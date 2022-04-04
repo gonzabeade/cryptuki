@@ -19,12 +19,20 @@ public class Offer {
         this.coin_amount = coin_amount;
     }
 
-    public Number getId() {
+    public Number getOffer_id() {
         return offer_id;
+    }
+
+    public int getSeller_id() {
+        return seller_id;
     }
 
     public Date getOffer_date() {
         return offer_date;
+    }
+
+    public String getCoin_id() {
+        return coin_id;
     }
 
     public double getAsking_price() {
@@ -33,10 +41,6 @@ public class Offer {
 
     public double getCoin_amount() {
         return coin_amount;
-    }
-
-    public String getCoin_id() {
-        return coin_id;
     }
 
     @Override
@@ -49,5 +53,15 @@ public class Offer {
                 ", asking_price=" + asking_price +
                 ", coin_amount=" + coin_amount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(!(obj instanceof Offer))
+            return false;
+        Offer other = (Offer) obj;
+        return this.offer_id.equals(other.offer_id) && this.seller_id == other.seller_id && this.offer_date.equals(other.offer_date) && this.coin_id.equals(other.coin_id) && this.asking_price == other.asking_price && this.coin_amount==other.coin_amount;
     }
 }

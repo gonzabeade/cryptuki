@@ -29,10 +29,19 @@ public class OfferJdbcDao implements OfferDao {
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offers").usingGeneratedKeyColumns("offer_id");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS offers("+
+                "offer_id SERIAL PRIMARY KEY,"+
+                "seller_id INT NOT NULL,"+
+                "offer_date TIMESTAMP NOT NULL,"+
+                "coin_id TEXT NOT NULL,"+
+                "asking_price DOUBLE NOT NULL,"+
+                "coin_amount DOUBLE NOT NULL)");
+
     }
 
     @Override
-    public Offer makeOffer(int seller_id, Date offer_date,String coin_id, float asking_price, float coin_amount) {
+    public Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount) {
         final Map<String,Object> args = new HashMap<>();
         args.put("seller_id",seller_id);
         args.put("offer_date",new java.sql.Date(offer_date.getTime()));

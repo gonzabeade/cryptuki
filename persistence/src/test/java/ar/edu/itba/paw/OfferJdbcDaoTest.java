@@ -14,7 +14,6 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 import java.util.Date;
-import java.util.List;
 
 @Sql("classpath:schema.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,7 +38,7 @@ public class OfferJdbcDaoTest {
     public void TestMakeOffer(){
         Offer offer = new Offer(1,2,new Date(),"arg",15,16);
 
-        Offer tableOffer= offerJdbcDao.makeOffer(offer.getSeller_id(),offer.getOffer_date(),offer.getCoin_id(),offer.getAsking_price(),offer.getCoin_amount());
+        Offer tableOffer= offerJdbcDao.makeOffer(offer.getSellerId(),offer.getDate(),offer.getCoin_id(),offer.getAskingPrice(),offer.getCoinAmount());
 
      //   Assert.assertEquals(offer.getOffer_id(),tableOffer.getOffer_id());
         Assert.assertEquals(1,JdbcTestUtils.countRowsInTable(jdbcTemplate,"offers"));

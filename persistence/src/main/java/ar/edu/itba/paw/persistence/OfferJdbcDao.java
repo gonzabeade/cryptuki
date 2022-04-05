@@ -9,12 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class OfferJdbcDao implements OfferDao {
@@ -22,22 +17,21 @@ public class OfferJdbcDao implements OfferDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private final static RowMapper<Offer> ROW_MAPPER = (resultSet, i) -> new Offer(resultSet.getInt("offer_id"),resultSet.getInt("seller_id"),resultSet.getTimestamp("offer_date"), resultSet.getString("coin_id"),resultSet.getDouble("asking_price"),
-            resultSet.getDouble("coin_amount"));
+    private final static RowMapper<Offer> ROW_MAPPER =
+            (resultSet, i) -> new Offer.Builder()
+                .id(resultSet.getInt("offer_id"))
+                .seller(resultSet.getInt("seller_id"))
+                .date(resultSet.getTimestamp("offer_date"))
+                .coin(resultSet.getString("coin_id"))
+                .price(resultSet.getDouble("asking_price"))
+                .amount(resultSet.getDouble("coin_amount"))
+                .build();
+
 
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offers").usingGeneratedKeyColumns("offer_id");
-
-//        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS offers("+
-//                "offer_id SERIAL PRIMARY KEY,"+
-//                "seller_id INT NOT NULL,"+
-//                "offer_date TIMESTAMP NOT NULL,"+
-//                "coin_id TEXT NOT NULL,"+
-//                "asking_price DOUBLE NOT NULL,"+
-//                "coin_amount DOUBLE NOT NULL)");
-
     }
 
     @Override
@@ -48,7 +42,7 @@ public class OfferJdbcDao implements OfferDao {
         args.put("coin_id",coin_id);
         args.put("asking_price",asking_price);
         args.put("coin_amount",coin_amount);
-        final Number offer_id = jdbcInsert.executeAndReturnKey(args);
+        final int offer_id = jdbcInsert.executeAndReturnKey(args).intValue();
         return new Offer(offer_id,seller_id,offer_date,coin_id,asking_price,coin_amount);
     }
 

@@ -16,16 +16,17 @@ import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
 
-@ComponentScan({"ar.edu.itba.paw.cryptuki.controller",
+@ComponentScan({
+        "ar.edu.itba.paw.cryptuki.controller",
         "ar.edu.itba.paw.persistence",
-        "ar.edu.itba.paw.service"})
+        "ar.edu.itba.paw.service",
+})
 @EnableWebMvc
 @Configuration
 public class WebConfig {
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
-
 
     @Bean /*Use WebMVC **BUT** use this particular view resolver*/
     public ViewResolver viewResolver() {
@@ -36,14 +37,13 @@ public class WebConfig {
         return resolver;
     }
 
-
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5433/postgres");
+        ds.setUrl("jdbc:postgresql://localhost:5432/paw");
         ds.setUsername("postgres");
-        ds.setPassword("shadad");
+        ds.setPassword("gonza");
         return ds;
     }
 
@@ -59,6 +59,4 @@ public class WebConfig {
         dbp.addScript(schemaSql);
         return dbp;
     }
-
-
 }

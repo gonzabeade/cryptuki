@@ -5,3 +5,5 @@ CREATE TABLE IF NOT EXISTS offers(
     coin_id TEXT NOT NULL,
     asking_price DOUBLE NOT NULL,
     coin_amount DOUBLE NOT NULL);
+
+

@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Date;
-import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OfferServiceImplTest {
@@ -24,11 +23,20 @@ public class OfferServiceImplTest {
 
     @Test
     public void testmakeOffer(){
-        Offer offer = new Offer(1,2,new Date(),"arg",15,15);
-        Mockito.when(offerDao.makeOffer(offer.getSeller_id(),offer.getOffer_date(),offer.getCoin_id(),offer.getAsking_price(),offer.getCoin_amount()))
+
+        Offer offer = new Offer.Builder()
+                .id(1)
+                .seller(2)
+                .date(new Date())
+                .coin("arg")
+                .price(15)
+                .amount(15)
+                .build();
+
+        Mockito.when(offerDao.makeOffer(offer.getSellerId(),offer.getDate(),offer.getCoin_id(),offer.getAskingPrice(),offer.getCoinAmount()))
                 .thenReturn(offer);
 
-        Offer serviceOffer = offerService.makeOffer(offer.getSeller_id(),offer.getOffer_date(),offer.getCoin_id(),offer.getAsking_price(),offer.getCoin_amount());
+        Offer serviceOffer = offerService.makeOffer(offer.getSellerId(),offer.getDate(),offer.getCoin_id(),offer.getAskingPrice(),offer.getCoinAmount());
 
         Assert.assertNotNull(serviceOffer);
         Assert.assertEquals(offer,serviceOffer);

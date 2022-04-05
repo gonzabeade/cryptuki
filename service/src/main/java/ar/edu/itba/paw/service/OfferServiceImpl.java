@@ -14,11 +14,6 @@ public class OfferServiceImpl implements OfferService{
     @Autowired
     private OfferDao offerDao;
 
-//    @Autowired
-//    public OfferServiceImpl(OfferDao offerDao) {
-//        this.offerDao = offerDao;
-//    }
-
     @Override
     public Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount) {
         return offerDao.makeOffer(seller_id,offer_date,coin_id,asking_price,coin_amount);

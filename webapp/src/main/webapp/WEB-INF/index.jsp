@@ -13,7 +13,7 @@
 
 <ol>
     <c:forEach var="emp" items="${empList}">
-        <>${emp}</li>
+        <li><jsp:include page="./components/card.jsp"/></li>
     </c:forEach>
 </ol>
 

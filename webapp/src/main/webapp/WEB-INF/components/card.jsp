@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
+<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-storml">
 				<div class="flex-row basis-1/4 ">
 					<h1>Vendedor: </h1>
 					<h3 class="font-bold">pepito</h3>
@@ -25,8 +25,8 @@
 
 				</div>
 				<div class="flex basis-1/4 justify-center">
-						<button class=" border-2 border-[#88C0D0] rounded-lg bg-[#ECEFF4] max-h-14 m-2">
-						<p class="pr-14 pl-14 text-[#88C0D0] ">Compra</p>
+						<button class=" border-2 border-frost rounded-lg bg-storm max-h-14 m-2">
+						<p class="pr-14 pl-14 text-frost ">Compra</p>
   					</button>
   				</div>
 

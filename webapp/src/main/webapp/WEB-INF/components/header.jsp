@@ -2,7 +2,7 @@
     <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
         <div class="flex justify-center center w-1/4">
             <div class="flex w-full">
-                <img class='object-contain' src="logo.png" alt="logo"></img>
+                <img class='object-contain' src="../public/images/logo.png" alt="logo"></img>
             </div>
         </div>
         <div class="justify-self-center flex justify-end w-2/3">

@@ -28,8 +28,6 @@ public class HelloWorldController {
     public ModelAndView helloWorld() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("index"); /* Load a jsp file */
-        offerService.makeOffer(2,new Date(),"arg",15,16);
-
 
         List<Offer> offers = offerService.getAllOffers();
         System.out.println("OFFERS"+offers);

@@ -9,6 +9,9 @@
 
 <body>
 <jsp:include page="../components/header.jsp"/>
+<div class=" flex justify-center mx-10">
+    <jsp:include page="../components/subir_oferta_marketplace.jsp"/>
+</div>
 <div class="flex justify-center mx-10">
     <ol class="min-w-full">
         <div>

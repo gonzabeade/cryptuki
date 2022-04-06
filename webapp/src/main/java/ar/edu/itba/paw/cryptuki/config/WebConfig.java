@@ -32,7 +32,7 @@ public class WebConfig {
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setViewClass(JstlView.class);
-        resolver.setPrefix("/WEB-INF/");
+        resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
         return resolver;
     }
@@ -41,9 +41,9 @@ public class WebConfig {
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5432/paw");
-        ds.setUsername("postgres");
-        ds.setPassword("gonza");
+        ds.setUrl("jdbc:postgresql://localhost:5432/" + System.getenv("DB_NAME"));
+        ds.setUsername(System.getenv("DB_USER"));
+        ds.setPassword(System.getenv("DB_PASS"));
         return ds;
     }
 

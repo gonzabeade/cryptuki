@@ -27,28 +27,27 @@ public class OfferJdbcDao implements OfferDao {
                 .amount(resultSet.getDouble("coin_amount"))
                 .build();
 
-
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offers").usingGeneratedKeyColumns("offer_id");
     }
 
-    @Override
-    public Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount) {
+    @Override // TODO: Reduce parameters in this code
+    public int makeOffer(int sellerId, Date date,String coinId, double price, double coinAmount) {
         final Map<String,Object> args = new HashMap<>();
-        args.put("seller_id",seller_id);
-        args.put("offer_date",new java.sql.Date(offer_date.getTime()));
-        args.put("coin_id",coin_id);
-        args.put("asking_price",asking_price);
-        args.put("coin_amount",coin_amount);
-        final int offer_id = jdbcInsert.executeAndReturnKey(args).intValue();
-        return new Offer(offer_id,seller_id,offer_date,coin_id,asking_price,coin_amount);
+        args.put("seller_id", sellerId);
+        args.put("offer_date", new java.sql.Date(date.getTime()));
+        args.put("coin_id", coinId);
+        args.put("asking_price", price);
+        args.put("coin_amount", coinAmount);
+        final int offerId = jdbcInsert.executeAndReturnKey(args).intValue();
+        return offerId;
     }
 
     @Override
     public List<Offer> getAllOffers() {
-        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFERS",ROW_MAPPER);
+        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFERS", ROW_MAPPER);
         return offers;
     }
 }

@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface OfferDao {
 
-    Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount);
-
+    int makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount);
     List<Offer> getAllOffers();
 
 

@@ -24,11 +24,11 @@ public class HelloWorldController {
         this.offerService = offerService;
     }
 
-    @RequestMapping("/hola") /* When requests come to this path, requests are forwarded to this method*/
+    @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView helloWorld() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("hello/index"); /* Load a jsp file */
-        offerService.makeOffer(2,new Date(),"arg",15,16);
+        offerService.makeOffer(2,new Date(),"BTC",15,16);
 
 
         List<Offer> offers = offerService.getAllOffers();

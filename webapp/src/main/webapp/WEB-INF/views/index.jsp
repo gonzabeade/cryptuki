@@ -12,7 +12,7 @@
 <div class=" flex justify-center mx-10">
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
-<div class="flex justify-center mx-10">
+<div class="flex justify-center mx-48">
     <ol class="min-w-full">
         <div>
             <c:forEach var="emp" items="${empList}">

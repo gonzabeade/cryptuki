@@ -4,16 +4,16 @@
     <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
         <div class="flex justify-center center w-1/4">
             <div class="flex w-full">
-                <a href="<c:url value="/"/>"><img class='object-contain' src="../public/images/logo.png" alt="logo"></a>
+                <a href="<c:url value="/"/>"><img class='object-contain' src="public/images/logo.png" alt="logo"></a>
             </div>
         </div>
         <div class="justify-self-center flex justify-end w-2/3">
             <ul class="flex justify-between content-self-center flex-wrap w-5/6 mt-4">
                 <li>
-                    <a href="#Cryptos" class="block py-2 pr-4 pl-3 text-polarlr font-sans ">Que monedas puedo comprar?</a>
+                    <a href="#Cryptos" class="py-2 pr-4 pl-3 text-polarlr font-sans text-lg font-bold">¿Qué monedas puedo comprar?</a>
                 </li>
                 <li>
-                    <a href="#FAQs" class="block py-2 pr-4 pl-3 text-polarlr font-sans ">Preguntas frecuentes</a>
+                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polarlr font-sans  font-bold text-lg ">Soporte</a>
                 </li>
             </ul>
         </div>

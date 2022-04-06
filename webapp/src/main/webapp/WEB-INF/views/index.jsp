@@ -7,10 +7,10 @@
 			<script src="../config/tailwind.config.js"></script>
 </head>
 
-<body>
+<body class="bg-[#ECEFF4]">
 <jsp:include page="../components/header.jsp"/>
 <div class=" flex justify-center mx-10">
-    <jsp:include page="../components/subir_oferta_marketplace.jsp"/>
+    <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex justify-center mx-10">
     <ol class="min-w-full">

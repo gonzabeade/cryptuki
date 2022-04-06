@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
-<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#E5E9F0]">
+<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
 					<h1>Vendedor: </h1>
 					<h3 class="font-bold">pepito</h3>

@@ -8,15 +8,10 @@
 </head>
 
 <body>
-
-<h2>Hello ${greeting}!</h2>
-
 <ol>
     <c:forEach var="emp" items="${empList}">
-        <li><jsp:include page="./components/card.jsp"/></li>
+        <li><jsp:include page="../components/card.jsp"/></li>
     </c:forEach>
 </ol>
-
-<h2>size: ${empListSize}</h2>
 </body>
 </html>

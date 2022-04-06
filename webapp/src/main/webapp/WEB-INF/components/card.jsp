@@ -26,8 +26,8 @@
 
 				</div>
 				<div class="flex basis-1/4 justify-center">
-						<button class="rounded-lg bg-[#5E81AC] max-h-14 m-2">
-						<p class="pr-14 pl-14 text-[#E5E9F0] ">Compra</p>
+						<button class="rounded-lg bg-frostdr max-h-14 m-2">
+						<p class="pr-14 pl-14 text-storm ">Compra</p>
   					</button>
   				</div>
 

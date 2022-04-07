@@ -10,7 +10,6 @@
                     theme: {
                         extend: {
                             colors: {
-
                                 polar: '#3B4252',
                                 polard: '#2E3440',
                                 polarl: '#434C5E',
@@ -51,7 +50,14 @@
     <ol class="min-w-full">
         <div>
             <c:forEach var="emp" items="${empList}">
-                <li><jsp:include page="../components/card.jsp"/></li>
+                <li>
+                    <jsp:include page="../components/card.jsp">
+                        <jsp:param name="currency" value="${emp.coin_id}"/>
+                        <jsp:param name="user" value="pepito"/>
+                        <jsp:param name="asking_price" value="${emp.askingPrice}"/>
+                        <jsp:param name="trades" value="1"/>
+                    </jsp:include>
+                </li>
             </c:forEach>
         </div>
     </ol>

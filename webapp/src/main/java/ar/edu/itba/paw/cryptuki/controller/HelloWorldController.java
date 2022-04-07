@@ -53,18 +53,10 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/mail")
-    public ModelAndView sendMail(String receiverMail) throws MessagingException {
+    @RequestMapping("/mensaje")
+    public ModelAndView sendMessage(String to) throws MessagingException {
 
-        final MimeMessage mimeMessage = this.gmailSender.createMimeMessage();
-        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
-        message.setSubject("Test de servicio de mail paw");
-        message.setFrom("TestPaw25@gmail.com");
-        message.setTo(receiverMail);
-        message.setText("Buenas, este es un intento de mail, adioss", false);
-
-        this.gmailSender.send(mimeMessage);
-
+        this.gmailSender.send("TestPaw25@gmail.com", to, "Encabezado de mail", "Cuerpo de mail");
 
         final ModelAndView mav = new ModelAndView("hello/index"); /* Load a jsp file */
         offerService.makeOffer(2,new Date(),"arg",15,16);

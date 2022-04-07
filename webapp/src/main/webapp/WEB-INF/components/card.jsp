@@ -18,7 +18,6 @@
 						<div class="flex flex-row justify-between">
 							<img src="https://pbs.twimg.com/profile_images/1467851350256017412/VNkteEHP_400x400.jpg" class="max-w-[50px]"> </img>
 							<img src="	https://flyclipart.com/thumb2/library-credit-card-icon-672259.png" class="max-w-[50px]"> </img>
-
 						</div>
 
 

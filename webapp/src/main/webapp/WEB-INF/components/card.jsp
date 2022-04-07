@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
 					<h1>Vendedor: </h1>
@@ -16,8 +17,9 @@
 					<div class="flex-col ">
 						<h1>Medios de Pago: </h1>
 						<div class="flex flex-row justify-between">
-							<img src="https://pbs.twimg.com/profile_images/1467851350256017412/VNkteEHP_400x400.jpg" class="max-w-[50px]"> </img>
-							<img src="	https://flyclipart.com/thumb2/library-credit-card-icon-672259.png" class="max-w-[50px]"> </img>
+							<c:forEach var="payment_method" items="${param.accepted_payments}">
+							<img src="public/images/${payment_method}.png" class="max-w-[50px]" alt="${payment_method}">
+							</c:forEach>
 						</div>
 
 

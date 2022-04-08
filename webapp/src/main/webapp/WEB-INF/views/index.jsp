@@ -40,7 +40,6 @@
                 }
             </script>
 </head>
-
 <body class="bg-storml">
 <jsp:include page="../components/header.jsp"/>
 <div class=" flex justify-center mx-10">
@@ -49,13 +48,13 @@
 <div class="flex justify-center mx-48">
     <ol class="min-w-full">
         <div>
-            <c:forEach var="emp" items="${empList}">
+            <c:forEach var="offer" items="${offerList}">
                 <li>
                     <jsp:include page="../components/card.jsp">
-                        <jsp:param name="currency" value="${emp.coin_id}"/>
+                        <jsp:param name="currency" value="${offer.coin_id}"/>
                         <jsp:param name="user" value="pepito"/>
-                        <jsp:param name="asking_price" value="${emp.askingPrice}"/>
-                        <jsp:param name="trades" value="1"/>
+                        <jsp:param name="asking_price" value="${offer.askingPrice}"/>
+                        <jsp:param name="trades" value="2"/>
                         <jsp:param name="accepted_payments" value="${'bru'}"/>
                     </jsp:include>
                 </li>

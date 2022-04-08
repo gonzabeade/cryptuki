@@ -13,7 +13,7 @@
                     <a href="#Cryptos" class="py-2 pr-4 pl-3 text-polar font-sans text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Monedas</a>
                 </li>
                 <li>
-                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polar font-sans  font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8">Soporte</a>
+                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polar font-sans  font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Soporte</a>
                 </li>
             </ul>
         </div>

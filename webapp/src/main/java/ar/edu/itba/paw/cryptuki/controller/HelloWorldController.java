@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
-import ar.edu.itba.paw.Offer;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -33,16 +32,16 @@ public class HelloWorldController {
         System.out.println("OFFERS"+offers);
         mav.addObject("empList",offers);
         mav.addObject("empListSize",offers.size());
-
         mav.addObject("greeting", us.getUsername(1)); /* Set variables to be used within the jsp*/
         return mav;
     }
 
-    @RequestMapping("/chau") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView byeByeWorld() {
-        /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("hello/byebye"); /* Load a jsp file */
-        mav.addObject("greeting", "PAW"); /* Set variables to be used within the jsp*/
-        return mav;
+    @RequestMapping("/postoffer")
+    public ModelAndView postOffer() {
+        Offer.Builder builder = Offer.builder(2, "BTC", 1)
+                .amount(100)
+                .status(2);
+        offerService.makeOffer(builder);
+        return helloWorld();
     }
 }

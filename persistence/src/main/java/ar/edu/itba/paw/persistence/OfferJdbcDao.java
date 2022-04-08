@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,14 +17,15 @@ public class OfferJdbcDao implements OfferDao {
     private SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Offer> ROW_MAPPER =
-            (resultSet, i) -> new Offer.Builder()
+            (resultSet, i) -> Offer.builder(
+                            resultSet.getInt("seller_id"),
+                            resultSet.getString("coin_id"),
+                            resultSet.getDouble("asking_price")
+                    )
                     .id(resultSet.getInt("offer_id"))
-                    .seller(resultSet.getInt("seller_id"))
-                    .date(resultSet.getTimestamp("offer_date"))
-                    .coin(resultSet.getString("coin_id"))
-                    .status(resultSet.getString("status_id"))
-                    .price(resultSet.getDouble("asking_price"))
                     .amount(resultSet.getDouble("coin_amount"))
+                    .date(resultSet.getTimestamp("offer_date"))
+                    .status(resultSet.getInt("status_id"))
                     .build();
 
     @Autowired
@@ -34,17 +34,17 @@ public class OfferJdbcDao implements OfferDao {
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
     }
 
-    @Override // TODO: Reduce parameters in this code
-    public int makeOffer(int sellerId, Date date,String coinId, double price, double coinAmount) {
+    @Override
+    public Offer makeOffer(Offer.Builder builder) {
         final Map<String,Object> args = new HashMap<>();
-        args.put("seller_id", sellerId);
-        args.put("offer_date", new java.sql.Date(date.getTime()));
-        args.put("coin_id", coinId);
-        args.put("asking_price", price);
+        args.put("seller_id", builder.getSellerId());
+        args.put("offer_date", builder.getDate());
+        args.put("coin_id", builder.getCoinId());
+        args.put("asking_price", builder.getAskingPrice());
         args.put("status_id", 2);
-        args.put("coin_amount", coinAmount);
-        final int offerId = jdbcInsert.executeAndReturnKey(args).intValue();
-        return offerId;
+        args.put("coin_amount", builder.getCoinAmount());
+        jdbcInsert.executeAndReturnKey(args).intValue();
+        return builder.build();
     }
 
     @Override

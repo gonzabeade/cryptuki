@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.Offer;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class OfferServiceImpl implements OfferService{
     private OfferDao offerDao;
 
     @Override
-    public int makeOffer(int sellerId, Date date, String coinId, double askingPrice, double coinAmount) {
-        return offerDao.makeOffer(sellerId, date, coinId, askingPrice, coinAmount);
+    public Offer makeOffer(Offer.Builder builder) {
+        return offerDao.makeOffer(builder);
     }
 
     @Override

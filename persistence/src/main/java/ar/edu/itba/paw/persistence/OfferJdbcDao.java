@@ -24,7 +24,7 @@ public class OfferJdbcDao implements OfferDao {
                     )
                     .id(resultSet.getInt("offer_id"))
                     .amount(resultSet.getDouble("coin_amount"))
-                    .date(resultSet.getTimestamp("offer_date"))
+                    .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
                     .status(resultSet.getInt("status_id"))
                     .build();
 

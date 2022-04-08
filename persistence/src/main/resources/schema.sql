@@ -57,7 +57,7 @@ CREATE TABLE payment_methods_at_offer (
     FOREIGN KEY(payment_method_id) REFERENCES payment_method(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (email, rating_sum, rating_count) VALUES ('gonza@paw.com', 0, 0);
+INSERT INTO users (email, rating_sum, rating_count) VALUES ('gonza@paw.com', 0, 0) ;
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('salta@paw.com', 0, 0);
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('marquinhos@paw.com', 0, 0);
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('salcas@paw.com', 0, 0);

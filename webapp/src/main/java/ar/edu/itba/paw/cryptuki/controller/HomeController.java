@@ -32,7 +32,7 @@ public class HomeController {
         List<Offer> offers = offerService.getAllOffers();
         System.out.println("OFFERS"+offers);
         mav.addObject("offerList",offers);
-        String[] payments = {"bru", "mp"};
+        String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
         mav.addObject("payments", payments);
         return mav;
     }

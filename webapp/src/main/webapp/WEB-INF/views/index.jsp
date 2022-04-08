@@ -50,12 +50,12 @@
         <div>
             <c:forEach var="offer" items="${offerList}">
                 <li>
+                    <c:set  var="accepted_payments" value="${payments}" scope="request"/>
                     <jsp:include page="../components/card.jsp">
                         <jsp:param name="currency" value="${offer.coin_id}"/>
                         <jsp:param name="user" value="pepito"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="2"/>
-                        <jsp:param name="accepted_payments" value="${'bru'}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

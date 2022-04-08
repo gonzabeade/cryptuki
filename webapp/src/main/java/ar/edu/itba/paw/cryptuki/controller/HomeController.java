@@ -32,6 +32,8 @@ public class HomeController {
         List<Offer> offers = offerService.getAllOffers();
         System.out.println("OFFERS"+offers);
         mav.addObject("offerList",offers);
+        String[] payments = {"bru", "mp"};
+        mav.addObject("payments", payments);
         return mav;
     }
 

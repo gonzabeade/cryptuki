@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 
 import ar.edu.itba.paw.Offer;
+import ar.edu.itba.paw.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,10 +31,7 @@ public class HomeController {
 
         List<Offer> offers = offerService.getAllOffers();
         System.out.println("OFFERS"+offers);
-        mav.addObject("empList",offers);
-        mav.addObject("empListSize",offers.size());
-
-        mav.addObject("greeting", us.getUsername(1)); /* Set variables to be used within the jsp*/
+        mav.addObject("offerList",offers);
         return mav;
     }
 

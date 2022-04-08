@@ -25,7 +25,7 @@ public class HomeController {
     }
 
     @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView helloWorld() {
+    public ModelAndView home() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
@@ -34,6 +34,11 @@ public class HomeController {
         mav.addObject("offerList",offers);
         String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
         mav.addObject("payments", payments);
+        return mav;
+    }
+    @RequestMapping("/contact")
+    public ModelAndView contact(){
+        final ModelAndView mav = new ModelAndView("views/contact"); /* Load a jsp file */
         return mav;
     }
 

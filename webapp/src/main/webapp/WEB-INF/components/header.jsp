@@ -13,7 +13,7 @@
                     <a href="#Cryptos" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Monedas</a>
                 </li>
                 <li>
-                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Soporte</a>
+                    <a href="${pageContext.request.contextPath}/contact" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Contactate</a>
                 </li>
             </ol>
         </div>

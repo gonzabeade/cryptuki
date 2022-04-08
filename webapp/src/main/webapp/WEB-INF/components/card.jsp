@@ -19,7 +19,7 @@
 						<h1 class="font-sans">Medios de Pago: </h1>
 						<div class="flex flex-row justify-between">
 
-							<%--@elvariable id="accepted_payments" type="java.util.ArrayList"--%>
+							<%--@elvariable id="accepted_payments" type="java.util.Iterable"--%>
 							<c:forEach  var="payment_method" items="${accepted_payments}">
 							<img src="<c:url value = "/public/images/${payment_method}.png"/>" class="max-w-[32px] max-h-[32px]" alt="${payment_method}">
 							</c:forEach>

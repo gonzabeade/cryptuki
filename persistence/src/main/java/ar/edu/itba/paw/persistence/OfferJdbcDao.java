@@ -19,18 +19,19 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static RowMapper<Offer> ROW_MAPPER =
             (resultSet, i) -> new Offer.Builder()
-                .id(resultSet.getInt("offer_id"))
-                .seller(resultSet.getInt("seller_id"))
-                .date(resultSet.getTimestamp("offer_date"))
-                .coin(resultSet.getString("coin_id"))
-                .price(resultSet.getDouble("asking_price"))
-                .amount(resultSet.getDouble("coin_amount"))
-                .build();
+                    .id(resultSet.getInt("offer_id"))
+                    .seller(resultSet.getInt("seller_id"))
+                    .date(resultSet.getTimestamp("offer_date"))
+                    .coin(resultSet.getString("coin_id"))
+                    .status(resultSet.getString("status_id"))
+                    .price(resultSet.getDouble("asking_price"))
+                    .amount(resultSet.getDouble("coin_amount"))
+                    .build();
 
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offers").usingGeneratedKeyColumns("offer_id");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
     }
 
     @Override // TODO: Reduce parameters in this code
@@ -40,6 +41,7 @@ public class OfferJdbcDao implements OfferDao {
         args.put("offer_date", new java.sql.Date(date.getTime()));
         args.put("coin_id", coinId);
         args.put("asking_price", price);
+        args.put("status_id", 2);
         args.put("coin_amount", coinAmount);
         final int offerId = jdbcInsert.executeAndReturnKey(args).intValue();
         return offerId;
@@ -47,7 +49,7 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public List<Offer> getAllOffers() {
-        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFERS", ROW_MAPPER);
+        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER", ROW_MAPPER);
         return offers;
     }
 }

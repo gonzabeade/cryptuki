@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
-<nav class="bg-white border-gray-200 py-3 h-20"> <!--OK-->
+<nav class="bg-[#FAFCFF] border-gray-200 py-3 h-20"> <!--OK-->
     <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
         <div class="flex justify-center center w-1/4">
             <div class="flex w-full my-2">
@@ -10,10 +10,10 @@
         <div class="justify-self-center flex justify-end w-2/3">
             <ul class="flex justify-between content-self-center flex-wrap w-5/6 mt-4">
                 <li>
-                    <a href="#Cryptos" class="py-2 pr-4 pl-3 text-polarlr font-sans text-lg font-bold">Monedas</a>
+                    <a href="#Cryptos" class="py-2 pr-4 pl-3 text-polar font-sans text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Monedas</a>
                 </li>
                 <li>
-                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polarlr font-sans  font-bold text-lg ">Soporte</a>
+                    <a href="#FAQs" class="py-2 pr-4 pl-3 text-polar font-sans  font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8">Soporte</a>
                 </li>
             </ul>
         </div>

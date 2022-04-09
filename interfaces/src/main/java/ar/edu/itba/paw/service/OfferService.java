@@ -1,14 +1,11 @@
 package ar.edu.itba.paw.service;
-
-import ar.edu.itba.paw.Offer;
-
-import java.util.Date;
-import java.util.List;
+import ar.edu.itba.paw.persistence.Offer;
 
 public interface OfferService {
 
-    int makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount);
-
-    List<Offer> getAllOffers();
+    Offer makeOffer(Offer.Builder builder);
+    Iterable<Offer> getPagedOffers(int page, int pageSize);
+    Iterable<Offer> getAllOffers();
+    Offer getOffer(int id);
 
 }

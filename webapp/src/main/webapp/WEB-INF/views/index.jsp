@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <html>
 <head>
 			<meta charset="ISO-8859-1">
@@ -9,7 +10,6 @@
                     theme: {
                         extend: {
                             colors: {
-
                                 polar: '#3B4252',
                                 polard: '#2E3440',
                                 polarl: '#434C5E',
@@ -33,14 +33,16 @@
                             },
                             fontFamily: {
                                 sans: ['Roboto', 'sans-serif'],
-                                serif: ['serif'],
                             },
                         }
                     }
                 }
             </script>
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
+</head>
 <body class="bg-storml">
 <jsp:include page="../components/header.jsp"/>
 <div class=" flex justify-center mx-10">
@@ -49,8 +51,16 @@
 <div class="flex justify-center mx-48">
     <ol class="min-w-full">
         <div>
-            <c:forEach var="emp" items="${empList}">
-                <li><jsp:include page="../components/card.jsp"/></li>
+            <c:forEach var="offer" items="${offerList}">
+                <li>
+                    <c:set  var="accepted_payments" value="${payments}" scope="request"/>
+                    <jsp:include page="../components/card.jsp">
+                        <jsp:param name="currency" value="${offer.coin_id}"/>
+                        <jsp:param name="user" value="pepito"/>
+                        <jsp:param name="asking_price" value="${offer.askingPrice}"/>
+                        <jsp:param name="trades" value="2"/>
+                    </jsp:include>
+                </li>
             </c:forEach>
         </div>
     </ol>

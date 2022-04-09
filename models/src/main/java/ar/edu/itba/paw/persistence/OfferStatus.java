@@ -1,11 +1,11 @@
-package ar.edu.itba.paw;
+package ar.edu.itba.paw.persistence;
 
-public class OfferStatus {
+public final class OfferStatus {
 
     private String code;
     private String description;
 
-    public OfferStatus(String code, String description) {
+    protected OfferStatus(String code, String description) {
         this.code = code;
         this.description = description;
     }

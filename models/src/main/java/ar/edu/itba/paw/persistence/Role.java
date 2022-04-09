@@ -1,11 +1,11 @@
-package ar.edu.itba.paw;
+package ar.edu.itba.paw.persistence;
 
-public class Role {
+public final class Role {
 
-    private int id;
+    private Integer id;
     private String desc;
 
-    public Role(int id, String desc) {
+    protected Role(int id, String desc) {
         this.id = id;
         this.desc = desc;
     }
@@ -13,7 +13,6 @@ public class Role {
     public int getId() {
         return id;
     }
-
     public String getDesc() {
         return desc;
     }

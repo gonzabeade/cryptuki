@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.persistence;
-import ar.edu.itba.paw.PaymentMethod;
 
 import java.time.LocalDateTime;
 import java.util.*;

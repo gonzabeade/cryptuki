@@ -54,9 +54,12 @@
 <div class=" flex justify-center mx-10">
     <jsp:include page="../components/contact_text.jsp"/>
 </div>
-<jsp:include page="../components/form.jsp">
-    <jsp:param name="url" value="support"/>
-</jsp:include>
+<div class="flex justify-center">
+    <jsp:include page="../components/form.jsp">
+        <jsp:param name="url" value="support"/>
+    </jsp:include>
+</div>
+
 
 </body>
 </html>

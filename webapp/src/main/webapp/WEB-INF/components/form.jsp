@@ -7,7 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<form>
+<form action="<c:url value="${param.url}"/>">
     <c:forEach var="" items="">
         <label>Ayuda</label>
         <input type="text">

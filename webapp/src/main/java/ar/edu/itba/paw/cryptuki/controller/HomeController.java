@@ -7,6 +7,8 @@ import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -41,5 +43,11 @@ public class HomeController {
         final ModelAndView mav = new ModelAndView("views/contact"); /* Load a jsp file */
         return mav;
     }
+    @RequestMapping(value= "/support", method = {RequestMethod.POST})
+    public ModelAndView support(@RequestParam(name= "email",required= true) final String email, @RequestParam(name= "message",required= true) final String message){
+        //send ticket to our email with this info
+        return new ModelAndView("redirect:/");
+    }
+
 
 }

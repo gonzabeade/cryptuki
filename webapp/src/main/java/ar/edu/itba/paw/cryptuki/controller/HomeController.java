@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.persistence.Cryptocurrency;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
@@ -17,11 +18,13 @@ public class HomeController {
 
     private final UserService us;
     private final OfferService offerService;
+    private final CryptocurrencyService cryptocurrencyService;
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService) {
+    public HomeController(UserService us, OfferService offerService,CryptocurrencyService cryptocurrencyService) {
         this.us = us;
         this.offerService = offerService;
+        this.cryptocurrencyService = cryptocurrencyService;
     }
 
     @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
@@ -34,6 +37,8 @@ public class HomeController {
         mav.addObject("offerList",offers);
         String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
         mav.addObject("payments", payments);
+
+
         return mav;
     }
 

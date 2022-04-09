@@ -37,4 +37,14 @@ public final class Cryptocurrency {
     public int hashCode() {
         return Objects.hash(code, marketPrice, name);
     }
+
+
+    @Override
+    public String toString() {
+        return "Cryptocurrency{" +
+                "code='" + code + '\'' +
+                ", marketPrice=" + marketPrice +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -6,9 +6,9 @@ import java.util.*;
 public final class Offer {
 
     private final Integer id;
-    private final Integer sellerId;
+    private final User seller;
     private final LocalDateTime date;
-    private final String coinId;
+    private final Cryptocurrency crypto;
     private final Integer statusId;
     private final Double askingPrice;
     private final Double coinAmount;
@@ -17,8 +17,8 @@ public final class Offer {
     public static class Builder {
 
         // Compulsory
-        private Integer sellerId;
-        private String coinId;
+        private User seller; // TODO: Deberia ser un User.Builder?
+        private Cryptocurrency crypto;
         private Double askingPrice;
 
         // Optional
@@ -29,9 +29,9 @@ public final class Offer {
         private Integer statusId;
 
         // Main Constructor
-        private Builder(int sellerId, String coinId, double askingPrice) {
-            this.sellerId = sellerId;
-            this.coinId = coinId;
+        private Builder(User seller, Cryptocurrency crypto, double askingPrice) {
+            this.seller = seller;
+            this.crypto = crypto;
             this.askingPrice = askingPrice;
             this.date = LocalDateTime.now();
         }
@@ -52,11 +52,11 @@ public final class Offer {
         public int getId() {
             return id;
         }
-        public int getSellerId() {
-            return sellerId;
+        public User getSeller() {
+            return seller;
         }
-        public String getCoinId() {
-            return coinId;
+        public Cryptocurrency getCrypto() {
+            return crypto;
         }
         public double getAskingPrice() {
             return askingPrice;
@@ -80,15 +80,15 @@ public final class Offer {
         }
     }
 
-    public static Builder builder(int sellerId, String coinId, double askingPrice) {
-        return new Builder(sellerId, coinId, askingPrice);
+    public static Builder builder(User seller, Cryptocurrency crypto, double askingPrice) {
+        return new Builder(seller, crypto, askingPrice);
     }
 
     private Offer(Builder builder) {
         id = builder.id;
-        sellerId = builder.sellerId;
+        seller = builder.seller;
         date = builder.date;
-        coinId = builder.coinId;
+        crypto = builder.crypto;
         askingPrice = builder.askingPrice;
         coinAmount = builder.coinAmount;
         statusId = builder.statusId;
@@ -98,14 +98,14 @@ public final class Offer {
     public int getId() {
         return id;
     }
-    public int getSellerId() {
-        return sellerId;
+    public User getSeller() {
+        return seller;
     }
     public LocalDateTime getDate() {
         return date;
     }
-    public String getCoin_id() {
-        return coinId;
+    public Cryptocurrency getCrypto() {
+        return crypto;
     }
     public double getAskingPrice() {
         return askingPrice;
@@ -117,13 +117,17 @@ public final class Offer {
         return paymentMethodsAccepted;
     }
 
+    // TODO: This is a patch, erase when done
+    public String getCoin_id () {
+        return crypto.getCode();
+    }
     @Override
     public String toString() {
         return "Offer{" +
                 "offer_id=" + id +
-                ", seller_id=" + sellerId +
+                ", seller_id=" + seller +
                 ", offer_date=" + date +
-                ", coin_id='" + coinId + '\'' +
+                ", coin_id='" + crypto + '\'' +
                 ", asking_price=" + askingPrice +
                 ", coin_amount=" + coinAmount +
                 '}';

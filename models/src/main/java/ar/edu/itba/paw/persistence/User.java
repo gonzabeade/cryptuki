@@ -13,7 +13,7 @@ public final class User {
     private final Integer ratingCount;
     private final Collection<Role> roles;
 
-    public class Builder {
+    public static class Builder {
         private Integer id;
         private UserAuth userAuth;
         private String email = "";
@@ -21,12 +21,14 @@ public final class User {
         private Integer ratingCount = 0;
         private Set<Role> roles = new HashSet<>();
 
-        private Builder(UserAuth userAuth) { this.userAuth = userAuth; }
+        private Builder() { }
 
+        public Builder userAuth(UserAuth userAuth) {this.userAuth = userAuth; return this; }
         public Builder email(String email) {this.email = email; return this;}
         public Builder ratingSum(int sum) {this.ratingSum = sum; return this; }
         public Builder ratingCount(int count) {this.ratingCount = count; return this; }
         public Builder addRole(Role role) { roles.add(role); return this; }
+        public Builder id(int id) {this.id = id; return this; }
 
         protected User build() {return new User(this);}
 
@@ -47,8 +49,8 @@ public final class User {
         }
     }
 
-    public Builder builder(UserAuth userAuth) {
-        return new Builder(userAuth);
+    public static Builder builder() {
+        return new Builder();
     }
 
     private User (Builder builder) {
@@ -79,5 +81,12 @@ public final class User {
         Collection<Role> roles = new HashSet<>();
         roles.addAll(this.roles);
         return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                '}';
     }
 }

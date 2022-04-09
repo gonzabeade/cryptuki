@@ -52,7 +52,7 @@ public class WebConfig {
     public DataSourceInitializer dataSourceInitializer(final DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
         dsi.setDataSource(ds);
-        dsi.setDatabasePopulator(databasePopulator());
+//        dsi.setDatabasePopulator(databasePopulator());
         return dsi;
     }
 

@@ -22,7 +22,10 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Iterable<Offer> getPagedOffers(int page, int pageSize) { return null; } // TODO: implement correctly
+    public Iterable<Offer> getPagedOffers(int page, int pageSize) {
+      //TODO: validations
+        return offerDao.getPagedOffers(page,pageSize);
+    }
 
     @Override
     public Iterable<Offer> getAllOffers() {

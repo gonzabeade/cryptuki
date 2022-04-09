@@ -73,4 +73,11 @@ public class OfferJdbcDao implements OfferDao {
         final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id", OFFER_ROW_MAPPER);
         return offers;
     }
+
+    @Override
+    public Iterable<Offer> getPagedOffers(int page, int pageSize) {
+        cryptoCache = new HashMap<>();
+        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id LIMIT ? OFFSET ?", OFFER_ROW_MAPPER,pageSize, page);
+        return offers;
+    }
 }

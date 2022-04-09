@@ -51,6 +51,9 @@ public class HomeController {
             return support(form);
         }
         //send mail
+        String user = form.getEmail();
+        String message = form.getMessage();
+
         return new ModelAndView("redirect:/");
     }
 

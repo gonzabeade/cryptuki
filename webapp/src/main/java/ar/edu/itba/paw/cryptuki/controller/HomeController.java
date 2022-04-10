@@ -29,7 +29,7 @@ public class HomeController {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
-        Iterable<Offer> offers = offerService.getAllOffers();
+        Iterable<Offer> offers = offerService.getPagedOffers(1, 4);
         System.out.println("OFFERS"+offers);
         mav.addObject("offerList",offers);
         String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only

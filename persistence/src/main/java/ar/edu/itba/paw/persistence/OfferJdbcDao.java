@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Repository
@@ -16,7 +18,7 @@ public class OfferJdbcDao implements OfferDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private static Map<String, Cryptocurrency> cryptoCache = new HashMap<>();
+    private static Map<String, Offer.Builder> builders = new HashMap<>();
 
     private final static RowMapper<Offer> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
@@ -25,14 +27,11 @@ public class OfferJdbcDao implements OfferDao {
                         .email(resultSet.getString("email"))
                         .build();
 
-
                 String cryptoId = resultSet.getString("coin_id");
-                Cryptocurrency crypto = cryptoCache.getOrDefault(cryptoId,
-                        Cryptocurrency.getInstance(
-                                cryptoId,
+                Cryptocurrency crypto = Cryptocurrency.getInstance(
+                        cryptoId,
                         resultSet.getString("description"),
                         resultSet.getDouble("market_price")
-                        )
                 );
 
                 return Offer.builder(
@@ -45,6 +44,38 @@ public class OfferJdbcDao implements OfferDao {
                         .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
                         .status(resultSet.getInt("status_id"))
                         .build();
+            };
+
+    private final static RowMapper<Offer.Builder> OFFER_BUILDER_ROW_MAPPER =
+            (resultSet, i) -> {
+                User seller = User.builder()
+                        .id(resultSet.getInt("seller_id"))
+                        .email(resultSet.getString("email"))
+                        .build();
+
+                String cryptoId = resultSet.getString("coin_id");
+                Cryptocurrency crypto = Cryptocurrency.getInstance(
+                        cryptoId,
+                        resultSet.getString("description"),
+                        resultSet.getDouble("market_price")
+                );
+
+                PaymentMethod pm = new PaymentMethod(
+                        resultSet.getInt("payment_method_id"),
+                        resultSet.getString("payment_name"),
+                        ""
+                );
+
+                return Offer.builder(
+                                seller,
+                                crypto,
+                                resultSet.getDouble("asking_price")
+                        )
+                        .id(resultSet.getInt("offer_id"))
+                        .amount(resultSet.getDouble("coin_amount"))
+                        .paymentMethod(pm)
+                        .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
+                        .status(resultSet.getInt("status_id"));
             };
 
 
@@ -69,7 +100,6 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public List<Offer> getAllOffers() {
-        cryptoCache = new HashMap<>();
         final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id", OFFER_ROW_MAPPER);
         return offers;
     }
@@ -80,8 +110,28 @@ public class OfferJdbcDao implements OfferDao {
     }
     @Override
     public Iterable<Offer> getPagedOffers(int page, int pageSize) {
-        cryptoCache = new HashMap<>();
-        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id LIMIT ? OFFSET ?", OFFER_ROW_MAPPER, pageSize, page);
-        return offers;
+
+        String query = "SELECT * FROM offer \n" +
+                "    JOIN users ON offer.seller_id = users.id\n" +
+                "    JOIN cryptocurrency c on offer.coin_id = c.id\n" +
+                "    JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id \n" +
+                "    JOIN payment_method pm on pmao.payment_method_id = pm.id\n" +
+                "    LIMIT ? OFFSET ?";
+
+
+
+        final List<Offer.Builder> offerBuilders = jdbcTemplate.query(query, OFFER_BUILDER_ROW_MAPPER, pageSize, page);
+        Map<Integer,Offer.Builder> builderMap = new HashMap<>();
+        for(Offer.Builder builder : offerBuilders ){
+            builderMap.putIfAbsent(builder.getId(),builder);
+            for(PaymentMethod paymentMethod : builder.getPaymentMethods())
+                builderMap.get(builder.getId()).paymentMethod(paymentMethod);
+        }
+
+        final List<Offer> offerList = new ArrayList<>();
+        for(Offer.Builder builder : builderMap.values())
+            offerList.add(builder.build());
+
+        return offerList;
     }
 }

@@ -37,7 +37,7 @@ public class HomeController {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
-        Iterable<Offer> offers = offerService.getAllOffers();
+        Iterable<Offer> offers = offerService.getPagedOffers(0, 4);
         mav.addObject("offerList",offers);
         return mav;
     }

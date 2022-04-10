@@ -59,6 +59,7 @@
                         <jsp:param name="user" value="pepito"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="2"/>
+                        <jsp:param name="offerId" value="${offer.id}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

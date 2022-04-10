@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 
 
@@ -31,7 +32,7 @@
 				</div>
 				<div class="flex basis-1/4 justify-center">
 						<button class="rounded-lg bg-frostdr max-h-14 m-2 transition ease-in-out delay-150 hover:-translate-y-0.25 hover:scale-110 hover:bg-polarl duration-150">
-						<p class="pr-14 pl-14 text-storm ">Compra</p>
+						<a class="pr-14 pl-14 text-storm " href="<c:url value="/buy?offerId=${param.offerId}"/>">Compra</a>
   					</button>
   				</div>
 

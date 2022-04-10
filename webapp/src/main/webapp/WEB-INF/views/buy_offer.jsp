@@ -58,5 +58,8 @@
         <h1 class="text-center text-4xl font-bold">100000 ARS / ETH</h1>
     </div>
 </div>
+<jsp:include page="../components/buy_form.jsp">
+    <jsp:param name="offer_id" value="${offer.id}"/>
+</jsp:include>
 </body>
 </html>

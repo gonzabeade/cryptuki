@@ -1,8 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-			<meta charset="ISO-8859-1">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<script src="https://cdn.tailwindcss.com"></script>
 			<script>

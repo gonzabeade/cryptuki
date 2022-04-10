@@ -36,7 +36,6 @@ public class HomeController {
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
         Iterable<Offer> offers = offerService.getAllOffers();
-        System.out.println("OFFERS"+offers);
         mav.addObject("offerList",offers);
         String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
         mav.addObject("payments", payments);
@@ -77,8 +76,8 @@ public class HomeController {
         String message =  user + " ha demostrado interés en  " + offerService.getOffer(form.getOfferId()).toString();
         message+="\nQuiere comprarte " + form.getAmount() + "ARS";
 
-        message+="\n También te dejó un mensaje: " + form.getMessage();
-        message+="\n Contactalo ya por mail!";
+        message+="\nTambién te dejó un mensaje: " + form.getMessage();
+        message+="\nContactalo ya por mail!";
         MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(form.getOfferId()).getSeller().getEmail());
         mailMessage.setBody(message);
 

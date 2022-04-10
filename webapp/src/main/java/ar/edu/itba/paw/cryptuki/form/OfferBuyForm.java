@@ -1,10 +1,23 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-public class OfferBuyForm {
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+public class OfferBuyForm {
+    @Size(min=6, max= 100)
+    @Email()
+    @Pattern(regexp=".+@.+\\..+")
     private String email;
+
+    @NumberFormat
     private int amount;
+
     private Integer offerId;
+    @NotEmpty
     private String message;
 
     public void setOfferId(Integer offerId) {

@@ -30,8 +30,8 @@
 
         </div>
         <div class="flex flex-row p-5 mx-60">
-            <button class="bg-polarlr/[0.6] text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cancelar</button>
-            <button type="submit" class="bg-frostdr text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
+            <button class="bg-polarlr/[0.6] text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cancelar</button>
+            <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
         </div>
         <form:input type="hidden" path="offerId"  value="${param.offerId}"/>
     </form:form>

@@ -125,11 +125,11 @@ public final class Offer {
     public String toString() {
         return "tu oferta \n" +
                 "Identificador de la Oferta: " + id +
-                ",\n Dueño: " + seller.getEmail() +
-                ",\n Publicada el: " + date +
-                ",\n Criptomoneda: '" + crypto.getName() + '\'' +
-                ",\n Precio : " + askingPrice +
-                ",\n Cantidad ofertada : " + coinAmount;
+                "\n Dueño: " + seller.getEmail() +
+                "\n Publicada el: " + date +
+                "\n Criptomoneda: '" + crypto.getName() + '\'' +
+                "\n Precio : " + askingPrice +
+                "\n Cantidad ofertada : " + coinAmount;
     }
 
     @Override

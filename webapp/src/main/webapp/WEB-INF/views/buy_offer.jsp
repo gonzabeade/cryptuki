@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: marcos
-  Date: 9/4/2022
-  Time: 20:19
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -58,8 +52,14 @@
             <h1 class="text-center text-4xl font-bold">${offer.askingPrice} ARS / ${offer.crypto.name}</h1>
         </div>
     </div>
-    <jsp:include page="../components/buy_form.jsp">
-        <jsp:param name="offer_id" value="${offer.id}"/>
-    </jsp:include>
+    <div>
+        <jsp:include page="../components/buy_form.jsp">
+            <jsp:param name="offer_id" value="${offer.id}"/>
+        </jsp:include>
+        <jsp:include page="../components/seller_info.jsp">
+            <jsp:param name="email" value="${offer.seller.email}"/>
+        </jsp:include>
+    </div>
+
 </body>
 </html>

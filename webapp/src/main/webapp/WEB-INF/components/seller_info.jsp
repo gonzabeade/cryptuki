@@ -1,18 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: marcos
-  Date: 9/4/2022
-  Time: 21:23
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="border border-gray-500">
-    <h1>Información del vendedor</h1>
+<hr>
+<div class="flex  flex-col mx-auto text-center mb-10">
+    <h1 class="font-sans font-bold text-polard text-2xl mt-3">Información del vendedor</h1>
     <div>
-        <h3>Mail de contacto</h3>
-        <h3>Cantidad de trades</h3>
-        <h3>Rating</h3>
-        <h3>Numero de contacto</h3>
+        <h3 class="font-sans">Mail de contacto: <c:out value="${param.email}"/></h3>
     </div>
 
 </div>

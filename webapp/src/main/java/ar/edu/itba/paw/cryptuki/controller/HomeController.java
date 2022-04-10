@@ -39,8 +39,6 @@ public class HomeController {
 
         Iterable<Offer> offers = offerService.getAllOffers();
         mav.addObject("offerList",offers);
-        String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
-        mav.addObject("payments", payments);
         return mav;
     }
     @RequestMapping(value = "/contact", method = RequestMethod.GET)

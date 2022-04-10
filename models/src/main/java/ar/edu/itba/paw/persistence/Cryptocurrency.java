@@ -1,24 +1,48 @@
 package ar.edu.itba.paw.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class Cryptocurrency {
 
-    private final String code;
-    private final Double marketPrice;
-    private final String name;
+    private CryptoTag cryptoTag;
+    private Double marketPrice;
 
-    protected Cryptocurrency(String code, String name, Double marketPrice) {
-        this.code = code;
+    // Flyweight Pattern - Why return whole new Cryptocurrency instances if I can cache the intrinsic state?
+    private static Map<String, CryptoTag> cache = new HashMap<>();
+
+    private static class CryptoTag {
+        private String code;
+        private String name;
+
+        public CryptoTag(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
+
+    private Cryptocurrency(CryptoTag cryptoTag,  Double marketPrice) {
+        this.cryptoTag = cryptoTag;
         this.marketPrice = marketPrice;
-        this.name = name;
+    }
+
+    // Flyweight Factory Method with on-the-go updates
+    protected static Cryptocurrency getInstance(String code, String name, Double marketPrice) {
+        if ( cache.containsKey(code) ) {
+            return new Cryptocurrency( cache.get(code), marketPrice);
+        } else {
+            CryptoTag ct = new CryptoTag(code, name);
+            cache.put(code, ct);
+            return new Cryptocurrency( ct, marketPrice);
+        }
     }
 
     public String getCode() {
-        return code;
+        return cryptoTag.code;
     }
     public String getName() {
-        return name;
+        return cryptoTag.name;
     }
     public double getMarketPrice() {
         return marketPrice;
@@ -30,21 +54,21 @@ public final class Cryptocurrency {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cryptocurrency that = (Cryptocurrency) o;
-        return Objects.equals(code, that.code) && Objects.equals(marketPrice, that.marketPrice) && Objects.equals(name, that.name);
+        return Objects.equals(cryptoTag.code, that.cryptoTag.code) && Objects.equals(marketPrice, that.marketPrice) && Objects.equals(cryptoTag.name, cryptoTag.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, marketPrice, name);
+        return Objects.hash(cryptoTag.code, marketPrice, cryptoTag.name);
     }
 
 
     @Override
     public String toString() {
         return "Cryptocurrency{" +
-                "code='" + code + '\'' +
+                "code='" + cryptoTag.code + '\'' +
                 ", marketPrice=" + marketPrice +
-                ", name='" + name + '\'' +
+                ", name='" + cryptoTag.name + '\'' +
                 '}';
     }
 }

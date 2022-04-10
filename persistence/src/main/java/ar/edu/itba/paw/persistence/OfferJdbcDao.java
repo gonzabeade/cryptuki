@@ -28,7 +28,7 @@ public class OfferJdbcDao implements OfferDao {
 
                 String cryptoId = resultSet.getString("coin_id");
                 Cryptocurrency crypto = cryptoCache.getOrDefault(cryptoId,
-                        new Cryptocurrency(
+                        Cryptocurrency.getInstance(
                                 cryptoId,
                         resultSet.getString("description"),
                         resultSet.getDouble("market_price")

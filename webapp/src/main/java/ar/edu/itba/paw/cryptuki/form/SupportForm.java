@@ -8,8 +8,8 @@ import javax.validation.constraints.Size;
 
 public class SupportForm {
     @Size(min=6, max= 100)
-    @Email(message="Por favor introduzca un email correcto")
-    @Pattern(regexp=".+@.+\\..+", message="Por favor introduzca un email correcto")
+    @Email()
+    @Pattern(regexp=".+@.+\\..+")
     private String email;
 
     @NotEmpty

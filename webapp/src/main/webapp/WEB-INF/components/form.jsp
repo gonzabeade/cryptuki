@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:url value="/contact" var="postUrl"/>
 <form:form modelAttribute="supportForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">

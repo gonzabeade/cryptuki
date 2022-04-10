@@ -1,14 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: marcos
-  Date: 8/4/2022
-  Time: 17:04
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
-    <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

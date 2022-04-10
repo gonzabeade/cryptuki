@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="bg-[#FAFCFF] border-gray-200 py-3 h-20"> <!--OK-->
     <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
         <div class="flex justify-center center w-1/4">

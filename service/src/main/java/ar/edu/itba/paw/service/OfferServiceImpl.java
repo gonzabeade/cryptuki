@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.Offer;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
+import com.sun.org.apache.xml.internal.dtm.ref.DTMAxisIteratorBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,18 +10,31 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class OfferServiceImpl implements OfferService{
+public class OfferServiceImpl implements OfferService {
 
     @Autowired
     private OfferDao offerDao;
 
     @Override
-    public Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount) {
-        return offerDao.makeOffer(seller_id,offer_date,coin_id,asking_price,coin_amount);
+    public Offer makeOffer(Offer.Builder builder) {
+        // TODO: Back-end validation of builder
+        return null; // offerDao.makeOffer(builder);
     }
 
     @Override
-    public List<Offer> getAllOffers() {
-        return offerDao.getAllOffers();
+    public Iterable<Offer> getPagedOffers(int page, int pageSize) { return null; } // TODO: implement correctly
+
+    @Override
+    public Iterable<Offer> getAllOffers() {
+        Iterable<Offer> x = offerDao.getAllOffers();
+        for ( Offer t: x) {
+            System.out.println(t);
+        }
+        return x;
+    }
+
+    @Override
+    public Offer getOffer(int id) {
+        return null; // offerDao.getOffer(id);
     }
 }

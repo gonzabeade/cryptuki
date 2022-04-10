@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,38 +16,61 @@ public class OfferJdbcDao implements OfferDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private final static RowMapper<Offer> ROW_MAPPER =
-            (resultSet, i) -> new Offer.Builder()
-                .id(resultSet.getInt("offer_id"))
-                .seller(resultSet.getInt("seller_id"))
-                .date(resultSet.getTimestamp("offer_date"))
-                .coin(resultSet.getString("coin_id"))
-                .price(resultSet.getDouble("asking_price"))
-                .amount(resultSet.getDouble("coin_amount"))
-                .build();
+    private static Map<String, Cryptocurrency> cryptoCache = new HashMap<>();
+
+    private final static RowMapper<Offer> OFFER_ROW_MAPPER =
+            (resultSet, i) -> {
+                User seller = User.builder()
+                        .id(resultSet.getInt("seller_id"))
+                        .email(resultSet.getString("email"))
+                        .build();
+
+
+                String cryptoId = resultSet.getString("coin_id");
+                Cryptocurrency crypto = cryptoCache.getOrDefault(cryptoId,
+                        new Cryptocurrency(
+                                cryptoId,
+                        resultSet.getString("description"),
+                        resultSet.getDouble("market_price")
+                        )
+                );
+
+                return Offer.builder(
+                                seller,
+                                crypto,
+                                resultSet.getDouble("asking_price")
+                        )
+                        .id(resultSet.getInt("offer_id"))
+                        .amount(resultSet.getDouble("coin_amount"))
+                        .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
+                        .status(resultSet.getInt("status_id"))
+                        .build();
+            };
 
 
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offers").usingGeneratedKeyColumns("offer_id");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
     }
 
     @Override
-    public Offer makeOffer(int seller_id, Date offer_date,String coin_id, double asking_price, double coin_amount) {
+    public Offer makeOffer(Offer.Builder builder) {
         final Map<String,Object> args = new HashMap<>();
-        args.put("seller_id",seller_id);
-        args.put("offer_date",new java.sql.Date(offer_date.getTime()));
-        args.put("coin_id",coin_id);
-        args.put("asking_price",asking_price);
-        args.put("coin_amount",coin_amount);
-        final int offer_id = jdbcInsert.executeAndReturnKey(args).intValue();
-        return new Offer(offer_id,seller_id,offer_date,coin_id,asking_price,coin_amount);
+        args.put("seller_id", builder.getSeller().getId());
+        args.put("offer_date", builder.getDate());
+//        args.put("coin_id", builder.getCoinId());
+        args.put("asking_price", builder.getAskingPrice());
+        args.put("status_id", 2);
+        args.put("coin_amount", builder.getCoinAmount());
+        jdbcInsert.executeAndReturnKey(args).intValue();
+        return builder.build();
     }
 
     @Override
     public List<Offer> getAllOffers() {
-        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFERS",ROW_MAPPER);
+        cryptoCache = new HashMap<>();
+        final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id", OFFER_ROW_MAPPER);
         return offers;
     }
 }

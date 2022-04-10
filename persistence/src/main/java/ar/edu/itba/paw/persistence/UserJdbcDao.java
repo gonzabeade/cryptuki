@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 
-import ar.edu.itba.paw.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

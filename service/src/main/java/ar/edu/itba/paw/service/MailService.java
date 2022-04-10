@@ -30,8 +30,7 @@ public final class MailService implements ContactService<MailMessage> {
     }
 
     @Override
-    public MailMessage createMessage(String from, String to) {
-        if (from != mainSender) System.err.println("WARNING: 'from' parameter ignored, Mail service is only available for "+mainSender);
+    public MailMessage createMessage(String to) {
         return new MailMessage(mainSender, to);
     }
 

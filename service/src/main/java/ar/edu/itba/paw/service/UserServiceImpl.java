@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUsername(int id) {
-        return "DESDE EL SERVICE";
+    public User getUser(int id) {
+        return null;
+    }
+
+    @Override
+    public User makeUser(UserAuth.Builder authBuilder, User.Builder userBuilder) {
+        return null;
     }
 }

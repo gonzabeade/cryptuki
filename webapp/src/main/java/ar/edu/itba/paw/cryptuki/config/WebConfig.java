@@ -42,16 +42,17 @@ public class WebConfig {
 
     @Bean
     public ContactService<MailMessage> contactService() {
-        return new MailService("TestPaw25@gmail.com", "esteesuntestdepaw");
+        return new MailService(System.getenv("MAIL_ADDRESS"), System.getenv("MAIL_PASS") );
     }
 
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5432/paw");
-        ds.setUsername("postgres");
-        ds.setPassword("gonza");
+        System.out.println("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
+        ds.setUrl("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
+        ds.setUsername(System.getenv("DB_USER"));
+        ds.setPassword(System.getenv("DB_PASS"));
         return ds;
     }
 
@@ -59,6 +60,7 @@ public class WebConfig {
     public DataSourceInitializer dataSourceInitializer(final DataSource ds){
         final DataSourceInitializer dsi = new DataSourceInitializer();
         dsi.setDataSource(ds);
+//        dsi.setDatabasePopulator(databasePopulator());
         return dsi;
     }
 

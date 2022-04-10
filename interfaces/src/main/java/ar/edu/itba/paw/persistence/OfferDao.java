@@ -7,6 +7,7 @@ public interface OfferDao {
 
     Offer makeOffer(Offer.Builder builder);
     List<Offer> getAllOffers();
+    Iterable<Offer> getPagedOffers(int page, int pageSize);
 
 
 }

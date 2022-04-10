@@ -3,7 +3,6 @@
 <html>
 <head>
     <title>P2P Crypto</title>
-    <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>

@@ -23,6 +23,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
+    private static final int PAGE_SIZE = 2;
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -32,15 +33,19 @@ public class HomeController {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView helloWorld() {
+    @RequestMapping("/{page}") /* When requests come to this path, requests are forwarded to this method*/
+    public ModelAndView helloWorld(@PathVariable(value = "page") final int page) {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
-        Iterable<Offer> offers = offerService.getAllOffers();
+        Iterable<Offer> offers = offerService.getPagedOffers(page,PAGE_SIZE);
+        System.out.println("OFFERS"+offers);
         mav.addObject("offerList",offers);
+        String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
+        mav.addObject("payments", payments);
         return mav;
     }
+
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
         return new ModelAndView("views/contact");
@@ -96,4 +101,3 @@ public class HomeController {
     }
 
 }
-

@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
-import java.util.Iterator;
+import java.util.Optional;
 
 
 @Controller  /* Requests can be dispatched to this class */
@@ -34,16 +33,22 @@ public class HomeController {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    @RequestMapping("/{page}") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView helloWorld(@PathVariable(value = "page") final int page) {
-        /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
+    @RequestMapping(value = {"/","/{page}"}, method = RequestMethod.GET)
+    public ModelAndView helloWorld(@PathVariable(value = "page") final Optional<Integer> page) {
 
-        Iterable<Offer> offers = offerService.getPagedOffers(page,PAGE_SIZE);
+        final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
+
+        if(page.isPresent()){
+            Iterable<Offer> offers = offerService.getPagedOffers(page.get(),PAGE_SIZE);
+            mav.addObject("offerList",offers);
+        }else{
+           Iterable<Offer> offers = offerService.getPagedOffers(0, PAGE_SIZE);
+            mav.addObject("offerList",offers);
+        }
+
         int offersSize = offerService.getOfferCount();
-        mav.addObject("offerList",offers);
+
         mav.addObject("pages", Math.ceil( (double) offersSize / PAGE_SIZE));
-        mav.addObject("activePage", page);
         return mav;
     }
 

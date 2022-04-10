@@ -33,9 +33,9 @@
         </div>
     </ol>
     <div class="flex flex-row mx-auto">
-        <a href="<c:url value="/0"/>" class="bg-frost active:text-red-400 p-3 mx-4 my-5" >1</a>
-        <a href="<c:url value="/1"/>" class="bg-frost  p-3 mx-4 my-5" >2</a>
-        <a href="<c:url value="/2"/>" class="bg-frost p-3 mx-4 my-5">3</a>
+        <c:forEach var = "i" begin = "0" end = "${pages - 1}">
+            <a href="<c:url value="/${i}"/>" class="bg-frost active:text-white-400 p-3 mx-4 my-5"><c:out value="${i+1}"/></a>
+        </c:forEach>
     </div>
 </div>
 <div class="shape-blob"></div>

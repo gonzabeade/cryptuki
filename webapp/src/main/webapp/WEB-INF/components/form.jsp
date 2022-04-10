@@ -6,7 +6,7 @@
 <form:form modelAttribute="supportForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
     <div class="flex flex-col p-5 justify-center">
-        <form:errors path="email" element="h1" cssClass="text-color: red" />
+        <form:errors path="email" element="h1" cssClass="bg-red" />
         <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Email</form:label>
         <div class="flex-row justify-center">
             <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3"/>

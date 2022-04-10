@@ -42,13 +42,13 @@ public class HomeController {
         return mav;
     }
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView createTicket( @ModelAttribute("supportForm") final SupportForm form ){
+    public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
         return new ModelAndView("contact");
     }
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
-    public ModelAndView support(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors){
+    public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors){
         if(errors.hasErrors()){
-            return createTicket(form);
+            return support(form);
         }
         //send mail
         return new ModelAndView("redirect:/");

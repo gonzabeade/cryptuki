@@ -8,6 +8,8 @@ public final class PaymentMethod {
     private final String name;
     private final String description;
 
+    private static
+
     protected PaymentMethod(int id, String name, String description) {
         this.id = id;
         this.name = name;

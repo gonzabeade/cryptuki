@@ -45,17 +45,17 @@ public class WebConfig {
 
     @Bean
     public ContactService<MailMessage> contactService() {
-        return new MailService(System.getenv("MAIL_ADDRESS"), System.getenv("MAIL_PASS") );
+        return new MailService(System.getProperty("MAIL_ADDRESS"), System.getProperty("MAIL_PASS") );
     }
 
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        System.out.println("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
-        ds.setUrl("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
-        ds.setUsername(System.getenv("DB_USER"));
-        ds.setPassword(System.getenv("DB_PASS"));
+        System.out.println("jdbc:"+System.getProperty("DB_CONNECTION") + System.getProperty("DB_NAME"));
+        ds.setUrl("jdbc:"+System.getProperty("DB_CONNECTION") + System.getProperty("DB_NAME"));
+        ds.setUsername(System.getProperty("DB_USER"));
+        ds.setPassword(System.getProperty("DB_PASS"));
 
         return ds;
     }

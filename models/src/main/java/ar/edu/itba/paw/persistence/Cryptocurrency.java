@@ -23,7 +23,6 @@ public final class Cryptocurrency {
     }
 
     private Cryptocurrency(CryptoTag cryptoTag,  Double marketPrice) {
-        cache.putIfAbsent(cryptoTag.code, cryptoTag);
         this.cryptoTag = cryptoTag;
         this.marketPrice = marketPrice;
     }

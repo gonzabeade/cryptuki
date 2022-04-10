@@ -64,7 +64,6 @@ public class HomeController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        System.out.println(offerService.getOffer(offerId));
         mav.addObject("offer", offerService.getOffer(offerId));
         return mav;
     }
@@ -73,7 +72,19 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form);
         }
-        System.out.println("TOOOODOOO OOOOOOK");
+        String user = form.getEmail();
+
+        String message =  user + " ha demostrado interés en  " + offerService.getOffer(form.getOfferId()).toString();
+        message+="\nQuiere comprarte " + form.getAmount() + "ARS";
+
+        message+="\n También te dejó un mensaje: " + form.getMessage();
+        message+="\n Contactalo ya por mail!";
+        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(form.getOfferId()).getSeller().getEmail());
+        mailMessage.setBody(message);
+
+        mailMessage.setSubject("Recibiste una oferta por tu publicación en Cryptuki!");
+        mailContactService.sendMessage(mailMessage);
+
         return new ModelAndView("redirect:/");
     }
 

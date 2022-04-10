@@ -123,14 +123,13 @@ public final class Offer {
     }
     @Override
     public String toString() {
-        return "Offer{" +
-                "offer_id=" + id +
-                ", seller_id=" + seller +
-                ", offer_date=" + date +
-                ", coin_id='" + crypto + '\'' +
-                ", asking_price=" + askingPrice +
-                ", coin_amount=" + coinAmount +
-                '}';
+        return "tu oferta \n" +
+                "Identificador de la Oferta: " + id +
+                ",\n Dueño: " + seller.getEmail() +
+                ",\n Publicada el: " + date +
+                ",\n Criptomoneda: '" + crypto.getName() + '\'' +
+                ",\n Precio : " + askingPrice +
+                ",\n Cantidad ofertada : " + coinAmount;
     }
 
     @Override

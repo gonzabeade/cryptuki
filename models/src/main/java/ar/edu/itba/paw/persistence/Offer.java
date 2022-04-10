@@ -61,7 +61,7 @@ public final class Offer {
         public double getAskingPrice() {
             return askingPrice;
         }
-        public Collection<PaymentMethod> getPaymentMethodsAccepted() {
+        public Collection<PaymentMethod> getPaymentMethods() {
             return paymentMethodsAccepted;
         }
         public LocalDateTime getDate() {
@@ -113,6 +113,7 @@ public final class Offer {
     public double getCoinAmount() {
         return coinAmount;
     }
+
     public Iterable<PaymentMethod> getPaymentMethods() {  // Prevents manipulation of collection from outside the class
         return paymentMethodsAccepted;
     }

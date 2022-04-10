@@ -130,7 +130,9 @@ public final class Offer {
                 "\n Publicada el: " + date +
                 "\n Criptomoneda: '" + crypto.getName() + '\'' +
                 "\n Precio : " + askingPrice +
-                "\n Cantidad ofertada : " + coinAmount;
+                "\n Cantidad ofertada : " + coinAmount +
+                "\n Metodo de pago : " + paymentMethods;
+
     }
 
     @Override

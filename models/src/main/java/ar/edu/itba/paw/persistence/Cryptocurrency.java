@@ -29,13 +29,8 @@ public final class Cryptocurrency {
 
     // Flyweight Factory Method with on-the-go updates
     protected static Cryptocurrency getInstance(String code, String name, Double marketPrice) {
-        if ( cache.containsKey(code) ) {
-            return new Cryptocurrency( cache.get(code), marketPrice);
-        } else {
-            CryptoTag ct = new CryptoTag(code, name);
-            cache.put(code, ct);
-            return new Cryptocurrency( ct, marketPrice);
-        }
+        CryptoTag ct = cache.getOrDefault(code, new CryptoTag(code, name));
+        return new Cryptocurrency(ct, marketPrice);
     }
 
     public String getCode() {

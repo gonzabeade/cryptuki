@@ -5,18 +5,18 @@
 <form:form modelAttribute="supportForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
     <div class="flex flex-col p-5 justify-center">
-        <form:errors path="email" element="h1" cssClass="bg-red" />
+        <form:errors path="email" cssClass="text-red-500"/>
         <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Email</form:label>
         <div class="flex-row justify-center">
-            <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3"/>
+            <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
         </div>
 
     </div>
     <div class="flex flex-col p-5 ">
-        <form:errors path="message" element="p" cssClass="color: red"/>
+        <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Mensaje</form:label>
         <div class="flex-row justify-center">
-            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message"/>
+            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="Quiero vender mis 3 bitcoins a 40 mil dólares, No me llegan los emails, etc"/>
         </div>
 
     </div>

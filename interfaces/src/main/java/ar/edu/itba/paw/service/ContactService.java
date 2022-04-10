@@ -1,12 +1,7 @@
 package ar.edu.itba.paw.service;
 
-public interface ContactService {
+public interface ContactService<T extends Message> {
 
-    interface Message {
-        String getTo();
-        String getFrom();
-    }
-
-    void sendMessage(Message m);
-    Message newMessage();
+    void sendMessage(T message);
+    T createMessage(String to);
 }

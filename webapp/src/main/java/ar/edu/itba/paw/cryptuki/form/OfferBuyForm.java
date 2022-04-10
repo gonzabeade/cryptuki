@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.form;
 public class OfferBuyForm {
 
     private String email;
+    private int amount;
     private Integer offerId;
     private String message;
 
@@ -15,6 +16,9 @@ public class OfferBuyForm {
     public void setMessage(String message) {
         this.message = message;
     }
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     public String getEmail() {
         return email;
@@ -24,6 +28,9 @@ public class OfferBuyForm {
     }
     public String getMessage() {
         return message;
+    }
+    public int getAmount() {
+        return amount;
     }
 
 }

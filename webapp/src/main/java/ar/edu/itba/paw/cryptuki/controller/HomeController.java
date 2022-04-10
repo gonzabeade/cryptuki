@@ -1,14 +1,19 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -36,9 +41,17 @@ public class HomeController {
         mav.addObject("payments", payments);
         return mav;
     }
-    @RequestMapping("/buy")
-    public ModelAndView buyOffer(){
+    @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
+    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId){
+        ModelAndView mav = new ModelAndView("views/buy_offer");
+        mav.addObject("offer", offerService.getOffer(offerId));
         return new ModelAndView("views/buy_offer");
+    }
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form){
+
+
+        return new ModelAndView("redirect:/");
     }
 
 }

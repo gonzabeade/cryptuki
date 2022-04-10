@@ -30,7 +30,7 @@
 
         </div>
         <div class="flex flex-row p-5 mx-60">
-            <button class="bg-polarlr/[0.6] text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cancelar</button>
+            <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
             <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
         </div>
         <form:input type="hidden" path="offerId"  value="${param.offerId}"/>

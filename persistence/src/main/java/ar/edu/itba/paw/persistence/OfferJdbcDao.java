@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -110,7 +111,7 @@ public class OfferJdbcDao implements OfferDao {
     }
     @Override
     public Iterable<Offer> getPagedOffers(int page, int pageSize) {
-
+        int index = page * pageSize;
         String query = "SELECT * FROM offer \n" +
                 "    JOIN users ON offer.seller_id = users.id\n" +
                 "    JOIN cryptocurrency c on offer.coin_id = c.id\n" +
@@ -120,7 +121,7 @@ public class OfferJdbcDao implements OfferDao {
 
 
 
-        final List<Offer.Builder> offerBuilders = jdbcTemplate.query(query, OFFER_BUILDER_ROW_MAPPER, pageSize, page);
+        final List<Offer.Builder> offerBuilders = jdbcTemplate.query(query, OFFER_BUILDER_ROW_MAPPER, pageSize, index);
         Map<Integer,Offer.Builder> builderMap = new HashMap<>();
         for(Offer.Builder builder : offerBuilders ){
             builderMap.putIfAbsent(builder.getId(),builder);
@@ -133,5 +134,10 @@ public class OfferJdbcDao implements OfferDao {
             offerList.add(builder.build());
 
         return offerList;
+    }
+
+    @Override
+    public int getOfferCount() {
+          return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM offer", Integer.class);
     }
 }

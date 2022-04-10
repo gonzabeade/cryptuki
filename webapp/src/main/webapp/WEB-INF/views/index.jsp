@@ -15,7 +15,7 @@
 <div class=" flex justify-center mx-10">
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
-<div class="flex justify-center mx-60">
+<div class="flex flex-col justify-center mx-60">
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
@@ -32,6 +32,11 @@
             </c:forEach>
         </div>
     </ol>
+    <div class="flex flex-row mx-auto">
+        <c:forEach var = "i" begin = "0" end = "${pages - 1}">
+            <a href="<c:url value="/${i}"/>" class="bg-frost active:text-white-400 p-3 mx-4 my-5"><c:out value="${i+1}"/></a>
+        </c:forEach>
+    </div>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

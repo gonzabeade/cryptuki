@@ -8,5 +8,6 @@ public interface OfferService {
     Iterable<Offer> getPagedOffers(int page, int pageSize);
     Iterable<Offer> getAllOffers();
     Offer getOffer(int id);
+    int getOfferCount();
 
 }

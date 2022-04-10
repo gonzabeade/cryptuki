@@ -33,7 +33,7 @@ public class HomeController {
     @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView helloWorld() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("index"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
         Iterable<Offer> offers = offerService.getAllOffers();
         System.out.println("OFFERS"+offers);
@@ -44,7 +44,7 @@ public class HomeController {
     }
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
-        return new ModelAndView("contact");
+        return new ModelAndView("views/contact");
     }
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors){
@@ -62,15 +62,18 @@ public class HomeController {
         return new ModelAndView("redirect:/");
     }
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId){
+    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
+        System.out.println(offerService.getOffer(offerId));
         mav.addObject("offer", offerService.getOffer(offerId));
-        return new ModelAndView("views/buy_offer");
+        return mav;
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form){
-
-
+    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return buyOffer(form.getOfferId(), form);
+        }
+        System.out.println("TOOOODOOO OOOOOOK");
         return new ModelAndView("redirect:/");
     }
 

@@ -7,6 +7,7 @@ public interface OfferDao {
 
     Offer makeOffer(Offer.Builder builder);
     List<Offer> getAllOffers();
+    Offer getOffer(int offerId);
 
 
 }

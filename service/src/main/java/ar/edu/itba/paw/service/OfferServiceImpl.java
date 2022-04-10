@@ -35,6 +35,6 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public Offer getOffer(int id) {
-        return null; // offerDao.getOffer(id);
+        return offerDao.getOffer(id);
     }
 }

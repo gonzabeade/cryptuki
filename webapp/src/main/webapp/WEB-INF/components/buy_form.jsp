@@ -33,6 +33,6 @@
             <button class="bg-gray-500 text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cancelar</button>
             <button type="submit" class="bg-green-500 text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
         </div>
-        <form:hidden path="offerId" >${param.offerId}</form:hidden>
+        <form:input type="hidden" path="offerId"  value="${param.offerId}"/>
     </form:form>
 </div>

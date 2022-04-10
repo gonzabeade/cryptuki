@@ -53,13 +53,12 @@ public class HelloWorldController {
 
 
     @RequestMapping("/mail")
-    public ModelAndView sendMessage(String to) throws MessagingException {
+    public ModelAndView sendMessage() {
 
-        MailMessage message = mailService.createMessage("TestPaw25@gmail.com", "gbeade@itba.edu.ar");
-        message.setSubject("Test Paw con beans!");
-        message.setBody("Hola desde Paw 45!");
+        MailMessage message = mailService.createMessage("", "scastagnino@itba.edu.ar");
+        message.setBody("Hola Salva como estas");
+        message.setSubject("Esto es una prueba");
         mailService.sendMessage(message);
-
 
         return new ModelAndView("hello/index");
     }

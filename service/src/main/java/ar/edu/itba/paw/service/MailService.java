@@ -19,7 +19,7 @@ public final class MailService implements ContactService<MailMessage> {
         // TODO: What goes instead of UTF-8?
         final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
         try {
-            messageHelper.setSubject(message.getBody());
+            messageHelper.setSubject(message.getSubject());
             messageHelper.setFrom(message.getFrom());
             messageHelper.setTo(message.getTo());
             messageHelper.setText(message.getBody());
@@ -31,13 +31,15 @@ public final class MailService implements ContactService<MailMessage> {
 
     @Override
     public MailMessage createMessage(String from, String to) {
-        return new MailMessage(from, to);
+        if (from != mainSender) System.err.println("WARNING: 'from' parameter ignored, Mail service is only available for "+mainSender);
+        return new MailMessage(mainSender, to);
     }
 
 
     public MailService(String email, String password) {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mainSender = email;
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");

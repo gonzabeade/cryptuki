@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Iterator;
 
 
 @Controller  /* Requests can be dispatched to this class */
@@ -39,10 +40,10 @@ public class HomeController {
         final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
 
         Iterable<Offer> offers = offerService.getPagedOffers(page,PAGE_SIZE);
-        System.out.println("OFFERS"+offers);
+        int offersSize = offerService.getOfferCount();
         mav.addObject("offerList",offers);
-        String[] payments = {"bru", "mp"}; //this is WRONG, it should get the info from the offer. Demostrative purposes only
-        mav.addObject("payments", payments);
+        mav.addObject("pages", Math.ceil( (double) offersSize / PAGE_SIZE));
+        mav.addObject("activePage", page);
         return mav;
     }
 

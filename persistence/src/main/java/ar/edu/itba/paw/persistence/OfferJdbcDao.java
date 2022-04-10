@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -85,5 +86,10 @@ public class OfferJdbcDao implements OfferDao {
         final List<Offer> offers = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id LIMIT ? OFFSET ?", OFFER_ROW_MAPPER, pageSize, index);
 
         return offers;
+    }
+
+    @Override
+    public int getOfferCount() {
+          return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM offer", Integer.class);
     }
 }

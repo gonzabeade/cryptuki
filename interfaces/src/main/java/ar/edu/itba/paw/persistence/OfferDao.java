@@ -9,6 +9,7 @@ public interface OfferDao {
     List<Offer> getAllOffers();
     Offer getOffer(int offerId);
     Iterable<Offer> getPagedOffers(int page, int pageSize);
+    int getOfferCount();
 
 
 }

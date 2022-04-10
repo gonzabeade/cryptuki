@@ -22,12 +22,14 @@ public class HomeController {
     private final UserService us;
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
+    private final CryptocurrencyService cryptocurrencyService;
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService) {
+    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
         this.us = us;
         this.offerService = offerService;
         this.mailContactService = mailContactService;
+        this.cryptocurrencyService = cryptocurrencyService;
     }
 
     @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
@@ -85,6 +87,14 @@ public class HomeController {
         mailContactService.sendMessage(mailMessage);
 
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping("/coins") /* When requests come to this path, requests are forwarded to this method*/
+    public ModelAndView coins() {
+        /*Alter the model (M) alters de view (V) via this Controller (C)*/
+        final ModelAndView mav = new ModelAndView("views/CoinsPage"); /* Load a jsp file */
+        mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
+        return mav;
     }
 
 }

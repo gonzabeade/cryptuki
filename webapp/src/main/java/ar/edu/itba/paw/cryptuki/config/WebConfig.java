@@ -56,6 +56,7 @@ public class WebConfig {
         ds.setUrl("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
         ds.setUsername(System.getenv("DB_USER"));
         ds.setPassword(System.getenv("DB_PASS"));
+
         return ds;
     }
 

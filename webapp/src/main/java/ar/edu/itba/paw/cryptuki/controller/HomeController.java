@@ -36,5 +36,9 @@ public class HomeController {
         mav.addObject("payments", payments);
         return mav;
     }
+    @RequestMapping("/buy")
+    public ModelAndView buyOffer(){
+        return new ModelAndView("views/buy_offer");
+    }
 
 }

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.cryptuki.config;
 
+import ar.edu.itba.paw.service.ContactService;
+import ar.edu.itba.paw.service.MailMessage;
+import ar.edu.itba.paw.service.MailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,6 +38,11 @@ public class WebConfig {
         resolver.setPrefix("/WEB-INF/");
         resolver.setSuffix(".jsp");
         return resolver;
+    }
+
+    @Bean
+    public ContactService<MailMessage> contactService() {
+        return new MailService("TestPaw25@gmail.com", "esteesuntestdepaw");
     }
 
     @Bean

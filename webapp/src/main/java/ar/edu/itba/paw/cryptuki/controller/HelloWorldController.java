@@ -4,13 +4,11 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.Offer;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +18,13 @@ public class HelloWorldController {
 
     private final UserService us;
     private final OfferService offerService;
-    private final GmailSender gmailSender;
+    private final ContactService<MailMessage> mailService;
 
     @Autowired
-    public HelloWorldController(UserService us, OfferService offerService, GmailSender gmailSender) {
+    public HelloWorldController(UserService us, OfferService offerService, ContactService<MailMessage> mailService) {
         this.us = us;
         this.offerService = offerService;
-        this.gmailSender = gmailSender;
+        this.mailService = mailService;
     }
 
     @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
@@ -53,21 +51,16 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/mensaje")
+
+    @RequestMapping("/mail")
     public ModelAndView sendMessage(String to) throws MessagingException {
 
-        this.gmailSender.send("TestPaw25@gmail.com", to, "Encabezado de mail", "Cuerpo de mail");
+        MailMessage message = mailService.createMessage("TestPaw25@gmail.com", "gbeade@itba.edu.ar");
+        message.setSubject("Test Paw con beans!");
+        message.setBody("Hola desde Paw 45!");
+        mailService.sendMessage(message);
 
-        final ModelAndView mav = new ModelAndView("hello/index"); /* Load a jsp file */
-        offerService.makeOffer(2,new Date(),"arg",15,16);
 
-
-        List<Offer> offers = offerService.getAllOffers();
-        System.out.println("OFFERS"+offers);
-        mav.addObject("empList",offers);
-        mav.addObject("empListSize",offers.size());
-
-        mav.addObject("greeting", us.getUsername(1)); /* Set variables to be used within the jsp*/
-        return mav;
+        return new ModelAndView("hello/index");
     }
 }

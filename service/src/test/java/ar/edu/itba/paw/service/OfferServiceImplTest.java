@@ -1,4 +1,4 @@
-package ar.edu.itba.paw;
+package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.service.OfferServiceImpl;

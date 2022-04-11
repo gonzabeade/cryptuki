@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.*;
 
@@ -11,16 +13,18 @@ public class OfferBuyForm {
     @Pattern(regexp=".+@.+\\..+")
     private String email;
 
-    @NotEmpty
-    private int amount;
+    @Min(1)
+    @NotNull
+    private Integer amount;
 
     @NotNull
-    private Integer offerId;
+    private int offerId;
 
+    @Size(min=1, max= 140)
     @NotEmpty
     private String message;
 
-    public void setOfferId(Integer offerId) {
+    public void setOfferId(int offerId) {
         this.offerId = offerId;
     }
     public void setEmail(String email) {
@@ -29,20 +33,20 @@ public class OfferBuyForm {
     public void setMessage(String message) {
         this.message = message;
     }
-    public void setAmount(int amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
     public String getEmail() {
         return email;
     }
-    public Integer getOfferId() {
+    public int getOfferId() {
         return offerId;
     }
     public String getMessage() {
         return message;
     }
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 

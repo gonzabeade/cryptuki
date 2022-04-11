@@ -13,7 +13,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
-@Sql("classpath:schema.sql")
+//TODO: script sql especial para poblar la bd con tablas de las que dependa offer, por fk por ejemplo
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class OfferJdbcDaoTest {
@@ -25,6 +25,7 @@ public class OfferJdbcDaoTest {
     private static final double MARKET_PRICE = 22.1;
     private static final String CRYPTO_CODE = "1";
     private static final double ASKING_PRICE = 20.65;
+    private static final int OFFER_ID = 1;
 
     @Autowired
     private DataSource ds;
@@ -46,6 +47,8 @@ public class OfferJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
 
         //TODO: estas 3 lineas de abajo en las que creo un builder (usando modelos) que voy a usar para el Dao, van en setup?
+
+        //TODO: ver de agregar campos opcionales al builder
         User user = User.builder().id(USER_ID).email(USER_MAIL).build();
         Cryptocurrency crypto = Cryptocurrency.getInstance(CRYPTO_CODE, CRYPTO_NAME, MARKET_PRICE);
         //TODO: cuando se buildea una offer se esta craeando un Builder de la offer, este guarda el horario actual,
@@ -74,7 +77,30 @@ public class OfferJdbcDaoTest {
     }
 
     @Test
-    public void TestgetAllOffers(){
+    public void TestGetAllOffers(){
+        //TODO: ver si poner un sql aparte para
+    }
+
+    @Test
+    public void TestGetOffer(){
+        // 1
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
+        //TODO: creo una fila manualmente para el offer que voy a pedir, uso los mismos datos que user para testear la creacion
+        //TODO: mirar como le seteo el user id, que en la original es un serial, lo pongo como default en 1
+
+        // 2
+        Offer offer = offerJdbcDao.getOffer(OFFER_ID);
+
+        // 3
+        Assert.assertEquals(OFFER_ID, offer.getId());
+        Assert.assertEquals(ASKING_PRICE, offer.getAskingPrice());
+
+        Assert.assertEquals(USER_ID, offer.getSeller().getId());
+        Assert.assertEquals(USER_MAIL, offer.getSeller().getEmail());
+
+        Assert.assertEquals(MARKET_PRICE, offer.getCrypto().getMarketPrice());
+        Assert.assertEquals(CRYPTO_CODE, offer.getCrypto().getCode());
+        Assert.assertEquals(CRYPTO_NAME, offer.getCrypto().getName());
     }
 
 

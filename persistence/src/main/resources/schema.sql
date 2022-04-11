@@ -80,6 +80,8 @@ INSERT INTO status (code, status_description) VALUES ('PSU', 'Paused by Supervis
 
 INSERT INTO payment_method (code, payment_description) VALUES ('mp', 'MercadoPago') ON CONFLICT DO NOTHING;
 INSERT INTO payment_method (code, payment_description) VALUES ('bru', 'Brubank') ON CONFLICT DO NOTHING;
+INSERT INTO payment_method (code, payment_description) VALUES ('cas', 'Cash') ON CONFLICT DO NOTHING;
+
 
 INSERT INTO offer (seller_id, offer_date, crypto_code, status_code, asking_price, quantity)
 VALUES (1, '2022-01-01', 'BTC', 'APR', 34.7, 7)
@@ -112,7 +114,12 @@ INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (3, 'bru') 
 INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (4, 'bru') ON CONFLICT DO NOTHING;
 INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (4, 'mp') ON CONFLICT DO NOTHING;
 INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (4, 'bru') ON CONFLICT DO NOTHING;
-INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (4, 'mp') ON CONFLICT DO NOTHING;
+INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (5, 'cas') ON CONFLICT DO NOTHING;
+INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (5, 'mp') ON CONFLICT DO NOTHING;
+INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (6, 'mp') ON CONFLICT DO NOTHING;
+INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (6, 'cas') ON CONFLICT DO NOTHING;
+INSERT INTO payment_methods_at_offer (offer_id, payment_code) VALUES (6, 'bru') ON CONFLICT DO NOTHING;
+
 
 
 

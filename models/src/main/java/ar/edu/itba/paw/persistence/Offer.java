@@ -46,7 +46,7 @@ public final class Offer {
         }
         public Builder status(OfferStatus statusCode) { this.status = status; return this; }
         public Builder paymentMethod(PaymentMethod method) {
-            paymentMethods.add(method);
+            if (method != null) paymentMethods.add(method);
             return this;
         }
 

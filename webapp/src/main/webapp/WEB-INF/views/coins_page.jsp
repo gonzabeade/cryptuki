@@ -13,7 +13,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
-<h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20">Conocé las principales criptomonedas del mercado.</h1>
+<h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20">Conoce las principales criptomonedas del mercado.</h1>
 <div class="mx-48">
     <ol class="min-w-50%">
         <div class="flex justify-center flex-wrap">

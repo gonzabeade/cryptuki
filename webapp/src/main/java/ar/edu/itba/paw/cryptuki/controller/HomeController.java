@@ -23,7 +23,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -42,7 +42,7 @@ public class HomeController {
         Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
         mav.addObject("offerList",offers);
 
-        mav.addObject("pages", 1 +  offersSize / PAGE_SIZE);
+        mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);
         return mav;
     }
 

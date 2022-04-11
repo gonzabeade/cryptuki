@@ -40,10 +40,8 @@ public class OfferJdbcDao implements OfferDao {
                         resultSet.getDouble("market_price")
                 );
 
-                PaymentMethod pm = PaymentMethod.getInstance(
-                        resultSet.getString("payment_code"),
-                        resultSet.getString("payment_description")
-                );
+                String paymentCode = resultSet.getString("payment_code");
+                PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
 
                 return Offer.builder(
                                 seller,
@@ -61,14 +59,9 @@ public class OfferJdbcDao implements OfferDao {
         int i = 0;
         Map<Integer, Offer.Builder> cache = new HashMap<>();
         while (resultSet.next()) {
-
-            for (int x = 0; x < resultSet.getMetaData().getColumnCount(); x ++ ) {
-                System.out.println(resultSet.getMetaData().getColumnLabel(x+1));
-            }
-            System.out.println("-----------");
-
             int offerId = resultSet.getInt("offer_id");
-            PaymentMethod pm = PaymentMethod.getInstance( resultSet.getString("payment_code"), "payment_description");
+            String paymentCode = resultSet.getString("payment_code");  // TODO: Improve
+            PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
             Offer.Builder instance = cache.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
@@ -106,8 +99,8 @@ public class OfferJdbcDao implements OfferDao {
                 "SELECT * FROM offer \n" +
                         "    JOIN users ON offer.seller_id = users.id\n" +
                         "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
-                        "    JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
-                        "    JOIN payment_method pm on pmao.payment_code = pm.code\n" +
+                        "    LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
+                        "    LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code\n" +
                         "    JOIN status s on s.code = offer.status_code"+
                         "    WHERE offer.id=?";
 
@@ -122,9 +115,9 @@ public class OfferJdbcDao implements OfferDao {
                 "SELECT * FROM offer \n" +
                 "    JOIN users ON offer.seller_id = users.id\n" +
                 "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
-                "    JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
+                "    LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
                 "    JOIN status s on s.code = offer.status_code"+
-                "    JOIN payment_method pm on pmao.payment_code = pm.code\n";
+                "    LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code\n";
 
         Collection<Offer.Builder> builders = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER);
         return builders.stream().map(Offer.Builder::build)
@@ -138,9 +131,9 @@ public class OfferJdbcDao implements OfferDao {
                 "( SELECT * FROM offer LIMIT ? OFFSET ?) paged_offer\n" +
                 "JOIN users ON paged_offer.seller_id = users.id\n" +
                 "JOIN cryptocurrency c on paged_offer.crypto_code = c.code\n" +
-                "JOIN payment_methods_at_offer pmao on paged_offer.id = pmao.offer_id\n" +
+                "LEFT OUTER JOIN payment_methods_at_offer pmao on paged_offer.id = pmao.offer_id\n" +
                 "JOIN status s on s.code = paged_offer.status_code\n" +
-                "JOIN payment_method pm on pmao.payment_code = pm.code;";
+                "LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;";
 
         return jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, pageSize, idx)
                 .stream().map(Offer.Builder::build)

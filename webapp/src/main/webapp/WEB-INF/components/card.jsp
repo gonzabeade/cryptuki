@@ -11,7 +11,7 @@
 
 				<div class="flex flex-col basis-1/4 font-sans">
 					<h1 class="font-sans">Precio: </h1>
-					<h1 class="text-xl font-bold font-sans">${param.asking_price} ARS/ ${param.currency}</h1>
+					<h1 class="text-xl font-bold font-sans">${param.asking_price} ARS / ${param.currency}</h1>
   					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>
 				<div class="flex flex-row basis-1/4 justify-between">

@@ -23,7 +23,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 6;
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -38,17 +38,11 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
 
-        if(page.isPresent()){
-            Iterable<Offer> offers = offerService.getPagedOffers(page.get(),PAGE_SIZE);
-            mav.addObject("offerList",offers);
-        }else{
-           Iterable<Offer> offers = offerService.getPagedOffers(0, PAGE_SIZE);
-            mav.addObject("offerList",offers);
-        }
-
         int offersSize = offerService.getOfferCount();
+        Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
+        mav.addObject("offerList",offers);
 
-        mav.addObject("pages", Math.ceil( (double) offersSize / PAGE_SIZE));
+        mav.addObject("pages", 1 +  offersSize / PAGE_SIZE);
         return mav;
     }
 

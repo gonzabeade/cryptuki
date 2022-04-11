@@ -52,16 +52,17 @@ public class OfferJdbcDao implements OfferDao {
                         .status(resultSet.getInt("status_id"));
             };
 
-    private final static ResultSetExtractor<Collection<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
+    private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
         Map<Integer, Offer.Builder> cache = new HashMap<>();
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
             PaymentMethod pm = PaymentMethod.getInstance( resultSet.getString("payment_name"), "Dummy Description");
-            cache.getOrDefault(
+            Offer.Builder instance = cache.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
             ).paymentMethod(pm);
+            cache.putIfAbsent(offerId, instance);
             i ++;
         }
         return cache.values().stream().collect(Collectors.toList());
@@ -89,7 +90,16 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public Offer getOffer(int offer_id) {
-        final List<Offer.Builder> offer = jdbcTemplate.query("SELECT * FROM PUBLIC.OFFER JOIN PUBLIC.USERS ON offer.seller_id = users.id JOIN cryptocurrency c on offer.coin_id = c.id WHERE offer_id=?", OFFER_ROW_MAPPER, offer_id);
+
+        String query =
+                "SELECT * FROM offer \n" +
+                        "    JOIN users ON offer.seller_id = users.id\n" +
+                        "    JOIN cryptocurrency c on offer.coin_id = c.id\n" +
+                        "    JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id \n" +
+                        "    JOIN payment_method pm on pmao.payment_method_id = pm.id\n" +
+                        "    WHERE offer.offer_id=?";
+
+        final List<Offer.Builder> offer = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, offer_id);
         return offer.get(0).build();
     }
 
@@ -103,8 +113,8 @@ public class OfferJdbcDao implements OfferDao {
                 "    JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id \n" +
                 "    JOIN payment_method pm on pmao.payment_method_id = pm.id\n";
 
-        return jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER)
-                .stream().map(Offer.Builder::build)
+        Collection<Offer.Builder> builders = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER);
+        return builders.stream().map(Offer.Builder::build)
                 .collect(Collectors.toList());
     }
 

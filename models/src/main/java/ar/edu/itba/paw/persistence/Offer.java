@@ -9,7 +9,7 @@ public final class Offer {
     private final User seller;
     private final LocalDateTime date;
     private final Cryptocurrency crypto;
-    private final Integer statusId;
+    private final OfferStatus status;
     private final Double askingPrice;
     private final Double coinAmount;
     private final Iterable<PaymentMethod> paymentMethods;
@@ -26,7 +26,8 @@ public final class Offer {
         private Collection<PaymentMethod> paymentMethods = new HashSet<>();
         private LocalDateTime date;
         private Double coinAmount;
-        private Integer statusId;
+
+        private OfferStatus status;
 
         // Main Constructor
         private Builder(User seller, Cryptocurrency crypto, double askingPrice) {
@@ -43,7 +44,7 @@ public final class Offer {
             this.date = date; // Immutable
             return this;
         }
-        public Builder status(int statusId) { this.statusId = statusId; return this; }
+        public Builder status(OfferStatus statusCode) { this.status = status; return this; }
         public Builder paymentMethod(PaymentMethod method) {
             paymentMethods.add(method);
             return this;
@@ -70,8 +71,8 @@ public final class Offer {
         public Double getCoinAmount() {
             return coinAmount;
         }
-        public int getStatusId() {
-            return statusId;
+        public OfferStatus getStatus() {
+            return status;
         }
 
         // Restricted access Offer build method
@@ -91,7 +92,7 @@ public final class Offer {
         crypto = builder.crypto;
         askingPrice = builder.askingPrice;
         coinAmount = builder.coinAmount;
-        statusId = builder.statusId;
+        status = builder.status;
         paymentMethods = builder.paymentMethods;
     }
 

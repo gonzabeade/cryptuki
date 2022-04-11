@@ -28,16 +28,21 @@ public class OfferJdbcDao implements OfferDao {
                         .email(resultSet.getString("email"))
                         .build();
 
-                String cryptoId = resultSet.getString("coin_id");
+                OfferStatus offerStatus = OfferStatus.getInstance(
+                        resultSet.getString("status_code"),
+                        resultSet.getString("status_description")
+                );
+
+                String cryptoId = resultSet.getString("crypto_code");
                 Cryptocurrency crypto = Cryptocurrency.getInstance(
                         cryptoId,
-                        resultSet.getString("description"),
+                        resultSet.getString("commercial_name"),
                         resultSet.getDouble("market_price")
                 );
 
                 PaymentMethod pm = PaymentMethod.getInstance(
-                        resultSet.getString("payment_name"),
-                        ""
+                        resultSet.getString("payment_code"),
+                        resultSet.getString("payment_description")
                 );
 
                 return Offer.builder(
@@ -46,18 +51,24 @@ public class OfferJdbcDao implements OfferDao {
                                 resultSet.getDouble("asking_price")
                         )
                         .id(resultSet.getInt("offer_id"))
-                        .amount(resultSet.getDouble("coin_amount"))
+                        .amount(resultSet.getDouble("quantity"))
                         .paymentMethod(pm)
                         .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
-                        .status(resultSet.getInt("status_id"));
+                        .status(offerStatus);
             };
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
         Map<Integer, Offer.Builder> cache = new HashMap<>();
         while (resultSet.next()) {
+
+            for (int x = 0; x < resultSet.getMetaData().getColumnCount(); x ++ ) {
+                System.out.println(resultSet.getMetaData().getColumnLabel(x+1));
+            }
+            System.out.println("-----------");
+
             int offerId = resultSet.getInt("offer_id");
-            PaymentMethod pm = PaymentMethod.getInstance( resultSet.getString("payment_name"), "Dummy Description");
+            PaymentMethod pm = PaymentMethod.getInstance( resultSet.getString("payment_code"), "payment_description");
             Offer.Builder instance = cache.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
@@ -94,10 +105,11 @@ public class OfferJdbcDao implements OfferDao {
         String query =
                 "SELECT * FROM offer \n" +
                         "    JOIN users ON offer.seller_id = users.id\n" +
-                        "    JOIN cryptocurrency c on offer.coin_id = c.id\n" +
-                        "    JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id \n" +
-                        "    JOIN payment_method pm on pmao.payment_method_id = pm.id\n" +
-                        "    WHERE offer.offer_id=?";
+                        "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
+                        "    JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
+                        "    JOIN payment_method pm on pmao.payment_code = pm.code\n" +
+                        "    JOIN status s on s.code = offer.status_code"+
+                        "    WHERE offer.id=?";
 
         final List<Offer.Builder> offer = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, offer_id);
         return offer.get(0).build();
@@ -109,9 +121,10 @@ public class OfferJdbcDao implements OfferDao {
         String query =
                 "SELECT * FROM offer \n" +
                 "    JOIN users ON offer.seller_id = users.id\n" +
-                "    JOIN cryptocurrency c on offer.coin_id = c.id\n" +
-                "    JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id \n" +
-                "    JOIN payment_method pm on pmao.payment_method_id = pm.id\n";
+                "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
+                "    JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
+                "    JOIN status s on s.code = offer.status_code"+
+                "    JOIN payment_method pm on pmao.payment_code = pm.code\n";
 
         Collection<Offer.Builder> builders = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER);
         return builders.stream().map(Offer.Builder::build)
@@ -124,9 +137,10 @@ public class OfferJdbcDao implements OfferDao {
         String query = "SELECT * FROM\n" +
                 "( SELECT * FROM offer LIMIT ? OFFSET ?) paged_offer\n" +
                 "JOIN users ON paged_offer.seller_id = users.id\n" +
-                "JOIN cryptocurrency c on paged_offer.coin_id = c.id\n" +
-                "JOIN payment_methods_at_offer pmao on paged_offer.offer_id = pmao.offer_id\n" +
-                "JOIN payment_method pm on pmao.payment_method_id = pm.id;";
+                "JOIN cryptocurrency c on paged_offer.crypto_code = c.code\n" +
+                "JOIN payment_methods_at_offer pmao on paged_offer.id = pmao.offer_id\n" +
+                "JOIN status s on s.code = paged_offer.status_code\n" +
+                "JOIN payment_method pm on pmao.payment_code = pm.code;";
 
         return jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, pageSize, idx)
                 .stream().map(Offer.Builder::build)

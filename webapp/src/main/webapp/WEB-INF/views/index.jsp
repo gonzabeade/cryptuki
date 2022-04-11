@@ -12,7 +12,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
-<div class=" flex justify-center mx-10">
+<div class=" flex justify-center mx-20">
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">

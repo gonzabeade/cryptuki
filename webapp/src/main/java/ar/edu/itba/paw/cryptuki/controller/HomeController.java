@@ -95,7 +95,7 @@ public class HomeController {
     @RequestMapping("/coins") /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView coins() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("views/CoinsPage"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         return mav;
     }

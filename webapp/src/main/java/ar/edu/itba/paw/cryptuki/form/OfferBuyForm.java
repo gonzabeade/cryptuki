@@ -11,8 +11,9 @@ public class OfferBuyForm {
     @Pattern(regexp=".+@.+\\..+")
     private String email;
 
-    @Min(value=1)
+    @NotEmpty
     private int amount;
+
     @NotNull
     private Integer offerId;
 

@@ -1,17 +1,25 @@
 package ar.edu.itba.paw.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class PaymentMethod {
 
-    private final Integer id;
     private final String name;
     private final String description;
 
-    protected PaymentMethod(int id, String name, String description) {
-        this.id = id;
+    // Flyweight pattern
+    private static Map<String, PaymentMethod> cache = new HashMap<>();
+
+    private PaymentMethod(String name, String description) {
         this.name = name;
         this.description = description;
+        cache.putIfAbsent(name, this);
+    }
+
+    protected static PaymentMethod getInstance(String name, String description) {
+        return cache.getOrDefault(name, new PaymentMethod(name, description));
     }
 
     @Override
@@ -21,17 +29,14 @@ public final class PaymentMethod {
         if(!(obj instanceof PaymentMethod))
             return false;
         PaymentMethod other = (PaymentMethod) obj;
-        return id == other.id;
+        return name.equals(other.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
 
-    public Integer getId() {
-        return id;
-    }
     public String getName() {
         return name;
     }

@@ -61,8 +61,7 @@ public class OfferJdbcDao implements OfferDao {
                         resultSet.getDouble("market_price")
                 );
 
-                PaymentMethod pm = new PaymentMethod(
-                        resultSet.getInt("payment_method_id"),
+                PaymentMethod pm = PaymentMethod.getInstance(
                         resultSet.getString("payment_name"),
                         ""
                 );

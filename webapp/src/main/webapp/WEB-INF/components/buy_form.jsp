@@ -7,7 +7,7 @@
 
         <div class="flex flex-col justify-center mt-3">
             <form:errors path="email" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Email *</form:label>
+            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Correo electrónico *</form:label>
             <div class="flex-row justify-center mx-96">
                 <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3 " placeholder="roman@gmail.com"/>
             </div>
@@ -15,7 +15,7 @@
 
         <div class="flex flex-col justify-center mt-3">
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuantos ARS querés gastar? *</form:label>
+            <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>
             <div class="flex-row justify-center mx-auto">
                 <form:input type="number" path="amount" class=" min-w-full h-10 justify-center rounded-lg p-3"/>
             </div>
@@ -23,7 +23,7 @@
         </div>
         <div class="flex flex-col mt-3">
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
-            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Mensaje *</form:label>
+            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Tu mensaje: *</form:label>
             <div class="flex-row justify-center mx-96">
                 <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="Soy de Quilmes como vos" />
             </div>

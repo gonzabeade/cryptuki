@@ -4,20 +4,19 @@
     <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
         <div class="flex justify-center center w-1/4">
             <div class="flex w-full my-2">
-                <a href="<c:url value="/1"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
+                <a href="<c:url value="/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
             </div>
         </div>
         <div class="flex justify-end">
             <ol class="flex mt-4">
                 <li>
-                    <a href="<c:url value="/"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Home</a>
-
+                    <a href="<c:url value="/"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Explora</a>
                 </li>
                 <li>
-                    <a href="<c:url value="/coins"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Monedas</a>
+                    <a href="<c:url value="/coins"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8">Criptomonedas</a>
                 </li>
                 <li>
-                    <a href="<c:url value="/contact"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Contactate</a>
+                    <a href="<c:url value="/contact"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Contáctate</a>
                 </li>
             </ol>
         </div>

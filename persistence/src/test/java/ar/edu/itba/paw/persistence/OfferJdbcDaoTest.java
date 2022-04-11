@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,14 +31,15 @@ public class OfferJdbcDaoTest {
     @Autowired
     private DataSource ds;
 
-    @Autowired
     private OfferJdbcDao offerJdbcDao;
-
+    private SimpleJdbcInsert jdbcInsert;
     private JdbcTemplate jdbcTemplate;
 
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
+        jdbcInsert = new SimpleJdbcInsert(ds);
+        offerJdbcDao = new OfferJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"offers");
     }
 

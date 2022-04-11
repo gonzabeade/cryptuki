@@ -61,8 +61,8 @@ INSERT INTO users (email, rating_sum, rating_count) VALUES ('shadad@itba.edu.ar'
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('mdedeu@itba.edu.ar', 0, 0) ON CONFLICT DO NOTHING;
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('scastagnino@itba.edu.ar', 0, 0) ON CONFLICT DO NOTHING;
 
-INSERT INTO user_role (description) VALUES ('supervisor');
-INSERT INTO user_role (description) VALUES ('seller');
+INSERT INTO user_role (description) VALUES ('supervisor') ON CONFLICT DO NOTHING;
+INSERT INTO user_role (description) VALUES ('seller') ON CONFLICT DO NOTHING;
 
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('BTC', 6789.0, 'Bitcoin') ON CONFLICT DO NOTHING;
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('ETH', 12.0, 'Ether') ON CONFLICT DO NOTHING;

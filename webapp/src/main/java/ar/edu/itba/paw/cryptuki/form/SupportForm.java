@@ -13,6 +13,7 @@ public class SupportForm {
     private String email;
 
     @NotEmpty
+    @Size(min=1, max= 140)
     private String message;
 
     public String getEmail() {

@@ -125,15 +125,19 @@ public final class Offer {
     }
     @Override
     public String toString() {
-        return "tu oferta \n" +
+        StringBuilder ans = new StringBuilder("tu oferta \n" +
                 "Identificador de la Oferta: " + id +
                 "\n Dueño: " + seller.getEmail() +
                 "\n Publicada el: " + date +
                 "\n Criptomoneda: '" + crypto.getName() + '\'' +
                 "\n Precio : " + askingPrice +
                 "\n Cantidad ofertada : " + coinAmount +
-                "\n Metodo de pago : " + paymentMethods;
+                "\n Métodos de Pago: ");
 
+        for (PaymentMethod payment_method : paymentMethods) {
+            ans.append(payment_method.getDescription()).append(", ");
+        }
+        return ans.toString();
     }
 
     @Override

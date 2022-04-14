@@ -22,7 +22,7 @@
         <div>
             <c:forEach var="offer" items="${offerList}">
                 <li>
-                    <c:set  var="accepted_payments" value="${offer.getPaymentMethods()}" scope="request"/>
+                    <c:set  var="accepted_payments" value="${offer.getPaymentMethods()}" scope="helper"/>
                     <jsp:include page="../components/card.jsp">
                         <jsp:param name="currency" value="${offer.coin_id}"/>
                         <jsp:param name="user" value="${offer.seller.email}"/>

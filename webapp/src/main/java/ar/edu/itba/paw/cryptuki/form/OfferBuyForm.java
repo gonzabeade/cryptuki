@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.TradeService;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -48,6 +51,19 @@ public class OfferBuyForm {
     }
     public Integer getAmount() {
         return amount;
+    }
+
+
+    public TradeService.BuyHelper toOfferBuyHelper() {
+
+        TradeService.BuyHelper helper = TradeService.BuyHelper.newInstance(
+                getOfferId(),
+                getEmail(),
+                getMessage(),
+                getAmount()
+        );
+
+        return helper;
     }
 
 }

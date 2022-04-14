@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.service.SupportService;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,7 +20,6 @@ public class SupportForm {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -27,8 +27,14 @@ public class SupportForm {
     public String getMessage() {
         return message;
     }
-
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public SupportService.Helper toSupportHelper() {
+        SupportService.Helper helper = SupportService.Helper.newInstance();
+        helper.body(getMessage());
+        helper.author(getEmail());
+        return helper;
     }
 }

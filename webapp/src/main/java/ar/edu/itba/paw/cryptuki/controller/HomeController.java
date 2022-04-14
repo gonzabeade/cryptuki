@@ -21,16 +21,18 @@ public class HomeController {
 
     private final UserService us;
     private final OfferService offerService;
-    private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
+    private final SupportService supportService;
+    private final TradeService tradeService;
     private static final int PAGE_SIZE = 3;
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
+    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService) {
         this.us = us;
         this.offerService = offerService;
-        this.mailContactService = mailContactService;
+        this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
+        this.tradeService = tradeService;
     }
 
     @RequestMapping(value = {"/","/{page}"}, method = RequestMethod.GET)
@@ -55,16 +57,11 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form);
         }
-        //send mail
-        String user = form.getEmail();
-        String message = form.getMessage();
-        MailMessage mailMessage = mailContactService.createMessage(user);
-        mailMessage.setBody("Tu consulta: " + message);
-        mailMessage.setSubject("Hemos recibido tu consulta");
-        mailContactService.sendMessage(mailMessage);
-
+        supportService.getSupportFor(form.toSupportHelper());
         return new ModelAndView("redirect:/");
     }
+
+
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
@@ -76,19 +73,7 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form);
         }
-        String user = form.getEmail();
-
-        String message =  user + " ha demostrado interés en  " + offerService.getOffer(form.getOfferId()).toString();
-        message+="\nQuiere comprarte " + form.getAmount() + "ARS";
-
-        message+="\nTambién te dejó un mensaje: " + form.getMessage();
-        message+="\nContactalo ya por mail!";
-        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(form.getOfferId()).getSeller().getEmail());
-        mailMessage.setBody(message);
-
-        mailMessage.setSubject("Recibiste una oferta por tu publicación en Cryptuki!");
-        mailContactService.sendMessage(mailMessage);
-
+        tradeService.executeTrade(form.toOfferBuyHelper());
         return new ModelAndView("redirect:/");
     }
 

@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
+<jsp:useBean id="accepted_payments" scope="helper" type="java.util.Collection"/>
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
 					<h1 class="fotn-sans">Vendedor: </h1>

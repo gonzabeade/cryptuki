@@ -48,5 +48,8 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
       <page-encoding>UTF-8</page-encoding>
     </jsp-property-group>
   </jsp-config>
+  <error-page>
+    <location>/errors</location>
+  </error-page>
 
 </web-app>

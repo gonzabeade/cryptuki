@@ -17,15 +17,19 @@ public class TradeServiceImpl implements TradeService {
             Use StringBuilder !!
             You can then build a final String instance using StringBuilder.toString() ;
         */
-        String message =  user + " ha demostrado interés en  " + offerService.getOffer(buyHelper.getOfferId()).toString();
-        message+="\nQuiere comprarte " + buyHelper.getAmount() + "ARS";
 
-        message+="\nTambién te dejó un mensaje: " + buyHelper.getComments();
-        message+="\nContactalo ya por mail!";
-        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(buyHelper.getOfferId()).getSeller().getEmail());
-        mailMessage.setBody(message);
+        // TODO: Estoy teniendo problemas con el userService pero anda
+//        String message =  user + " ha demostrado interés en  " + offerService.getOffer(buyHelper.getOfferId()).toString();
+//        message+="\nQuiere comprarte " + buyHelper.getAmount() + "ARS";
+//
+//        message+="\nTambién te dejó un mensaje: " + buyHelper.getComments();
+//        message+="\nContactalo ya por mail!";
+//        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(buyHelper.getOfferId()).getSeller().getEmail());
+//        mailMessage.setBody(message);
 
-        mailMessage.setSubject("Recibiste una oferta por tu publicación en Cryptuki!");
+        MailMessage mailMessage = mailContactService.createMessage(buyHelper.getBuyerEmail());
+        mailMessage.setBody(buyHelper.getComments());
+        mailMessage.setSubject("Has solicitado comprarle a un vendedor de Cryptuki!");
         mailContactService.sendMessage(mailMessage);
     }
 

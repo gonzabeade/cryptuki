@@ -42,7 +42,7 @@ public class HomeController {
 
         int offersSize = offerService.getOfferCount();
         Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
-        mav.addObject("offerList",offers);
+        mav.addObject("offerList", offers);
 
         mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);
         return mav;
@@ -52,6 +52,7 @@ public class HomeController {
     public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
         return new ModelAndView("views/contact");
     }
+
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors){
         if(errors.hasErrors()){

@@ -20,7 +20,7 @@
 						<div class="flex flex-row justify-start">
 							<c:if test="${accepted_payments.size() == 0}">El vendedor no propuso métodos de pago.</c:if>
 							<c:forEach  var="payment_method" items="${accepted_payments}">
-							<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " alt="${payment_method}">
+							<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">
 							</c:forEach>
 						</div>
 

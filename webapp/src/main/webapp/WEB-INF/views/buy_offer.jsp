@@ -15,7 +15,7 @@
     <div class="flex">
         <div class="flex flex-col mx-auto mt-10">
             <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>
-            <h1 class="text-center text-4xl font-bold">${offer.askingPrice} ARS / ${offer.crypto.name}</h1>
+            <h1 class="text-center text-4xl font-bold"><c:out value="${offer.askingPrice}"/> ARS -> <c:out value="${offer.crypto.name}"/></h1>
         </div>
     </div>
     <div>

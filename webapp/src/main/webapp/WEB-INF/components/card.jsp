@@ -6,7 +6,7 @@
 				<div class="flex-row basis-1/4 ">
 					<h1 class="fotn-sans">Vendedor: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.user}"/></h3>
-					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/>trades</h4>
+					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> trades</h4>
 				</div>
 
 				<div class="flex flex-col basis-1/4 font-sans">

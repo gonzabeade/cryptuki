@@ -38,7 +38,9 @@ public class OfferJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(ds);
+        jdbcInsert = new SimpleJdbcInsert(ds)
+                .withTableName("offer")
+                .usingGeneratedKeyColumns("id");
         offerJdbcDao = new OfferJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"offers");
     }

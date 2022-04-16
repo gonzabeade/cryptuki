@@ -20,31 +20,29 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private static final int PAGE_SIZE = 3;
+    private final PaginatorService<Offer> offerPaginatorService;
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
+    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService, PaginatorService<Offer> offerPaginatorService) {
         this.us = us;
         this.offerService = offerService;
         this.mailContactService = mailContactService;
         this.cryptocurrencyService = cryptocurrencyService;
+        this.offerPaginatorService = offerPaginatorService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
-
         int pageNumber = page.orElse(0);
-        if(pageNumber < 0){
+        if(!offerPaginatorService.validatePage(pageNumber)){
             throw new RuntimeException();
-        }
+        };
 
-        int offersSize = offerService.getOfferCount();
-        Iterable<Offer> offers = offerService.getPagedOffers(pageNumber, PAGE_SIZE);
-        mav.addObject("offerList",offers);
+        mav.addObject("offerList",offerPaginatorService.getPagedObjects(pageNumber));
+        mav.addObject("pages", offerPaginatorService.getPageCount());
 
-        mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);
         return mav;
     }
 

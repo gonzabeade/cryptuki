@@ -4,18 +4,18 @@ public final class UserAuth{
 
     private Integer id;
     private Integer sessionId;
+    private String password;
     private String username;  // Does not contain password. Password from database should never be loaded to Server RAM.
 
-    public class Builder {
+    public static class Builder {
         private Integer id;
         private Integer sessionId;
         private String username;
         private String password;
 
-        public Builder(int id, String username, String password) {
+        public Builder(String username, String password) {
             this.username = username;
             this.password = password;
-            this.id = id;
         }
 
         public Builder id(int id) { this.id = id; return this; }
@@ -44,6 +44,7 @@ public final class UserAuth{
     private UserAuth(Builder builder) {
         this.id = builder.id;
         this.username = builder.username;
+        this.password = builder.password;
     }
 
     public int getId() {
@@ -52,4 +53,6 @@ public final class UserAuth{
     public String getUsername() {
         return username;
     }
+
+    public String getPassword(){return password;}
 }

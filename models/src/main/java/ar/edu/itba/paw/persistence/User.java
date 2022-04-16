@@ -7,36 +7,36 @@ import java.util.Set;
 public final class User {
 
     private final Integer id;
-    private final UserAuth userAuth;
     private final String email;
     private final Integer ratingSum;
     private final Integer ratingCount;
+
+    private final Integer phoneNumber;
     private final Collection<Role> roles;
 
     public static class Builder {
         private Integer id;
-        private UserAuth userAuth;
         private String email = "";
         private Integer ratingSum = 0;
         private Integer ratingCount = 0;
+
+        private Integer phoneNumber = 0 ;
         private Set<Role> roles = new HashSet<>();
 
         private Builder() { }
 
-        public Builder userAuth(UserAuth userAuth) {this.userAuth = userAuth; return this; }
         public Builder email(String email) {this.email = email; return this;}
         public Builder ratingSum(int sum) {this.ratingSum = sum; return this; }
         public Builder ratingCount(int count) {this.ratingCount = count; return this; }
         public Builder addRole(Role role) { roles.add(role); return this; }
         public Builder id(int id) {this.id = id; return this; }
 
+        public Builder phoneNumber(int phoneNumber){this.phoneNumber = phoneNumber;return this;}
+
         protected User build() {return new User(this);}
 
         public Integer getId() {
             return id;
-        }
-        public UserAuth getUserAuth() {
-            return userAuth;
         }
         public String getEmail() {
             return email;
@@ -47,6 +47,8 @@ public final class User {
         public Integer getRatingCount() {
             return ratingCount;
         }
+
+        public Integer getPhoneNumber(){return phoneNumber;}
     }
 
     public static Builder builder() {
@@ -58,8 +60,8 @@ public final class User {
         this.email = builder.email;
         this.ratingCount = builder.ratingCount;
         this.ratingSum = builder.ratingSum;
+        this.phoneNumber= builder.phoneNumber;
         this.roles = builder.roles;
-        this.userAuth = builder.userAuth;
     }
 
     public int getId() {
@@ -74,7 +76,8 @@ public final class User {
     public int getRatingCount() {
         return ratingCount;
     }
-    public String getUsername() { return userAuth.getUsername(); }
+
+    public int phoneNumber(){return phoneNumber;}
 
     // The user knows it is a defensive copy what is being returned
     public Collection<Role> getRoles() {

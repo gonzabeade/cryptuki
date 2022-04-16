@@ -2,17 +2,20 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.registerForm;
 import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Optional;
 
 
@@ -99,5 +102,50 @@ public class HomeController {
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         return mav;
     }
+
+
+    @RequestMapping(value="/register",method = {RequestMethod.GET})
+    public ModelAndView registerGet(@ModelAttribute("registerForm") final registerForm form){
+        return new ModelAndView("views/register");
+    }
+
+
+    @RequestMapping(value="/register" , method={RequestMethod.POST})
+    public ModelAndView register(@Valid @ModelAttribute("registerForm")  registerForm form , final BindingResult errors){
+        if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
+            form.setPassword("");
+            form.setRepeatPassword("");
+            return registerGet(form);
+        }
+
+        Optional<User> maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()) ,
+                User.builder().email(form.getEmail()).phoneNumber(Integer.parseInt(form.getPhoneNumber()))
+        );
+        if(!maybeUser.isPresent()){
+            //username o mail is already on db.
+            System.out.println("username or mail is already on db");
+            form = new registerForm();
+            return registerGet(form);
+        }
+
+        System.out.println("User was created successfully");
+        return new ModelAndView("redirect:/");
+    }
+
+
+    @RequestMapping("/login")
+    public ModelAndView login(@RequestParam(value = "error" , required = false) String error) throws IOException {
+        if(error != null)
+            System.out.println("incorrect username or password");
+
+        return new ModelAndView("views/login");
+    }
+
+
+    @RequestMapping("/403")
+    public ModelAndView forbidden() {
+        return new ModelAndView("403");
+    }
+
 
 }

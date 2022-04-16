@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class PaginatorServiceImpl implements PaginatorService<Offer>{
     OfferService offerService;
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 3;
     @Autowired
     public PaginatorServiceImpl(OfferServiceImpl offerService) {
         this.offerService = offerService;

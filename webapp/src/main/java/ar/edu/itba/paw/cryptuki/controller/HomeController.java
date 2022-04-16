@@ -42,6 +42,7 @@ public class HomeController {
 
         mav.addObject("offerList",offerPaginatorService.getPagedObjects(pageNumber));
         mav.addObject("pages", offerPaginatorService.getPageCount());
+        mav.addObject("activePage", pageNumber);
 
         return mav;
     }

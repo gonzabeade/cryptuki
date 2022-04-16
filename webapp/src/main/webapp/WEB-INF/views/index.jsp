@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
+<jsp:useBean id="activePage" scope="request" type="java.lang.Integer"/>
 <html>
 <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,9 +38,27 @@
         </div>
     </ol>
     <div class="flex flex-row mx-auto">
-        <c:forEach var = "i" begin = "0" end = "${pages - 1}">
-            <a href="<c:url value="/?page=${i}"/>" class="bg-frost active:text-white-400 p-3 mx-4 my-5"><c:out value="${i+1}"/></a>
-        </c:forEach>
+
+        <c:if  test="${activePage > 0}">
+            <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard my-auto">Anterior</a>
+        </c:if>
+
+        <c:forEach var = "i" begin = "${activePage}" end = "${(activePage + 2 > pages-1 )? pages-1 : activePage + 2 }">
+            <c:choose>
+                <c:when test="${activePage == i }">
+                    <a href="<c:url value="/?page=${i}"/>" class="bg-stormd active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
+                </c:when>
+                <c:otherwise>
+                    <a href="<c:url value="/?page=${i}"/>" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
+                </c:otherwise>
+            </c:choose>
+            </c:forEach>
+        <c:if test="${activePage < pages-1}">
+            <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard my-auto">Siguiente</a>
+        </c:if>
+
+
+
     </div>
 </div>
 <div class="shape-blob"></div>

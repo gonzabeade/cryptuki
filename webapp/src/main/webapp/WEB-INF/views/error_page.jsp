@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <jsp:useBean id="errorMsg" scope="request" type="java.lang.String"/>
+<jsp:useBean id="code" scope="request" type="java.lang.Integer"/>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +18,8 @@
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
 <div class=" flex flex-col justify-center mx-20 my-10">
-    <h1 class="text-xl text-polard font-bold font-sans text-center">${errorMsg}</h1>
+    <h1 class="text-3xl text-polard font-bold font-sans text-center">${errorMsg}</h1>
+    <img src="<c:url value="/public/images/${code}.png"/>" alt="<c:out value="${code}"/>" class="h-96 mx-auto"/>
     <a href="<c:url value="/"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg">Volver al Home</a>
 </div>
 <div class="shape-blob"></div>

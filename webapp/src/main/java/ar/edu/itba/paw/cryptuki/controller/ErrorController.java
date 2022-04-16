@@ -19,7 +19,7 @@ public class ErrorController {
 
         switch (httpErrorCode) {
             case 400: {
-                errorMsg = "Hubo un error. Si persiste, contacte soporte.";
+                errorMsg = "Parece que estás enviando algo incorrecto.";
                 break;
             }
             case 401: {
@@ -35,6 +35,7 @@ public class ErrorController {
             }
         }
         errorPage.addObject("errorMsg", errorMsg);
+        errorPage.addObject("code", httpErrorCode);
         return errorPage;
     }
 

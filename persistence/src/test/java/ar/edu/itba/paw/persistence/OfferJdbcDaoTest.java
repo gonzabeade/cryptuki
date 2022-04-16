@@ -13,16 +13,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 //TODO: script sql especial para poblar la bd con tablas de las que dependa offer, por fk por ejemplo
 @RunWith(SpringJUnit4ClassRunner.class)
+@Sql(scripts = {"classpath:offerInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
 public class OfferJdbcDaoTest {
 
     private static final String OFFER_TABLE = "offer";
+    private static final String STATUS_CODE = "APR";
+    private static final String DATE = "2022-01-01";
+    private static final int QUANTITY = 7;
+
     private ArrayList<Offer> offers;
 
     @Autowired
@@ -46,16 +49,16 @@ public class OfferJdbcDaoTest {
         //TODO: puede haber algun problema con el tema del determinismo (ya que las horas son diferentes)?
         offers = new ArrayList<>(Arrays.asList(
                 offerJdbcDao.makeOffer(Offer.builder(User.builder().id(1).email("scastagnino@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("1", "BTC", 22.1),
+                        Cryptocurrency.getInstance("BTC", "Bitcoin", 22.1),
                         22.2)),
                 offerJdbcDao.makeOffer(Offer.builder(User.builder().id(2).email("shadad@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("3", "ADA", 10.4),
+                        Cryptocurrency.getInstance("ADA", "Cardano", 10.4),
                         9)),
                 offerJdbcDao.makeOffer(Offer.builder(User.builder().id(3).email("gbeade@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("2", "ETH", 54.3),
+                        Cryptocurrency.getInstance("ETH", "Ether", 54.3),
                         54.0)),
                 offerJdbcDao.makeOffer(Offer.builder(User.builder().id(4).email("mdedeu@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("4", "DOT", 2.0),
+                        Cryptocurrency.getInstance("DOT", "Polkadot", 2.0),
                         2.65))
         ));
     }
@@ -63,7 +66,7 @@ public class OfferJdbcDaoTest {
     @Test
     public void TestMakeOffer(){
         // Setup
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         Offer.Builder offerBuilder = Offer.builder(offers.get(1).getSeller(), offers.get(1).getCrypto(), offers.get(1).getAskingPrice());
 
         // Exercise
@@ -78,7 +81,10 @@ public class OfferJdbcDaoTest {
     @Test
     public void TestGetAllOffers(){
         // Setup
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(Offer offer : offers){
+            insertOffer(offer);
+        }
 
         // Exercise
         List<Offer> testedOffers = offerJdbcDao.getAllOffers();
@@ -98,7 +104,8 @@ public class OfferJdbcDaoTest {
     @Test
     public void TestGetOffer(){
         // Setup
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        insertOffer(offers.get(1));
 
         // Exercise
         Offer testedOffer = offerJdbcDao.getOffer(1);
@@ -106,6 +113,17 @@ public class OfferJdbcDaoTest {
         // Validations
         Assert.assertNotNull(testedOffer);
         assertOffer(offers.get(1), testedOffer);
+    }
+
+    private void insertOffer(Offer offer, Map<String){
+        HashMap<String, Object> offerMap = new HashMap<>();
+        offerMap.put("user_id", offers.get(1).getSeller().getId());
+        offerMap.put("offer_date", DATE);
+        offerMap.put("crypto_code", offers.get(1).getCrypto().getCode());
+        offerMap.put("status_code", "STATUS_CODE");
+        offerMap.put("asking_price", offers.get(1).getAskingPrice());
+        offerMap.put("quantity", QUANTITY);
+        jdbcInsert.execute(offerMap);
     }
 
     //TODO: preguntar si esta bien usar un metodo auxiliar para no repetir codigo en los unit tests

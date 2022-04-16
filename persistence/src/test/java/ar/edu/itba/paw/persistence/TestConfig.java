@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 public class TestConfig {
 
     //TODO: mirar de armar correctamente el path del archivo de creacion de las tablas
-    @Value("classpath: sql/schema.sql")
+    @Value("classpath: testSchema.sql")
     private Resource schemaSql;
 
     @Bean
@@ -47,6 +47,4 @@ public class TestConfig {
 
         return populator;
     }
-
-
 }

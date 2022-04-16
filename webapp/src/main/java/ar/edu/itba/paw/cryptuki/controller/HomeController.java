@@ -7,10 +7,7 @@ import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Optional;
@@ -33,13 +30,18 @@ public class HomeController {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    @RequestMapping(value = {"/","/{page}"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@PathVariable(value = "page") final Optional<Integer> page) {
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
 
+        int pageNumber = page.orElse(0);
+        if(pageNumber < 0){
+            throw new RuntimeException();
+        }
+
         int offersSize = offerService.getOfferCount();
-        Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
+        Iterable<Offer> offers = offerService.getPagedOffers(pageNumber, PAGE_SIZE);
         mav.addObject("offerList",offers);
 
         mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);

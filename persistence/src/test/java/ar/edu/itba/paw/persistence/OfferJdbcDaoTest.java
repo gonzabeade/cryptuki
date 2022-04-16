@@ -41,6 +41,9 @@ public class OfferJdbcDaoTest {
         offerJdbcDao = new OfferJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"offers");
 
+        //TODO: mirar de agregar campos opcionales al builder
+        //TODO: cuando se buildea una offer se esta craeando un Builder de la offer, este guarda el horario actual,
+        //TODO: puede haber algun problema con el tema del determinismo (ya que las horas son diferentes)?
         offers = new ArrayList<>(Arrays.asList(
                 offerJdbcDao.makeOffer(Offer.builder(User.builder().id(1).email("scastagnino@itba.edu.ar").build(),
                         Cryptocurrency.getInstance("1", "BTC", 22.1),
@@ -59,43 +62,32 @@ public class OfferJdbcDaoTest {
 
     @Test
     public void TestMakeOffer(){
-        // 1. setup
+        // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
-
-        //TODO: estas 3 lineas de abajo en las que creo un builder (usando modelos) que voy a usar para el Dao, van en setup?
-
-        //TODO: ver de agregar campos opcionales al builder
-
-        //TODO: cuando se buildea una offer se esta craeando un Builder de la offer, este guarda el horario actual,
-        //TODO: puede haber algun problema con el tema del determinismo (ya que las horas son diferentes)?
         Offer.Builder offerBuilder = Offer.builder(offers.get(1).getSeller(), offers.get(1).getCrypto(), offers.get(1).getAskingPrice());
 
-        // 2. ejercitar
+        // Exercise
         Offer testedOffer = offerJdbcDao.makeOffer(offerBuilder);
 
-        // 3. validaciones
+        // Validations
         Assert.assertNotNull(testedOffer);
-        //TODO: Juan valida que el User se haya creado correctamente, el tema es que en esta caso crar la Offer es muy parecido a por ejemplo crear una Crypto
-        //TODO: y esto lo hice en setup ya que son modelos, deberia validar esto entonces, y la creacion de lo que esta en setup?
-
-        //TODO: mirar que hacer con metodos deprecados, hay que agregar delta
         assertOffer(offers.get(1), testedOffer);
-
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
     }
 
     @Test
     public void TestGetAllOffers(){
-        // 1
+        // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
 
-        // 2
+        // Exercise
         List<Offer> testedOffers = offerJdbcDao.getAllOffers();
 
-        // 3
+        // Validations
         Assert.assertNotNull(testedOffers);
         for (Offer testedOffer : testedOffers)
             Assert.assertNotNull(testedOffer);
+
         Assert.assertEquals(offers.size(), testedOffers.size());
 
         for(int i = 0; i < offers.size(); i++) {
@@ -105,21 +97,20 @@ public class OfferJdbcDaoTest {
 
     @Test
     public void TestGetOffer(){
-        // 1
+        // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "offer");
-        //TODO: creo una fila manualmente para el offer que voy a pedir, uso los mismos datos que user para testear la creacion
-        //TODO: mirar como le seteo el user id, que en la original es un serial, lo pongo como default en 1
 
-        // 2
+        // Exercise
         Offer testedOffer = offerJdbcDao.getOffer(1);
 
-        // 3
+        // Validations
+        Assert.assertNotNull(testedOffer);
         assertOffer(offers.get(1), testedOffer);
-
     }
 
-
     //TODO: preguntar si esta bien usar un metodo auxiliar para no repetir codigo en los unit tests
+    //TODO: mirar que tantos AssertNotNull tengo que poner
+    //TODO: mirar que hacer con los metodos deprecados mirar que hacer con los metodos deprecados
     private void assertOffer(Offer originalOffer, Offer testedOffer){
         Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice());
 
@@ -130,7 +121,5 @@ public class OfferJdbcDaoTest {
         Assert.assertEquals(originalOffer.getCrypto().getCode(), testedOffer.getCrypto().getCode());
         Assert.assertEquals(originalOffer.getCrypto().getName(), testedOffer.getCrypto().getName());
     }
-
-
 
 }

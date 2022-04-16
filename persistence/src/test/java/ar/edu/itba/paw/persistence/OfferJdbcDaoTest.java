@@ -79,14 +79,7 @@ public class OfferJdbcDaoTest {
         //TODO: y esto lo hice en setup ya que son modelos, deberia validar esto entonces, y la creacion de lo que esta en setup?
 
         //TODO: mirar que hacer con metodos deprecados, hay que agregar delta
-        Assert.assertEquals(offers.get(1).getAskingPrice(), testedOffer.getAskingPrice());
-
-        Assert.assertEquals(offers.get(1).getSeller().getEmail(), testedOffer.getSeller().getEmail());
-        Assert.assertEquals(offers.get(1).getSeller().getId(), testedOffer.getSeller().getId());
-
-        Assert.assertEquals(offers.get(1).getCrypto().getMarketPrice(), testedOffer.getCrypto().getMarketPrice());
-        Assert.assertEquals(offers.get(1).getCrypto().getCode(), testedOffer.getCrypto().getCode());
-        Assert.assertEquals(offers.get(1).getCrypto().getName(), testedOffer.getCrypto().getName());
+        assertOffer(offers.get(1), testedOffer);
 
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
     }
@@ -106,14 +99,7 @@ public class OfferJdbcDaoTest {
         Assert.assertEquals(offers.size(), testedOffers.size());
 
         for(int i = 0; i < offers.size(); i++) {
-            Assert.assertEquals(offers.get(i).getAskingPrice(), testedOffers.get(i).getAskingPrice());
-
-            Assert.assertEquals(offers.get(i).getSeller().getEmail(), testedOffers.get(i).getSeller().getEmail());
-            Assert.assertEquals(offers.get(i).getSeller().getId(), testedOffers.get(i).getSeller().getId());
-
-            Assert.assertEquals(offers.get(i).getCrypto().getMarketPrice(), testedOffers.get(i).getCrypto().getMarketPrice());
-            Assert.assertEquals(offers.get(i).getCrypto().getCode(), testedOffers.get(i).getCrypto().getCode());
-            Assert.assertEquals(offers.get(i).getCrypto().getName(), testedOffers.get(i).getCrypto().getName());
+            assertOffer(offers.get(i), testedOffers.get(i));
         }
     }
 
@@ -128,17 +114,22 @@ public class OfferJdbcDaoTest {
         Offer testedOffer = offerJdbcDao.getOffer(1);
 
         // 3
-        Assert.assertEquals(offers.get(1).getAskingPrice(), testedOffer.getAskingPrice());
-
-        Assert.assertEquals(offers.get(1).getSeller().getEmail(), testedOffer.getSeller().getEmail());
-        Assert.assertEquals(offers.get(1).getSeller().getId(), testedOffer.getSeller().getId());
-
-        Assert.assertEquals(offers.get(1).getCrypto().getMarketPrice(), testedOffer.getCrypto().getMarketPrice());
-        Assert.assertEquals(offers.get(1).getCrypto().getCode(), testedOffer.getCrypto().getCode());
-        Assert.assertEquals(offers.get(1).getCrypto().getName(), testedOffer.getCrypto().getName());
+        assertOffer(offers.get(1), testedOffer);
 
     }
 
+
+    //TODO: preguntar si esta bien usar un metodo auxiliar para no repetir codigo en los unit tests
+    private void assertOffer(Offer originalOffer, Offer testedOffer){
+        Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice());
+
+        Assert.assertEquals(originalOffer.getSeller().getEmail(), testedOffer.getSeller().getEmail());
+        Assert.assertEquals(originalOffer.getSeller().getId(), testedOffer.getSeller().getId());
+
+        Assert.assertEquals(originalOffer.getCrypto().getMarketPrice(), testedOffer.getCrypto().getMarketPrice());
+        Assert.assertEquals(originalOffer.getCrypto().getCode(), testedOffer.getCrypto().getCode());
+        Assert.assertEquals(originalOffer.getCrypto().getName(), testedOffer.getCrypto().getName());
+    }
 
 
 

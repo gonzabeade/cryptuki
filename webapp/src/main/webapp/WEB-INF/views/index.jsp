@@ -37,11 +37,13 @@
             </c:forEach>
         </div>
     </ol>
-    <div class="flex flex-row mx-auto content-center">
-
-        <c:if  test="${activePage > 0}">
-            <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard my-auto">Anterior</a>
-        </c:if>
+    <div>
+        <div class="absolute left-[37%] my-7">
+            <c:if  test="${activePage > 0}">
+                <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
+            </c:if>
+        </div>
+        <div class="flex flex-row mx-40 justify-center ">
         <c:forEach var = "i" begin = "${activePage - 1 < 0 ? activePage : activePage - 1 }" end = "${(activePage + 1 > pages - 1 )? pages - 1 : activePage + 1 }">
             <c:choose>
                 <c:when test="${activePage == i }">
@@ -52,9 +54,13 @@
                 </c:otherwise>
             </c:choose>
         </c:forEach>
-        <c:if test="${activePage < pages-1}">
-            <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard my-auto">Siguiente</a>
-        </c:if>
+        </div>
+        <div class="absolute right-[37%] -mt-12">
+            <c:if test="${activePage < pages-1}">
+                <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
+            </c:if>
+        </div>
+
 
 
 

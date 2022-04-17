@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS status (
 CREATE TABLE IF NOT EXISTS offer (
     id INT IDENTITY PRIMARY KEY,
     seller_id INT NOT NULL,
-    offer_date TIMESTAMP NOT NULL,
+    offer_date VARCHAR(50) NOT NULL,
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
     asking_price DECIMAL NOT NULL,
     quantity DECIMAL NOT NULL,
     FOREIGN KEY (crypto_code) REFERENCES cryptocurrency(code) ON DELETE CASCADE,
-    FOREIGN KEY (status_code) REFERENCES status(code) ON DELETE SET NULL,
+    FOREIGN KEY (status_code) REFERENCES status(code) ON DELETE CASCADE,
     FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE
     );
 

@@ -13,6 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 //TODO: script sql especial para poblar la bd con tablas de las que dependa offer, por fk por ejemplo
@@ -42,7 +46,7 @@ public class OfferJdbcDaoTest {
                 .withTableName("offer")
                 .usingGeneratedKeyColumns("id");
         offerJdbcDao = new OfferJdbcDao(ds);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"offers");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"offer");
 
         //TODO: mirar de agregar campos opcionales al builder
         //TODO: cuando se buildea una offer se esta craeando un Builder de la offer, este guarda el horario actual,
@@ -115,14 +119,16 @@ public class OfferJdbcDaoTest {
         assertOffer(offers.get(1), testedOffer);
     }
 
-    private void insertOffer(Offer offer, Map<String){
+    private void insertOffer(Offer offer){
         HashMap<String, Object> offerMap = new HashMap<>();
-        offerMap.put("user_id", offers.get(1).getSeller().getId());
+
+        offerMap.put("user_id", offer.getSeller().getId());
         offerMap.put("offer_date", DATE);
-        offerMap.put("crypto_code", offers.get(1).getCrypto().getCode());
-        offerMap.put("status_code", "STATUS_CODE");
-        offerMap.put("asking_price", offers.get(1).getAskingPrice());
+        offerMap.put("crypto_code", offer.getCrypto().getCode());
+        offerMap.put("status_code", STATUS_CODE);
+        offerMap.put("asking_price", offer.getAskingPrice());
         offerMap.put("quantity", QUANTITY);
+
         jdbcInsert.execute(offerMap);
     }
 

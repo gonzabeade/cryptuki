@@ -15,7 +15,7 @@ public class OfferServiceImpl implements OfferService {
     private Paginator<Offer> offerPaginator;
 
     private class OfferPaginator implements Paginator<Offer> {
-        private static final int PAGE_SIZE = 3;
+        private static final int PAGE_SIZE = 2;
         private static final int TTL = 1;
         int offerCount;
         LocalDateTime timeToLive = LocalDateTime.now();

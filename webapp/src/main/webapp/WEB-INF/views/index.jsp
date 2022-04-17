@@ -37,22 +37,21 @@
             </c:forEach>
         </div>
     </ol>
-    <div class="flex flex-row mx-auto">
+    <div class="flex flex-row mx-auto content-center">
 
         <c:if  test="${activePage > 0}">
             <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard my-auto">Anterior</a>
         </c:if>
-
-        <c:forEach var = "i" begin = "${activePage}" end = "${(activePage + 2 > pages-1 )? pages-1 : activePage + 2 }">
+        <c:forEach var = "i" begin = "${activePage - 1 < 0 ? activePage : activePage - 1 }" end = "${(activePage + 1 > pages - 1 )? pages - 1 : activePage + 1 }">
             <c:choose>
                 <c:when test="${activePage == i }">
-                    <a href="<c:url value="/?page=${i}"/>" class="bg-stormd active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
+                    <a href="<c:url value="/?page=${i}"/>" class="bg-stormd border-2 border-polard active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full "><c:out value="${i+1}"/></a>
                 </c:when>
                 <c:otherwise>
                     <a href="<c:url value="/?page=${i}"/>" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
                 </c:otherwise>
             </c:choose>
-            </c:forEach>
+        </c:forEach>
         <c:if test="${activePage < pages-1}">
             <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard my-auto">Siguiente</a>
         </c:if>

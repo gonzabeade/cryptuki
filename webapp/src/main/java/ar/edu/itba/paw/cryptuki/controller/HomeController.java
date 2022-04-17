@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @Controller  /* Requests can be dispatched to this class */
@@ -23,6 +23,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -32,15 +33,19 @@ public class HomeController {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    @RequestMapping("/") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView helloWorld() {
-        /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("views/index"); /* Load a jsp file */
+    @RequestMapping(value = {"/","/{page}"}, method = RequestMethod.GET)
+    public ModelAndView helloWorld(@PathVariable(value = "page") final Optional<Integer> page) {
 
-        Iterable<Offer> offers = offerService.getAllOffers();
+        final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
+
+        int offersSize = offerService.getOfferCount();
+        Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
         mav.addObject("offerList",offers);
+
+        mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);
         return mav;
     }
+
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
         return new ModelAndView("views/contact");
@@ -90,10 +95,9 @@ public class HomeController {
     @RequestMapping("/coins") /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView coins() {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
-        final ModelAndView mav = new ModelAndView("views/CoinsPage"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         return mav;
     }
 
 }
-

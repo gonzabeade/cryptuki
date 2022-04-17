@@ -15,8 +15,8 @@ public class CryptocurrencyJdbcDao implements CryptoCurrencyDao{
     private JdbcTemplate jdbcTemplate;
     private final static RowMapper<Cryptocurrency> CRYPTOCURRENCY_ROW_MAPPER = (
             (resultSet, i) -> Cryptocurrency.getInstance(
-                    resultSet.getString("id"),
-                    resultSet.getString("description"),
+                    resultSet.getString("code"),
+                    resultSet.getString("commercial_name"),
                     resultSet.getDouble("market_price")
             )
     );

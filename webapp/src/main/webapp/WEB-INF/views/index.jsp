@@ -9,13 +9,15 @@
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
+            <title>P2P CryptoMarketplace</title>
+
 </head>
-<body class="bg-storml">
+<body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
-<div class=" flex justify-center mx-10">
+<div class=" flex justify-center mx-20">
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
-<div class="flex justify-center mx-60">
+<div class="flex flex-col justify-center mx-60">
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
@@ -32,6 +34,11 @@
             </c:forEach>
         </div>
     </ol>
+    <div class="flex flex-row mx-auto">
+        <c:forEach var = "i" begin = "0" end = "${pages - 1}">
+            <a href="<c:url value="/${i}"/>" class="bg-frost active:text-white-400 p-3 mx-4 my-5"><c:out value="${i+1}"/></a>
+        </c:forEach>
+    </div>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

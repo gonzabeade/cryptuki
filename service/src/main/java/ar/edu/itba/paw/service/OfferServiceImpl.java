@@ -40,4 +40,9 @@ public class OfferServiceImpl implements OfferService {
     public Offer getOffer(int id) {
         return offerDao.getOffer(id);
     }
+
+    @Override
+    public int getOfferCount() {
+        return offerDao.getOfferCount();
+    }
 }

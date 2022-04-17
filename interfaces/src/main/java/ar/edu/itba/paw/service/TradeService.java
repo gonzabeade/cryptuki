@@ -2,13 +2,13 @@ package ar.edu.itba.paw.service;
 
 public interface TradeService {
 
-    final class BuyHelper {
+    final class BuyDigest {
         private int offerId; // TODO -- Question: Should be an Offer or an Offer.Builder?
         private String comments;
         private String buyerEmail;
         private int amount;
 
-        private BuyHelper(int offerId, String buyerEmail, String comments, int amount) {
+        private BuyDigest(int offerId, String buyerEmail, String comments, int amount) {
             this.offerId = offerId;
             this.comments = comments;
             this.buyerEmail = buyerEmail;
@@ -28,8 +28,8 @@ public interface TradeService {
             return amount;
         }
 
-        public static BuyHelper newInstance(int offerId, String buyerEmail, String comments, int amount) {
-            return new BuyHelper(offerId, buyerEmail, comments, amount);
+        public static BuyDigest newInstance(int offerId, String buyerEmail, String comments, int amount) {
+            return new BuyDigest(offerId, buyerEmail, comments, amount);
         }
     }
 
@@ -45,7 +45,7 @@ public interface TradeService {
         }
     }
 
-    void executeTrade(BuyHelper buyHelper);
+    void executeTrade(BuyDigest buyDigest);
     void executeTrade(SellHelper sellHelper);
 
 

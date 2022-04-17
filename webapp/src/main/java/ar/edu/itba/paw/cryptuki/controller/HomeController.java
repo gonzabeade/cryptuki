@@ -58,7 +58,7 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form);
         }
-        supportService.getSupportFor(form.toSupportHelper());
+        supportService.getSupportFor(form.toSupportDigest());
         return new ModelAndView("redirect:/");
     }
 
@@ -74,7 +74,7 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form);
         }
-        tradeService.executeTrade(form.toOfferBuyHelper());
+        tradeService.executeTrade(form.toOfferBuyDigest());
         return new ModelAndView("redirect:/");
     }
 

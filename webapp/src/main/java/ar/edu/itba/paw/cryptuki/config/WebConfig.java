@@ -44,11 +44,6 @@ public class WebConfig {
     }
 
     @Bean
-    public ContactService<MailMessage> contactService() {
-        return new MailService(System.getProperty("MAIL_ADDRESS"), System.getProperty("MAIL_PASS") );
-    }
-
-    @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);

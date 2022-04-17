@@ -31,10 +31,10 @@ public class SupportForm {
         this.message = message;
     }
 
-    public SupportService.Helper toSupportHelper() {
-        SupportService.Helper helper = SupportService.Helper.newInstance();
-        helper.body(getMessage());
-        helper.author(getEmail());
-        return helper;
+    public SupportService.Digest toSupportDigest() {
+        SupportService.Digest digest = SupportService.Digest.newInstance();
+        digest.body(getMessage());
+        digest.author(getEmail());
+        return digest;
     }
 }

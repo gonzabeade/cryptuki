@@ -1,16 +1,21 @@
 package ar.edu.itba.paw.service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SupportServiceImpl implements SupportService {
 
-    // TODO: Autowire
-    private final ContactService<MailMessage> mailContactService = new MailService("p2pcryptuki@gmail.com", "esteesuntestdepaw");
+    private final ContactService<MailMessage> mailContactService;
+
+    @Autowired
+    public SupportServiceImpl(ContactService<MailMessage> mailContactService) {
+        this.mailContactService = mailContactService;
+    }
 
     @Override
-    public void getSupportFor(Helper helper) { // TODO: Improve radically
-        MailMessage mailMessage = mailContactService.createMessage(helper.getAuthor());
-        mailMessage.setBody("Tu consulta: " + helper.getBody());
+    public void getSupportFor(Digest digest) { // TODO: Improve radically
+        MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
+        mailMessage.setBody("Tu consulta: " + digest.getBody());
         mailMessage.setSubject("Hemos recibido tu consulta");
         mailContactService.sendMessage(mailMessage);
     }

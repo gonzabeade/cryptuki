@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.*;
 
@@ -54,9 +50,9 @@ public class OfferBuyForm {
     }
 
 
-    public TradeService.BuyHelper toOfferBuyHelper() {
+    public TradeService.BuyDigest toOfferBuyDigest() {
 
-        TradeService.BuyHelper helper = TradeService.BuyHelper.newInstance(
+        TradeService.BuyDigest helper = TradeService.BuyDigest.newInstance(
                 getOfferId(),
                 getEmail(),
                 getMessage(),

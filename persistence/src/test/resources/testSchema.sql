@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS status (
 CREATE TABLE IF NOT EXISTS offer (
     id INT IDENTITY PRIMARY KEY,
     seller_id INT NOT NULL,
-    offer_date VARCHAR(50) NOT NULL,
+    offer_date TIMESTAMP NOT NULL,
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
     asking_price DECIMAL NOT NULL,

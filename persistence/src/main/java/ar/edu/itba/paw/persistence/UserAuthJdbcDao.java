@@ -20,7 +20,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = ((resultSet, i) ->
              new UserAuth.Builder(resultSet.getString("uname"),
-                    resultSet.getString("password")).id(resultSet.getInt("user_id")).build());
+                    resultSet.getString("password")).id(resultSet.getInt("user_id")).role(resultSet.getString("description")).build());
 
     @Autowired
     public UserAuthJdbcDao(DataSource dataSource) {
@@ -31,7 +31,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
-        String query = "SELECT * FROM auth where uname=?";
+        String query = "select * from (SELECT * FROM auth where uname = ?) as temp join user_role on temp.role_id=id ";
         List<UserAuth> userAuthList = jdbcTemplate.query(query,USER_AUTH_USERNAME_ROW_MAPPER,username);
         return userAuthList.isEmpty() ? Optional.empty() : Optional.of(userAuthList.get(0));
     }
@@ -42,7 +42,22 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("user_id",userAuth.getId());
         args.put("uname",userAuth.getUsername());
         args.put("password",userAuth.getPassword());
+        args.put("role_id",getIdOfRole(userAuth.getRoleDescriptor()));
         jdbcInsert.execute(args);
         return userAuth.build();
     }
+
+    private Integer getIdOfRole(String roleDescriptor){
+
+        String query = "SELECT * FROM user_role WHERE description = ?";
+
+        List<Integer> id = jdbcTemplate.query(query, (resultSet, i) ->
+             resultSet.getInt("id")
+        ,roleDescriptor);
+
+//        if(id.size() != 1 )
+            //Invalid role
+        return id.get(0);
+    }
+
 }

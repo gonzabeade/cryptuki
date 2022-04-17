@@ -2,20 +2,18 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
-import ar.edu.itba.paw.cryptuki.form.registerForm;
+import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Optional;
 
 
@@ -105,26 +103,27 @@ public class HomeController {
 
 
     @RequestMapping(value="/register",method = {RequestMethod.GET})
-    public ModelAndView registerGet(@ModelAttribute("registerForm") final registerForm form){
+    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
         return new ModelAndView("views/register");
     }
 
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
-    public ModelAndView register(@Valid @ModelAttribute("registerForm")  registerForm form , final BindingResult errors){
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
             form.setPassword("");
             form.setRepeatPassword("");
             return registerGet(form);
         }
 
-        Optional<User> maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()) ,
+        //TODO: do not pass UserAuth.Builder, User.Builder
+        Optional<User> maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
                 User.builder().email(form.getEmail()).phoneNumber(Integer.parseInt(form.getPhoneNumber()))
         );
         if(!maybeUser.isPresent()){
             //username o mail is already on db.
             System.out.println("username or mail is already on db");
-            form = new registerForm();
+            form = new RegisterForm();
             return registerGet(form);
         }
 

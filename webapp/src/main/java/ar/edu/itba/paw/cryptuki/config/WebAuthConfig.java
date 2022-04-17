@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.config;
 
-import ar.edu.itba.paw.cryptuki.auth.cryptukiUserDetailsService;
+import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @ComponentScan("ar.edu.itba.paw.cryptuki.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private cryptukiUserDetailsService userDetailsService;
+    private CryptukiUserDetailsService userDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{

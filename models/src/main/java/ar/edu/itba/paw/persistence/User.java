@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import java.util.Collection;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +12,6 @@ public final class User {
     private final Integer ratingCount;
 
     private final Integer phoneNumber;
-    private final Collection<Role> roles;
 
     public static class Builder {
         private Integer id;
@@ -21,14 +20,12 @@ public final class User {
         private Integer ratingCount = 0;
 
         private Integer phoneNumber = 0 ;
-        private Set<Role> roles = new HashSet<>();
 
         private Builder() { }
 
         public Builder email(String email) {this.email = email; return this;}
         public Builder ratingSum(int sum) {this.ratingSum = sum; return this; }
         public Builder ratingCount(int count) {this.ratingCount = count; return this; }
-        public Builder addRole(Role role) { roles.add(role); return this; }
         public Builder id(int id) {this.id = id; return this; }
 
         public Builder phoneNumber(int phoneNumber){this.phoneNumber = phoneNumber;return this;}
@@ -61,7 +58,6 @@ public final class User {
         this.ratingCount = builder.ratingCount;
         this.ratingSum = builder.ratingSum;
         this.phoneNumber= builder.phoneNumber;
-        this.roles = builder.roles;
     }
 
     public int getId() {
@@ -78,13 +74,6 @@ public final class User {
     }
 
     public int phoneNumber(){return phoneNumber;}
-
-    // The user knows it is a defensive copy what is being returned
-    public Collection<Role> getRoles() {
-        Collection<Role> roles = new HashSet<>();
-        roles.addAll(this.roles);
-        return roles;
-    }
 
     @Override
     public String toString() {

@@ -3,15 +3,16 @@ package ar.edu.itba.paw.persistence;
 public final class UserAuth{
 
     private Integer id;
-    private Integer sessionId;
     private String password;
-    private String username;  // Does not contain password. Password from database should never be loaded to Server RAM.
+    private String username;
+    private String roleDescriptor;
 
     public static class Builder {
         private Integer id;
-        private Integer sessionId;
         private String username;
         private String password;
+        private String roleDescriptor;
+
 
         public Builder(String username, String password) {
             this.username = username;
@@ -21,7 +22,8 @@ public final class UserAuth{
         public Builder id(int id) { this.id = id; return this; }
         public Builder username(String username) { this.username = username; return this; }
         public Builder password(String password) { this.password = password; return this; }
-        public Builder sessionId(int sessionId) {this.sessionId = sessionId; return this; }
+
+        public Builder role(String role){this.roleDescriptor = role; return this; }
 
         public UserAuth build() {
             return new UserAuth(this);
@@ -30,21 +32,21 @@ public final class UserAuth{
         public Integer getId() {
             return id;
         }
-        public Integer getSessionId() {
-            return sessionId;
-        }
         public String getUsername() {
             return username;
         }
         public String getPassword() {
             return password;
         }
+
+        public String getRoleDescriptor(){return roleDescriptor; }
     }
 
     private UserAuth(Builder builder) {
         this.id = builder.id;
         this.username = builder.username;
         this.password = builder.password;
+        this.roleDescriptor = builder.roleDescriptor; //only creating instance in persistence
     }
 
     public int getId() {
@@ -55,4 +57,8 @@ public final class UserAuth{
     }
 
     public String getPassword(){return password;}
+
+    public String getRole() {
+        return roleDescriptor;
+    }
 }

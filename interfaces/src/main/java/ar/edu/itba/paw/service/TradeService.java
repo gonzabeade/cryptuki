@@ -34,19 +34,19 @@ public interface TradeService {
     }
 
     // TODO: Discuss and implement
-    final class SellHelper {
+    final class SellDigest {
 
-        private SellHelper() {
+        private SellDigest() {
 
         }
 
-        public static SellHelper newInstance() {
-            return new SellHelper();
+        public static SellDigest newInstance() {
+            return new SellDigest();
         }
     }
 
     void executeTrade(BuyDigest buyDigest);
-    void executeTrade(SellHelper sellHelper);
+    void executeTrade(SellDigest sellHelper);
 
 
 }

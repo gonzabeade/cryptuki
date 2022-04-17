@@ -46,7 +46,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public void executeTrade(SellHelper sellHelper) {
+    public void executeTrade(SellDigest sellHelper) {
 
     }
 }

@@ -12,7 +12,7 @@ public interface SupportService {
         private Digest() {
         }
 
-        public Digest title(String title) { this.title = title; return null; }
+        public Digest title(String title) { this.title = title; return this; }
         public Digest body(String body) { this.body = body; return this; }
         public Digest author(String author) {this.author = author; return this; }
 

@@ -20,15 +20,15 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private final PaginatorService<Offer> offerPaginatorService;
+    private final Paginator<Offer> offerPaginator;
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService, PaginatorService<Offer> offerPaginatorService) {
+    public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
         this.us = us;
         this.offerService = offerService;
         this.mailContactService = mailContactService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.offerPaginatorService = offerPaginatorService;
+        this.offerPaginator = offerService.getPaginator();
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -36,12 +36,12 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);
-        if(!offerPaginatorService.validatePage(pageNumber)){
+        if(!offerPaginator.isPageValid(pageNumber)){
             throw new RuntimeException();
         };
 
-        mav.addObject("offerList",offerPaginatorService.getPagedObjects(pageNumber));
-        mav.addObject("pages", offerPaginatorService.getPageCount());
+        mav.addObject("offerList", offerPaginator.getPagedObjects(pageNumber));
+        mav.addObject("pages", offerPaginator.getPageCount());
         mav.addObject("activePage", pageNumber);
 
         return mav;

@@ -16,7 +16,10 @@
     <div class="flex">
         <div class="flex flex-col mx-auto mt-10">
             <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>
-            <h1 class="text-center text-4xl font-bold"><c:out value="${offer.askingPrice}"/> ARS -> <c:out value="${offer.crypto.name}"/></h1>
+            <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.name}"/>" class="w-20 h-20 mx-auto">
+            <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.name}"/></h1>
+            <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
+
         </div>
     </div>
     <div>

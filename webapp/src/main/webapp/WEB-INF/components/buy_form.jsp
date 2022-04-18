@@ -25,7 +25,7 @@
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
             <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Tu mensaje: *</form:label>
             <div class="flex-row justify-center mx-96">
-                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="Soy de Quilmes como vos" />
+                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="Juntemonos en el Starbucks de 9 de Julio." />
             </div>
 
         </div>

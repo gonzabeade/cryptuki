@@ -33,13 +33,14 @@
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
+                        <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
                     </jsp:include>
                 </li>
             </c:forEach>
         </div>
     </ol>
     <div>
-        <div class="absolute left-[37%] my-7">
+        <div class="absolute left-[37%] my-6">
             <c:if  test="${activePage > 0}">
                 <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
             </c:if>
@@ -56,7 +57,7 @@
             </c:choose>
         </c:forEach>
         </div>
-        <div class="absolute right-[37%] -mt-12">
+        <div class="absolute right-[37%] -mt-[50px]">
             <c:if test="${activePage < pages-1}">
                 <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
             </c:if>

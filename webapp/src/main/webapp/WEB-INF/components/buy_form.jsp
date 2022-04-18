@@ -43,7 +43,9 @@
     document.getElementsByName('amount')[0].addEventListener('change', changeVal)
     function changeVal(){
             let value = document.getElementById('amount').value;
-            let newVal =  value / ${param.price};
-            document.getElementById('coinAmount').innerHTML = newVal.toFixed(5);
+            if(value > 0){
+                let newVal =  value / ${param.price};
+                document.getElementById('coinAmount').innerHTML = newVal.toFixed(5);
+            }
     }
 </script>

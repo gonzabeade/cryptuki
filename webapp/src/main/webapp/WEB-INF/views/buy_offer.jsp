@@ -25,6 +25,9 @@
     <div>
         <jsp:include page="../components/buy_form.jsp">
             <jsp:param name="offer_id" value="${offer.id}"/>
+            <jsp:param name="price" value="${offer.askingPrice}"/>
+            <jsp:param name="coin" value="${offer.crypto.code}"/>
+
         </jsp:include>
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>

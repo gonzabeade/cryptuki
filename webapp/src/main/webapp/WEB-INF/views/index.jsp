@@ -22,7 +22,7 @@
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md">
     <div class="flex flex-col my-auto mx-9">
-        <label for="coins"  class="font-sans">Criptomoneda</label>
+        <label for="coins"  class="font-sans text-sm font-semibold">Criptomoneda</label>
         <select name="coins" id="coins" class="bg-transparent">
             <option value="ETH">Ether</option>
             <option value="BTC">Bitcoin</option>
@@ -31,7 +31,7 @@
         </select>
     </div>
     <div class="flex flex-col my-auto mx-9 justify-center">
-        <label for="pm" class="font-sans">Medio de Pago</label>
+        <label for="pm" class="font-sans text-sm font-semibold">Medio de Pago</label>
         <select name="pm" id="pm" class="bg-transparent">
             <option value="mp">Mercado Pago</option>
             <option value="bru">Brubank</option>
@@ -40,9 +40,9 @@
         </select>
     </div>
     <div class="flex flex-col my-auto mx-9 justify-center">
-        <label for="priceFilter" class="font-sans">Quiero comprar...</label>
+        <label for="priceFilter" class="font-sans text-sm font-semibold">Quiero comprar...</label>
         <div class="flex flex-row">
-            <input type="text" id="priceFilter" class="bg-transparent border-1 border-polard mx-1">
+            <input type="number" id="priceFilter" class="bg-transparent border-1 border-polard mx-1">
             <h1 class="font-sans font-semibold">ARS</h1>
         </div>
     </div>

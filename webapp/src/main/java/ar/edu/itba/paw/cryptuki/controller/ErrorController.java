@@ -19,11 +19,11 @@ public class ErrorController {
 
         switch (httpErrorCode) {
             case 400: {
-                errorMsg = "Parece que estás enviando algo incorrecto.";
+                errorMsg = "Parece que estás enviando algo incorrecto";
                 break;
             }
             case 401: {
-                errorMsg = "No tiene los permisos necesarios para ingresar a esta página.";
+                errorMsg = "No tiene los permisos necesarios para ingresar a esta página";
                 break;
             }
             case 404: {
@@ -32,6 +32,9 @@ public class ErrorController {
             }
             case 500: {
                 errorMsg = "Hubo un error de nuestro lado! Por favor intenta de nuevo. Si el error persiste, contacte a soporte";
+            }
+            default: {
+                errorMsg = "Error desconocido";
             }
         }
         errorPage.addObject("errorMsg", errorMsg);

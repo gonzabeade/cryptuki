@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.service.SupportService;
+import ar.edu.itba.paw.service.digests.SupportDigest;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SupportForm {
+
     @Size(min=6, max= 100)
     @Email()
     @Pattern(regexp=".+@.+\\..+")
@@ -31,10 +33,8 @@ public class SupportForm {
         this.message = message;
     }
 
-    public SupportService.Digest toSupportDigest() {
-        SupportService.Digest digest = SupportService.Digest.newInstance();
-        digest.body(getMessage());
-        digest.author(getEmail());
+    public SupportDigest toDigest() {
+        SupportDigest digest = new SupportDigest(getMessage(), getEmail());
         return digest;
     }
 }

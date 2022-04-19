@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.service.digests.BuyDigest;
+import ar.edu.itba.paw.service.digests.SellDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public void executeTrade(SellDigest sellHelper) {
+    public void executeTrade(SellDigest digest) {
 
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.service.TradeService;
+import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -50,16 +51,16 @@ public class OfferBuyForm {
     }
 
 
-    public TradeService.BuyDigest toOfferBuyDigest() {
+    public BuyDigest toDigest() {
 
-        TradeService.BuyDigest helper = TradeService.BuyDigest.newInstance(
+        BuyDigest digest = new BuyDigest(
                 getOfferId(),
                 getEmail(),
                 getMessage(),
                 getAmount()
         );
 
-        return helper;
+        return digest;
     }
 
 }

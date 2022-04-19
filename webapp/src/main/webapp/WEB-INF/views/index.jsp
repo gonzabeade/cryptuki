@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
@@ -18,6 +19,41 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
+<div class="flex">
+<div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md">
+    <div class="flex flex-col my-auto mx-9">
+        <label for="coins"  class="font-sans">Criptomoneda</label>
+        <select name="coins" id="coins" class="bg-transparent">
+            <option value="ETH">Ether</option>
+            <option value="BTC">Bitcoin</option>
+            <option value="ADA">Cardano</option>
+            <option value="SOL">Solana</option>
+        </select>
+    </div>
+    <div class="flex flex-col my-auto mx-9 justify-center">
+        <label for="pm" class="font-sans">Medio de Pago</label>
+        <select name="pm" id="pm" class="bg-transparent">
+            <option value="mp">Mercado Pago</option>
+            <option value="bru">Brubank</option>
+            <option value="cash">Efectivo</option>
+            <option value="bank">Transferencia Bancaria</option>
+        </select>
+    </div>
+    <div class="flex flex-col my-auto mx-9 justify-center">
+        <label for="priceFilter" class="font-sans">Quiero comprar...</label>
+        <div class="flex flex-row">
+            <input type="text" id="priceFilter" class="bg-transparent border-1 border-polard mx-1">
+            <h1 class="font-sans font-semibold">ARS</h1>
+        </div>
+    </div>
+
+    <a href="<c:url value="/"/>" class="drop-shadow-lg bg-frost rounded-full p-3 ml-4 my-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </a>
+</div>
+</div>
 <div class=" flex justify-center mx-20">
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>

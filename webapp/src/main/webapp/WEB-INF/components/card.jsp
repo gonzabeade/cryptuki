@@ -34,7 +34,7 @@
 
 				</div>
 				<div class="flex basis-1/4 justify-center">
-					<a class=" pb-6 px-9 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">
+					<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">
 						Ver oferta
 					</a>
 				</div>

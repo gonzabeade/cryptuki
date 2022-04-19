@@ -10,6 +10,7 @@ public interface UserService {
 
     Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
     Optional<UserAuth> getUserByUsername(String username);
-
     int verifyUser(String username , Integer code);
+    void sendChangePasswordMail(String email);
+    int changePassword(String username, Integer code, String password);
 }

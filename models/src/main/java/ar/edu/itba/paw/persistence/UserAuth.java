@@ -66,6 +66,7 @@ public final class UserAuth{
         this.username = builder.username;
         this.password = builder.password;
         this.roleDescriptor = builder.roleDescriptor; //only creating instance in persistence
+        this.code= builder.getCode();
         this.userStatus = builder.userStatus;
     }
 

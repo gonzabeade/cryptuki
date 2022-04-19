@@ -10,5 +10,9 @@ public interface UserAuthDao {
 
     int verifyUser(String username , Integer code);
 
+    int changePassword(String username , Integer code , String password);
+
+    Optional<UserAuth> getUsernameByEmail(String email);
+
 
 }

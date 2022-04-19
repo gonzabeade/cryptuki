@@ -8,7 +8,6 @@ public class CodeForm {
     @NotNull
     private Integer code;
 
-
     public Integer getCode() {
         return code;
     }

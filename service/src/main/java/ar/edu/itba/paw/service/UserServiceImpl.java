@@ -60,4 +60,21 @@ public class UserServiceImpl implements UserService {
     public int verifyUser(String username, Integer code) {
         return userAuthDao.verifyUser(username,code);
     }
+
+    public void sendChangePasswordMail(String email){
+        Optional<UserAuth> maybeUser = userAuthDao.getUsernameByEmail(email);
+        if(!maybeUser.isPresent())
+            throw new RuntimeException("Invalid email");
+
+        UserAuth user = maybeUser.get();
+        MailMessage message = contactService.createMessage(email);
+        message.setSubject("Change your password");
+        message.setBody("http://localhost:8080/passwordRecovery?user="+user.getUsername()+"&code="+user.getCode());
+        contactService.sendMessage(message);
+    }
+
+    @Override
+    public int changePassword(String username, Integer code, String password) {
+        return userAuthDao.changePassword(username, code, password);
+    }
 }

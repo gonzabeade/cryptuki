@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.CodeForm;
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.SupportForm;
-import ar.edu.itba.paw.cryptuki.form.RegisterForm;
+import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
@@ -182,6 +179,26 @@ public class HomeController {
 
     }
 
+
+    @RequestMapping(value="/passwordRecovery")
+    public ModelAndView passwordSendMailGet(@Valid @ModelAttribute("EmailForm") EmailForm form){
+        return new ModelAndView("views/ChangePassword");
+    }
+
+    @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
+    public ModelAndView passwordSendMail(@Valid @ModelAttribute("EmailForm") EmailForm form, BindingResult errors){
+        if(errors.hasErrors())
+            return passwordSendMailGet(form);
+        try{
+            us.sendChangePasswordMail(form.getEmail());
+        }catch (Exception e ){
+            return forbidden();
+        }
+        return new ModelAndView("views/ChangePasswordMailSent");
+
+    }
+
+       
 
     @RequestMapping("/403")
     public ModelAndView forbidden() {

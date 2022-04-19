@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +71,12 @@ public class UserAuthJdbcDao implements UserAuthDao{
         return jdbcTemplate.update(query,username,code);
     }
 
+    @Override
+    public int changePassword(String username, Integer code, String password) {
+        String query="UPDATE auth set password=? where uname=? and code=?";
+        return jdbcTemplate.update(query,password,username,code);
+    }
+
     private Integer getIdOfRole(String roleDescriptor){
 
         String query = "SELECT * FROM user_role WHERE description = ?";
@@ -80,6 +88,19 @@ public class UserAuthJdbcDao implements UserAuthDao{
 //        if(id.size() != 1 )
             //Invalid role
         return id.get(0);
+    }
+
+
+    @Override
+    public Optional<UserAuth> getUsernameByEmail(String email) {
+        String query ="SELECT * FROM auth join users on id=user_id where email=?";
+        List<UserAuth> users = jdbcTemplate.query(query, (resultSet, i) -> new UserAuth.Builder(
+                resultSet.getString("uname"),
+                resultSet.getString("password"))
+                .id(resultSet.getInt("user_id"))
+                .code(resultSet.getInt("code"))
+                .build(), email);
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0))  ;
     }
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.form.CodeForm;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
@@ -24,6 +25,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
+    private  String username="";
     private static final int PAGE_SIZE = 3;
 
     @Autowired
@@ -127,8 +129,8 @@ public class HomeController {
             return registerGet(form);
         }
 
-        System.out.println("User was created successfully");
-        return new ModelAndView("redirect:/");
+        this.username= form.getUsername();
+      return new ModelAndView("redirect:/verifyManual");
     }
 
 
@@ -141,9 +143,49 @@ public class HomeController {
     }
 
 
+    @RequestMapping("/verify")
+    public ModelAndView verify(@RequestParam(value="user") String username, @RequestParam(value="code") Integer code){
+
+        int validate = us.verifyUser(username,code);
+            if(validate != 1){
+                System.out.println("Username or code are invalid");
+                return new ModelAndView("redirect:/403");
+            }
+            else
+            {
+                System.out.println("user has been verified");
+                return new ModelAndView("redirect:/");
+            }
+
+    }
+
+
+    @RequestMapping(value="/verifyManual",method = {RequestMethod.GET})
+    public ModelAndView verifyManualGet(@ModelAttribute("CodeForm") final CodeForm form){
+        return new ModelAndView("views/codeVerification");
+    }
+
+    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
+    public ModelAndView verifyManual(@Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
+       if(errors.hasErrors()){
+           return verifyManualGet(form);
+       }
+
+        int validate = us.verifyUser(this.username, form.getCode());
+        if(validate != 1){
+            return new ModelAndView("redirect:/403");
+        }
+        else
+        {
+            return new ModelAndView("redirect:/");
+        }
+
+    }
+
+
     @RequestMapping("/403")
     public ModelAndView forbidden() {
-        return new ModelAndView("403");
+        return new ModelAndView("views/403");
     }
 
 

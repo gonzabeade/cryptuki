@@ -8,5 +8,7 @@ public interface UserAuthDao {
 
     UserAuth createUserAuth(UserAuth.Builder userAuth);
 
+    int verifyUser(String username , Integer code);
+
 
 }

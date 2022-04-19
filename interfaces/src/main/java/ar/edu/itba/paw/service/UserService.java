@@ -10,4 +10,6 @@ public interface UserService {
 
     Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
     Optional<UserAuth> getUserByUsername(String username);
+
+    int verifyUser(String username , Integer code);
 }

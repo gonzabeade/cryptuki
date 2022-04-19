@@ -18,9 +18,20 @@ public class UserAuthJdbcDao implements UserAuthDao{
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = ((resultSet, i) ->
-             new UserAuth.Builder(resultSet.getString("uname"),
-                    resultSet.getString("password")).id(resultSet.getInt("user_id")).role(resultSet.getString("description")).build());
+    private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = ((resultSet, i) ->{
+        UserAuth.Builder userAuth = new UserAuth.Builder(
+                resultSet.getString("uname"),
+                resultSet.getString("password"))
+                .id(resultSet.getInt("user_id"))
+                .role(resultSet.getString("description"));
+                if(resultSet.getInt("status") == 1 )
+                    userAuth.userStatus(UserStatus.VERIFIED);
+                else
+                    userAuth.userStatus(UserStatus.UNVERIFIED);
+                return userAuth.build();
+
+    }
+            );
 
     @Autowired
     public UserAuthJdbcDao(DataSource dataSource) {
@@ -43,8 +54,19 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("uname",userAuth.getUsername());
         args.put("password",userAuth.getPassword());
         args.put("role_id",getIdOfRole(userAuth.getRoleDescriptor()));
+        args.put("code",userAuth.getCode());
+        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
+            args.put("status",0);
+        else
+            throw new RuntimeException();//can not create verified user.
         jdbcInsert.execute(args);
         return userAuth.build();
+    }
+
+    @Override
+    public int verifyUser(String username, Integer code) {
+        String query="UPDATE auth set status=1 where uname=? and code=?";
+        return jdbcTemplate.update(query,username,code);
     }
 
     private Integer getIdOfRole(String roleDescriptor){

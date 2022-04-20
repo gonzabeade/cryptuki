@@ -105,9 +105,11 @@ public class HomeController {
     }
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
-        return new ModelAndView("views/upload_page");
+        ModelAndView mav = new ModelAndView("views/upload_page");
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        return mav;
     }
-    @RequestMapping("/upload/post")
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView uploadOffer(@ModelAttribute("offerBuyForm") final UploadOfferForm form, final BindingResult errors){
         if(errors.hasErrors()){
             return uploadOffer(form);

@@ -16,7 +16,11 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
-
+<div class="flex">
+    <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar">Sube tu oferta</h1>
+</div>
+<c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
+<jsp:include page="../components/upload_form.jsp"/>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
 <div class="shape-blob two"></div>

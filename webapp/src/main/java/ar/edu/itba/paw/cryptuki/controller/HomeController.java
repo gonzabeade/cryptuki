@@ -2,10 +2,13 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -98,6 +101,18 @@ public class HomeController {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
+        return mav;
+    }
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
+        return new ModelAndView("views/upload_page");
+    }
+    @RequestMapping("/upload/post")
+    public ModelAndView uploadOffer(@ModelAttribute("offerBuyForm") final UploadOfferForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return uploadOffer(form);
+        }
+        ModelAndView mav = new ModelAndView("redirect:/");
         return mav;
     }
 

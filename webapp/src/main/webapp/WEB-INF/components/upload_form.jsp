@@ -38,7 +38,7 @@
             <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda</form:label>
             <div class="flex flex-col justify-center mx-96">
                 <form:input type="number" path="price" class="h-10 justify-center rounded-lg p-3 mx-auto"/>
-                <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1>
+               <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->
             </div>
         </div>
         <div class="flex flex-row p-5 mx-60">

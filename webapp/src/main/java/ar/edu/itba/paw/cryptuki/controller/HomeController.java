@@ -6,6 +6,7 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -115,17 +116,20 @@ public class HomeController {
             return registerGet(form);
         }
 
+        Optional<User> maybeUser;
         //TODO: do not pass UserAuth.Builder, User.Builder
-        Optional<User> maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
-                User.builder().email(form.getEmail()).phoneNumber(Integer.parseInt(form.getPhoneNumber()))
-        );
-        if(!maybeUser.isPresent()){
-            //username o mail is already on db.
-            System.out.println("username or mail is already on db");
-            form = new RegisterForm();
-            return registerGet(form);
-        }
+        try{
+            maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
+                    User.builder().email(form.getEmail()).phoneNumber(Integer.parseInt(form.getPhoneNumber()))
+            );
 
+        }
+        catch(Exception e ){
+                //username o mail is already on db.
+                System.out.println("username or mail is already on db");
+                form = new RegisterForm();
+                return registerGet(form);
+        }
         this.username= form.getUsername();
       return new ModelAndView("redirect:/verifyManual");
     }
@@ -197,8 +201,7 @@ public class HomeController {
         return new ModelAndView("views/ChangePasswordMailSent");
 
     }
-
-       
+    
 
     @RequestMapping("/403")
     public ModelAndView forbidden() {

@@ -13,4 +13,6 @@ public interface UserService {
     int verifyUser(String username , Integer code);
     void sendChangePasswordMail(String email);
     int changePassword(String username, Integer code, String password);
+
+    Optional<User> getUserInformation(String username);
 }

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,15 +26,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    @Transactional
     @Override
     public Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
-        if(userDao.getUserByEmail(userBuilder.getEmail()).isPresent() || userAuthDao.getUserAuthByUsername(authBuilder.getUsername()).isPresent())
-           return Optional.empty();
         User user = userDao.createUser(userBuilder);
         authBuilder.id(user.getId());
         authBuilder.password(passwordEncoder.encode(authBuilder.getPassword()));
         authBuilder.code((int)(Math.random()*Integer.MAX_VALUE));
         authBuilder.userStatus(UserStatus.UNVERIFIED);
+        userAuthDao.createUserAuth(authBuilder);
+
 
         //send code.
         System.out.println("about to send a mail to "+ userBuilder.getEmail());
@@ -44,7 +47,6 @@ public class UserServiceImpl implements UserService {
         message.setBody(link);
         contactService.sendMessage(message);
 
-        userAuthDao.createUserAuth(authBuilder);
         return Optional.of(user);
     }
 
@@ -76,5 +78,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public int changePassword(String username, Integer code, String password) {
         return userAuthDao.changePassword(username, code, password);
+    }
+
+    @Override
+    public Optional<User> getUserInformation(String username) {
+        return Optional.empty();
     }
 }

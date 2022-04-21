@@ -7,7 +7,7 @@ public interface UserDao {
 
     User createUser(User.Builder user);
 
-
+    Optional<User> getUserByUsername(String username);
 
 
 }

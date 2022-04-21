@@ -47,5 +47,11 @@ public class UserJdbcDao implements UserDao{
         return user.build();
     }
 
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        //TODO: NATURAL JOIN WITH USERAUTH.
+        return Optional.empty();
+    }
+
 
 }

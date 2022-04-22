@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
+import ar.edu.itba.paw.persistence.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,14 @@ public class OfferServiceImpl implements OfferService {
         @Override
         public Iterable<Offer> getPagedObjects(int pageNumber) {
             if (isPageValid(pageNumber))
-                return offerDao.getPagedOffers(pageNumber, PAGE_SIZE);
+                return offerDao.getOffersBy( new OfferFilter()
+                                .byPaymentMethod("mp")
+                                .byCryptoCode("DOGE")
+                        .byCryptoCode("DAI")
+
+                        .fromPage(pageNumber)
+                        .withPageSize(PAGE_SIZE)
+                );
             else
                 return new ArrayList<>();  // Return empty, invalid pageNumber
         }
@@ -60,17 +68,17 @@ public class OfferServiceImpl implements OfferService {
     }
     @Override
     public Iterable<Offer> getAllOffers() {
-        return offerDao.getAllOffers();
+        return null; // offerDao.getAllOffers();
     }
 
     @Override
     public Offer getOffer(int id) {
-        return offerDao.getOffer(id);
+        return null; // offerDao.getOffer(id);
     }
 
     @Override
     public int getOfferCount() {
-        return offerDao.getOfferCount();
+        return 100; //  offerDao.getOfferCount();
     }
 
     @Override

@@ -20,7 +20,6 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private final Paginator<Offer> offerPaginator;
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -28,7 +27,6 @@ public class HomeController {
         this.offerService = offerService;
         this.mailContactService = mailContactService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.offerPaginator = offerService.getPaginator();
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -36,12 +34,10 @@ public class HomeController {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);
-        if(!offerPaginator.isPageValid(pageNumber)){
-            throw new RuntimeException();
-        };
 
-        mav.addObject("offerList", offerPaginator.getPagedObjects(pageNumber));
-        mav.addObject("pages", offerPaginator.getPageCount());
+
+        mav.addObject("offerList", offerService.getOfferByCrypto(page.orElse(0), 3, "BTC"));
+        mav.addObject("pages", offerService.countOffersByCrypto("BTC"));
         mav.addObject("activePage", pageNumber);
 
         return mav;
@@ -69,7 +65,7 @@ public class HomeController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        mav.addObject("offer", offerService.getOffer(offerId));
+        mav.addObject("offer", offerService.getOfferById(offerId));
         return mav;
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
@@ -79,12 +75,12 @@ public class HomeController {
         }
         String user = form.getEmail();
 
-        String message =  user + " ha demostrado interés en  " + offerService.getOffer(form.getOfferId()).toString();
+        String message =  user + " ha demostrado interés en  " + offerService.getOfferById(form.getOfferId()).get().toString();
         message+="\nQuiere comprarte " + form.getAmount() + "ARS";
 
         message+="\nTambién te dejó un mensaje: " + form.getMessage();
         message+="\nContactalo ya por mail!";
-        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(form.getOfferId()).getSeller().getEmail());
+        MailMessage mailMessage = mailContactService.createMessage(offerService.getOfferById(form.getOfferId()).get().getSeller().getEmail());
         mailMessage.setBody(message);
 
         mailMessage.setSubject("Recibiste una oferta por tu publicación en Cryptuki!");

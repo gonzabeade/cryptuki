@@ -5,10 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface OfferDao {
-
-    int getOfferCount();
-
+    int getOfferCount(OfferFilter filter);
     Collection<Offer> getOffersBy(OfferFilter filter);
-
-
 }

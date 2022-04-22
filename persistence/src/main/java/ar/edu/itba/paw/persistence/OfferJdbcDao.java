@@ -60,7 +60,7 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
-        Map<Integer, Offer.Builder> cache = new HashMap<>();
+        Map<Integer, Offer.Builder> cache = new HashMap<>(); // TODO - rename
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
             String paymentCode = resultSet.getString("payment_code");  // TODO: Improve
@@ -84,21 +84,36 @@ public class OfferJdbcDao implements OfferDao {
 
 
     @Override
-    public int getOfferCount() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM offer", Integer.class);
+    public int getOfferCount(OfferFilter filter) {
+        List<Object> params = new LinkedList<>();
+        final String query = "SELECT COUNT(DISTINCT offer_id) FROM offer_complete WHERE TRUE %s";
+        final String filterSyntax = getFilterSyntax(filter, params);
+        return jdbcTemplate.queryForObject( String.format(query, filterSyntax), Integer.class, params.toArray());
     }
 
 
-    // Generates a string of the form "AND ( [ nameInDatabase = ? OR]^n FALSE )
     private static String pumpFilterWildcard(int filterQuantity, String nameInDatabase){
         if ( filterQuantity == 0 ) return "";
         StringBuilder sb = new StringBuilder().append("AND (");  // We use a StringBuilder because there may be many iterations
         while ( filterQuantity-- > 0) {
             sb.append(nameInDatabase).append(" = ? OR ");
         }
-        sb.append(" FALSE) ");
+        sb.append("FALSE) ");
         return sb.toString();
     }
+
+    // TODO - Discuss
+    private static String getFilterSyntax(OfferFilter filter, List<Object> params) {
+        params.addAll(filter.getCryptoCodes());
+        params.addAll(filter.getPaymentMethods());
+        params.addAll(filter.getIds());
+        return new StringBuilder() // Here we use StringBuilder because each appended string may be very long
+                .append(pumpFilterWildcard(filter.getCryptoCodes().size(), "crypto_code"))
+                .append(pumpFilterWildcard(filter.getPaymentMethods().size(), "payment_code"))
+                .append(pumpFilterWildcard(filter.getIds().size(), "offer_id"))
+                .toString();
+    }
+
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
@@ -107,17 +122,8 @@ public class OfferJdbcDao implements OfferDao {
 
         List<Object> params = new LinkedList<>();
 
-        // %s is to be replaced with appropriate content for theWHERE clause
         final String queryTemplate = "SELECT * FROM offer_complete WHERE offer_id IN (SELECT DISTINCT offer_id FROM offer_complete WHERE TRUE %s LIMIT ? OFFSET ?)";
-        String filterSyntax = new StringBuilder() // Here we use StringBuilder because each appended string may be very long
-                .append(pumpFilterWildcard(filter.getCryptoCodes().size(), "crypto_code"))
-                .append(pumpFilterWildcard(filter.getPaymentMethods().size(), "payment_code"))
-                .append(pumpFilterWildcard(filter.getIds().size(), "offer_id"))
-                .toString();
-
-        params.addAll(filter.getCryptoCodes());
-        params.addAll(filter.getPaymentMethods());
-        params.addAll(filter.getIds());
+        final String filterSyntax = getFilterSyntax(filter, params);
         params.add(filter.getPageSize());
         params.add(offset);
 

@@ -89,36 +89,37 @@ public class OfferJdbcDao implements OfferDao {
     }
 
 
-    private static <T> String getFilterSyntaxFrom(Collection<T> filter, List<Object> params, String nameInDatabase){
-        if (!filter.isEmpty()) {
-            StringBuilder newFilter = new StringBuilder(); // Here we use StringBuilder because we do not know how many iterations the foreach-loop has
-            newFilter.append("AND ( ");
-            for (T x : filter) {
-                newFilter.append(nameInDatabase).append(" = ? OR ");
-                params.add(x);
-            }
-            newFilter.append(" FALSE) ");
-            return newFilter.toString();
+    // Generates a string of the form "AND ( [ nameInDatabase = ? OR]^n FALSE )
+    private static String pumpFilterWildcard(int filterQuantity, String nameInDatabase){
+        if ( filterQuantity == 0 ) return "";
+        StringBuilder sb = new StringBuilder().append("AND (");  // We use a StringBuilder because there may be many iterations
+        while ( filterQuantity-- > 0) {
+            sb.append(nameInDatabase).append(" = ? OR ");
         }
-        return "";
+        sb.append(" FALSE) ");
+        return sb.toString();
     }
+
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
 
-        int idx = filter.getPageSize() * filter.getPage();
+        int offset = filter.getPageSize() * filter.getPage();
 
         List<Object> params = new LinkedList<>();
 
         // %s is to be replaced with appropriate content for theWHERE clause
         final String queryTemplate = "SELECT * FROM offer_complete WHERE offer_id IN (SELECT DISTINCT offer_id FROM offer_complete WHERE TRUE %s LIMIT ? OFFSET ?)";
         String filterSyntax = new StringBuilder() // Here we use StringBuilder because each appended string may be very long
-                .append(getFilterSyntaxFrom(filter.getCryptoCodes(), params, "crypto_code"))
-                .append(getFilterSyntaxFrom(filter.getPaymentMethods(), params, "payment_code"))
-                .append(getFilterSyntaxFrom(filter.getIds(), params, "offer_id"))
+                .append(pumpFilterWildcard(filter.getCryptoCodes().size(), "crypto_code"))
+                .append(pumpFilterWildcard(filter.getPaymentMethods().size(), "payment_code"))
+                .append(pumpFilterWildcard(filter.getIds().size(), "offer_id"))
                 .toString();
 
+        params.addAll(filter.getCryptoCodes());
+        params.addAll(filter.getPaymentMethods());
+        params.addAll(filter.getIds());
         params.add(filter.getPageSize());
-        params.add(idx);
+        params.add(offset);
 
         return jdbcTemplate.query(String.format(queryTemplate, filterSyntax), OFFER_MULTIROW_MAPPER, params.toArray())
                 .stream()

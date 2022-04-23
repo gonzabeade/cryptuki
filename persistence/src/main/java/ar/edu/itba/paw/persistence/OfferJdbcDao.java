@@ -6,15 +6,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+import java.beans.Expression;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +28,7 @@ import java.util.stream.Stream;
 public class OfferJdbcDao implements OfferDao {
 
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
@@ -78,58 +85,62 @@ public class OfferJdbcDao implements OfferDao {
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
+
     }
 
+    String allQuery = "SELECT *\n" +
+            "FROM offer_complete\n" +
+            "WHERE offer_id IN (\n" +
+            "    SELECT DISTINCT offer_id\n" +
+            "    FROM offer_complete\n" +
+            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+            "          :min <= asking_price*quantity AND\n" +
+            "          :max >= asking_price*quantity\n" +
+            "    LIMIT :limit OFFSET :offset\n" +
+            ")";
 
+
+    String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
+            "FROM offer_complete\n" +
+            "WHERE offer_id IN (\n" +
+            "    SELECT DISTINCT offer_id\n" +
+            "    FROM offer_complete\n" +
+            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+            "          :min <= asking_price*quantity AND\n" +
+            "          :max >= asking_price*quantity\n" +
+            ")";
+
+
+    private static MapSqlParameterSource toMapSqlParameterSource(OfferFilter filter) {
+        return new MapSqlParameterSource()
+                .addValue("crypto_codes", filter.getCryptoCodes().isEmpty() ? null: filter.getCryptoCodes())
+                .addValue("offer_ids", filter.getIds().isEmpty() ? null : filter.getIds())
+                .addValue("payment_codes", filter.getPaymentMethods().isEmpty() ? null : filter.getPaymentMethods())
+                .addValue("limit", filter.getPageSize())
+                .addValue("offset", filter.getPage()*filter.getPageSize())
+                .addValue("min", filter.getMinPrice())
+                .addValue("max", filter.getMaxPrice());
+    }
 
     @Override
     public int getOfferCount(OfferFilter filter) {
-        List<Object> params = new LinkedList<>();
-        final String query = "SELECT COUNT(DISTINCT offer_id) FROM offer_complete WHERE TRUE %s";
-        final String filterSyntax = getFilterSyntax(filter, params);
-        return jdbcTemplate.queryForObject( String.format(query, filterSyntax), Integer.class, params.toArray());
+        return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
     }
-
-
-    private static String pumpFilterWildcard(int filterQuantity, String nameInDatabase){
-        if ( filterQuantity == 0 ) return "";
-        StringBuilder sb = new StringBuilder().append("AND (");  // We use a StringBuilder because there may be many iterations
-        while ( filterQuantity-- > 0) {
-            sb.append(nameInDatabase).append(" = ? OR ");
-        }
-        sb.append("FALSE) ");
-        return sb.toString();
-    }
-
-    // TODO - Discuss
-    private static String getFilterSyntax(OfferFilter filter, List<Object> params) {
-        params.addAll(filter.getCryptoCodes());
-        params.addAll(filter.getPaymentMethods());
-        params.addAll(filter.getIds());
-        return new StringBuilder() // Here we use StringBuilder because each appended string may be very long
-                .append(pumpFilterWildcard(filter.getCryptoCodes().size(), "crypto_code"))
-                .append(pumpFilterWildcard(filter.getPaymentMethods().size(), "payment_code"))
-                .append(pumpFilterWildcard(filter.getIds().size(), "offer_id"))
-                .toString();
-    }
-
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-
-        int offset = filter.getPageSize() * filter.getPage();
-
-        List<Object> params = new LinkedList<>();
-
-        final String queryTemplate = "SELECT * FROM offer_complete WHERE offer_id IN (SELECT DISTINCT offer_id FROM offer_complete WHERE TRUE %s LIMIT ? OFFSET ?)";
-        final String filterSyntax = getFilterSyntax(filter, params);
-        params.add(filter.getPageSize());
-        params.add(offset);
-
-        return jdbcTemplate.query(String.format(queryTemplate, filterSyntax), OFFER_MULTIROW_MAPPER, params.toArray())
+            List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
                 .stream()
                 .map(Offer.Builder::build)
                 .collect(Collectors.toList());
+        System.out.println(x);
+        return x;
     }
+
 }

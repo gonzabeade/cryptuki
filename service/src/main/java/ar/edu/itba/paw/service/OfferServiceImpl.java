@@ -5,18 +5,13 @@ import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.logging.Filter;
 
 @Service
 public class OfferServiceImpl implements OfferService {
 
     private OfferDao offerDao;
-    private Paginator<Offer> offerPaginator;
 
     @Autowired
     public OfferServiceImpl(OfferDao offerDao) {
@@ -39,13 +34,13 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Collection<Offer> getOfferByCrypto(int page, int pageSize, String cryptoCode) {
-        return offerDao.getOffersBy(new OfferFilter().byCryptoCode(cryptoCode).withPageSize(pageSize).fromPage(page));
+    public Collection<Offer> getOfferBy(OfferFilter filter) {
+        return offerDao.getOffersBy(filter);
     }
 
     @Override
-    public int countOffersByCrypto(String cryptoCode) {
-        return offerDao.getOfferCount(new OfferFilter().byCryptoCode(cryptoCode));
+    public int countOffersBy(OfferFilter filter) {
+        return offerDao.getOfferCount(filter);
     }
 
 

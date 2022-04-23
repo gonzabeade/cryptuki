@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.OfferFilter;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -10,6 +11,6 @@ public interface OfferService {
     Offer makeOffer(Offer.Builder builder);
     Optional<Offer> getOfferById(int id);
 
-    Collection<Offer> getOfferByCrypto(int page, int pageSize, String cryptoCode);
-    int countOffersByCrypto(String cryptoCode);
+    Collection<Offer> getOfferBy(OfferFilter filter);
+    int countOffersBy(OfferFilter filter);
 }

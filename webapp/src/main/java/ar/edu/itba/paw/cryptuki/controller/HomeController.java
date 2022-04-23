@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Optional;
 
 
@@ -36,8 +38,9 @@ public class HomeController {
         int pageNumber = page.orElse(0);
 
 
-        mav.addObject("offerList", offerService.getOfferByCrypto(page.orElse(0), 3, "BTC"));
-        mav.addObject("pages", offerService.countOffersByCrypto("BTC"));
+        OfferFilter filter = new OfferFilter().withPageSize(2).fromPage(pageNumber);
+        mav.addObject("offerList", offerService.getOfferBy(filter));
+        mav.addObject("pages", offerService.countOffersBy(filter)/2);
         mav.addObject("activePage", pageNumber);
 
         return mav;

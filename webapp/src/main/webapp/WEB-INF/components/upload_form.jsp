@@ -22,7 +22,7 @@
         </div>
         </div>
         <div class="flex flex-col justify-center mt-6">
-            <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites</h2>
+            <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
             <div class="flex flex-row justify-center">

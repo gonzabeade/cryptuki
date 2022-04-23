@@ -21,24 +21,35 @@
             </form:select>
         </div>
         </div>
-        <div class="flex flex-col justify-center my-6">
-            <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="maxAmount" class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row mx-auto">¿Cuánto es el máximo de <p id="maxCoin" class="mx-2"> Bitcoin </p> que quieres vender?*</form:label>
-            <div class="flex flex-row justify-center mx-auto">
-                <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
-                <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
-            </div>
-        </div>
-        <div class="flex flex-col justify-center my-6">
+        <div class="flex flex-col justify-center mt-6">
+            <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites</h2>
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="minAmount" class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row mx-auto">¿Cuánto es el límite mínimo en <p id="minCoin" class="mx-2">Bitcoin</p> para recibir ofertas?*</form:label>
-            <div class="flex flex-row justify-center mx-auto">
-                <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
-                <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
+            <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
+            <div class="flex flex-row justify-center">
+                <div>
+
+                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2"> Bitcoin </p></form:label>
+                    <div class="flex flex-row justify-center mx-auto">
+                        <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
+                        <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
+                    </div>
+                </div>
+                <div class="my-12">
+                    -
+                </div>
+                <div>
+                    <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">Bitcoin</p></form:label>
+                    <div class="flex flex-row justify-center mx-auto">
+                        <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
+                        <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
+                    </div>
+                </div>
             </div>
+
         </div>
 
-        <div class="flex flex-col my-6 mx-auto">
+
+        <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Medios de Pago*</form:label>
             <div class="flex flex-row justify-center mx-80">
@@ -48,7 +59,7 @@
                  </c:forEach>
             </div>
         </div>
-        <div class="flex flex-col my-6">
+        <div class="flex flex-col mt-6">
             <form:errors path="price" cssClass="text-red-500 mx-auto"/>
             <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda en ARS*</form:label>
             <div class="flex flex-col justify-center mx-96">
@@ -56,7 +67,7 @@
                <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->
             </div>
         </div>
-        <div class="flex flex-row p-5 mx-60">
+        <div class="flex flex-row p-5 mx-60 mt-10">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
             <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
         </div>

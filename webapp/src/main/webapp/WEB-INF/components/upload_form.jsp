@@ -28,7 +28,7 @@
             <div class="flex flex-row justify-center">
                 <div>
 
-                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2"> Bitcoin </p></form:label>
+                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
@@ -38,7 +38,7 @@
                     -
                 </div>
                 <div>
-                    <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">Bitcoin</p></form:label>
+                    <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
@@ -52,9 +52,9 @@
         <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Medios de Pago*</form:label>
-            <div class="flex flex-row justify-center mx-80">
+            <div class="flex flex-row justify-center mx-auto">
                 <c:forEach items="${paymentMethods}" var="paymentMethod">
-                    <form:label path="paymentMethods" for="${paymentMethod.code}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%] hover:cursor-pointer" onclick="changeBorderColor(this)"><c:out value="${paymentMethod.name}"/></form:label>
+                    <form:label path="paymentMethods" for="${paymentMethod.code}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)"><c:out value="${paymentMethod.name}"/></form:label>
                     <form:checkbox path="paymentMethods" id="${paymentMethod.code}" value="${paymentMethod.code}" cssClass="hidden"/>
                  </c:forEach>
             </div>

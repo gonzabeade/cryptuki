@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 
 
@@ -23,8 +25,7 @@ public class HomeController {
     private final OfferService offerService;
     private final ContactService<MailMessage> mailContactService;
     private final CryptocurrencyService cryptocurrencyService;
-    private  String username="";
-    private static final int PAGE_SIZE = 3;
+
 
     @Autowired
     public HomeController(UserService us, OfferService offerService, ContactService<MailMessage> mailContactService, CryptocurrencyService cryptocurrencyService) {
@@ -34,16 +35,18 @@ public class HomeController {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    @RequestMapping(value = {"/","/{page}"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@PathVariable(value = "page") final Optional<Integer> page) {
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
+        int pageNumber = page.orElse(0);
 
-        int offersSize = offerService.getOfferCount();
-        Iterable<Offer> offers = offerService.getPagedOffers(page.orElse(0), PAGE_SIZE); // offerService.getPagedOffers(page.get(),PAGE_SIZE);
-        mav.addObject("offerList",offers);
 
-        mav.addObject("pages", 1 +  (offersSize-1) / PAGE_SIZE);
+        OfferFilter filter = new OfferFilter().withPageSize(2).fromPage(pageNumber);
+        mav.addObject("offerList", offerService.getOfferBy(filter));
+        mav.addObject("pages", offerService.countOffersBy(filter)/2);
+        mav.addObject("activePage", pageNumber);
+
         return mav;
     }
 
@@ -69,7 +72,7 @@ public class HomeController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        mav.addObject("offer", offerService.getOffer(offerId));
+        mav.addObject("offer", offerService.getOfferById(offerId));
         return mav;
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
@@ -79,12 +82,12 @@ public class HomeController {
         }
         String user = form.getEmail();
 
-        String message =  user + " ha demostrado interés en  " + offerService.getOffer(form.getOfferId()).toString();
+        String message =  user + " ha demostrado interés en  " + offerService.getOfferById(form.getOfferId()).get().toString();
         message+="\nQuiere comprarte " + form.getAmount() + "ARS";
 
         message+="\nTambién te dejó un mensaje: " + form.getMessage();
         message+="\nContactalo ya por mail!";
-        MailMessage mailMessage = mailContactService.createMessage(offerService.getOffer(form.getOfferId()).getSeller().getEmail());
+        MailMessage mailMessage = mailContactService.createMessage(offerService.getOfferById(form.getOfferId()).get().getSeller().getEmail());
         mailMessage.setBody(message);
 
         mailMessage.setSubject("Recibiste una oferta por tu publicación en Cryptuki!");
@@ -130,7 +133,7 @@ public class HomeController {
                 form = new RegisterForm();
                 return registerGet(form);
         }
-        this.username= form.getUsername();
+
       return new ModelAndView("redirect:/verifyManual");
     }
 
@@ -166,22 +169,22 @@ public class HomeController {
         return new ModelAndView("views/codeVerification");
     }
 
-    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
-    public ModelAndView verifyManual(@Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
-       if(errors.hasErrors()){
-           return verifyManualGet(form);
-       }
-
-        int validate = us.verifyUser(this.username, form.getCode());
-        if(validate != 1){
-            return new ModelAndView("redirect:/403");
-        }
-        else
-        {
-            return new ModelAndView("redirect:/");
-        }
-
-    }
+//    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
+//    public ModelAndView verifyManual(@Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
+//       if(errors.hasErrors()){
+//           return verifyManualGet(form);
+//       }
+//
+//        int validate = us.verifyUser(this.username, form.getCode());
+//        if(validate != 1){
+//            return new ModelAndView("redirect:/403");
+//        }
+//        else
+//        {
+//            return new ModelAndView("redirect:/");
+//        }
+//
+//    }
 
 
     @RequestMapping(value="/passwordRecovery")

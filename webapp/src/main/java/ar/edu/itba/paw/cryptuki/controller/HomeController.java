@@ -169,22 +169,22 @@ public class HomeController {
         return new ModelAndView("views/codeVerification");
     }
 
-//    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
-//    public ModelAndView verifyManual(@Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
-//       if(errors.hasErrors()){
-//           return verifyManualGet(form);
-//       }
-//
-//        int validate = us.verifyUser(this.username, form.getCode());
-//        if(validate != 1){
-//            return new ModelAndView("redirect:/403");
-//        }
-//        else
-//        {
-//            return new ModelAndView("redirect:/");
-//        }
-//
-//    }
+    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
+    public ModelAndView verifyManual(Authentication authentication, @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
+       if(errors.hasErrors()){
+           return verifyManualGet(form);
+       }
+
+        int validate = us.verifyUser(authentication.getName(), form.getCode());
+        if(validate != 1){
+            return new ModelAndView("redirect:/403");
+        }
+        else
+        {
+            return new ModelAndView("redirect:/");
+        }
+
+    }
 
 
     @RequestMapping(value="/passwordRecovery")

@@ -57,7 +57,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("user_id",userAuth.getId());
         args.put("uname",userAuth.getUsername());
         args.put("password",userAuth.getPassword());
-        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRoleDescriptor()).get().getDesc());
+        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRoleDescriptor()).get().getId());
         args.put("code",userAuth.getCode());
         if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
             args.put("status",0);

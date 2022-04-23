@@ -7,12 +7,13 @@
 </head>
 <body>
 <h2>Verify</h2>
-<c:url value="/verifyManual" var="postPath"/>
+<c:url value="/verify" var="postPath"/>
 <%--@elvariable id="CodeForm" type="ar.edu.itba.paw.cryptuki.form"--%>
 <form:form modelAttribute="CodeForm" action="${postPath}" method="post">
     <div>
         <form:label path="code">code: </form:label>
         <form:input type="text" path="code"/>
+        <form:input path="username" type="hidden" value="${username}"/>
         <form:errors path="code" cssClass="formError" element="p"/>
     </div>
     <div>

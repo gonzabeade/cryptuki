@@ -5,15 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.util.UrlPathHelper;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +49,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/upload/**").authenticated()
                 .antMatchers("/**").anonymous()
-                .and().formLogin()
+                .and().formLogin().failureHandler(new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                        UrlPathHelper helper = new UrlPathHelper();
+                        String contextPath = helper.getContextPath(httpServletRequest);
+                        if(e.getCause() instanceof UsernameNotFoundException){
+                            httpServletResponse.sendRedirect(contextPath + "/login?error");
+                        }
+                        else if(e.getCause() instanceof RuntimeException){
+                            httpServletResponse.sendRedirect(contextPath + "/verify"+"?user="+ httpServletRequest.getParameter("j_username"));
+                        }
+                    }
+                })
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .defaultSuccessUrl("/", false)
@@ -59,7 +82,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/403");
+                .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/errors");
     }
 
     @Bean

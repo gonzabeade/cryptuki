@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
@@ -71,7 +72,8 @@ public class HomeController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        mav.addObject("offer", offerService.getOfferById(offerId).get());
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
+        mav.addObject("offer", offer);
         return mav;
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
@@ -136,7 +138,7 @@ public class HomeController {
                 return registerGet(form);
         }
 
-      return new ModelAndView("redirect:/verifyManual");
+      return new ModelAndView("redirect:/verify?user="+form.getUsername());
     }
 
 
@@ -147,44 +149,25 @@ public class HomeController {
 
         return new ModelAndView("views/login");
     }
-
-
-    @RequestMapping("/verify")
-    public ModelAndView verify(@RequestParam(value="user") String username, @RequestParam(value="code") Integer code){
-
-        int validate = us.verifyUser(username,code);
-            if(validate != 1){
-                System.out.println("Username or code are invalid");
-                return new ModelAndView("redirect:/errors");
-            }
-            else
-            {
-                System.out.println("user has been verified");
-                return new ModelAndView("redirect:/");
-            }
-
+    @RequestMapping(value="/verify",method = {RequestMethod.GET})
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
+        ModelAndView mav = new ModelAndView("views/codeVerification");
+        mav.addObject("username", username);
+        return mav;
     }
 
-
-    @RequestMapping(value="/verifyManual",method = {RequestMethod.GET})
-    public ModelAndView verifyManualGet(@ModelAttribute("CodeForm") final CodeForm form){
-        return new ModelAndView("views/codeVerification");
-    }
-
-    @RequestMapping(value = "/verifyManual",method = RequestMethod.POST)
-    public ModelAndView verifyManual(Authentication authentication, @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
+    @RequestMapping(value = "/verify",method = RequestMethod.POST)
+    public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
        if(errors.hasErrors()){
-           return verifyManualGet(form);
+           return verify(new CodeForm(), form.getUsername());
+       }
+       try{
+           us.verifyUser(form.getUsername(), form.getCode());
+       } catch (RuntimeException e){
+           return verify(new CodeForm(), form.getUsername());
        }
 
-        int validate = us.verifyUser(authentication.getName(), form.getCode());
-        if(validate != 1){
-            return new ModelAndView("redirect:/errors");
-        }
-        else
-        {
-            return new ModelAndView("redirect:/");
-        }
+       return new ModelAndView("redirect:/");
 
     }
 

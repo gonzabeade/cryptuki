@@ -68,9 +68,9 @@ public class UserAuthJdbcDao implements UserAuthDao{
     }
 
     @Override
-    public int verifyUser(String username, Integer code) {
+    public boolean verifyUser(String username, Integer code) {
         String query="UPDATE auth set status=1 where uname=? and code=?";
-        return jdbcTemplate.update(query,username,code);
+        return jdbcTemplate.update(query,username,code) == 1;
     }
 
     @Override

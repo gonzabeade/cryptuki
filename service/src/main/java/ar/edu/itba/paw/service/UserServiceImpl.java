@@ -53,14 +53,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserAuth> getUserByUsername(String username) {
         Optional<UserAuth> maybeUserAuth = userAuthDao.getUserAuthByUsername(username);
-        if(maybeUserAuth.isPresent() && maybeUserAuth.get().getUserStatus().equals(UserStatus.UNVERIFIED))
-            return Optional.empty();
         return maybeUserAuth;
     }
 
     @Override
-    public int verifyUser(String username, Integer code) {
-        return userAuthDao.verifyUser(username,code);
+    public void verifyUser(String username, Integer code) {
+        if (!userAuthDao.verifyUser(username,code)){
+            throw new RuntimeException("Incorrect Verification");
+        };
     }
 
     public void sendChangePasswordMail(String email){

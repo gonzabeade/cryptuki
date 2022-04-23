@@ -43,7 +43,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                .invalidSessionUrl("/")
+                //.invalidSessionUrl("/")
                 .and().authorizeRequests()
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
@@ -82,7 +82,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/errors");
+                .antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
     }
 
     @Bean

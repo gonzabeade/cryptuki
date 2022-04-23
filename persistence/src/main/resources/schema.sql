@@ -6,13 +6,19 @@ CREATE TABLE IF NOT EXISTS users (
     phone_number VARCHAR(8)
     );
 
+CREATE TABLE IF NOT EXISTS user_role (
+      id SERIAL PRIMARY KEY,
+      description VARCHAR(20) NOT NULL
+    );
+
 CREATE TABLE IF NOT EXISTS auth (
     user_id INT PRIMARY KEY,
     uname VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
-    session_id int,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+    password VARCHAR(100) NOT NULL,
+    role_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES user_role(id)
+    );
 
 CREATE TABLE IF NOT EXISTS cryptocurrency (
     code VARCHAR(5) PRIMARY KEY,
@@ -20,10 +26,7 @@ CREATE TABLE IF NOT EXISTS cryptocurrency (
     commercial_name VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS user_role (
-    id SERIAL PRIMARY KEY,
-    description VARCHAR(20) NOT NULL
-);
+
 
 CREATE TABLE IF NOT EXISTS status (
     code VARCHAR(3) PRIMARY KEY,

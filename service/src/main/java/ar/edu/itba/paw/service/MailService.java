@@ -24,7 +24,7 @@ public final class MailService implements ContactService<MailMessage> {
             messageHelper.setTo(message.getTo());
             messageHelper.setText(message.getBody());
         } catch (MessagingException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO: replace with logger.
         }
         mailSender.send(mimeMessage);
     }

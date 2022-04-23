@@ -15,8 +15,8 @@ import java.util.Date;
 @RunWith(MockitoJUnitRunner.class)
 public class OfferServiceImplTest {
 
-    @InjectMocks
-    private OfferServiceImpl offerService = new OfferServiceImpl();
+//    @InjectMocks
+//    private OfferServiceImpl offerService = new OfferServiceImpl();
 
     @Mock
     private OfferDao offerDao;

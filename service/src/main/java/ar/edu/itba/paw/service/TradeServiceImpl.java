@@ -31,7 +31,7 @@ public class TradeServiceImpl implements TradeService {
         String sellerMessage = new StringBuilder()
                 .append(buyerEmail)
                 .append(" ha demostrado interés en  ")
-                .append(offerService.getOffer(buyDigest.getOfferId()))
+                .append(offerService.getOfferById(buyDigest.getOfferId()))
                 .append("\nQuiere comprarte ")
                 .append(buyDigest.getAmount())
                 .append("ARS")

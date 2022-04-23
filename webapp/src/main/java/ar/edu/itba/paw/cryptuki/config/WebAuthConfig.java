@@ -32,11 +32,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                .invalidSessionUrl("/login")
+                .invalidSessionUrl("/")
                 .and().authorizeRequests()
-                .antMatchers("/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
+               // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").authenticated()
+                .antMatchers("/upload/**").authenticated()
+                .antMatchers("/**").anonymous()
                 .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
@@ -51,7 +52,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .and().exceptionHandling()
-                .accessDeniedPage("/403")
+                .accessDeniedPage("/errors")
                 .and().csrf().disable();
     }
 

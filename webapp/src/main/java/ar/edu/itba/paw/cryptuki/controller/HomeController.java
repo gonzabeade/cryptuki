@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+
 import ar.edu.itba.paw.cryptuki.form.*;
-import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
+import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Optional;
 
 
@@ -88,6 +90,21 @@ public class HomeController {
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         return mav;
     }
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
+        ModelAndView mav = new ModelAndView("views/upload_page");
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", cryptocurrencyService.getAllCryptocurrencies());
+        return mav;
+    }
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return uploadOffer(form);
+        }
+        ModelAndView mav = new ModelAndView("redirect:/");
+        return mav;
+    }
 
 
     @RequestMapping(value="/register",method = {RequestMethod.GET})
@@ -138,7 +155,7 @@ public class HomeController {
         int validate = us.verifyUser(username,code);
             if(validate != 1){
                 System.out.println("Username or code are invalid");
-                return new ModelAndView("redirect:/403");
+                return new ModelAndView("redirect:/errors");
             }
             else
             {
@@ -162,7 +179,7 @@ public class HomeController {
 
         int validate = us.verifyUser(authentication.getName(), form.getCode());
         if(validate != 1){
-            return new ModelAndView("redirect:/403");
+            return new ModelAndView("redirect:/errors");
         }
         else
         {
@@ -184,17 +201,10 @@ public class HomeController {
         try{
             us.sendChangePasswordMail(form.getEmail());
         }catch (Exception e ){
-            return forbidden();
+            return new ModelAndView("redirect:/errors");
         }
         return new ModelAndView("views/ChangePasswordMailSent");
 
     }
-    
-
-    @RequestMapping("/403")
-    public ModelAndView forbidden() {
-        return new ModelAndView("views/403");
-    }
-
 
 }

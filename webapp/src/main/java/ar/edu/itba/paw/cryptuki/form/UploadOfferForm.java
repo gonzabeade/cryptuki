@@ -23,7 +23,7 @@ public class UploadOfferForm {
     @Size(min=2, max=30)
     private String cryptocurrency;
 
-    @NotEmpty
+    @Size(min = 1)
     private String[] paymentMethods;
     public Float getMinAmount() {
         return minAmount;

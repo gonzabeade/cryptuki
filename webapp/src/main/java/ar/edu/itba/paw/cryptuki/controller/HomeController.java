@@ -69,7 +69,7 @@ public class HomeController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        mav.addObject("offer", offerService.getOfferById(offerId));
+        mav.addObject("offer", offerService.getOfferById(offerId).get());
         return mav;
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)

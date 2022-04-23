@@ -111,7 +111,7 @@ public class HomeController {
         return mav;
     }
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadOffer(@ModelAttribute("offerBuyForm") final UploadOfferForm form, final BindingResult errors){
+    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors){
         if(errors.hasErrors()){
             return uploadOffer(form);
         }

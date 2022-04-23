@@ -46,7 +46,7 @@
         </div>
         <div class="flex flex-col my-6">
             <form:errors path="price" cssClass="text-red-500 mx-auto"/>
-            <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda*</form:label>
+            <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda en ARS*</form:label>
             <div class="flex flex-col justify-center mx-96">
                 <form:input type="number" path="price" class="h-10 justify-center rounded-lg p-3 mx-auto " step=".01"/>
                <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->

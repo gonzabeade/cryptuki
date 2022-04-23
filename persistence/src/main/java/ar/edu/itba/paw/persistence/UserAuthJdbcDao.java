@@ -19,6 +19,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
+    private RoleDao roleDao;
 
     private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = ((resultSet, i) ->{
         UserAuth.Builder userAuth = new UserAuth.Builder(
@@ -36,9 +37,10 @@ public class UserAuthJdbcDao implements UserAuthDao{
             );
 
     @Autowired
-    public UserAuthJdbcDao(DataSource dataSource) {
+    public UserAuthJdbcDao(DataSource dataSource,RoleDao roleDao) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("auth");
+        this.roleDao=roleDao;
     }
 
 
@@ -55,7 +57,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("user_id",userAuth.getId());
         args.put("uname",userAuth.getUsername());
         args.put("password",userAuth.getPassword());
-        args.put("role_id",getIdOfRole(userAuth.getRoleDescriptor()));
+        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRoleDescriptor()).get().getDesc());
         args.put("code",userAuth.getCode());
         if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
             args.put("status",0);
@@ -77,18 +79,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
         return jdbcTemplate.update(query,password,username,code);
     }
 
-    private Integer getIdOfRole(String roleDescriptor){
 
-        String query = "SELECT * FROM user_role WHERE description = ?";
-
-        List<Integer> id = jdbcTemplate.query(query, (resultSet, i) ->
-             resultSet.getInt("id")
-        ,roleDescriptor);
-
-//        if(id.size() != 1 )
-            //Invalid role
-        return id.get(0);
-    }
 
 
     @Override

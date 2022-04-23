@@ -1,14 +1,20 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class UploadOfferForm {
-    @Min(1)
     @NotNull
-    private int maxAmount;
+    @DecimalMin("0.0")
+    private float minAmount;
 
     @NotNull
+    @DecimalMin("0.0")
+    private float maxAmount;
+
+    @NotNull
+    @DecimalMin("0.0")
     private float price;
 
     @NotNull
@@ -16,13 +22,20 @@ public class UploadOfferForm {
 
     @NotNull
     private String[] paymentMethods;
-
-    public int getMaxAmount() {
-        return maxAmount;
+    public float getMinAmount() {
+        return minAmount;
     }
 
-    public void setMaxAmount(int maxAmount) {
+    public void setMinAmount(float minAmount) {
+        this.minAmount = minAmount;
+    }
+
+    public void setMaxAmount(float maxAmount) {
         this.maxAmount = maxAmount;
+    }
+
+    public float getMaxAmount() {
+        return maxAmount;
     }
 
     public float getPrice() {

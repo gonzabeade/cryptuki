@@ -5,18 +5,22 @@
 <jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
 <div class="flex flex-col">
     <c:url value="/upload" var="postUrl"/>
+    <%--@elvariable id="uploadOfferForm" type="ar.edu.itba.paw.cryptuki.form.UploadOfferForm"--%>
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
         <div class="flex flex-col justify-center">
             <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>
             <form:label  path="cryptocurrency" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Criptomoneda*</form:label>
-            <form:select path="cryptocurrency" class="mx-auto rounded-lg p-4" onchange="updateVars(this.value)">
+            <div class="flex flex-row justify-center mx-auto">
+            <form:select path="cryptocurrency" class="rounded-lg p-3" onchange="updateVars(this.value)">
                 <c:forEach var="coin" items="${cryptocurrencies}">
-                    <form:option value="${coin.code}"><c:out value="${coin.name}"/></form:option>
+                    <form:option value="${coin.code}">
+                        <c:out value="${coin.name}"/>
+                    </form:option>
                 </c:forEach>
             </form:select>
         </div>
-
+        </div>
         <div class="flex flex-col justify-center my-6">
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
             <form:label  path="maxAmount" class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row mx-auto">¿Cuánto es el máximo de <p id="maxCoin" class="mx-2"> Bitcoin </p> que quieres vender?*</form:label>
@@ -39,7 +43,7 @@
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Medios de Pago*</form:label>
             <div class="flex flex-row justify-center mx-80">
                 <c:forEach items="${paymentMethods}" var="paymentMethod">
-                    <form:label path="paymentMethods" for="${paymentMethod.code}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%]" onclick="changeBorderColor(this)"><c:out value="${paymentMethod.name}"/></form:label>
+                    <form:label path="paymentMethods" for="${paymentMethod.code}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%] hover:cursor-pointer" onclick="changeBorderColor(this)"><c:out value="${paymentMethod.name}"/></form:label>
                     <form:checkbox path="paymentMethods" id="${paymentMethod.code}" value="${paymentMethod.code}" cssClass="hidden"/>
                  </c:forEach>
             </div>
@@ -54,27 +58,7 @@
         </div>
         <div class="flex flex-row p-5 mx-60">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
-            <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
+            <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
         </div>
     </form:form>
 </div>
-<script>
-    function changeBorderColor(label) {
-        if(label.matches(".checked")){
-            console.log("was checked")
-            label.classList.remove("checked");
-            label.classList.remove("border-2");
-            label.classList.remove("border-frostdr");
-        }else{
-            console.log("not checked");
-            label.classList.add("border-2");
-            label.classList.add("border-frostdr")
-            label.classList.add("checked");
-        }
-
-    }
-    function updateVars(value) {
-                document.getElementById("minCoin").innerText = value;
-                document.getElementById("maxCoin").innerText = value;
-    }
-</script>

@@ -107,6 +107,7 @@ public class HomeController {
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
         ModelAndView mav = new ModelAndView("views/upload_page");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", cryptocurrencyService.getAllCryptocurrencies());
         return mav;
     }
     @RequestMapping(value = "/upload", method = RequestMethod.POST)

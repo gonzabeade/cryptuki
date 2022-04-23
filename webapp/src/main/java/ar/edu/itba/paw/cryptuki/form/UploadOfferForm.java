@@ -1,26 +1,31 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
+
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UploadOfferForm {
     @NotNull
-    @DecimalMin("0.0")
+    @Min(0)
     private float minAmount;
 
     @NotNull
-    @DecimalMin("0.0")
+    @Min(0)
     private float maxAmount;
 
     @NotNull
-    @DecimalMin("0.0")
+    @Min(0)
     private float price;
 
     @NotNull
+    @Size(min=2, max=30)
     private String cryptocurrency;
 
-    @NotNull
+    @NotEmpty
     private String[] paymentMethods;
     public float getMinAmount() {
         return minAmount;

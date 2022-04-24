@@ -2,8 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url value="/login" var="loginUrl" />
 
-<form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded" class=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
-  <h1 class="text-center text-4xl font-semibold font-sans text-polar">Inicia sesión en Cryptuki</h1>
+<form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded" class=" py-12 px-64 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
+  <h1 class="text-center text-4xl font-semibold font-sans text-polar">Inicia sesión</h1>
   <div class="flex flex-col mx-5 my-4">
     <label for="username" class="text-center text-xl font-bold font-sans text-polar my-2">Usuario</label>
     <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="e.g juanperez"/>

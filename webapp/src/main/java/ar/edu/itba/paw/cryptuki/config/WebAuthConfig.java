@@ -37,7 +37,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/upload/**").authenticated()
-                .antMatchers("/**").anonymous()
+//                .antMatchers("/**").anonymous()
                 .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
@@ -59,7 +59,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/403");
+                .antMatchers("/public/css/**", "/public/js/**", "/public/images/**", "/public/favicon.ico", "/errors");
     }
 
     @Bean

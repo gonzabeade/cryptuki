@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class CryptocurrencyJdbcDao implements CryptoCurrencyDao{
+public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
 
     private JdbcTemplate jdbcTemplate;
     private final static RowMapper<Cryptocurrency> CRYPTOCURRENCY_ROW_MAPPER = (

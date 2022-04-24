@@ -21,6 +21,7 @@ public class UploadOfferForm {
     private Float price;
 
     @Size(min=2, max=30)
+    @NotNull
     private String cryptocurrency;
 
     @Size(min = 1)

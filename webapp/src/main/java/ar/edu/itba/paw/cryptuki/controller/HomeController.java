@@ -108,6 +108,7 @@ public class HomeController {
         if(errors.hasErrors()){
             return uploadOffer(form);
         }
+        //offerService.makeOffer(form.toFormBuilder());
         ModelAndView mav = new ModelAndView("redirect:/");
         return mav;
     }

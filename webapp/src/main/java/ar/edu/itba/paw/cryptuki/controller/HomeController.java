@@ -40,14 +40,27 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page) {
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);
 
-        OfferFilter filter = new OfferFilter().withPageSize(PAGE_SIZE).fromPage(pageNumber);
+        OfferFilter filter = new OfferFilter();
+        if(coin != null){
+            filter = filter.byCryptoCode(coin);
+        }
+        if(paymentMethod != null){
+            filter = filter.byPaymentMethod(paymentMethod);
+        }
+        if(price != null){
+            filter = filter.byMaxPrice(price);
+        }
+        filter = filter.withPageSize(PAGE_SIZE).fromPage(pageNumber);
+
         mav.addObject("offerList", offerService.getOfferBy(filter));
-        mav.addObject("pages", offerService.countOffersBy(filter)/PAGE_SIZE);
+        int offerCount = offerService.countOffersBy(filter);
+        int pages = offerCount < PAGE_SIZE ? (offerCount > 0 ? 1:0) : offerCount/PAGE_SIZE;
+        mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
 
         return mav;

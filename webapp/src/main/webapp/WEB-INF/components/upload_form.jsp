@@ -13,6 +13,7 @@
             <form:label  path="cryptocurrency" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Criptomoneda*</form:label>
             <div class="flex flex-row justify-center mx-auto">
             <form:select path="cryptocurrency" class="rounded-lg p-3" onchange="updateVars(this.value)">
+                <option disabled selected>Selecciona una opción</option>
                 <c:forEach var="coin" items="${cryptocurrencies}">
                     <form:option value="${coin.code}">
                         <c:out value="${coin.name}"/>

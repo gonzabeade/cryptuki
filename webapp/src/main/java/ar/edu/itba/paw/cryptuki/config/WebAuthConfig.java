@@ -48,7 +48,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/upload/**").authenticated()
-                .antMatchers("/**").anonymous()
+//                .antMatchers("/**").anonymous()
                 .and().formLogin().failureHandler(new AuthenticationFailureHandler() {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {

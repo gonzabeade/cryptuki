@@ -11,13 +11,17 @@ import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -29,6 +33,7 @@ public class HomeController {
     private final CryptocurrencyService cryptocurrencyService;
     private final SupportService supportService;
     private final TradeService tradeService;
+
     private static final int PAGE_SIZE = 3;
 
     @Autowired
@@ -167,6 +172,10 @@ public class HomeController {
            return verify(new CodeForm(), form.getUsername());
        }
 
+       //log in programmatically
+        UserAuth current = us.getUserByUsername(form.getUsername()).orElseThrow(()-> new RuntimeException());
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Arrays.asList(new SimpleGrantedAuthority(current.getRole())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
        return new ModelAndView("redirect:/");
 
     }

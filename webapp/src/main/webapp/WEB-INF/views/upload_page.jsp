@@ -16,7 +16,9 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/header.jsp">
+    <jsp:param name="username" value="${username}"/>
+</jsp:include>
 <div class="flex">
     <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar">Subí tu anuncio</h1>
 </div>

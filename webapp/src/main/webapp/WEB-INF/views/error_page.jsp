@@ -17,7 +17,9 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/header.jsp">
+    <jsp:param name="username" value="${username}"/>
+</jsp:include>
 <div class=" flex flex-col justify-center mx-20 my-10">
     <h1 class="text-2xl text-polard font-bold font-sans text-center">${errorMsg}</h1>
     <img src="<c:url value="/public/images/${code}.png"/>" alt="<c:out value="${code}"/>" class="h-96 mx-auto"/>

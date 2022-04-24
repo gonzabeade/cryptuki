@@ -10,6 +10,7 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
+import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,7 +47,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page) {
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);
@@ -55,66 +56,91 @@ public class HomeController {
         mav.addObject("offerList", offerService.getOfferBy(filter));
         mav.addObject("pages", offerService.countOffersBy(filter)/PAGE_SIZE);
         mav.addObject("activePage", pageNumber);
+        mav.addObject("username", authentication == null ? null : authentication.getName());
 
         return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form ){
-        return new ModelAndView("views/contact");
+    public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+        ModelAndView mav =  new ModelAndView("views/contact");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
-    public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors){
+    public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return support(form);
+            return support(form,authentication);
         }
+
         supportService.getSupportFor(form.toDigest());
-        return new ModelAndView("redirect:/");
+        ModelAndView mav = new ModelAndView("redirect:/");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        return mav;
+
     }
 
 
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form){
+    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/buy_offer");
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
         mav.addObject("offer", offer);
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
         return mav;
+
     }
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors){
+    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return buyOffer(form.getOfferId(), form);
+            return buyOffer(form.getOfferId(), form,authentication);
         }
         tradeService.executeTrade(form.toDigest());
-        return new ModelAndView("redirect:/");
+        ModelAndView mav = new ModelAndView("redirect:/");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        return mav;
+
     }
 
-    @RequestMapping("/coins") /* When requests come to this path, requests are forwarded to this method*/
-    public ModelAndView coins() {
+    @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
+    public ModelAndView coins(final Authentication authentication) {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
         return mav;
+
     }
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
+    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/upload_page");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
         return mav;
+
     }
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors){
+    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return uploadOffer(form);
+            return uploadOffer(form,authentication);
         }
         ModelAndView mav = new ModelAndView("redirect:/");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
         return mav;
+
     }
 
 
-    @RequestMapping(value="/register",method = {RequestMethod.GET})
+    @RequestMapping(value="/register",method = RequestMethod.GET)
     public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
         return new ModelAndView("views/register");
     }

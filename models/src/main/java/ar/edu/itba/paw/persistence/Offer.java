@@ -44,7 +44,7 @@ public final class Offer {
             this.date = date; // Immutable
             return this;
         }
-        public Builder status(OfferStatus statusCode) { this.status = status; return this; }
+        protected Builder status(OfferStatus statusCode) { this.status = status; return this; }
         public Builder paymentMethod(PaymentMethod method) {
             if (method != null) paymentMethods.add(method);
             return this;

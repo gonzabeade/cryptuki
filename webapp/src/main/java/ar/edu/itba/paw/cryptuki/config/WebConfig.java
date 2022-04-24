@@ -9,10 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -22,6 +25,7 @@ import org.springframework.core.io.Resource;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 
+@EnableTransactionManagement
 @ComponentScan({
         "ar.edu.itba.paw.cryptuki.controller",
         "ar.edu.itba.paw.persistence",
@@ -44,11 +48,6 @@ public class WebConfig {
     }
 
     @Bean
-    public ContactService<MailMessage> contactService() {
-        return new MailService(System.getenv("MAIL_ADDRESS"), System.getenv("MAIL_PASS") );
-    }
-
-    @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
@@ -56,7 +55,6 @@ public class WebConfig {
         ds.setUrl("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
         ds.setUsername(System.getenv("DB_USER"));
         ds.setPassword(System.getenv("DB_PASS"));
-
         return ds;
     }
 
@@ -79,7 +77,13 @@ public class WebConfig {
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
         messageSource.setCacheSeconds(5);
-
         return messageSource;
     }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final DataSource ds) {
+        return new DataSourceTransactionManager(ds);
+    }
+
+
 }

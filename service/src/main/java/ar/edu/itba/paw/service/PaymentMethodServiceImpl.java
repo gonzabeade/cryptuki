@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class PaymentMethodServiceImpl implements PaymentMethodService {
@@ -20,5 +21,11 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public Collection<PaymentMethod> getAllPaymentMethods() {
         return paymentMethodDao.getAllPaymentMethods();
     }
+
+    @Override
+    public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
+        return paymentMethodDao.getPaymentMethodByCode(code);
+    }
+
 
 }

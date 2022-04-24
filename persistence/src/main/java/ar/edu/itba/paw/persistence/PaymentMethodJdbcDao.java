@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
 
 @Repository
 public class PaymentMethodJdbcDao implements PaymentMethodDao {
@@ -26,8 +27,16 @@ public class PaymentMethodJdbcDao implements PaymentMethodDao {
 
     private final static String query = "SELECT * FROM payment_method";
 
+    private final static String queryByCode = "SELECT * FROM payment_method WHERE code = ?";
+
+
     @Override
     public Collection<PaymentMethod> getAllPaymentMethods() {
         return jdbcTemplate.query(query, PAYMENT_METHOD_ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
+        return Optional.of(jdbcTemplate.query(queryByCode, new Object[]{code}, PAYMENT_METHOD_ROW_MAPPER).iterator().next());
     }
 }

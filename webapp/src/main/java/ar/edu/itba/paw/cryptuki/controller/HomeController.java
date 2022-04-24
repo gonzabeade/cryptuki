@@ -62,6 +62,7 @@ public class HomeController {
         int pages = offerCount < PAGE_SIZE ? (offerCount > 0 ? 1:0) : offerCount/PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
 
         return mav;
     }

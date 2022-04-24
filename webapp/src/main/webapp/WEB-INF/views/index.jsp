@@ -4,6 +4,7 @@
 <jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="activePage" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <html>
 <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,11 +27,9 @@
         <label for="coin"  class="font-sans text-sm font-semibold text-center">Criptomoneda</label>
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
-            <option value="ETH">Ether</option>
-            <option value="DAI">DAI</option>
-            <option value="BTC">Bitcoin</option>
-            <option value="ADA">Cardano</option>
-            <option value="SOL">Solana</option>
+            <c:forEach items="${cryptocurrencies}" var="coin">
+                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.name}"/></option>
+            </c:forEach>
         </select>
     </div>
     <div class="flex flex-col my-auto justify-center mx-3">
@@ -106,6 +105,7 @@
                 <div class="flex flex-col">
                     <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
                     <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
+                </div>
             </c:otherwise>
 
         </c:choose>

@@ -28,15 +28,21 @@ public class HomeController {
     private final CryptocurrencyService cryptocurrencyService;
     private final SupportService supportService;
     private final TradeService tradeService;
+
+    private final PaymentMethodService paymentMethodService;
+
     private static final int PAGE_SIZE = 3;
 
+
+
     @Autowired
-    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService) {
+    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.tradeService = tradeService;
+        this.paymentMethodService = paymentMethodService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -108,7 +114,7 @@ public class HomeController {
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form){
         ModelAndView mav = new ModelAndView("views/upload_page");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         return mav;
     }
     @RequestMapping(value = "/upload", method = RequestMethod.POST)

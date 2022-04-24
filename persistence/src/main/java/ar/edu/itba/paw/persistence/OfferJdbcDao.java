@@ -51,7 +51,7 @@ public class OfferJdbcDao implements OfferDao {
                 );
 
                 String paymentCode = resultSet.getString("payment_code");
-                PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
+                PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance(paymentCode, resultSet.getString("payment_description"));
 
                 return Offer.builder(
                                 seller,
@@ -87,7 +87,6 @@ public class OfferJdbcDao implements OfferDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
         namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
-
     }
 
     String allQuery = "SELECT *\n" +

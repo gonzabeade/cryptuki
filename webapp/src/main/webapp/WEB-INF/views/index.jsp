@@ -5,6 +5,7 @@
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="activePage" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
+<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
 <html>
 <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,10 +37,9 @@
         <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center">Medio de Pago</label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
-            <option value="mp">Mercado Pago</option>
-            <option value="bru">Brubank</option>
-            <option value="cash">Efectivo</option>
-            <option value="bank">Transferencia Bancaria</option>
+            <c:forEach items="${paymentMethods}" var="paymentMethod">
+                <option value="${paymentMethod.name}"><c:out value="${paymentMethod.description}"/></option>
+            </c:forEach>
         </select>
      </div>
     <div class="flex flex-col my-auto justify-center mx-3">
@@ -58,7 +58,7 @@
 </div>
 </div>
 <div class="flex flex-row justify-center mt-3">
-    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Reset all filters</button>
+    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
 </div>
 <div class=" flex justify-center mx-20">
     <jsp:include page="../components/welcome_message.jsp"/>

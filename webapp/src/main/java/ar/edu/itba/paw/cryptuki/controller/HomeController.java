@@ -69,7 +69,7 @@ public class HomeController {
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-
+        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         return mav;
     }
 

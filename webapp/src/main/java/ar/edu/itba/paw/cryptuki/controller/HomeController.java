@@ -156,7 +156,7 @@ public class HomeController {
     }
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
-        ModelAndView mav = new ModelAndView("views/codeVerification");
+        ModelAndView mav = new ModelAndView("verify");
         mav.addObject("username", username);
         return mav;
     }

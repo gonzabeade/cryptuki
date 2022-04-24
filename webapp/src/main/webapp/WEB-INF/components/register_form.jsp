@@ -21,7 +21,7 @@
 
     <div class="flex flex-col mt-3">
         <form:label path="phoneNumber" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Número telefónico</form:label>
-        <form:input type="text" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="e.g +5491123456789"/>
+        <form:input type="text" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="e.g 5491123456789"/>
         <form:errors path="phoneNumber" cssClass="formError" element="p"/>
     </div>
 

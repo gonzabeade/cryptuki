@@ -15,9 +15,17 @@ function resetAllFilters(){
 
 
 }
+function addPageValue(value){
+    var searchParams = new URLSearchParams(window.location.search)
+    searchParams.set("page",value);
+    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newRelativePathQuery);
+    window.location.href = newRelativePathQuery;
+}
 function addQueryParam(id) {
     var searchParams = new URLSearchParams(window.location.search)
     searchParams.set(id, document.getElementById(id).value);
+    searchParams.delete("page")
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;

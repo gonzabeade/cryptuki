@@ -94,10 +94,10 @@
                 <c:forEach var = "i" begin = "${activePage - 1 < 0 ? activePage : activePage - 1 }" end = "${(activePage + 1 > pages - 1 )? pages - 1 : activePage + 1 }">
                     <c:choose>
                         <c:when test="${activePage == i }">
-                            <a href="<c:url value="/?page=${i}"/>" class="bg-stormd border-2 border-polard active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full "><c:out value="${i+1}"/></a>
+                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-stormd border-2 border-polard active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full "><c:out value="${i+1}"/></a>
                         </c:when>
                         <c:otherwise>
-                            <a href="<c:url value="/?page=${i}"/>" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
+                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>

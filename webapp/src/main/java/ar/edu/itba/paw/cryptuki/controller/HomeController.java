@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 
@@ -182,7 +185,7 @@ public class HomeController {
     }
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
-        ModelAndView mav = new ModelAndView("verify");
+        ModelAndView mav = new ModelAndView("views/code_verification");
         mav.addObject("username", username);
         return mav;
     }
@@ -190,19 +193,21 @@ public class HomeController {
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
        if(errors.hasErrors()){
-           return verify(new CodeForm(), form.getUsername());
+           return verify(form, form.getUsername());
        }
        try{
            us.verifyUser(form.getUsername(), form.getCode());
        } catch (RuntimeException e){
-           return verify(new CodeForm(), form.getUsername());
+           return verify(form, form.getUsername());
        }
 
        //log in programmatically
-        UserAuth current = us.getUserByUsername(form.getUsername()).orElseThrow(()-> new RuntimeException());
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Arrays.asList(new SimpleGrantedAuthority(current.getRole())));
+
+        UserAuth user = us.getUserByUsername(form.getUsername()).orElseThrow(RuntimeException::new);
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(form.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
         SecurityContextHolder.getContext().setAuthentication(auth);
-       return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/");
 
     }
 

@@ -44,7 +44,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login", "/register", "/verify").anonymous()
+                .antMatchers("/login", "/register", "/verify**").anonymous()
                 .antMatchers("/upload/**").authenticated()
                 .and().formLogin().failureHandler(new AuthenticationFailureHandler() {
                     @Override

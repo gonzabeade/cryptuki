@@ -14,7 +14,10 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/header.jsp">
+    <jsp:param name="username" value="${null}"/>
+</jsp:include>
+
 <div class="flex mt-20 mb-10">
     <jsp:include page="../components/verify_form.jsp">
         <jsp:param name="username" value="${username}"/>

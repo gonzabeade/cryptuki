@@ -1,7 +1,0 @@
-{
-"databaseUrl": "jdbc:postgresql://localhost:5432/postgres",
-"databaseUsername": "postgres",
-"databasePassword": "postgres",
-"mailUsername" : "p2pcryptuki@gmail.com",
-"mailPassword" : "esteesuntestdepaw"
-}

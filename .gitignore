@@ -130,3 +130,4 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 webapp/src/main/resources/key
+webapp/src/main/resources/info

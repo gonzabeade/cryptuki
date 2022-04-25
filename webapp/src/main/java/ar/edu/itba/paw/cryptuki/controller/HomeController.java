@@ -59,7 +59,7 @@ public class HomeController {
             filter = filter.byPaymentMethod(paymentMethod);
         }
         if(price != null){
-            filter = filter.byMaxPrice(price);
+            filter = filter.byMinPrice(price);
         }
         filter = filter.withPageSize(PAGE_SIZE).fromPage(pageNumber);
 

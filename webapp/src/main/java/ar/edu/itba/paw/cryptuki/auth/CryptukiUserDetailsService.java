@@ -16,19 +16,27 @@ import java.util.Collection;
 
 @Component
 public class CryptukiUserDetailsService implements UserDetailsService {
-
+    private static class UserDetailsImpl extends org.springframework.security.core.userdetails.User{
+        private boolean enabled;
+        public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
+            super(username, password, authorities);
+            this.enabled = enabled;
+        }
+        @Override
+        public boolean isEnabled(){
+            return this.enabled;
+        }
+    }
     @Autowired
     private UserService userService;
-
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final UserAuth userAuth = userService.getUserByUsername(username).orElseThrow( ()-> new UsernameNotFoundException(""));
 
         final Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(userAuth.getRole()));// get roles of username
-        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(username, userAuth.getPassword(), authorities);
-        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED)){
-            throw new RuntimeException("Username not verified");
-        }
-        return user;
+        //        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED)){
+//            throw new RuntimeException("Username not verified");
+//        }
+        return new UserDetailsImpl(username, userAuth.getPassword(), authorities, userAuth.getUserStatus().equals(UserStatus.VERIFIED));
     }
 }

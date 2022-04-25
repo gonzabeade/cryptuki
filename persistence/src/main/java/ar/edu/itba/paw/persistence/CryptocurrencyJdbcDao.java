@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 
 
 import javax.sql.DataSource;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class CryptocurrencyJdbcDao implements CryptoCurrencyDao{
+public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
 
     private JdbcTemplate jdbcTemplate;
     private final static RowMapper<Cryptocurrency> CRYPTOCURRENCY_ROW_MAPPER = (
@@ -30,12 +31,12 @@ public class CryptocurrencyJdbcDao implements CryptoCurrencyDao{
 
     @Override
     public Cryptocurrency getCryptocurrency(String id) {
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency WHERE id = ?", CRYPTOCURRENCY_ROW_MAPPER, id);
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?", CRYPTOCURRENCY_ROW_MAPPER, id);
         return cryptocurrencies.get(0); //should be unique
     }
 
     @Override
-    public Iterable<Cryptocurrency> getAllCryptocurrencies() {
+    public Collection<Cryptocurrency> getAllCryptocurrencies() {
         final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency", CRYPTOCURRENCY_ROW_MAPPER);
         return cryptocurrencies;
     }

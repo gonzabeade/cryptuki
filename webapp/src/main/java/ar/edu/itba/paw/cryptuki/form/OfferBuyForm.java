@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.service.TradeService;
+import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.*;
 
@@ -48,6 +48,19 @@ public class OfferBuyForm {
     }
     public Integer getAmount() {
         return amount;
+    }
+
+
+    public BuyDigest toDigest() {
+
+        BuyDigest digest = new BuyDigest(
+                getOfferId(),
+                getEmail(),
+                getMessage(),
+                getAmount()
+        );
+
+        return digest;
     }
 
 }

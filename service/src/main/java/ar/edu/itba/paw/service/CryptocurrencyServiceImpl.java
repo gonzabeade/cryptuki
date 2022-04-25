@@ -1,15 +1,17 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.CryptoCurrencyDao;
+import ar.edu.itba.paw.persistence.CryptocurrencyDao;
 import ar.edu.itba.paw.persistence.Cryptocurrency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class CryptocurrencyServiceImpl implements CryptocurrencyService {
 
     @Autowired
-    private CryptoCurrencyDao cryptoCurrencyDao;
+    private CryptocurrencyDao cryptoCurrencyDao;
 
     @Override
     public Cryptocurrency getCryptocurrency(String id) {
@@ -18,7 +20,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
     }
 
     @Override
-    public Iterable<Cryptocurrency> getAllCryptocurrencies() {
+    public Collection<Cryptocurrency> getAllCryptocurrencies() {
         //TODO: validate
         return cryptoCurrencyDao.getAllCryptocurrencies();
     }

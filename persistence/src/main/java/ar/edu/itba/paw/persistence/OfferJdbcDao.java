@@ -1,17 +1,16 @@
 package ar.edu.itba.paw.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,10 @@ import java.util.stream.Collectors;
 public class OfferJdbcDao implements OfferDao {
 
     private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert jdbcInsert;
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
+    private SimpleJdbcInsert jdbcOfferInsert;
+    private SimpleJdbcInsert jdbcPaymentMethodAtOfferInsert;
+
 
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
@@ -41,7 +43,7 @@ public class OfferJdbcDao implements OfferDao {
                 );
 
                 String paymentCode = resultSet.getString("payment_code");
-                PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
+                PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance(paymentCode, resultSet.getString("payment_description"));
 
                 return Offer.builder(
                                 seller,
@@ -49,7 +51,7 @@ public class OfferJdbcDao implements OfferDao {
                                 resultSet.getDouble("asking_price")
                         )
                         .id(resultSet.getInt("offer_id"))
-                        .amount(resultSet.getDouble("quantity"))
+                        .quantity(resultSet.getDouble("quantity"))
                         .paymentMethod(pm)
                         .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
                         .status(offerStatus);
@@ -57,7 +59,7 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
-        Map<Integer, Offer.Builder> cache = new HashMap<>();
+        Map<Integer, Offer.Builder> cache = new HashMap<>(); // TODO - rename
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
             String paymentCode = resultSet.getString("payment_code");  // TODO: Improve
@@ -75,73 +77,85 @@ public class OfferJdbcDao implements OfferDao {
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
+        namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        jdbcOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("id");
+        jdbcPaymentMethodAtOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("payment_methods_at_offer");
+    }
+
+    String allQuery = "SELECT *\n" +
+            "FROM offer_complete\n" +
+            "WHERE offer_id IN (\n" +
+            "    SELECT DISTINCT offer_id\n" +
+            "    FROM offer_complete\n" +
+            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+            "          :min <= asking_price*quantity AND\n" +
+            "          :max >= asking_price*quantity\n" +
+            "    LIMIT :limit OFFSET :offset\n" +
+            ")";
+
+
+    String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
+            "FROM offer_complete\n" +
+            "WHERE offer_id IN (\n" +
+            "    SELECT DISTINCT offer_id\n" +
+            "    FROM offer_complete\n" +
+            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+            "          :min <= asking_price*quantity AND\n" +
+            "          :max >= asking_price*quantity\n" +
+            ")";
+
+
+    private static MapSqlParameterSource toMapSqlParameterSource(OfferFilter filter) {
+        return new MapSqlParameterSource()
+                .addValue("crypto_codes", filter.getCryptoCodes().isEmpty() ? null: filter.getCryptoCodes())
+                .addValue("offer_ids", filter.getIds().isEmpty() ? null : filter.getIds())
+                .addValue("payment_codes", filter.getPaymentMethods().isEmpty() ? null : filter.getPaymentMethods())
+                .addValue("limit", filter.getPageSize())
+                .addValue("offset", filter.getPage()*filter.getPageSize())
+                .addValue("min", filter.getMinPrice())
+                .addValue("max", filter.getMaxPrice());
+    }
+
+    @Override
+    public int getOfferCount(OfferFilter filter) {
+        return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
+    }
+
+    @Override
+    public Collection<Offer> getOffersBy(OfferFilter filter) {
+            List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
+                .stream()
+                .map(Offer.Builder::build)
+                .collect(Collectors.toList());
+        return x;
     }
 
     @Override
     public Offer makeOffer(Offer.Builder builder) {
-        final Map<String,Object> args = new HashMap<>();
+        Map<String,Object> args = new HashMap<>();
         args.put("seller_id", builder.getSeller().getId());
-        args.put("offer_date", builder.getDate());
-//        args.put("coin_id", builder.getCoinId());
+
+        args.put("offer_date", builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
+        args.put("crypto_code", builder.getCrypto().getCode());
+        args.put("status_code", "APR");
         args.put("asking_price", builder.getAskingPrice());
-        args.put("status_id", 2);
-        args.put("coin_amount", builder.getCoinAmount());
-        jdbcInsert.executeAndReturnKey(args).intValue();
+        args.put("quantity", builder.getQuantity());
+        int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
+        args.clear();
+
+        args.put("offer_id", offerId);
+        for (PaymentMethod pm: builder.getPaymentMethods()) {
+            args.put("payment_code", pm.getName());
+            jdbcPaymentMethodAtOfferInsert.execute(args);
+        }
+
+        builder.id(offerId);
+
         return builder.build();
     }
 
-
-    @Override
-    public Offer getOffer(int offer_id) {
-
-        String query =
-                "SELECT * FROM offer \n" +
-                        "    JOIN users ON offer.seller_id = users.id\n" +
-                        "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
-                        "    LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
-                        "    LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code\n" +
-                        "    JOIN status s on s.code = offer.status_code"+
-                        "    WHERE offer.id=?";
-
-        final List<Offer.Builder> offer = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, offer_id);
-        return offer.get(0).build();
-    }
-
-    @Override
-    public List<Offer> getAllOffers() {
-
-        String query =
-                "SELECT * FROM offer \n" +
-                "    JOIN users ON offer.seller_id = users.id\n" +
-                "    JOIN cryptocurrency c on offer.crypto_code = c.code\n" +
-                "    LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id \n" +
-                "    JOIN status s on s.code = offer.status_code"+
-                "    LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code\n";
-
-        Collection<Offer.Builder> builders = jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER);
-        return builders.stream().map(Offer.Builder::build)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Iterable<Offer> getPagedOffers(int page, int pageSize) {
-        int idx = pageSize * page;
-        String query = "SELECT * FROM\n" +
-                "( SELECT * FROM offer LIMIT ? OFFSET ?) paged_offer\n" +
-                "JOIN users ON paged_offer.seller_id = users.id\n" +
-                "JOIN cryptocurrency c on paged_offer.crypto_code = c.code\n" +
-                "LEFT OUTER JOIN payment_methods_at_offer pmao on paged_offer.id = pmao.offer_id\n" +
-                "JOIN status s on s.code = paged_offer.status_code\n" +
-                "LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;";
-
-        return jdbcTemplate.query(query, OFFER_MULTIROW_MAPPER, pageSize, idx)
-                .stream().map(Offer.Builder::build)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public int getOfferCount() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM offer", Integer.class);
-    }
 }

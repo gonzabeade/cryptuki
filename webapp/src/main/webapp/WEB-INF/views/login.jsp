@@ -15,7 +15,9 @@
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp"/>
 <div class="flex mt-20 mb-10">
-    <jsp:include page="../components/login_form.jsp"/>
+    <jsp:include page="../components/login_form.jsp">
+        <jsp:param name="error" value="${error}"/>
+    </jsp:include>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

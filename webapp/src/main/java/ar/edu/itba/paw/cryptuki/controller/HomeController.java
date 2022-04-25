@@ -19,7 +19,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
@@ -177,14 +180,16 @@ public class HomeController {
 
 
     @RequestMapping("/login")
-    public ModelAndView login(@RequestParam(value = "error" , required = false) String error) throws IOException {
-        if(error != null)
-            System.out.println("incorrect username or password");
-
-        return new ModelAndView("views/login");
+    public ModelAndView login(@RequestParam(value = "error" , required = false) String error){
+        ModelAndView mav = new ModelAndView("views/login");
+        if(error != null){
+            mav.addObject("error", true);
+            return mav;
+        }
+        return mav;
     }
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) final boolean error){
         ModelAndView mav = new ModelAndView("views/code_verification");
         mav.addObject("username", username);
         return mav;
@@ -193,12 +198,12 @@ public class HomeController {
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
        if(errors.hasErrors()){
-           return verify(form, form.getUsername());
+           return verify(form, form.getUsername(), true);
        }
        try{
            us.verifyUser(form.getUsername(), form.getCode());
        } catch (RuntimeException e){
-           return verify(form, form.getUsername());
+           return verify(form, form.getUsername(), true);
        }
 
        //log in programmatically

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.persistence.Cryptocurrency;
+import ar.edu.itba.paw.persistence.Offer;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +23,7 @@ public class UploadOfferForm {
     private Float price;
 
     @Size(min=2, max=30)
+    @NotNull
     private String cryptocurrency;
 
     @Size(min = 1)
@@ -64,4 +67,7 @@ public class UploadOfferForm {
     public void setPaymentMethods(String[] paymentMethods) {
         this.paymentMethods = paymentMethods;
     }
+
+
 }
+

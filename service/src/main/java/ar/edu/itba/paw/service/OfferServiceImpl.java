@@ -20,17 +20,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public Offer makeOffer(Offer.Builder builder) {
-        // TODO: Back-end validation of builder
-        return null; // offerDao.makeOffer(builder);
+        return offerDao.makeOffer(builder);
     }
 
     @Override
     public Optional<Offer> getOfferById(int id) {
         Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter().byOfferId(id));
-        if (offer.isEmpty())
-            return Optional.empty();
-        else
-            return Optional.of(offer.iterator().next());
+        return offer.isEmpty() ? Optional.empty() : Optional.of(offer.iterator().next());
     }
 
     @Override

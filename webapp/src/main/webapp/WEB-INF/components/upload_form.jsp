@@ -55,7 +55,12 @@
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Medios de Pago*</form:label>
             <div class="flex flex-row justify-center mx-auto">
                 <c:forEach items="${paymentMethods}" var="paymentMethod">
-                    <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)"><c:out value="${paymentMethod.name}"/></form:label>
+                    <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[20%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)">
+                        <div class="flex flex-row">
+                            <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
+                            <c:out value="${paymentMethod.description}"/>
+                        </div>
+                    </form:label>
                     <form:checkbox path="paymentMethods" id="${paymentMethod.name}" value="${paymentMethod.name}" cssClass="hidden"/>
                  </c:forEach>
             </div>

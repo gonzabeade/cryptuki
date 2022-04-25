@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
@@ -118,11 +119,25 @@ public class HomeController {
         return mav;
     }
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors){
+    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication auth){
         if(errors.hasErrors()){
             return uploadOffer(form);
         }
-        ModelAndView mav = new ModelAndView("redirect:/");
+
+        Offer.Builder builder = Offer.builder(
+                us.getUserInformation(auth.getName()).get(),
+                cryptocurrencyService.getCryptocurrency(form.getCryptocurrency()),
+                form.getPrice()
+        );
+
+        for (String x: form.getPaymentMethods()) {
+            builder.paymentMethod(paymentMethodService.getPaymentMethodByCode(x).get());
+        }
+
+        builder.quantity(form.getMinAmount());
+        Offer offer = offerService.makeOffer(builder);
+
+        ModelAndView mav = new ModelAndView("redirect:/buy/"+offer.getId());
         return mav;
     }
 

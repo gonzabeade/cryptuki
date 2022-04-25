@@ -9,7 +9,6 @@ public class RegisterForm {
 
 
     @Size(min=6, max= 100)
-    @Email()
     @Pattern(regexp=".+@.+\\..+")
     private String email;
     @Size(min = 6, max = 100)
@@ -21,7 +20,6 @@ public class RegisterForm {
     @Size(min = 6, max = 100)
     private String password;
     @Size(min = 6, max = 100)
-
     private String repeatPassword;
     public String getUsername() {
         return username;

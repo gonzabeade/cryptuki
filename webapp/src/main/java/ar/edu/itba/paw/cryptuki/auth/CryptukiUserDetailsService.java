@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.auth;
 
 import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.persistence.UserStatus;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,17 +16,27 @@ import java.util.Collection;
 
 @Component
 public class CryptukiUserDetailsService implements UserDetailsService {
-
+    private static class UserDetailsImpl extends org.springframework.security.core.userdetails.User{
+        private boolean enabled;
+        public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
+            super(username, password, authorities);
+            this.enabled = enabled;
+        }
+        @Override
+        public boolean isEnabled(){
+            return this.enabled;
+        }
+    }
     @Autowired
     private UserService userService;
-
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final UserAuth userAuth = userService.getUserByUsername(username).orElseThrow( ()-> new UsernameNotFoundException(""));
 
         final Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(userAuth.getRole()));// get roles of username
-
-        return new org.springframework.security.core.userdetails.User(username, userAuth.getPassword(), authorities);
-
+        //        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED)){
+//            throw new RuntimeException("Username not verified");
+//        }
+        return new UserDetailsImpl(username, userAuth.getPassword(), authorities, userAuth.getUserStatus().equals(UserStatus.VERIFIED));
     }
 }

@@ -8,7 +8,7 @@ public interface UserAuthDao {
 
     UserAuth createUserAuth(UserAuth.Builder userAuth);
 
-    int verifyUser(String username , Integer code);
+    boolean verifyUser(String username , Integer code);
 
     int changePassword(String username , Integer code , String password);
 

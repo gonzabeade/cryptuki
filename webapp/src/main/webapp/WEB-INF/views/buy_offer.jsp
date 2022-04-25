@@ -12,7 +12,9 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/header.jsp">
+    <jsp:param name="username" value="${username}"/>
+</jsp:include>
     <div class="flex">
         <div class="flex flex-col mx-auto mt-10">
             <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>

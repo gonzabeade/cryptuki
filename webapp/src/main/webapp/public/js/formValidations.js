@@ -14,3 +14,25 @@ function passwordMatch(){
         document.getElementById("passError").classList.add("hidden");
     }
 }
+function preventMinMaxFromSubmitting(){
+    const min = document.getElementById("minAmount").value;
+    const max = document.getElementById("maxAmount").value;
+    if(!isNaN(min) && !isNaN(max)){
+        if(min <= max){
+            document.getElementById("uploadOfferForm").submit();
+        }
+    }
+}
+function checkMinMax(){
+    const min = document.getElementById("minAmount").value;
+    const max = document.getElementById("maxAmount").value;
+    if(!isNaN(min) && !isNaN(max)){
+       if(min <= max) {
+           document.getElementById("minMaxValidation").classList.add("hidden");
+           return;
+       }
+    }
+    document.getElementById("minMaxValidation").classList.remove("hidden");
+
+
+}

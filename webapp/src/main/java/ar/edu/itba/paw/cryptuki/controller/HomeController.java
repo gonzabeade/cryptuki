@@ -66,7 +66,7 @@ public class HomeController {
 
         mav.addObject("offerList", offerService.getOfferBy(filter));
         int offerCount = offerService.countOffersBy(filter);
-        int pages = offerCount < PAGE_SIZE ? (offerCount > 0 ? 1:0) : offerCount/PAGE_SIZE;
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());

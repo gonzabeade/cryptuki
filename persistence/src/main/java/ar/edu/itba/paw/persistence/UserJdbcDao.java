@@ -19,7 +19,7 @@ public class UserJdbcDao implements UserDao{
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER = ((resultSet, i) -> User.builder().email(resultSet.getString("email")).build());
+    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER = ((resultSet, i) -> User.builder().email(resultSet.getString("email")).id(resultSet.getInt("id")).build());
 
 
     @Autowired
@@ -47,10 +47,12 @@ public class UserJdbcDao implements UserDao{
         return user.build();
     }
 
+
+    String query = "SELECT * FROM users JOIN (SELECT user_id, uname FROM auth WHERE uname = ?) user_auth ON users.id = user_auth.user_id";
+
     @Override
     public Optional<User> getUserByUsername(String username) {
-        //TODO: NATURAL JOIN WITH USERAUTH.
-        return Optional.empty();
+        return Optional.of(jdbcTemplate.query(query, USER_EMAIL_ROW_MAPPER, username).get(0));
     }
 
 

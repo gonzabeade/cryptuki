@@ -5,6 +5,8 @@ import ar.edu.itba.paw.persistence.Cryptocurrency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class CryptocurrencyServiceImpl implements CryptocurrencyService {
 
@@ -18,7 +20,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
     }
 
     @Override
-    public Iterable<Cryptocurrency> getAllCryptocurrencies() {
+    public Collection<Cryptocurrency> getAllCryptocurrencies() {
         //TODO: validate
         return cryptoCurrencyDao.getAllCryptocurrencies();
     }

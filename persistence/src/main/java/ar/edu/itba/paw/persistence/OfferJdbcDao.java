@@ -1,35 +1,27 @@
 package ar.edu.itba.paw.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
-import java.beans.Expression;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class OfferJdbcDao implements OfferDao {
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedJdbcTemplate;
-    private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcOfferInsert;
+    private SimpleJdbcInsert jdbcPaymentMethodAtOfferInsert;
+
 
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
@@ -59,7 +51,7 @@ public class OfferJdbcDao implements OfferDao {
                                 resultSet.getDouble("asking_price")
                         )
                         .id(resultSet.getInt("offer_id"))
-                        .amount(resultSet.getDouble("quantity"))
+                        .quantity(resultSet.getDouble("quantity"))
                         .paymentMethod(pm)
                         .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
                         .status(offerStatus);
@@ -86,7 +78,8 @@ public class OfferJdbcDao implements OfferDao {
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("offer_id");
+        jdbcOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("id");
+        jdbcPaymentMethodAtOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("payment_methods_at_offer");
     }
 
     String allQuery = "SELECT *\n" +
@@ -140,6 +133,31 @@ public class OfferJdbcDao implements OfferDao {
                 .collect(Collectors.toList());
         System.out.println(x);
         return x;
+    }
+
+    @Override
+    public Offer makeOffer(Offer.Builder builder) {
+        Map<String,Object> args = new HashMap<>();
+        args.put("seller_id", builder.getSeller().getId());
+
+        System.out.println("HOLAA"+builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
+        args.put("offer_date", builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
+        args.put("crypto_code", builder.getCrypto().getCode());
+        args.put("status_code", "APR");
+        args.put("asking_price", builder.getAskingPrice());
+        args.put("quantity", builder.getQuantity());
+        int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
+        args.clear();
+
+        args.put("offer_id", offerId);
+        for (PaymentMethod pm: builder.getPaymentMethods()) {
+            args.put("payment_code", pm.getName());
+            jdbcPaymentMethodAtOfferInsert.execute(args);
+        }
+
+        builder.id(offerId);
+
+        return builder.build();
     }
 
 }

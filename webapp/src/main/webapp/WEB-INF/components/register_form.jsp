@@ -4,7 +4,7 @@
 
 <c:url value="/register" var="postPath"/>
 <%--@elvariable id="registerForm" type="ar.edu.itba.paw.cryptuki.form.RegisterForm"--%>
-<form:form modelAttribute="registerForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
+<form:form modelAttribute="registerForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard" onsubmit="event.preventDefault(); preventSubmitPasswordNotMatching()">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar">Registrate</h2>
     <h3 class="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3"> Crea una cuenta para poder publicar anuncios y más.</h3>
     <div class="flex flex-col mt-3">
@@ -31,13 +31,18 @@
     <div class="flex flex-col mt-3">
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <form:label path="password" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Contraseña</form:label>
-        <form:input type="password" path="password" cssClass="rounded-lg p-3" placeholder="e.g micontraseña"/>
-
+        <div class="flex flex-col">
+            <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="e.g micontraseña" onchange="passwordMatch()"/>
+            <p class="text-red-400 hidden" id="passError">Las contraseñas no coinciden</p>
+        </div>
     </div>
     <div class="flex flex-col mt-3">
         <form:errors path="repeatPassword" cssClass="text-red-400" element="p"/>
         <form:label path="repeatPassword" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Repetir contraseña</form:label>
-        <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3" placeholder="e.g micontraseña" />
+        <div class="flex flex-col">
+            <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3  w-full" placeholder="e.g micontraseña" onchange="passwordMatch()"/>
+            <p class="text-red-400 hidden" id="repeatPassError">Las contraseñas no coinciden</p>
+        </div>
 
     </div>
     <div class="flex flex-col justify-center mt-6">

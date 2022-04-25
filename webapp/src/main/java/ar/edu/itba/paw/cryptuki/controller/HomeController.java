@@ -199,7 +199,7 @@ public class HomeController {
 
         }
         catch(Exception e ){
-                errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrònico ya fueron utilizados."));
+                errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
                 return registerGet(form);
         }
 

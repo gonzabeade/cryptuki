@@ -179,11 +179,8 @@ public class HomeController {
 
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
-    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form, @RequestParam(value = "error" , required = false) boolean error){
+    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
         ModelAndView mav =  new ModelAndView("views/register");
-        if(error){
-            mav.addObject("error", true);
-        }
         return mav;
     }
 
@@ -191,7 +188,7 @@ public class HomeController {
     @RequestMapping(value="/register" , method={RequestMethod.POST})
     public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
-            return registerGet(form, false);
+            return registerGet(form);
         }
         Optional<User> maybeUser;
         //TODO: do not pass UserAuth.Builder, User.Builder
@@ -202,9 +199,8 @@ public class HomeController {
 
         }
         catch(Exception e ){
-                //username o mail is already on db.
-                System.out.println("username or mail is already on db");
-                return registerGet(form, true);
+                errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrònico ya fueron utilizados."));
+                return registerGet(form);
         }
 
       return new ModelAndView("redirect:/verify?user="+form.getUsername());
@@ -221,9 +217,8 @@ public class HomeController {
         return mav;
     }
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) final boolean error){
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
         ModelAndView mav = new ModelAndView("views/code_verification");
-        mav.addObject("error", error);
         mav.addObject("username", username);
         return mav;
     }
@@ -231,12 +226,13 @@ public class HomeController {
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
        if(errors.hasErrors()){
-           return verify(form, form.getUsername(), true);
+           return verify(form, form.getUsername());
        }
        try{
            us.verifyUser(form.getUsername(), form.getCode());
        } catch (RuntimeException e){
-           return verify(form, form.getUsername(), true);
+           errors.addError(new FieldError("CodeForm","code","El código ingresado no es correcto"));
+           return verify(form, form.getUsername());
        }
 
        //log in programmatically

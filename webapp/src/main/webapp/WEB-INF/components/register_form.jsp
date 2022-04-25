@@ -7,7 +7,6 @@
 <form:form modelAttribute="registerForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar">Registrate</h2>
     <h3 class="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3"> Crea una cuenta para poder publicar anuncios y más.</h3>
-    <c:if test="${param.error}"><p class="text-red-400 text-center">Usuario o mail ya registrado</p></c:if>
     <div class="flex flex-col mt-3">
         <form:errors path="email" cssClass="text-red-400" element="p"/>
         <form:label path="email" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Correo electrónico</form:label>

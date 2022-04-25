@@ -131,7 +131,6 @@ public class OfferJdbcDao implements OfferDao {
                 .stream()
                 .map(Offer.Builder::build)
                 .collect(Collectors.toList());
-        System.out.println(x);
         return x;
     }
 
@@ -140,7 +139,6 @@ public class OfferJdbcDao implements OfferDao {
         Map<String,Object> args = new HashMap<>();
         args.put("seller_id", builder.getSeller().getId());
 
-        System.out.println("HOLAA"+builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
         args.put("offer_date", builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
         args.put("crypto_code", builder.getCrypto().getCode());
         args.put("status_code", "APR");

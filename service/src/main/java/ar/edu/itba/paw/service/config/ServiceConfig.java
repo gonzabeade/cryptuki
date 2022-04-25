@@ -17,7 +17,7 @@ public class ServiceConfig {
 
     @Bean
     public ContactService<MailMessage> contactService() {
-        return new MailService(System.getenv("MAIL_ADDRESS"), System.getenv("MAIL_PASS") );
+          return new MailService(System.getenv("MAIL_ADDRESS"), System.getenv("MAIL_PASS") );
     }
 
 }

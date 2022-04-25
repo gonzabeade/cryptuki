@@ -39,10 +39,9 @@ public class UserServiceImpl implements UserService {
 
 
         //send code.
-        System.out.println("about to send a mail to "+ userBuilder.getEmail());
         MailMessage message = contactService.createMessage(userBuilder.getEmail());
         message.setSubject("Verify your account.");
-        String link = "http://localhost:8080/webapp/verify?user="+authBuilder.getUsername()
+        String link = "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername()
                 +"&code="+authBuilder.getCode();
         message.setBody(link);
         contactService.sendMessage(message);

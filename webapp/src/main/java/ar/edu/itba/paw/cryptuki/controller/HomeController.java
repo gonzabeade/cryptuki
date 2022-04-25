@@ -147,19 +147,20 @@ public class HomeController {
 
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
-    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
-        return new ModelAndView("views/register");
+    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form, @RequestParam(value = "error" , required = false) boolean error){
+        ModelAndView mav =  new ModelAndView("views/register");
+        if(error){
+            mav.addObject("error", true);
+        }
+        return mav;
     }
 
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
     public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
-            form.setPassword("");
-            form.setRepeatPassword("");
-            return registerGet(form);
+            return registerGet(form, false);
         }
-
         Optional<User> maybeUser;
         //TODO: do not pass UserAuth.Builder, User.Builder
         try{
@@ -171,8 +172,7 @@ public class HomeController {
         catch(Exception e ){
                 //username o mail is already on db.
                 System.out.println("username or mail is already on db");
-                form = new RegisterForm();
-                return registerGet(form);
+                return registerGet(form, true);
         }
 
       return new ModelAndView("redirect:/verify?user="+form.getUsername());

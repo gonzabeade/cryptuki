@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.config;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.MailMessage;
 import ar.edu.itba.paw.service.MailService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -23,6 +25,9 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 @EnableTransactionManagement
@@ -37,6 +42,9 @@ public class WebConfig {
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
+    @Value("classpath:info")
+    private Resource info;
+
 
     @Bean /*Use WebMVC **BUT** use this particular view resolver*/
     public ViewResolver viewResolver() {
@@ -48,12 +56,14 @@ public class WebConfig {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() throws IOException {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:"+System.getenv("DB_CONNECTION") + System.getenv("DB_NAME"));
-        ds.setUsername(System.getenv("DB_USER"));
-        ds.setPassword(System.getenv("DB_PASS"));
+        Reader reader = new InputStreamReader(info.getInputStream());
+        JSONObject jsonObject = new JSONObject(FileCopyUtils.copyToString(reader));
+        ds.setUrl(jsonObject.getString("databaseUrl"));
+        ds.setUsername(jsonObject.getString("databaseUsername"));
+        ds.setPassword(jsonObject.getString("databasePassword"));
         return ds;
     }
 

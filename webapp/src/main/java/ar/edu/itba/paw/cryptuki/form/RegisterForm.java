@@ -15,7 +15,7 @@ public class RegisterForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String username;
 
-    @Pattern(regexp = "\\d{8}")
+    @Pattern(regexp = "\\d{8,10}")
     private String phoneNumber;
     @Size(min = 6, max = 100)
     private String password;

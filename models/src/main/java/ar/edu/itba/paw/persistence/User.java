@@ -11,7 +11,7 @@ public final class User {
     private final Integer ratingSum;
     private final Integer ratingCount;
 
-    private final Integer phoneNumber;
+    private final String phoneNumber;
 
     public static class Builder {
         private Integer id;
@@ -19,7 +19,7 @@ public final class User {
         private Integer ratingSum = 0;
         private Integer ratingCount = 0;
 
-        private Integer phoneNumber = 0 ;
+        private String phoneNumber = "" ;
 
         private Builder() { }
 
@@ -28,7 +28,7 @@ public final class User {
         public Builder ratingCount(int count) {this.ratingCount = count; return this; }
         public Builder id(int id) {this.id = id; return this; }
 
-        public Builder phoneNumber(int phoneNumber){this.phoneNumber = phoneNumber;return this;}
+        public Builder phoneNumber(String phoneNumber){this.phoneNumber = phoneNumber;return this;}
 
         protected User build() {return new User(this);}
 
@@ -45,7 +45,7 @@ public final class User {
             return ratingCount;
         }
 
-        public Integer getPhoneNumber(){return phoneNumber;}
+        public String getPhoneNumber(){return phoneNumber;}
     }
 
     public static Builder builder() {
@@ -73,7 +73,7 @@ public final class User {
         return ratingCount;
     }
 
-    public int phoneNumber(){return phoneNumber;}
+    public String phoneNumber(){return phoneNumber;}
 
     @Override
     public String toString() {

@@ -194,7 +194,7 @@ public class HomeController {
         //TODO: do not pass UserAuth.Builder, User.Builder
         try{
             maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
-                    User.builder().email(form.getEmail()).phoneNumber(Integer.parseInt(form.getPhoneNumber()))
+                    User.builder().email(form.getEmail()).phoneNumber(form.getPhoneNumber())
             );
 
         }

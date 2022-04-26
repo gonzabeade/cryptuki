@@ -38,12 +38,15 @@ public class UserServiceImpl implements UserService {
         userAuthDao.createUserAuth(authBuilder);
 
 
-        //send code.
+       String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
+                + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
+                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode().toString()
+                + " en el lugar indicado o entrando al siguiente link:\n"
+                + "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername() +"&code="+authBuilder.getCode();
+       //send code.
         MailMessage message = contactService.createMessage(userBuilder.getEmail());
-        message.setSubject("Verify your account.");
-        String link = "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername()
-                +"&code="+authBuilder.getCode();
-        message.setBody(link);
+        message.setSubject("Verifica tu cuenta.");
+        message.setBody(message_body);
         contactService.sendMessage(message);
 
         return Optional.of(user);

@@ -15,7 +15,7 @@
 						<img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2"/>
 						<h1 class="font-sans font-semibold"><c:out value="${param.currency}"/></h1>
 					</div>
-					<h1 class="text-xl font-bold font-sans mx-2"><c:out value="${param.asking_price}"/> ARS </h1>
+					<h1 class="text-xl font-bold font-sans mx-2"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
 					<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.coinAmount}"/> ARS </h4>
 					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>

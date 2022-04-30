@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,20 +19,20 @@ public class UserAuthJdbcDao implements UserAuthDao{
     private SimpleJdbcInsert jdbcInsert;
     private RoleDao roleDao;
 
-    private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = ((resultSet, i) ->{
+    private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = (resultSet, i) ->{
         UserAuth.Builder userAuth = new UserAuth.Builder(
                 resultSet.getString("uname"),
                 resultSet.getString("password"))
-                .id(resultSet.getInt("user_id"))
-                .role(resultSet.getString("description"));
-                if(resultSet.getInt("status") == 1 )
-                    userAuth.userStatus(UserStatus.VERIFIED);
+                .withId(resultSet.getInt("user_id"))
+                .withCode(resultSet.getInt("code"))
+                .withRole(resultSet.getString("description"));
+                if( resultSet.getInt("status") == 1 )
+                    userAuth.withUserStatus(UserStatus.VERIFIED);
                 else
-                    userAuth.userStatus(UserStatus.UNVERIFIED);
+                    userAuth.withUserStatus(UserStatus.UNVERIFIED);
                 return userAuth.build();
 
-    }
-            );
+    };
 
     @Autowired
     public UserAuthJdbcDao(DataSource dataSource,RoleDao roleDao) {
@@ -57,7 +55,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("user_id",userAuth.getId());
         args.put("uname",userAuth.getUsername());
         args.put("password",userAuth.getPassword());
-        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRoleDescriptor()).get().getId());
+        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRole()).get().getId());
         args.put("code",userAuth.getCode());
         if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
             args.put("status",0);
@@ -88,8 +86,8 @@ public class UserAuthJdbcDao implements UserAuthDao{
         List<UserAuth> users = jdbcTemplate.query(query, (resultSet, i) -> new UserAuth.Builder(
                 resultSet.getString("uname"),
                 resultSet.getString("password"))
-                .id(resultSet.getInt("user_id"))
-                .code(resultSet.getInt("code"))
+                .withId(resultSet.getInt("user_id"))
+                .withCode(resultSet.getInt("code"))
                 .build(), email);
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0))  ;
     }

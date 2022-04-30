@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
-import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
@@ -11,23 +10,17 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
-import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -179,13 +172,9 @@ public class HomeController {
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
             return registerGet(form);
         }
-        Optional<User> maybeUser;
-        //TODO: do not pass UserAuth.Builder, User.Builder
-        try{
-            maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
-                    User.builder().email(form.getEmail()).phoneNumber(form.getPhoneNumber())
-            );
 
+        try{
+            us.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         }
         catch(Exception e ){
                 errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));

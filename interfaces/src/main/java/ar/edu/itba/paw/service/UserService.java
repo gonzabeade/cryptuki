@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface UserService {
 
 
-    Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
+    void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
     Optional<UserAuth> getUserByUsername(String username);
     void verifyUser(String username , Integer code);
     void sendChangePasswordMail(String email);

@@ -19,8 +19,11 @@ public class UserJdbcDao implements UserDao{
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER = ((resultSet, i) -> User.builder().email(resultSet.getString("email")).id(resultSet.getInt("id")).build());
-
+    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER =
+            (resultSet, i) -> new User.Builder(
+                    resultSet.getString("email"))
+                    .withId(resultSet.getInt("id"))
+                    .build();
 
     @Autowired
     public UserJdbcDao(DataSource dataSource) {
@@ -43,7 +46,7 @@ public class UserJdbcDao implements UserDao{
         args.put("rating_count",user.getRatingCount());
         args.put("phone_number",user.getPhoneNumber());
         int id = jdbcInsert.executeAndReturnKey(args).intValue();
-        user.id(id);
+        user.withId(id);
         return user.build();
     }
 

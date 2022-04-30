@@ -29,27 +29,24 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
+    public void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
         User user = userDao.createUser(userBuilder);
-        authBuilder.id(user.getId());
-        authBuilder.password(passwordEncoder.encode(authBuilder.getPassword()));
-        authBuilder.code((int)(Math.random()*Integer.MAX_VALUE));
-        authBuilder.userStatus(UserStatus.UNVERIFIED);
+        authBuilder.withId(user.getId());
+        authBuilder.withPassword(passwordEncoder.encode(authBuilder.getPassword()));
+        authBuilder.withCode((int)(Math.random()*Integer.MAX_VALUE));
+        authBuilder.withUserStatus(UserStatus.UNVERIFIED);
+        authBuilder.withRole("seller");
         userAuthDao.createUserAuth(authBuilder);
-
 
        String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
                 + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
-                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode().toString()
+                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode()
                 + " en el lugar indicado o entrando al siguiente link:\n"
                 + "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername() +"&code="+authBuilder.getCode();
-       //send code.
         MailMessage message = contactService.createMessage(userBuilder.getEmail());
         message.setSubject("Verifica tu cuenta.");
         message.setBody(message_body);
         contactService.sendMessage(message);
-
-        return Optional.of(user);
     }
 
     @Override

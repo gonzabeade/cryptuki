@@ -26,9 +26,8 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
-                User seller = User.builder()
-                        .id(resultSet.getInt("seller_id"))
-                        .email(resultSet.getString("email"))
+                User seller = new User.Builder(resultSet.getString("email"))
+                        .withId(resultSet.getInt("seller_id"))
                         .build();
 
                 OfferStatus offerStatus = OfferStatus.getInstance(

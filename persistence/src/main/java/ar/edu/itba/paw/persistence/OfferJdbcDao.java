@@ -23,7 +23,6 @@ public class OfferJdbcDao implements OfferDao {
     private SimpleJdbcInsert jdbcOfferInsert;
     private SimpleJdbcInsert jdbcPaymentMethodAtOfferInsert;
 
-
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
                 User seller = new User.Builder(resultSet.getString("email"))
@@ -38,8 +37,7 @@ public class OfferJdbcDao implements OfferDao {
                 String cryptoId = resultSet.getString("crypto_code");
                 Cryptocurrency crypto = Cryptocurrency.getInstance(
                         cryptoId,
-                        resultSet.getString("commercial_name"),
-                        resultSet.getDouble("market_price")
+                        resultSet.getString("commercial_name")
                 );
 
                 String paymentCode = resultSet.getString("payment_code");
@@ -83,33 +81,6 @@ public class OfferJdbcDao implements OfferDao {
         jdbcPaymentMethodAtOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("payment_methods_at_offer");
     }
 
-    String allQuery = "SELECT *\n" +
-            "FROM offer_complete\n" +
-            "WHERE offer_id IN (\n" +
-            "    SELECT DISTINCT offer_id\n" +
-            "    FROM offer_complete\n" +
-            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
-            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
-            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-            "          :min <= asking_price*max_quantity AND\n" +
-            "          :max >= asking_price*max_quantity\n" +
-            "    LIMIT :limit OFFSET :offset\n" +
-            ")";
-
-
-    String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
-            "FROM offer_complete\n" +
-            "WHERE offer_id IN (\n" +
-            "    SELECT DISTINCT offer_id\n" +
-            "    FROM offer_complete\n" +
-            "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
-            "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
-            "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-            "          :min <= asking_price*max_quantity AND\n" +
-            "          :max >= asking_price*max_quantity\n" +
-            ")";
-
-
     private static MapSqlParameterSource toMapSqlParameterSource(OfferFilter filter) {
         return new MapSqlParameterSource()
                 .addValue("crypto_codes", filter.getCryptoCodes().isEmpty() ? null: filter.getCryptoCodes())
@@ -121,14 +92,51 @@ public class OfferJdbcDao implements OfferDao {
                 .addValue("max", filter.getMaxPrice());
     }
 
+    private static MapSqlParameterSource toMapSqlParameterSource(OfferDigest digest) {
+        return new MapSqlParameterSource()
+                .addValue("min_quantity", digest.getMinQuantity())
+                .addValue("max_quantity", digest.getMaxQuantity())
+                .addValue("asking_price", digest.getAskingPrice())
+                .addValue("offer_id", digest.getId());
+    }
+
     @Override
     public int getOfferCount(OfferFilter filter) {
+
+        String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
+                "FROM offer_complete\n" +
+                "WHERE offer_id IN (\n" +
+                "    SELECT DISTINCT offer_id\n" +
+                "    FROM offer_complete\n" +
+                "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+                "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+                "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+                "          :min <= asking_price*max_quantity AND\n" +
+                "          :max >= asking_price*max_quantity AND\n" +
+                "          status_code = 'APR'" +
+                ")";
+
         return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
     }
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-            List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
+
+        String allQuery = "SELECT *\n" +
+                "FROM offer_complete\n" +
+                "WHERE offer_id IN (\n" +
+                "    SELECT DISTINCT offer_id\n" +
+                "    FROM offer_complete\n" +
+                "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+                "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
+                "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
+                "          :min <= asking_price*max_quantity AND\n" +
+                "          :max >= asking_price*max_quantity AND\n" +
+                "          status_code = 'APR'" +
+                "    LIMIT :limit OFFSET :offset\n" +
+                ")";
+
+        List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
                 .stream()
                 .map(Offer.Builder::build)
                 .collect(Collectors.toList());
@@ -138,6 +146,7 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public void makeOffer(OfferDigest digest) {
         Map<String,Object> args = new HashMap<>();
+
         args.put("seller_id", digest.getSellerId());
         args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth());
         args.put("crypto_code", digest.getCryptoCode());
@@ -145,6 +154,7 @@ public class OfferJdbcDao implements OfferDao {
         args.put("asking_price", digest.getAskingPrice());
         args.put("max_quantity", digest.getMaxQuantity());
         args.put("min_quantity", digest.getMinQuantity());
+
         int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
         args.clear();
 
@@ -154,5 +164,46 @@ public class OfferJdbcDao implements OfferDao {
             jdbcPaymentMethodAtOfferInsert.execute(args);
         }
     }
+
+
+    private void changeOfferStatus(int offerId, String statusCode) {
+        String query = "UPDATE offer SET status_code= ? WHERE id = ?";
+        jdbcTemplate.update(query, statusCode, offerId);
+    }
+    @Override
+    public void deleteOffer(int offerId) {
+        changeOfferStatus(offerId, "DEL");
+    }
+
+    @Override
+    public void hardPauseOffer(int offerId) {
+        changeOfferStatus(offerId, "PSU");
+    }
+
+    @Override
+    public void pauseOffer(int offerId) {
+        changeOfferStatus(offerId, "PSE");
+    }
+
+    @Override
+    public void resumeOffer(int offerId) {
+        changeOfferStatus(offerId, "APR");
+    }
+
+    @Override
+    public void modifyOffer(OfferDigest digest) {
+        String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity WHERE id = :offer_id";
+        namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
+
+        String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
+        jdbcTemplate.update(deleteQuery, digest.getId());
+
+        String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", digest.getId())
+                .addValue("pm", digest.getPaymentMethods().isEmpty() ? null : digest.getPaymentMethods());
+        namedJdbcTemplate.update(paymentMethodQuery, map);
+    }
+
 
 }

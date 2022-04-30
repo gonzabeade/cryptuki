@@ -17,17 +17,14 @@ public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
     private final static RowMapper<Cryptocurrency> CRYPTOCURRENCY_ROW_MAPPER = (
             (resultSet, i) -> Cryptocurrency.getInstance(
                     resultSet.getString("code"),
-                    resultSet.getString("commercial_name"),
-                    resultSet.getDouble("market_price")
+                    resultSet.getString("commercial_name")
             )
     );
-
 
     @Autowired
     public CryptocurrencyJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
 
     @Override
     public Cryptocurrency getCryptocurrency(String id) {

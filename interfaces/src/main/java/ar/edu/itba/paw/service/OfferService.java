@@ -14,4 +14,11 @@ public interface OfferService {
 
     Collection<Offer> getOfferBy(OfferFilter filter);
     int countOffersBy(OfferFilter filter);
+
+    void modifyOffer(OfferDigest digest);
+    void deleteOffer(int offerId);
+
+    void hardPauseOffer(int offerId);
+    void pauseOffer(int offerId);
+    void resumeOffer(int offerId);
 }

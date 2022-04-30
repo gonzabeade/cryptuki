@@ -120,18 +120,4 @@ public final class Offer {
     public Collection<PaymentMethod> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
     }
-    @Override
-    public boolean equals(Object obj) {
-        if(this==obj)
-            return true;
-        if(!(obj instanceof Offer))
-            return false;
-        Offer other = (Offer) obj;
-        return id == other.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

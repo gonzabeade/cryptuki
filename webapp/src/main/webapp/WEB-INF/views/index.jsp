@@ -31,7 +31,7 @@
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
             <c:forEach items="${cryptocurrencies}" var="coin">
-                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.name}"/></option>
+                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>

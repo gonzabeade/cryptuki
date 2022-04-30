@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
 import ar.edu.itba.paw.service.*;
@@ -172,7 +172,6 @@ public class HomeController {
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
             return registerGet(form);
         }
-
         try{
             us.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         }

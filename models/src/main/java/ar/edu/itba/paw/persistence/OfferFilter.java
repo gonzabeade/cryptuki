@@ -3,9 +3,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class OfferFilter { // TODO: should be an interface?
-
-    private boolean closed = Boolean.FALSE;
+public class OfferFilter {
     private final Collection<String> paymentMethods = new LinkedList<>();
     private final Collection<String> cryptoCodes = new LinkedList<>();
     private final Collection<Integer> ids = new LinkedList<>();
@@ -33,15 +31,15 @@ public class OfferFilter { // TODO: should be an interface?
     public double getMinPrice() { return minPrice; }
 
     public OfferFilter byCryptoCode(String cryptoCode) {
-        if (!closed) this.cryptoCodes.add(cryptoCode);
+        this.cryptoCodes.add(cryptoCode);
         return this;
     }
     public OfferFilter byPaymentMethod(String paymentMethod) {
-        if (!closed) this.paymentMethods.add(paymentMethod);
+        this.paymentMethods.add(paymentMethod);
         return this;
     }
     public OfferFilter byOfferId(int id) {
-        if (!closed) this.ids.add(id);
+        this.ids.add(id);
         return this;
     }
 
@@ -56,15 +54,11 @@ public class OfferFilter { // TODO: should be an interface?
     }
 
     public OfferFilter fromPage(int page) {
-        if (!closed) this.page = page;
+        this.page = page;
         return this;
     }
     public OfferFilter withPageSize(int page) {
-        if (!closed) this.pageSize = page;
+        this.pageSize = page;
         return this;
-    }
-
-    public void close() {
-        this.closed = Boolean.TRUE;
     }
 }

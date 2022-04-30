@@ -158,18 +158,7 @@ public class HomeController {
             return uploadOffer(form,authentication);
         }
 
-        Offer.Builder builder = Offer.builder(
-                us.getUserInformation(authentication.getName()).get(),
-                cryptocurrencyService.getCryptocurrency(form.getCryptocurrency()),
-                form.getPrice()
-        );
-
-        for (String x: form.getPaymentMethods()) {
-            builder.paymentMethod(paymentMethodService.getPaymentMethodByCode(x).get());
-        }
-
-        builder.quantity(form.getMinAmount());
-        Offer offer = offerService.makeOffer(builder);
+        offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
 
         ModelAndView mav = new ModelAndView("redirect:/");
         mav.addObject("username", authentication == null ? null : authentication.getName());

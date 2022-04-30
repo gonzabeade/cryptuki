@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.OfferFilter;
@@ -19,8 +20,8 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Offer makeOffer(Offer.Builder builder) {
-        return offerDao.makeOffer(builder);
+    public void makeOffer(OfferDigest digest) {
+        offerDao.makeOffer(digest);
     }
 
     @Override

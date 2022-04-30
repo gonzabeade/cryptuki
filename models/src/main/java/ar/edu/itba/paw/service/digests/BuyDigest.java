@@ -25,5 +25,4 @@ public final class BuyDigest {
     public int getAmount() {
         return amount;
     }
-
 }

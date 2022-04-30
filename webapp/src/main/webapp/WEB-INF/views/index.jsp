@@ -72,12 +72,12 @@
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
                     <jsp:include page="../components/card.jsp">
-                        <jsp:param name="currency" value="${offer.coin_id}"/>
+                        <jsp:param name="currency" value="${offer.crypto.code}"/>
                         <jsp:param name="user" value="${offer.seller.email}"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
-                        <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
+                        <jsp:param name="coinAmount" value="${offer.maxQuantity}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

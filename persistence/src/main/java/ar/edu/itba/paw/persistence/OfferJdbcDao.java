@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.OfferDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -45,16 +46,17 @@ public class OfferJdbcDao implements OfferDao {
                 String paymentCode = resultSet.getString("payment_code");
                 PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance(paymentCode, resultSet.getString("payment_description"));
 
-                return Offer.builder(
+                return new Offer.Builder(
+                                resultSet.getInt("offer_id"),
                                 seller,
                                 crypto,
-                                resultSet.getDouble("asking_price")
+                                resultSet.getFloat("asking_price")
                         )
-                        .id(resultSet.getInt("offer_id"))
-                        .quantity(resultSet.getDouble("quantity"))
-                        .paymentMethod(pm)
-                        .date(resultSet.getTimestamp("offer_date").toLocalDateTime())
-                        .status(offerStatus);
+                        .withMinQuantity(resultSet.getFloat("min_quantity"))
+                        .withMaxQuantity(resultSet.getFloat("max_quantity"))
+                        .withPaymentMethod(pm)
+                        .withDate(resultSet.getTimestamp("offer_date").toLocalDateTime())
+                        .withStatus(offerStatus);
             };
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
@@ -67,7 +69,7 @@ public class OfferJdbcDao implements OfferDao {
             Offer.Builder instance = cache.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
-            ).paymentMethod(pm);
+            ).withPaymentMethod(pm);
             cache.putIfAbsent(offerId, instance);
             i ++;
         }
@@ -90,8 +92,8 @@ public class OfferJdbcDao implements OfferDao {
             "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
             "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
             "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-            "          :min <= asking_price*quantity AND\n" +
-            "          :max >= asking_price*quantity\n" +
+            "          :min <= asking_price*max_quantity AND\n" +
+            "          :max >= asking_price*max_quantity\n" +
             "    LIMIT :limit OFFSET :offset\n" +
             ")";
 
@@ -104,8 +106,8 @@ public class OfferJdbcDao implements OfferDao {
             "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
             "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
             "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-            "          :min <= asking_price*quantity AND\n" +
-            "          :max >= asking_price*quantity\n" +
+            "          :min <= asking_price*max_quantity AND\n" +
+            "          :max >= asking_price*max_quantity\n" +
             ")";
 
 
@@ -135,27 +137,23 @@ public class OfferJdbcDao implements OfferDao {
     }
 
     @Override
-    public Offer makeOffer(Offer.Builder builder) {
+    public void makeOffer(OfferDigest digest) {
         Map<String,Object> args = new HashMap<>();
-        args.put("seller_id", builder.getSeller().getId());
-
-        args.put("offer_date", builder.getDate().getYear()+"-"+builder.getDate().getMonthValue()+"-"+builder.getDate().getDayOfMonth());
-        args.put("crypto_code", builder.getCrypto().getCode());
+        args.put("seller_id", digest.getSellerId());
+        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth());
+        args.put("crypto_code", digest.getCryptoCode());
         args.put("status_code", "APR");
-        args.put("asking_price", builder.getAskingPrice());
-        args.put("quantity", builder.getQuantity());
+        args.put("asking_price", digest.getAskingPrice());
+        args.put("max_quantity", digest.getMaxQuantity());
+        args.put("min_quantity", digest.getMinQuantity());
         int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
         args.clear();
 
         args.put("offer_id", offerId);
-        for (PaymentMethod pm: builder.getPaymentMethods()) {
-            args.put("payment_code", pm.getName());
+        for (String pm: digest.getPaymentMethods()) {
+            args.put("payment_code", pm);
             jdbcPaymentMethodAtOfferInsert.execute(args);
         }
-
-        builder.id(offerId);
-
-        return builder.build();
     }
 
 }

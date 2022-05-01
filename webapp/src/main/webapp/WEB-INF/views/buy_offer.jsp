@@ -24,14 +24,18 @@
                 <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.name}"/>" class="w-20 h-20 mx-auto">
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.name}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
-
+                <div class="flex flex-row mt-3 font-sans ">
+                    <h2 class="font-sans mx-2"><b>Mínimo:</b> 100 BTC </h2>
+                    <h2 class="font-sans"> <b>Máximo:</b> 200 BTC </h2>
+                </div>
             </div>
         </div>
         <div>
             <jsp:include page="../components/buy_form.jsp">
                 <jsp:param name="offer_id" value="${offer.id}"/>
-                <jsp:param name="price" value="${offer.askingPrice}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
+                <jsp:param name="price" value="${offer.askingPrice}"/>
+                <jsp:param name="min" value="${offer.askingPrice}"/>
             </jsp:include>
         </div>
     </div>

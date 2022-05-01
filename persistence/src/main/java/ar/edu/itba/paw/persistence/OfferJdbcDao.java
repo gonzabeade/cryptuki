@@ -108,7 +108,7 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public int getOfferCount(OfferFilter filter) {
 
-        String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
+        final String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
                 "FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
@@ -128,7 +128,7 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
 
-        String allQuery = "SELECT *\n" +
+        final String allQuery = "SELECT *\n" +
                 "FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
@@ -199,13 +199,13 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public void modifyOffer(OfferDigest digest) {
-        String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity WHERE id = :offer_id";
+        final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity WHERE id = :offer_id";
         namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
 
-        String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
+        final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
         jdbcTemplate.update(deleteQuery, digest.getId());
 
-        String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
+        final String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", digest.getId())
                 .addValue("pm", digest.getPaymentMethods().isEmpty() ? null : digest.getPaymentMethods());

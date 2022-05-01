@@ -24,8 +24,7 @@
                 <li class="m-10">
                     <jsp:include page="../components/crypto_card.jsp">
                         <jsp:param name="code" value="${coin.code}"/>
-                        <jsp:param name="name" value="${coin.commercialName}"/>
-                        <jsp:param name="marketPrice" value="${coin.marketPrice}"/>
+                        <jsp:param name="commercialName" value="${coin.commercialName}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

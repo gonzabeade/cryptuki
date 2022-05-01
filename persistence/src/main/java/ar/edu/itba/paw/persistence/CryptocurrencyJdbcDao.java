@@ -28,13 +28,15 @@ public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
 
     @Override
     public Cryptocurrency getCryptocurrency(String id) {
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?", CRYPTOCURRENCY_ROW_MAPPER, id);
+        final String query = "SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?";
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER, id);
         return cryptocurrencies.get(0); //should be unique
     }
 
     @Override
     public Collection<Cryptocurrency> getAllCryptocurrencies() {
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency", CRYPTOCURRENCY_ROW_MAPPER);
+        final String query = "SELECT * FROM PUBLIC.cryptocurrency";
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER);
         return cryptocurrencies;
     }
 }

@@ -31,7 +31,6 @@ public class UserAuthJdbcDao implements UserAuthDao{
                 else
                     userAuth.withUserStatus(UserStatus.UNVERIFIED);
                 return userAuth.build();
-
     };
 
     @Autowired
@@ -44,7 +43,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
-        String query = "select * from (SELECT * FROM auth where uname = ?) as temp join user_role on temp.role_id=id ";
+        final String query = "SELECT * FROM (SELECT * FROM auth WHERE uname = ?) AS temp JOIN user_role ON temp.role_id=id ";
         List<UserAuth> userAuthList = jdbcTemplate.query(query,USER_AUTH_USERNAME_ROW_MAPPER,username);
         return userAuthList.isEmpty() ? Optional.empty() : Optional.of(userAuthList.get(0));
     }
@@ -60,36 +59,28 @@ public class UserAuthJdbcDao implements UserAuthDao{
         if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
             args.put("status",0);
         else
-            throw new RuntimeException();//can not create verified user.
+            throw new RuntimeException();//can not create verified user.  // TODO !!!!
         jdbcInsert.execute(args);
         return userAuth.build();
     }
 
     @Override
     public boolean verifyUser(String username, Integer code) {
-        String query="UPDATE auth set status=1 where uname=? and code=?";
+        final String query="UPDATE auth set status=1 where uname=? and code=?";
         return jdbcTemplate.update(query,username,code) == 1;
     }
 
     @Override
     public int changePassword(String username, Integer code, String password) {
-        String query="UPDATE auth set password=? where uname=? and code=?";
+        final String query="UPDATE auth SET password = ? WHERE uname = ? and code = ?";
         return jdbcTemplate.update(query,password,username,code);
     }
 
-
-
-
     @Override
     public Optional<UserAuth> getUsernameByEmail(String email) {
-        String query ="SELECT * FROM auth join users on id=user_id where email=?";
-        List<UserAuth> users = jdbcTemplate.query(query, (resultSet, i) -> new UserAuth.Builder(
-                resultSet.getString("uname"),
-                resultSet.getString("password"))
-                .withId(resultSet.getInt("user_id"))
-                .withCode(resultSet.getInt("code"))
-                .build(), email);
-        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0))  ;
+        final String query ="SELECT * FROM auth JOIN users on id = user_id where email = ?";
+        UserAuth user = jdbcTemplate.queryForObject(query, USER_AUTH_USERNAME_ROW_MAPPER);
+        return Optional.ofNullable(user);
     }
 
 }

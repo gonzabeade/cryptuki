@@ -6,6 +6,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.persistence.Cryptocurrency;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.OfferFilter;
@@ -130,6 +131,7 @@ public class HomeController {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
+
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
         return mav;

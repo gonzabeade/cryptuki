@@ -6,23 +6,26 @@ CREATE TABLE IF NOT EXISTS users (
     phone_number VARCHAR(8)
     );
 
+CREATE TABLE IF NOT EXISTS user_role (
+        id INT IDENTITY PRIMARY KEY,
+        description VARCHAR(20) NOT NULL
+    );
+
 CREATE TABLE IF NOT EXISTS auth (
+    status INT CHECK(status = 0 OR status = 1),
+    code INT,
+    role_id INT NOT NULL,
     user_id INT PRIMARY KEY,
-    uname VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
-    session_id int,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    uname VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES user_role
     );
 
 CREATE TABLE IF NOT EXISTS cryptocurrency (
     code VARCHAR(5) PRIMARY KEY,
     market_price DECIMAL CHECK (market_price > 0),
     commercial_name VARCHAR(20) NOT NULL
-    );
-
-CREATE TABLE IF NOT EXISTS user_role (
-    id INT IDENTITY PRIMARY KEY,
-    description VARCHAR(20) NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS status (
@@ -33,7 +36,7 @@ CREATE TABLE IF NOT EXISTS status (
 CREATE TABLE IF NOT EXISTS offer (
     id INT IDENTITY PRIMARY KEY,
     seller_id INT NOT NULL,
-    offer_date TIMESTAMP NOT NULL,
+    offer_date VARCHAR(100) NOT NULL,
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
     asking_price DECIMAL NOT NULL,
@@ -55,3 +58,28 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
     FOREIGN KEY(offer_id) REFERENCES offer(id) ON DELETE CASCADE,
     FOREIGN KEY(payment_code) REFERENCES payment_method(code) ON DELETE CASCADE
     );
+
+
+CREATE VIEW offer_complete as
+SELECT offer_id,
+       seller_id,
+       offer_date,
+       crypto_code,
+       status_code,
+       asking_price,
+       quantity,
+       email,
+       rating_sum,
+       rating_count,
+       phone_number,
+       market_price,
+       commercial_name,
+       payment_code,
+       status_description,
+       payment_description
+FROM offer
+         JOIN users ON offer.seller_id = users.id
+         JOIN cryptocurrency c on offer.crypto_code = c.code
+         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
+         JOIN status s on s.code = offer.status_code
+         LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;

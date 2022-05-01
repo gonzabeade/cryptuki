@@ -1,17 +1,15 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
-import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
-import ar.edu.itba.paw.persistence.Cryptocurrency;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.UserAuth;
-import ar.edu.itba.paw.persistence.OfferFilter;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +19,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -35,19 +35,21 @@ public class HomeController {
     private final SupportService supportService;
     private final TradeService tradeService;
     private final PaymentMethodService paymentMethodService;
+    private final ProfilePicService profilePicService;
 
     private static final int PAGE_SIZE = 3;
 
 
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService) {
+    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService, ProfilePicService profilePicService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.tradeService = tradeService;
         this.paymentMethodService = paymentMethodService;
+        this.profilePicService = profilePicService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -242,5 +244,26 @@ public class HomeController {
         return new ModelAndView("views/ChangePasswordMailSent");
 
     }
+
+
+    @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
+    public ResponseEntity<byte[]> imageGet(@PathVariable final String username){
+
+        Image image = profilePicService.getProfilePicture(username).orElseThrow( () -> new RuntimeException("Unknown user"));
+        return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
+    }
+
+
+    @RequestMapping(value="/test", method = {RequestMethod.GET})
+    public ModelAndView testGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
+        return new ModelAndView("views/upload_picture");
+    }
+
+    @RequestMapping(value = "/test", method = { RequestMethod.POST })
+    public ModelAndView test(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult) throws IOException {
+        profilePicService.uploadProfilePicture("holachau", form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
+        return new ModelAndView("redirect:/");
+    }
+
 
 }

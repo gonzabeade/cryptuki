@@ -9,5 +9,6 @@ public interface UserDao {
     Optional<User> getUserByUsername(String username);
     void updateLastLogin(String username);
 
+    void incrementUserRating(String username, int rating);
 
 }

@@ -11,7 +11,11 @@ public interface UserService {
     Optional<UserAuth> getUserByUsername(String username);
     void verifyUser(String username , Integer code);
     void sendChangePasswordMail(String email);
-    int changePassword(String username, Integer code, String password);
+    boolean changePassword(String username, int code, String newPassword);
+    boolean changePassword(String username, String oldPassword, String newPassword);
     void updateLastLogin(String username);
     Optional<User> getUserInformation(String username);
+
+    void incrementUserRating(String username, int rating);
+
 }

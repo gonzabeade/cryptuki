@@ -27,9 +27,9 @@ public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
     }
 
     @Override
-    public Cryptocurrency getCryptocurrency(String id) {
+    public Cryptocurrency getCryptocurrency(String code) {
         final String query = "SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?";
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER, id);
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER, code);
         return cryptocurrencies.get(0); //should be unique
     }
 

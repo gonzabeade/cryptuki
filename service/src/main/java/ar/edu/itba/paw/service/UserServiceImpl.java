@@ -75,8 +75,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int changePassword(String username, Integer code, String password) {
-        return userAuthDao.changePassword(username, code, password);
+    public boolean changePassword(String username, int code, String newPassword) {
+        Optional<UserAuth> userAuth = userAuthDao.getUserAuthByUsername(username);
+        if (userAuth.isPresent() && userAuth.get().getCode() == code)
+            return userAuthDao.changePassword(username, newPassword);
+        return false;
+    }
+
+    @Override
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        return userAuthDao.changePassword(username, newPassword);
     }
 
     @Override
@@ -87,5 +95,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserInformation(String username) {
         return userDao.getUserByUsername(username);
+    }
+
+    @Override
+    public void incrementUserRating(String username, int rating) {
+        userDao.incrementUserRating(username, rating);
     }
 }

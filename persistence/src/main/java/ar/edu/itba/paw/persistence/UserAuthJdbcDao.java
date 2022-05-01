@@ -44,36 +44,33 @@ public class UserAuthJdbcDao implements UserAuthDao{
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
         final String query = "SELECT * FROM (SELECT * FROM auth WHERE uname = ?) AS temp JOIN user_role ON temp.role_id=id ";
-        List<UserAuth> userAuthList = jdbcTemplate.query(query,USER_AUTH_USERNAME_ROW_MAPPER,username);
-        return userAuthList.isEmpty() ? Optional.empty() : Optional.of(userAuthList.get(0));
+        UserAuth userAuthList = jdbcTemplate.queryForObject(query,USER_AUTH_USERNAME_ROW_MAPPER, username);
+        return Optional.ofNullable(userAuthList);
     }
 
     @Override
-    public UserAuth createUserAuth(UserAuth.Builder userAuth) {
-        final Map<String,Object> args = new HashMap<>();
-        args.put("user_id",userAuth.getId());
-        args.put("uname",userAuth.getUsername());
-        args.put("password",userAuth.getPassword());
-        args.put("role_id",roleDao.getRoleByDescription(userAuth.getRole()).get().getId());
-        args.put("code",userAuth.getCode());
-        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED))
-            args.put("status",0);
-        else
-            throw new RuntimeException();//can not create verified user.  // TODO !!!!
+    public UserAuth createUserAuth(UserAuth.Builder builder) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("user_id", builder.getId());
+        args.put("uname", builder.getUsername());
+        args.put("password", builder.getPassword());
+        args.put("role_id", roleDao.getRoleByDescription(builder.getRole()).get().getId());
+        args.put("code", builder.getCode());
+        args.put("status",0);
         jdbcInsert.execute(args);
-        return userAuth.build();
+        return builder.build();
     }
 
     @Override
-    public boolean verifyUser(String username, Integer code) {
-        final String query="UPDATE auth set status=1 where uname=? and code=?";
-        return jdbcTemplate.update(query,username,code) == 1;
+    public boolean verifyUser(String username, int code) {
+        final String query="UPDATE auth SET status = 1 WHERE uname = ? AND code = ?";
+        return jdbcTemplate.update(query, username, code) == 1;
     }
 
     @Override
-    public int changePassword(String username, Integer code, String password) {
-        final String query="UPDATE auth SET password = ? WHERE uname = ? and code = ?";
-        return jdbcTemplate.update(query,password,username,code);
+    public boolean changePassword(String username, String newPassword) {
+        final String query="UPDATE auth SET password = ? WHERE uname = ?";
+        return jdbcTemplate.update(query, newPassword, username) == 1;
     }
 
     @Override

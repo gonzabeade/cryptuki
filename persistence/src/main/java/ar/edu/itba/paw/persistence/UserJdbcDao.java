@@ -37,9 +37,9 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query ="SELECT * FROM users where email=?";
-        List<User> users = jdbcTemplate.query(query,USER_EMAIL_ROW_MAPPER,email);
-        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0))  ;
+        final String query ="SELECT * FROM users where email=?";
+        User user = jdbcTemplate.queryForObject(query, USER_EMAIL_ROW_MAPPER, email);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -56,13 +56,20 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        String query = "SELECT * FROM users JOIN (SELECT user_id, uname FROM auth WHERE uname = ?) user_auth ON users.id = user_auth.user_id";
-        return Optional.of(jdbcTemplate.query(query, USER_EMAIL_ROW_MAPPER, username).get(0));
+        final String query = "SELECT * FROM users JOIN (SELECT user_id, uname FROM auth WHERE uname = ?) user_auth ON users.id = user_auth.user_id";
+        User user = jdbcTemplate.queryForObject(query, USER_EMAIL_ROW_MAPPER, username);
+        return Optional.ofNullable(user);
     }
 
     @Override
     public void updateLastLogin(String username) {
         jdbcTemplate.update("UPDATE users SET last_login = NOW() WHERE id IN (SELECT user_id FROM auth WHERE uname = ?)", username);
+    }
+
+    @Override
+    public void incrementUserRating(String username, int rating) {
+        final String query = "UPDATE users SET rating_count = rating_count + 1, rating_sum = rating_sum + ? WHERE id IN ( SELECT user_id FROM auth WHERE uname = ?)";
+        jdbcTemplate.update(query, rating, username);
     }
 
 

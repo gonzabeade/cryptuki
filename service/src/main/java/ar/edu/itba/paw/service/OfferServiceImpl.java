@@ -15,12 +15,10 @@ import java.util.Optional;
 public class OfferServiceImpl implements OfferService {
 
     private OfferDao offerDao;
-    private UserService userService;
 
     @Autowired
-    public OfferServiceImpl(OfferDao offerDao, UserService userService) {
+    public OfferServiceImpl(OfferDao offerDao) {
         this.offerDao = offerDao;
-        this.userService = userService;
     }
 
     @Override

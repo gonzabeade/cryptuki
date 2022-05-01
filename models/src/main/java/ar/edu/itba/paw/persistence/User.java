@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 
+import java.time.LocalDateTime;
+
 public final class User {
 
     private final int id;
@@ -8,6 +10,7 @@ public final class User {
     private final int ratingSum;
     private final int ratingCount;
 
+    private final LocalDateTime lastLogin;
     private final String phoneNumber;
 
     public static class Builder {
@@ -18,6 +21,8 @@ public final class User {
         private int ratingSum = 0;
         private int ratingCount = 0;
 
+        private LocalDateTime lastLogin = LocalDateTime.now();
+
         private String phoneNumber;
 
         public Builder(String email) {
@@ -27,7 +32,8 @@ public final class User {
         public Builder withRatingSum(int sum) {this.ratingSum = sum; return this; }
         public Builder withRatingCount(int count) {this.ratingCount = count; return this; }
         public Builder withId(int id) {this.id = id; return this; }
-        public Builder withPhoneNumber(String phoneNumber){this.phoneNumber = phoneNumber;return this;}
+        public Builder withPhoneNumber(String phoneNumber){this.phoneNumber = phoneNumber; return this;}
+        public Builder withLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; return this; }
 
         public Integer getId() {
             return id;
@@ -42,6 +48,8 @@ public final class User {
             return ratingCount;
         }
         public String getPhoneNumber(){return phoneNumber;}
+        public LocalDateTime getLastLogin(){return lastLogin;}
+
 
         protected User build() {return new User(this);}
     }
@@ -52,6 +60,7 @@ public final class User {
         this.ratingCount = builder.ratingCount;
         this.ratingSum = builder.ratingSum;
         this.phoneNumber= builder.phoneNumber;
+        this.lastLogin = builder.lastLogin;
     }
 
     public int getId() {

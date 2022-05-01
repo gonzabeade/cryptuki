@@ -80,6 +80,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateLastLogin(String username) {
+        userDao.updateLastLogin(username);
+    }
+
+    @Override
     public Optional<User> getUserInformation(String username) {
         return userDao.getUserByUsername(username);
     }

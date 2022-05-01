@@ -89,7 +89,8 @@ public class OfferJdbcDao implements OfferDao {
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize())
                 .addValue("min", filter.getMinPrice())
-                .addValue("max", filter.getMaxPrice());
+                .addValue("max", filter.getMaxPrice())
+                .addValue("uname", filter.getUsername());
     }
 
     private static MapSqlParameterSource toMapSqlParameterSource(OfferDigest digest) {
@@ -113,6 +114,7 @@ public class OfferJdbcDao implements OfferDao {
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          status_code = 'APR'" +
                 ")";
 
@@ -132,6 +134,7 @@ public class OfferJdbcDao implements OfferDao {
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          status_code = 'APR'" +
                 "    LIMIT :limit OFFSET :offset\n" +
                 ")";

@@ -14,6 +14,8 @@ public class OfferFilter {
     private double minPrice = 0;
     private double maxPrice = Double.MAX_VALUE;
 
+    private String username = null;
+
 
     // Using the Optional<String> solves the defensive copy problem too
     public Collection<String> getPaymentMethods() {
@@ -29,11 +31,14 @@ public class OfferFilter {
     public int getPageSize() { return pageSize; }
     public double getMaxPrice() { return maxPrice; }
     public double getMinPrice() { return minPrice; }
+    public String getUsername() { return username; }
+
 
     public OfferFilter byCryptoCode(String cryptoCode) {
         this.cryptoCodes.add(cryptoCode);
         return this;
     }
+
     public OfferFilter byPaymentMethod(String paymentMethod) {
         this.paymentMethods.add(paymentMethod);
         return this;
@@ -45,6 +50,11 @@ public class OfferFilter {
 
     public OfferFilter byMinPrice(double minPrice) {
         this.minPrice = minPrice;
+        return this;
+    }
+
+    public OfferFilter byUsername(String uname) {
+        this.username = uname;
         return this;
     }
 

@@ -35,6 +35,11 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    public Collection<Offer> getOffersByUsername(String username) {
+        return offerDao.getOffersBy( new OfferFilter().byUsername(username));
+    }
+
+    @Override
     public Collection<Offer> getOfferBy(OfferFilter filter) {
         return offerDao.getOffersBy(filter);
     }
@@ -42,6 +47,11 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public int countOffersBy(OfferFilter filter) {
         return offerDao.getOfferCount(filter);
+    }
+
+    @Override
+    public int countOffersByUsername(String username) {
+        return offerDao.getOfferCount(new OfferFilter().byUsername(username));
     }
 
     @Override

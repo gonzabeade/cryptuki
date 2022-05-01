@@ -12,8 +12,13 @@ public interface OfferService {
     void makeOffer(OfferDigest digest);
     Optional<Offer> getOfferById(int id);
 
+    Collection<Offer> getOffersByUsername(String username);
+
     Collection<Offer> getOfferBy(OfferFilter filter);
     int countOffersBy(OfferFilter filter);
+
+    int countOffersByUsername(String username);
+
 
     void modifyOffer(OfferDigest digest);
     void deleteOffer(int offerId);
@@ -21,4 +26,6 @@ public interface OfferService {
     void hardPauseOffer(int offerId);
     void pauseOffer(int offerId);
     void resumeOffer(int offerId);
+
+
 }

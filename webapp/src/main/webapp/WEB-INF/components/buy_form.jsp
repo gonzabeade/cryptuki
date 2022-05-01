@@ -5,7 +5,7 @@
 <div class="flex flex-col">
     <c:url value="/buy" var="postUrl"/>
     <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.OfferBuyForm"--%>
-    <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
+    <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post" class="flex flex-col">
 
         <div class="flex flex-col justify-center mt-3">
             <form:errors path="email" cssClass=" mx-auto text-red-500"/>

@@ -92,6 +92,23 @@ public class HomeController {
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
+    @RequestMapping(value = "/admin/assigned")
+    public ModelAndView assignedComplaints(final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/admin/assigned");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        return mav;
+    }
+    @RequestMapping(value = "/admin/solved")
+    public ModelAndView solvedComplaints(final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/admin/solved");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        return mav;
+    }
+    @RequestMapping(value = "/admin/profile")
+    public ModelAndView adminProfile(final Authentication authentication){
+       return null;
+    }
+
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){

@@ -18,12 +18,12 @@
             <c:choose>
               <c:when test="${selectedCrypto == coin.code}">
                 <option value="${coin.code}" selected>
-                  <c:out value="${coin.name}"/>
+                  <c:out value="${coin.commercialName}"/>
                 </option>
               </c:when>
               <c:otherwise>
                 <form:option value="${coin.code}">
-                  <c:out value="${coin.name}"/>
+                  <c:out value="${coin.commercialName}"/>
                 </form:option>
               </c:otherwise>
             </c:choose>

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service.digests;
 
 public final class BuyDigest {
-    private final int offerId; // TODO -- Question: Should be an Offer or an Offer.Builder?
+    private final int offerId;
     private final String comments;
     private final String buyerEmail;
     private final int amount;
@@ -25,5 +25,4 @@ public final class BuyDigest {
     public int getAmount() {
         return amount;
     }
-
 }

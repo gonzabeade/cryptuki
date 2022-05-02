@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.persistence.Cryptocurrency;
 import ar.edu.itba.paw.persistence.Offer;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -28,9 +29,22 @@ public class UploadOfferForm {
 
     @Size(min = 1)
     private String[] paymentMethods;
+
+    @Size(max = 40)
+    private String location;
+
     public Double getMinAmount() {
         return minAmount;
     }
+
+    public String getLocation(){
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 
     public void setMinAmount(Double minAmount) {
         this.minAmount = minAmount;
@@ -66,6 +80,13 @@ public class UploadOfferForm {
 
     public void setPaymentMethods(String[] paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    public OfferDigest toOfferDigest(int sellerId) {
+        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price).withMinQuantity(minAmount).withMaxQuantity(maxAmount);
+        for (String pm: paymentMethods)
+                builder.withPaymentMethod(pm);
+        return builder.build();
     }
 
 

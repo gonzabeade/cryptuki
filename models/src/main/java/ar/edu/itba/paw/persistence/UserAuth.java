@@ -2,45 +2,35 @@ package ar.edu.itba.paw.persistence;
 
 public final class UserAuth{
 
-    private Integer id;
+    private int id;
     private String password;
     private String username;
     private String roleDescriptor;
     private Integer code;
     private UserStatus userStatus;
 
-
-
     public static class Builder {
         private Integer id;
         private String username;
         private String password;
-        private String roleDescriptor;
+        private String role;
         private Integer code;
-        private UserStatus userStatus;
-
+        private UserStatus userStatus = UserStatus.UNVERIFIED;
 
         public Builder(String username, String password) {
             this.username = username;
             this.password = password;
         }
 
-        public Builder id(int id) { this.id = id; return this; }
-        public Builder username(String username) { this.username = username; return this; }
-        public Builder password(String password) { this.password = password; return this; }
+        public Builder withId(int id) { this.id = id; return this; }
+        public Builder withRole(String role){this.role = role; return this; }
+        public Builder withPassword(String password){this.password = password; return this; }
 
-        public Builder role(String role){this.roleDescriptor = role; return this; }
-
-        public Builder code(Integer code){this.code = code ; return this;}
-
-        public Builder userStatus(UserStatus userStatus){this.userStatus=userStatus;return this;}
+        public Builder withCode(Integer code){this.code = code ; return this;}
+        public Builder withUserStatus(UserStatus userStatus){this.userStatus=userStatus;return this;}
 
 
-        public UserAuth build() {
-            return new UserAuth(this);
-        }
-
-        public Integer getId() {
+        public int getId() {
             return id;
         }
         public String getUsername() {
@@ -49,15 +39,15 @@ public final class UserAuth{
         public String getPassword() {
             return password;
         }
-
-        public String getRoleDescriptor(){return roleDescriptor; }
-
-        public Integer getCode() {
+        public String getRole(){return role; }
+        public int getCode() {
             return code;
         }
-
         public UserStatus getUserStatus() {
             return userStatus;
+        }
+        protected UserAuth build() {
+            return new UserAuth(this);
         }
     }
 
@@ -65,8 +55,8 @@ public final class UserAuth{
         this.id = builder.id;
         this.username = builder.username;
         this.password = builder.password;
-        this.roleDescriptor = builder.roleDescriptor; //only creating instance in persistence
-        this.code= builder.getCode();
+        this.code = builder.code;
+        this.roleDescriptor = builder.role; //only creating instance in persistence
         this.userStatus = builder.userStatus;
     }
 
@@ -76,18 +66,12 @@ public final class UserAuth{
     public String getUsername() {
         return username;
     }
-
     public String getPassword(){return password;}
-
     public String getRole() {
         return roleDescriptor;
     }
-
-    public Integer getCode() {
-        return code;
-    }
-
     public UserStatus getUserStatus() {
         return userStatus;
     }
+    public int getCode() { return code; };
 }

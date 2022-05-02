@@ -19,24 +19,21 @@ public class PaymentMethodJdbcDao implements PaymentMethodDao {
     private final static RowMapper<PaymentMethod> PAYMENT_METHOD_ROW_MAPPER =
             (resultSet, i) -> PaymentMethod.getInstance(resultSet.getString("code"), resultSet.getString("payment_description"));
 
-
     @Autowired
     public PaymentMethodJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private final static String query = "SELECT * FROM payment_method";
-
-    private final static String queryByCode = "SELECT * FROM payment_method WHERE code = ?";
-
-
     @Override
     public Collection<PaymentMethod> getAllPaymentMethods() {
+        final String query = "SELECT * FROM payment_method";
         return jdbcTemplate.query(query, PAYMENT_METHOD_ROW_MAPPER);
     }
 
     @Override
     public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
-        return Optional.of(jdbcTemplate.query(queryByCode, new Object[]{code}, PAYMENT_METHOD_ROW_MAPPER).iterator().next());
+        final String queryByCode = "SELECT * FROM payment_method WHERE code = ?";
+        PaymentMethod pm = jdbcTemplate.queryForObject(queryByCode, PAYMENT_METHOD_ROW_MAPPER, code);
+        return Optional.of(pm);
     }
 }

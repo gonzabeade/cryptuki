@@ -16,11 +16,19 @@
                 <option disabled selected>Selecciona una opción</option>
                 <c:forEach var="coin" items="${cryptocurrencies}">
                     <form:option value="${coin.code}">
-                        <c:out value="${coin.name}"/>
+                        <c:out value="${coin.commercialName}"/>
                     </form:option>
                 </c:forEach>
             </form:select>
+            </div>
         </div>
+        <div class="flex flex-col mt-6">
+                <form:errors path="price" cssClass="text-red-500 mx-auto"/>
+                <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda en ARS*</form:label>
+                <div class="flex flex-col justify-center mx-96">
+                    <form:input type="number" path="price" class="h-10 justify-center rounded-lg p-3 mx-auto " step=".01"/>
+                    <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->
+                </div>
         </div>
         <div class="flex flex-col justify-center mt-6">
             <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
@@ -66,16 +74,23 @@
                  </c:forEach>
             </div>
         </div>
-        <div class="flex flex-col mt-6">
-            <form:errors path="price" cssClass="text-red-500 mx-auto"/>
-            <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Precio por moneda en ARS*</form:label>
-            <div class="flex flex-col justify-center mx-96">
-                <form:input type="number" path="price" class="h-10 justify-center rounded-lg p-3 mx-auto " step=".01"/>
-               <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->
+        <div class="flex flex-col justify-center mt-6">
+            <form:errors path="location" cssClass=" mx-auto text-red-500"/>
+            <form:label  path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Ubicación*</form:label>
+            <div class="flex flex-row justify-center mx-auto">
+                <form:select path="location" class="rounded-lg p-3">
+                    <option disabled selected>Selecciona una opción</option>
+                    <c:forEach var="coin" items="${cryptocurrencies}">
+                        <form:option value="${coin.code}">
+                            <c:out value="${coin.commercialName}"/>
+                        </form:option>
+                    </c:forEach>
+                </form:select>
             </div>
         </div>
+
         <div class="flex flex-row p-5 mx-60 mt-10">
-            <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar</a>
+            <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
             <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
         </div>
     </form:form>

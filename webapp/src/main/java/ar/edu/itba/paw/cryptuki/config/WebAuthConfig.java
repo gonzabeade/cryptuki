@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.cryptuki.config;
 
 import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
+import ar.edu.itba.paw.cryptuki.auth.CustomAuthenticationSuccessHandler;
+import ar.edu.itba.paw.cryptuki.auth.CustomFailureHandler;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,11 +15,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -39,6 +44,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler failureHandler() {
+        return new CustomFailureHandler();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
@@ -48,21 +68,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/login", "/register", "/verify**").anonymous()
                 .antMatchers("/upload/**").authenticated()
-                .and().formLogin().failureHandler(new AuthenticationFailureHandler() {
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                        UrlPathHelper helper = new UrlPathHelper();
-                        String contextPath = helper.getContextPath(httpServletRequest);
-                        if(e.getCause() instanceof RuntimeException){
-                            httpServletResponse.sendRedirect(contextPath + "/verify"+"?user="+ httpServletRequest.getParameter("j_username"));
-                        }else{
-                            httpServletResponse.sendRedirect(contextPath + "/login?error=error");
-                        }
-                    }
-                })
+                .and().formLogin()
+                .failureHandler(failureHandler())
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
-                .defaultSuccessUrl("/", false)
+                .successHandler(successHandler())
                 .loginPage("/login")
                 .and().rememberMe()
                 .rememberMeParameter("j_rememberme")
@@ -80,14 +90,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
-
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-
-
 }

@@ -31,7 +31,7 @@
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
             <c:forEach items="${cryptocurrencies}" var="coin">
-                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.name}"/></option>
+                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>
@@ -72,12 +72,13 @@
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
                     <jsp:include page="../components/card.jsp">
-                        <jsp:param name="currency" value="${offer.coin_id}"/>
+                        <jsp:param name="currency" value="${offer.crypto.code}"/>
                         <jsp:param name="owner" value="${offer.seller.email}"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
-                        <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
+                        <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                        <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                         <jsp:param name="userEmail" value="${userEmail}"/>
                     </jsp:include>
                 </li>

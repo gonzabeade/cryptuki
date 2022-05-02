@@ -24,8 +24,8 @@
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
                 <div class="flex flex-row mt-3 font-sans ">
-                    <h2 class="font-sans mx-2"><b>Mínimo:</b> 100 BTC </h2>
-                    <h2 class="font-sans"> <b>Máximo:</b> 200 BTC </h2>
+                    <h2 class="font-sans mx-2"><b>Mínimo:</b> ${offer.minQuantity * offer.askingPrice} ARS </h2>
+                    <h2 class="font-sans"> <b>Máximo:</b> ${offer.maxQuantity * offer.askingPrice} ARS </h2>
                 </div>
             </div>
         </div>

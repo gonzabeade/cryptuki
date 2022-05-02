@@ -112,10 +112,10 @@ public class HomeController {
 
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
-    public ModelAndView modify(HttpServletRequest request, @PathVariable("offerId") final int offerId, @ModelAttribute("modifyForm") final UploadOfferForm form, final Authentication authentication){
+    public ModelAndView modify(@PathVariable("offerId") final int offerId, @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
 
-        if(offer.getSeller().getEmail().equals(authentication.getName())){
+        if(!offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail())){
             return new ModelAndView("redirect:/errors");
         }
 
@@ -123,24 +123,28 @@ public class HomeController {
 
         form.setMinAmount(offer.getCoinAmount());
         form.setMaxAmount(offer.getCoinAmount());
-        form.setCryptocurrency(offer.getCrypto().getName());
-        ArrayList<String> pm = new ArrayList<>();
-        offer.getPaymentMethods().forEach((paymentMethod -> pm.add(paymentMethod.getName())));
-        form.setPaymentMethods((String[]) pm.toArray());
+        form.setCryptocurrency(offer.getCrypto().getCode());
         form.setPrice(offer.getAskingPrice());
+        ArrayList<String> pm =  new ArrayList<>();
+        offer.getPaymentMethods().forEach(paymentMethod -> pm.add(paymentMethod.getName()));
+        form.setPaymentMethods(pm.toArray(new String[0]));
 
         mav.addObject("offer", offer);
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("selectedCrypto", offer.getCrypto().getCode());
+        mav.addObject("selectedPayments", pm);
 
         return mav;
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.POST)
-    public ModelAndView modify(HttpServletRequest request, @PathVariable("offerId") final int offerId,  @Valid @ModelAttribute("modifyForm") final UploadOfferForm form, final Authentication authentication, final BindingResult errors){
+    public ModelAndView modify(@PathVariable("offerId") final int offerId,  @Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication, final BindingResult errors){
         if(errors.hasErrors()){
-            return modify(request, offerId, form, authentication);
+            return modify(offerId, form, authentication);
         }
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-        if(!(request.isUserInRole("ROLE_ADMIN") || (offer.getSeller().getEmail().equals(authentication.getName())))){ //TODO-Cambiar a Username
+        if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail()))){
             return new ModelAndView("redirect:/errors");
         }
         //offer.modify

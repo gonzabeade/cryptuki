@@ -34,13 +34,11 @@
 
 				</div>
 				<div class="flex basis-1/4 justify-center">
-					<c:if test="${param.currentUser == param.owner}">
-					<a class=" pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 m-2 hover:bg-stormd/[.6] hover:border-2 hover:border-frostdr text-polard" href="<c:url value="/buy/${param.offerId}"/>">
+					<a class="${param.userEmail == param.owner ? " ": "invisible"} pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 m-2 hover:bg-stormd/[.6] hover:border-2 hover:border-frostdr text-polard" href="<c:url value="/modify/${param.offerId}"/>">
 						Editar
 					</a>
-					</c:if>
 					<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">
-						Ver oferta
+						Ver
 					</a>
 				</div>
 

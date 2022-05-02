@@ -78,7 +78,7 @@
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
                         <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
-                        <jsp:param name="currentUser" value="${userEmail}"/>
+                        <jsp:param name="userEmail" value="${userEmail}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

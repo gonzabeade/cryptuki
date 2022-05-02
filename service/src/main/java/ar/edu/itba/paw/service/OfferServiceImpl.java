@@ -3,7 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
-import ar.edu.itba.paw.persistence.OfferFilter;
+import ar.edu.itba.paw.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

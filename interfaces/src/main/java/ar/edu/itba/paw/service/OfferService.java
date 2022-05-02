@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.OfferFilter;
+import ar.edu.itba.paw.OfferFilter;
 
 import java.util.Collection;
 import java.util.Optional;

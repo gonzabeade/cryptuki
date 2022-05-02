@@ -1,19 +1,9 @@
-package ar.edu.itba.paw.service;
-
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeStatus;
-import ar.edu.itba.paw.service.digests.BuyDigest;
-import ar.edu.itba.paw.service.digests.SellDigest;
+package ar.edu.itba.paw.persistence;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public interface TradeService {
-
-    void executeTrade(BuyDigest buyDigest);
-    void executeTrade(SellDigest sellHelper);
-
-
+public interface TradeDao {
 
     void makeTrade(Trade.Builder trade);
     void updateStatus(int tradeId, TradeStatus status);
@@ -21,6 +11,5 @@ public interface TradeService {
     Optional<Trade> getTradeById(int tradeId);
     Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize);
     Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
-
 
 }

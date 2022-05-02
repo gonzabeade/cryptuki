@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -17,7 +17,6 @@ public class OfferFilter {
     private String username = null;
 
 
-    // Using the Optional<String> solves the defensive copy problem too
     public Collection<String> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
     }

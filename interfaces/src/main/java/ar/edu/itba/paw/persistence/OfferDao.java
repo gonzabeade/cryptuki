@@ -1,10 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.OfferFilter;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface OfferDao {
     int getOfferCount(OfferFilter filter);

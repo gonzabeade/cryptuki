@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
@@ -262,6 +263,19 @@ public class HomeController {
     @RequestMapping(value = "/test", method = { RequestMethod.POST })
     public ModelAndView test(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult) throws IOException {
         profilePicService.uploadProfilePicture("holachau", form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
+        return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = "/caca", method = { RequestMethod.GET })
+    public ModelAndView caca() {
+
+        Trade.Builder builder = new Trade.Builder(10, "gonzabeade")
+                .withQuantity(10)
+                .withTradeStatus(TradeStatus.OPEN);
+
+        tradeService.makeTrade(builder);
+        System.out.println(tradeService.getBuyingTradesByUsername("gonzabeade", 0, 100));
+
         return new ModelAndView("redirect:/");
     }
 

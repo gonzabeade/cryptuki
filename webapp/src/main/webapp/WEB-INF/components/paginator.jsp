@@ -1,13 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div>
-  <div class="absolute left-[37%] my-6">
-    <c:if  test="${param.activePage > 0}">
-      <a href="<c:url value="/?page=${param.activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
-    </c:if>
-  </div>
+
   <div class="flex flex-row mx-40 justify-center ">
     <c:choose>
       <c:when test="${param.pages > 0}">
+        <div class="my-auto">
+          <c:if  test="${param.activePage > 0}">
+            <a  onclick="addPageValue(${param.activePage - 1 })" href="#" class="font-bold font-sans text-polard ">Anterior</a>
+          </c:if>
+        </div>
         <c:forEach var = "i" begin = "${param.activePage - 1 < 0 ? param.activePage : param.activePage - 1 }" end = "${(param.activePage + 1 > param.pages - 1 )? param.pages - 1 : param.activePage + 1 }">
           <c:choose>
             <c:when test="${param.activePage == i }">
@@ -18,6 +19,11 @@
             </c:otherwise>
           </c:choose>
         </c:forEach>
+        <div class="my-auto">
+          <c:if test="${param.activePage < param.pages-1}">
+            <a   href="#" onclick="addPageValue(${param.activePage +1})" class="font-bold font-sans text-polard">Siguiente</a>
+          </c:if>
+        </div>
       </c:when>
       <c:otherwise>
         <div class="flex flex-col">
@@ -28,9 +34,5 @@
 
     </c:choose>
   </div>
-  <div class="absolute right-[37%] -mt-[50px]">
-    <c:if test="${param.activePage < param.pages-1}">
-      <a href="<c:url value="/?page=${param.activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
-    </c:if>
-  </div>
+
 </div>

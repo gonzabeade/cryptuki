@@ -69,7 +69,7 @@ public class HomeController {
 
         mav.addObject("offerList", offerService.getOfferBy(filter));
         int offerCount = offerService.countOffersBy(filter);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;;
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
@@ -97,6 +97,13 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos pendientes");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        int offerCount = 10;
+        int pageNumber = page.orElse(0);
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+
         return mav;
     }
     @RequestMapping(value = "/admin/assigned", method = RequestMethod.GET)
@@ -110,6 +117,13 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos Asignados a mí");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        int offerCount = 10;
+        int pageNumber = page.orElse(0);
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+
         return mav;
     }
     @RequestMapping(value = "/admin/solved", method = RequestMethod.GET)
@@ -123,6 +137,13 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos resueltos");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        int offerCount = 10;
+        int pageNumber = page.orElse(0);
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+
         return mav;
     }
     @RequestMapping(value = "/admin/profile")

@@ -1,4 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -20,13 +21,14 @@
     <jsp:param name="username" value="${username}"/>
   </jsp:include>
   <div class="flex flex-col ml-96 my-10 h-screen">
-    <h1 class="font-sans text-4xl font-bold"> Mis Reclamos</h1>
+    <h1 class="font-sans text-4xl font-bold">${title}</h1>
     <div class="flex flex-row mt-10 divide-x h-full">
       <jsp:include page="../../components/admin/filters.jsp"/>
       <div class="p-10">
         holaa
       </div>
     </div>
+
   </div>
 
 </div>

@@ -86,21 +86,42 @@ public class HomeController {
 
         return mav;
     }
-    @RequestMapping(value = "/admin")
-    public ModelAndView adminHome(final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/pending");
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public ModelAndView adminHome(@RequestParam(value = "page") final Optional<Integer> page,
+                                  @RequestParam(value = "fromDate", required = false) final String fromDate,
+                                  @RequestParam(value = "toDate", required = false) final String toDate,
+                                  @RequestParam(value = "offerId", required = false) final Double offerId,
+                                  @RequestParam(value = "tradeId", required = false) final Double tradeId,
+                                  @RequestParam(value = "username", required = false) final Double username,
+                                  final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        mav.addObject("title", "Reclamos pendientes");
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
-    @RequestMapping(value = "/admin/assigned")
-    public ModelAndView assignedComplaints(final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/assigned");
+    @RequestMapping(value = "/admin/assigned", method = RequestMethod.GET)
+    public ModelAndView assignedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
+                                           @RequestParam(value = "fromDate", required = false) final String fromDate,
+                                           @RequestParam(value = "toDate", required = false) final String toDate,
+                                           @RequestParam(value = "offerId", required = false) final Double offerId,
+                                           @RequestParam(value = "tradeId", required = false) final Double tradeId,
+                                           @RequestParam(value = "username", required = false) final Double username,
+                                           final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        mav.addObject("title", "Reclamos Asignados a mí");
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
-    @RequestMapping(value = "/admin/solved")
-    public ModelAndView solvedComplaints(final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/solved");
+    @RequestMapping(value = "/admin/solved", method = RequestMethod.GET)
+    public ModelAndView solvedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
+                                         @RequestParam(value = "fromDate", required = false) final String fromDate,
+                                         @RequestParam(value = "toDate", required = false) final String toDate,
+                                         @RequestParam(value = "offerId", required = false) final Double offerId,
+                                         @RequestParam(value = "tradeId", required = false) final Double tradeId,
+                                         @RequestParam(value = "username", required = false) final Double username,
+                                         final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        mav.addObject("title", "Reclamos resueltos");
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }

@@ -12,8 +12,6 @@ function resetAllFilters(){
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-
-
 }
 function addPageValue(value){
     var searchParams = new URLSearchParams(window.location.search)

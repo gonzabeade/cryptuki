@@ -113,9 +113,8 @@ public class HomeController {
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
     public ModelAndView modify(@PathVariable("offerId") final int offerId, @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-
-        if(!offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail())){
+        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
+        if(offer == null){
             return new ModelAndView("redirect:/errors");
         }
 
@@ -143,12 +142,21 @@ public class HomeController {
         if(errors.hasErrors()){
             return modify(offerId, form, authentication);
         }
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-        if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail()))){
+        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
+        if(offer == null){
             return new ModelAndView("redirect:/errors");
         }
         //offer.modify
         return new ModelAndView("redirect:/");
+    }
+    @RequestMapping(value = "/delete/{offerId}", method = RequestMethod.POST)
+    public ModelAndView delete(@PathVariable("offerId") final int offerId, final Authentication authentication){
+        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
+        if(offer == null){
+            return new ModelAndView("redirect:/errors");
+        }
+        //delete
+        return  new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
@@ -303,6 +311,14 @@ public class HomeController {
         }
         return new ModelAndView("views/ChangePasswordMailSent");
 
+    }
+
+    private Offer checkOfferPermissionAndGetOffer(int offerId, final Authentication authentication){
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
+        if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail()))){
+            return null;
+        }
+        return offer;
     }
 
 }

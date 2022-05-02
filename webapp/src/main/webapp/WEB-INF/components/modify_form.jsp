@@ -7,7 +7,7 @@
 <jsp:useBean id="selectedPayments" scope="request" type="java.util.ArrayList"/>
 <div class="flex flex-col">
 
-  <c:url value="${param.url}" var="postUrl"/>
+  <c:url value="${param.saveUrl}" var="postUrl"/>
   <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]" onsubmit="event.preventDefault(); preventMinMaxFromSubmitting();">
     <div class="flex flex-col justify-center">
       <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>

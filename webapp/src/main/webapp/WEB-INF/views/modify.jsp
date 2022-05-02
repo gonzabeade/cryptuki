@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -21,11 +22,18 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex">
-    <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar">Edita tu anuncio</h1>
+    <div class="flex flex-row mx-auto">
+        <h1 class="my-10 text-4xl font-semibold font-sans text-polar">Modifica tu anuncio </h1>
+        <c:url value="/delete/${offer.id}" var="deleteUrl"/>
+        <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
+            <button type="submit" class="bg-nred text-white text-center mx-auto p-3 rounded-md font-sans">Eliminar anuncio</button>
+        </form:form>
+    </div>
 </div>
+
 <c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
 <jsp:include page="../components/modify_form.jsp">
-    <jsp:param name="url" value="/modify/${offer.id}"/>
+    <jsp:param name="saveUrl" value="/modify/${offer.id}"/>
     <jsp:param name="selectedCrypto" value="${selectedCrypto}"/>
 
 </jsp:include>

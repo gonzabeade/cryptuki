@@ -16,7 +16,7 @@
                 <option disabled selected>Selecciona una opción</option>
                 <c:forEach var="coin" items="${cryptocurrencies}">
                     <form:option value="${coin.code}">
-                        <c:out value="${coin.name}"/>
+                        <c:out value="${coin.commercialName}"/>
                     </form:option>
                 </c:forEach>
             </form:select>

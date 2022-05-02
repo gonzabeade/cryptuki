@@ -1,33 +1,30 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
-import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
+import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
-import ar.edu.itba.paw.persistence.OfferFilter;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
-import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -41,19 +38,24 @@ public class HomeController {
     private final SupportService supportService;
     private final TradeService tradeService;
     private final PaymentMethodService paymentMethodService;
+    private final ProfilePicService profilePicService;
+
+    private final ComplainService complainService;
 
     private static final int PAGE_SIZE = 3;
 
 
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService) {
+    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService, ProfilePicService profilePicService, ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.tradeService = tradeService;
         this.paymentMethodService = paymentMethodService;
+        this.profilePicService = profilePicService;
+        this.complainService = complainService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -137,6 +139,7 @@ public class HomeController {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
         final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
+
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
         return mav;
@@ -158,18 +161,7 @@ public class HomeController {
             return uploadOffer(form,authentication);
         }
 
-        Offer.Builder builder = Offer.builder(
-                us.getUserInformation(authentication.getName()).get(),
-                cryptocurrencyService.getCryptocurrency(form.getCryptocurrency()),
-                form.getPrice()
-        );
-
-        for (String x: form.getPaymentMethods()) {
-            builder.paymentMethod(paymentMethodService.getPaymentMethodByCode(x).get());
-        }
-
-        builder.quantity(form.getMinAmount());
-        Offer offer = offerService.makeOffer(builder);
+        offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
 
         ModelAndView mav = new ModelAndView("redirect:/");
         mav.addObject("username", authentication == null ? null : authentication.getName());
@@ -190,13 +182,8 @@ public class HomeController {
         if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
             return registerGet(form);
         }
-        Optional<User> maybeUser;
-        //TODO: do not pass UserAuth.Builder, User.Builder
         try{
-            maybeUser = us.registerUser( new UserAuth.Builder(form.getUsername(), form.getPassword()).role("seller") ,
-                    User.builder().email(form.getEmail()).phoneNumber(form.getPhoneNumber())
-            );
-
+            us.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         }
         catch(Exception e ){
                 errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
@@ -263,5 +250,35 @@ public class HomeController {
         return new ModelAndView("views/ChangePasswordMailSent");
 
     }
+
+
+    @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
+    public ResponseEntity<byte[]> imageGet(@PathVariable final String username){
+
+        Image image = profilePicService.getProfilePicture(username).orElseThrow( () -> new RuntimeException("Unknown user"));
+        return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
+    }
+
+
+    @RequestMapping(value="/test", method = {RequestMethod.GET})
+    public ModelAndView testGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
+        return new ModelAndView("views/upload_picture");
+    }
+
+    @RequestMapping(value = "/test", method = { RequestMethod.POST })
+    public ModelAndView test(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult) throws IOException {
+        profilePicService.uploadProfilePicture("holachau", form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
+        return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = "/caca", method = { RequestMethod.GET })
+    public ModelAndView caca() {
+
+        complainService.updateComplainStatus(8, ComplainStatus.ASSIGNED);
+        complainService.updateModerator(8, "gonzabeade");
+        complainService.updateModeratorComment(8, "Solucionando!!");
+        return new ModelAndView("redirect:/");
+    }
+
 
 }

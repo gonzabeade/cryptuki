@@ -15,14 +15,13 @@
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
-
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/4">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>
-                <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.name}"/>" class="w-20 h-20 mx-auto">
-                <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.name}"/></h1>
+                <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
+                <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
                 <div class="flex flex-row mt-3 font-sans ">
                     <h2 class="font-sans mx-2"><b>Mínimo:</b> 100 BTC </h2>

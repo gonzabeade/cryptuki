@@ -2,18 +2,18 @@ package ar.edu.itba.paw.persistence;
 
 public final class Role {
 
-    private Integer id;
-    private String desc;
+    private int id;
+    private String description;
 
-    protected Role(int id, String desc) {
+    protected Role(int id, String description) {
         this.id = id;
-        this.desc = desc;
+        this.description = description;
     }
 
     public int getId() {
         return id;
     }
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 }

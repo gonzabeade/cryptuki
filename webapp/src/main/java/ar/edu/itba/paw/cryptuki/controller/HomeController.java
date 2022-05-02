@@ -25,8 +25,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
@@ -82,6 +85,7 @@ public class HomeController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("userEmail", us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail());
 
         return mav;
     }
@@ -107,7 +111,41 @@ public class HomeController {
         return mav;
 
     }
+    @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
+    public ModelAndView modify(HttpServletRequest request, @PathVariable("offerId") final int offerId, @ModelAttribute("modifyForm") final UploadOfferForm form, final Authentication authentication){
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
 
+        if(offer.getSeller().getEmail().equals(authentication.getName())){
+            return new ModelAndView("redirect:/errors");
+        }
+
+        ModelAndView mav = new ModelAndView("views/modify");
+
+        form.setMinAmount(offer.getCoinAmount());
+        form.setMaxAmount(offer.getCoinAmount());
+        form.setCryptocurrency(offer.getCrypto().getName());
+        ArrayList<String> pm = new ArrayList<>();
+        offer.getPaymentMethods().forEach((paymentMethod -> pm.add(paymentMethod.getName())));
+        form.setPaymentMethods((String[]) pm.toArray());
+        form.setPrice(offer.getAskingPrice());
+
+        mav.addObject("offer", offer);
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+
+        return mav;
+    }
+    @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.POST)
+    public ModelAndView modify(HttpServletRequest request, @PathVariable("offerId") final int offerId,  @Valid @ModelAttribute("modifyForm") final UploadOfferForm form, final Authentication authentication, final BindingResult errors){
+        if(errors.hasErrors()){
+            return modify(request, offerId, form, authentication);
+        }
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
+        if(!(request.isUserInRole("ROLE_ADMIN") || (offer.getSeller().getEmail().equals(authentication.getName())))){ //TODO-Cambiar a Username
+            return new ModelAndView("redirect:/errors");
+        }
+        //offer.modify
+        return new ModelAndView("redirect:/");
+    }
 
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication){
@@ -180,8 +218,7 @@ public class HomeController {
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
     public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
-        ModelAndView mav =  new ModelAndView("views/register");
-        return mav;
+        return new ModelAndView("views/register");
     }
 
 

@@ -28,10 +28,7 @@
 							<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">
 							</c:forEach>
 						</div>
-
-
 					</div>
-
 				</div>
 				<div class="flex basis-1/4 justify-center">
 					<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">

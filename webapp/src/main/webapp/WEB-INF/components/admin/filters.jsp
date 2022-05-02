@@ -1,7 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div class="flex flex-col mx-auto px-10">
+<div class="flex flex-col px-10 w-1/3">
     <h1 class="font-sans text-2xl font-bold">Filtros</h1>
     <div class="flex flex-col mt-7">
         <label for="fromDate" >Desde</label>

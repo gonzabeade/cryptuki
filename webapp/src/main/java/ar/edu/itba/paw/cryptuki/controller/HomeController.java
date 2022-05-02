@@ -96,6 +96,7 @@ public class HomeController {
                                   final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos pendientes");
+        mav.addObject("baseUrl", "/admin");
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
         int offerCount = 10;
@@ -117,6 +118,7 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos Asignados a mí");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("baseUrl", "/admin/assigned");
 
         int offerCount = 10;
         int pageNumber = page.orElse(0);
@@ -137,7 +139,7 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         mav.addObject("title", "Reclamos resueltos");
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
+        mav.addObject("baseUrl", "/admin/solved");
         int offerCount = 10;
         int pageNumber = page.orElse(0);
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

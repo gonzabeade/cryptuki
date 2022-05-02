@@ -23,7 +23,9 @@
   <div class="flex flex-col ml-96 my-10 h-screen w-screen">
     <h1 class="font-sans text-4xl font-bold">${title}</h1>
     <div class="flex flex-row mt-10 divide-x h-full">
-      <jsp:include page="../../components/admin/filters.jsp"/>
+      <jsp:include page="../../components/admin/filters.jsp">
+        <jsp:param name="baseUrl" value="${baseUrl}"/>
+      </jsp:include>
       <div class="p-10 w-2/3  flex flex-col">
          <jsp:include page="../../components/admin/card_complaint.jsp"/>
         <jsp:include page="../../components/paginator.jsp">

@@ -28,8 +28,9 @@ import java.util.*;
 public class OfferJdbcDaoTest {
 
     private static final String OFFER_TABLE = "offer";
+    private static final String OFFER_VIEW = "offer_complete";
     private static final String STATUS_CODE = "APR";
-    private static final int OFFER_COUNT = 4;
+    private static final int OFFER_COUNT = 3;
     private static final int TESTING_OFFER_INDEX = 2;
     private static final int TESTING_FILTER_INDEX= 0;
 
@@ -71,7 +72,7 @@ public class OfferJdbcDaoTest {
                         22.2).quantity(10).build()
         ));
 
-        testingFitler = new OfferFilter().byOfferId(0);
+        testingFitler = new OfferFilter();
         testingFitler.close();
 
     }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -38,12 +40,14 @@ public class HomeController {
     private final PaymentMethodService paymentMethodService;
     private final ProfilePicService profilePicService;
 
+    private final ComplainService complainService;
+
     private static final int PAGE_SIZE = 3;
 
 
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService, ProfilePicService profilePicService) {
+    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService, ProfilePicService profilePicService, ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
@@ -51,6 +55,7 @@ public class HomeController {
         this.tradeService = tradeService;
         this.paymentMethodService = paymentMethodService;
         this.profilePicService = profilePicService;
+        this.complainService = complainService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -269,13 +274,9 @@ public class HomeController {
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
 
-        Trade.Builder builder = new Trade.Builder(10, "gonzabeade")
-                .withQuantity(10)
-                .withTradeStatus(TradeStatus.OPEN);
-
-        tradeService.makeTrade(builder);
-        System.out.println(tradeService.getBuyingTradesByUsername("gonzabeade", 0, 100));
-
+        complainService.updateComplainStatus(8, ComplainStatus.ASSIGNED);
+        complainService.updateModerator(8, "gonzabeade");
+        complainService.updateModeratorComment(8, "Solucionando!!");
         return new ModelAndView("redirect:/");
     }
 

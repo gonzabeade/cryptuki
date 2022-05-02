@@ -9,12 +9,12 @@ public class ComplainFilter {
 
     private final int page;
     private final int pageSize;
-    private final Optional<String> complainerUsername;
-    private final Optional<ComplainStatus> complainStatus;
-    private final Optional<String> moderatorUsername;
-    private final Optional<Integer> tradeId;
+    private final String complainerUsername;
+    private final ComplainStatus complainStatus;
+    private final String moderatorUsername;
+    private final Integer tradeId;
 
-    private final Optional<Integer> complainId;
+    private final Integer complainId;
 
 
     public static final class Builder {
@@ -70,11 +70,11 @@ public class ComplainFilter {
     private ComplainFilter(Builder builder) {
         this.page = builder.page;
         this.pageSize = builder.pageSize;
-        this.complainerUsername = Optional.ofNullable(builder.complainerUsername);
-        this.moderatorUsername = Optional.ofNullable(builder.moderatorUsername);
-        this.tradeId = Optional.ofNullable(builder.tradeId);
-        this.complainStatus = Optional.ofNullable(builder.complainStatus);
-        this.complainId = Optional.ofNullable(builder.complainId);
+        this.complainerUsername = builder.complainerUsername;
+        this.moderatorUsername = builder.moderatorUsername;
+        this.tradeId = builder.tradeId;
+        this.complainStatus = builder.complainStatus;
+        this.complainId = builder.complainId;
     }
 
     public int getPage() {
@@ -85,23 +85,23 @@ public class ComplainFilter {
         return pageSize;
     }
 
-    public Optional<String> getComplainerUsername() {
+    public String getComplainerUsername() {
         return complainerUsername;
     }
 
-    public Optional<ComplainStatus> getComplainStatus() {
+    public ComplainStatus getComplainStatus() {
         return complainStatus;
     }
 
-    public Optional<String> getModeratorUsername() {
+    public String getModeratorUsername() {
         return moderatorUsername;
     }
 
-    public Optional<Integer> getTradeId() {
+    public Integer getTradeId() {
         return tradeId;
     }
 
-    public Optional<Integer> getComplainId() {
+    public Integer getComplainId() {
         return complainId;
     }
 }

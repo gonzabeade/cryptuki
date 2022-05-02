@@ -34,13 +34,12 @@ public class TradeDaoImpl implements TradeDao {
     }
 
     @Override
-    public void makeTrade(Trade.Builder trade) {
-
+    public void makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
         final MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("offer_id", trade.getOfferId())
-                .addValue("buyer_uname", trade.getBuyerUsername())
-                .addValue("status", trade.getStatus().toString())
-                .addValue("quantity", trade.getQuantity());
+                .addValue("offer_id", offerId)
+                .addValue("buyer_uname", buyerUsername)
+                .addValue("status", status.toString())
+                .addValue("quantity", quantity);
 
 
         final String query = "INSERT INTO trade (offer_id, buyer_id, start_date, status, quantity) VALUES ( :offer_id,\n" +
@@ -48,6 +47,11 @@ public class TradeDaoImpl implements TradeDao {
                 "        NOW(), :status, :quantity)";
 
         namedJdbcTemplate.update(query, map);
+    }
+
+    @Override
+    public void makeTrade(Trade.Builder builder) {
+        makeTrade(builder.getTradeId(), builder.getBuyerUsername(), builder.getQuantity(), builder.getStatus());
     }
 
     @Override

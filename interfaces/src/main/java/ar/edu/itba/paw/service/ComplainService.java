@@ -1,9 +1,12 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.persistence.ComplainStatus;
+
 import java.util.Collection;
 
-public interface ComplainDao {
+public interface ComplainService {
 
     Collection<Complain> getComplainsBy(ComplainFilter filter);
     int countComplainsBy(ComplainFilter filter);
@@ -13,5 +16,4 @@ public interface ComplainDao {
     void updateComplainStatus(int complainId, ComplainStatus complainStatus);
     void updateModerator(int complainId, String username);
     void updateModeratorComment(int complain, String comments);
-
 }

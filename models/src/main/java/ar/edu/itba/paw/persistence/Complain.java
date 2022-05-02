@@ -10,20 +10,32 @@ public final class Complain {
     private final Optional<String> complainerComments;
     private final Optional<String> moderatorUsername;
     private final Optional<String> moderatorComments;
+    private final Optional<Integer> tradeId;
 
     public static class Builder {
 
-        private final int complainId;
         private final String complainerUsername;
 
+        private Integer tradeId;
         private ComplainStatus status = ComplainStatus.PENDING;
         private String complainerComments;
         private String moderatorUsername;
         private String moderatorComments;
+        private Integer complainId;
 
-        public Builder(int complainId, String complainerUsername) {
-            this.complainId = complainId;
+
+        public Builder(String complainerUsername) {
             this.complainerUsername = complainerUsername;
+        }
+
+        public Builder withComplainId(int complainId) {
+            this.complainId = complainId;
+            return this;
+        }
+
+        public Builder withTradeId(int tradeId) {
+            this.tradeId = tradeId;
+            return this;
         }
 
 
@@ -62,6 +74,7 @@ public final class Complain {
         public String getComplainerComments() {
             return complainerComments;
         }
+        public Integer getTradeId() {return tradeId; }
 
         protected Complain build() {
             return new Complain(this);
@@ -75,6 +88,7 @@ public final class Complain {
         this.status = builder.status;
         this.moderatorUsername = Optional.ofNullable(builder.getModerator());
         this.moderatorComments = Optional.ofNullable(builder.moderatorComments);
+        this.tradeId = Optional.ofNullable(builder.tradeId);
     }
 
     public int getComplainId() {
@@ -99,5 +113,18 @@ public final class Complain {
 
     public Optional<String> getModeratorComments() {
         return moderatorComments;
+    }
+
+    @Override
+    public String toString() {
+        return "Complain{" +
+                "complainId=" + complainId +
+                ", status=" + status +
+                ", complainerUsername='" + complainerUsername + '\'' +
+                ", complainerComments=" + complainerComments +
+                ", moderatorUsername=" + moderatorUsername +
+                ", moderatorComments=" + moderatorComments +
+                ", tradeId=" + tradeId +
+                '}';
     }
 }

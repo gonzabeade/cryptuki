@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -24,8 +25,8 @@
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
                 <div class="flex flex-row mt-3 font-sans ">
-                    <h2 class="font-sans mx-2"><b>Mínimo:</b> ${offer.minQuantity * offer.askingPrice} ARS </h2>
-                    <h2 class="font-sans"> <b>Máximo:</b> ${offer.maxQuantity * offer.askingPrice} ARS </h2>
+                    <h2 class="font-sans mx-2"><b>Mínimo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.minQuantity}"/> ARS </h2>
+                    <h2 class="font-sans"> <b>Máximo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.maxQuantity}"/> ARS </h2>
                 </div>
             </div>
         </div>
@@ -34,7 +35,6 @@
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.askingPrice}"/>
-                <jsp:param name="min" value="${offer.askingPrice}"/>
             </jsp:include>
         </div>
     </div>

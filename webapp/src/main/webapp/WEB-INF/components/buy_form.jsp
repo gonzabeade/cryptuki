@@ -7,14 +7,7 @@
     <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.OfferBuyForm"--%>
     <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post" class="flex flex-col">
 
-        <div class="flex flex-col justify-center mt-3">
-            <form:errors path="email" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Correo electrónico *</form:label>
-            <div class="flex-row justify-center mx-auto">
-                <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3 " placeholder="roman@gmail.com"/>
-            </div>
-        </div>
-
+        <input type="hidden" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>

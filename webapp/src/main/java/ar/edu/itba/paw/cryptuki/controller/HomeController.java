@@ -116,7 +116,10 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/buy_offer");
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication == null ? null : authentication.getName());
+        if( authentication != null ){
+            mav.addObject("username", authentication == null ? null : authentication.getName());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        }
 
         return mav;
 

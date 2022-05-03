@@ -4,9 +4,9 @@ public final class BuyDigest {
     private final int offerId;
     private final String comments;
     private final String buyerEmail;
-    private final int amount;
+    private final double amount;
 
-    public BuyDigest(int offerId, String buyerEmail, String comments, int amount) {
+    public BuyDigest(int offerId, String buyerEmail, String comments, double amount) {
         this.offerId = offerId;
         this.comments = comments;
         this.buyerEmail = buyerEmail;
@@ -22,7 +22,7 @@ public final class BuyDigest {
     public String getBuyerEmail() {
         return buyerEmail;
     }
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 }

@@ -43,21 +43,28 @@
                     <h1 class="text-center text-3xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
-            <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h1 class="mx-2">Depositale al vendedor</h1>
-            </div>
-            <form:form  modelAttribute="tradeForm" action="/" method="post">
+            <c:url value="/trade" var="postUrl"/>
+            <form:form  modelAttribute="tradeForm" action="${postUrl}" method="post">
                 <form:hidden path="amount" value="${amount / offer.askingPrice }"/>
-                <form:input  cssClass="rounded-lg p-3" type="text" path="wallet"/>
+                <form:hidden path="offerId" value="${ offer.id}"/>
+                <div class="flex flex-col mx-auto mt-7">
+                    <form:errors for="wallet" cssClass="text-red-400"/>
+                    <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto">Pega la dirección donde querés recibir los ${offer.crypto.code}</form:label>
+                    <form:input  cssClass="rounded-lg p-3 mx-auto" type="text" path="wallet"/>
+                </div>
+                <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h1 class="mx-2 text-lg my-auto">Depositale al vendedor</h1>
+                </div>
                 <div class="flex flex-row justify-between">
                     <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar trade</a>
-                    <button class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Tuve un problema</button>
                     <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit">Ya le pague</button>
+                    <a class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/contact"/>">Tuve un problema</a>
                 </div>
             </form:form>
+
 
 
         </div>

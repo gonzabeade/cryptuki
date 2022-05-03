@@ -89,7 +89,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
         ModelAndView mav =  new ModelAndView("views/contact");
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
@@ -129,20 +129,31 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form,authentication);
         }
-        tradeService.executeTrade(form.toDigest());
+        //tradeService.executeTrade(form.toDigest());
+        TradeForm tradeForm =  new TradeForm();
+        tradeForm.setAmount(form.getAmount());
+        tradeForm.setOfferId(form.getOfferId());
+
+        return executeTrade(tradeForm, authentication);
+
+    }
+    @RequestMapping(value="/trade", method = RequestMethod.GET)
+    public ModelAndView executeTrade(final TradeForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/trade");
+        mav.addObject("tradeForm", form);
         mav.addObject("offer", offerService.getOfferById(form.getOfferId()).get());
         mav.addObject("amount", form.getAmount());
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
         return mav;
-
     }
-    @RequestMapping(value = "/completed_transaction", method = RequestMethod.POST)
-    public ModelAndView executeTransaction(TradeForm form, BindingResult errors){
+    @RequestMapping(value = "/trade", method = RequestMethod.POST)
+    public ModelAndView executeTradePost(@Valid @ModelAttribute("tradeForm")  final TradeForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return null;
+            return executeTrade(form,authentication);
         }
+        //persist transaction
+        //trade(form.offerId(), form.wallet(), form.amount()
+        //send mail with buyers info
         return new ModelAndView("redirect:/");
     }
 

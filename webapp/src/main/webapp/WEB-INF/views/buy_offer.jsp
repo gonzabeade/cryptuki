@@ -42,6 +42,8 @@
     <div class="flex flex-row justify-center">
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
+            <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
+            <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
         </jsp:include>
     </div>
 </div>

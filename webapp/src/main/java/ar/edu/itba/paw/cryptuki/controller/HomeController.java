@@ -83,8 +83,10 @@ public class HomeController {
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("userEmail", us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail());
+        if(authentication != null){
+            mav.addObject("username",  authentication.getName());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        }
 
         return mav;
     }
@@ -145,7 +147,7 @@ public class HomeController {
         if(offer == null){
             return new ModelAndView("redirect:/errors");
         }
-        //offer.modify
+        offerService.modifyOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
         return new ModelAndView("redirect:/");
     }
     @RequestMapping(value = "/delete/{offerId}", method = RequestMethod.POST)
@@ -154,7 +156,7 @@ public class HomeController {
         if(offer == null){
             return new ModelAndView("redirect:/errors");
         }
-        //delete
+        offerService.deleteOffer(offerId);
         return  new ModelAndView("redirect:/");
     }
 

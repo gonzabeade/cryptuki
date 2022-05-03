@@ -16,6 +16,10 @@ import java.util.Collection;
 
 @Component
 public class CryptukiUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserService userService;
+
     private static class UserDetailsImpl extends org.springframework.security.core.userdetails.User{
         private boolean enabled;
         public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
@@ -27,8 +31,7 @@ public class CryptukiUserDetailsService implements UserDetailsService {
             return this.enabled;
         }
     }
-    @Autowired
-    private UserService userService;
+
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final UserAuth userAuth = userService.getUserByUsername(username).orElseThrow( ()-> new UsernameNotFoundException(""));

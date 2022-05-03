@@ -15,19 +15,17 @@ public class RoleJdbcDao implements RoleDao{
     private JdbcTemplate jdbcTemplate;
 
     private static final RowMapper<Role> ROLE_ROW_MAPPER = ((resultSet, i) ->
-            new Role(resultSet.getInt("id"),resultSet.getString("description")) );
+            new Role(resultSet.getInt("id"),resultSet.getString("description")));
 
     @Autowired
     public RoleJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
     @Override
     public Optional<Role> getRoleByDescription(String description) {
-        String query ="SELECT * FROM user_role WHERE description = ?";
-        List<Role> roles = jdbcTemplate.query(query,ROLE_ROW_MAPPER,description);
-        return roles.isEmpty() ? Optional.empty() : Optional.of(roles.get(0))  ;
-
+        final String query ="SELECT * FROM user_role WHERE description = ?";
+        Role role = jdbcTemplate.queryForObject(query, ROLE_ROW_MAPPER, description);
+        return Optional.ofNullable(role);
     }
 }

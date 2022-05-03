@@ -131,6 +131,8 @@ public class HomeController {
         }
         tradeService.executeTrade(form.toDigest());
         ModelAndView mav = new ModelAndView("views/trade");
+        mav.addObject("offer", offerService.getOfferById(form.getOfferId()).get());
+        mav.addObject("amount", form.getAmount());
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
         return mav;

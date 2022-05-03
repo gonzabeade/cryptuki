@@ -30,21 +30,9 @@ public class UploadOfferForm {
     @Size(min = 1)
     private String[] paymentMethods;
 
-    @Size(max = 40)
-    private String location;
-
     public Double getMinAmount() {
         return minAmount;
     }
-
-    public String getLocation(){
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
 
     public void setMinAmount(Double minAmount) {
         this.minAmount = minAmount;

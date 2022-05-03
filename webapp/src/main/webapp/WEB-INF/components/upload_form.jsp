@@ -57,8 +57,6 @@
             </div>
 
         </div>
-
-
         <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Medios de Pago*</form:label>
@@ -74,21 +72,6 @@
                  </c:forEach>
             </div>
         </div>
-        <div class="flex flex-col justify-center mt-6">
-            <form:errors path="location" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Ubicación</form:label>
-            <div class="flex flex-row justify-center mx-auto">
-                <form:select path="location" class="rounded-lg p-3">
-                    <option disabled selected>Selecciona una opción</option>
-                    <c:forEach var="coin" items="${cryptocurrencies}">
-                        <form:option value="${coin.code}">
-                            <c:out value="${coin.commercialName}"/>
-                        </form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-        </div>
-
         <div class="flex flex-row p-5 mx-60 mt-10">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
             <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>

@@ -48,7 +48,7 @@
                 <form:hidden path="amount" value="${amount / offer.askingPrice }"/>
                 <form:hidden path="offerId" value="${ offer.id}"/>
                 <div class="flex flex-col mx-auto mt-7">
-                    <form:errors for="wallet" cssClass="text-red-400"/>
+                    <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>
                     <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto">Pega la dirección donde querés recibir los ${offer.crypto.code}</form:label>
                     <form:input  cssClass="rounded-lg p-3 mx-auto" type="text" path="wallet"/>
                 </div>

@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -154,6 +155,29 @@ public class HomeController {
         //persist transaction
         //trade(form.offerId(), form.wallet(), form.amount()
         //send mail with buyers info
+        int tradeId= 2;
+        return receipt(tradeId,authentication);
+    }
+    @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
+    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/receipt");
+        Optional<Trade> trade = tradeService.getTradeById(tradeId);
+
+        if(!trade.isPresent()){
+            return null;
+        }
+
+        mav.addObject("trade" , trade.get());
+        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()));
+
+        if(authentication != null){
+            mav.addObject("username", authentication.getName());
+        }
+
+        //persist transaction
+        //trade(form.offerId(), form.wallet(), form.amount()
+        //send mail with buyers info
+
         return new ModelAndView("redirect:/");
     }
 

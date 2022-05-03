@@ -7,7 +7,7 @@
     <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.OfferBuyForm"--%>
     <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post" class="flex flex-col">
 
-        <input type="hidden" value="${param.userEmail}">
+        <input type="hidden" name="email"  id="email" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>

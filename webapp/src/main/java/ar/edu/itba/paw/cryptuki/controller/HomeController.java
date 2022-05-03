@@ -130,7 +130,7 @@ public class HomeController {
             return buyOffer(form.getOfferId(), form,authentication);
         }
         tradeService.executeTrade(form.toDigest());
-        ModelAndView mav = new ModelAndView("redirect:/");
+        ModelAndView mav = new ModelAndView("views/trade");
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
         return mav;

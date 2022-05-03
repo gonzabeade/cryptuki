@@ -76,7 +76,7 @@
         </div>
         <div class="flex flex-col justify-center mt-6">
             <form:errors path="location" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Ubicación*</form:label>
+            <form:label  path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Ubicación</form:label>
             <div class="flex flex-row justify-center mx-auto">
                 <form:select path="location" class="rounded-lg p-3">
                     <option disabled selected>Selecciona una opción</option>

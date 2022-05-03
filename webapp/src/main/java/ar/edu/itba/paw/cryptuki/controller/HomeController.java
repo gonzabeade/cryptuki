@@ -138,6 +138,13 @@ public class HomeController {
         return mav;
 
     }
+    @RequestMapping(value = "/completed_transaction", method = RequestMethod.POST)
+    public ModelAndView executeTransaction(TradeForm form, BindingResult errors){
+        if(errors.hasErrors()){
+            return null;
+        }
+        return new ModelAndView("redirect:/");
+    }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView coins(final Authentication authentication) {

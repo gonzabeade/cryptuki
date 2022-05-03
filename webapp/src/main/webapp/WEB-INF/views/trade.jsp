@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -48,11 +49,16 @@
                 </svg>
                 <h1 class="mx-2">Depositale al vendedor</h1>
             </div>
-            <div class="flex flex-row justify-between">
-                <button class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar trade</button>
-                <button class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Tuve un problema</button>
-                <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Ya le pague</button>
-            </div>
+            <form:form  modelAttribute="tradeForm" action="/" method="post">
+                <form:hidden path="amount" value="${amount / offer.askingPrice }"/>
+                <form:input  cssClass="rounded-lg p-3" type="text" path="wallet"/>
+                <div class="flex flex-row justify-between">
+                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar trade</a>
+                    <button class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Tuve un problema</button>
+                    <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit">Ya le pague</button>
+                </div>
+            </form:form>
+
 
         </div>
     </div>

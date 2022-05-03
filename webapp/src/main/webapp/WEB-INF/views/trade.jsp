@@ -77,14 +77,6 @@
         </jsp:include>
     </div>
 </div>
-
-
-
-
-
-
-
-
 </body>
 </html>
 

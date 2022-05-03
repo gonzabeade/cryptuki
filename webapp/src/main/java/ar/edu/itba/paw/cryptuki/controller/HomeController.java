@@ -152,9 +152,15 @@ public class HomeController {
         if(errors.hasErrors()){
             return executeTrade(form,authentication);
         }
-        //persist transaction
-        //trade(form.offerId(), form.wallet(), form.amount()
-        //send mail with buyers info
+        Offer offer = offerService.getOfferById(form.getOfferId()).get();
+        //inserto el trade
+//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(), authentication.getName())
+//                .withTradeStatus(TradeStatus.OPEN)
+//                .withQuantity(form.getAmount())
+//                .withSellerUsername(offer.getSeller().getUsername());
+//        );
+        //restarle el amount
+        //mandarle los datos  del comprador al vendedor
         int tradeId= 2;
         return receipt(tradeId,authentication);
     }
@@ -168,7 +174,7 @@ public class HomeController {
         }
 
         mav.addObject("trade" , trade.get());
-        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()));
+        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
 
         if(authentication != null){
             mav.addObject("username", authentication.getName());
@@ -178,7 +184,7 @@ public class HomeController {
         //trade(form.offerId(), form.wallet(), form.amount()
         //send mail with buyers info
 
-        return new ModelAndView("redirect:/");
+        return mav;
     }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/

@@ -22,7 +22,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="#A3BE8C" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
         </svg>
-        <h1>Listo</h1>
+        <h1>Listo!</h1>
     </div>
     <div class="flex flex-row justify-center">
         <jsp:include page="../components/seller_info.jsp">

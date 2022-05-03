@@ -5,7 +5,7 @@
 
 <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded" class=" py-12 px-64 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
   <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="logIn"/></h1>
-  <c:if test="${param.error}"><h2 class="flex flex-col mx-auto text-red-400"><messages:message code="userOrPaswordIncorrect"/></h2></c:if>
+  <c:if test="${param.error}"><h2 class="flex flex-col mx-auto text-red-400"><messages:message code="userOrPasswordIncorrect"/></h2></c:if>
   <div class="flex flex-col mx-5 my-4">
     <label for="username" class="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="user"/></label>
     <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="e.g juanperez"/>
@@ -24,6 +24,6 @@
   </div>
   <div class="flex flex-col mx-auto my-10" >
     <input type="submit" value="Iniciar sesión" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
-    <a href="<c:url value="/register"/>" class=" underline text-polard text-center mt-2"><messages:message code="noAccount"/><messages:message code="register"/></a>
+    <a href="<c:url value="/register"/>" class=" underline text-polard text-center mt-2"><messages:message code="noAccount"/> <messages:message code="register"/></a>
   </div>
 </form>

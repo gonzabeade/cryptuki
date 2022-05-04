@@ -39,7 +39,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
                 <div class="flex flex-col mx-10">
-                    <h1 class="text-center">Recibis</h1>
+                    <h1 class="text-center">Recibes</h1>
                     <h1 class="text-center text-3xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     <h1 class="mx-2 text-lg my-auto">Depositale al vendedor</h1>
                 </div>
                 <div class="flex flex-row justify-between">
-                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar trade</a>
+                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar trade</a>
                     <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit">Ya le pague</button>
                     <a class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/contact"/>">Tuve un problema</a>
                 </div>

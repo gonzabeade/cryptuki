@@ -12,7 +12,7 @@
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>
             <div class="flex flex-col justify-center mx-auto">
-                <form:input type="number" path="amount" class="h-10 justify-center rounded-lg p-3 mx-5"/>
+                <form:input type="number" path="amount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".01"/>
                 <div class="flex flex-row mx-auto">
                     <h1 class="my-auto" id="coinAmount">~0.00000</h1>
                     <p class="my-auto mx-2 font-semibold"><c:out value="${param.coin}"/> </p>

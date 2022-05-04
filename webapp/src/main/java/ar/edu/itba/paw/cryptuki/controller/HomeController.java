@@ -157,11 +157,7 @@ public class HomeController {
                 .withTradeStatus(TradeStatus.OPEN)
                 .withQuantity(form.getAmount())
                 .withSellerUsername("mdedeu"));
-//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(), authentication.getName())
-//                .withTradeStatus(TradeStatus.OPEN)
-//                .withQuantity(form.getAmount())
-//                .withSellerUsername(offer.getSeller().getUsername());
-//        );
+
         //restarle el amount
         //mandarle los datos  del comprador al vendedor
         int tradeId= 2;
@@ -182,11 +178,6 @@ public class HomeController {
         if(authentication != null){
             mav.addObject("username", authentication.getName());
         }
-
-        //persist transaction
-        //trade(form.offerId(), form.wallet(), form.amount()
-        //send mail with buyers info
-
         return mav;
     }
 

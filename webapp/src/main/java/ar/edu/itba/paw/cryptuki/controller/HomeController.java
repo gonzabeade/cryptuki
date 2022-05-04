@@ -234,7 +234,7 @@ public class HomeController {
 
     @RequestMapping(value="/passwordRecovery")
     public ModelAndView passwordSendMailGet(@Valid @ModelAttribute("EmailForm") EmailForm form){
-        return new ModelAndView("views/ChangePassword");
+        return new ModelAndView("/views/passwordRecovery");
     }
 
     @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
@@ -296,6 +296,52 @@ public class HomeController {
         mav.addObject("tradeList",tradeList);
         return mav;
     }
+
+
+    @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
+    public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/changePassword");
+        mav.addObject(authentication.getName());
+        return mav;
+    }
+
+    @RequestMapping(value="/changePassword", method = {RequestMethod.POST})
+    public ModelAndView changePassword(@ModelAttribute("changePasswordForm") changePasswordForm form, BindingResult bindingResult, Authentication authentication){
+        if(bindingResult.hasErrors())
+            changePasswordGet(new changePasswordForm(),authentication);
+
+        //check current password.
+        us.changePassword(form.getOldPassword(), form.getPassword(), form.getRepeatPassword());
+        SecurityContextHolder.clearContext();
+        return new ModelAndView("redirect:/logout");
+    }
+
+
+    @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
+    public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
+        ModelAndView mav = new ModelAndView("views/recoverPassword");
+        mav.addObject("username",username);
+        mav.addObject("code",code);
+        return mav;
+    }
+
+
+    @RequestMapping(value ="/recoverPassword", method = {RequestMethod.POST})
+    public ModelAndView recoverPasswordGet(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return recoverPasswordGet(new recoverPasswordForm(),form.getUsername(), form.getCode());
+        us.changePassword(form.getUsername(), form.getCode(), form.getPassword());
+
+
+        UserAuth user = us.getUserByUsername(form.getUsername()).orElseThrow(RuntimeException::new);
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(form.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return new ModelAndView("redirect:/");
+
+    }
+
+
 
 
 

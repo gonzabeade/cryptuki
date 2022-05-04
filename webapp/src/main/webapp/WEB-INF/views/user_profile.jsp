@@ -26,7 +26,7 @@
         <img src="<c:url value="/profilepic/${username}"/>"  class=" shadow rounded-full" />
       </div>
     <div class="flex basis-1/4 justify-center">
-      <a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/profilePicSelector" />">
+      <a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/profilePicSelector"/>">
         Editar foto de perfil
       </a>
     </div>
@@ -59,7 +59,7 @@
     </div>
   </div>
   <div class="flex justify-between mb-30" >
-    <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cambiar contraseña</button>
+    <a href="<c:url value="/changePassword"/>" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cambiar contraseña</a>
   </div>
 </div>
   <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Ultimas transacciones: </h2>

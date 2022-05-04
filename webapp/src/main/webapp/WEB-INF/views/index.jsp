@@ -30,7 +30,7 @@
     <div class="flex flex-col my-auto mx-3">
         <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected><messages:message code="choseAnOption"/></option>
+            <option disabled selected><messages:message code="chooseAnOption"/></option>
             <c:forEach items="${cryptocurrencies}" var="coin">
                 <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
@@ -39,7 +39,7 @@
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center"><messages:message code="paymentMethod"/></label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected><messages:message code="choseAnOption"/></option>
+            <option disabled selected><messages:message code="chooseAnOption"/></option>
             <c:forEach items="${paymentMethods}" var="paymentMethod">
                 <option value="${paymentMethod.name}"><c:out value="${paymentMethod.description}"/></option>
             </c:forEach>

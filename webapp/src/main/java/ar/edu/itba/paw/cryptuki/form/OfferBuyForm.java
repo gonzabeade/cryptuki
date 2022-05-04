@@ -15,7 +15,7 @@ public class OfferBuyForm {
 
     @Min(1)
     @NotNull
-    private Double amount;
+    private Float amount;
 
     @NotNull
     private int offerId;
@@ -33,7 +33,7 @@ public class OfferBuyForm {
     public void setMessage(String message) {
         this.message = message;
     }
-    public void setAmount(Double amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -46,7 +46,7 @@ public class OfferBuyForm {
     public String getMessage() {
         return message;
     }
-    public Double getAmount() {
+    public Float getAmount() {
         return amount;
     }
 

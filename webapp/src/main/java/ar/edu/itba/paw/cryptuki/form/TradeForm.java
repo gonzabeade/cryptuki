@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class TradeForm {
     @NotNull
-    private Double amount;
+    private Float amount;
     @NotNull
     @Size(min = 1)
     private String wallet;
@@ -20,11 +20,11 @@ public class TradeForm {
         this.offerId = offerId;
     }
 
-    public Double getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 

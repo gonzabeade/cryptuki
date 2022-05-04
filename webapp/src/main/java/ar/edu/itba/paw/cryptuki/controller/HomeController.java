@@ -130,7 +130,7 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form,authentication);
         }
-        //tradeService.executeTrade(form.toDigest());
+
         TradeForm tradeForm =  new TradeForm();
         tradeForm.setAmount(form.getAmount());
         tradeForm.setOfferId(form.getOfferId());
@@ -152,8 +152,11 @@ public class HomeController {
         if(errors.hasErrors()){
             return executeTrade(form,authentication);
         }
-        Offer offer = offerService.getOfferById(form.getOfferId()).get();
         //inserto el trade
+        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
+                .withTradeStatus(TradeStatus.OPEN)
+                .withQuantity(form.getAmount())
+                .withSellerUsername("mdedeu"));
 //        tradeService.makeTrade(new Trade.Builder(form.getOfferId(), authentication.getName())
 //                .withTradeStatus(TradeStatus.OPEN)
 //                .withQuantity(form.getAmount())

@@ -18,7 +18,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
-    <div class="flex flex-col w-3/4">
+    <div class="flex flex-col w-3/5">
         <div class="flex flex-col">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás comprando</h2>
@@ -50,7 +50,7 @@
                 <div class="flex flex-col mx-auto mt-7">
                     <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>
                     <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto">Pega la dirección donde querés recibir los ${offer.crypto.code}</form:label>
-                    <form:input  cssClass="rounded-lg p-3 mx-auto" type="text" path="wallet"/>
+                    <form:input  cssClass="rounded-lg p-3 mx-auto mt-3" type="text" path="wallet"/>
                 </div>
                 <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
@@ -69,7 +69,7 @@
 
         </div>
     </div>
-    <div class="flex flex-row justify-center">
+    <div class="flex flex-row w-2/5">
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>

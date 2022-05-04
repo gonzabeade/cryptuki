@@ -1,9 +1,10 @@
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-<h2>Recover it from your Mailbox</h2>
+<h2><messages:message code="recoverPasswrodFromEmail"/></h2>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,10 +18,10 @@
 </jsp:include>
     <div class="flex">
         <div class="flex flex-col mx-auto mt-10">
-            <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>
+            <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="aboutToBuy"/></h2>
             <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
             <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
-            <h2 class="font-sans font-medium text-polard text-2xl text-center">a  <c:out value="${offer.askingPrice}"/> ARS </h2>
+            <h2 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="to"/>  <c:out value="${offer.askingPrice}"/> ARS </h2>
 
         </div>
     </div>

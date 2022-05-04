@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
@@ -27,25 +28,25 @@
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">
     <div class="flex flex-col my-auto mx-3">
-        <label for="coin"  class="font-sans text-sm font-semibold text-center">Criptomoneda</label>
+        <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected>Selecciona una opción</option>
+            <option disabled selected><messages:message code="choseAnOption"/></option>
             <c:forEach items="${cryptocurrencies}" var="coin">
                 <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>
     <div class="flex flex-col my-auto justify-center mx-3">
-        <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center">Medio de Pago</label>
+        <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center"><messages:message code="paymentMethod"/></label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected>Selecciona una opción</option>
+            <option disabled selected><messages:message code="choseAnOption"/></option>
             <c:forEach items="${paymentMethods}" var="paymentMethod">
                 <option value="${paymentMethod.name}"><c:out value="${paymentMethod.description}"/></option>
             </c:forEach>
         </select>
      </div>
     <div class="flex flex-col my-auto justify-center mx-3">
-        <label for="price" class="font-sans text-sm font-semibold ml-2 text-center">Quiero comprar...</label>
+        <label for="price" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="wantToBuy"/></label>
         <div class="flex flex-row ">
             <input type="number" id="price" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
             <h1 class="font-sans font-semibold my-auto">ARS</h1>
@@ -60,7 +61,7 @@
 </div>
 </div>
 <div class="flex flex-row justify-center mt-3">
-    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
+    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
 </div>
 <div class=" flex justify-center mx-20">
     <jsp:include page="../components/welcome_message.jsp"/>
@@ -86,7 +87,7 @@
     <div>
         <div class="absolute left-[37%] my-6">
             <c:if  test="${activePage > 0}">
-                <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
+                <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard "><messages:message code="previous"/></a>
             </c:if>
         </div>
         <div class="flex flex-row mx-40 justify-center ">
@@ -105,8 +106,8 @@
             </c:when>
             <c:otherwise>
                 <div class="flex flex-col">
-                    <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
-                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
+                    <h2 class="font-polard text-lg mx-auto"><messages:message code="noResults"/></h2>
+                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" ><messages:message code="reload"/></a>
                 </div>
             </c:otherwise>
 
@@ -114,7 +115,7 @@
         </div>
         <div class="absolute right-[37%] -mt-[50px]">
             <c:if test="${activePage < pages-1}">
-                <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
+                <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard"><messages:message code="next"/></a>
             </c:if>
         </div>
 

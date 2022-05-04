@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
-import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
@@ -260,15 +259,20 @@ public class HomeController {
     }
 
 
-    @RequestMapping(value="/test", method = {RequestMethod.GET})
-    public ModelAndView testGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
+    @RequestMapping(value= "/profilePicSelector", method = {RequestMethod.GET})
+    public ModelAndView profilePicSelectorGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
+
+
         return new ModelAndView("views/upload_picture");
     }
 
-    @RequestMapping(value = "/test", method = { RequestMethod.POST })
-    public ModelAndView test(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult) throws IOException {
-        profilePicService.uploadProfilePicture("holachau", form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
-        return new ModelAndView("redirect:/");
+    @RequestMapping(value = "/profilePicSelector", method = { RequestMethod.POST })
+    public ModelAndView profilePicSelector(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult,Authentication authentication) throws IOException {
+        if(bindingResult.hasErrors())
+            return profilePicSelectorGet(new ProfilePicForm());
+
+        profilePicService.uploadProfilePicture(authentication.getName(), form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
+        return new ModelAndView("redirect:/user");
     }
 
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
@@ -279,6 +283,20 @@ public class HomeController {
         complainService.updateModeratorComment(8, "Solucionando!!");
         return new ModelAndView("redirect:/");
     }
+
+
+    @RequestMapping(value="/user")
+    public ModelAndView user(Authentication authentication){
+        String username = authentication.getName();
+        User user = us.getUserInformation(username).get();
+        Collection<Trade> tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(),0,10);
+        ModelAndView mav = new ModelAndView("views/user_profile");
+        mav.addObject("username",username);
+        mav.addObject("user",user);
+        mav.addObject("tradeList",tradeList);
+        return mav;
+    }
+
 
 
 }

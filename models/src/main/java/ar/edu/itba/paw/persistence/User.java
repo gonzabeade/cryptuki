@@ -76,6 +76,6 @@ public final class User {
         return ratingCount;
     }
 
-    public String phoneNumber(){return phoneNumber;}
+    public String getPhoneNumber(){return phoneNumber;}
 
 }

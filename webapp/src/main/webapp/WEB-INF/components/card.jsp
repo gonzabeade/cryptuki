@@ -17,7 +17,12 @@
 						<h1 class="font-sans font-semibold"><c:out value="${param.currency}"/></h1>
 					</div>
 					<h1 class="text-xl font-bold font-sans mx-2"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
-					<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.coinAmount}"/> ARS </h4>
+					<div class="flex flex-row">
+						<h4 class="text-gray-400 font-sans mx-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
+						<p class="text-gray-400 font-sans">-</p>
+						<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.maxCoinAmount}"/> ARS </h4>
+
+					</div>
 					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>
 				<div class="flex flex-row basis-1/4 justify-between">

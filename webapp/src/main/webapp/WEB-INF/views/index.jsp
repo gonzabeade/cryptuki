@@ -78,7 +78,8 @@
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
-                        <jsp:param name="coinAmount" value="${offer.maxQuantity}"/>
+                        <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                        <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

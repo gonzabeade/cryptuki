@@ -35,6 +35,8 @@
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.askingPrice}"/>
+                <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                 <jsp:param name="userEmail" value="${userEmail}"/>
             </jsp:include>
         </div>

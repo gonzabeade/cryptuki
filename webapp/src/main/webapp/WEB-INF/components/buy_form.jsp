@@ -9,8 +9,11 @@
 
         <input type="hidden" name="email"  id="email" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
-            <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>
+            <p class="mx-auto text-red-500 hidden" id="minError">El valor tiene que ser mayor o igual al minimo</p>
+            <p class="mx-auto text-red-500 hidden" id="maxError">El valor tiene que ser menor o igual al máximo</p>
+            <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
+
             <div class="flex flex-col justify-center mx-auto">
                 <form:input type="number" path="amount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".01"/>
                 <div class="flex flex-row mx-auto">
@@ -39,9 +42,25 @@
     document.getElementsByName('amount')[0].addEventListener('change', changeVal)
     function changeVal(){
             let value = document.getElementById('amount').value;
-            if(value > 0){
+
+            if( value >= 0){
                 let newVal =  value / ${param.price};
                 document.getElementById('coinAmount').innerHTML = newVal.toFixed(5);
+            }
+            let maxAmount = ${param.maxCoinAmount * param.price};
+            let minAmount = ${param.minCoinAmount * param.price};
+            if ( value > maxAmount){
+                console.log("max violation")
+                document.getElementById('maxError').classList.remove("hidden");
+            }
+            if ( value < minAmount ){
+                console.log("min violation")
+                document.getElementById('minError').classList.remove("hidden");
+            }
+            if( value >= minAmount && value <= maxAmount){
+                console.log("ok")
+                document.getElementById('maxError').classList.add("hidden");
+                document.getElementById('minError').classList.add("hidden");
             }
     }
 </script>

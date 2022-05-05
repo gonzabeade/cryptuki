@@ -85,43 +85,9 @@
         </div>
     </ol>
     <div>
-        <div class="absolute left-[37%] my-6">
-            <c:if  test="${activePage > 0}">
-                <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
-            </c:if>
-        </div>
-        <div class="flex flex-row mx-40 justify-center ">
-        <c:choose>
-            <c:when test="${pages > 0}">
-                <c:forEach var = "i" begin = "${activePage - 1 < 0 ? activePage : activePage - 1 }" end = "${(activePage + 1 > pages - 1 )? pages - 1 : activePage + 1 }">
-                    <c:choose>
-                        <c:when test="${activePage == i }">
-                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-stormd border-2 border-polard active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full "><c:out value="${i+1}"/></a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <div class="flex flex-col">
-                    <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
-                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
-                </div>
-            </c:otherwise>
+       <jsp:include page="../components/paginator.jsp">
 
-        </c:choose>
-        </div>
-        <div class="absolute right-[37%] -mt-[50px]">
-            <c:if test="${activePage < pages-1}">
-                <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
-            </c:if>
-        </div>
-
-
-
-
+       </jsp:include>
     </div>
 </div>
 <div class="shape-blob"></div>

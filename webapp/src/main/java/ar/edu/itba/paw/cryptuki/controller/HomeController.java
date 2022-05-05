@@ -221,19 +221,12 @@ public class HomeController {
            return verify(form, form.getUsername());
        }
 
-       //log in programmatically
-
-        UserAuth user = us.getUserByUsername(form.getUsername()).orElseThrow(RuntimeException::new);
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(form.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        return new ModelAndView("redirect:/");
-
+       return logInProgrammatically(form.getUsername());
     }
 
 
     @RequestMapping(value="/passwordRecovery")
-    public ModelAndView passwordSendMailGet(@Valid @ModelAttribute("EmailForm") EmailForm form){
+    public ModelAndView passwordSendMailGet(@ModelAttribute("EmailForm") EmailForm form){
         return new ModelAndView("/views/passwordRecovery");
     }
 
@@ -306,14 +299,13 @@ public class HomeController {
     }
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.POST})
-    public ModelAndView changePassword(@ModelAttribute("changePasswordForm") changePasswordForm form, BindingResult bindingResult, Authentication authentication){
+    public ModelAndView changePassword(@Valid @ModelAttribute("changePasswordForm") changePasswordForm form, BindingResult bindingResult, Authentication authentication){
         if(bindingResult.hasErrors())
-            changePasswordGet(new changePasswordForm(),authentication);
+            return changePasswordGet(new changePasswordForm(),authentication);
 
         //check current password.
         us.changePassword(form.getOldPassword(), form.getPassword(), form.getRepeatPassword());
-        SecurityContextHolder.clearContext();
-        return new ModelAndView("redirect:/logout");
+        return new ModelAndView("redirect:/user");
     }
 
 
@@ -330,19 +322,22 @@ public class HomeController {
     public ModelAndView recoverPasswordGet(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return recoverPasswordGet(new recoverPasswordForm(),form.getUsername(), form.getCode());
+        //check this before login
         us.changePassword(form.getUsername(), form.getCode(), form.getPassword());
 
+        return logInProgrammatically(form.getUsername());
 
-        UserAuth user = us.getUserByUsername(form.getUsername()).orElseThrow(RuntimeException::new);
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(form.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+    }
+
+    private ModelAndView logInProgrammatically(String username ){
+        UserAuth user = us.getUserByUsername(username).orElseThrow(RuntimeException::new);
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
         Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
         SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/");
-
     }
 
 
 
-
-
 }
+

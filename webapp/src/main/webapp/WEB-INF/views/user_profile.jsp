@@ -59,7 +59,7 @@
     </div>
   </div>
   <div class="flex justify-between mb-30" >
-    <a href="<c:url value="/changePassword"/>" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Cambiar contraseña</a>
+    <a href="<c:url value="/changePassword"/>" class="bg-frostdr text-white  mt-4 mb-4 p-3 rounded-md font-sans  mx-auto">Cambiar contraseña</a>
   </div>
 </div>
   <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Ultimas transacciones: </h2>

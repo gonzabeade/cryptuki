@@ -22,14 +22,14 @@
     <%--@elvariable id="EmailForm" type="ar.edu.itba.paw.cryptuki.form"--%>
     <form:form modelAttribute="EmailForm" action="${postPath}" method="post">
         <div class="flex flex-col items-center justify-center mt-20">
-            <div class="flex flex-col mb-10">
+            <div class="flex flex-col mb-10 items-center justify-center">
+                <form:errors path="email" cssClass="formError mx-auto text-red-500" element="p"/>
                 <div class="mb-5">
                     <form:label path="email" class="text-center text-2xl font-bold font-sans text-polar my-2">Ingresa tu correo electronico </form:label>
                 </div>
                 <div>
                     <form:input type="text" path="email" placeholder="e.g pepe@gmail.com" cssClass="rounded-lg p-3"/>
                 </div>
-                <form:errors path="email" cssClass="formError" element="p"/>
             </div>
             <div>
                 <input type="submit" value="Continuar" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>

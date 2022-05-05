@@ -7,6 +7,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -322,9 +325,20 @@ public class HomeController {
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
 
-        complainService.updateComplainStatus(8, ComplainStatus.ASSIGNED);
-        complainService.updateModerator(8, "gonzabeade");
-        complainService.updateModeratorComment(8, "Solucionando!!");
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.now()));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 12, 5)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 50)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 30)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 4, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 3, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.APRIL, 3, 11, 0)));
+
+
+
+
+
+
         return new ModelAndView("redirect:/");
     }
 

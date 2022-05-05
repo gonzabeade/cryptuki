@@ -1,12 +1,13 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 public class OfferBuyForm {
     @Size(min=6, max= 100)
     @Email()

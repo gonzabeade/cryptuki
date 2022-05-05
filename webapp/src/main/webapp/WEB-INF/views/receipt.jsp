@@ -32,11 +32,11 @@
             <h1 class="text-polard font-extrabold text-2xl font-sans">Datos de la oferta:</h1>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg">Criptomoneda</h1>
-                <p class="text-polard font-sans text-center">Bitcoin</p>
+                <p class="text-polard font-sans text-center">${offer.crypto.commercialName}</p>
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg">Precio por Moneda</h1>
-                <p class="text-polard font-sans text-center">200 ARS</p>
+                <p class="text-polard font-sans text-center">${offer.askingPrice} ARS</p>
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg">Fecha de la transacción</h1>
@@ -44,18 +44,28 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="#">Tuve un problema</a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?trade=${trade.tradeId}"/> ">Tuve un problema</a>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>">Volver al Home</a>
         </div>
 
 
     </div>
     <div class="flex flex-row w-2/5">
-        <jsp:include page="../components/seller_info.jsp">
-            <jsp:param name="email" value="${offer.seller.email}"/>
-            <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
-            <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-        </jsp:include>
+        <div class="flex flex-col">
+            <jsp:include page="../components/seller_info.jsp">
+                <jsp:param name="email" value="${offer.seller.email}"/>
+                <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
+                <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
+                <jsp:param name="lastLogin" value="2022-03-25"/>
+            </jsp:include>
+            <jsp:include page="../components/buyer_info.jsp">
+                <jsp:param name="email" value="${user.email}"/>
+                <jsp:param name="trades" value="${user.ratingCount}"/>
+                <jsp:param name="phone" value="${user.phoneNumber}"/>
+                <jsp:param name="lastLogin" value="2022-03-25"/>
+            </jsp:include>
+        </div>
+
     </div>
 </div>
 </body>

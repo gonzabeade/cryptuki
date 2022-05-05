@@ -153,10 +153,10 @@ public class HomeController {
             return executeTrade(form,authentication);
         }
         //inserto el trade
-        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
-                .withTradeStatus(TradeStatus.OPEN)
-                .withQuantity(form.getAmount())
-                .withSellerUsername("mdedeu"));
+//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
+//                .withTradeStatus(TradeStatus.OPEN)
+//                .withQuantity(form.getAmount())
+//                .withSellerUsername("mdedeu"));
 
         //restarle el amount
         //mandarle los datos  del comprador al vendedor
@@ -177,6 +177,7 @@ public class HomeController {
 
         if(authentication != null){
             mav.addObject("username", authentication.getName());
+            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
         }
         return mav;
     }

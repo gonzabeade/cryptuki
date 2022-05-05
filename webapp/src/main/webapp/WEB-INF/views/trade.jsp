@@ -61,7 +61,6 @@
                 <div class="flex flex-row justify-between">
                     <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar trade</a>
                     <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit">Ya le pague</button>
-                    <a class="bg-nred text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/contact"/>">Tuve un problema</a>
                 </div>
             </form:form>
 
@@ -74,6 +73,7 @@
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
+            <jsp:param name="lastLogin" value="2022-03-25"/>
         </jsp:include>
     </div>
 </div>

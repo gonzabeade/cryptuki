@@ -10,8 +10,7 @@
         <input type="hidden" name="email"  id="email" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>
-            <p class="mx-auto text-red-500 hidden" id="minError">El valor tiene que ser mayor o igual al minimo</p>
-            <p class="mx-auto text-red-500 hidden" id="maxError">El valor tiene que ser menor o igual al máximo</p>
+            <form:errors cssClass=" mx-auto text-red-400"/>
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
 
             <div class="flex flex-col justify-center mx-auto">

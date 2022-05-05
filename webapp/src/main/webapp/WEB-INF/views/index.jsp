@@ -66,6 +66,7 @@
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
+    <h1 class="text-right text-gray-400 mx-5">Obtuviste ${offerCount} resultado/s</h1>
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
@@ -84,10 +85,12 @@
             </c:forEach>
         </div>
     </ol>
-    <div>
+    <div class="flex flex-col">
        <jsp:include page="../components/paginator.jsp">
-
+           <jsp:param name="activePage" value="${activePage}"/>
+           <jsp:param name="pages" value="${pages}"/>
        </jsp:include>
+        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
     </div>
 </div>
 <div class="shape-blob"></div>

@@ -85,7 +85,7 @@ public class HomeController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
+        mav.addObject("offerCount", offerCount);
         return mav;
     }
 

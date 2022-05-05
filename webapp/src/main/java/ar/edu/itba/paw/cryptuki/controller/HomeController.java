@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -59,7 +64,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Float price, final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);
@@ -83,6 +88,8 @@ public class HomeController {
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("offerCount", offerCount);
+
         if(authentication != null){
             mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
@@ -92,7 +99,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support( @ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
         ModelAndView mav =  new ModelAndView("views/contact");
         mav.addObject("username", authentication == null ? null : authentication.getName());
 
@@ -165,7 +172,10 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/buy_offer");
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication == null ? null : authentication.getName());
+        if( authentication != null ){
+            mav.addObject("username", authentication == null ? null : authentication.getName());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        }
 
         return mav;
 
@@ -175,12 +185,56 @@ public class HomeController {
         if(errors.hasErrors()){
             return buyOffer(form.getOfferId(), form,authentication);
         }
-        tradeService.executeTrade(form.toDigest());
-        ModelAndView mav = new ModelAndView("redirect:/");
+
+        TradeForm tradeForm =  new TradeForm();
+        tradeForm.setAmount(form.getAmount());
+        tradeForm.setOfferId(form.getOfferId());
+
+        return executeTrade(tradeForm, authentication);
+
+    }
+    @RequestMapping(value="/trade", method = RequestMethod.GET)
+    public ModelAndView executeTrade(final TradeForm form, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/trade");
+        mav.addObject("tradeForm", form);
+        mav.addObject("offer", offerService.getOfferById(form.getOfferId()).get());
+        mav.addObject("amount", form.getAmount());
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
         return mav;
+    }
+    @RequestMapping(value = "/trade", method = RequestMethod.POST)
+    public ModelAndView executeTradePost(@Valid @ModelAttribute("tradeForm")  final TradeForm form, final BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return executeTrade(form,authentication);
+        }
+        //inserto el trade
+//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
+//                .withTradeStatus(TradeStatus.OPEN)
+//                .withQuantity(form.getAmount())
+//                .withSellerUsername("mdedeu"));
 
+        //restarle el amount
+        //mandarle los datos  del comprador al vendedor
+        int tradeId= 2;
+        return receipt(tradeId,authentication);
+    }
+    @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
+    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/receipt");
+        Optional<Trade> trade = tradeService.getTradeById(tradeId);
+
+        if(!trade.isPresent()){
+            return null;
+        }
+
+        mav.addObject("trade" , trade.get());
+        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
+
+        if(authentication != null){
+            mav.addObject("username", authentication.getName());
+            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
+        }
+        return mav;
     }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
@@ -328,9 +382,20 @@ public class HomeController {
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
 
-        complainService.updateComplainStatus(8, ComplainStatus.ASSIGNED);
-        complainService.updateModerator(8, "gonzabeade");
-        complainService.updateModeratorComment(8, "Solucionando!!");
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.now()));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 12, 5)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 50)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 30)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 4, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 3, 11, 0)));
+        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.APRIL, 3, 11, 0)));
+
+
+
+
+
+
         return new ModelAndView("redirect:/");
     }
 }

@@ -13,15 +13,15 @@ public class UploadOfferForm {
 
     @NotNull
     @DecimalMin("0.0000001")
-    private Double minAmount;
+    private Float minAmount;
 
     @NotNull
     @DecimalMin("0.00000001")
-    private Double maxAmount;
+    private Float maxAmount;
 
     @NotNull
     @DecimalMin("10.0")
-    private Double price;
+    private Float price;
 
     @Size(min=2, max=30)
     @NotNull
@@ -30,27 +30,27 @@ public class UploadOfferForm {
     @Size(min = 1)
     private String[] paymentMethods;
 
-    public Double getMinAmount() {
+    public Float getMinAmount() {
         return minAmount;
     }
 
-    public void setMinAmount(Double minAmount) {
+    public void setMinAmount(Float minAmount) {
         this.minAmount = minAmount;
     }
 
-    public void setMaxAmount(Double maxAmount) {
+    public void setMaxAmount(Float maxAmount) {
         this.maxAmount = maxAmount;
     }
 
-    public Double getMaxAmount() {
+    public Float getMaxAmount() {
         return maxAmount;
     }
 
-    public Double getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 

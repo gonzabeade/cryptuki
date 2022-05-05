@@ -18,7 +18,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
-    <div class="flex flex-col w-3/4">
+    <div class="flex flex-col w-3/5">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-2xl text-center">Estás por comprar</h2>
@@ -36,12 +36,18 @@
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.askingPrice}"/>
+                <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
+                <jsp:param name="userEmail" value="${userEmail}"/>
             </jsp:include>
         </div>
     </div>
-    <div class="flex flex-row justify-center">
+    <div class="flex flex-row w-2/5">
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
+            <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
+            <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
+            <jsp:param name="lastLogin" value="2022-02-11"/>
         </jsp:include>
     </div>
 <div class="shape-blob"></div>

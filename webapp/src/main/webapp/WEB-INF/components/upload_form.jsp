@@ -33,7 +33,7 @@
         <div class="flex flex-col justify-center mt-6">
             <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
-            <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
+            <form:errors path="amountCheck" cssClass=" mx-auto text-red-500"/>
             <p class="text-red-500 hidden text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</p>
             <div class="flex flex-row justify-center">
                 <div>
@@ -48,9 +48,9 @@
                     -
                 </div>
                 <div>
-                    <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">BTC</p></form:label>
+                    <form:label  path="amountCheck" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
-                        <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
+                        <form:input type="number" path="amountCheck" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                     </div>
                 </div>

@@ -13,6 +13,7 @@ public final class User {
     private final LocalDateTime lastLogin;
     private final String phoneNumber;
 
+
     public static class Builder {
 
         private final String email;
@@ -76,6 +77,9 @@ public final class User {
         return ratingCount;
     }
 
-    public String phoneNumber(){return phoneNumber;}
+    public String getPhoneNumber(){return phoneNumber;}
 
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
 }

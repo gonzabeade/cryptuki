@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -327,7 +326,7 @@ public class HomeController {
 
 
     @RequestMapping(value="/user")
-    public ModelAndView user(Authentication authentication){
+    public ModelAndView user(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
         String username = authentication.getName();
         User user = us.getUserInformation(username).get();
         Collection<Trade> tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(),0,10);
@@ -335,6 +334,14 @@ public class HomeController {
         mav.addObject("username",username);
         mav.addObject("user",user);
         mav.addObject("tradeList",tradeList);
+
+        int pageNumber= page.orElse(0);
+        int tradeCount = tradeService.getBuyingTradesByUsernameCount(username);
+        System.out.println("holaaaaaaaaaa "+ tradeCount);
+        int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        mav.addObject("pages",pages);
+        mav.addObject("activePage",pageNumber);
+
         return mav;
     }
 

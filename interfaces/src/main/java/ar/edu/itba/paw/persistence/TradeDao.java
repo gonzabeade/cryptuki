@@ -14,6 +14,10 @@ public interface TradeDao {
 
     Optional<Trade> getTradeById(int tradeId);
     Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize);
+    int getSellingTradesByUsernameCount(String username);
+
     Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
+
+    int getBuyingTradesByUsername(String username);
 
 }

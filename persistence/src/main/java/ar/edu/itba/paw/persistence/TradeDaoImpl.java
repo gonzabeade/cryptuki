@@ -67,6 +67,8 @@ public class TradeDaoImpl implements TradeDao {
         return Optional.ofNullable(trade);
     }
 
+
+
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE seller_uname = ? LIMIT ? OFFSET ?";
@@ -74,8 +76,20 @@ public class TradeDaoImpl implements TradeDao {
     }
 
     @Override
+    public int getSellingTradesByUsernameCount(String username) {
+        final String query = "SELECT COUNT(*) FROM trade_complete WHERE seller_uname = ?";
+        return jdbcTemplate.queryForObject(query,new Object[]{username},Integer.class);
+    }
+
+    @Override
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE buyer_uname = ? LIMIT ? OFFSET ?";
         return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
+    }
+
+    @Override
+    public int getBuyingTradesByUsername(String username) {
+        final String query = "SELECT COUNT(*) FROM trade_complete WHERE buyer_uname = ?";
+        return jdbcTemplate.queryForObject(query,new Object[]{username},Integer.class);
     }
 }

@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.validator;
+package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.annotation.AmountCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.OfferService;

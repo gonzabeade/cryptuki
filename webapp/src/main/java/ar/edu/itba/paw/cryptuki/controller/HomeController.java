@@ -60,7 +60,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+    public ModelAndView helloWorld(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Float price, final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("views/index");/* Load a jsp file */
         int pageNumber = page.orElse(0);

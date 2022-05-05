@@ -47,9 +47,9 @@
                 let newVal =  value / ${param.price};
                 document.getElementById('coinAmount').innerHTML = newVal.toFixed(5);
             }
-            let maxAmount = ${param.maxCoinAmount * param.price};
+            let amountCheck = ${param.maxCoinAmount * param.price};
             let minAmount = ${param.minCoinAmount * param.price};
-            if ( value > maxAmount){
+            if ( value > amountCheck){
                 console.log("max violation")
                 document.getElementById('maxError').classList.remove("hidden");
             }
@@ -57,7 +57,7 @@
                 console.log("min violation")
                 document.getElementById('minError').classList.remove("hidden");
             }
-            if( value >= minAmount && value <= maxAmount){
+            if( value >= minAmount && value <= amountCheck){
                 console.log("ok")
                 document.getElementById('maxError').classList.add("hidden");
                 document.getElementById('minError').classList.add("hidden");

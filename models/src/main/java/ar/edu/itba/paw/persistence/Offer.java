@@ -59,7 +59,7 @@ public final class Offer {
         public Cryptocurrency getCrypto() {
             return crypto;
         }
-        public double getAskingPrice() {
+        public float getAskingPrice() {
             return askingPrice;
         }
         public Collection<PaymentMethod> getPaymentMethods() {
@@ -108,13 +108,13 @@ public final class Offer {
     public Cryptocurrency getCrypto() {
         return crypto;
     }
-    public double getAskingPrice() {
+    public float getAskingPrice() {
         return askingPrice;
     }
-    public double getMinQuantity() {
+    public float getMinQuantity() {
         return minQuantity;
     }
-    public double getMaxQuantity() {
+    public float getMaxQuantity() {
         return maxQuantity;
     }
     public Collection<PaymentMethod> getPaymentMethods() {

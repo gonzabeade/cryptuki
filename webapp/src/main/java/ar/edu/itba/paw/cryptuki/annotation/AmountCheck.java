@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = AmountValidator.class)
 @Target( ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MaxAmount {
+public @interface AmountCheck {
     //error message
     public String message() default "Debe enviar una cantidad correcta";
     //represents group of constraints

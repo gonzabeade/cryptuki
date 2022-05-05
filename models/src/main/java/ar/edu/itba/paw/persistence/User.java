@@ -13,6 +13,7 @@ public final class User {
     private final LocalDateTime lastLogin;
     private final String phoneNumber;
 
+
     public static class Builder {
 
         private final String email;
@@ -78,4 +79,7 @@ public final class User {
 
     public String getPhoneNumber(){return phoneNumber;}
 
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
 }

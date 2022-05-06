@@ -18,26 +18,45 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
-    <div class="flex flex-col w-3/5">
-        <div class="mt-10 mx-auto flex flex-col">
-            <h1 class="text-polard font-extrabold text-2xl font-sans">Datos de la oferta:</h1>
-            <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Criptomoneda</h1>
-                <img class="w-20" src="<c:url value = "/public/images/${offer.crypto.code}.png"/>">
-                <p class="text-polard font-sans text-center">${offer.crypto.commercialName}</p>
+    <div class="flex flex-col w-3/5 h-screen">
+        <div class="mt-10 mx-10 flex flex-col bg-stormd/[0.9] border-2 border-polard rounded-lg p-5">
+            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center ">Datos de la transacción:</h1>
+            <div class="flex">
+                <div class="mx-5">
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Compraste:</h1>
+                </div>
+                <div class="flex">
+                    <div class="mr-3">
+                        <h1 class="text-3xl text-polard font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h1>
+                    </div>
+                    <div class="mr-3">
+                        <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.code}"/>" class="w-8 h-8"/>
+                    </div>
+                    <div>
+                        <h1 class="ml-2 text-3xl text-polard font-sans font-semibold"><c:out value="${offer.crypto.code}"/></h1>
+                    </div>
+                </div>
             </div>
-            <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Precio por Moneda</h1>
-                <p class="text-polard font-sans text-center">${offer.askingPrice} ARS</p>
+            <div class="flex">
+                <div class="mx-5">
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl">A cambio de:</h1>
+                </div>
+                <div>
+                    <h1 class="text-polard font-sans text-center text-3xl">${trade.quantity}$ARS</h1>
+                </div>
             </div>
-            <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Fecha de la transacción</h1>
-                <p class="text-polard font-sans text-center">2022-02-21</p>
+            <div class="flex">
+                <div class="mx-5">
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Fecha de la transaccion:</h1>
+                </div>
+                <div>
+                    <h1 class="text-polard font-sans text-center text-3xl">${trade.startDate.get().toString()}</h1>
+                </div>
             </div>
         </div>
         <div class="flex flex-row mt-10">
             <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?trade=${trade.tradeId}"/> ">Tuve un problema</a>
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>">Volver al Home</a>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>">Volver</a>
         </div>
 
 

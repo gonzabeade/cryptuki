@@ -19,12 +19,24 @@ public interface TradeService {
     void updateStatus(int tradeId, TradeStatus status);
 
     Optional<Trade> getTradeById(int tradeId);
+
+    @Deprecated
     Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize);
+    @Deprecated
     int getSellingTradesByUsernameCount(String username);
 
+    @Deprecated
     Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
 
+    @Deprecated
     int getBuyingTradesByUsernameCount(String username);
+
+
+    Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
+
+    int getTradesByUsernameCount(String username);
+
+
 
 
 }

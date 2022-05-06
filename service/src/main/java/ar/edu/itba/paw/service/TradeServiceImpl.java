@@ -94,4 +94,14 @@ public class TradeServiceImpl implements TradeService {
     public int getBuyingTradesByUsernameCount(String username) {
         return tradeDao.getSellingTradesByUsernameCount(username);
     }
+
+    @Override
+    public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
+        return tradeDao.getTradesByUsername(username,page,pageSize);
+    }
+
+    @Override
+    public int getTradesByUsernameCount(String username) {
+        return tradeDao.getTradesByUsernameCount(username);
+    }
 }

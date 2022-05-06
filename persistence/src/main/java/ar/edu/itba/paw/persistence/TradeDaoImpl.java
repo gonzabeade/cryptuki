@@ -17,16 +17,24 @@ public class TradeDaoImpl implements TradeDao {
     private JdbcTemplate jdbcTemplate;
 
     private final static RowMapper<Trade> TRADE_COMPLETE_ROW_MAPPER =
-            (rs, i) -> new Trade.Builder(
-                    rs.getInt("offer_id"),
-                    rs.getString("buyer_uname"))
-                    .withSellerUsername(rs.getString("seller_uname"))
-                    .withTradeStatus( TradeStatus.valueOf(rs.getString("status")))
-                    .withTradeId(rs.getInt("trade_id"))
-                    .withQuantity(rs.getFloat("quantity"))
-                    .withStartDate(rs.getTimestamp("start_date").toLocalDateTime())
-                    .build();
-
+            (rs, i) ->{
+                String cryptoId = rs.getString("crypto_code");
+                Cryptocurrency crypto = Cryptocurrency.getInstance(
+                        cryptoId,
+                        rs.getString("commercial_name")
+                );
+                  return   new Trade.Builder(
+                        rs.getInt("offer_id"),
+                        rs.getString("buyer_uname"))
+                        .withSellerUsername(rs.getString("seller_uname"))
+                        .withTradeStatus( TradeStatus.valueOf(rs.getString("status")))
+                        .withTradeId(rs.getInt("trade_id"))
+                        .withQuantity(rs.getFloat("quantity"))
+                        .withStartDate(rs.getTimestamp("start_date").toLocalDateTime())
+                        .withAskedPrice(rs.getFloat("asking_price"))
+                        .withCryptoCurrency(crypto)
+                        .build();
+                } ;
     @Autowired
     public TradeDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -68,13 +76,14 @@ public class TradeDaoImpl implements TradeDao {
     }
 
 
-
+    @Deprecated
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE seller_uname = ? LIMIT ? OFFSET ?";
         return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
     }
 
+    @Deprecated
     @Override
     public int getSellingTradesByUsernameCount(String username) {
         final String query = "SELECT COUNT(*) FROM trade_complete WHERE seller_uname = ?";
@@ -82,14 +91,27 @@ public class TradeDaoImpl implements TradeDao {
     }
 
     @Override
+    @Deprecated
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE buyer_uname = ? LIMIT ? OFFSET ?";
         return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
     }
 
     @Override
+    @Deprecated
     public int getBuyingTradesByUsername(String username) {
         final String query = "SELECT COUNT(*) FROM trade_complete WHERE buyer_uname = ?";
         return jdbcTemplate.queryForObject(query,new Object[]{username},Integer.class);
     }
+
+    @Override
+    public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
+        final String query = "SELECT * FROM trade_complete WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
+        return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username,username, pageSize, pageSize*page));
+    }
+
+    @Override
+    public int getTradesByUsernameCount(String username) {
+        final String query = "SELECT COUNT(*) FROM trade_complete WHERE ( buyer_uname = ? OR seller_uname = ?)";
+        return jdbcTemplate.queryForObject(query,new Object[]{username,username},Integer.class);    }
 }

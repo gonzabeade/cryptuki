@@ -67,8 +67,13 @@
       <c:forEach var="trade" items="${tradeList}">
       <li>
         <jsp:include page="../components/trade_card.jsp">
-          <jsp:param name="user" value="${trade.sellerUsername}"/>
+          <jsp:param name="username" value="${username}"/>
+          <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
+          <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
           <jsp:param name="quantity" value="${trade.quantity}"/>
+          <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+          <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
+          <jsp:param name="tradeId" value="${trade.tradeId}"/>
         </jsp:include>
 
      </li>

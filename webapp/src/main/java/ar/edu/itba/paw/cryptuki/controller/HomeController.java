@@ -180,6 +180,29 @@ public class HomeController {
         return mav;
     }
 
+    @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
+    public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/receiptDescription");
+        Optional<Trade> trade = tradeService.getTradeById(tradeId);
+
+        if(!trade.isPresent()){
+            return null;
+        }
+
+        mav.addObject("trade" , trade.get());
+        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
+
+        if(authentication != null){
+            mav.addObject("username", authentication.getName());
+            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
+        }
+        return mav;
+    }
+
+
+
+
+
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView coins(final Authentication authentication) {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
@@ -329,16 +352,15 @@ public class HomeController {
     public ModelAndView user(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
         String username = authentication.getName();
         User user = us.getUserInformation(username).get();
-        Collection<Trade> tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(),0,10);
         ModelAndView mav = new ModelAndView("views/user_profile");
         mav.addObject("username",username);
         mav.addObject("user",user);
-        mav.addObject("tradeList",tradeList);
 
         int pageNumber= page.orElse(0);
-        int tradeCount = tradeService.getBuyingTradesByUsernameCount(username);
-        System.out.println("holaaaaaaaaaa "+ tradeCount);
+        int tradeCount = tradeService.getTradesByUsernameCount(username);
         int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        Collection<Trade> tradeList = tradeService.getTradesByUsername(authentication.getName(),pageNumber,PAGE_SIZE);
+        mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 

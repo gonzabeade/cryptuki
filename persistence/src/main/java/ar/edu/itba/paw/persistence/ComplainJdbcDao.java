@@ -20,16 +20,21 @@ public class ComplainJdbcDao implements ComplainDao {
     private JdbcTemplate jdbcTemplate;
 
     private static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
-            (rs, i) -> new Complain.Builder(
-                    rs.getString("complainer_uname"))
-                    .withTradeId(rs.getInt("trade_id"))
-                    .withComplainId(rs.getInt("complain_id"))
-                    .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
-                    .withComplainerComments(rs.getString("complainer_comments"))
-                    .withModeratorComments(rs.getString("moderator_comments"))
-                    .withModerator(rs.getString("moderator_uname"))
-                    .build();
+            (rs, i) -> {
+               Complain.Builder builder= new Complain.Builder(
+                        rs.getString("complainer_uname"))
+                        .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
+                        .withComplainerComments(rs.getString("complainer_comments"))
+                        .withModeratorComments(rs.getString("moderator_comments"))
+                        .withModerator(rs.getString("moderator_uname"))
+                       .withComplainId(rs.getInt("complain_id"))
+                       .withTradeId(rs.getInt("trade_id"));
+                       if(rs.wasNull()){
+                           builder.withTradeId(null);
+                       }
 
+                return builder.build();
+            };
     @Autowired
     public ComplainJdbcDao(DataSource dataSource) {
         this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -81,12 +86,11 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT COUNT(complain_id)\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (:trade_id IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (:complain_status IS NULL OR status = :complain_status) AND\n" +
-                "    (:moderator_uname IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (:complainer_uname IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (:complain_id IS NULL OR complain_id = :complain_id)\n" +
-                "    LIMIT :limit OFFSET :offset;";
+                "    (COALESCE(:trade_id) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id);" ;
 
 
         return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);

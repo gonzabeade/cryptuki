@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 
+import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
@@ -88,23 +89,25 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam(value = "trade", required = false) Integer tradeId){
         ModelAndView mav =  new ModelAndView("views/contact");
+        String username= authentication.getName();
+        User user = us.getUserInformation(username).get();
+        mav.addObject("complainerId",user.getId());
+        mav.addObject("tradeId",tradeId);
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
         return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return support(form,authentication);
+            return support(form,authentication, form.getTradeId());
         }
 
-        supportService.getSupportFor(form.toDigest());
-        ModelAndView mav = new ModelAndView("redirect:/");
+        supportService.getSupportFor(form.toComplainBuilder());
+        ModelAndView mav = new ModelAndView("redirect:/user");
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
         return mav;
 
     }
@@ -166,6 +169,7 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("views/receipt");
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
 
+
         if(!trade.isPresent()){
             return null;
         }
@@ -184,6 +188,7 @@ public class HomeController {
     public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/receiptDescription");
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
+
 
         if(!trade.isPresent()){
             return null;
@@ -366,6 +371,30 @@ public class HomeController {
 
         return mav;
     }
+
+
+
+
+    @RequestMapping(value="/complaints", method = {RequestMethod.GET})
+    public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/complaints_page");
+
+        int pageNumber= page.orElse(0);
+        int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
+        int pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
+        ComplainFilter complainFilter = new ComplainFilter.Builder().withComplainerUsername(authentication.getName())
+                .withPage(pageNumber)
+                .withPageSize(PAGE_SIZE)
+                .build();
+        Collection<Complain> complaintsList = complainService.getComplainsBy(complainFilter);
+        mav.addObject("complaintsList",complaintsList);
+        mav.addObject("pages",pages);
+        mav.addObject("activePage",pageNumber);
+
+        mav.addObject(authentication.getName());
+        return mav;
+    }
+
 
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})

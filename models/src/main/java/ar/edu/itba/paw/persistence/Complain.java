@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class Complain {
 
-    private final int complainId;
+    private final Integer complainId;
     private final ComplainStatus status;
     private final String complainerUsername;
     private final Optional<String> complainerComments;
@@ -28,12 +28,12 @@ public final class Complain {
             this.complainerUsername = complainerUsername;
         }
 
-        public Builder withComplainId(int complainId) {
+        public Builder withComplainId(Integer complainId) {
             this.complainId = complainId;
             return this;
         }
 
-        public Builder withTradeId(int tradeId) {
+        public Builder withTradeId(Integer tradeId) {
             this.tradeId = tradeId;
             return this;
         }
@@ -62,7 +62,7 @@ public final class Complain {
         public String getModeratorComments() {
             return moderatorComments;
         }
-        public int getComplainId() {
+        public Integer getComplainId() {
             return complainId;
         }
         public ComplainStatus getStatus() {
@@ -91,7 +91,11 @@ public final class Complain {
         this.tradeId = Optional.ofNullable(builder.tradeId);
     }
 
-    public int getComplainId() {
+    public Optional<Integer> getTradeId() {
+        return tradeId;
+    }
+
+    public Integer getComplainId() {
         return complainId;
     }
 

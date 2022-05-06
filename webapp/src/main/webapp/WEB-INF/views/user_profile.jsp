@@ -61,7 +61,7 @@
   </div>
 
 </div>
-  <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Ultimas transacciones: </h2>
+  <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus transacciones: </h2>
   <div  class="flex flex-col mx-80 justify-center">
     <div>
       <c:forEach var="trade" items="${tradeList}">
@@ -88,14 +88,6 @@
     </div>
 </div>
 
-<div>
-
-</div>
-  <h2>Tus reclamos pendientes</h2>
-
-<div>
-
-</div>
 
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

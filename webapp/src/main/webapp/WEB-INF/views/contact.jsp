@@ -22,6 +22,9 @@
 <div class="flex justify-center">
     <jsp:include page="../components/form.jsp">
         <jsp:param name="url" value="support"/>
+        <jsp:param name="tradeId" value="${tradeId}"/>
+        <jsp:param name="username" value="${username}"/>
+        <jsp:param name="complainerId" value="${complainerId}"/>
     </jsp:include>
 </div>
 

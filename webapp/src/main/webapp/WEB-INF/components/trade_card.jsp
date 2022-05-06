@@ -17,9 +17,9 @@
         <c:if test="${username ==  param.buyerUsername }">
             <h1 class="font-sans">Compraste por: </h1>
         </c:if>
-<%--        <c:if test="${username == param.sellerUsername}">--%>
-<%--            <h1 class="font-sans">Vendiste por: </h1>--%>
-<%--        </c:if>--%>
+        <c:if test="${username == param.sellerUsername}">
+            <h1 class="font-sans">Vendiste por: </h1>
+        </c:if>
         <h3 class="font-sans font-semibold"><c:out value="${param.quantity}"/>$AR</h3>
     </div>
 

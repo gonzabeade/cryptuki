@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 
 @Controller  /* Requests can be dispatched to this class */
@@ -327,20 +328,7 @@ public class HomeController {
 
     @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {
-
-        Optional<Image> maybeImage = profilePicService.getProfilePicture(username);
-        Image image;
-        if(!maybeImage.isPresent()){
-
-            BufferedImage bImage = ImageIO.read(new File(this.getClass().getClassLoader().getResource("default-Profile.png").toURI()));
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(bImage, "png", bos );
-            byte [] data = bos.toByteArray();
-            image =  new Image(username,data,"image/png");
-        }else {
-            image=maybeImage.get();
-        }
-
+        Image image = profilePicService.getProfilePicture(username).orElseThrow(() -> new RuntimeException());
         return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
     }
 

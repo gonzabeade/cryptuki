@@ -102,6 +102,7 @@ public class OfferJdbcDao implements OfferDao {
     private static MapSqlParameterSource toMapSqlParameterSource(OfferDigest digest) {
         return new MapSqlParameterSource()
                 .addValue("min_quantity", digest.getMinQuantity())
+                .addValue("crypto_code", digest.getCryptoCode())
                 .addValue("max_quantity", digest.getMaxQuantity())
                 .addValue("comments", digest.getComments())
                 .addValue("asking_price", digest.getAskingPrice())
@@ -203,7 +204,7 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public void modifyOffer(OfferDigest digest) {
-        final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity, comments = :comments WHERE id = :offer_id";
+        final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity, comments = :comments, crypto_code = :crypto_code WHERE id = :offer_id";
         namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
 
         final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";

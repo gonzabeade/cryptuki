@@ -1,11 +1,9 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class OfferFilter { // TODO: should be an interface?
-
-    private boolean closed = Boolean.FALSE;
+public class OfferFilter {
     private final Collection<String> paymentMethods = new LinkedList<>();
     private final Collection<String> cryptoCodes = new LinkedList<>();
     private final Collection<Integer> ids = new LinkedList<>();
@@ -13,11 +11,12 @@ public class OfferFilter { // TODO: should be an interface?
     private int page = 0;
     private int pageSize = 1;
 
-    private double minPrice = 0;
-    private double maxPrice = Double.MAX_VALUE;
+    private float minPrice = 0;
+    private float maxPrice = Float.MAX_VALUE;
+
+    private String username = null;
 
 
-    // Using the Optional<String> solves the defensive copy problem too
     public Collection<String> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
     }
@@ -29,42 +28,46 @@ public class OfferFilter { // TODO: should be an interface?
     }
     public int getPage() { return page; }
     public int getPageSize() { return pageSize; }
-    public double getMaxPrice() { return maxPrice; }
-    public double getMinPrice() { return minPrice; }
+    public float getMaxPrice() { return maxPrice; }
+    public float getMinPrice() { return minPrice; }
+    public String getUsername() { return username; }
+
 
     public OfferFilter byCryptoCode(String cryptoCode) {
-        if (!closed) this.cryptoCodes.add(cryptoCode);
+        this.cryptoCodes.add(cryptoCode);
         return this;
     }
+
     public OfferFilter byPaymentMethod(String paymentMethod) {
-        if (!closed) this.paymentMethods.add(paymentMethod);
+        this.paymentMethods.add(paymentMethod);
         return this;
     }
     public OfferFilter byOfferId(int id) {
-        if (!closed) this.ids.add(id);
+        this.ids.add(id);
         return this;
     }
 
-    public OfferFilter byMinPrice(double minPrice) {
+    public OfferFilter byMinPrice(float minPrice) {
         this.minPrice = minPrice;
         return this;
     }
 
-    public OfferFilter byMaxPrice(double maxPrice) {
+    public OfferFilter byUsername(String uname) {
+        this.username = uname;
+        return this;
+    }
+
+    public OfferFilter byMaxPrice(float maxPrice) {
         this.maxPrice = maxPrice;
         return this;
     }
 
     public OfferFilter fromPage(int page) {
-        if (!closed) this.page = page;
+        this.page = page;
         return this;
     }
     public OfferFilter withPageSize(int page) {
-        if (!closed) this.pageSize = page;
+        this.pageSize = page;
         return this;
-    }
-
-    public void close() {
-        this.closed = Boolean.TRUE;
     }
 }

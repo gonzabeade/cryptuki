@@ -31,7 +31,7 @@
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
             <c:forEach items="${cryptocurrencies}" var="coin">
-                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.name}"/></option>
+                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>
@@ -66,28 +66,33 @@
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
+    <h1 class="text-right text-gray-400 mx-5">Obtuviste ${offerCount} resultado/s</h1>
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
                     <jsp:include page="../components/card.jsp">
-                        <jsp:param name="currency" value="${offer.coin_id}"/>
+                        <jsp:param name="currency" value="${offer.crypto.code}"/>
                         <jsp:param name="user" value="${offer.seller.email}"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
-                        <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
+                        <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                        <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                     </jsp:include>
                 </li>
             </c:forEach>
         </div>
     </ol>
-    <jsp:include page="../components/paginator.jsp">
-        <jsp:param name="activePage" value="${activePage}"/>
-        <jsp:param name="pages" value="${pages}"/>
-    </jsp:include>
 
+    <div class="flex flex-col">
+       <jsp:include page="../components/paginator.jsp">
+           <jsp:param name="activePage" value="${activePage}"/>
+           <jsp:param name="pages" value="${pages}"/>
+       </jsp:include>
+        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+    </div>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

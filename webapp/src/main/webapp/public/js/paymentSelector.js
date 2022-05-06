@@ -7,6 +7,8 @@ function changeBorderColor(label) {
         label.classList.add("checked");
     }
 
+
+
 }
 function updateVars(value) {
     document.getElementById("minCoin").innerText = value;

@@ -21,6 +21,7 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
@@ -63,6 +64,7 @@
     <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
 </div>
 <div class=" flex justify-center mx-20">
+    <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
@@ -72,6 +74,7 @@
             <c:forEach var="offer" items="${offerList}">
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
+                    <% request.setCharacterEncoding("UTF-8"); %>
                     <jsp:include page="../components/card.jsp">
                         <jsp:param name="currency" value="${offer.crypto.code}"/>
                         <jsp:param name="owner" value="${offer.seller.email}"/>
@@ -87,6 +90,7 @@
         </div>
     </ol>
     <div class="flex flex-col">
+        <% request.setCharacterEncoding("UTF-8"); %>
        <jsp:include page="../components/paginator.jsp">
            <jsp:param name="activePage" value="${activePage}"/>
            <jsp:param name="pages" value="${pages}"/>

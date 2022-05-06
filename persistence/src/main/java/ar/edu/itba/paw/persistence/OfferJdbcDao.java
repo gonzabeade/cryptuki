@@ -58,6 +58,7 @@ public class OfferJdbcDao implements OfferDao {
                         .withMaxQuantity(resultSet.getFloat("max_quantity"))
                         .withPaymentMethod(pm)
                         .withDate(resultSet.getTimestamp("offer_date").toLocalDateTime())
+                        .withComments(resultSet.getString("comments"))
                         .withStatus(offerStatus);
             };
 
@@ -162,6 +163,7 @@ public class OfferJdbcDao implements OfferDao {
         args.put("asking_price", digest.getAskingPrice());
         args.put("max_quantity", digest.getMaxQuantity());
         args.put("min_quantity", digest.getMinQuantity());
+        args.put("comments", digest.getComments());
 
         int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
         args.clear();

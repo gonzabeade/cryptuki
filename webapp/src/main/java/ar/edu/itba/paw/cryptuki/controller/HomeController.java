@@ -176,6 +176,7 @@ public class HomeController {
             mav.addObject("username", authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
         }
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
         return mav;
 
@@ -214,9 +215,11 @@ public class HomeController {
     public ModelAndView executeTrade(final TradeForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/trade");
         mav.addObject("tradeForm", form);
-        mav.addObject("offer", offerService.getOfferById(form.getOfferId()).get());
+        Offer offer = offerService.getOfferById(form.getOfferId()).get();
+        mav.addObject("offer", offer);
         mav.addObject("amount", form.getAmount());
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
     }
     @RequestMapping(value = "/trade", method = RequestMethod.POST)
@@ -245,7 +248,9 @@ public class HomeController {
         }
 
         mav.addObject("trade" , trade.get());
-        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
+        Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
+        mav.addObject("offer", offer);
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
         if(authentication != null){
             mav.addObject("username", authentication.getName());
@@ -398,20 +403,6 @@ public class HomeController {
 
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
-
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.now()));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 12, 5)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 50)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 30)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 4, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 3, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.APRIL, 3, 11, 0)));
-
-
-
-
-
 
         return new ModelAndView("redirect:/");
     }

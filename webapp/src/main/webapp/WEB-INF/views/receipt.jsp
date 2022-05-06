@@ -14,6 +14,8 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
@@ -50,19 +52,22 @@
 
 
     </div>
+    <% request.setCharacterEncoding("UTF-8"); %>
     <div class="flex flex-row w-2/5">
         <div class="flex flex-col">
             <jsp:include page="../components/seller_info.jsp">
                 <jsp:param name="email" value="${offer.seller.email}"/>
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+                <jsp:param name="message" value="${offer.comments}"/>
             </jsp:include>
+            <% request.setCharacterEncoding("UTF-8"); %>
             <jsp:include page="../components/buyer_info.jsp">
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
             </jsp:include>
         </div>
 

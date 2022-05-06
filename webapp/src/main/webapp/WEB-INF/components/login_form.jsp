@@ -10,11 +10,11 @@
   <c:if test="${param.error}"><h2 class="flex flex-col mx-auto text-red-400"><messages:message code="userOrPasswordIncorrect"/></h2></c:if>
   <div class="flex flex-col mx-5 my-4">
     <label for="username" class="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="user"/></label>
-    <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="e.g ${usernamePlaceholder}"/>
+    <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="${usernamePlaceholder}"/>
   </div>
   <div class="flex flex-col mx-5 my-4" >
     <label for="password" class="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="password"/></label>
-    <input id="password" name="j_password" type="password" class="rounded-lg p-3" placeholder="e.g ${passwordPlaceholder}" />
+    <input id="password" name="j_password" type="password" class="rounded-lg p-3" placeholder="${passwordPlaceholder}" />
   </div>
   <div class="flex flex-row mx-5" >
     <label class="flex flex-row">

@@ -12,7 +12,7 @@
         <form:errors path="email" cssClass="text-red-500"/>
         <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="emailAddress"/> *</form:label>
         <div class="flex-row justify-center">
-            <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="e.g ${emailPlaceholder}"/>
+            <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="${emailPlaceholder}"/>
         </div>
 
     </div>
@@ -20,7 +20,7 @@
         <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="message"/> *</form:label>
         <div class="flex-row justify-center">
-            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="e.g ${yourMessagePlaceholder}" />
+            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="${yourMessagePlaceholder}" />
         </div>
 
     </div>

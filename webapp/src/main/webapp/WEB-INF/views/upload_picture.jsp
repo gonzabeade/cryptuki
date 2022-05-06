@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<c:set var="sendButton"><messages:message code="send"/></c:set>
 
 
 <html>
@@ -19,7 +21,7 @@
 <c:url value="/test" var="postUrl"/>
 <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
   <form:input type="file" path="multipartFile" />
-    <input type="submit" value="Enviar" />
+    <input type="submit" value="sendButton" />
 
 </form:form>
 </body>

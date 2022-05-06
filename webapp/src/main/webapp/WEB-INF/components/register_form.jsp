@@ -18,7 +18,7 @@
     <div class="flex flex-col mt-3">
         <form:label path="email" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="emailAddress"/></form:label>
         <form:errors path="email" cssClass="text-red-400" element="p"/>
-        <form:input type="text" path="email" cssClass="rounded-lg p-3" placeholder="e.g ${emailPlaceholder}"/>
+        <form:input type="text" path="email" cssClass="rounded-lg p-3" placeholder="${emailPlaceholder}"/>
 
     </div>
 
@@ -26,7 +26,7 @@
 
         <form:label path="username" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="user"/></form:label>
         <form:errors path="username" cssClass="text-red-400" element="p"/>
-        <form:input type="text" path="username" cssClass="rounded-lg p-3" placeholder="e.g ${usernamePlaceholder}"/>
+        <form:input type="text" path="username" cssClass="rounded-lg p-3" placeholder="${usernamePlaceholder}"/>
 
     </div>
 
@@ -34,7 +34,7 @@
 
         <form:label path="phoneNumber" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="phoneNumber"/></form:label>
         <form:errors path="phoneNumber" cssClass="text-red-400" element="p"/>
-        <form:input type="text" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="e.g 12345678"/>
+        <form:input type="text" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="12345678"/>
 
     </div>
 
@@ -42,7 +42,7 @@
         <form:label path="password" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="password"/></form:label>
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
-            <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="e.g ${passwordPlaceholder}" onchange="passwordMatch()"/>
+            <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="${passwordPlaceholder}" onchange="passwordMatch()"/>
             <p class="text-red-400 hidden" id="passError"><messages:message code="passwordsDontMatch"/></p>
         </div>
     </div>
@@ -50,7 +50,7 @@
         <form:label path="repeatPassword" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="repeatPassword"/></form:label>
         <form:errors path="repeatPassword" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
-            <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3  w-full" placeholder="e.g ${passwordPlaceholder}" onchange="passwordMatch()"/>
+            <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3  w-full" placeholder="${passwordPlaceholder}" onchange="passwordMatch()"/>
             <p class="text-red-400 hidden" id="repeatPassError"><messages:message code="passwordsDontMatch"/></p>
         </div>
 

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<c:set var="sendButton"><messages:message code="send"/></c:set>
 
 <html>
 <head>
@@ -17,7 +18,7 @@
         <form:errors path="email" cssClass="formError" element="p"/>
     </div>
     <div>
-        <input type="submit" value="Send"/>
+        <input type="submit" value="sendButton"/>
     </div>
 </form:form>
 </body>

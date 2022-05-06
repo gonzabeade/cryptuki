@@ -8,6 +8,7 @@ import ar.edu.itba.paw.service.CryptocurrencyService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.PaymentMethodService;
 import ar.edu.itba.paw.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -119,7 +120,11 @@ public class OfferController {
             return new ModelAndView("redirect:/errors");
         }
         offerService.deleteOffer(offerId);
-        return  new ModelAndView("redirect:/");
+        ModelAndView mav = new ModelAndView("views/deleted_offer");
+        if(null != authentication){
+            mav.addObject("username", authentication.getName());
+        }
+        return mav;
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)

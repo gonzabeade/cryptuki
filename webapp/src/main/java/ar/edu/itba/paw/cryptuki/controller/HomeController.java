@@ -90,9 +90,10 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam( value = "completed", required = false) final boolean completed){
         ModelAndView mav =  new ModelAndView("views/contact");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("completed", completed);
 
         return mav;
     }
@@ -100,14 +101,12 @@ public class HomeController {
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return support(form,authentication);
+            return support(form,authentication, false);
         }
 
         supportService.getSupportFor(form.toDigest());
-        ModelAndView mav = new ModelAndView("redirect:/");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
 
-        return mav;
+        return support(new SupportForm(),authentication, true);
 
     }
 

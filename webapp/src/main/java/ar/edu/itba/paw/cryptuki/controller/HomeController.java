@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collection;
@@ -99,73 +100,6 @@ public class HomeController {
 
         return mav;
     }
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public ModelAndView adminHome(@RequestParam(value = "page") final Optional<Integer> page,
-                                  @RequestParam(value = "fromDate", required = false) final String fromDate,
-                                  @RequestParam(value = "toDate", required = false) final String toDate,
-                                  @RequestParam(value = "offerId", required = false) final Double offerId,
-                                  @RequestParam(value = "tradeId", required = false) final Double tradeId,
-                                  @RequestParam(value = "username", required = false) final Double username,
-                                  final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
-        mav.addObject("title", "Reclamos pendientes");
-        mav.addObject("baseUrl", "/admin");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-
-        int offerCount = 10;
-        int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-
-        return mav;
-    }
-    @RequestMapping(value = "/admin/assigned", method = RequestMethod.GET)
-    public ModelAndView assignedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
-                                           @RequestParam(value = "fromDate", required = false) final String fromDate,
-                                           @RequestParam(value = "toDate", required = false) final String toDate,
-                                           @RequestParam(value = "offerId", required = false) final Double offerId,
-                                           @RequestParam(value = "tradeId", required = false) final Double tradeId,
-                                           @RequestParam(value = "username", required = false) final Double username,
-                                           final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
-        mav.addObject("title", "Reclamos Asignados a mí");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("baseUrl", "/admin/assigned");
-
-        int offerCount = 10;
-        int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-
-        return mav;
-    }
-    @RequestMapping(value = "/admin/solved", method = RequestMethod.GET)
-    public ModelAndView solvedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
-                                         @RequestParam(value = "fromDate", required = false) final String fromDate,
-                                         @RequestParam(value = "toDate", required = false) final String toDate,
-                                         @RequestParam(value = "offerId", required = false) final Double offerId,
-                                         @RequestParam(value = "tradeId", required = false) final Double tradeId,
-                                         @RequestParam(value = "username", required = false) final Double username,
-                                         final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
-        mav.addObject("title", "Reclamos resueltos");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("baseUrl", "/admin/solved");
-        int offerCount = 10;
-        int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-
-        return mav;
-    }
-    @RequestMapping(value = "/admin/profile")
-    public ModelAndView adminProfile(final Authentication authentication){
-       return null;
-    }
-
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
@@ -391,6 +325,15 @@ public class HomeController {
 
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
+
+
+        LocalDate from = LocalDate.of(2022, Month.APRIL, 1);
+        LocalDate to = LocalDate.of(2022, Month.APRIL, 30);
+
+        System.out.println("--------------------------------------");
+        System.out.println("---TESTING----------------------------");
+        System.out.println(complainService.getComplainsBy(new ComplainFilter.Builder().from(from).to(to).build()));
+        System.out.println("--------------------------------------");
 
         return new ModelAndView("redirect:/");
     }

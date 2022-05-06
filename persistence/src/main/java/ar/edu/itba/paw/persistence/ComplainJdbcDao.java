@@ -38,11 +38,13 @@ public class ComplainJdbcDao implements ComplainDao {
 
     private static MapSqlParameterSource toMapSqlParameterSource(ComplainFilter filter) {
         return new MapSqlParameterSource()
-                .addValue("complainer_uname", filter.getComplainerUsername())
-                .addValue("complain_status", filter.getComplainStatus() == null ? null : filter.getComplainStatus().toString())
-                .addValue("moderator_uname", filter.getModeratorUsername())
-                .addValue("trade_id", filter.getTradeId())
-                .addValue("complain_id", filter.getComplainId())
+                .addValue("complainer_uname", filter.getComplainerUsername().orElse(null))
+                .addValue("from_date", filter.getFrom().orElse(null))
+                .addValue("to_date", filter.getTo().orElse(null))
+                .addValue("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get().toString() : null)
+                .addValue("moderator_uname", filter.getModeratorUsername().orElse(null))
+                .addValue("trade_id", filter.getTradeId().isPresent() ? filter.getTradeId().getAsInt() : null)
+                .addValue("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null)
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize());
     }
@@ -67,6 +69,8 @@ public class ComplainJdbcDao implements ComplainDao {
                 "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
                 "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
                 "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date) IS NULL OR  complain_date <= :to_date) AND\n" +
                 "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 

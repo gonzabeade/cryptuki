@@ -84,6 +84,7 @@
                         <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                         <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                         <jsp:param name="userEmail" value="${userEmail}"/>
+                        <jsp:param name="isAdmin" value="${isAdmin}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

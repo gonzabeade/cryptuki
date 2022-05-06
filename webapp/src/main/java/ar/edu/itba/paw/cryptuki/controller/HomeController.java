@@ -2,11 +2,11 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.SupportForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,20 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-
-import java.util.ArrayList;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -93,6 +87,7 @@ public class HomeController {
         if(authentication != null){
             mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
 
         return mav;
@@ -195,6 +190,8 @@ public class HomeController {
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.get().getSeller().getLastLogin()));
         if(null != authentication){
             mav.addObject("username", authentication.getName());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
         return mav;
     }

@@ -39,12 +39,18 @@
 
 				</div>
 				<div class="flex basis-1/4 justify-center">
-					<a class="${param.userEmail == param.owner ? " ": "invisible"} pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 m-2 hover:bg-stormd/[.6] hover:border-2 hover:border-frostdr text-polard" href="<c:url value="/modify/${param.offerId}"/>">
-						Editar
-					</a>
-					<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">
-						Ver
-					</a>
+					<c:choose>
+						<c:when test="${param.userEmail == param.owner || param.isAdmin}">
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-32 text-center" href="<c:url value="/offer/${param.offerId}"/>">
+								Ver
+							</a>
+						</c:when>
+						<c:otherwise>
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-32 text-center" href="<c:url value="/buy/${param.offerId}"/>">
+								Comprar
+							</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 		</div>

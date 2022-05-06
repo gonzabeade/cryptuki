@@ -33,13 +33,16 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-row  mx-auto mt-10">
-            <a class="bg-frostdr text-white  my-auto p-3 rounded-md font-sans mx-auto active:cursor-progress" href="<c:url value="/modify/${offer.id}"/>">Editar</a>
-            <c:url value="/delete/${offer.id}" var="deleteUrl"/>
-            <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
-                <button type="submit" class="bg-nred text-white text-center mx-auto p-3 rounded-md font-sans">Eliminar anuncio</button>
-            </form:form>
-        </div>
+        <c:if test="${isAdmin || offer.seller.email == userEmail}">
+            <div class="flex flex-row  mx-auto mt-10">
+                <a class="bg-frostdr text-white  my-auto p-3 rounded-md font-sans mx-auto active:cursor-progress" href="<c:url value="/modify/${offer.id}"/>">Editar</a>
+                <c:url value="/delete/${offer.id}" var="deleteUrl"/>
+                <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
+                    <button type="submit" class="bg-nred text-white text-center mx-auto p-3 rounded-md font-sans">Eliminar anuncio</button>
+                </form:form>
+            </div>
+        </c:if>
+
 
     </div>
     <div class="flex flex-row mt-10">

@@ -120,7 +120,7 @@ public class HomeController {
 
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
-    public ModelAndView modify(@PathVariable("offerId") final int offerId, @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
+    public ModelAndView modify(@PathVariable("offerId") final int offerId, @ModelAttribute("modifyOfferForm") final ModifyOfferForm form, final Authentication authentication){
         Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
         if(offer == null){
             return new ModelAndView("redirect:/errors");
@@ -132,6 +132,7 @@ public class HomeController {
         form.setMaxAmount(offer.getMaxQuantity());
         form.setCryptocurrency(offer.getCrypto().getCode());
         form.setPrice(offer.getAskingPrice());
+        form.setMessage(offer.getComments());
         ArrayList<String> pm =  new ArrayList<>();
         offer.getPaymentMethods().forEach(paymentMethod -> pm.add(paymentMethod.getName()));
         form.setPaymentMethods(pm.toArray(new String[0]));
@@ -146,7 +147,7 @@ public class HomeController {
         return mav;
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.POST)
-    public ModelAndView modify(@PathVariable("offerId") final int offerId,  @Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication, final BindingResult errors){
+    public ModelAndView modify(@PathVariable("offerId") final int offerId,  @Valid @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,  final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
             return modify(offerId, form, authentication);
         }

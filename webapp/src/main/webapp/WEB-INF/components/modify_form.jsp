@@ -8,7 +8,8 @@
 <div class="flex flex-col">
 
   <c:url value="${param.saveUrl}" var="postUrl"/>
-  <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]" onsubmit="event.preventDefault(); preventMinMaxFromSubmitting();">
+  <form:form modelAttribute="modifyOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
+    <form:hidden path="offerId" value="${offer.id}"/>
     <div class="flex flex-col justify-center">
       <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>
       <form:label  path="cryptocurrency" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Criptomoneda*</form:label>
@@ -40,13 +41,13 @@
       </div>
     </div>
     <div class="flex flex-col justify-center mt-6">
-      <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
-      <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
-      <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
-      <p class="text-red-500 hidden text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</p>
+      <div class="flex flex-col">
+        <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
+        <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
+        <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
+        <form:errors cssClass="text-red-500 text-center mx-auto"/>
       <div class="flex flex-row justify-center">
         <div>
-
           <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2"><c:out value="${selectedCrypto}"/></p></form:label>
           <div class="flex flex-row justify-center mx-auto">
             <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
@@ -94,6 +95,14 @@
 
           <form:checkbox path="paymentMethods" id="${paymentMethod.name}" value="${paymentMethod.name}" cssClass="hidden"/>
         </c:forEach>
+      </div>
+    </div>
+    <div class="flex flex-col mx-auto">
+      <form:errors path="message" cssClass="text-red-500 mx-auto"/>
+      <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Datos de transferencia*</form:label>
+      <div class="flex flex-row justify-center w-96">
+        <form:textarea path="message" cssClass="min-w-full h-36 rounded-lg mx-auto p-5"/>
+      </div>
       </div>
     </div>
     <div class="flex flex-row p-5 mx-60 mt-10">

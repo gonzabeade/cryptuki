@@ -13,6 +13,7 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
@@ -31,6 +32,7 @@
             </div>
         </div>
         <div>
+            <% request.setCharacterEncoding("UTF-8"); %>
             <jsp:include page="../components/buy_form.jsp">
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
@@ -41,12 +43,13 @@
             </jsp:include>
         </div>
     </div>
+    <% request.setCharacterEncoding("utf-8"); %>
     <div class="flex flex-row w-2/5">
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-            <jsp:param name="lastLogin" value="2022-02-11"/>
+            <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
         </jsp:include>
     </div>
 </div>

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.cryptuki.form.annotation.MinMax;
 import ar.edu.itba.paw.persistence.Cryptocurrency;
 import ar.edu.itba.paw.persistence.Offer;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -8,7 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
-
+@MinMax
 public class UploadOfferForm {
 
     @NotNull
@@ -29,18 +30,16 @@ public class UploadOfferForm {
 
     @Size(min = 1)
     private String[] paymentMethods;
+    @Size(min = 1, max = 140)
+    private String message;
 
-    @Size(max = 40)
-    private String location;
-
-    public String getLocation() {
-        return location;
+    public String getMessage() {
+        return message;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setMessage(String message) {
+        this.message = message;
     }
-
 
     public Float getMinAmount() {
         return minAmount;

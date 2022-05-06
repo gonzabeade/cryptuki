@@ -374,9 +374,12 @@ public class HomeController {
     }
     private Offer checkOfferPermissionAndGetOffer(int offerId, final Authentication authentication){
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-        if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication == null ? null : authentication.getName()).get().getEmail()))){
-            return null;
+        if(authentication !=null){
+            if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication.getName()).get().getEmail())) && authentication.getAuthorities().stream().noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))){
+                return null;
+            }
         }
+
         return offer;
     }
 

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -14,11 +15,12 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
-<div class="flex flex-row divide-x-2 divide-polard mt-10">
-    <div class="flex flex-col w-3/5">
+<div class="flex flex-col mt-10">
+    <div class="flex flex-col">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-2xl text-center">Oferta # <c:out value="${offer.id}"/></h2>
@@ -31,15 +33,22 @@
                 </div>
             </div>
         </div>
-        <a>Editar</a>
-        <a>Eliminar</a>
+        <div class="flex flex-row  mx-auto mt-10">
+            <a class="bg-frostdr text-white  my-auto p-3 rounded-md font-sans mx-auto active:cursor-progress" href="<c:url value="/modify/${offer.id}"/>">Editar</a>
+            <c:url value="/delete/${offer.id}" var="deleteUrl"/>
+            <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
+                <button type="submit" class="bg-nred text-white text-center mx-auto p-3 rounded-md font-sans">Eliminar anuncio</button>
+            </form:form>
+        </div>
+
     </div>
-    <div class="flex flex-row w-2/5">
+    <div class="flex flex-row mt-10">
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-            <jsp:param name="lastLogin" value="2022-02-11"/>
+            <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+            <jsp:param name="message" value="${offer.comments}"/>
         </jsp:include>
     </div>
 

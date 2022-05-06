@@ -24,10 +24,6 @@
 <div class="flex">
     <div class="flex flex-row mx-auto">
         <h1 class="my-10 text-4xl font-semibold font-sans text-polar">Modifica tu anuncio </h1>
-        <c:url value="/delete/${offer.id}" var="deleteUrl"/>
-        <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
-            <button type="submit" class="bg-nred text-white text-center mx-auto p-3 rounded-md font-sans">Eliminar anuncio</button>
-        </form:form>
     </div>
 </div>
 

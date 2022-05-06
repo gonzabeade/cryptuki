@@ -6,7 +6,7 @@
 <jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
-					<h1 class="fotn-sans"><messages:message code="seller"/> </h1>
+					<h1 class="fotn-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.user}"/></h3>
 					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/></h4>
 				</div>
@@ -27,7 +27,7 @@
 				</div>
 				<div class="flex flex-row basis-1/4 justify-between">
 					<div class="flex-col">
-						<h1 class="font-sans"><messages:message code="paymentMethods"/> </h1>
+						<h1 class="font-sans"><messages:message code="paymentMethods"/>: </h1>
 						<div class="flex flex-row justify-start">
 							<c:if test="${accepted_payments.size() == 0}"><messages:message code="noPaymentMethods"/></c:if>
 							<c:forEach  var="payment_method" items="${accepted_payments}">

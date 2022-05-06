@@ -60,7 +60,7 @@ public class OfferController {
         }
 
         int offerId = offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
-        return seeOffer(offerId,authentication, true);
+        return seeOffer(offerId,authentication, true,false);
 
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
@@ -109,7 +109,7 @@ public class OfferController {
             return new ModelAndView("redirect:/errors");
         }
         offerService.modifyOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
-        return new ModelAndView("redirect:/");
+        return seeOffer(offer.getId(),authentication,false,true);
     }
     @RequestMapping(value = "/delete/{offerId}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("offerId") final int offerId,
@@ -125,7 +125,8 @@ public class OfferController {
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
     public  ModelAndView seeOffer(@PathVariable("offerId") final int offerId,
                                   final Authentication authentication,
-                                  @RequestParam(value = "confirmation", required = false) boolean confirmation){
+                                  @RequestParam(value = "creation", required = false) boolean creation,
+                                  @RequestParam(value = "edit", required = false) boolean edit){
 
         Optional<Offer> offer = offerService.getOfferById(offerId);
         if( !offer.isPresent()) {
@@ -135,7 +136,8 @@ public class OfferController {
         ModelAndView mav = new ModelAndView("views/see_offer");
         mav.addObject("offer", offer.get());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.get().getSeller().getLastLogin()));
-        mav.addObject("confirmation", confirmation);
+        mav.addObject("creation", creation);
+        mav.addObject("edit", edit);
         if(null != authentication){
             mav.addObject("username", authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());

@@ -20,10 +20,16 @@
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
-<c:if test="${confirmation == true}">
+<c:if test="${creation == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">
         <jsp:param name="title" value="Oferta creada con éxito"/>
+    </jsp:include>
+</c:if>
+<c:if test="${edit == true}">
+    <% request.setCharacterEncoding("UTF-8"); %>
+    <jsp:include page="../components/confirmationToggle.jsp">
+        <jsp:param name="title" value="Oferta modificada con éxito"/>
     </jsp:include>
 </c:if>
 <div class="flex flex-col mt-10">

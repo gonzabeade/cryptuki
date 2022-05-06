@@ -325,20 +325,6 @@ public class HomeController {
     @RequestMapping(value = "/caca", method = { RequestMethod.GET })
     public ModelAndView caca() {
 
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.now()));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 12, 5)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 50)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 30)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 5, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 4, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.MAY, 3, 11, 0)));
-        System.out.println(LastConnectionUtils.toRelativeTime(LocalDateTime.of(2022, Month.APRIL, 3, 11, 0)));
-
-
-
-
-
-
         return new ModelAndView("redirect:/");
     }
 

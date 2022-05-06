@@ -1,5 +1,7 @@
 package ar.edu.itba.paw;
 
+import ar.edu.itba.paw.persistence.Offer;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,12 +20,16 @@ public class OfferDigest {
     private final Collection<String> paymentMethods;
     private final LocalDateTime date;
 
+    private final String comments;
+
     public static class Builder {
 
         private final String cryptoCode;
         private final float askingPrice;
         private final int sellerId;
 
+
+        private String comments;
 
         private Collection<String> paymentMethods = new LinkedList<>();
         private float minQuantity = 1.0f;
@@ -65,9 +71,14 @@ public class OfferDigest {
             return id;
         }
 
+        public String getComments() {
+            return comments;
+        }
+
         public Builder withPaymentMethod(String pm) { this.paymentMethods.add(pm); return this; }
         public Builder withMinQuantity(float quantity) { this.minQuantity = quantity; return this; }
         public Builder withMaxQuantity(float quantity) { this.maxQuantity = quantity; return this; }
+        public Builder withComments(String comments) { this.comments = comments; return this; }
 
         public Builder withId(int id) { this.id = id; return this; }
 
@@ -83,6 +94,7 @@ public class OfferDigest {
         maxQuantity = builder.maxQuantity;
         paymentMethods = Collections.unmodifiableList(new LinkedList<>(builder.paymentMethods));
         date = builder.date;
+        comments = builder.comments;
     }
 
     public int getId() {
@@ -109,5 +121,9 @@ public class OfferDigest {
     }
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public String getComments() {
+        return comments;
     }
 }

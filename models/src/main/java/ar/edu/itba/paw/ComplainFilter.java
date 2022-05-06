@@ -16,13 +16,15 @@ public class ComplainFilter {
     private final String complainerUsername;
     private final ComplainStatus complainStatus;
     private final String moderatorUsername;
-    private final Integer tradeId;
 
     private final LocalDate from;
 
     private final LocalDate to;
 
     private final Integer complainId;
+    private final Integer tradeId;
+    private final Integer offerId;
+
 
 
     public static final class Builder {
@@ -31,12 +33,14 @@ public class ComplainFilter {
         private String complainerUsername;
         private ComplainStatus complainStatus;
         private String moderatorUsername;
-        private Integer tradeId;
 
         private LocalDate from;
         private LocalDate to;
 
         private Integer complainId;
+        private Integer tradeId;
+        private Integer offerId;
+
 
         public Builder withPage(int page) {
             this.page = page;
@@ -65,6 +69,11 @@ public class ComplainFilter {
 
         public Builder withTradeId(int tradeId) {
             this.tradeId = tradeId;
+            return this;
+        }
+
+        public Builder withOfferId(int offerId) {
+            this.offerId = offerId;
             return this;
         }
 
@@ -99,6 +108,7 @@ public class ComplainFilter {
         this.complainId = builder.complainId;
         this.from = builder.from;
         this.to = builder.to;
+        this.offerId = builder.offerId;
     }
 
     public int getPage() {
@@ -123,6 +133,10 @@ public class ComplainFilter {
 
     public OptionalInt getTradeId() {
         return tradeId == null ? OptionalInt.empty() : OptionalInt.of(tradeId);
+    }
+
+    public OptionalInt getOfferId() {
+        return offerId == null ? OptionalInt.empty() : OptionalInt.of(offerId);
     }
 
     public OptionalInt getComplainId() {

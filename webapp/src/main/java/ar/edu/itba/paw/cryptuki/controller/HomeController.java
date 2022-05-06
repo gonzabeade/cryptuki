@@ -327,12 +327,10 @@ public class HomeController {
     public ModelAndView caca() {
 
 
-        LocalDate from = LocalDate.of(2022, Month.APRIL, 1);
-        LocalDate to = LocalDate.of(2022, Month.APRIL, 30);
 
         System.out.println("--------------------------------------");
         System.out.println("---TESTING----------------------------");
-        System.out.println(complainService.getComplainsBy(new ComplainFilter.Builder().from(from).to(to).build()));
+        System.out.println(complainService.getComplainsBy(new ComplainFilter.Builder().withPageSize(1000).withOfferId(10).build()));
         System.out.println("--------------------------------------");
 
         return new ModelAndView("redirect:/");

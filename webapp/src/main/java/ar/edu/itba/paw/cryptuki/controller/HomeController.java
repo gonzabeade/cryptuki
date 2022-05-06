@@ -173,13 +173,30 @@ public class HomeController {
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
         mav.addObject("offer", offer);
         if( authentication != null ){
-            mav.addObject("username", authentication == null ? null : authentication.getName());
+            mav.addObject("username", authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
         }
 
         return mav;
 
     }
+    @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
+    public  ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication){
+
+        Optional<Offer> offer = offerService.getOfferById(offerId);
+        if( !offer.isPresent()) {
+            return null;
+        }
+
+        ModelAndView mav = new ModelAndView("views/see_offer");
+        mav.addObject("offer", offer.get());
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.get().getSeller().getLastLogin()));
+        if(null != authentication){
+            mav.addObject("username", authentication.getName());
+        }
+        return mav;
+    }
+
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){

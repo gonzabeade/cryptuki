@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.service.CryptocurrencyService;
+import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.PaymentMethodService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

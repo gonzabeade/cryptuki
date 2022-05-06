@@ -8,6 +8,7 @@ import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ public class TradeFluxController {
     private final TradeService tradeService;
     private final UserService us;
 
+    @Autowired
     public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us) {
         this.offerService = offerService;
         this.tradeService = tradeService;

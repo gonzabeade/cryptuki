@@ -8,6 +8,7 @@ import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,12 @@ import java.util.Collections;
 public class UserController {
     private  final UserService userService;
     private final ProfilePicService profilePicService;
+
+    @Autowired
+    public UserController(UserService userService, ProfilePicService profilePicService) {
+        this.userService = userService;
+        this.profilePicService = profilePicService;
+    }
 
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
@@ -68,10 +75,6 @@ public class UserController {
         return mav;
     }
 
-    public UserController(UserService userService, ProfilePicService profilePicService) {
-        this.userService = userService;
-        this.profilePicService = profilePicService;
-    }
 
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){

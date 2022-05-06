@@ -22,8 +22,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -320,9 +326,21 @@ public class HomeController {
 
 
     @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
-    public ResponseEntity<byte[]> imageGet(@PathVariable final String username){
+    public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {
 
-        Image image = profilePicService.getProfilePicture(username).orElseThrow( () -> new RuntimeException("Unknown user"));
+        Optional<Image> maybeImage = profilePicService.getProfilePicture(username);
+        Image image;
+        if(!maybeImage.isPresent()){
+
+            BufferedImage bImage = ImageIO.read(new File(this.getClass().getClassLoader().getResource("default-Profile.png").toURI()));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "png", bos );
+            byte [] data = bos.toByteArray();
+            image =  new Image(username,data,"image/png");
+        }else {
+            image=maybeImage.get();
+        }
+
         return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
     }
 

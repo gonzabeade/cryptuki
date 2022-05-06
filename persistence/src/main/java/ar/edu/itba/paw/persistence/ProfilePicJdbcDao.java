@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,8 +28,11 @@ public class ProfilePicJdbcDao implements ProfilePicDao {
     @Override
     public Optional<Image> getProfilePicture(String username) {
         final String query = "SELECT * FROM profile_pic JOIN auth ON auth.user_id = profile_pic.user_id WHERE uname = ?";
-        Image image = jdbcTemplate.queryForObject(query, IMAGE_ROW_MAPPER, username);
-        return Optional.ofNullable(image);
+        List<Image> list = jdbcTemplate.query(query,IMAGE_ROW_MAPPER,username);
+        if(list.size() == 0)
+            return Optional.empty();
+        else
+            return Optional.of(list.get(0));
     }
 
     @Override

@@ -155,7 +155,7 @@ public class OfferJdbcDao implements OfferDao {
     }
 
     @Override
-    public void makeOffer(OfferDigest digest) {
+    public int makeOffer(OfferDigest digest) {
         Map<String,Object> args = new HashMap<>();
 
         args.put("seller_id", digest.getSellerId());
@@ -175,6 +175,7 @@ public class OfferJdbcDao implements OfferDao {
             args.put("payment_code", pm);
             jdbcPaymentMethodAtOfferInsert.execute(args);
         }
+        return offerId;
     }
 
 

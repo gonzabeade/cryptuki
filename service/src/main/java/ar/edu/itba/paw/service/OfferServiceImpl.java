@@ -22,8 +22,8 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void makeOffer(OfferDigest digest) {
-        offerDao.makeOffer(digest);
+    public int makeOffer(OfferDigest digest) {
+         return offerDao.makeOffer(digest);
     }
 
     @Override

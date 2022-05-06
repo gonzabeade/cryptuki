@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -62,11 +59,8 @@ public class OfferController {
             return uploadOffer(form,authentication);
         }
 
-        offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
-
-        ModelAndView mav = new ModelAndView("redirect:/");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        return mav;
+        int offerId = offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
+        return seeOffer(offerId,authentication, true);
 
     }
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
@@ -129,7 +123,9 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
-    public  ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication){
+    public  ModelAndView seeOffer(@PathVariable("offerId") final int offerId,
+                                  final Authentication authentication,
+                                  @RequestParam(value = "confirmation", required = false) boolean confirmation){
 
         Optional<Offer> offer = offerService.getOfferById(offerId);
         if( !offer.isPresent()) {
@@ -139,6 +135,7 @@ public class OfferController {
         ModelAndView mav = new ModelAndView("views/see_offer");
         mav.addObject("offer", offer.get());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.get().getSeller().getLastLogin()));
+        mav.addObject("confirmation", confirmation);
         if(null != authentication){
             mav.addObject("username", authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());

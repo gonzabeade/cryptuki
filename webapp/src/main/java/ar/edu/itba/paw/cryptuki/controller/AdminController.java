@@ -2,7 +2,12 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
+import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.ComplainService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,75 +25,94 @@ import java.util.Optional;
 public class AdminController {
 
     private static final int PAGE_SIZE = 5;
-//    private final ComplainService complainService;
+    private final ComplainService complainService;
 
 
-//    public AdminController(ComplainService complainService) {
-//        this.complainService = complainService;
-//    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView adminHome(@RequestParam(value = "page") final Optional<Integer> page,
-                                  @ModelAttribute("complainFilterForm") final SupportForm form,
-                                  final Authentication authentication){
+    @Autowired
+    public AdminController(ComplainService complainService) {
+        this.complainService = complainService;
+    }
 
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ModelAndView adminHome(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ComplainFilter filter = builder
+                .withComplainStatus(ComplainStatus.PENDING)
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE)
+                .build();
+
+
+        mav.addObject("baseUrl", "/admin"); // TODO: check
         mav.addObject("title", "Reclamos pendientes");
-        mav.addObject("baseUrl", "/admin/");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
-
-        int offerCount = 10;
+        int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
+        mav.addObject("complainList", complainService.getComplainsBy(filter));
 
         return mav;
     }
-    @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public ModelAndView assignedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
-                                           @RequestParam(value = "fromDate", required = false) final String fromDate,
-                                           @RequestParam(value = "toDate", required = false) final String toDate,
-                                           @RequestParam(value = "offerId", required = false) final Double offerId,
-                                           @RequestParam(value = "tradeId", required = false) final Double tradeId,
-                                           @RequestParam(value = "username", required = false) final Double username,
-                                           final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
-        mav.addObject("title", "Reclamos asignados a mi");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("baseUrl", "/admin/assigned");
 
-        int offerCount = 10;
+
+    @RequestMapping(value = "/assigned", method = RequestMethod.GET)
+    public ModelAndView assignedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
+        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ComplainFilter filter = builder
+                .withComplainStatus(ComplainStatus.ASSIGNED)
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE)
+                .withModeratorUsername(authentication.getName())
+                .build();
+
+
+        mav.addObject("baseUrl", "/admin"); // TODO: check
+        mav.addObject("title", "Reclamos asignados a mí");
+        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
+
+        int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
+        mav.addObject("complainList", complainService.getComplainsBy(filter));
 
         return mav;
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
-    public ModelAndView solvedComplaints(@RequestParam(value = "page") final Optional<Integer> page,
-                                         @RequestParam(value = "fromDate", required = false) final String fromDate,
-                                         @RequestParam(value = "toDate", required = false) final String toDate,
-                                         @RequestParam(value = "offerId", required = false) final Double offerId,
-                                         @RequestParam(value = "tradeId", required = false) final Double tradeId,
-                                         @RequestParam(value = "username", required = false) final Double username,
-                                         final Authentication authentication){
+    public ModelAndView solvedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ComplainFilter filter = builder
+                .withComplainStatus(ComplainStatus.CLOSED)
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE)
+                .build();
+
+
+        mav.addObject("baseUrl", "/admin"); // TODO: check
         mav.addObject("title", "Reclamos resueltos");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("baseUrl", "/admin/solved");
-        int offerCount = 10;
+        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
+
+        int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
+        mav.addObject("complainList", complainService.getComplainsBy(filter));
 
         return mav;
     }
+
     @RequestMapping(value = "/profile")
     public ModelAndView adminProfile(final Authentication authentication){
         return null;

@@ -323,18 +323,8 @@ public class HomeController {
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "/caca", method = { RequestMethod.GET })
-    public ModelAndView caca() {
 
 
-
-        System.out.println("--------------------------------------");
-        System.out.println("---TESTING----------------------------");
-        System.out.println(complainService.getComplainsBy(new ComplainFilter.Builder().withPageSize(1000).withOfferId(10).build()));
-        System.out.println("--------------------------------------");
-
-        return new ModelAndView("redirect:/");
-    }
 
 
 }

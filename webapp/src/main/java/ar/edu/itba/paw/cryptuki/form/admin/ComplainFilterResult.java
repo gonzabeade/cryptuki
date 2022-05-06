@@ -2,57 +2,62 @@ package ar.edu.itba.paw.cryptuki.form.admin;
 
 import ar.edu.itba.paw.ComplainFilter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class ComplainFilterForm {
+public class ComplainFilterResult {
 
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate fromDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate toDate;
 
-    int offerId;
-    int tradeId;
+    @Min(0)
+    Integer offerId;
+
+    @Min(0)
+    Integer tradeId;
 
     String complainerUsername;
 
-    public LocalDate getFromDate() {
-        return fromDate;
+    public Optional<LocalDate> getFromDate() {
+        return Optional.ofNullable(fromDate);
     }
 
     public void setFromDate(LocalDate fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDate getToDate() {
-        return toDate;
+    public Optional<LocalDate> getToDate() {
+        return Optional.ofNullable(toDate);
     }
 
     public void setToDate(LocalDate toDate) {
         this.toDate = toDate;
     }
 
-    public int getOfferId() {
-        return offerId;
+    public Optional<Integer> getOfferId() {
+        return Optional.ofNullable(offerId);
     }
 
     public void setOfferId(int offerId) {
         this.offerId = offerId;
     }
 
-    public int getTradeId() {
-        return tradeId;
+    public Optional<Integer> getTradeId() {
+        return Optional.ofNullable(tradeId);
     }
 
     public void setTradeId(int tradeId) {
         this.tradeId = tradeId;
     }
 
-    public String getComplainerUsername() {
-        return complainerUsername;
+    public Optional<String> getComplainerUsername() {
+        return Optional.ofNullable(complainerUsername);
     }
 
     public void setComplainerUsername(String complainerUsername) {
@@ -63,6 +68,7 @@ public class ComplainFilterForm {
         return new ComplainFilter.Builder()
                 .withComplainerUsername(complainerUsername)
                 .withTradeId(tradeId)
+                .withOfferId(offerId)
                 .from(fromDate)
                 .to(toDate);
     }

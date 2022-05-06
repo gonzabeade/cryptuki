@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="complainList" scope="request" type="java.util.Collection"/>
+
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +15,8 @@
   <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
   <title>cryptuki</title>
   <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
-
 </head>
+
 <body class="bg-storml overflow-x-hidden">
 <div class="flex flex-row">
   <jsp:include page="../../components/admin/header.jsp">
@@ -27,7 +29,18 @@
         <jsp:param name="baseUrl" value="${baseUrl}"/>
       </jsp:include>
       <div class="p-10 w-2/3  flex flex-col">
-         <jsp:include page="../../components/admin/card_complaint.jsp"/>
+
+        <c:forEach var="complain" items="${complainList}">
+          <li style="list-style-type: none">
+            <jsp:include page="../../components/admin/card_complaint.jsp">
+              <jsp:param name="date" value="${complain.date}"/>
+              <jsp:param name="complainId" value="${complain.complainId}"/>
+              <jsp:param name="complainerUsername" value="${complain.complainerUsername}"/>
+              <jsp:param name="complainerComments" value="${complain.complainerComments.get()}"/>
+            </jsp:include>
+          </li>
+        </c:forEach>
+
         <jsp:include page="../../components/paginator.jsp">
           <jsp:param name="activePage" value="${activePage}"/>
           <jsp:param name="pages" value="${pages}"/>

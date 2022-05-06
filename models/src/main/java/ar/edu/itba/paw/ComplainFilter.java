@@ -67,12 +67,12 @@ public class ComplainFilter {
             return this;
         }
 
-        public Builder withTradeId(int tradeId) {
+        public Builder withTradeId(Integer tradeId) {
             this.tradeId = tradeId;
             return this;
         }
 
-        public Builder withOfferId(int offerId) {
+        public Builder withOfferId(Integer offerId) {
             this.offerId = offerId;
             return this;
         }
@@ -88,7 +88,7 @@ public class ComplainFilter {
         }
 
 
-        public Builder withComplainId(int complainId) {
+        public Builder withComplainId(Integer complainId) {
             this.complainId = complainId;
             return this;
         }

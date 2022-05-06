@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public final class Complain {
@@ -7,10 +8,12 @@ public final class Complain {
     private final int complainId;
     private final ComplainStatus status;
     private final String complainerUsername;
-    private final Optional<String> complainerComments;
-    private final Optional<String> moderatorUsername;
-    private final Optional<String> moderatorComments;
-    private final Optional<Integer> tradeId;
+
+    private final LocalDate date;
+    private final String complainerComments;
+    private final String moderatorUsername;
+    private final String moderatorComments;
+    private final Integer tradeId;
 
     public static class Builder {
 
@@ -22,6 +25,8 @@ public final class Complain {
         private String moderatorUsername;
         private String moderatorComments;
         private Integer complainId;
+
+        private LocalDate date;
 
 
         public Builder(String complainerUsername) {
@@ -38,6 +43,10 @@ public final class Complain {
             return this;
         }
 
+        protected Builder withDate(LocalDate date) {
+            this.date = date;
+            return this;
+        }
 
         public Builder withComplainerComments(String complainerComments) {
             this.complainerComments = complainerComments;
@@ -84,11 +93,12 @@ public final class Complain {
     private Complain(Complain.Builder builder) {
         this.complainerUsername = builder.complainerUsername;
         this.complainId = builder.complainId;
-        this.complainerComments = Optional.ofNullable(builder.getComplainerComments());
+        this.complainerComments = builder.getComplainerComments();
         this.status = builder.status;
-        this.moderatorUsername = Optional.ofNullable(builder.getModerator());
-        this.moderatorComments = Optional.ofNullable(builder.moderatorComments);
-        this.tradeId = Optional.ofNullable(builder.tradeId);
+        this.moderatorUsername = builder.getModerator();
+        this.moderatorComments = builder.moderatorComments;
+        this.tradeId = builder.tradeId;
+        this.date = builder.date;
     }
 
     public int getComplainId() {
@@ -104,15 +114,31 @@ public final class Complain {
     }
 
     public Optional<String> getComplainerComments() {
-        return complainerComments;
+        return Optional.ofNullable(complainerComments);
     }
 
     public Optional<String> getModerator() {
-        return moderatorUsername;
+        return Optional.ofNullable(moderatorUsername);
     }
 
     public Optional<String> getModeratorComments() {
-        return moderatorComments;
+        return Optional.ofNullable(moderatorComments);
+    }
+
+    public String getComplainerUsername() {
+        return complainerUsername;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public Optional<String> getModeratorUsername() {
+        return Optional.ofNullable(moderatorUsername);
+    }
+
+    public Optional<Integer> getTradeId() {
+        return Optional.ofNullable(tradeId);
     }
 
     @Override

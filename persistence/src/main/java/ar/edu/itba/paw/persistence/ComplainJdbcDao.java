@@ -24,6 +24,7 @@ public class ComplainJdbcDao implements ComplainDao {
                     rs.getString("complainer_uname"))
                     .withTradeId(rs.getInt("trade_id"))
                     .withComplainId(rs.getInt("complain_id"))
+                    .withDate(rs.getTimestamp("complain_date").toLocalDateTime().toLocalDate())
                     .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
                     .withComplainerComments(rs.getString("complainer_comments"))
                     .withModeratorComments(rs.getString("moderator_comments"))

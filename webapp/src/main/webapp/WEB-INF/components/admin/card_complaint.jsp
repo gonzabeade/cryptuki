@@ -1,17 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div class="flex flex-row bg-white shadow-lg h-36 rounded-lg p-4 justify-start">
     <div class="flex flex-row basis-3/4">
         <div class="flex flex-col my-auto mx-7">
             <h1 class="font-sans font-polard text-2xl font-semibold">
-                Reclamo <b>#1</b>
+                Reclamo <b><c:out value="${param.complainId}"/></b>
             </h1>
-            <h3 class="text-gray-300"> Efectuado el 2022/02/01</h3>
+            <h3 class="text-gray-300"> Efectuado el <c:out value="${param.date}"/></h3>
         </div>
         <div class="flex flex-col my-auto mx-7">
             <h1 class="font-sans font-polard text-2xl font-semibold">
-                Usuario:  <b>mdedeu</b>
+                Usuario:  <b><c:out value="${param.complainerUsername}"/></b>
             </h1>
-            <h3 class="text-gray-300">Último login el 2022/02/01</h3>
+            <h3 class="text-gray-300">Comentario: <c:out value="${param.complainerComments}"/></h3>
         </div>
     </div>
     <div class="flex flex-row basis-1/4 my-auto">

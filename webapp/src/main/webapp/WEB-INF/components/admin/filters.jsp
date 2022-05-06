@@ -21,8 +21,8 @@
    </div>
 
     <div class="flex flex-col mt-7">
-        <label for="username"> Username</label>
-        <input type="text" class="p-1 rounded-lg" id="username" onchange="addQueryParam('username')">
+        <label for="complainer"> Username</label>
+        <input type="text" class="p-1 rounded-lg" id="complainer" onchange="addQueryParam('username')">
     </div>
     <a id="link" href="<c:url value="${param.baseUrl}"/>" class="rounded-lg bg-frost text-white mt-7 p-3 text-center"> Filtrar</a>
 

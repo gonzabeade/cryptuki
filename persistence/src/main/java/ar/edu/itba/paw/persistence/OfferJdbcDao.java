@@ -72,7 +72,7 @@ public class OfferJdbcDao implements OfferDao {
             Offer.Builder instance = cache.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
-            ).withPaymentMethod(pm);
+            ).withPaymentMethod(pm); // TODO - is paymentMethod repeated
             cache.putIfAbsent(offerId, instance);
             i ++;
         }

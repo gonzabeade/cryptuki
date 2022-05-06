@@ -75,9 +75,8 @@
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-
             <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
-            <jsp:param name="lastLogin" value="2022-03-25"/>
+            <jsp:param name="message" value="${offer.comments}"/>
         </jsp:include>
     </div>
 </div>

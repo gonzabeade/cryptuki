@@ -60,6 +60,7 @@
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                 <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+                <jsp:param name="message" value="${offer.comments}"/>
             </jsp:include>
             <% request.setCharacterEncoding("UTF-8"); %>
             <jsp:include page="../components/buyer_info.jsp">

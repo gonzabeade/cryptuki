@@ -74,6 +74,13 @@
                  </c:forEach>
             </div>
         </div>
+        <div class="flex flex-col mx-auto mt-6">
+            <form:errors path="message" cssClass="text-red-500 mx-auto"/>
+            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Datos para la transferencia*</form:label>
+            <div class="flex flex-row justify-center w-96">
+                <form:textarea path="message" cssClass="min-w-full h-36 rounded-lg mx-auto p-5"/>
+            </div>
+        </div>
         <div class="flex flex-row p-5 mx-60 mt-10">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>">Cancelar</a>
             <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>

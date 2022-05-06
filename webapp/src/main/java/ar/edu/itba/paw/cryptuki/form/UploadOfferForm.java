@@ -30,6 +30,16 @@ public class UploadOfferForm {
 
     @Size(min = 1)
     private String[] paymentMethods;
+    @Size(min = 1, max = 140)
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public Float getMinAmount() {
         return minAmount;

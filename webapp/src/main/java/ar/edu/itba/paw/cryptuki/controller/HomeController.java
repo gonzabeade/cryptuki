@@ -121,7 +121,7 @@ public class HomeController {
         Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
         mav.addObject("offer", offer);
         if( authentication != null ){
-            mav.addObject("username", authentication == null ? null : authentication.getName());
+            mav.addObject("username", authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
         }
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));

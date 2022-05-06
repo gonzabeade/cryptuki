@@ -35,9 +35,9 @@
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
             <p class="text-red-500 hidden text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</p>
+            <form:errors class="text-red-500  text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</form:errors>
             <div class="flex flex-row justify-center">
                 <div>
-
                     <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>

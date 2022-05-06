@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>
+<c:set var="yourMessagePlaceholder"><messages:message code="placeholder.yourMessage.location"/></c:set>
 
 <div class="flex flex-col">
     <c:url value="/buy" var="postUrl"/>
@@ -12,7 +14,7 @@
             <form:errors path="email" cssClass=" mx-auto text-red-500"/>
             <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="emailAddress"/> *</form:label>
             <div class="flex-row justify-center mx-auto">
-                <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3 " placeholder="roman@gmail.com"/>
+                <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3 " placeholder="e.g ${emailPlaceholder}"/>
             </div>
         </div>
 
@@ -31,7 +33,7 @@
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
             <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="yourMessage"/>: *</form:label>
             <div class="flex-row justify-center">
-                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="Juntemonos en el Starbucks de 9 de Julio." />
+                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="e.g ${yourMessagePlaceholder}" />
             </div>
 
         </div>

@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<c:set var="passwordPlaceholder"><messages:message code="placeholder.password"/></c:set>
+<c:set var="usernamePlaceholder"><messages:message code="placeholder.username"/></c:set>
 <c:url value="/login" var="loginUrl" />
 
 <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded" class=" py-12 px-64 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
@@ -8,11 +10,11 @@
   <c:if test="${param.error}"><h2 class="flex flex-col mx-auto text-red-400"><messages:message code="userOrPasswordIncorrect"/></h2></c:if>
   <div class="flex flex-col mx-5 my-4">
     <label for="username" class="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="user"/></label>
-    <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="e.g juanperez"/>
+    <input id="username" name="j_username" type="text" class="rounded-lg p-3" placeholder="e.g ${usernamePlaceholder}"/>
   </div>
   <div class="flex flex-col mx-5 my-4" >
     <label for="password" class="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="password"/></label>
-    <input id="password" name="j_password" type="password" class="rounded-lg p-3" placeholder="e.g micontraseña" />
+    <input id="password" name="j_password" type="password" class="rounded-lg p-3" placeholder="e.g ${passwordPlaceholder}" />
   </div>
   <div class="flex flex-row mx-5" >
     <label class="flex flex-row">

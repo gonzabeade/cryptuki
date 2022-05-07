@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -120,6 +121,34 @@ public class HomeController {
 
         return mav;
 
+    }
+    @RequestMapping(value = "/admin/complaint/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/complaint");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", "messi");
+        return mav;
+
+    }
+    @RequestMapping(value = "/admin/solve/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplaintForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+
+        ModelAndView mav = new ModelAndView("views/solve_complaint");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", "messi");
+        return mav;
+    }
+    @RequestMapping(value = "/admin/solve/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplaintForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        if(result.hasErrors()){
+            return solveComplaint(form,complaintId,authentication);
+        }
+        ModelAndView mav = new ModelAndView("views/solved_complaint");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
+        return mav;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,13 +28,17 @@ public class ProfilePicJdbcDao implements ProfilePicDao {
     @Override
     public Optional<Image> getProfilePicture(String username) {
         final String query = "SELECT * FROM profile_pic JOIN auth ON auth.user_id = profile_pic.user_id WHERE uname = ?";
-        Image image = jdbcTemplate.queryForObject(query, IMAGE_ROW_MAPPER, username);
-        return Optional.ofNullable(image);
+        List<Image> list = jdbcTemplate.query(query,IMAGE_ROW_MAPPER,username);
+        if(list.size() == 0)
+            return Optional.empty();
+        else
+            return Optional.of(list.get(0));
     }
 
     @Override
     public void uploadProfilePicture(String username, byte[] profilePicture, String type) {
-        final String query = "INSERT INTO profile_pic (user_id, image_data, image_type) VALUES ( (SELECT user_id FROM auth WHERE auth.uname= ? ), ?, ? )";
-        jdbcTemplate.update(query, username, profilePicture, type);
+        final String query = "INSERT INTO profile_pic (user_id, image_data, image_type) VALUES ( (SELECT user_id FROM auth WHERE auth.uname= ? ), ?, ? )\n" +
+                "ON CONFLICT ON CONSTRAINT profile_pic_pkey DO UPDATE SET image_data = ?,image_type = ? WHERE profile_pic.user_id = (SELECT user_id as uid FROM auth WHERE auth.uname= ? ) ";
+        jdbcTemplate.update(query, username, profilePicture, type,profilePicture,type,username);
     }
 }

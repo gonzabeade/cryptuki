@@ -15,23 +15,36 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 
 </head>
+
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
+<div class="flex flex-col">
+    <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
+    <div  class="flex flex-col mx-80 justify-center">
+        <div>
+            <c:forEach var="complaint" items="${complaintsList}">
+                <li>
+                    <jsp:include page="../components/complain_card.jsp">
+                        <jsp:param name="status" value="${complaint.status}"/>
+                        <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
+                        <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
+                    </jsp:include>
 
-<h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar">Chequea tu correo electronico</h1>
-
-<div class="shape-blob"></div>
-<div class="shape-blob one"></div>
-<div class="shape-blob two"></div>
-<div class="shape-blob" style="left: 50%"></div>
-
-<div class="shape-blob" style="left: 5%; top: 80%"></div>
-
-
-
-
-
+                </li>
+            </c:forEach>
+        </div>
+        <div class="flex flex-col">
+            <jsp:include page="../components/paginator.jsp">
+                <jsp:param name="activePage" value="${activePage}"/>
+                <jsp:param name="pages" value="${pages}"/>
+            </jsp:include>
+            <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+
+

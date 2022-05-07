@@ -31,6 +31,7 @@ public class ComplainJdbcDao implements ComplainDao {
                     .withModerator(rs.getString("moderator_uname"))
                     .build();
 
+
     @Autowired
     public ComplainJdbcDao(DataSource dataSource) {
         this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -97,6 +98,7 @@ public class ComplainJdbcDao implements ComplainDao {
                 "    (COALESCE(:offer_id) IS NULL OR  offer_id = :offer_id) AND\n" +
                 "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
+
 
 
         return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);

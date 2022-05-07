@@ -1,31 +1,20 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
-import ar.edu.itba.paw.cryptuki.form.*;
-import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Optional;
 
 
@@ -37,6 +26,7 @@ public class HomeController {
     private final CryptocurrencyService cryptocurrencyService;
     private final SupportService supportService;
     private final PaymentMethodService paymentMethodService;
+    private final ComplainService complainService;
     private static final int PAGE_SIZE = 7;
 
 
@@ -46,12 +36,14 @@ public class HomeController {
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
                           SupportService supportService,
-                          PaymentMethodService paymentMethodService) {
+                          PaymentMethodService paymentMethodService,
+                          ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
+        this.complainService = complainService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -74,14 +66,14 @@ public class HomeController {
 
         mav.addObject("offerList", offerService.getOfferBy(filter));
         int offerCount = offerService.countOffersBy(filter);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;;
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("offerCount", offerCount);
 
-        if(authentication != null){
+        if(null != authentication){
             mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
             mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
@@ -91,26 +83,29 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam( value = "completed", required = false) final boolean completed){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam( value = "tradeId", required = false) final Integer tradeId,@RequestParam( value = "completed", required = false) final boolean completed){
         ModelAndView mav =  new ModelAndView("views/contact");
+        String username= authentication.getName();
+        User user = us.getUserInformation(username).get();
+        mav.addObject("complainerId",user.getId());
+        mav.addObject("tradeId",tradeId);
         mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("completed", completed);
-
         return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return support(form,authentication, false);
+            return support(form,authentication, form.getTradeId(),false);
         }
 
-        supportService.getSupportFor(form.toDigest());
-
-        return support(new SupportForm(),authentication, true);
+        supportService.getSupportFor(form.toComplainBuilder());
+        ModelAndView mav = new ModelAndView("redirect:/user");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        return mav;
 
     }
-
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
     public ModelAndView coins(final Authentication authentication) {
         /*Alter the model (M) alters de view (V) via this Controller (C)*/
@@ -124,4 +119,24 @@ public class HomeController {
     }
 
 
+    @RequestMapping(value="/complaints", method = {RequestMethod.GET})
+    public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/complaints_page");
+
+        int pageNumber= page.orElse(0);
+        int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
+        int pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
+        ComplainFilter complainFilter = new ComplainFilter.Builder().withComplainerUsername(authentication.getName())
+                .withPage(pageNumber)
+                .withPageSize(PAGE_SIZE)
+                .build();
+        Collection<Complain> complaintsList = complainService.getComplainsBy(complainFilter);
+        mav.addObject("complaintsList",complaintsList);
+        mav.addObject("pages",pages);
+        mav.addObject("activePage",pageNumber);
+
+        mav.addObject(authentication.getName());
+        return mav;
+    }
 }
+

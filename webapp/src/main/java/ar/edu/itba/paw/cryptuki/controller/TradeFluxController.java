@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -110,4 +111,32 @@ public class TradeFluxController {
         }
         return mav;
     }
+
+
+
+    @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
+    public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/receiptDescription");
+        Optional<Trade> trade = tradeService.getTradeById(tradeId);
+
+
+        if(!trade.isPresent()){
+            return null;
+        }
+
+        mav.addObject("trade" , trade.get());
+        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
+
+        if(authentication != null){
+            mav.addObject("username", authentication.getName());
+            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
+        }
+        return mav;
+
+    }
+
+
+
+
+
 }

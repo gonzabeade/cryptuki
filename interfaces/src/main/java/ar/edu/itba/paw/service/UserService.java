@@ -12,7 +12,7 @@ public interface UserService {
     void verifyUser(String username , Integer code);
     void sendChangePasswordMail(String email);
     boolean changePassword(String username, int code, String newPassword);
-    boolean changePassword(String username, String oldPassword, String newPassword);
+    boolean changePassword(String username, String newPassword);
     void updateLastLogin(String username);
     Optional<User> getUserInformation(String username);
 

@@ -64,13 +64,13 @@ public class UserServiceImpl implements UserService {
 
     public void sendChangePasswordMail(String email){
         Optional<UserAuth> maybeUser = userAuthDao.getUsernameByEmail(email);
-        if(!maybeUser.isPresent())
+        if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new RuntimeException("Invalid email");
 
         UserAuth user = maybeUser.get();
         MailMessage message = contactService.createMessage(email);
         message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/passwordRecovery?user="+user.getUsername()+"&code="+user.getCode());
+        message.setBody("http://localhost:8080/webapp/recoverPassword?user="+user.getUsername()+"&code="+user.getCode());
         contactService.sendMessage(message);
     }
 
@@ -78,13 +78,13 @@ public class UserServiceImpl implements UserService {
     public boolean changePassword(String username, int code, String newPassword) {
         Optional<UserAuth> userAuth = userAuthDao.getUserAuthByUsername(username);
         if (userAuth.isPresent() && userAuth.get().getCode() == code)
-            return userAuthDao.changePassword(username, newPassword);
+            return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
         return false;
     }
 
     @Override
-    public boolean changePassword(String username, String oldPassword, String newPassword) {
-        return userAuthDao.changePassword(username, newPassword);
+    public boolean changePassword(String username, String newPassword) {
+        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
     }
 
     @Override

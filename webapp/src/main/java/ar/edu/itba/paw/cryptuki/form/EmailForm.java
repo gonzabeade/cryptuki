@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 
 public class EmailForm {
     @Size(min=6, max= 100)
-    @Email()
     @Pattern(regexp=".+@.+\\..+")
     private String email;
 

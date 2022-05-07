@@ -23,18 +23,15 @@
 
 <div class="flex flex-col justify-center items-center">
     <div>
-        <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20">Escoge tu nueva foto de perfil</h1>
+        <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-5 mb-10">Escoge una nueva foto de perfil de entre tus archivos</h1>
     </div>
-    <div>
-        <div>
-            <h3 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20">Buscá entre tus archivos</h3>
-        </div>
+    <div class="flex flex-col">
         <c:url value="/profilePicSelector" var="postUrl"/>
         <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
-            <form:label for="fyle" path="multipartFile">Buscá entre tus archivos</form:label>
-            <form:input type="file" path="multipartFile"/>
-            <div class="flex justify-around flex-row">
-                <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="javascript:history.back()">Cancelar</a>
+            <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>
+            <form:input type="file" path="multipartFile" cssClass="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-transparent text-sm rounded-lg"/>
+            <div class="flex justify-around">
+                <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/user"/>">Cancelar</a>
                 <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
             </div>
         </form:form>
@@ -47,6 +44,8 @@
 <div class="shape-blob" style="left: 50%"></div>
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
+
+
 
 
 

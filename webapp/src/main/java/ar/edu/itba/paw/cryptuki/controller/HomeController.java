@@ -344,6 +344,12 @@ public class HomeController {
     public ModelAndView profilePicSelector(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult,Authentication authentication) throws IOException {
         if(bindingResult.hasErrors())
             return profilePicSelectorGet(new ProfilePicForm());
+        if(form.getMultipartFile().isEmpty()){
+            bindingResult.addError(new FieldError("ProfilePicForm","multipartFile","Debe escoger una foto para continuar."));
+            return profilePicSelectorGet(form);
+        }
+
+
 
         profilePicService.uploadProfilePicture(authentication.getName(), form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
         return new ModelAndView("redirect:/user");
@@ -416,7 +422,7 @@ public class HomeController {
             return changePasswordGet(new changePasswordForm(),authentication);
 
         //check current password.
-        us.changePassword(form.getOldPassword(), form.getPassword(), form.getRepeatPassword());
+        us.changePassword(authentication.getName(), form.getPassword());
         return new ModelAndView("redirect:/user");
     }
 

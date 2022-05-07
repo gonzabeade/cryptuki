@@ -37,7 +37,8 @@ public class ProfilePicJdbcDao implements ProfilePicDao {
 
     @Override
     public void uploadProfilePicture(String username, byte[] profilePicture, String type) {
-        final String query = "INSERT INTO profile_pic (user_id, image_data, image_type) VALUES ( (SELECT user_id FROM auth WHERE auth.uname= ? ), ?, ? )";
-        jdbcTemplate.update(query, username, profilePicture, type);
+        final String query = "INSERT INTO profile_pic (user_id, image_data, image_type) VALUES ( (SELECT user_id FROM auth WHERE auth.uname= ? ), ?, ? )\n" +
+                "ON CONFLICT ON CONSTRAINT profile_pic_pkey DO UPDATE SET image_data = ?,image_type = ? WHERE profile_pic.user_id = (SELECT user_id as uid FROM auth WHERE auth.uname= ? ) ";
+        jdbcTemplate.update(query, username, profilePicture, type,profilePicture,type,username);
     }
 }

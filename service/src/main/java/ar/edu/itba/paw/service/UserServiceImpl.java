@@ -83,9 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(String username, String oldPassword, String newPassword) {
-        //validate oldPassword.
-
+    public boolean changePassword(String username, String newPassword) {
         return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
     }
 

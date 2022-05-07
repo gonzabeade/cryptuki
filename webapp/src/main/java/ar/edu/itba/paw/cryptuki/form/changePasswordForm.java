@@ -5,23 +5,13 @@ import javax.validation.constraints.Size;
 
 public class changePasswordForm {
 
-    @NotNull
-    @Size(min = 6, max = 100)
-    private String oldPassword;
-
     @Size(min = 6, max = 100)
     private String password;
 
     @Size(min = 6, max = 100)
     private String repeatPassword;
 
-    public String getOldPassword() {
-        return oldPassword;
-    }
 
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
 
     public String getPassword() {
         return password;

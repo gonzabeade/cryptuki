@@ -6,12 +6,6 @@
 <%--@elvariable id="changePasswordForm" type="ar.edu.itba.paw.cryptuki.form.changePasswordForm"--%>
 <form:form modelAttribute="changePasswordForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard" onsubmit="event.preventDefault(); preventChangePasswordNotMatching()">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar">Cambia tu contraseña</h2>
-    <div class="flex flex-col mt-3">
-        <form:label path="oldPassword" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Contraseña actual:</form:label>
-        <form:errors path="oldPassword" cssClass="text-red-400" element="p"/>
-        <form:input type="password" path="oldPassword" cssClass="rounded-lg p-3" placeholder="Contraseña actual"/>
-
-    </div>
 
     <div class="flex flex-col mt-3">
         <form:label path="password" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Contraseña</form:label>

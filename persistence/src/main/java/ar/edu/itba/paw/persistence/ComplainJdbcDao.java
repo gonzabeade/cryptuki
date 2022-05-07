@@ -116,6 +116,7 @@ public class ComplainJdbcDao implements ComplainDao {
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
 
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         jdbcTemplate.update(query, complainStatus.toString(), complainId);
     }
 

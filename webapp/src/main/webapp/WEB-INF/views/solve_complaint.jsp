@@ -24,19 +24,19 @@
     <div class="flex flex-col">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
-                <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo #25</h2>
-                <h2 class="font-sans font-medium text-polard text-3xl text-center">Efectuado el 2022-02-20</h2>
+                <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo #<c:out value="${complain.complainId}"/></h2>
+                <h2 class="font-sans font-medium text-polard text-3xl text-center">Efectuado el <c:out value="${complain.date}"/></h2>
             </div>
         </div>
         <div class="flex flex-col mt-10 mx-20">
             <h1 class="font-sans font-medium text-polard text-2xl text-center">Descripción del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</p>
+            <p class="mx-auto rounded-lg text-justify"><c:out value="${complain.complainerComments.orElse('No hay comentarios')}"/></p>
         </div>
         <div class="flex flex-col mt-6 mx-52">
             <h1 class="font-sans font-medium text-polard text-2xl text-center">Usuario del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify text-xl">mdedeu</p>
-            <p class="mx-auto rounded-lg text-justify text-lg">marcosdedeu@hotmail.com</p>
-            <p class="mx-auto rounded-lg text-justify text-gray-400">Última vez activo: 2022-02-03</p>
+            <p class="mx-auto rounded-lg text-justify text-xl"><c:out value="${complain.complainerUsername}"/></p>
+            <p class="mx-auto rounded-lg text-justify text-lg"><c:out value="${complainer.email}"/></p>
+            <p class="mx-auto rounded-lg text-justify text-gray-400">Última vez activo: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
         </div>
         <div class="flex flex-col mt-3">
             <c:url value="/admin/solve/${complaintId}" var="postUrl"/>
@@ -53,27 +53,29 @@
     <div class="flex flex-col mt-6 mx-auto w-1/2">
         <h1 class="font-sans font-medium text-polard text-2xl text-center">Detalles del trade</h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
-            <h1 class="font-sans font-medium text-polard text-xl text-center ">Oferta #25</h1>
-            <h1 class="text-center text-4xl font-bold">Bitcoin</h1>
-            <h2 class="font-sans font-medium text-polard text-2xl text-center">a  1400000 ARS </h2>
-            <div class="flex flex-row mt-3 font-sans mx-auto ">
-                <h2 class="font-sans mx-2"><b>Mínimo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="10000"/> ARS </h2>
-                <h2 class="font-sans"> <b>Máximo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="200000"/> ARS </h2>
-            </div>
+            <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-m text-center ">Realizado sobre la oferta #<c:out value="${trade.offerId}"/></h1>
+                <%--            <h1 class="text-center text-4xl font-bold"><c:out value="${trade.}"/></h1>--%>
+<%--            <h2 class="font-sans font-medium text-polard text-2xl text-center">a  1400000 ARS </h2>--%>
+                <%--            <div class="flex flex-row mt-3 font-sans mx-auto ">--%>
+                <%--                <h2 class="font-sans mx-2"><b>Mínimo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="10000"/> ARS </h2>--%>
+                <%--                <h2 class="font-sans"> <b>Máximo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="200000"/> ARS </h2>--%>
+                <%--            </div>--%>
             <div class="flex flex-col mx-auto mt-5">
                 <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center">Participantes</h2>
-                <p class="font-sans font-polard"><b>Comprador:</b> mdedeu</p>
-                <p class="font-sans font-polard"><b>Vendedor:</b> mdedeu</p>
+                <p class="font-sans font-polard"><b>Comprador:</b> <c:out value="${trade.buyerUsername}"/></p>
+                <p class="font-sans font-polard"><b>Vendedor:</b> <c:out value="${trade.sellerUsername}"/></p>
             </div>
             <div class="flex flex-col mx-auto mt-3">
                 <h2 class="font-sans font-semibold font-polard text-2xl text-center ">Cantidad ofertada</h2>
-                <h3 class="text-xl font-sans font-polard text-center">1000 ARS</h3>
+                <h3 class="text-xl font-sans font-polard text-center"><c:out value="${trade.quantity}"/> ARS</h3>
             </div>
             <div class="flex flex-col mx-auto mt-3">
                 <h2 class="font-sans font-semibold font-polard text-2xl text-center ">Estado del Trade</h2>
-                <h3 class="text-xl font-sans font-polard text-center">Pendiente</h3>
+                <h3 class="text-xl font-sans font-polard text-center"><c:out value="${trade.status}"/></h3>
             </div>
         </div>
+
         </c:if>
     </div>
     <div class="shape-blob"></div>

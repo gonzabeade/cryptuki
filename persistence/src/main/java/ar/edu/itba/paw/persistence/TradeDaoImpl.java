@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -63,7 +64,12 @@ public class TradeDaoImpl implements TradeDao {
     @Override
     public Optional<Trade> getTradeById(int tradeId) {
         String query = "SELECT * FROM trade_complete WHERE trade_id = ?";
-        Trade trade = jdbcTemplate.queryForObject(query, TRADE_COMPLETE_ROW_MAPPER, tradeId);
+        Trade trade = null;
+        try {
+            trade = jdbcTemplate.queryForObject(query, TRADE_COMPLETE_ROW_MAPPER, tradeId);
+        } catch(EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(trade);
     }
 

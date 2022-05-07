@@ -1,23 +1,23 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
+import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainStatus;
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.ComplainService;
+import ar.edu.itba.paw.service.TradeService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
-import java.time.Month;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -26,11 +26,14 @@ public class AdminController {
 
     private static final int PAGE_SIZE = 5;
     private final ComplainService complainService;
-
+    private final UserService userService;
+    private final TradeService tradeService;
 
     @Autowired
-    public AdminController(ComplainService complainService) {
+    public AdminController(ComplainService complainService, UserService userService, TradeService tradeService) {
         this.complainService = complainService;
+        this.userService = userService;
+        this.tradeService = tradeService;
     }
 
 
@@ -110,6 +113,73 @@ public class AdminController {
         mav.addObject("activePage", pageNumber);
         mav.addObject("complainList", complainService.getComplainsBy(filter));
 
+        return mav;
+    }
+
+    @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/complaint");
+
+
+        Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
+        System.out.println(complain);
+        User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
+        Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
+
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", trade);
+        mav.addObject("complain", complain);
+        mav.addObject("complainer", complainer);
+
+        return mav;
+    }
+
+
+    @RequestMapping(value = "/selfassign/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView selfAssign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
+
+        // TODO: Esto esta mal: tiene que ser Transactional y estar en la capa de servicio
+        complainService.updateComplainStatus(complaintId, ComplainStatus.ASSIGNED);
+        complainService.updateModerator(complaintId, authentication.getName());
+        return new ModelAndView("redirect:/admin/solve/"+complaintId); //TODO !!!!!!!!!!!!!!
+    }
+
+    @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+
+        ModelAndView mav = new ModelAndView("views/solve_complaint");
+
+
+        Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
+        System.out.println(complain);
+        User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
+        Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
+
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", trade);
+        mav.addObject("complain", complain);
+        mav.addObject("complainer", complainer);
+        return mav;
+    }
+    @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        if(result.hasErrors()){
+            return solveComplaint(form,complaintId,authentication);
+        }
+
+
+        // TODO!!! Deberia ser un metodo del servicio Transactional
+        complainService.updateComplainStatus(complaintId, ComplainStatus.CLOSED);
+        complainService.updateModeratorComment(complaintId, form.getComments());
+
+        return new ModelAndView("redirect:/admin/success");
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public ModelAndView solveSuccess() {
+        ModelAndView mav = new ModelAndView("views/solved_complaint");
         return mav;
     }
 

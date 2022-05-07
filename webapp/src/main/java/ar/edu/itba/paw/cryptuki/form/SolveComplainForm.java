@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class SolveComplaintForm {
+public class SolveComplainForm {
     @Size(min=1)
     private String comments;
 

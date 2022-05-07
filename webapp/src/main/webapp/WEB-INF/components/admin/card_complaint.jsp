@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="flex flex-row basis-1/4 my-auto">
-        <a  href="<c:url value="/"/>" class="pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mr-5">Ver</a>
+        <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class="pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mr-5">Ver</a>
         <c:if test="${true}"> <!--if complaint status is not Assigned nor solved  -->
 
             <c:url value="/admin/selfassign/${param.complainId}" var="postUrl"/>

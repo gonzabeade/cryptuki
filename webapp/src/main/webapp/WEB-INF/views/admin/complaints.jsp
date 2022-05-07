@@ -31,7 +31,7 @@
       <div class="p-10 w-2/3  flex flex-col">
 
         <c:forEach var="complain" items="${complainList}">
-          <li style="list-style-type: none">
+          <li style="list-style-type: none" class="my-3">
             <jsp:include page="../../components/admin/card_complaint.jsp">
               <jsp:param name="date" value="${complain.date}"/>
               <jsp:param name="complainId" value="${complain.complainId}"/>

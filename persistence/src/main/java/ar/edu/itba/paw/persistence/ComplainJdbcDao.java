@@ -68,14 +68,14 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT *\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (COALESCE(:trade_id) IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
-                "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (COALESCE(:from_date) IS NULL OR  complain_date >= :from_date) AND\n" +
-                "    (COALESCE(:to_date) IS NULL OR  complain_date <= :to_date) AND\n" +
-                "    (COALESCE(:offer_id) IS NULL OR  offer_id = :offer_id) AND\n" +
-                "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id, null) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 
 
@@ -89,15 +89,14 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT COUNT(complain_id)\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (COALESCE(:trade_id) IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
-                "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (COALESCE(:from_date) IS NULL OR  complain_date >= :from_date) AND\n" +
-                "    (COALESCE(:to_date) IS NULL OR  complain_date <= :to_date) AND\n" +
-                "    (COALESCE(:offer_id) IS NULL OR  offer_id = :offer_id) AND\n" +
-                "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
-                "    LIMIT :limit OFFSET :offset;";
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id , null) IS NULL OR complain_id = :complain_id)\n";
 
 
 

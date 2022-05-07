@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,8 +39,10 @@ public class AdminController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView adminHome(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
-
+    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ,   final Authentication authentication){
+        if(result.hasErrors()){
+            return null;
+        }
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         ComplainFilter filter = builder
@@ -65,7 +68,7 @@ public class AdminController {
 
 
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public ModelAndView assignedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+    public ModelAndView assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
@@ -91,7 +94,7 @@ public class AdminController {
         return mav;
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
-    public ModelAndView solvedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+    public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");

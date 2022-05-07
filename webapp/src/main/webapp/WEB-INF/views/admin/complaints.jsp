@@ -37,6 +37,7 @@
               <jsp:param name="complainId" value="${complain.complainId}"/>
               <jsp:param name="complainerUsername" value="${complain.complainerUsername}"/>
               <jsp:param name="complainerComments" value="${complain.complainerComments.get()}"/>
+              <jsp:param name="complainStatus" value="${complain.status}"/>
             </jsp:include>
           </li>
         </c:forEach>
@@ -46,6 +47,7 @@
           <jsp:param name="pages" value="${pages}"/>
           <jsp:param name="baseUrl" value="${baseUrl}"/>
         </jsp:include>
+        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
       </div>
     </div>
 

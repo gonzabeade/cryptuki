@@ -31,7 +31,12 @@ function addPageValue(value){
 }
 function addQueryParam(id) {
     var searchParams = new URLSearchParams(window.location.search)
-    searchParams.set(id, document.getElementById(id).value);
+    let value = document.getElementById(id).value;
+    if(value === ''){
+        searchParams.delete(id);
+    }else{
+        searchParams.set(id,value);
+    }
     searchParams.delete("page")
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);

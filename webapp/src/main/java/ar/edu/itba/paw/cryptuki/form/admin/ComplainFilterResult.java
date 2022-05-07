@@ -44,7 +44,7 @@ public class ComplainFilterResult {
         return Optional.ofNullable(offerId);
     }
 
-    public void setOfferId(int offerId) {
+    public void setOfferId(Integer offerId) {
         this.offerId = offerId;
     }
 
@@ -52,7 +52,7 @@ public class ComplainFilterResult {
         return Optional.ofNullable(tradeId);
     }
 
-    public void setTradeId(int tradeId) {
+    public void setTradeId(Integer tradeId) {
         this.tradeId = tradeId;
     }
 

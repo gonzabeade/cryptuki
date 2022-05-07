@@ -16,10 +16,10 @@
 <body class="bg-storml overflow-x-hidden">
 
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
+<jsp:include page="../../components/admin/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
-<div class="flex flex-row  mt-10">
+<div class="flex flex-row">
     <div class="flex flex-col mx-auto">
         <div class="mx-auto">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-60 w-60 ml-14" fill="none" viewBox="0 0 24 24" stroke="#A3BE8C" stroke-width="2">
@@ -30,7 +30,7 @@
         <div class="mx-auto  text-polard text-2xl mt-10">
             El reclamo fue resuelto satisfactoriamente.
         </div>
-        <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10">Volver al Home</a>
+        <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10">Volver a Reclamos Pendientes</a>
     </div>
 </div>
 </body>

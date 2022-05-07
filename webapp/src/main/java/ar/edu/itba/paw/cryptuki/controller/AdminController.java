@@ -118,7 +118,7 @@ public class AdminController {
 
     @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
     public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/complaint");
+        ModelAndView mav = new ModelAndView("views/admin/complaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -127,7 +127,6 @@ public class AdminController {
         Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
 
         mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("isAdmin", true);
         mav.addObject("trade", trade);
         mav.addObject("complain", complain);
         mav.addObject("complainer", complainer);
@@ -148,7 +147,7 @@ public class AdminController {
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
     public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("views/solve_complaint");
+        ModelAndView mav = new ModelAndView("views/admin/solve_complaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -179,7 +178,7 @@ public class AdminController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView solveSuccess() {
-        ModelAndView mav = new ModelAndView("views/solved_complaint");
+        ModelAndView mav = new ModelAndView("views/admin/solved_complaint");
         return mav;
     }
 

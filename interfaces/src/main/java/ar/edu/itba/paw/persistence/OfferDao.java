@@ -9,7 +9,7 @@ public interface OfferDao {
     int getOfferCount(OfferFilter filter);
     Collection<Offer> getOffersBy(OfferFilter filter);
 
-    void makeOffer(OfferDigest digest);
+    int makeOffer(OfferDigest digest);
 
     void modifyOffer(OfferDigest digest);
     void deleteOffer(int offerId);

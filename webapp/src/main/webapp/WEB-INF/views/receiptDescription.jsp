@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?trade=${trade.tradeId}"/> ">Tuve un problema</a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> ">Tuve un problema</a>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>">Volver</a>
         </div>
 

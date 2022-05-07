@@ -1,6 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exception.DuplicateUsernameException;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -16,7 +21,6 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
-    private RoleDao roleDao;
 
     private static final RowMapper<UserAuth> AUTH_ROLE_ROW_MAPPER = (resultSet, i) ->{
         UserAuth.Builder userAuth = new UserAuth.Builder(
@@ -52,7 +56,6 @@ public class UserAuthJdbcDao implements UserAuthDao{
     public UserAuthJdbcDao(DataSource dataSource,RoleDao roleDao) {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("auth");
-        this.roleDao=roleDao;
     }
 
 
@@ -69,30 +72,53 @@ public class UserAuthJdbcDao implements UserAuthDao{
         args.put("user_id", builder.getId());
         args.put("uname", builder.getUsername());
         args.put("password", builder.getPassword());
-        args.put("role_id", roleDao.getRoleByDescription(builder.getRole()).get().getId());
+        args.put("role_id", 2);
         args.put("code", builder.getCode());
-        args.put("status",0);
-        jdbcInsert.execute(args);
+        args.put("status", 0);
+
+        try {
+            jdbcInsert.execute(args);
+        } catch (DataIntegrityViolationException dive) {
+            throw new DuplicateUsernameException(builder.getUsername(), dive);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
         return builder.build();
     }
 
     @Override
     public boolean verifyUser(String username, int code) {
         final String query="UPDATE auth SET status = 1 WHERE uname = ? AND code = ?";
-        return jdbcTemplate.update(query, username, code) == 1;
+
+        try {
+            return jdbcTemplate.update(query, username, code) == 1;
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public boolean changePassword(String username, String newPassword) {
         final String query="UPDATE auth SET password = ? WHERE uname = ?";
-        return jdbcTemplate.update(query, newPassword, username) == 1;
+
+        try {
+            return jdbcTemplate.update(query, newPassword, username) == 1;
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
-    public Optional<UserAuth> getUsernameByEmail(String email) {
+    public Optional<UserAuth> getUserAuthByEmail(String email) {
         final String query ="SELECT * FROM auth JOIN (select * from users where email = ?) temp on temp.id = user_id ";
-        UserAuth user = jdbcTemplate.queryForObject(query, AUTH_USER_ROW_MAPPER,email);
-        return Optional.ofNullable(user);
+
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(query, AUTH_USER_ROW_MAPPER, email));
+        } catch  (EmptyResultDataAccessException erde) {
+            return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
 }

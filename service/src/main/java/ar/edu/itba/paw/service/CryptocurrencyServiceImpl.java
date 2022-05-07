@@ -16,7 +16,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
     @Override
     public Cryptocurrency getCryptocurrency(String id) {
         //TODO: validate
-        return cryptoCurrencyDao.getCryptocurrency(id);
+        return cryptoCurrencyDao.getCryptocurrency(id).get();
     }
 
     @Override

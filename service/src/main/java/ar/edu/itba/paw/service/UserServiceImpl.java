@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendChangePasswordMail(String email){
-        Optional<UserAuth> maybeUser = userAuthDao.getUsernameByEmail(email);
+        Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new RuntimeException("Invalid email");
 

@@ -2,7 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,8 +37,8 @@ public class ComplainJdbcDao implements ComplainDao {
 
     @Autowired
     public ComplainJdbcDao(DataSource dataSource) {
-        this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.namedJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     private static MapSqlParameterSource toMapSqlParameterSource(ComplainFilter filter) {
@@ -78,10 +81,11 @@ public class ComplainJdbcDao implements ComplainDao {
                 "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 
-
-
-        Collection<Complain> c = Collections.unmodifiableCollection(namedJdbcTemplate.query(query, toMapSqlParameterSource(filter), COMPLAIN_ROW_MAPPER));
-        return c;
+        try {
+            return Collections.unmodifiableCollection(namedJdbcTemplate.query(query, toMapSqlParameterSource(filter), COMPLAIN_ROW_MAPPER));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -99,9 +103,13 @@ public class ComplainJdbcDao implements ComplainDao {
                 "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 
-
-
-        return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);
+        try {
+            return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);
+        } catch (EmptyResultDataAccessException erde) {
+            return 0;
+        } catch (DataAccessException dae){
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -109,17 +117,22 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "INSERT INTO complain (trade_id, complainer_id, complainer_comments, status, moderator_comments, moderator_id)\n" +
                 "VALUES (:trade_id, (SELECT user_id FROM auth WHERE uname = :complainer_uname), :complainer_comments, :complain_status, :moderator_comments, (SELECT user_id FROM auth WHERE uname = :moderator_uname))";
 
-
-        namedJdbcTemplate.update(query, toMapSqlParameterSource(complain));
-
+        try {
+            namedJdbcTemplate.update(query, toMapSqlParameterSource(complain));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        jdbcTemplate.update(query, complainStatus.toString(), complainId);
+        try {
+            jdbcTemplate.update(query, complainStatus.toString(), complainId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -128,12 +141,21 @@ public class ComplainJdbcDao implements ComplainDao {
                 "SET moderator_id = (SELECT user_id FROM auth WHERE uname = ? )\n" +
                 "WHERE complain_id = ?";
 
-        jdbcTemplate.update(query, username, complainId);
+        try {
+            jdbcTemplate.update(query, username, complainId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public void updateModeratorComment(int complainId, String comments) {
         final String query = "UPDATE complain SET moderator_comments = ? WHERE complain_id = ?";
-        jdbcTemplate.update(query, comments, complainId);
+
+        try {
+            jdbcTemplate.update(query, comments, complainId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 }

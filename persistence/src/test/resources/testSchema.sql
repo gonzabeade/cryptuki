@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS profile_pic(
                                           FOREIGN KEY (user_id) REFERENCES users (id)
     );
 CREATE TABLE trade (
-                       trade_id SERIAL PRIMARY KEY,
+                       trade_id INT IDENTITY PRIMARY KEY,
                        offer_id INT CHECK(offer_id >= 0),
                        buyer_id INT CHECK(buyer_id >= 0),
                        seller_id INT CHECK (seller_id >=0),
@@ -148,7 +148,7 @@ CREATE TABLE trade (
 );
 
 CREATE TABLE complain (
-                          complain_id SERIAL PRIMARY KEY,
+                          complain_id INT IDENTITY PRIMARY KEY,
                           trade_id INT,
                           complainer_id INT NOT NULL,
                           complainer_comments VARCHAR(140) NOT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE IF NOT EXISTS profile_pic(
                                           FOREIGN KEY (user_id) REFERENCES users (id)
     );
 CREATE TABLE trade (
-                       trade_id SERIAL PRIMARY KEY,
+                       trade_id INT IDENTITY PRIMARY KEY,
                        offer_id INT CHECK(offer_id >= 0),
                        buyer_id INT CHECK(offer_id >= 0),
                        start_date timestamp,
@@ -245,7 +245,7 @@ CREATE TABLE trade (
 );
 
 CREATE TABLE complain (
-                          complain_id SERIAL PRIMARY KEY,
+                          complain_id INT IDENTITY PRIMARY KEY,
                           trade_id INT,
                           complainer_id INT NOT NULL,
                           complainer_comments VARCHAR(140) NOT NULL,

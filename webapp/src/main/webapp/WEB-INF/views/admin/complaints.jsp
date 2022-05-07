@@ -44,6 +44,7 @@
         <jsp:include page="../../components/paginator.jsp">
           <jsp:param name="activePage" value="${activePage}"/>
           <jsp:param name="pages" value="${pages}"/>
+          <jsp:param name="baseUrl" value="${baseUrl}"/>
         </jsp:include>
       </div>
     </div>

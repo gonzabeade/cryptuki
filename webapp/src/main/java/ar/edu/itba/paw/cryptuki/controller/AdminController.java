@@ -77,7 +77,7 @@ public class AdminController {
                 .build();
 
 
-        mav.addObject("baseUrl", "/admin"); // TODO: check
+        mav.addObject("baseUrl", "/admin/assigned"); // TODO: check
         mav.addObject("title", "Reclamos asignados a mí");
         mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
@@ -102,7 +102,7 @@ public class AdminController {
                 .build();
 
 
-        mav.addObject("baseUrl", "/admin"); // TODO: check
+        mav.addObject("baseUrl", "/admin/solved"); // TODO: check
         mav.addObject("title", "Reclamos resueltos");
         mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 

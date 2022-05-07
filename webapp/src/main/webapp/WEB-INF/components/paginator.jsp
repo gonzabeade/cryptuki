@@ -28,7 +28,7 @@
             <c:otherwise>
                 <div class="flex flex-col">
                     <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
-                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
+                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="${param.baseUrl}"/>" >Volver a cargar</a>
                 </div>
             </c:otherwise>
 

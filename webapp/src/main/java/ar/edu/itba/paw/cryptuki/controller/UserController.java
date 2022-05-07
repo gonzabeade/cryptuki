@@ -171,7 +171,7 @@ public class UserController {
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
     public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
         ModelAndView mav = new ModelAndView("views/changePassword");
-        mav.addObject(authentication.getName());
+        mav.addObject("username",authentication.getName());
         return mav;
     }
 

@@ -27,7 +27,7 @@ public class HomeController {
     private final SupportService supportService;
     private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
-    private static final int PAGE_SIZE = 7;
+    private static final int PAGE_SIZE =2;
 
 
 
@@ -138,7 +138,7 @@ public class HomeController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject(authentication.getName());
+        mav.addObject("username",authentication.getName());
         return mav;
     }
 }

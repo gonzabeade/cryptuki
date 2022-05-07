@@ -22,26 +22,23 @@
 </jsp:include>
 <div class="flex flex-col">
     <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
-    <div  class="flex flex-col mx-80 justify-center">
-        <div>
-            <c:forEach var="complaint" items="${complaintsList}">
-                <li>
-                    <jsp:include page="../components/complain_card.jsp">
-                        <jsp:param name="status" value="${complaint.status}"/>
-                        <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
-                        <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
-                    </jsp:include>
-
-                </li>
-            </c:forEach>
-        </div>
-        <div class="flex flex-col">
+    <div  class="flex flex-col justify-center">
+                <c:forEach var="complaint" items="${complaintsList}">
+                    <li class="list-none mx-20">
+                        <jsp:include page="../components/complain_card.jsp">
+                            <jsp:param name="status" value="${complaint.status}"/>
+                            <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
+                            <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
+                        </jsp:include>
+                    </li>
+                </c:forEach>
+    </div>
+    <div class="flex flex-col">
             <jsp:include page="../components/paginator.jsp">
                 <jsp:param name="activePage" value="${activePage}"/>
                 <jsp:param name="pages" value="${pages}"/>
             </jsp:include>
             <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
-        </div>
     </div>
 </div>
 </body>

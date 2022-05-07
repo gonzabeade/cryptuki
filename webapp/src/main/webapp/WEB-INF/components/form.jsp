@@ -7,13 +7,22 @@
     <form:input path="tradeId" type="hidden" value="${param.tradeId}"/>
     <form:input path="complainerId" type="hidden" value="${param.complainerId}"/>
     <form:input path="username" type="hidden" value="${param.username}"/>
+    <c:if test="${param.username.isEmpty()}">
+        <div class="flex flex-col p-5 justify-center">
+            <form:errors path="email" cssClass="text-red-500"/>
+            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Correo electrónico *</form:label>
+            <div class="flex-row justify-center">
+                <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
+            </div>
+
+        </div>
+    </c:if>
     <div class="flex flex-col p-5 ">
         <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Mensaje *</form:label>
         <div class="flex-row justify-center">
             <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="No recibi las criptomonedas, etc" />
         </div>
-
     </div>
     <div class="flex flex-row p-5">
         <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>

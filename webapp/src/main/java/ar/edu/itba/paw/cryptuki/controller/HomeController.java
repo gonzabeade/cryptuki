@@ -85,11 +85,15 @@ public class HomeController {
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam( value = "tradeId", required = false) final Integer tradeId,@RequestParam( value = "completed", required = false) final boolean completed){
         ModelAndView mav =  new ModelAndView("views/contact");
-        String username= authentication.getName();
-        User user = us.getUserInformation(username).get();
-        mav.addObject("complainerId",user.getId());
+
+        if(null!=authentication){
+            String username= authentication.getName();
+            User user = us.getUserInformation(username).get();
+            mav.addObject("complainerId",user.getId());
+            mav.addObject("username", authentication.getName());
+        }
+
         mav.addObject("tradeId",tradeId);
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("completed", completed);
         return mav;
     }
@@ -99,11 +103,10 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form,authentication, form.getTradeId(),false);
         }
-
-        supportService.getSupportFor(form.toComplainBuilder());
-        ModelAndView mav = new ModelAndView("redirect:/user");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        return mav;
+        if(null!=authentication){
+            supportService.getSupportFor(form.toComplainBuilder());
+        }
+        return support(new SupportForm(), authentication,null, true);
 
     }
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/

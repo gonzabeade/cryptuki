@@ -91,8 +91,9 @@ public class HomeController {
             User user = us.getUserInformation(username).get();
             mav.addObject("complainerId",user.getId());
             mav.addObject("username", authentication.getName());
+            form.setEmail(user.getEmail());
         }
-
+        mav.addObject("supportForm",form);
         mav.addObject("tradeId",tradeId);
         mav.addObject("completed", completed);
         return mav;
@@ -103,8 +104,11 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form,authentication, form.getTradeId(),false);
         }
+
         if(null!=authentication){
             supportService.getSupportFor(form.toComplainBuilder());
+        }else{
+            supportService.getSupportFor(form.toDigest());
         }
         return support(new SupportForm(), authentication,null, true);
 

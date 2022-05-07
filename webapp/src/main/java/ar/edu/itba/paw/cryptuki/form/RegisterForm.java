@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.UserAuth;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Pattern;
@@ -54,5 +56,14 @@ public class RegisterForm {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public User.Builder toUserBuilder() {
+        return new User.Builder(email).withPhoneNumber(phoneNumber);
+    }
+
+    public UserAuth.Builder toUserAuthBuilder() {
+        return new UserAuth.Builder(username, password);
+
     }
 }

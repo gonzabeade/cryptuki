@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,15 @@ public class UserJdbcDao implements UserDao{
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER = ((resultSet, i) -> User.builder().email(resultSet.getString("email")).id(resultSet.getInt("id")).build());
-
+    private static final RowMapper<User> USER_EMAIL_ROW_MAPPER =
+            (resultSet, i) -> new User.Builder(
+                    resultSet.getString("email"))
+                    .withId(resultSet.getInt("id"))
+                    .withPhoneNumber(resultSet.getString("phone_number"))
+                    .withRatingCount(resultSet.getInt("rating_count"))
+                    .withRatingSum(resultSet.getInt("rating_sum"))
+                    .withLastLogin(resultSet.getTimestamp("last_login").toLocalDateTime())
+                    .build();
 
     @Autowired
     public UserJdbcDao(DataSource dataSource) {
@@ -30,9 +38,9 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query ="SELECT * FROM users where email=?";
-        List<User> users = jdbcTemplate.query(query,USER_EMAIL_ROW_MAPPER,email);
-        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0))  ;
+        final String query ="SELECT * FROM users where email=?";
+        User user = jdbcTemplate.queryForObject(query, USER_EMAIL_ROW_MAPPER, email);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -41,18 +49,31 @@ public class UserJdbcDao implements UserDao{
         args.put("email",user.getEmail());
         args.put("rating_sum",user.getRatingSum());
         args.put("rating_count",user.getRatingCount());
-        args.put("phone_number",user.getPhoneNumber());
+        args.put("phone_number", user.getPhoneNumber());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        args.put("last_login",localDateTime.getYear()+"-"+localDateTime.getMonthValue()+"-"+localDateTime.getDayOfMonth()+" "+localDateTime.getHour()+":"+localDateTime.getMinute()+":"+localDateTime.getSecond()
+        );
         int id = jdbcInsert.executeAndReturnKey(args).intValue();
-        user.id(id);
+        user.withId(id);
         return user.build();
     }
 
-
-    String query = "SELECT * FROM users JOIN (SELECT user_id, uname FROM auth WHERE uname = ?) user_auth ON users.id = user_auth.user_id";
-
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return Optional.of(jdbcTemplate.query(query, USER_EMAIL_ROW_MAPPER, username).get(0));
+        final String query = "SELECT * FROM users JOIN (SELECT user_id, uname FROM auth WHERE uname = ?) user_auth ON users.id = user_auth.user_id";
+        User user = jdbcTemplate.queryForObject(query, USER_EMAIL_ROW_MAPPER, username);
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public void updateLastLogin(String username) {
+        jdbcTemplate.update("UPDATE users SET last_login = NOW() WHERE id IN (SELECT user_id FROM auth WHERE uname = ?)", username);
+    }
+
+    @Override
+    public void incrementUserRating(String username, int rating) {
+        final String query = "UPDATE users SET rating_count = rating_count + 1, rating_sum = rating_sum + ? WHERE id IN ( SELECT user_id FROM auth WHERE uname = ?)";
+        jdbcTemplate.update(query, rating, username);
     }
 
 

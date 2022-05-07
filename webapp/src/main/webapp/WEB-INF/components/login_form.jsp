@@ -24,5 +24,6 @@
   <div class="flex flex-col mx-auto my-10" >
     <input type="submit" value="Iniciar sesión" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
     <a href="<c:url value="/register"/>" class=" underline text-polard text-center mt-2"> No tienes cuenta? Registrate</a>
+    <a href="<c:url value="/passwordRecovery"/>" class=" underline text-polard text-center mt-2"> Olvidaste tu contraseña?</a>
   </div>
 </form>

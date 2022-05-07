@@ -17,27 +17,26 @@ public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
     private final static RowMapper<Cryptocurrency> CRYPTOCURRENCY_ROW_MAPPER = (
             (resultSet, i) -> Cryptocurrency.getInstance(
                     resultSet.getString("code"),
-                    resultSet.getString("commercial_name"),
-                    resultSet.getDouble("market_price")
+                    resultSet.getString("commercial_name")
             )
     );
-
 
     @Autowired
     public CryptocurrencyJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
     @Override
-    public Cryptocurrency getCryptocurrency(String id) {
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?", CRYPTOCURRENCY_ROW_MAPPER, id);
+    public Cryptocurrency getCryptocurrency(String code) {
+        final String query = "SELECT * FROM PUBLIC.cryptocurrency WHERE code = ?";
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER, code);
         return cryptocurrencies.get(0); //should be unique
     }
 
     @Override
     public Collection<Cryptocurrency> getAllCryptocurrencies() {
-        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query("SELECT * FROM PUBLIC.cryptocurrency", CRYPTOCURRENCY_ROW_MAPPER);
+        final String query = "SELECT * FROM PUBLIC.cryptocurrency";
+        final List<Cryptocurrency> cryptocurrencies = jdbcTemplate.query(query, CRYPTOCURRENCY_ROW_MAPPER);
         return cryptocurrencies;
     }
 }

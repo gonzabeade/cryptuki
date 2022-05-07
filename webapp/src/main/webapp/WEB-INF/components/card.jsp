@@ -6,7 +6,7 @@
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
 					<h1 class="fotn-sans">Vendedor: </h1>
-					<h3 class="font-bold font-sans"><c:out value="${param.user}"/></h3>
+					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
 					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> trades</h4>
 				</div>
 
@@ -16,7 +16,12 @@
 						<h1 class="font-sans font-semibold"><c:out value="${param.currency}"/></h1>
 					</div>
 					<h1 class="text-xl font-bold font-sans mx-2"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
-					<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.coinAmount}"/> ARS </h4>
+					<div class="flex flex-row">
+						<h4 class="text-gray-400 font-sans mx-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
+						<p class="text-gray-400 font-sans">-</p>
+						<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.maxCoinAmount}"/> ARS </h4>
+
+					</div>
 					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>
 				<div class="flex flex-row basis-1/4 justify-between">
@@ -28,15 +33,21 @@
 							<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">
 							</c:forEach>
 						</div>
-
-
 					</div>
-
 				</div>
 				<div class="flex basis-1/4 justify-center">
-					<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white" href="<c:url value="/buy/${param.offerId}"/>">
-						Ver oferta
-					</a>
+					<c:choose>
+						<c:when test="${param.userEmail == param.owner || param.isAdmin}">
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-32 text-center" href="<c:url value="/offer/${param.offerId}"/>">
+								Ver
+							</a>
+						</c:when>
+						<c:otherwise>
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-32 text-center" href="<c:url value="/buy/${param.offerId}"/>">
+								Comprar
+							</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 		</div>

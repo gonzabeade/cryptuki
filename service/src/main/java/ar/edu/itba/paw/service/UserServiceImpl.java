@@ -29,27 +29,24 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Optional<User> registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
+    public void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
         User user = userDao.createUser(userBuilder);
-        authBuilder.id(user.getId());
-        authBuilder.password(passwordEncoder.encode(authBuilder.getPassword()));
-        authBuilder.code((int)(Math.random()*Integer.MAX_VALUE));
-        authBuilder.userStatus(UserStatus.UNVERIFIED);
+        authBuilder.withId(user.getId());
+        authBuilder.withPassword(passwordEncoder.encode(authBuilder.getPassword()));
+        authBuilder.withCode((int)(Math.random()*Integer.MAX_VALUE));
+        authBuilder.withUserStatus(UserStatus.UNVERIFIED);
+        authBuilder.withRole("seller");
         userAuthDao.createUserAuth(authBuilder);
-
 
        String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
                 + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
-                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode().toString()
+                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode()
                 + " en el lugar indicado o entrando al siguiente link:\n"
                 + "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername() +"&code="+authBuilder.getCode();
-       //send code.
         MailMessage message = contactService.createMessage(userBuilder.getEmail());
         message.setSubject("Verifica tu cuenta.");
         message.setBody(message_body);
         contactService.sendMessage(message);
-
-        return Optional.of(user);
     }
 
     @Override
@@ -67,23 +64,41 @@ public class UserServiceImpl implements UserService {
 
     public void sendChangePasswordMail(String email){
         Optional<UserAuth> maybeUser = userAuthDao.getUsernameByEmail(email);
-        if(!maybeUser.isPresent())
+        if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new RuntimeException("Invalid email");
 
         UserAuth user = maybeUser.get();
         MailMessage message = contactService.createMessage(email);
         message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/passwordRecovery?user="+user.getUsername()+"&code="+user.getCode());
+        message.setBody("http://localhost:8080/webapp/recoverPassword?user="+user.getUsername()+"&code="+user.getCode());
         contactService.sendMessage(message);
     }
 
     @Override
-    public int changePassword(String username, Integer code, String password) {
-        return userAuthDao.changePassword(username, code, password);
+    public boolean changePassword(String username, int code, String newPassword) {
+        Optional<UserAuth> userAuth = userAuthDao.getUserAuthByUsername(username);
+        if (userAuth.isPresent() && userAuth.get().getCode() == code)
+            return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        return false;
+    }
+
+    @Override
+    public boolean changePassword(String username, String newPassword) {
+        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+    }
+
+    @Override
+    public void updateLastLogin(String username) {
+        userDao.updateLastLogin(username);
     }
 
     @Override
     public Optional<User> getUserInformation(String username) {
         return userDao.getUserByUsername(username);
+    }
+
+    @Override
+    public void incrementUserRating(String username, int rating) {
+        userDao.incrementUserRating(username, rating);
     }
 }

@@ -1,9 +1,15 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.TradeDao;
+import ar.edu.itba.paw.persistence.TradeStatus;
 import ar.edu.itba.paw.service.digests.BuyDigest;
 import ar.edu.itba.paw.service.digests.SellDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class TradeServiceImpl implements TradeService {
@@ -11,10 +17,13 @@ public class TradeServiceImpl implements TradeService {
     private final ContactService<MailMessage> mailContactService;
     private final OfferService offerService;
 
+    private final TradeDao tradeDao;
+
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService) {
+    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao) {
         this.mailContactService = mailContactService;
         this.offerService = offerService;
+        this.tradeDao = tradeDao;
     }
 
     @Override
@@ -49,6 +58,50 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public void executeTrade(SellDigest digest) {
+    }
 
+    @Override
+    public void makeTrade(Trade.Builder trade) {
+        tradeDao.makeTrade(trade);
+    }
+
+    @Override
+    public void updateStatus(int tradeId, TradeStatus status) {
+        tradeDao.updateStatus(tradeId, status);
+    }
+
+    @Override
+    public Optional<Trade> getTradeById(int tradeId) {
+        return tradeDao.getTradeById(tradeId);
+    }
+
+    @Override
+    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
+        return tradeDao.getSellingTradesByUsername(username, page, pageSize);
+    }
+
+    @Override
+    public int getSellingTradesByUsernameCount(String username) {
+        return tradeDao.getSellingTradesByUsernameCount(username);
+    }
+
+    @Override
+    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
+        return tradeDao.getBuyingTradesByUsername(username, page, pageSize);
+    }
+
+    @Override
+    public int getBuyingTradesByUsernameCount(String username) {
+        return tradeDao.getSellingTradesByUsernameCount(username);
+    }
+
+    @Override
+    public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
+        return tradeDao.getTradesByUsername(username,page,pageSize);
+    }
+
+    @Override
+    public int getTradesByUsernameCount(String username) {
+        return tradeDao.getTradesByUsernameCount(username);
     }
 }

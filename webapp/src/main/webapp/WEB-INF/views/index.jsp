@@ -21,6 +21,7 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
@@ -31,7 +32,7 @@
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
             <option disabled selected>Selecciona una opción</option>
             <c:forEach items="${cryptocurrencies}" var="coin">
-                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.name}"/></option>
+                <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>
@@ -63,64 +64,40 @@
     <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
 </div>
 <div class=" flex justify-center mx-20">
+    <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
+    <h1 class="text-right text-gray-400 mx-5">Obtuviste ${offerCount} resultado/s</h1>
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
+                    <% request.setCharacterEncoding("UTF-8"); %>
                     <jsp:include page="../components/card.jsp">
-                        <jsp:param name="currency" value="${offer.coin_id}"/>
-                        <jsp:param name="user" value="${offer.seller.email}"/>
+                        <jsp:param name="currency" value="${offer.crypto.code}"/>
+                        <jsp:param name="owner" value="${offer.seller.email}"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
-                        <jsp:param name="coinAmount" value="${offer.coinAmount}"/>
+                        <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                        <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
+                        <jsp:param name="userEmail" value="${userEmail}"/>
+                        <jsp:param name="isAdmin" value="${isAdmin}"/>
                     </jsp:include>
                 </li>
             </c:forEach>
         </div>
     </ol>
-    <div>
-        <div class="absolute left-[37%] my-6">
-            <c:if  test="${activePage > 0}">
-                <a href="<c:url value="/?page=${activePage - 1}"/>"  class="font-bold font-sans text-polard ">Anterior</a>
-            </c:if>
-        </div>
-        <div class="flex flex-row mx-40 justify-center ">
-        <c:choose>
-            <c:when test="${pages > 0}">
-                <c:forEach var = "i" begin = "${activePage - 1 < 0 ? activePage : activePage - 1 }" end = "${(activePage + 1 > pages - 1 )? pages - 1 : activePage + 1 }">
-                    <c:choose>
-                        <c:when test="${activePage == i }">
-                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-stormd border-2 border-polard active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full "><c:out value="${i+1}"/></a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="#" onclick="addPageValue(<c:out value="${i}"/>)" class="bg-storm active:text-white-400 px-3 py-1 mx-4 my-5 rounded-full"><c:out value="${i+1}"/></a>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <div class="flex flex-col">
-                    <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
-                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
-                </div>
-            </c:otherwise>
 
-        </c:choose>
-        </div>
-        <div class="absolute right-[37%] -mt-[50px]">
-            <c:if test="${activePage < pages-1}">
-                <a href="<c:url value="/?page=${activePage + 1}"/>" class="font-bold font-sans text-polard">Siguiente</a>
-            </c:if>
-        </div>
-
-
-
-
+    <div class="flex flex-col">
+        <% request.setCharacterEncoding("UTF-8"); %>
+       <jsp:include page="../components/paginator.jsp">
+           <jsp:param name="activePage" value="${activePage}"/>
+           <jsp:param name="pages" value="${pages}"/>
+       </jsp:include>
+        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
     </div>
 </div>
 <div class="shape-blob"></div>

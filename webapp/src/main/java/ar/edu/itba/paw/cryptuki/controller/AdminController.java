@@ -146,6 +146,14 @@ public class AdminController {
         complainService.updateModerator(complaintId, authentication.getName());
         return new ModelAndView("redirect:/admin/solve/"+complaintId); //TODO !!!!!!!!!!!!!!
     }
+    @RequestMapping(value = "/unassign/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView unassign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
+
+        // TODO: Esto esta mal: tiene que ser Transactional y estar en la capa de servicio
+        complainService.updateComplainStatus(complaintId, ComplainStatus.PENDING);
+        complainService.updateModerator(complaintId, null);
+        return new ModelAndView("redirect:/admin/"); //TODO !!!!!!!!!!!!!!
+    }
 
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
     public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){

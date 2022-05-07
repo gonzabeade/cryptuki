@@ -43,7 +43,7 @@ function resetAllAdminFilters(){
     document.getElementById("toDate").value = null
     document.getElementById("offerId").value = null;
     document.getElementById("tradeId").value = null;
-    document.getElementById("username").value = null;
+    document.getElementById("complainer").value = null;
 
     deleteParams();
 

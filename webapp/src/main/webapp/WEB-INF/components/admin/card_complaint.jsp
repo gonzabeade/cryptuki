@@ -20,7 +20,13 @@
     <div class="flex flex-row basis-1/4 my-auto">
 
             <c:if test="${param.complainStatus == 'PENDING'}">
-                <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" w-24 text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto min-w-20">Ver</a>
+                <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" w-24 text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto">Ver</a>
+            </c:if>
+            <c:if test="${param.complainStatus == 'ASSIGNED'}">
+                <c:url value="/admin/unassign/${param.complainId}" var="postUrl"/>
+                <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
+                <button type="submit" class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto">Desasignarme<button/>
+            </form:form>
             </c:if>
             <c:url value="/admin/selfassign/${param.complainId}" var="postUrl"/>
             <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">

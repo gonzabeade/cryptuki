@@ -16,8 +16,9 @@
             <h3 class="text-gray-300">Comentario: <c:out value="${param.complainerComments}"/></h3>
         </div>
     </div>
+    <c:if test="${param.complainStatus != 'CLOSED'}">
     <div class="flex flex-row basis-1/4 my-auto">
-        <c:if test="${param.complainStatus != 'SOLVED'}">
+
             <c:if test="${param.complainStatus == 'PENDING'}">
                 <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" w-24 text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto min-w-20">Ver</a>
             </c:if>
@@ -25,7 +26,7 @@
             <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
             <button type="submit" class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 text-white w-32 text-center">Atender<button/>
             </form:form>
-        </c:if>
     </div>
+    </c:if>
 
 </div>

@@ -17,8 +17,8 @@ public class LastConnectionUtils {
 
 
         private String relativeTime;
-        private long secondsLowerBound;
-        private long secondsUpperBound;
+        private final long secondsLowerBound;
+        private final long secondsUpperBound;
 
         RelativeTime(String relativeTime, long secondsLowerBound, long secondsUpperBound) {
             this.relativeTime = relativeTime;
@@ -28,6 +28,9 @@ public class LastConnectionUtils {
 
         public boolean isInRange(long seconds) {
             return secondsLowerBound <= seconds && seconds < secondsUpperBound;
+        }
+        public String getRelativeTime(){
+            return relativeTime;
         }
 
     }

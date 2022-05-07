@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-
-import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.*;
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.SupportForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,18 +16,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -41,26 +36,22 @@ public class HomeController {
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
     private final SupportService supportService;
-    private final TradeService tradeService;
     private final PaymentMethodService paymentMethodService;
-    private final ProfilePicService profilePicService;
-
-    private final ComplainService complainService;
-
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 7;
 
 
 
     @Autowired
-    public HomeController(UserService us, OfferService offerService, CryptocurrencyService cryptocurrencyService, SupportService supportService, TradeService tradeService, PaymentMethodService paymentMethodService, ProfilePicService profilePicService, ComplainService complainService) {
+    public HomeController(UserService us,
+                          OfferService offerService,
+                          CryptocurrencyService cryptocurrencyService,
+                          SupportService supportService,
+                          PaymentMethodService paymentMethodService) {
         this.us = us;
         this.offerService = offerService;
         this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.tradeService = tradeService;
         this.paymentMethodService = paymentMethodService;
-        this.profilePicService = profilePicService;
-        this.complainService = complainService;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -83,20 +74,27 @@ public class HomeController {
 
         mav.addObject("offerList", offerService.getOfferBy(filter));
         int offerCount = offerService.countOffersBy(filter);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("offerCount", offerCount);
+
+        if(authentication != null){
+            mav.addObject("username",  authentication.getName());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
+        }
+
         return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication){
+    public ModelAndView support(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication,@RequestParam( value = "completed", required = false) final boolean completed){
         ModelAndView mav =  new ModelAndView("views/contact");
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("completed", completed);
 
         return mav;
     }
@@ -104,86 +102,13 @@ public class HomeController {
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView createTicket(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return support(form,authentication);
+            return support(form,authentication, false);
         }
 
         supportService.getSupportFor(form.toDigest());
-        ModelAndView mav = new ModelAndView("redirect:/");
-        mav.addObject("username", authentication == null ? null : authentication.getName());
 
-        return mav;
+        return support(new SupportForm(),authentication, true);
 
-    }
-
-
-    @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/buy_offer");
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-        mav.addObject("offer", offer);
-        if( authentication != null ){
-            mav.addObject("username", authentication == null ? null : authentication.getName());
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        }
-
-        return mav;
-
-    }
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
-        if(errors.hasErrors()){
-            return buyOffer(form.getOfferId(), form,authentication);
-        }
-
-        TradeForm tradeForm =  new TradeForm();
-        tradeForm.setAmount(form.getAmount());
-        tradeForm.setOfferId(form.getOfferId());
-
-        return executeTrade(tradeForm, authentication);
-
-    }
-    @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade(final TradeForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/trade");
-        mav.addObject("tradeForm", form);
-        mav.addObject("offer", offerService.getOfferById(form.getOfferId()).get());
-        mav.addObject("amount", form.getAmount());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-        return mav;
-    }
-    @RequestMapping(value = "/trade", method = RequestMethod.POST)
-    public ModelAndView executeTradePost(@Valid @ModelAttribute("tradeForm")  final TradeForm form, final BindingResult errors, final Authentication authentication){
-        if(errors.hasErrors()){
-            return executeTrade(form,authentication);
-        }
-        //inserto el trade
-//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
-//                .withTradeStatus(TradeStatus.OPEN)
-//                .withQuantity(form.getAmount())
-//                .withSellerUsername("mdedeu"));
-
-        //restarle el amount
-        //mandarle los datos  del comprador al vendedor
-        int tradeId= 2;
-        return receipt(tradeId,authentication);
-    }
-    @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/receipt");
-        Optional<Trade> trade = tradeService.getTradeById(tradeId);
-
-        if(!trade.isPresent()){
-            return null;
-        }
-
-        mav.addObject("trade" , trade.get());
-        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
-
-        if(authentication != null){
-            mav.addObject("username", authentication.getName());
-            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
-        }
-        return mav;
     }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET) /* When requests come to this path, requests are forwarded to this method*/
@@ -197,134 +122,33 @@ public class HomeController {
         return mav;
 
     }
-    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/upload_page");
-        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+    @RequestMapping(value = "/admin/complaint/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/complaint");
         mav.addObject("username", authentication == null ? null : authentication.getName());
-
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", "messi");
         return mav;
 
     }
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
-        if(errors.hasErrors()){
-            return uploadOffer(form,authentication);
-        }
+    @RequestMapping(value = "/admin/solve/{complaintId}", method = RequestMethod.GET)
+    public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplaintForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
 
-        offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
-
-        ModelAndView mav = new ModelAndView("redirect:/");
+        ModelAndView mav = new ModelAndView("views/solve_complaint");
         mav.addObject("username", authentication == null ? null : authentication.getName());
-        return mav;
-
-    }
-
-
-    @RequestMapping(value="/register",method = RequestMethod.GET)
-    public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
-        ModelAndView mav =  new ModelAndView("views/register");
+        mav.addObject("isAdmin", true);
+        mav.addObject("trade", "messi");
         return mav;
     }
-
-
-    @RequestMapping(value="/register" , method={RequestMethod.POST})
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
-        if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
-            return registerGet(form);
+    @RequestMapping(value = "/admin/solve/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplaintForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+        if(result.hasErrors()){
+            return solveComplaint(form,complaintId,authentication);
         }
-        try{
-            us.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
-        }
-        catch(Exception e ){
-                errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
-                return registerGet(form);
-        }
-
-      return new ModelAndView("redirect:/verify?user="+form.getUsername());
-    }
-
-
-    @RequestMapping("/login")
-    public ModelAndView login(@RequestParam(value = "error" , required = false) String error){
-        ModelAndView mav = new ModelAndView("views/login");
-        if(error != null){
-            mav.addObject("error", true);
-            return mav;
-        }
+        ModelAndView mav = new ModelAndView("views/solved_complaint");
+        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("isAdmin", true);
         return mav;
     }
-    @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
-        ModelAndView mav = new ModelAndView("views/code_verification");
-        mav.addObject("username", username);
-        return mav;
-    }
-
-    @RequestMapping(value = "/verify",method = RequestMethod.POST)
-    public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
-       if(errors.hasErrors()){
-           return verify(form, form.getUsername());
-       }
-       try{
-           us.verifyUser(form.getUsername(), form.getCode());
-       } catch (RuntimeException e){
-           errors.addError(new FieldError("CodeForm","code","El código ingresado no es correcto"));
-           return verify(form, form.getUsername());
-       }
-
-       //log in programmatically
-
-        UserAuth user = us.getUserByUsername(form.getUsername()).orElseThrow(RuntimeException::new);
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(form.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        return new ModelAndView("redirect:/");
-
-    }
-
-
-    @RequestMapping(value="/passwordRecovery")
-    public ModelAndView passwordSendMailGet(@Valid @ModelAttribute("EmailForm") EmailForm form){
-        return new ModelAndView("views/ChangePassword");
-    }
-
-    @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
-    public ModelAndView passwordSendMail(@Valid @ModelAttribute("EmailForm") EmailForm form, BindingResult errors){
-        if(errors.hasErrors())
-            return passwordSendMailGet(form);
-        try{
-            us.sendChangePasswordMail(form.getEmail());
-        }catch (Exception e ){
-            return new ModelAndView("redirect:/errors");
-        }
-        return new ModelAndView("views/ChangePasswordMailSent");
-
-    }
-
-
-    @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
-    public ResponseEntity<byte[]> imageGet(@PathVariable final String username){
-
-        Image image = profilePicService.getProfilePicture(username).orElseThrow( () -> new RuntimeException("Unknown user"));
-        return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
-    }
-
-
-    @RequestMapping(value="/test", method = {RequestMethod.GET})
-    public ModelAndView testGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
-        return new ModelAndView("views/upload_picture");
-    }
-
-    @RequestMapping(value = "/test", method = { RequestMethod.POST })
-    public ModelAndView test(@Valid @ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult) throws IOException {
-        profilePicService.uploadProfilePicture("holachau", form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
-        return new ModelAndView("redirect:/");
-    }
-
-
-
-
 
 }

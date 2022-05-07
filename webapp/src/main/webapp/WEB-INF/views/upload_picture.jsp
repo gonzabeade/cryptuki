@@ -23,13 +23,23 @@
 
 <div class="flex flex-col justify-center items-center">
     <div>
-        <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-5 mb-10">Escoge una nueva foto de perfil de entre tus archivos</h1>
+        <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-5 mb-10">Escoge una nueva foto de perfil</h1>
     </div>
     <div class="flex flex-col">
         <c:url value="/profilePicSelector" var="postUrl"/>
         <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
             <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>
-            <form:input type="file" path="multipartFile" cssClass="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-transparent text-sm rounded-lg"/>
+            <div>
+                <form:label path="multipartFile">
+                    <div class="flex flex-row">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                        <h3 id="fileName" class="font-sans text-2xl mt-3">Elige tu foto</h3>
+                    </div>
+                </form:label>
+                <form:input type="file" path="multipartFile" onchange="getUploadedFileName(this)" cssClass="invisible before:bg-red-400 "/>
+            </div>
             <div class="flex justify-around">
                 <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/user"/>">Cancelar</a>
                 <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
@@ -44,7 +54,20 @@
 <div class="shape-blob" style="left: 50%"></div>
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
+<script>
+    function getUploadedFileName(input){
+        var fullPath = input.value;
+        if (fullPath) {
+            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            var filename = fullPath.substring(startIndex);
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                filename = filename.substring(1);
+            }
+        }
+        document.getElementById("fileName").innerText=filename
+    }
 
+</script>
 
 
 

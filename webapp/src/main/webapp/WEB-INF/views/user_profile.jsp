@@ -44,20 +44,18 @@
         <h2 class="text-3xl font-semibold font-sans text-polar"><c:out value="${user.ratingCount}"/></h2>
       </div>
     </div>
-    <div class="flex justify-around mr-5" >
+    <div class="flex justify-around mt-36" >
       <div>
         <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Cambiar contraseña</a>
-      </div>
-      <div>
-        <a class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center" href="<c:url value="/profilePicSelector"/>">
-          Editar foto de perfil
-        </a>
       </div>
     </div>
   </div>
 
-  <div class="basis-1/4 height-auto ml-5">
+  <div class="flex flex-col basis-1/4 height-auto ml-5">
     <img src="<c:url value="/profilepic/${username}"/>"  class=" shadow rounded-full" />
+      <a class="mx-auto mt-3 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center" href="<c:url value="/profilePicSelector"/>">
+        Editar foto de perfil
+      </a>
   </div>
 
 </div>

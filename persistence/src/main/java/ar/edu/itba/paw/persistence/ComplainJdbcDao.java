@@ -10,8 +10,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 @Repository
 public class ComplainJdbcDao implements ComplainDao {

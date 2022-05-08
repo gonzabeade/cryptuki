@@ -21,7 +21,12 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-col">
-    <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
+    <div class="flex justify-between mt-10 mb-5">
+        <h2 class="text-center text-3xl  ml-32 font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
+        <div class="flex justify-center items-center">
+            <a href="<c:url value="/user"/>" class="h-12 mr-32 bg-frost text-white p-3 font-sans rounded-lg mx-auto">Volver</a>
+        </div>
+    </div>
     <div  class="flex flex-col justify-center">
                 <c:forEach var="complaint" items="${complaintsList}">
                     <li class="list-none mx-20">

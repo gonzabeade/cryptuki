@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+
 public final class Complain {
 
     private final Integer complainId;
@@ -130,8 +132,8 @@ public final class Complain {
         return complainerUsername;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getDate() {
+        return date.format(ISO_LOCAL_DATE);
     }
 
     public Optional<String> getModeratorUsername() {

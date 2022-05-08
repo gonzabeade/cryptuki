@@ -22,7 +22,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col mx-auto">
+    <div class="flex flex-col ml-80">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo # <c:url value="${complain.complainId}"/> </h2>
@@ -51,7 +51,7 @@
 
     </div>
     <c:if test="${trade!=null}">
-    <div class="flex flex-col mt-6 mx-auto w-1/2">
+    <div class="flex flex-col mt-6 mx-auto">
         <h1 class="font-sans font-medium text-polard text-2xl text-center">Detalles del trade</h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
             <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>

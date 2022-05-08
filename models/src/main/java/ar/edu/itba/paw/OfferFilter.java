@@ -13,8 +13,8 @@ public class OfferFilter {
     private int page = 0;
     private int pageSize = 1;
 
-    private float minPrice = 0;
-    private float maxPrice = Float.MAX_VALUE;
+    private float minPrice = Float.MAX_VALUE;
+    private float maxPrice =  0;
 
     private String username = null;
 

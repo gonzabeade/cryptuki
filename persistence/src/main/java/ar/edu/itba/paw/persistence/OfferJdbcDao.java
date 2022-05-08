@@ -124,8 +124,8 @@ public class OfferJdbcDao implements OfferDao {
                 "\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min <= asking_price*max_quantity AND\n" +
-                "          :max >= asking_price*max_quantity AND\n" +
+                "          :min >= asking_price*min_quantity AND\n" +
+                "          :max <= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
@@ -148,8 +148,8 @@ public class OfferJdbcDao implements OfferDao {
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min <= asking_price*max_quantity AND\n" +
-                "          :max >= asking_price*max_quantity AND\n" +
+                "          :min >= asking_price*min_quantity AND\n" +
+                "          :max <= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";

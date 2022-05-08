@@ -61,6 +61,7 @@ public class HomeController {
         }
         if(price != null){
             filter = filter.byMinPrice(price);
+            filter = filter.byMaxPrice(price);
         }
         filter = filter.withPageSize(PAGE_SIZE).fromPage(pageNumber);
 

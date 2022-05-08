@@ -93,7 +93,7 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Filter object cannot be null");
 
         try {
-            return offerDao.getOfferCount(filter);
+            return offerDao.getOfferCount(filter.byStatus("APR"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

@@ -97,11 +97,11 @@ create unique index user_role_description_uindex on user_role (description);
 
 CREATE TABLE profile_pic(
                         user_id INT PRIMARY KEY,
-                        image_data VARBINARY(1000),
+                        image_data VARBINARY(max),
                         image_type VARCHAR(1000),
 
                         FOREIGN KEY (user_id) REFERENCES users (id)
-    );
+);
 
 CREATE TABLE trade (
                        trade_id INT IDENTITY PRIMARY KEY,

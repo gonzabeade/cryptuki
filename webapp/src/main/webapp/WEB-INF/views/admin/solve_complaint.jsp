@@ -23,7 +23,7 @@
 <div class="flex flex-row divide-x divide-polard">
     <div class="flex flex-col ml-80">
         <div class="flex">
-            <div class="flex flex-col mx-auto mt-10">
+            <div class="flex flex-col  mt-10">
                 <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo #<c:out value="${complain.complainId}"/></h2>
                 <h2 class="font-sans font-medium text-polard text-3xl text-center">Efectuado el <c:out value="${complain.date}"/></h2>
             </div>
@@ -58,12 +58,6 @@
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
             <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>
             <h1 class="font-sans font-medium text-polard text-m text-center ">Realizado sobre la oferta #<c:out value="${trade.offerId}"/></h1>
-                <%--            <h1 class="text-center text-4xl font-bold"><c:out value="${trade.}"/></h1>--%>
-<%--            <h2 class="font-sans font-medium text-polard text-2xl text-center">a  1400000 ARS </h2>--%>
-                <%--            <div class="flex flex-row mt-3 font-sans mx-auto ">--%>
-                <%--                <h2 class="font-sans mx-2"><b>Mínimo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="10000"/> ARS </h2>--%>
-                <%--                <h2 class="font-sans"> <b>Máximo:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="200000"/> ARS </h2>--%>
-                <%--            </div>--%>
             <div class="flex flex-col mx-auto mt-5">
                 <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center">Participantes</h2>
                 <p class="font-sans font-polard"><b>Comprador:</b> <c:out value="${trade.buyerUsername}"/></p>

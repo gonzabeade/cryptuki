@@ -9,8 +9,7 @@ public interface UserService {
 
     void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
     Optional<UserAuth> getUserByUsername(String username);
-    void verifyUser(String username , Integer code);
-    void sendChangePasswordMail(String email);
+    boolean verifyUser(String username , Integer code);
     boolean changePassword(String username, int code, String newPassword);
     boolean changePassword(String username, String newPassword);
     void updateLastLogin(String username);

@@ -89,12 +89,10 @@ public class UserController {
         if(errors.hasErrors()){
             return verify(form, form.getUsername());
         }
-        try{
-            userService.verifyUser(form.getUsername(), form.getCode());
-        } catch (RuntimeException e){
-            errors.addError(new FieldError("CodeForm","code","El código ingresado no es correcto"));
-            return verify(form, form.getUsername());
-        }
+           if ( ! userService.verifyUser(form.getUsername(), form.getCode()) ) {
+               errors.addError(new FieldError("CodeForm", "code", "El código ingresado no es correcto"));
+               return verify(form, form.getUsername());
+           }
 
         return logInProgrammatically(form.getUsername());
     }
@@ -110,7 +108,7 @@ public class UserController {
         if(errors.hasErrors())
             return passwordSendMailGet(form);
         try{
-            userService.sendChangePasswordMail(form.getEmail());
+//            userService.sendChangePasswordMail(form.getEmail()); TODO: ESTO ESTA MAL!! ES LOGICA DE NEGOCIO!!
         }catch (Exception e ){
             return new ModelAndView("redirect:/errors");
         }

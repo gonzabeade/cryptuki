@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 
+import ar.edu.itba.paw.exception.DuplicateEmailException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -62,7 +64,10 @@ public class UserJdbcDao implements UserDao{
         int id;
         try {
             id = jdbcInsert.executeAndReturnKey(args).intValue();
-        } catch (DataAccessException dae) {
+        } catch (DataIntegrityViolationException dive) {
+            throw new DuplicateEmailException(user.getEmail(), dive);
+        }
+        catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
 

@@ -24,7 +24,6 @@ public class HomeController {
     private final UserService us;
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
-    private final SupportService supportService;
     private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
     private static final int PAGE_SIZE = 7;
@@ -35,12 +34,10 @@ public class HomeController {
     public HomeController(UserService us,
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
-                          SupportService supportService,
                           PaymentMethodService paymentMethodService,
                           ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
-        this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
         this.complainService = complainService;
@@ -104,7 +101,7 @@ public class HomeController {
             return support(form,authentication, form.getTradeId(),false);
         }
         if(null!=authentication){
-            supportService.getSupportFor(form.toComplainBuilder());
+            complainService.makeComplain(form.toComplainBuilder());
         }
         return support(new SupportForm(), authentication,null, true);
 
@@ -141,5 +138,6 @@ public class HomeController {
         mav.addObject(authentication.getName());
         return mav;
     }
+
 }
 

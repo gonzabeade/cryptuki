@@ -85,6 +85,9 @@ public class OfferServiceImpl implements OfferService {
     @Transactional(readOnly = true)
     public int countOffersBy(OfferFilter filter) {
 
+        if (filter == null)
+            throw new NullPointerException("Filter object cannot be null");
+
         try {
             return offerDao.getOfferCount(filter);
         } catch (PersistenceException pe) {

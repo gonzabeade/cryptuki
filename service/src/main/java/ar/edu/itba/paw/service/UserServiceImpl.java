@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.DuplicateEmailException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;

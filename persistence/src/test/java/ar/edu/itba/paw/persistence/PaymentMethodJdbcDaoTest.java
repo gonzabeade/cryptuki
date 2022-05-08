@@ -22,6 +22,7 @@ import java.util.Optional;
 public class PaymentMethodJdbcDaoTest {
     private static final String PAYMENT_METHOD_TABLE= "payment_method";
     private static final int TESTED_INDEX = 1;
+    private static final int ROW_COUNT = 3;
 
     private ArrayList<PaymentMethod> paymentMethods;
 
@@ -42,9 +43,9 @@ public class PaymentMethodJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
 
         paymentMethods= new ArrayList<>();
-        paymentMethods.add(PaymentMethod.getInstance("BTC", "Bitcoin"));
-        paymentMethods.add(PaymentMethod.getInstance("BTC", "Bitcoin"));
-        paymentMethods.add(PaymentMethod.getInstance("BTC", "Bitcoin"));
+        paymentMethods.add(PaymentMethod.getInstance("Cash", "Paper"));
+        paymentMethods.add(PaymentMethod.getInstance("Lemon", "Crypto"));
+        paymentMethods.add(PaymentMethod.getInstance("Cred", "Bank"));
     }
 
     @Test
@@ -57,7 +58,7 @@ public class PaymentMethodJdbcDaoTest {
         Optional<PaymentMethod> testedPaymentMethod = paymentMethodJdbcDao.getPaymentMethodByCode(paymentMethods.get(TESTED_INDEX).getName());
 
         //Validations
-        Assert.assertNotNull(testedPaymentMethod);
+        Assert.assertTrue(testedPaymentMethod.isPresent());
         Assert.assertEquals(paymentMethods.get(TESTED_INDEX).getName(), testedPaymentMethod.get().getName());
         Assert.assertEquals(paymentMethods.get(TESTED_INDEX).getDescription(), testedPaymentMethod.get().getDescription());
     }
@@ -71,9 +72,11 @@ public class PaymentMethodJdbcDaoTest {
         }
 
         // Exercise
-        Collection<PaymentMethod> testedCryptos = paymentMethodJdbcDao.getAllPaymentMethods();
+        Collection<PaymentMethod> testedPaymentMethods = paymentMethodJdbcDao.getAllPaymentMethods();
 
         //Validations
+        Assert.assertEquals(ROW_COUNT, JdbcTestUtils.countRowsInTable(jdbcTemplate, PAYMENT_METHOD_TABLE));
+        Assert.assertTrue(testedPaymentMethods.containsAll(paymentMethods));
     }
 
     private void insertPaymentMethod(PaymentMethod paymentMethod){

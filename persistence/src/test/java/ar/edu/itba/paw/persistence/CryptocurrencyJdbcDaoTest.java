@@ -81,7 +81,7 @@ public class CryptocurrencyJdbcDaoTest {
 
         //Validations
         Assert.assertEquals(ROW_COUNT, JdbcTestUtils.countRowsInTable(jdbcTemplate, CRYPTO_TABLE));
-        Assert.assertEquals(true, testedCryptos.containsAll(cryptos));
+        Assert.assertTrue(testedCryptos.containsAll(cryptos));
     }
 
     private void insertCrypto(Cryptocurrency crypto){

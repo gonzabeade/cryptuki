@@ -5,21 +5,13 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class TradeForm {
-    @NotNull
+//    @NotNull
     private Float amount;
     @NotNull
     @Pattern(regexp = "0x[\\dabcdef]{8,10}")
     private String wallet;
-    @NotNull
-    private int offerId;
-
-    public int getOfferId() {
-        return offerId;
-    }
-
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
-    }
+//    @NotNull
+    private Integer offerId;
 
     public Float getAmount() {
         return amount;
@@ -35,5 +27,13 @@ public class TradeForm {
 
     public void setWallet(String wallet) {
         this.wallet = wallet;
+    }
+
+    public Integer getOfferId() {
+        return offerId;
+    }
+
+    public void setOfferId(Integer offerId) {
+        this.offerId = offerId;
     }
 }

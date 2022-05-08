@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS offer (
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
     asking_price DECIMAL NOT NULL,
-    quantity DECIMAL NOT NULL,
+    max_quantity DECIMAL NOT NULL,
     FOREIGN KEY (crypto_code) REFERENCES cryptocurrency(code) ON DELETE CASCADE,
     FOREIGN KEY (status_code) REFERENCES status(code) ON DELETE CASCADE,
     FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
     FOREIGN KEY(payment_code) REFERENCES payment_method(code) ON DELETE CASCADE
     );
 
-
+/*
 CREATE VIEW offer_complete as
 SELECT offer_id,
        seller_id,
@@ -83,19 +83,18 @@ FROM offer
          LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
          JOIN status s on s.code = offer.status_code
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
+*/
+
 
 alter table offer
-    rename column quantity to max_quantity;
+    add min_quantity numeric set default 0;
 
-alter table offer
-    add min_quantity numeric default 0;
-
-drop view offer_complete;
+/*drop view offer_complete;*/
 
 INSERT INTO status (code, status_description) VALUES ('DEL', 'Deleted by user');
 
 alter table users
-    add last_login timestamp default '2022-05-01 02:08:03.777554' not null;
+    add last_login timestamp set default '2022-05-01 02:08:03.777554' not null;
 
 CREATE VIEW offer_complete as
 SELECT offer_id,
@@ -126,13 +125,15 @@ FROM offer
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
 
 create unique index user_role_description_uindex on user_role (description);
-CREATE TABLE IF NOT EXISTS profile_pic(
-                                          user_id INT PRIMARY KEY,
-                                          image_data BYTEA,
-                                          image_type TEXT,
 
-                                          FOREIGN KEY (user_id) REFERENCES users (id)
+CREATE TABLE IF NOT EXISTS profile_pic(
+                        user_id INT PRIMARY KEY,
+                        image_data VARBINARY(1000),
+                        image_type VARCHAR(1000),
+
+                        FOREIGN KEY (user_id) REFERENCES users (id)
     );
+
 CREATE TABLE trade (
                        trade_id INT IDENTITY PRIMARY KEY,
                        offer_id INT CHECK(offer_id >= 0),
@@ -189,13 +190,15 @@ FROM complain
          LEFT OUTER JOIN auth moderator_auth ON moderator_auth.user_id = complain.moderator_id
 
 alter table offer
-    rename column quantity to max_quantity;
-alter table offer
-    add min_quantity numeric default 0;
+    add min_quantity numeric set default 0;
+
 drop view offer_complete;
+
 INSERT INTO status (code, status_description) VALUES ('DEL', 'Deleted by user');
+
 alter table users
-    add last_login timestamp default '2022-05-01 02:08:03.777554' not null;
+    add last_login timestamp set default '2022-05-01 02:08:03.777554' not null;
+
 CREATE VIEW offer_complete as
 SELECT offer_id,
        seller_id,
@@ -225,6 +228,7 @@ FROM offer
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
 create unique index user_role_description_uindex
     on user_role (description);
+
 CREATE TABLE IF NOT EXISTS profile_pic(
                                           user_id INT PRIMARY KEY,
                                           image_data BYTEA,
@@ -232,6 +236,7 @@ CREATE TABLE IF NOT EXISTS profile_pic(
 
                                           FOREIGN KEY (user_id) REFERENCES users (id)
     );
+
 CREATE TABLE trade (
                        trade_id INT IDENTITY PRIMARY KEY,
                        offer_id INT CHECK(offer_id >= 0),
@@ -305,7 +310,7 @@ FROM trade
          JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code
 
 alter table offer
-    add comments varchar(280) default 'No comments.';
+    add comments varchar(280) set default 'No comments.';
 
 DROP VIEW offer_complete;
 CREATE VIEW offer_complete as
@@ -338,7 +343,7 @@ FROM offer
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
 
 alter table complain
-    add complain_date date default now()
+    add complain_date date set default now()
 
 DROP VIEW complain_complete;
 CREATE VIEW complain_complete AS

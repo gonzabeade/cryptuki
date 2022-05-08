@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.OfferFilter;
 import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Before;
@@ -58,22 +60,21 @@ public class OfferJdbcDaoTest {
         //TODO: puede haber algun problema con el tema del determinismo (ya que las horas son diferentes)?
         //TODO: mirar que hacer con el date type que no me lo estaba tomando el hsqldb
         offers = new ArrayList<>(Arrays.asList(
-                Offer.builder(User.builder().id(0).email("gbeade@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("ETH", "Ether", 54.3),
-                        54.0).quantity(40).build(),
-                Offer.builder(User.builder().id(1).email("shadad@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("ADA", "Cardano", 10.4),
-                        9).quantity(30).build(),
-                Offer.builder(User.builder().id(2).email("mdedeu@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("DOT", "Polkadot", 2.0),
-                        2.65).quantity(20).build(),
-                Offer.builder(User.builder().id(3).email("scastagnino@itba.edu.ar").build(),
-                        Cryptocurrency.getInstance("BTC", "Bitcoin", 22.1),
-                        22.2).quantity(10).build()
+                new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),
+                        Cryptocurrency.getInstance("ETH", "Ether"),
+                        (float)54.0).build(),
+                new Offer.Builder(1, new User.Builder("shadad@itba.edu.ar").withId(1).build(),
+                        Cryptocurrency.getInstance("ADA", "Cardano"),
+                        (float)9.0).build(),
+                new Offer.Builder(2, new User.Builder("mdedeu@itba.edu.ar").withId(2).build(),
+                        Cryptocurrency.getInstance("DOT", "Polkadot"),
+                        (float)2.65).build(),
+                new Offer.Builder(3, new User.Builder("scastagnino@itba.edu.ar").withId(3).build(),
+                        Cryptocurrency.getInstance("BTC", "Bitcoin"),
+                        (float)22.2).build()
         ));
 
         testingFitler = new OfferFilter();
-        testingFitler.close();
 
     }
 
@@ -81,15 +82,12 @@ public class OfferJdbcDaoTest {
     public void TestMakeOffer(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        Offer.Builder offerBuilder = Offer.builder(offers.get(TESTING_OFFER_INDEX).getSeller(), offers.get(TESTING_OFFER_INDEX).getCrypto(), offers.get(TESTING_OFFER_INDEX).getAskingPrice()).quantity(offers.get(TESTING_OFFER_INDEX).getCoinAmount());
+        OfferDigest offerDigest = new OfferDigest.Builder( 0, "ETH", 11.2).build();
 
         // Exercise
-        Offer testedOffer = offerJdbcDao.makeOffer(offerBuilder);
+        int offerId = offerJdbcDao.makeOffer(offerDigest);
 
         // Validations
-        System.out.println("Email de oferta:" + testedOffer.getSeller());
-        Assert.assertNotNull(testedOffer);
-        assertOffer(offers.get(TESTING_OFFER_INDEX), testedOffer);
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
     }
 
@@ -145,7 +143,7 @@ public class OfferJdbcDaoTest {
         offerMap.put("crypto_code", offer.getCrypto().getCode());
         offerMap.put("status_code", STATUS_CODE);
         offerMap.put("asking_price", offer.getAskingPrice());
-        offerMap.put("quantity", offer.getCoinAmount());
+        //offerMap.put("quantity", offer.getCoinAmount());
 
         jdbcInsert.execute(offerMap);
 
@@ -162,7 +160,7 @@ public class OfferJdbcDaoTest {
 
         //Assert.assertEquals(originalOffer.getCrypto().getMarketPrice(), testedOffer.getCrypto().getMarketPrice());
         Assert.assertEquals(originalOffer.getCrypto().getCode(), testedOffer.getCrypto().getCode());
-        Assert.assertEquals(originalOffer.getCrypto().getName(), testedOffer.getCrypto().getName());
+        //Assert.assertEquals(originalOffer.getCrypto().getName(), testedOffer.getCrypto().getName());
 
     }
 

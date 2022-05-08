@@ -6,7 +6,6 @@ INSERT INTO users (email, rating_sum, rating_count) VALUES ('shadad@itba.edu.ar'
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('mdedeu@itba.edu.ar', 0, 0);
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('scastagnino@itba.edu.ar', 0, 0);
 
-INSERT INTO status (code, status_description) VALUES ('APR', 'test');
 
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('BTC', 22.1, 'Bitcoin');
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('ETH', 54.3, 'Ether');

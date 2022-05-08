@@ -10,7 +10,7 @@
         <input type="hidden" name="email"  id="email" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
             <form:label  path="amount" class="text-xl font-sans text-polard font-semibold mb-3 text-center">¿Cuántos ARS quieres gastar? *</form:label>
-            <form:errors cssClass=" mx-auto text-red-400"/>
+            <form:errors cssClass=" mx-auto text-red-500"/>
             <form:errors path="amount" cssClass=" mx-auto text-red-500"/>
 
             <div class="flex flex-col justify-center mx-auto">

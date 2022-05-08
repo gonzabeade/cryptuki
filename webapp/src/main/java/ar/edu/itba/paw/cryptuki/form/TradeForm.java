@@ -8,6 +8,7 @@ public class TradeForm {
 //    @NotNull
     private Float amount;
     @NotNull
+    @Size(min=1, max = 140)
     private String wallet;
 //    @NotNull
     private Integer offerId;

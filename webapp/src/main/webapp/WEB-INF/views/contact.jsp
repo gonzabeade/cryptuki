@@ -22,7 +22,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:if test="${completed == true}">
         <jsp:include page="../components/confirmationToggle.jsp">
-            <jsp:param name="title" value="Cargaste tu reclamo con éxito. Lo podrás ver en tu perfil."/>
+            <jsp:param name="title" value="Cargaste tu reclamo con éxito."/>
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>

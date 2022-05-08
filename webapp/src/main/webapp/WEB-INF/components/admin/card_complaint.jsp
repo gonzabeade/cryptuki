@@ -16,16 +16,23 @@
             <h3 class="text-gray-300">Comentario: <c:out value="${param.complainerComments}"/></h3>
         </div>
     </div>
+    <c:if test="${param.complainStatus != 'CLOSED'}">
     <div class="flex flex-row basis-1/4 my-auto">
-        <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class="pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mr-5">Ver</a>
-        <c:if test="${true}"> <!--if complaint status is not Assigned nor solved  -->
 
+            <c:if test="${param.complainStatus == 'PENDING'}">
+                <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" w-24 text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto">Ver</a>
+            </c:if>
+            <c:if test="${param.complainStatus == 'ASSIGNED'}">
+                <c:url value="/admin/unassign/${param.complainId}" var="postUrl"/>
+                <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
+                <button type="submit" class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto">Desasignarme<button/>
+            </form:form>
+            </c:if>
             <c:url value="/admin/selfassign/${param.complainId}" var="postUrl"/>
             <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
-                <button type="submit" class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 text-white">Atender<button/>
-                    </form:form>
-
-        </c:if>
+            <button type="submit" class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 text-white w-32 text-center">Atender<button/>
+            </form:form>
     </div>
+    </c:if>
 
 </div>

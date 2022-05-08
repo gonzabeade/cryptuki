@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.CryptocurrencyDao;
@@ -30,8 +31,8 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
 
         try {
             return cryptoCurrencyDao.getCryptocurrency(id);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -40,8 +41,8 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
     public Collection<Cryptocurrency> getAllCryptocurrencies() {
         try {
             return cryptoCurrencyDao.getAllCryptocurrencies();
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 }

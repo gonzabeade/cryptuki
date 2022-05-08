@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Image;
@@ -35,8 +36,8 @@ public class ProfilePicServiceImpl implements ProfilePicService {
 
         try {
             return profilePicDao.getProfilePicture(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -51,8 +52,8 @@ public class ProfilePicServiceImpl implements ProfilePicService {
 
         try {
             profilePicDao.uploadProfilePicture(username, profilePicture, type);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 }

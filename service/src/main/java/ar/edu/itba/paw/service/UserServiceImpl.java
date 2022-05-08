@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
@@ -40,8 +41,8 @@ public class UserServiceImpl implements UserService {
         User user;
         try {
            user = userDao.createUser(userBuilder);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
 
 
@@ -53,8 +54,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             userAuthDao.createUserAuth(authBuilder);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
 
         // TODO: modularizar y logica de negocio con Salva!
@@ -75,8 +76,8 @@ public class UserServiceImpl implements UserService {
     public Optional<UserAuth> getUserByUsername(String username) {
         try {
             return userAuthDao.getUserAuthByUsername(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -88,8 +89,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             verified = userAuthDao.verifyUser(username,code);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new UncategorizedPersistenceException(upe);
+        } catch (PersistenceException pe) {
+            throw new UncategorizedPersistenceException(pe);
         }
 
         return verified;
@@ -122,8 +123,8 @@ public class UserServiceImpl implements UserService {
         Optional<UserAuth> userAuth;
         try {
             userAuth = userAuthDao.getUserAuthByUsername(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
 
         if (userAuth.isPresent() && userAuth.get().getCode() == code)
@@ -140,8 +141,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -152,8 +153,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             userDao.updateLastLogin(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -166,8 +167,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             return userDao.getUserByUsername(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -183,8 +184,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             userDao.incrementUserRating(username, rating);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 }

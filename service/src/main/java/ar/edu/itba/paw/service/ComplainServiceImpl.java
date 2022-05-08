@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Complain;
@@ -37,8 +38,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             return complainDao.getComplainsBy(filter);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -62,8 +63,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             return complainDao.countComplainsBy(filter);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -76,8 +77,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             complainDao.makeComplain(complain);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -93,8 +94,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             complainDao.updateComplainStatus(complainId, complainStatus);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -107,8 +108,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             complainDao.updateModerator(complainId, username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -121,8 +122,8 @@ public class ComplainServiceImpl implements ComplainService{
 
         try {
             complainDao.updateModeratorComment(complainId, comments);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 

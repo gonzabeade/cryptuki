@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Offer;
@@ -32,8 +33,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             return offerDao.makeOffer(digest);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -47,8 +48,8 @@ public class OfferServiceImpl implements OfferService {
         try {
             Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter().byOfferId(id));
             return offer.isEmpty() ? Optional.empty() : Optional.of(offer.iterator().next());
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -61,8 +62,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             return offerDao.getOffersBy(new OfferFilter().byUsername(username));
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -75,8 +76,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             return offerDao.getOffersBy(filter);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -86,8 +87,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             return offerDao.getOfferCount(filter);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -100,8 +101,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             return offerDao.getOfferCount(new OfferFilter().byUsername(username));
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -114,8 +115,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             offerDao.modifyOffer(digest);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -128,8 +129,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             offerDao.deleteOffer(offerId);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -142,8 +143,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             offerDao.pauseOffer(offerId);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
 
     }
@@ -157,8 +158,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             offerDao.hardPauseOffer(offerId);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -171,8 +172,8 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             offerDao.resumeOffer(offerId);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.service;
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.PaymentMethod;
@@ -25,8 +26,8 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public Collection<PaymentMethod> getAllPaymentMethods() {
         try {
             return paymentMethodDao.getAllPaymentMethods();
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -35,8 +36,8 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
         try {
             return paymentMethodDao.getPaymentMethodByCode(code);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 

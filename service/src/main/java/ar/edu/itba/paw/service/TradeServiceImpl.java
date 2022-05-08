@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Trade;
@@ -37,8 +38,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             tradeDao.makeTrade(trade);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -54,8 +55,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             tradeDao.updateStatus(tradeId, status);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -68,8 +69,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getTradeById(tradeId);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -85,8 +86,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getSellingTradesByUsername(username, page, pageSize);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -99,8 +100,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getSellingTradesByUsernameCount(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -116,8 +117,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getBuyingTradesByUsername(username, page, pageSize);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -130,8 +131,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getSellingTradesByUsernameCount(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -147,8 +148,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getTradesByUsername(username,page,pageSize);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 
@@ -161,8 +162,8 @@ public class TradeServiceImpl implements TradeService {
 
         try {
             return tradeDao.getTradesByUsernameCount(username);
-        } catch (UncategorizedPersistenceException upe) {
-            throw new ServiceDataAccessException(upe);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
         }
     }
 }

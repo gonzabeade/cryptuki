@@ -67,7 +67,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/login", "/register", "/verify**").anonymous()
-                .antMatchers("/upload/**", "/buy/**").authenticated()
+                .antMatchers("/", "/contact","/coins").permitAll()
+                .antMatchers("/admin**").hasRole("ADMIN")
+                .antMatchers("/**").authenticated()
                 .and().formLogin()
                 .failureHandler(failureHandler())
                 .usernameParameter("j_username")
@@ -83,7 +85,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .and().exceptionHandling()
-                .accessDeniedPage("/errors")
+//                .accessDeniedPage("/errors")
                 .and().csrf().disable();
     }
 

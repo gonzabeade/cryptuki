@@ -22,7 +22,7 @@ public class ErrorController {
                 errorMsg = "Parece que estás enviando algo incorrecto";
                 break;
             }
-            case 401: {
+            case 403: {
                 errorMsg = "No tiene los permisos necesarios para ingresar a esta página";
                 break;
             }

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
@@ -121,6 +122,7 @@ public class HomeController {
 
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
+
         ModelAndView mav = new ModelAndView("views/complaints_page");
 
         int pageNumber= page.orElse(0);

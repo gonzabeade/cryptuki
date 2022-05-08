@@ -14,7 +14,7 @@
     <c:if test="${param.username.isEmpty()}">
         <div class="flex flex-col p-5 justify-center">
             <form:errors path="email" cssClass="text-red-500"/>
-            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Correo electrónico *</form:label>
+            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="emailAddress"/> *</form:label>
             <div class="flex-row justify-center">
                 <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
             </div>

@@ -54,9 +54,7 @@ public class OfferJdbcDaoTest {
                 .withTableName(OFFER_TABLE)
                 .usingGeneratedKeyColumns("id");
         offerJdbcDao = new OfferJdbcDao(ds);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"offer");
-
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAA"+OfferStatus.getInstance(STATUS_CODE, STATUS_DESC).getCode());
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,OFFER_TABLE);
 
         offers = new ArrayList<>(Arrays.asList(
                 new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),
@@ -69,8 +67,6 @@ public class OfferJdbcDaoTest {
                         Cryptocurrency.getInstance("DOT", "Polkadot"),
                         (float)2.65).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build()
         ));
-
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBB"+OfferStatus.getInstance(STATUS_CODE, STATUS_DESC).getCode());
 
         testingFilter = new OfferFilter();
 

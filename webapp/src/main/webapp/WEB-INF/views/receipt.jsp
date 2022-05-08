@@ -67,7 +67,7 @@
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
-                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+                <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
             </jsp:include>
         </div>
 

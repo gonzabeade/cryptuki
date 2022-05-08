@@ -89,6 +89,7 @@
     <div>
       <c:forEach var="trade" items="${tradeList}">
       <li>
+        <% request.setCharacterEncoding("utf-8"); %>
         <jsp:include page="../components/trade_card.jsp">
           <jsp:param name="username" value="${username}"/>
           <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
@@ -103,6 +104,7 @@
     </c:forEach>
     </div>
     <div class="flex flex-col mt-3">
+      <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../components/paginator.jsp">
         <jsp:param name="activePage" value="${activePage}"/>
         <jsp:param name="pages" value="${pages}"/>

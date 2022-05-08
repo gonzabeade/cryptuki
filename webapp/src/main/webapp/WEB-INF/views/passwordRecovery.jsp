@@ -15,6 +15,7 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp"/>
 <div>
     <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-10">Te enviaremos un link para que recuperes la contraseña</h1>

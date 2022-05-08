@@ -19,12 +19,15 @@
 
 <body class="bg-storml overflow-x-hidden">
 <div class="flex flex-row">
+
+  <% request.setCharacterEncoding("utf-8"); %>
   <jsp:include page="../../components/admin/header.jsp">
     <jsp:param name="username" value="${username}"/>
   </jsp:include>
   <div class="flex flex-col ml-96 my-10 h-screen w-screen">
     <h1 class="font-sans text-4xl font-bold">${title}</h1>
     <div class="flex flex-row mt-10 divide-x h-full">
+      <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../../components/admin/filters.jsp">
         <jsp:param name="baseUrl" value="${baseUrl}"/>
       </jsp:include>
@@ -32,6 +35,7 @@
 
         <c:forEach var="complain" items="${complainList}">
           <li style="list-style-type: none" class="my-3">
+            <% request.setCharacterEncoding("utf-8"); %>
             <jsp:include page="../../components/admin/card_complaint.jsp">
               <jsp:param name="date" value="${complain.date}"/>
               <jsp:param name="complainId" value="${complain.complainId}"/>

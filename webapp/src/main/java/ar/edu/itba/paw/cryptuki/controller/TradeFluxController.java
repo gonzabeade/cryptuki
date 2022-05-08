@@ -103,9 +103,12 @@ public class TradeFluxController {
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
+
         if(authentication != null){
             mav.addObject("username", authentication.getName());
-            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
+            User user = us.getUserInformation(authentication.getName()).get();
+            mav.addObject("user", user);
+            mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
         }
         return mav;
     }
@@ -123,11 +126,15 @@ public class TradeFluxController {
         }
 
         mav.addObject("trade" , trade.get());
-        mav.addObject("offer", offerService.getOfferById(trade.get().getOfferId()).get());
+        Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
+        mav.addObject("offer", offer);
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
         if(authentication != null){
             mav.addObject("username", authentication.getName());
-            mav.addObject("user", us.getUserInformation(authentication.getName()).get());
+            User user = us.getUserInformation(authentication.getName()).get();
+            mav.addObject("user", user);
+            mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
         }
         return mav;
 

@@ -70,7 +70,6 @@ public class TradeServiceImpl implements TradeService {
                     .withSellerUsername(userAuth.getUsername());
             int tradeId = tradeDao.makeTrade(trade);
 
-
             //send email to seller
             MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
             message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());

@@ -38,7 +38,7 @@ public class UserJdbcDao implements UserDao{
     @Autowired
     public UserJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingGeneratedKeyColumns("id");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingGeneratedKeyColumns("id").usingColumns("email","rating_sum","rating_count","phone_number");
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserJdbcDao implements UserDao{
         args.put("phone_number", user.getPhoneNumber());
         int id;
         try {
-            id = jdbcInsert.usingColumns("email","rating_sum","rating_count","phone_number").executeAndReturnKey(args).intValue();
+            id = jdbcInsert.executeAndReturnKey(args).intValue();
         } catch (DataIntegrityViolationException dive) {
             throw new DuplicateEmailException(user.getEmail(), dive);
         }

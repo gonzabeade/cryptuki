@@ -11,7 +11,7 @@
     <div class="flex flex-col">
         <form:errors path="code" cssClass="text-red-400 text-center" element="p"/>
         <form:label path="code" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Código</form:label>
-        <form:input type="text" path="code" cssClass="rounded-lg p-3 mx-auto"/>
+        <form:input type="number" path="code" cssClass="rounded-lg p-3 mx-auto"/>
         <form:input path="username" type="hidden" value="${param.username}"/>
 
     </div>

@@ -26,7 +26,7 @@ public class HomeController {
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
-    private static final int PAGE_SIZE =2;
+    private static final int PAGE_SIZE = 7;
 
 
 

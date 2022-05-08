@@ -8,7 +8,6 @@ public class TradeForm {
 //    @NotNull
     private Float amount;
     @NotNull
-    @Pattern(regexp = "0x[\\dabcdef]{8,10}")
     private String wallet;
 //    @NotNull
     private Integer offerId;

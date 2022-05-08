@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AmountCheck {
     //error message
-    public String message() default "Debe enviar una cantidad menor o igual al mínimo y mayor o igual al máximo";
+    public String message() default "Debe enviar una cantidad mayor o igual al mínimo y menor o igual al máximo";
     //represents group of constraints
     public Class<?>[] groups() default {};
     //represents additional information about annotation

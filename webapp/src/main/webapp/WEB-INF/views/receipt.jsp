@@ -42,7 +42,7 @@
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg">Fecha de la transacción</h1>
-                <p class="text-polard font-sans text-center">2022-02-21</p>
+                <p class="text-polard font-sans text-center">${trade.startDate}</p>
             </div>
         </div>
         <div class="flex flex-row mt-10">

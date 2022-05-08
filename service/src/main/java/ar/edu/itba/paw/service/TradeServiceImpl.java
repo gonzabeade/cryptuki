@@ -51,19 +51,24 @@ public class TradeServiceImpl implements TradeService {
 
             float remaining = offer.getMaxQuantity() - (trade.getQuantity()/offer.getAskingPrice());
 
-            if( remaining <= 0)
+            if( remaining <= 0){
                 offerService.pauseOffer(offer.getId());
+            }
 
 
             digestBuilder.withMaxQuantity(remaining);
             float newMin =(offer.getMinQuantity() > remaining ) ? 0 : (offer.getMinQuantity());
-            digestBuilder.withMinQuantity(newMin);
-            offerService.modifyOffer(digestBuilder.build());
-
+            if(newMin == 0){
+                offerService.pauseOffer(offer.getId());
+            }
+            else{
+                digestBuilder.withMinQuantity(newMin);
+                offerService.modifyOffer(digestBuilder.build());
+            }
             //create trade.
             trade.withTradeStatus(TradeStatus.OPEN)
                     .withSellerUsername(userAuth.getUsername());
-            Integer tradeId = tradeDao.makeTrade(trade);
+            int tradeId = tradeDao.makeTrade(trade);
 
 
             //send email to seller

@@ -173,6 +173,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserAuth> getUserAuthByEmail(String email) {
+        return userAuthDao.getUserAuthByEmail(email);
+    }
+
+    @Override
     public void incrementUserRating(String username, int rating) {
 
         if (rating < 0)

@@ -8,9 +8,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -18,6 +20,9 @@ public class TradeDaoImpl implements TradeDao {
 
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert jdbcTradeInsert;
+
+
 
     private final static RowMapper<Trade> TRADE_COMPLETE_ROW_MAPPER =
             (rs, i) ->{
@@ -42,31 +47,37 @@ public class TradeDaoImpl implements TradeDao {
     public TradeDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcTradeInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("trade").usingGeneratedKeyColumns("trade_id");
+
     }
 
     @Override
-    public void makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
-        final MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("offer_id", offerId)
-                .addValue("buyer_uname", buyerUsername)
-                .addValue("status", status.toString())
-                .addValue("quantity", quantity);
+    public int makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
+        final String getUserId = "SELECT user_id FROM auth WHERE auth.uname = ?";
+        Integer userId;
+        try{
+             userId = jdbcTemplate.query(getUserId, (rs,i) -> rs.getInt("user_id"),buyerUsername).get(0);
+        }catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
 
-
-        final String query = "INSERT INTO trade (offer_id, buyer_id, start_date, status, quantity) VALUES ( :offer_id,\n" +
-                "        (SELECT user_id FROM auth WHERE auth.uname = :buyer_uname),\n" +
-                "        NOW(), :status, :quantity)";
+        Map<String,Object> args = new HashMap<>();
+            args.put("offer_id",offerId);
+            args.put("buyer_id",userId);
+            args.put("start_date", LocalDateTime.now());
+            args.put("status",status.toString());
+            args.put("quantity",quantity);
 
         try {
-            namedJdbcTemplate.update(query, map);
+            return jdbcTradeInsert.executeAndReturnKey(args).intValue();
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
     }
 
     @Override
-    public void makeTrade(Trade.Builder builder) {
-        makeTrade(builder.getTradeId(), builder.getBuyerUsername(), builder.getQuantity(), builder.getStatus());
+    public int makeTrade(Trade.Builder builder) {
+        return makeTrade(builder.getOfferId(), builder.getBuyerUsername(), builder.getQuantity(), builder.getStatus());
     }
 
     @Override

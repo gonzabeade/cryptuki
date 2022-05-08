@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeDao;
-import ar.edu.itba.paw.persistence.TradeStatus;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 public class TradeServiceImpl implements TradeService {
@@ -21,23 +21,58 @@ public class TradeServiceImpl implements TradeService {
     private final OfferService offerService;
     private final TradeDao tradeDao;
 
+    private final UserService userService;
+
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao) {
+    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserService userService) {
         this.mailContactService = mailContactService;
         this.offerService = offerService;
         this.tradeDao = tradeDao;
+        this.userService = userService;
     }
 
 
     @Override
     @Transactional
-    public void makeTrade(Trade.Builder trade) {
+    public int makeTrade(Trade.Builder trade) {
 
         if (trade == null)
             throw new NullPointerException("Trade Builder cannot be null");
 
+        Offer offer = offerService.getOfferById(trade.getOfferId()).get();
+        UserAuth userAuth = userService.getUserAuthByEmail(offer.getSeller().getEmail()).get();
+
         try {
-            tradeDao.makeTrade(trade);
+            //modify offer
+            OfferDigest.Builder digestBuilder = new OfferDigest.Builder(offer.getSeller().getId(),offer.getCrypto().getCode(),offer.getAskingPrice());
+            digestBuilder.withId(offer.getId());
+            digestBuilder.withComments(offer.getComments());
+            offer.getPaymentMethods().forEach(paymentMethod -> digestBuilder.withPaymentMethod(paymentMethod.getName()));
+
+            float remaining = offer.getMaxQuantity() - (trade.getQuantity()/offer.getAskingPrice());
+
+            if( remaining <= 0)
+                offerService.pauseOffer(offer.getId());
+
+
+            digestBuilder.withMaxQuantity(remaining);
+            float newMin =(offer.getMinQuantity() > remaining ) ? 0 : (offer.getMinQuantity());
+            digestBuilder.withMinQuantity(newMin);
+            offerService.modifyOffer(digestBuilder.build());
+
+            //create trade.
+            trade.withTradeStatus(TradeStatus.OPEN)
+                    .withSellerUsername(userAuth.getUsername());
+            Integer tradeId = tradeDao.makeTrade(trade);
+
+
+            //send email to seller
+            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
+            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
+            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
+            mailContactService.sendMessage(message);
+
+            return tradeId;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

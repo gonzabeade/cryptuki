@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TradeService {
 
-    void makeTrade(Trade.Builder trade);
+    int makeTrade(Trade.Builder trade);
     void updateStatus(int tradeId, TradeStatus status);
 
     Optional<Trade> getTradeById(int tradeId);

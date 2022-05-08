@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface TradeDao {
 
-    void makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status);
+    int makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status);
 
-    void makeTrade(Trade.Builder builder);
+    int makeTrade(Trade.Builder builder);
 
 
     void updateStatus(int tradeId, TradeStatus status);

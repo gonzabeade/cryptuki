@@ -15,6 +15,8 @@ public interface UserService {
     void updateLastLogin(String username);
     Optional<User> getUserInformation(String username);
 
+    Optional<UserAuth> getUserAuthByEmail(String email);
+
     void incrementUserRating(String username, int rating);
 
 }

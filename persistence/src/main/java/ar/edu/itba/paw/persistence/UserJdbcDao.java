@@ -61,11 +61,9 @@ public class UserJdbcDao implements UserDao{
         args.put("rating_sum",user.getRatingSum());
         args.put("rating_count",user.getRatingCount());
         args.put("phone_number", user.getPhoneNumber());
-        args.put("phone_number", user.getPhoneNumber());
-
         int id;
         try {
-            id = jdbcInsert.executeAndReturnKey(args).intValue();
+            id = jdbcInsert.usingColumns("email","rating_sum","rating_count","phone_number").executeAndReturnKey(args).intValue();
         } catch (DataIntegrityViolationException dive) {
             throw new DuplicateEmailException(user.getEmail(), dive);
         }

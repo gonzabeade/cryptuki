@@ -59,6 +59,7 @@ public class UserController {
         }
         catch(Exception e ){
             errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
+            form.setUsername("");
             return registerGet(form);
         }
 

@@ -3,6 +3,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <c:set var="passwordPlaceholder"><messages:message code="placeholder.password"/></c:set>
 <c:set var="usernamePlaceholder"><messages:message code="placeholder.username"/></c:set>
+<c:set var="logIn"><messages:message code="logIn"/></c:set>
 <c:url value="/login" var="loginUrl" />
 
 <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded" class=" py-12 px-64 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard">
@@ -25,7 +26,7 @@
     </label>
   </div>
   <div class="flex flex-col mx-auto my-10" >
-    <input type="submit" value="Iniciar sesión" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
+    <input type="submit" value="${logIn}" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
     <a href="<c:url value="/register"/>" class=" underline text-polard text-center mt-2"><messages:message code="noAccount"/> <messages:message code="register"/></a>
     <a href="<c:url value="/passwordRecovery"/>" class=" underline text-polard text-center mt-2"> <messages:message code="forgotPassword"/></a>
   </div>

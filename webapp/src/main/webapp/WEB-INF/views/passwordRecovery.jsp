@@ -2,6 +2,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>
+<c:set var="continue"><messages:message code="continue"/></c:set>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,11 +31,11 @@
                     <form:label path="email" class="text-center text-2xl font-bold font-sans text-polar my-2"><messages:message code="insertEmailAddress"/></form:label>
                 </div>
                 <div>
-                    <form:input type="text" path="email" placeholder="e.g pepe@gmail.com" cssClass="rounded-lg p-3"/>
+                    <form:input type="text" path="email" placeholder="${emailPlaceholder}" cssClass="rounded-lg p-3"/>
                 </div>
             </div>
             <div>
-                <input type="submit" value="Continuar" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
+                <input type="submit" value="${continue}" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
             </div>
         </div>
     </form:form>

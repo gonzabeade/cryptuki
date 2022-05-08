@@ -3,6 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="modifiedOffer"><messages:message code="modifiedOffer"/></c:set>
+<c:set var="createdOffer"><messages:message code="createdOffer"/></c:set>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,13 +26,13 @@
 <c:if test="${creation == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">
-        <jsp:param name="title" value="Oferta creada con éxito"/>
+        <jsp:param name="title" value="${createdOffer}"/>
     </jsp:include>
 </c:if>
 <c:if test="${edit == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">
-        <jsp:param name="title" value="Oferta modificada con éxito"/>
+        <jsp:param name="title" value="${modifiedOffer}"/>
     </jsp:include>
 </c:if>
 <div class="flex flex-col mt-10">

@@ -45,7 +45,7 @@
 						</c:when>
 						<c:otherwise>
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-32 text-center" href="<c:url value="/buy/${param.offerId}"/>">
-								Comprar
+								<messages:message code="buy"/>
 							</a>
 						</c:otherwise>
 					</c:choose>

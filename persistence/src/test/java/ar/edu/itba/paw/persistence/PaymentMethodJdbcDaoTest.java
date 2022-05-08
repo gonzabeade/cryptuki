@@ -37,8 +37,7 @@ public class PaymentMethodJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName(PAYMENT_METHOD_TABLE)
-                .usingGeneratedKeyColumns("id");
+                .withTableName(PAYMENT_METHOD_TABLE);
         paymentMethodJdbcDao = new PaymentMethodJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
@@ -16,10 +15,8 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@Sql(scripts = {"classpath:cryptoInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
 public class CryptocurrencyJdbcDaoTest {
 
@@ -41,8 +38,7 @@ public class CryptocurrencyJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName(CRYPTO_TABLE)
-                .usingGeneratedKeyColumns("id");
+                .withTableName(CRYPTO_TABLE);
         cryptoJdbcDao = new CryptocurrencyJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,CRYPTO_TABLE);
 

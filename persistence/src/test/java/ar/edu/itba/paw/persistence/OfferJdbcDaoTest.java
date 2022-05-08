@@ -2,15 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
-import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -18,9 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -133,7 +127,7 @@ public class OfferJdbcDaoTest {
     private void insertOffer(Offer offer, int i){
         HashMap<String, Object> offerMap = new HashMap<>();
 
-        offerMap.put("seller_id", offer.getSeller().getId());
+        //offerMap.put("seller_id", offer.getSeller().getId());
         offerMap.put("offer_date", "date");
         offerMap.put("crypto_code", offer.getCrypto().getCode());
         offerMap.put("status_code", offer.getStatus().getCode());

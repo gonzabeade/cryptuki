@@ -1,4 +1,6 @@
 package ar.edu.itba.paw;
+import ar.edu.itba.paw.persistence.Offer;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -16,6 +18,9 @@ public class OfferFilter {
 
     private String username = null;
 
+    private Collection<String> status = new LinkedList<>();
+
+
 
     public Collection<String> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
@@ -31,7 +36,14 @@ public class OfferFilter {
     public float getMaxPrice() { return maxPrice; }
     public float getMinPrice() { return minPrice; }
     public String getUsername() { return username; }
+    public Collection<String> getStatus() {
+        return Collections.unmodifiableCollection(status);
+    }
 
+    public OfferFilter byStatus(String status) {
+        this.status.add(status);
+        return this;
+    }
 
     public OfferFilter byCryptoCode(String cryptoCode) {
         this.cryptoCodes.add(cryptoCode);

@@ -46,7 +46,11 @@ public class OfferServiceImpl implements OfferService {
             throw new IllegalArgumentException("Offer id can only be non negative");
 
         try {
-            Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter().byOfferId(id));
+            Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter()
+                    .byOfferId(id)
+                    .byStatus("APR")
+                    .byStatus("PSE")
+                    .byStatus("PSU"));
             return offer.isEmpty() ? Optional.empty() : Optional.of(offer.iterator().next());
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);

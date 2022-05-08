@@ -99,7 +99,8 @@ public class OfferJdbcDao implements OfferDao {
                 .addValue("offset", filter.getPage()*filter.getPageSize())
                 .addValue("min", filter.getMinPrice())
                 .addValue("max", filter.getMaxPrice())
-                .addValue("uname", filter.getUsername());
+                .addValue("uname", filter.getUsername())
+                .addValue("status", filter.getStatus().isEmpty() ? null: filter.getStatus());
     }
 
     private static MapSqlParameterSource toMapSqlParameterSource(OfferDigest digest) {
@@ -126,7 +127,7 @@ public class OfferJdbcDao implements OfferDao {
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          status_code = 'APR'" +
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))"+
                 ")";
 
         try {
@@ -140,8 +141,7 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-        final String allQuery = "SELECT *\n" +
-                "FROM offer_complete\n" +
+        final String allQuery = "SELECT * FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
                 "    FROM offer_complete\n" +
@@ -151,8 +151,7 @@ public class OfferJdbcDao implements OfferDao {
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          status_code = 'APR'" +
-                "    LIMIT :limit OFFSET :offset\n" +
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))"+
                 ")";
 
         try {

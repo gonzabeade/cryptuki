@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -23,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-//TODO: script sql especial para poblar la bd con tablas de las que dependa offer, por fk por ejemplo
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = {"classpath:offerInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
@@ -32,12 +32,13 @@ public class OfferJdbcDaoTest {
     private static final String OFFER_TABLE = "offer";
     private static final String OFFER_VIEW = "offer_complete";
     private static final String STATUS_CODE = "APR";
+    private static final String STATUS_DESC = "Approved";
     private static final int OFFER_COUNT = 3;
     private static final int TESTING_OFFER_INDEX = 2;
     private static final int TESTING_FILTER_INDEX= 0;
 
     private ArrayList<Offer> offers;
-    private OfferFilter testingFitler;
+    private OfferFilter testingFilter;
 
     @Autowired
     private DataSource ds;
@@ -55,26 +56,23 @@ public class OfferJdbcDaoTest {
         offerJdbcDao = new OfferJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"offer");
 
-        //TODO: mirar de agregar campos opcionales al builder
-        //TODO: cuando se buildea una offer se esta craeando un Builder de la offer, este guarda el horario actual,
-        //TODO: puede haber algun problema con el tema del determinismo (ya que las horas son diferentes)?
-        //TODO: mirar que hacer con el date type que no me lo estaba tomando el hsqldb
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAA"+OfferStatus.getInstance(STATUS_CODE, STATUS_DESC).getCode());
+
         offers = new ArrayList<>(Arrays.asList(
                 new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),
                         Cryptocurrency.getInstance("ETH", "Ether"),
-                        (float)54.0).build(),
+                        (float)54.0).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
                 new Offer.Builder(1, new User.Builder("shadad@itba.edu.ar").withId(1).build(),
                         Cryptocurrency.getInstance("ADA", "Cardano"),
-                        (float)9.0).build(),
+                        (float)9.0).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
                 new Offer.Builder(2, new User.Builder("mdedeu@itba.edu.ar").withId(2).build(),
                         Cryptocurrency.getInstance("DOT", "Polkadot"),
-                        (float)2.65).build(),
-                new Offer.Builder(3, new User.Builder("scastagnino@itba.edu.ar").withId(3).build(),
-                        Cryptocurrency.getInstance("BTC", "Bitcoin"),
-                        (float)22.2).build()
+                        (float)2.65).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build()
         ));
 
-        testingFitler = new OfferFilter();
+        System.out.println("BBBBBBBBBBBBBBBBBBBBBB"+OfferStatus.getInstance(STATUS_CODE, STATUS_DESC).getCode());
+
+        testingFilter = new OfferFilter();
 
     }
 
@@ -100,11 +98,10 @@ public class OfferJdbcDaoTest {
         }
 
         // Exercise
-        int tested_count = offerJdbcDao.getOfferCount(testingFitler);
+        int tested_count = offerJdbcDao.getOfferCount(testingFilter);
 
         // Validations
-        Assert.assertEquals(1, tested_count);
-
+        Assert.assertEquals(3, tested_count);
     }
 
     @Test
@@ -116,7 +113,7 @@ public class OfferJdbcDaoTest {
         }
 
         // Exercise
-        Collection<Offer> testedOffers = offerJdbcDao.getOffersBy(testingFitler);
+        Collection<Offer> testedOffers = offerJdbcDao.getOffersBy(testingFilter);
 
         // Validations
         Assert.assertNotNull(testedOffers);
@@ -138,31 +135,33 @@ public class OfferJdbcDaoTest {
     private void insertOffer(Offer offer, int i){
         HashMap<String, Object> offerMap = new HashMap<>();
 
-        offerMap.put("seller_id", i);
-        offerMap.put("offer_date", new java.sql.Timestamp(new java.sql.Date(0).getTime()));
+        offerMap.put("seller_id", offer.getSeller().getId());
+        offerMap.put("offer_date", "date");
         offerMap.put("crypto_code", offer.getCrypto().getCode());
-        offerMap.put("status_code", STATUS_CODE);
+        offerMap.put("status_code", offer.getStatus().getCode());
         offerMap.put("asking_price", offer.getAskingPrice());
-        //offerMap.put("quantity", offer.getCoinAmount());
+        offerMap.put("min_quantity", offer.getMinQuantity());
+        offerMap.put("max_quantity", offer.getMaxQuantity());
+        offerMap.put("comments", offer.getComments());
 
         jdbcInsert.execute(offerMap);
 
     }
 
-    //TODO: preguntar si esta bien usar un metodo auxiliar para no repetir codigo en los unit tests
-    //TODO: mirar que tantos AssertNotNull tengo que poner
     //TODO: mirar que hacer con los metodos deprecados mirar que hacer con los metodos deprecados
     private void assertOffer(Offer originalOffer, Offer testedOffer){
-        //Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice());
+        Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice());
 
         Assert.assertEquals(originalOffer.getSeller().getEmail(), testedOffer.getSeller().getEmail());
         Assert.assertEquals(originalOffer.getSeller().getId(), testedOffer.getSeller().getId());
 
-        //Assert.assertEquals(originalOffer.getCrypto().getMarketPrice(), testedOffer.getCrypto().getMarketPrice());
         Assert.assertEquals(originalOffer.getCrypto().getCode(), testedOffer.getCrypto().getCode());
-        //Assert.assertEquals(originalOffer.getCrypto().getName(), testedOffer.getCrypto().getName());
+        Assert.assertEquals(originalOffer.getCrypto().getCommercialName(), testedOffer.getCrypto().getCommercialName());
 
+        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity());
+        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity());
+
+        Assert.assertEquals(originalOffer.getComments(), testedOffer.getComments());
     }
 
-    //CAMBIOS EN EL DAO: (1) agregar al make parametros que faltan (2) poner un tipo valido para el timestamp (3)ver que status_code es not nullable
 }

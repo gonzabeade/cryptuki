@@ -61,6 +61,8 @@ public class UserJdbcDao implements UserDao{
         args.put("rating_sum",user.getRatingSum());
         args.put("rating_count",user.getRatingCount());
         args.put("phone_number", user.getPhoneNumber());
+        args.put("phone_number", user.getPhoneNumber());
+
         int id;
         try {
             id = jdbcInsert.executeAndReturnKey(args).intValue();

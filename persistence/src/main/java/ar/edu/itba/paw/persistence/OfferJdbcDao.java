@@ -116,18 +116,18 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public int getOfferCount(OfferFilter filter) {
 
-        final String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
-                "FROM offer_complete\n" +
+        final String countQuery = "SELECT COUNT(offer_id) FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
                 "    FROM offer_complete\n" +
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+                "\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))"+
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
 
         try {
@@ -151,7 +151,7 @@ public class OfferJdbcDao implements OfferDao {
                 "          :min <= asking_price*max_quantity AND\n" +
                 "          :max >= asking_price*max_quantity AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))"+
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
 
         try {

@@ -20,16 +20,22 @@ public class ComplainJdbcDao implements ComplainDao {
     private JdbcTemplate jdbcTemplate;
 
     private static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
-            (rs, i) -> new Complain.Builder(
-                    rs.getString("complainer_uname"))
-                    .withTradeId(rs.getInt("trade_id"))
-                    .withComplainId(rs.getInt("complain_id"))
-                    .withDate(rs.getTimestamp("complain_date").toLocalDateTime().toLocalDate())
-                    .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
-                    .withComplainerComments(rs.getString("complainer_comments"))
-                    .withModeratorComments(rs.getString("moderator_comments"))
-                    .withModerator(rs.getString("moderator_uname"))
-                    .build();
+            (rs, i) -> {
+                Complain.Builder builder= new Complain.Builder(
+                        rs.getString("complainer_uname"))
+                        .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
+                        .withComplainerComments(rs.getString("complainer_comments"))
+                        .withModeratorComments(rs.getString("moderator_comments"))
+                        .withModerator(rs.getString("moderator_uname"))
+                        .withComplainId(rs.getInt("complain_id"))
+                        .withDate(rs.getTimestamp("complain_date").toLocalDateTime())
+                        .withTradeId(rs.getInt("trade_id"));
+                if(rs.wasNull()){
+                    builder.withTradeId(null);
+                }
+
+                return builder.build();
+};
 
 
     @Autowired
@@ -117,8 +123,6 @@ public class ComplainJdbcDao implements ComplainDao {
     @Override
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
-
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         jdbcTemplate.update(query, complainStatus.toString(), complainId);
     }
 

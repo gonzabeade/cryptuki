@@ -29,6 +29,7 @@
                             <jsp:param name="status" value="${complaint.status}"/>
                             <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
                             <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
+                            <jsp:param name="date" value="${complaint.date}"/>
                         </jsp:include>
                     </li>
                 </c:forEach>

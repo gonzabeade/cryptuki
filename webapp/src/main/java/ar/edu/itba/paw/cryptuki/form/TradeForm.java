@@ -1,13 +1,14 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class TradeForm {
     @NotNull
     private Float amount;
     @NotNull
-    @Size(min = 1)
+    @Pattern(regexp = "0x[\\dabcdef]{8,10}")
     private String wallet;
     @NotNull
     private int offerId;

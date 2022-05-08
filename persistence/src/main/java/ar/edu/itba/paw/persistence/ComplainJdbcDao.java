@@ -24,11 +24,13 @@ public class ComplainJdbcDao implements ComplainDao {
                     rs.getString("complainer_uname"))
                     .withTradeId(rs.getInt("trade_id"))
                     .withComplainId(rs.getInt("complain_id"))
+                    .withDate(rs.getTimestamp("complain_date").toLocalDateTime().toLocalDate())
                     .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
                     .withComplainerComments(rs.getString("complainer_comments"))
                     .withModeratorComments(rs.getString("moderator_comments"))
                     .withModerator(rs.getString("moderator_uname"))
                     .build();
+
 
     @Autowired
     public ComplainJdbcDao(DataSource dataSource) {
@@ -38,11 +40,14 @@ public class ComplainJdbcDao implements ComplainDao {
 
     private static MapSqlParameterSource toMapSqlParameterSource(ComplainFilter filter) {
         return new MapSqlParameterSource()
-                .addValue("complainer_uname", filter.getComplainerUsername())
-                .addValue("complain_status", filter.getComplainStatus() == null ? null : filter.getComplainStatus().toString())
-                .addValue("moderator_uname", filter.getModeratorUsername())
-                .addValue("trade_id", filter.getTradeId())
-                .addValue("complain_id", filter.getComplainId())
+                .addValue("complainer_uname", filter.getComplainerUsername().orElse(null))
+                .addValue("from_date", filter.getFrom().orElse(null))
+                .addValue("to_date", filter.getTo().orElse(null))
+                .addValue("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get().toString() : null)
+                .addValue("moderator_uname", filter.getModeratorUsername().orElse(null))
+                .addValue("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)
+                .addValue("trade_id", filter.getTradeId().isPresent() ? filter.getTradeId().getAsInt() : null)
+                .addValue("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null)
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize());
     }
@@ -63,11 +68,14 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT *\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (COALESCE(:trade_id) IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
-                "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id, null) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 
 
@@ -81,12 +89,15 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT COUNT(complain_id)\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (:trade_id IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (:complain_status IS NULL OR status = :complain_status) AND\n" +
-                "    (:moderator_uname IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (:complainer_uname IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (:complain_id IS NULL OR complain_id = :complain_id)\n" +
-                "    LIMIT :limit OFFSET :offset;";
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id , null) IS NULL OR complain_id = :complain_id)\n";
+
 
 
         return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);
@@ -106,6 +117,7 @@ public class ComplainJdbcDao implements ComplainDao {
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
 
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         jdbcTemplate.update(query, complainStatus.toString(), complainId);
     }
 

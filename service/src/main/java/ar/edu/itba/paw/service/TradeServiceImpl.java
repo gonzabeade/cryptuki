@@ -81,7 +81,27 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    public int getSellingTradesByUsernameCount(String username) {
+        return tradeDao.getSellingTradesByUsernameCount(username);
+    }
+
+    @Override
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
         return tradeDao.getBuyingTradesByUsername(username, page, pageSize);
+    }
+
+    @Override
+    public int getBuyingTradesByUsernameCount(String username) {
+        return tradeDao.getSellingTradesByUsernameCount(username);
+    }
+
+    @Override
+    public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
+        return tradeDao.getTradesByUsername(username,page,pageSize);
+    }
+
+    @Override
+    public int getTradesByUsernameCount(String username) {
+        return tradeDao.getTradesByUsernameCount(username);
     }
 }

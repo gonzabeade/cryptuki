@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,9 @@ public class UserJdbcDao implements UserDao{
         args.put("rating_sum",user.getRatingSum());
         args.put("rating_count",user.getRatingCount());
         args.put("phone_number", user.getPhoneNumber());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        args.put("last_login",localDateTime.getYear()+"-"+localDateTime.getMonthValue()+"-"+localDateTime.getDayOfMonth()+" "+localDateTime.getHour()+":"+localDateTime.getMinute()+":"+localDateTime.getSecond()
+        );
         int id = jdbcInsert.executeAndReturnKey(args).intValue();
         user.withId(id);
         return user.build();

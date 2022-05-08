@@ -13,6 +13,7 @@ public final class Offer {
     private final float askingPrice;
     private final float minQuantity;
     private final float maxQuantity;
+    private final String comments;
 
     private final Collection<PaymentMethod> paymentMethods;
 
@@ -28,6 +29,8 @@ public final class Offer {
         private float minQuantity;
         private float maxQuantity;
 
+        private String comments;
+
         private OfferStatus status;
 
         public Builder(int id, User seller, Cryptocurrency crypto, float askingPrice) {
@@ -40,6 +43,7 @@ public final class Offer {
         public Builder withMinQuantity(float minQuantity) { this.minQuantity = minQuantity; return this; }
         public Builder withMaxQuantity(float maxQuantity) { this.maxQuantity = maxQuantity; return this; }
 
+        public Builder withComments(String comments) { this.comments = comments; return this; }
         public Builder withDate(LocalDateTime date) {
             this.date = date; // Immutable
             return this;
@@ -59,7 +63,7 @@ public final class Offer {
         public Cryptocurrency getCrypto() {
             return crypto;
         }
-        public double getAskingPrice() {
+        public float getAskingPrice() {
             return askingPrice;
         }
         public Collection<PaymentMethod> getPaymentMethods() {
@@ -79,6 +83,10 @@ public final class Offer {
             return status;
         }
 
+        public String getComments() {
+            return comments;
+        }
+
         protected Offer build() {
             return new Offer(this);
         }
@@ -94,6 +102,7 @@ public final class Offer {
         maxQuantity = builder.maxQuantity;
         status = builder.status;
         paymentMethods = builder.paymentMethods;
+        comments = builder.comments;
     }
 
     public int getId() {
@@ -108,16 +117,24 @@ public final class Offer {
     public Cryptocurrency getCrypto() {
         return crypto;
     }
-    public double getAskingPrice() {
+    public float getAskingPrice() {
         return askingPrice;
     }
-    public double getMinQuantity() {
+    public float getMinQuantity() {
         return minQuantity;
     }
-    public double getMaxQuantity() {
+    public float getMaxQuantity() {
         return maxQuantity;
     }
     public Collection<PaymentMethod> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
+    }
+
+    public OfferStatus getStatus() {
+        return status;
+    }
+
+    public String getComments() {
+        return comments;
     }
 }

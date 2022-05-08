@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OfferService {
 
     // Todo: Immutable Collections
-    void makeOffer(OfferDigest digest);
+    int makeOffer(OfferDigest digest);
     Optional<Offer> getOfferById(int id);
 
     Collection<Offer> getOffersByUsername(String username);

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
     private SimpleJdbcInsert jdbcInsert;
     private RoleDao roleDao;
 
-    private static final RowMapper<UserAuth> USER_AUTH_USERNAME_ROW_MAPPER = (resultSet, i) ->{
+    private static final RowMapper<UserAuth> AUTH_ROLE_ROW_MAPPER = (resultSet, i) ->{
         UserAuth.Builder userAuth = new UserAuth.Builder(
                 resultSet.getString("uname"),
                 resultSet.getString("password"))
@@ -33,6 +32,22 @@ public class UserAuthJdbcDao implements UserAuthDao{
                 return userAuth.build();
     };
 
+    private static final RowMapper<UserAuth> AUTH_USER_ROW_MAPPER=(resultSet, i) ->{
+        UserAuth.Builder userAuth = new UserAuth.Builder(
+                resultSet.getString("uname"),
+                resultSet.getString("password"))
+                .withId(resultSet.getInt("user_id"))
+                .withCode(resultSet.getInt("code"))
+                ;
+                if( resultSet.getInt("status") == 1 )
+                    userAuth.withUserStatus(UserStatus.VERIFIED);
+                else
+                    userAuth.withUserStatus(UserStatus.UNVERIFIED);                ;
+        return userAuth.build();
+    };
+
+
+
     @Autowired
     public UserAuthJdbcDao(DataSource dataSource,RoleDao roleDao) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -44,7 +59,7 @@ public class UserAuthJdbcDao implements UserAuthDao{
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
         final String query = "SELECT * FROM (SELECT * FROM auth WHERE uname = ?) AS temp JOIN user_role ON temp.role_id=id ";
-        UserAuth userAuthList = jdbcTemplate.queryForObject(query,USER_AUTH_USERNAME_ROW_MAPPER, username);
+        UserAuth userAuthList = jdbcTemplate.queryForObject(query, AUTH_ROLE_ROW_MAPPER, username);
         return Optional.ofNullable(userAuthList);
     }
 
@@ -75,8 +90,8 @@ public class UserAuthJdbcDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUsernameByEmail(String email) {
-        final String query ="SELECT * FROM auth JOIN users on id = user_id where email = ?";
-        UserAuth user = jdbcTemplate.queryForObject(query, USER_AUTH_USERNAME_ROW_MAPPER);
+        final String query ="SELECT * FROM auth JOIN (select * from users where email = ?) temp on temp.id = user_id ";
+        UserAuth user = jdbcTemplate.queryForObject(query, AUTH_USER_ROW_MAPPER,email);
         return Optional.ofNullable(user);
     }
 

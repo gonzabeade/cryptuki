@@ -30,7 +30,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="-mt-3 mx-2">
-                            <a href="<c:url value="#"/>" class="text-polar font-bold text-xl">
+                            <a href="<c:url value="/user"/>" class="text-polar font-bold text-xl">
                                 <div class="flex flex-col">
                                     <div class="mx-auto">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#3B4252" stroke-width="2">

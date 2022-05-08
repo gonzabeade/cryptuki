@@ -14,15 +14,7 @@ function resetAllFilters(){
     document.getElementById("pm").options[0].selected = true
     document.getElementById("price").value = 0;
 
-    var searchParams = new URLSearchParams(window.location.search)
-    for(const [key] of searchParams){
-        searchParams.delete(key)
-    }
-    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-    history.pushState(null, '', newRelativePathQuery);
-    document.getElementById("link").href = newRelativePathQuery;
-
-
+    deleteParams();
 }
 function addPageValue(value){
     var searchParams = new URLSearchParams(window.location.search)
@@ -33,10 +25,35 @@ function addPageValue(value){
 }
 function addQueryParam(id) {
     var searchParams = new URLSearchParams(window.location.search)
-    searchParams.set(id, document.getElementById(id).value);
+    let value = document.getElementById(id).value;
+    if(value === ''){
+        searchParams.delete(id);
+    }else{
+        searchParams.set(id,value);
+    }
     searchParams.delete("page")
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
     document.getElementById("reset").classList.remove("hidden");
+}
+function resetAllAdminFilters(){
+    document.getElementById("reset").classList.add("hidden")
+    document.getElementById("fromDate").value = null
+    document.getElementById("toDate").value = null
+    document.getElementById("offerId").value = null;
+    document.getElementById("tradeId").value = null;
+    document.getElementById("complainer").value = null;
+
+    deleteParams();
+
+}
+function deleteParams() {
+    const searchParams = new URLSearchParams(window.location.search);
+    for(const [key] of searchParams){
+        searchParams.delete(key)
+    }
+    const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newRelativePathQuery);
+    document.getElementById("link").href = newRelativePathQuery;
 }

@@ -4,6 +4,7 @@
 
 <jsp:useBean id="errorMsg" scope="request" type="java.lang.String"/>
 <jsp:useBean id="code" scope="request" type="java.lang.Integer"/>
+<% request.setCharacterEncoding("UTF-8"); %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,7 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>

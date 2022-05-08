@@ -11,8 +11,8 @@ public class OfferFilter {
     private int page = 0;
     private int pageSize = 1;
 
-    private double minPrice = 0;
-    private double maxPrice = Double.MAX_VALUE;
+    private float minPrice = 0;
+    private float maxPrice = Float.MAX_VALUE;
 
     private String username = null;
 
@@ -28,8 +28,8 @@ public class OfferFilter {
     }
     public int getPage() { return page; }
     public int getPageSize() { return pageSize; }
-    public double getMaxPrice() { return maxPrice; }
-    public double getMinPrice() { return minPrice; }
+    public float getMaxPrice() { return maxPrice; }
+    public float getMinPrice() { return minPrice; }
     public String getUsername() { return username; }
 
 
@@ -47,7 +47,7 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter byMinPrice(double minPrice) {
+    public OfferFilter byMinPrice(float minPrice) {
         this.minPrice = minPrice;
         return this;
     }
@@ -57,7 +57,7 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter byMaxPrice(double maxPrice) {
+    public OfferFilter byMaxPrice(float maxPrice) {
         this.maxPrice = maxPrice;
         return this;
     }

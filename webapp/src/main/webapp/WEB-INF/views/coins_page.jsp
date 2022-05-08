@@ -14,6 +14,7 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
@@ -21,6 +22,7 @@
 <div class="mx-48">
     <ol class="min-w-50%">
         <div class="flex justify-center flex-wrap">
+            <% request.setCharacterEncoding("UTF-8"); %>
             <c:forEach var="coin" items="${coinList}">
                 <li class="m-10">
                     <jsp:include page="../components/crypto_card.jsp">

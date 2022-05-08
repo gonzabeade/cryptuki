@@ -36,10 +36,10 @@
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
             <p class="text-red-500 hidden text-center" id="minMaxValidation"><messages:message code="minSmallerThanMax"/></p>
+            <form:errors class="text-red-500  text-center" id="minMaxValidation"><messages:message code="minSmallerThanMax"/></form:errors>
             <div class="flex flex-row justify-center">
                 <div>
-
-                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/><p id="minCoin" class="mx-2">BTC</p></form:label>
+                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/> <p id="minCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
@@ -58,8 +58,6 @@
             </div>
 
         </div>
-
-
         <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="paymentMethods"/>*</form:label>
@@ -75,18 +73,11 @@
                  </c:forEach>
             </div>
         </div>
-        <div class="flex flex-col justify-center mt-6">
-            <form:errors path="location" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="location"/>*</form:label>
-            <div class="flex flex-row justify-center mx-auto">
-                <form:select path="location" class="rounded-lg p-3">
-                    <option disabled selected><messages:message code="chooseAnOption"/></option>
-                    <c:forEach var="coin" items="${cryptocurrencies}">
-                        <form:option value="${coin.code}">
-                            <c:out value="${coin.commercialName}"/>
-                        </form:option>
-                    </c:forEach>
-                </form:select>
+        <div class="flex flex-col mx-auto mt-6">
+            <form:errors path="message" cssClass="text-red-500 mx-auto"/>
+            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center ">Datos para la transferencia*</form:label>
+            <div class="flex flex-row justify-center w-96">
+                <form:textarea path="message" cssClass="min-w-full h-36 rounded-lg mx-auto p-5"/>
             </div>
         </div>
 

@@ -13,6 +13,10 @@ public final class Trade {
     private final TradeStatus status;
     private final float quantity;
 
+    private final Cryptocurrency cryptoCurrency;
+
+    private final float askedPrice;
+
 
     public static class Builder {
 
@@ -24,6 +28,10 @@ public final class Trade {
         private TradeStatus status = TradeStatus.OPEN;
         private float quantity = 0f;
         private Integer tradeId;
+
+        private  Cryptocurrency cryptoCurrency;
+
+        private float askedPrice;
 
 
         public Builder(int offerId, String buyerUsername) {
@@ -53,6 +61,20 @@ public final class Trade {
             return this;
         }
 
+
+        public Builder withCryptoCurrency(Cryptocurrency cryptoCurrency) {
+            this.cryptoCurrency =cryptoCurrency;
+            return this;
+        }
+        public Builder withAskedPrice(float askedPrice) {
+            this.askedPrice=askedPrice;
+            return this;
+        }
+
+
+
+
+
         public int getTradeId() {
             return tradeId;
         }
@@ -75,6 +97,14 @@ public final class Trade {
             return quantity;
         }
 
+        public Cryptocurrency getCryptoCurrency() {
+            return cryptoCurrency;
+        }
+
+        public float getAskedPrice() {
+            return askedPrice;
+        }
+
         protected Trade build() {
             return new Trade(this);
         }
@@ -89,6 +119,9 @@ public final class Trade {
         this.startDate = Optional.ofNullable(builder.startDate);
         this.sellerUsername = builder.sellerUsername;
         this.status = builder.status;
+        this.askedPrice= builder.getAskedPrice();
+        this.cryptoCurrency =builder.getCryptoCurrency();
+
     }
 
     public int getTradeId() {
@@ -113,4 +146,11 @@ public final class Trade {
         return quantity;
     }
 
+    public Cryptocurrency getCryptoCurrency() {
+        return cryptoCurrency;
+    }
+
+    public float getAskedPrice() {
+        return askedPrice;
+    }
 }

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -41,7 +42,7 @@
                 <jsp:param name="pages" value="${pages}"/>
                 <jsp:param name="baseUrl" value="/complaints"/>
             </jsp:include>
-            <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+            <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
         </div>
     </div>
 </div>

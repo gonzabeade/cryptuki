@@ -69,7 +69,7 @@
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
-    <h1 class="text-right text-gray-400 mx-5">Obtuviste ${offerCount} resultado/s</h1>
+    <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
@@ -99,7 +99,7 @@
            <jsp:param name="pages" value="${pages}"/>
            <jsp:param name="baseUrl" value="/"/>
        </jsp:include>
-        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+        <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 </div>
 <div class="shape-blob"></div>

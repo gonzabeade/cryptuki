@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <html>
 <head>
@@ -20,7 +21,7 @@
   <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex">
-  <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar">Mi Perfil</h1>
+  <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="myProfile"/></h1>
 </div>
 <div class=" p-12 mx-96 rounded-lg bg-stormd/[0.9] flex  border-2 border-polard flex flex-row">
   <div class="flex flex-col height-auto mx-auto my-auto">
@@ -40,7 +41,7 @@
           </form:label>
           <form:input type="file" path="multipartFile" cssClass="invisible before:bg-red-400 w-0" onchange="showSendButton()"/>
         </div>
-        <button type="submit" id="sendProfile" class="invisible bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress">Guardar</button>
+        <button type="submit" id="sendProfile" class="invisible bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress"><messages:message code="save"/></button>
       </form:form>
       <p class="mx-auto font-bold text-polard text-2xl -mt-10"><c:out value="${username}"/></p>
     </div>
@@ -49,7 +50,7 @@
   <div class="flex flex-col">
     <div class="flex  rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
       <div class="flex">
-        <h2 class="text-2xl font-semibold font-sans text-polar my-auto">Correo electronico: </h2>
+        <h2 class="text-2xl font-semibold font-sans text-polar my-auto"><messages:message code="emailAddress"/>: </h2>
       </div>
       <div class="flex">
         <h2 class="text-xl font-semibold font-sans text-polar text-left my-auto ml-2"><c:out value="${user.email}"/></h2>
@@ -57,7 +58,7 @@
     </div>
     <div class="flex  rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
       <div class="flex">
-        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto" >Teléfono : </h2>
+        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto" ><messages:message code="phoneNumber"/>: </h2>
       </div>
       <div class="flex">
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.phoneNumber}"/></h2>
@@ -65,7 +66,7 @@
     </div>
     <div class="flex  rounded-lg h-12 mb-5  mt-5 mr-5 mx-10">
       <div class="flex">
-        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto">Cantidad de trades:</h2>
+        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto"><messages:message code="tradeQuantity"/>:</h2>
       </div>
       <div class="flex">
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.ratingCount}"/></h2>
@@ -73,7 +74,7 @@
     </div>
     <div class="flex mt-10" >
       <div>
-        <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Cambiar contraseña</a>
+        <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center"><messages:message code="changePassword"/></a>
       </div>
     </div>
   </div>
@@ -81,7 +82,7 @@
 
 
 </div>
-  <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus transacciones: </h2>
+  <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10"><messages:message code="myTransactions"/>: </h2>
   <div  class="flex flex-col mx-80 justify-center">
     <div>
       <c:forEach var="trade" items="${tradeList}">
@@ -105,7 +106,7 @@
         <jsp:param name="pages" value="${pages}"/>
         <jsp:param name="baseUrl" value="/user"/>
       </jsp:include>
-      <h1 class="mx-auto text-gray-400 mx-auto mt-3">Total de páginas: ${pages}</h1>
+      <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 </div>
 

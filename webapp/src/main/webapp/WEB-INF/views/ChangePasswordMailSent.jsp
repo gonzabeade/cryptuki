@@ -21,7 +21,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 
-<h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar">Chequea tu correo electronico</h1>
+<h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar"><messages:message code="checkEmail"/></h1>
 
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

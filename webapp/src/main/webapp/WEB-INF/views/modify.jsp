@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -23,7 +24,7 @@
 </jsp:include>
 <div class="flex">
     <div class="flex flex-row mx-auto">
-        <h1 class="my-10 text-4xl font-semibold font-sans text-polar">Modifica tu anuncio </h1>
+        <h1 class="my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="modifyAdvertisement"/></h1>
     </div>
 </div>
 

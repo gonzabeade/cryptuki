@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -20,10 +21,10 @@
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5 h-screen">
         <div class="mt-10 mx-10 flex flex-col bg-stormd/[0.9] border-2 border-polard rounded-lg p-5">
-            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center ">Datos de la transacción:</h1>
+            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center "><messages:message code="transactionInformation"/>:</h1>
             <div class="flex">
                 <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Compraste:</h1>
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>
                 </div>
                 <div class="flex">
                     <div class="mr-3">
@@ -39,7 +40,7 @@
             </div>
             <div class="flex">
                 <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">A cambio de:</h1>
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="inExchangeOf"/>:</h1>
                 </div>
                 <div>
                     <h1 class="text-polard font-sans text-center text-3xl">${trade.quantity}$ARS</h1>
@@ -47,7 +48,7 @@
             </div>
             <div class="flex">
                 <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Fecha de la transaccion:</h1>
+                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="trasactionDate"/>:</h1>
                 </div>
                 <div>
                     <h1 class="text-polard font-sans text-center text-3xl">${trade.startDate.get().toString()}</h1>
@@ -55,8 +56,8 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> ">Tuve un problema</a>
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>">Volver</a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
         </div>
 
 

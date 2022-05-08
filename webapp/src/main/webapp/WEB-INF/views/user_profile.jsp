@@ -85,10 +85,9 @@
 
 </div>
   <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus transacciones: </h2>
-  <div  class="flex flex-col mx-80 justify-center">
-    <div>
+  <div  class="flex flex-col  justify-center">
       <c:forEach var="trade" items="${tradeList}">
-      <li>
+      <li class="list-none mx-96">
         <% request.setCharacterEncoding("utf-8"); %>
         <jsp:include page="../components/trade_card.jsp">
           <jsp:param name="username" value="${username}"/>
@@ -99,10 +98,8 @@
           <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
           <jsp:param name="tradeId" value="${trade.tradeId}"/>
         </jsp:include>
-
      </li>
     </c:forEach>
-    </div>
     <div class="flex flex-col mt-3">
       <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../components/paginator.jsp">

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class CodeForm {

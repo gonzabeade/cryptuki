@@ -116,7 +116,7 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public int getOfferCount(OfferFilter filter) {
 
-        final String countQuery = "SELECT COUNT(offer_id) FROM offer_complete\n" +
+        final String countQuery = "SELECT COUNT( DISTINCT offer_id) FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
                 "    FROM offer_complete\n" +

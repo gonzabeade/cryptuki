@@ -26,7 +26,7 @@ public class HomeController {
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
-    private static final int PAGE_SIZE = 7;
+    private static final int PAGE_SIZE =2;
 
 
 
@@ -88,8 +88,9 @@ public class HomeController {
             User user = us.getUserInformation(username).get();
             mav.addObject("complainerId",user.getId());
             mav.addObject("username", authentication.getName());
+            form.setEmail(user.getEmail());
         }
-
+        mav.addObject("supportForm",form);
         mav.addObject("tradeId",tradeId);
         mav.addObject("completed", completed);
         return mav;
@@ -100,8 +101,12 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form,authentication, form.getTradeId(),false);
         }
+
         if(null!=authentication){
             complainService.makeComplain(form.toComplainBuilder());
+
+        }else{
+            complainService.getSupportFor(form.toDigest());
         }
         return support(new SupportForm(), authentication,null, true);
 
@@ -135,7 +140,7 @@ public class HomeController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject(authentication.getName());
+        mav.addObject("username",authentication.getName());
         return mav;
     }
 

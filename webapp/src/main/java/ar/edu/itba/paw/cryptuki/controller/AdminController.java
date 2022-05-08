@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,8 +39,10 @@ public class AdminController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView adminHome(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
-
+    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ,   final Authentication authentication){
+        if(result.hasErrors()){
+            return null;
+        }
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
         ComplainFilter filter = builder
@@ -65,7 +68,7 @@ public class AdminController {
 
 
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public ModelAndView assignedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+    public ModelAndView assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
@@ -77,7 +80,7 @@ public class AdminController {
                 .build();
 
 
-        mav.addObject("baseUrl", "/admin"); // TODO: check
+        mav.addObject("baseUrl", "/admin/assigned"); // TODO: check
         mav.addObject("title", "Reclamos asignados a mí");
         mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
@@ -91,7 +94,7 @@ public class AdminController {
         return mav;
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
-    public ModelAndView solvedComplains(Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+    public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
         ModelAndView mav = new ModelAndView("views/admin/complaints");
@@ -102,7 +105,7 @@ public class AdminController {
                 .build();
 
 
-        mav.addObject("baseUrl", "/admin"); // TODO: check
+        mav.addObject("baseUrl", "/admin/solved"); // TODO: check
         mav.addObject("title", "Reclamos resueltos");
         mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
@@ -142,6 +145,14 @@ public class AdminController {
         complainService.updateComplainStatus(complaintId, ComplainStatus.ASSIGNED);
         complainService.updateModerator(complaintId, authentication.getName());
         return new ModelAndView("redirect:/admin/solve/"+complaintId); //TODO !!!!!!!!!!!!!!
+    }
+    @RequestMapping(value = "/unassign/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView unassign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
+
+        // TODO: Esto esta mal: tiene que ser Transactional y estar en la capa de servicio
+        complainService.updateComplainStatus(complaintId, ComplainStatus.PENDING);
+        complainService.updateModerator(complaintId, null);
+        return new ModelAndView("redirect:/admin/"); //TODO !!!!!!!!!!!!!!
     }
 
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)

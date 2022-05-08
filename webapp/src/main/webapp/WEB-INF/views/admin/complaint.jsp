@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/feedback.js"/>"></script>
+    <script src="<c:url value="/public/js/filterLink.js"/>" ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -21,7 +22,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col mx-auto">
+    <div class="flex flex-col ml-80">
         <div class="flex">
             <div class="flex flex-col mx-auto mt-10">
                 <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo # <c:url value="${complain.complainId}"/> </h2>
@@ -50,7 +51,7 @@
 
     </div>
     <c:if test="${trade!=null}">
-    <div class="flex flex-col mt-6 mx-auto w-1/2">
+    <div class="flex flex-col mt-6 mx-auto">
         <h1 class="font-sans font-medium text-polard text-2xl text-center">Detalles del trade</h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
             <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>

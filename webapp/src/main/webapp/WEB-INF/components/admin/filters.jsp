@@ -25,5 +25,7 @@
         <input type="text" class="p-1 rounded-lg" id="complainer" onchange="addQueryParam('username')">
     </div>
     <a id="link" href="<c:url value="${param.baseUrl}"/>" class="rounded-lg bg-frost text-white mt-7 p-3 text-center"> Filtrar</a>
-
+    <div class="flex flex-row justify-center mt-3">
+        <button onclick="resetAllAdminFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
+    </div>
 </div>

@@ -15,11 +15,6 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         UrlPathHelper helper = new UrlPathHelper();
         String contextPath = helper.getContextPath(httpServletRequest);
-        if(e.getCause() instanceof RuntimeException){
-            httpServletResponse.sendRedirect(contextPath + "/verify"+"?user="+ httpServletRequest.getParameter("j_username"));
-        }else{
-            httpServletResponse.sendRedirect(contextPath + "/login?error=error");
-        }
-
+        httpServletResponse.sendRedirect(contextPath + "/login?error=error");
     }
 }

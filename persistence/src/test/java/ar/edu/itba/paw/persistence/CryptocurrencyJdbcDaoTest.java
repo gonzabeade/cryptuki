@@ -24,7 +24,9 @@ import java.util.List;
 public class CryptocurrencyJdbcDaoTest {
 
     private static final String CRYPTO_TABLE = "cryptocurrency";
+    private static final int ROW_COUNT = 4;
     private static final int TESTED_INDEX = 1;
+    private static final double MARKET_PRICE = 2.4;
 
     private ArrayList<Cryptocurrency> cryptos;
 
@@ -78,13 +80,15 @@ public class CryptocurrencyJdbcDaoTest {
         Collection<Cryptocurrency> testedCryptos = cryptoJdbcDao.getAllCryptocurrencies();
 
         //Validations
+        Assert.assertEquals(ROW_COUNT, JdbcTestUtils.countRowsInTable(jdbcTemplate, CRYPTO_TABLE));
+        Assert.assertEquals(true, testedCryptos.containsAll(cryptos));
     }
 
     private void insertCrypto(Cryptocurrency crypto){
         HashMap<String, Object> offerMap = new HashMap<>();
 
         offerMap.put("code", crypto.getCode());
-        offerMap.put("market_price", 1);
+        offerMap.put("market_price", MARKET_PRICE);
         offerMap.put("commercial_name", crypto.getCommercialName());
 
         jdbcInsert.execute(offerMap);

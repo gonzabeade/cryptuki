@@ -28,4 +28,13 @@ public final class Cryptocurrency {
         return commercialName;
     }
 
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof Cryptocurrency))
+            return false;
+        Cryptocurrency testedCrypto = (Cryptocurrency) object;
+        return testedCrypto.getCode().equals(this.getCode());
+    }
+
 }

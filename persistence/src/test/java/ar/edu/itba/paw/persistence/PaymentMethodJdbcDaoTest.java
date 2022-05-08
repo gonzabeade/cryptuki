@@ -63,7 +63,7 @@ public class PaymentMethodJdbcDaoTest {
     }
 
     @Test
-    public void TestGetAllCryptocurrencies(){
+    public void TestGetAllPaymentMethods(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
         for(PaymentMethod paymentMethod: paymentMethods){

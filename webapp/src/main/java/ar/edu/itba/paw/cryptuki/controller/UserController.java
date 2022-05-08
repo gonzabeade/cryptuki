@@ -149,7 +149,7 @@ public class UserController {
     }
 
     @RequestMapping(value="/user")
-    public ModelAndView user(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
+    public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
         ModelAndView mav = new ModelAndView("views/user_profile");

@@ -22,7 +22,7 @@ public class ComplainFilterResult {
     @Min(0)
     Integer tradeId;
 
-    String complainerUsername;
+    String complainer;
 
     public Optional<LocalDate> getFromDate() {
         return Optional.ofNullable(fromDate);
@@ -56,17 +56,17 @@ public class ComplainFilterResult {
         this.tradeId = tradeId;
     }
 
-    public Optional<String> getComplainerUsername() {
-        return Optional.ofNullable(complainerUsername);
+    public Optional<String> getComplainer() {
+        return Optional.ofNullable(complainer);
     }
 
-    public void setComplainerUsername(String complainerUsername) {
-        this.complainerUsername = complainerUsername;
+    public void setComplainer(String complainer) {
+        this.complainer= complainer;
     }
 
     public ComplainFilter.Builder toComplainFilterBuilder() {
         return new ComplainFilter.Builder()
-                .withComplainerUsername(complainerUsername)
+                .withComplainerUsername(complainer)
                 .withTradeId(tradeId)
                 .withOfferId(offerId)
                 .from(fromDate)

@@ -25,8 +25,6 @@ public class AmountValidator implements ConstraintValidator<AmountCheck,Object> 
         OfferBuyForm form = (OfferBuyForm) o;
         Offer offer = offerService.getOfferById(form.getOfferId()).get();
         float offerPrice = offer.getAskingPrice();
-        if(offerPrice * offer.getMinQuantity() <= form.getAmount() && form.getAmount() <= offerPrice * offer.getMaxQuantity() )
-            return true;
-        return false;
+        return ( form.getAmount() != null && offerPrice * offer.getMinQuantity() <= form.getAmount() && form.getAmount() <= offerPrice * offer.getMaxQuantity() );
     }
 }

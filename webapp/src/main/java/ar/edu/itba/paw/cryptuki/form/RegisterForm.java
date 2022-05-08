@@ -66,6 +66,5 @@ public class RegisterForm {
 
     public UserAuth.Builder toUserAuthBuilder() {
         return new UserAuth.Builder(username, password);
-
     }
 }

@@ -1,14 +1,18 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -16,6 +20,9 @@ public class TradeDaoImpl implements TradeDao {
 
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert jdbcTradeInsert;
+
+
 
     private final static RowMapper<Trade> TRADE_COMPLETE_ROW_MAPPER =
             (rs, i) ->{
@@ -40,84 +47,123 @@ public class TradeDaoImpl implements TradeDao {
     public TradeDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcTradeInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("trade").usingGeneratedKeyColumns("trade_id");
+
     }
 
     @Override
-    public void makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
-        final MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("offer_id", offerId)
-                .addValue("buyer_uname", buyerUsername)
-                .addValue("status", status.toString())
-                .addValue("quantity", quantity);
+    public int makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
+        final String getUserId = "SELECT user_id FROM auth WHERE auth.uname = ?";
+        Integer userId;
+        try{
+             userId = jdbcTemplate.query(getUserId, (rs,i) -> rs.getInt("user_id"),buyerUsername).get(0);
+        }catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
 
+        Map<String,Object> args = new HashMap<>();
+            args.put("offer_id",offerId);
+            args.put("buyer_id",userId);
+            args.put("start_date", LocalDateTime.now());
+            args.put("status",status.toString());
+            args.put("quantity",quantity);
 
-        final String query = "INSERT INTO trade (offer_id, buyer_id, start_date, status, quantity) VALUES ( :offer_id,\n" +
-                "        (SELECT user_id FROM auth WHERE auth.uname = :buyer_uname),\n" +
-                "        NOW(), :status, :quantity)";
-
-        namedJdbcTemplate.update(query, map);
+        try {
+            return jdbcTradeInsert.executeAndReturnKey(args).intValue();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
-    public void makeTrade(Trade.Builder builder) {
-        makeTrade(builder.getTradeId(), builder.getBuyerUsername(), builder.getQuantity(), builder.getStatus());
+    public int makeTrade(Trade.Builder builder) {
+        return makeTrade(builder.getOfferId(), builder.getBuyerUsername(), builder.getQuantity(), builder.getStatus());
     }
 
     @Override
     public void updateStatus(int tradeId, TradeStatus status) {
         final String query = "UPDATE trade SET status = ? WHERE trade_id = ?";
-        jdbcTemplate.update(query, status.toString(), tradeId);
+
+        try {
+            jdbcTemplate.update(query, status.toString(), tradeId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public Optional<Trade> getTradeById(int tradeId) {
         String query = "SELECT * FROM trade_complete WHERE trade_id = ?";
-        Trade trade = null;
         try {
-            trade = jdbcTemplate.queryForObject(query, TRADE_COMPLETE_ROW_MAPPER, tradeId);
+            return Optional.of(jdbcTemplate.queryForObject(query, TRADE_COMPLETE_ROW_MAPPER, tradeId));
         } catch(EmptyResultDataAccessException e) {
             return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
         }
-        return Optional.ofNullable(trade);
     }
 
-
-    @Deprecated
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE seller_uname = ? LIMIT ? OFFSET ?";
-        return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
+
+        try {
+            return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize * page));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
-    @Deprecated
+    @Override
+    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
+        final String query = "SELECT * FROM trade_complete WHERE buyer_uname = ? LIMIT ? OFFSET ?";
+
+        try {
+            return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+
     @Override
     public int getSellingTradesByUsernameCount(String username) {
         final String query = "SELECT COUNT(*) FROM trade_complete WHERE seller_uname = ?";
-        return jdbcTemplate.queryForObject(query,new Object[]{username},Integer.class);
+
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{username}, Integer.class);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
-    @Deprecated
-    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
-        final String query = "SELECT * FROM trade_complete WHERE buyer_uname = ? LIMIT ? OFFSET ?";
-        return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize*page));
-    }
-
-    @Override
-    @Deprecated
     public int getBuyingTradesByUsername(String username) {
         final String query = "SELECT COUNT(*) FROM trade_complete WHERE buyer_uname = ?";
-        return jdbcTemplate.queryForObject(query,new Object[]{username},Integer.class);
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{username}, Integer.class);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
-        return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username,username, pageSize, pageSize*page));
+        try {
+            return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, username, pageSize, pageSize * page));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public int getTradesByUsernameCount(String username) {
         final String query = "SELECT COUNT(*) FROM trade_complete WHERE ( buyer_uname = ? OR seller_uname = ?)";
-        return jdbcTemplate.queryForObject(query,new Object[]{username,username},Integer.class);    }
+
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{username,username}, Integer.class);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
 }

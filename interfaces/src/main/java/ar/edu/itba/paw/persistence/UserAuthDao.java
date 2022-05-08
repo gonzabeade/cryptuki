@@ -12,7 +12,7 @@ public interface UserAuthDao {
 
     boolean changePassword(String username, String newPassword);
 
-    Optional<UserAuth> getUsernameByEmail(String email);
+    Optional<UserAuth> getUserAuthByEmail(String email);
 
 
 

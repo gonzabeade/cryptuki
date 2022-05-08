@@ -6,7 +6,7 @@ public final class Image {
     private final byte[] bytes;
     private final String imageType;
 
-    public Image(String username, byte[] bytes, String imageType) {
+    protected Image(String username, byte[] bytes, String imageType) {
         this.username = username;
         this.bytes = bytes;
         this.imageType = imageType;

@@ -2,7 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -64,25 +67,25 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
-        Map<Integer, Offer.Builder> cache = new HashMap<>(); // TODO - rename
+        Map<Integer, Offer.Builder> map = new HashMap<>();
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
-            String paymentCode = resultSet.getString("payment_code");  // TODO: Improve
+            String paymentCode = resultSet.getString("payment_code");
             PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
-            Offer.Builder instance = cache.getOrDefault(
+            Offer.Builder instance = map.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
-            ).withPaymentMethod(pm); // TODO - is paymentMethod repeated
-            cache.putIfAbsent(offerId, instance);
+            ).withPaymentMethod(pm);
+            map.putIfAbsent(offerId, instance);
             i ++;
         }
-        return cache.values().stream().collect(Collectors.toList());
+        return map.values().stream().collect(Collectors.toList());
     };
 
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        namedJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         jdbcOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("id");
         jdbcPaymentMethodAtOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("payment_methods_at_offer");
     }
@@ -126,12 +129,17 @@ public class OfferJdbcDao implements OfferDao {
                 "          status_code = 'APR'" +
                 ")";
 
-        return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
+        try {
+            return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
+        } catch (EmptyResultDataAccessException erde) {
+            return 0;
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-
         final String allQuery = "SELECT *\n" +
                 "FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
@@ -147,11 +155,14 @@ public class OfferJdbcDao implements OfferDao {
                 "    LIMIT :limit OFFSET :offset\n" +
                 ")";
 
-        List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
-                .stream()
-                .map(Offer.Builder::build)
-                .collect(Collectors.toList());
-        return x;
+        try {
+            return namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
+                    .stream()
+                    .map(Offer.Builder::build)
+                    .collect(Collectors.toList());
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -167,21 +178,39 @@ public class OfferJdbcDao implements OfferDao {
         args.put("min_quantity", digest.getMinQuantity());
         args.put("comments", digest.getComments());
 
-        int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
-        args.clear();
-
-        args.put("offer_id", offerId);
-        for (String pm: digest.getPaymentMethods()) {
-            args.put("payment_code", pm);
-            jdbcPaymentMethodAtOfferInsert.execute(args);
+        int offerId;
+        try {
+            offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
         }
+
+        addPaymentMethodsToOffer(offerId, digest.getPaymentMethods());
+
         return offerId;
+    }
+
+    private void addPaymentMethodsToOffer(int offerId, Collection<String> paymentMethods) {
+        final String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
+
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", offerId)
+                .addValue("pm", paymentMethods);
+        try {
+            namedJdbcTemplate.update(paymentMethodQuery, map);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
 
     private void changeOfferStatus(int offerId, String statusCode) {
         String query = "UPDATE offer SET status_code= ? WHERE id = ?";
-        jdbcTemplate.update(query, statusCode, offerId);
+        try {
+            jdbcTemplate.update(query, statusCode, offerId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
     @Override
     public void deleteOffer(int offerId) {
@@ -206,17 +235,16 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public void modifyOffer(OfferDigest digest) {
         final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity, comments = :comments, crypto_code = :crypto_code WHERE id = :offer_id";
-        namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
-
         final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
-        jdbcTemplate.update(deleteQuery, digest.getId());
 
-        final String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
-        MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", digest.getId())
-                .addValue("pm", digest.getPaymentMethods().isEmpty() ? null : digest.getPaymentMethods());
-        namedJdbcTemplate.update(paymentMethodQuery, map);
+        try {
+            namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
+            jdbcTemplate.update(deleteQuery, digest.getId());
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+
+        addPaymentMethodsToOffer(digest.getId(), digest.getPaymentMethods());
     }
-
 
 }

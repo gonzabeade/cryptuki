@@ -28,7 +28,7 @@
             <h1 class="text-ngreen text-4xl text-center">Listo!</h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
-            El vendedor te va a transferir <b><c:out value="${trade.quantity}"/> <c:out value="${offer.crypto.code}"/></b> a tu wallet.
+            El vendedor te va a transferir <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/> <c:out value="${offer.crypto.code}"/></b> a tu wallet.
         </div>
         <div class="mt-10 mx-auto flex flex-col">
             <h1 class="text-polard font-extrabold text-2xl font-sans">Datos de la oferta:</h1>

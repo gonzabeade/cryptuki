@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.PersistenceException;
+import ar.edu.itba.paw.exception.ServiceDataAccessException;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,22 +26,39 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
-        this.passwordEncoder=passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
         this.contactService = contactService;
     }
 
 
-
-    @Transactional
     @Override
+    @Transactional
     public void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
-        User user = userDao.createUser(userBuilder);
+
+        if (authBuilder == null || userBuilder == null)
+            throw new NullPointerException("Neither Auth nor User builder can be null");
+
+        User user;
+        try {
+           user = userDao.createUser(userBuilder);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
+
         authBuilder.withId(user.getId());
         authBuilder.withPassword(passwordEncoder.encode(authBuilder.getPassword()));
         authBuilder.withCode((int)(Math.random()*Integer.MAX_VALUE));
         authBuilder.withUserStatus(UserStatus.UNVERIFIED);
         authBuilder.withRole("seller");
-        userAuthDao.createUserAuth(authBuilder);
+
+        try {
+            userAuthDao.createUserAuth(authBuilder);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
+        // TODO: modularizar y logica de negocio con Salva!
 
        String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
                 + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
@@ -50,20 +72,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserAuth> getUserByUsername(String username) {
-        Optional<UserAuth> maybeUserAuth = userAuthDao.getUserAuthByUsername(username);
-        return maybeUserAuth;
+        try {
+            return userAuthDao.getUserAuthByUsername(username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
     }
 
     @Override
-    public void verifyUser(String username, Integer code) {
-        if (!userAuthDao.verifyUser(username,code)){
-            throw new RuntimeException("Incorrect Verification");
-        };
+    @Transactional(readOnly = true)
+    public boolean verifyUser(String username, Integer code) {
+
+        boolean verified;
+
+        try {
+            verified = userAuthDao.verifyUser(username,code);
+        } catch (PersistenceException pe) {
+            throw new UncategorizedPersistenceException(pe);
+        }
+
+        return verified;
     }
 
-    public void sendChangePasswordMail(String email){
-        Optional<UserAuth> maybeUser = userAuthDao.getUsernameByEmail(email);
+    private void sendChangePasswordMail(String email){
+        Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new RuntimeException("Invalid email");
 
@@ -75,30 +109,88 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean changePassword(String username, int code, String newPassword) {
-        Optional<UserAuth> userAuth = userAuthDao.getUserAuthByUsername(username);
+
+        if (newPassword == null)
+            throw new NullPointerException("New password cannot be null");
+
+        if (code < 0)
+            throw new IllegalArgumentException("Code must be non negative");
+
+        // TODO: Validate permissions !! Check!!
+
+        Optional<UserAuth> userAuth;
+        try {
+            userAuth = userAuthDao.getUserAuthByUsername(username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
         if (userAuth.isPresent() && userAuth.get().getCode() == code)
             return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
-        return false;
+        else return false;
     }
 
     @Override
+    @Transactional
     public boolean changePassword(String username, String newPassword) {
-        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+
+        if (newPassword == null)
+            throw new NullPointerException("New password cannot be null");
+
+        try {
+            return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
     }
 
     @Override
     public void updateLastLogin(String username) {
-        userDao.updateLastLogin(username);
+
+        // TODO: Permissions
+
+        try {
+            userDao.updateLastLogin(username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
     }
 
     @Override
     public Optional<User> getUserInformation(String username) {
-        return userDao.getUserByUsername(username);
+
+        if (username == null) {
+            throw new NullPointerException("Username cannot be null");
+        }
+
+        try {
+            return userDao.getUserByUsername(username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    public Optional<UserAuth> getUserAuthByEmail(String email) {
+        return userAuthDao.getUserAuthByEmail(email);
     }
 
     @Override
     public void incrementUserRating(String username, int rating) {
-        userDao.incrementUserRating(username, rating);
+
+        if (rating < 0)
+            throw new IllegalArgumentException("Rating can only be non negative");
+
+        if (username == null) {
+            throw new NullPointerException("Username cannot be null");
+        }
+
+        try {
+            userDao.incrementUserRating(username, rating);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
     }
 }

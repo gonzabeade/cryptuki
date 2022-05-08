@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -23,6 +23,7 @@ import java.util.Optional;
 public class TradeFluxController {
     private final OfferService offerService;
     private final TradeService tradeService;
+
     private final UserService us;
 
     @Autowired
@@ -82,15 +83,10 @@ public class TradeFluxController {
         if(errors.hasErrors()){
             return executeTrade(form.getOfferId(), form.getAmount(), form,authentication);
         }
-        //inserto el trade
-//        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
-//                .withTradeStatus(TradeStatus.OPEN)
-//                .withQuantity(form.getAmount())
-//                .withSellerUsername("mdedeu"));
 
-        //restarle el amount
-        //mandarle los datos  del comprador al vendedor
-        int tradeId= 2;
+        Integer tradeId = tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
+                .withQuantity(form.getAmount()));
+
         return receipt(tradeId,authentication);
     }
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)

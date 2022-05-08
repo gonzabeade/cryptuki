@@ -105,7 +105,7 @@
         <jsp:param name="pages" value="${pages}"/>
         <jsp:param name="baseUrl" value="/user"/>
       </jsp:include>
-      <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+      <h1 class="mx-auto text-gray-400 mx-auto mt-3">Total de páginas: ${pages}</h1>
     </div>
 </div>
 

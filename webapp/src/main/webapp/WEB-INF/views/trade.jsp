@@ -45,8 +45,9 @@
                 </div>
             </div>
             <c:url value="/trade" var="postUrl"/>
-            <form:form modelAttribute="tradeForm" action="${postUrl}" method="post">
-                <form:hidden path="amount" value="${amount / offer.askingPrice }"/>
+
+            <form:form  modelAttribute="tradeForm" action="${postUrl}" method="post">
+                <form:hidden path="amount" value="${amount}"/>
                 <form:hidden path="offerId" value="${ offer.id}"/>
                 <div class="flex flex-col mx-auto mt-7">
                     <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>

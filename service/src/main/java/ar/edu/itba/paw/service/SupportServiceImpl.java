@@ -18,7 +18,7 @@ public class SupportServiceImpl implements SupportService {
     }
 
     @Override
-    public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
+    public void getSupportFor(SupportDigest digest) {
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
         mailMessage.setBody("Tu consulta: " + digest.getBody());
         mailMessage.setSubject("Hemos recibido tu consulta");

@@ -75,6 +75,9 @@
       <div>
         <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Cambiar contraseña</a>
       </div>
+      <div>
+        <a href="<c:url value="/complaints"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Ver mis reclamos</a>
+      </div>
     </div>
   </div>
 

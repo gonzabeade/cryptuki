@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class Complain {
 
@@ -9,7 +11,7 @@ public final class Complain {
     private final ComplainStatus status;
     private final String complainerUsername;
 
-    private final LocalDate date;
+    private final LocalDateTime date;
     private final String complainerComments;
     private final String moderatorUsername;
     private final String moderatorComments;
@@ -26,7 +28,7 @@ public final class Complain {
         private String moderatorComments;
         private Integer complainId;
 
-        private LocalDate date;
+        private LocalDateTime date;
 
 
         public Builder(String complainerUsername) {
@@ -43,7 +45,7 @@ public final class Complain {
             return this;
         }
 
-        protected Builder withDate(LocalDate date) {
+        protected Builder withDate(LocalDateTime date) {
             this.date = date;
             return this;
         }
@@ -130,8 +132,8 @@ public final class Complain {
         return complainerUsername;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getDate() {
+        return date.format(ISO_LOCAL_DATE);
     }
 
     public Optional<String> getModeratorUsername() {

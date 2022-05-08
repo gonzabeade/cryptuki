@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -73,7 +76,7 @@ public class HomeController {
         if(null != authentication){
             mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("supervisor")));
+            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
 
         return mav;
@@ -104,7 +107,6 @@ public class HomeController {
 
         if(null!=authentication){
             complainService.makeComplain(form.toComplainBuilder());
-
         }else{
             complainService.getSupportFor(form.toDigest());
         }
@@ -126,6 +128,7 @@ public class HomeController {
 
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
+
         ModelAndView mav = new ModelAndView("views/complaints_page");
 
         int pageNumber= page.orElse(0);

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,12 +12,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
-
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 @Repository
 public class ComplainJdbcDao implements ComplainDao {
@@ -141,7 +136,6 @@ public class ComplainJdbcDao implements ComplainDao {
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
-
     }
 
     @Override

@@ -1,8 +1,5 @@
 package ar.edu.itba.paw.cryptuki.config;
 
-import ar.edu.itba.paw.service.ContactService;
-import ar.edu.itba.paw.service.MailMessage;
-import ar.edu.itba.paw.service.MailService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -10,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -18,14 +16,11 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -49,7 +44,7 @@ public class WebConfig {
     private Resource info;
 
 
-    @Bean /*Use WebMVC **BUT** use this particular view resolver*/
+    @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setViewClass(JstlView.class);
@@ -90,12 +85,12 @@ public class WebConfig {
         //dbp.addScript(schemaSql);
         return dbp;
     }
+
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setBasenames("classpath:i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
-        messageSource.setCacheSeconds(5);
         return messageSource;
     }
 

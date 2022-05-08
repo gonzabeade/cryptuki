@@ -6,7 +6,7 @@
 <div class="flex flex-col">
     <c:url value="/upload" var="postUrl"/>
     <%--@elvariable id="uploadOfferForm" type="ar.edu.itba.paw.cryptuki.form.UploadOfferForm"--%>
-    <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]" onsubmit="event.preventDefault(); preventMinMaxFromSubmitting();">
+    <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
         <div class="flex flex-col justify-center">
             <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>
@@ -34,13 +34,12 @@
             <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Límites*</h2>
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
-            <p class="text-red-500 hidden text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</p>
-            <form:errors class="text-red-500  text-center" id="minMaxValidation">El valor mínimo debe ser menor al máximo</form:errors>
+            <form:errors cssClass="text-red-500 mx-auto text-center" />
             <div class="flex flex-row justify-center">
                 <div>
                     <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center ">Min en <p id="minCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
-                        <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
+                        <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                     </div>
                 </div>
@@ -50,7 +49,7 @@
                 <div>
                     <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center">Max en <p id="maxCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
-                        <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
+                        <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" />
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                     </div>
                 </div>

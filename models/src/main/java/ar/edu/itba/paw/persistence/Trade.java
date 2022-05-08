@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+
 public final class Trade {
 
     private final int tradeId;
@@ -136,8 +138,8 @@ public final class Trade {
     public String getBuyerUsername() {
         return buyerUsername;
     }
-    public Optional<LocalDateTime> getStartDate() {
-        return startDate;
+    public Optional<String> getStartDate() {
+        return startDate.isPresent()?Optional.ofNullable(startDate.get().format(ISO_LOCAL_DATE)):Optional.empty();
     }
     public TradeStatus getStatus() {
         return status;

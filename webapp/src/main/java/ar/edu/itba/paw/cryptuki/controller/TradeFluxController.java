@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -58,19 +55,24 @@ public class TradeFluxController {
             return buyOffer(form.getOfferId(), form,authentication);
         }
 
-        TradeForm tradeForm =  new TradeForm();
-        tradeForm.setAmount(form.getAmount());
-        tradeForm.setOfferId(form.getOfferId());
+//        TradeForm tradeForm =  new TradeForm();
+//        tradeForm.setAmount(form.getAmount());
+//        tradeForm.setOfferId(form.getOfferId());
 
-        return executeTrade(tradeForm, authentication);
+        return new ModelAndView("redirect:/trade?offerId="+form.getOfferId()+"&amount="+form.getAmount());
+//        return executeTrade(tradeForm, authentication);
 
-    } @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade(final TradeForm form, final Authentication authentication){
+    }
+    @RequestMapping(value="/trade", method = RequestMethod.GET)
+    public ModelAndView executeTrade(@RequestParam(value="offerId") Integer offerId,
+                                     @RequestParam (value="amount") float amount,
+                                     @ModelAttribute("tradeForm") final TradeForm form,
+                                     final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/trade");
-        mav.addObject("tradeForm", form);
-        Offer offer = offerService.getOfferById(form.getOfferId()).get();
+//        mav.addObject("tradeForm", form);
+        Offer offer = offerService.getOfferById(offerId).get();
         mav.addObject("offer", offer);
-        mav.addObject("amount", form.getAmount());
+        mav.addObject("amount", amount);
         mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
@@ -78,7 +80,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/trade", method = RequestMethod.POST)
     public ModelAndView executeTradePost(@Valid @ModelAttribute("tradeForm")  final TradeForm form, final BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return executeTrade(form,authentication);
+            return executeTrade(form.getOfferId(), form.getAmount(), form,authentication);
         }
         //inserto el trade
 //        tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())

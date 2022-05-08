@@ -21,7 +21,6 @@ public class MinMaxValidator implements ConstraintValidator<MinMax,Object> {
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
         UploadOfferForm form = (UploadOfferForm) o;
-        return form.getMinAmount() <= form.getMaxAmount();
-
+        return (form.getMinAmount()!=null && form.getMaxAmount()!=null && form.getMinAmount() <= form.getMaxAmount());
     }
 }

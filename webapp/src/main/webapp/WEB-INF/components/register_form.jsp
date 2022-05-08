@@ -31,10 +31,12 @@
     </div>
 
     <div class="flex flex-col mt-3">
+
         <form:label path="password" cssClass="text-center text-xl font-bold font-sans text-polar my-2">Contraseña</form:label>
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
             <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="e.g micontraseña" onchange="passwordMatch()"/>
+            <form:errors cssClass="text-red-400"/>
             <p class="text-red-400 hidden" id="passError">Las contraseñas no coinciden</p>
         </div>
     </div>

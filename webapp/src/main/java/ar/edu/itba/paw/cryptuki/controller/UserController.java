@@ -51,7 +51,7 @@ public class UserController {
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
     public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
-        if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
+        if(errors.hasErrors()){
             return registerGet(form);
         }
         try{

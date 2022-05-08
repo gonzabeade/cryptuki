@@ -67,13 +67,13 @@
                 <jsp:param name="email" value="${offer.seller.email}"/>
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
             </jsp:include>
             <jsp:include page="../components/buyer_info.jsp">
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${user.lastLogin.toLocalDate()}"/>
             </jsp:include>
         </div>
 

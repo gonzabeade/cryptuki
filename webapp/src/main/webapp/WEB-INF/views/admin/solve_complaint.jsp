@@ -21,22 +21,22 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col ml-80">
+    <div class="flex flex-col ml-96">
         <div class="flex">
             <div class="flex flex-col  mt-10">
-                <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo #<c:out value="${complain.complainId}"/></h2>
-                <h2 class="font-sans font-medium text-polard text-3xl text-center">Efectuado el <c:out value="${complain.date}"/></h2>
+                <h2 class="font-sans font-semibold text-polard text-5xl">Reclamo #<c:out value="${complain.complainId}"/></h2>
+                <h2 class="font-sans font-medium text-polard text-3xl">Efectuado el <c:out value="${complain.date}"/></h2>
             </div>
         </div>
-        <div class="flex flex-col mt-10 mx-20">
-            <h1 class="font-sans font-medium text-polard text-2xl text-center">Descripción del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify"><c:out value="${complain.complainerComments.orElse('No hay comentarios')}"/></p>
+        <div class="flex flex-col mt-10">
+            <h1 class="font-sans font-medium text-polard text-2xl">Descripción del reclamo:</h1>
+            <p class=" rounded-lg"><c:out value="${complain.complainerComments.orElse('No hay comentarios')}"/></p>
         </div>
-        <div class="flex flex-col mt-6 mx-52">
-            <h1 class="font-sans font-medium text-polard text-2xl text-center">Usuario del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify text-xl"><c:out value="${complain.complainerUsername}"/></p>
-            <p class="mx-auto rounded-lg text-justify text-lg"><c:out value="${complainer.email}"/></p>
-            <p class="mx-auto rounded-lg text-justify text-gray-400">Última vez activo: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
+        <div class="flex flex-col mt-6">
+            <h1 class="font-sans font-medium text-polard text-2xl">Usuario del reclamo:</h1>
+            <p class="rounded-lg text-xl"><c:out value="${complain.complainerUsername}"/></p>
+            <p class="rounded-lg text-lg"><c:out value="${complainer.email}"/></p>
+            <p class="rounded-lg text-gray-400">Última vez activo: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
         </div>
         <div class="flex flex-col mt-3">
              <c:url value="/admin/solve/${complaintId}" var="postUrl"/>

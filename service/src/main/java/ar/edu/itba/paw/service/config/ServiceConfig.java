@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.FileCopyUtils;
 
 
@@ -22,6 +23,7 @@ import java.io.Reader;
         "ar.edu.itba.paw.service",
 })
 @Configuration
+@EnableAsync
 public class ServiceConfig {
     @Value("classpath:info")
     private Resource info;

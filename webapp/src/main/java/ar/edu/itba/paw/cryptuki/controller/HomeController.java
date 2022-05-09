@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -24,7 +27,6 @@ public class HomeController {
     private final UserService us;
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
-    private final SupportService supportService;
     private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
     private static final int PAGE_SIZE = 7;
@@ -35,12 +37,10 @@ public class HomeController {
     public HomeController(UserService us,
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
-                          SupportService supportService,
                           PaymentMethodService paymentMethodService,
                           ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
-        this.supportService = supportService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
         this.complainService = complainService;
@@ -61,6 +61,7 @@ public class HomeController {
         }
         if(price != null){
             filter = filter.byMinPrice(price);
+            filter = filter.byMaxPrice(price);
         }
         filter = filter.withPageSize(PAGE_SIZE).fromPage(pageNumber);
 
@@ -91,8 +92,9 @@ public class HomeController {
             User user = us.getUserInformation(username).get();
             mav.addObject("complainerId",user.getId());
             mav.addObject("username", authentication.getName());
+            form.setEmail(user.getEmail());
         }
-
+        mav.addObject("supportForm",form);
         mav.addObject("tradeId",tradeId);
         mav.addObject("completed", completed);
         return mav;
@@ -103,8 +105,11 @@ public class HomeController {
         if(errors.hasErrors()){
             return support(form,authentication, form.getTradeId(),false);
         }
+
         if(null!=authentication){
-            supportService.getSupportFor(form.toComplainBuilder());
+            complainService.makeComplain(form.toComplainBuilder());
+        }else{
+            complainService.getSupportFor(form.toDigest());
         }
         return support(new SupportForm(), authentication,null, true);
 
@@ -124,6 +129,7 @@ public class HomeController {
 
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
+
         ModelAndView mav = new ModelAndView("views/complaints_page");
 
         int pageNumber= page.orElse(0);
@@ -138,8 +144,9 @@ public class HomeController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject(authentication.getName());
+        mav.addObject("username",authentication.getName());
         return mav;
     }
+
 }
 

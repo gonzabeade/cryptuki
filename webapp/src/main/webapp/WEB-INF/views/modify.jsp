@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -18,16 +19,18 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex">
     <div class="flex flex-row mx-auto">
-        <h1 class="my-10 text-4xl font-semibold font-sans text-polar">Modifica tu anuncio </h1>
+        <h1 class="my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="modifyAdvertisement"/></h1>
     </div>
 </div>
 
 <c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/modify_form.jsp">
     <jsp:param name="saveUrl" value="/modify/${offer.id}"/>
     <jsp:param name="selectedCrypto" value="${selectedCrypto}"/>

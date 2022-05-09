@@ -21,7 +21,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -51,14 +55,13 @@ public class UserController {
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
     public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form , final BindingResult errors){
-        if( !form.getPassword().equals(form.getRepeatPassword()) || errors.hasErrors()){
+        if(errors.hasErrors()){
             return registerGet(form);
         }
         try{
             userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         }
         catch(Exception e ){
-            errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
             return registerGet(form);
         }
 
@@ -78,23 +81,22 @@ public class UserController {
 
 
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username,@RequestParam(value = "error", required = false) boolean error){
         ModelAndView mav = new ModelAndView("views/code_verification");
         mav.addObject("username", username);
+        mav.addObject("error", error);
         return mav;
     }
 
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
         if(errors.hasErrors()){
-            return verify(form, form.getUsername());
+            return verify(form, form.getUsername(), false);
         }
-        try{
-            userService.verifyUser(form.getUsername(), form.getCode());
-        } catch (RuntimeException e){
-            errors.addError(new FieldError("CodeForm","code","El código ingresado no es correcto"));
-            return verify(form, form.getUsername());
-        }
+           if ( ! userService.verifyUser(form.getUsername(), form.getCode()) ) {
+              return verify(form, form.getUsername(), true);
+
+           }
 
         return logInProgrammatically(form.getUsername());
     }
@@ -110,7 +112,7 @@ public class UserController {
         if(errors.hasErrors())
             return passwordSendMailGet(form);
         try{
-            userService.sendChangePasswordMail(form.getEmail());
+//            userService.sendChangePasswordMail(form.getEmail()); TODO: ESTO ESTA MAL!! ES LOGICA DE NEGOCIO!!
         }catch (Exception e ){
             return new ModelAndView("redirect:/errors");
         }
@@ -121,8 +123,17 @@ public class UserController {
 
     @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {
-        Image image = profilePicService.getProfilePicture(username).orElseThrow(() -> new RuntimeException());
-        return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
+        Optional<Image> maybeImage = profilePicService.getProfilePicture(username);
+        if(!maybeImage.isPresent()){
+            BufferedImage bufferedImage = ImageIO.read(new File(this.getClass().getClassLoader().getResource("default-Profile.png").toURI()));
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage,"png",byteArrayOutputStream);
+            byte [] data=byteArrayOutputStream.toByteArray();
+            return ResponseEntity.ok().contentType(MediaType.valueOf("image/png")).body(data);
+        }else {
+            Image image= maybeImage.get();
+            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
+        }
     }
 
 
@@ -149,7 +160,7 @@ public class UserController {
     }
 
     @RequestMapping(value="/user")
-    public ModelAndView user(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
+    public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "updatedPass",required = false) final boolean updatedPass){
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
         ModelAndView mav = new ModelAndView("views/user_profile");
@@ -163,6 +174,7 @@ public class UserController {
         mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
+        mav.addObject("updatedPass", updatedPass);
 
         return mav;
     }
@@ -171,7 +183,7 @@ public class UserController {
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
     public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
         ModelAndView mav = new ModelAndView("views/changePassword");
-        mav.addObject(authentication.getName());
+        mav.addObject("username",authentication.getName());
         return mav;
     }
 
@@ -182,7 +194,7 @@ public class UserController {
 
         //check current password.
         userService.changePassword(authentication.getName(), form.getPassword());
-        return new ModelAndView("redirect:/user");
+        return new ModelAndView("redirect:/user"+"?updatedPass=true");
     }
 
 

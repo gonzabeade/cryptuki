@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -14,18 +15,19 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5 h-screen">
-        <div class="mt-10 mx-10 flex flex-col bg-stormd/[0.9] border-2 border-polard rounded-lg p-5">
-            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center ">Datos de la transacción:</h1>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Compraste:</h1>
+        <div class="mt-10 mx-10 flex flex-col  p-5">
+            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center "><messages:message code="transactionInformation"/>:</h1>
+            <div class="flex flex-col mt-10">
+                <div class="mx-auto">
+                    <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>
                 </div>
-                <div class="flex">
+                <div class="flex mx-auto">
                     <div class="mr-3">
                         <h1 class="text-3xl text-polard font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h1>
                     </div>
@@ -37,43 +39,64 @@
                     </div>
                 </div>
             </div>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">A cambio de:</h1>
+            <div class="flex flex-col mt-5">
+                <div class="mx-auto">
+                    <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="inExchangeOf"/>:</h1>
                 </div>
                 <div>
-                    <h1 class="text-polard font-sans text-center text-3xl">${trade.quantity}$ARS</h1>
+                    <h1 class="text-polard font-sans font-bold text-center text-3xl">${trade.quantity}$ARS</h1>
                 </div>
             </div>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl">Fecha de la transaccion:</h1>
+            <div class="flex flex-col mt-5">
+                <div class="mx-auto">
+                    <h1 class="text-polard  font-sans text-center text-3xl"><messages:message code="trasactionDate"/>:</h1>
                 </div>
                 <div>
-                    <h1 class="text-polard font-sans text-center text-3xl">${trade.startDate.get().toString()}</h1>
+                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto">${trade.startDate.get().toString()}</h1>
                 </div>
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> ">Tuve un problema</a>
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>">Volver</a>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+        </div>
+        <div class="flex flex-col mx-auto mt-10">
+
+            <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">
+                <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.sellerUsername == username? trade.buyerUsername : trade.buyerUsername}</h1>
+                <c:url value="/rate" var="postUrl"/>
+                <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
+
+                    <form:hidden path="tradeId" value="${trade.tradeId}"/>
+                    <div class="flex flex-col">
+                        <form:errors path="rating" cssClass="mx-auto text-red-400"/>
+                        <form:label path="rating" cssClass="mx-auto"><messages:message code="ratingConditions"/></form:label>
+                        <form:input path="rating"  type="number" cssClass="p-3 w-16 rounded-lg mx-auto mt-5 none"/>
+                        <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress"><messages:message code="send"/> </button>
+                    </div>
+
+                </form:form>
+            </c:if>
         </div>
 
 
     </div>
     <div class="flex flex-row w-2/5">
-        <div class="flex flex-col">
+        <div class="flex flex-col ml-32">
+
+            <% request.setCharacterEncoding("utf-8"); %>
             <jsp:include page="../components/seller_info.jsp">
                 <jsp:param name="email" value="${offer.seller.email}"/>
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
             </jsp:include>
+            <% request.setCharacterEncoding("utf-8"); %>
             <jsp:include page="../components/buyer_info.jsp">
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
-                <jsp:param name="lastLogin" value="2022-03-25"/>
+                <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
             </jsp:include>
         </div>
 

@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 @AmountCheck
 public class OfferBuyForm {
     @Size(min=6, max= 100)
-    @Email()
     @Pattern(regexp=".+@.+\\..+")
     private String email;
 
@@ -22,7 +21,7 @@ public class OfferBuyForm {
     private Float amount;
 
     @NotNull
-    private int offerId;
+    private Integer offerId;
 
     @Size(min=1, max= 140)
     @NotEmpty
@@ -44,7 +43,7 @@ public class OfferBuyForm {
     public String getEmail() {
         return email;
     }
-    public int getOfferId() {
+    public Integer getOfferId() {
         return offerId;
     }
     public String getMessage() {

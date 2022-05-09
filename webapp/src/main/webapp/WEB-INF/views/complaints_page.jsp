@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,31 +18,38 @@
 </head>
 
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-col">
-    <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
-    <div  class="flex flex-col mx-80 justify-center">
-        <div>
-            <c:forEach var="complaint" items="${complaintsList}">
-                <li>
-                    <jsp:include page="../components/complain_card.jsp">
-                        <jsp:param name="status" value="${complaint.status}"/>
-                        <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
-                        <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
-                    </jsp:include>
-
-                </li>
-            </c:forEach>
+    <div class="flex justify-between mt-10 mb-5">
+        <h2 class="text-center text-3xl  ml-32 font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
+        <div class="flex justify-center items-center">
+            <a href="<c:url value="/user"/>" class="h-12 mr-32 bg-frost text-white p-3 font-sans rounded-lg mx-auto">Volver</a>
         </div>
-        <div class="flex flex-col">
+    </div>
+    <div  class="flex flex-col justify-center">
+                <c:forEach var="complaint" items="${complaintsList}">
+                    <li class="list-none mx-20">
+                        <% request.setCharacterEncoding("utf-8"); %>
+                        <jsp:include page="../components/complain_card.jsp">
+                            <jsp:param name="status" value="${complaint.status}"/>
+                            <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
+                            <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />
+                            <jsp:param name="date" value="${complaint.date}"/>
+                        </jsp:include>
+                    </li>
+                </c:forEach>
+    </div>
+    <div class="flex flex-col">
+        <% request.setCharacterEncoding("utf-8"); %>
             <jsp:include page="../components/paginator.jsp">
                 <jsp:param name="activePage" value="${activePage}"/>
                 <jsp:param name="pages" value="${pages}"/>
+                <jsp:param name="baseUrl" value="/complaints"/>
             </jsp:include>
-            <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
-        </div>
+            <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 </div>
 </body>

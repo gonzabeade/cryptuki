@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <div>
 
     <div class="flex flex-row mx-40 justify-center ">
@@ -6,7 +7,7 @@
             <c:when test="${param.pages > 0}">
                 <div class="my-auto">
                     <c:if  test="${param.activePage > 0}">
-                        <a  onclick="addPageValue(${param.activePage - 1 })" href="#" class="font-bold font-sans text-polard ">Anterior</a>
+                        <a  onclick="addPageValue(${param.activePage - 1 })" href="#" class="font-bold font-sans text-polard "><messages:message code="previous"/></a>
                     </c:if>
                 </div>
                 <c:forEach var = "i" begin = "${param.activePage - 1 < 0 ? param.activePage : param.activePage - 1 }" end = "${(param.activePage + 1 > param.pages - 1 )? param.pages - 1 : param.activePage + 1 }">
@@ -21,14 +22,14 @@
                 </c:forEach>
                 <div class="my-auto">
                     <c:if test="${param.activePage < param.pages-1}">
-                        <a   href="#" onclick="addPageValue(${param.activePage +1})" class="font-bold font-sans text-polard">Siguiente</a>
+                        <a   href="#" onclick="addPageValue(${param.activePage +1})" class="font-bold font-sans text-polard"><messages:message code="next"/></a>
                     </c:if>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="flex flex-col">
-                    <h2 class="font-polard text-lg mx-auto">No hubo resultados</h2>
-                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="/"/>" >Volver a cargar</a>
+                    <h2 class="font-polard text-lg mx-auto"><messages:message code="noResults"/></h2>
+                    <a class="bg-polar/[0.5] text-white rounded-lg p-3 text-center" href="<c:url value="${param.baseUrl}"/>" ><messages:message code="reload"/></a>
                 </div>
             </c:otherwise>
 

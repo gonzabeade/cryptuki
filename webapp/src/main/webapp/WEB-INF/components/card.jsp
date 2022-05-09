@@ -1,13 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 
 <jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
-					<h1 class="fotn-sans">Vendedor: </h1>
+					<h1 class="fotn-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
-					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> trades</h4>
+					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/></h4>
 				</div>
 
 				<div class="flex flex-col basis-1/4 font-sans">
@@ -26,9 +27,9 @@
 				</div>
 				<div class="flex flex-row basis-1/4 justify-between">
 					<div class="flex-col">
-						<h1 class="font-sans">Medios de Pago: </h1>
+						<h1 class="font-sans"><messages:message code="paymentMethods"/>: </h1>
 						<div class="flex flex-row justify-start">
-							<c:if test="${accepted_payments.size() == 0}">El vendedor no propuso métodos de pago.</c:if>
+							<c:if test="${accepted_payments.size() == 0}"><messages:message code="noPaymentMethods"/></c:if>
 							<c:forEach  var="payment_method" items="${accepted_payments}">
 							<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">
 							</c:forEach>
@@ -39,12 +40,12 @@
 					<c:choose>
 						<c:when test="${param.userEmail == param.owner || param.isAdmin}">
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-32 text-center" href="<c:url value="/offer/${param.offerId}"/>">
-								Ver
+								<messages:message code="seeOffer"/>
 							</a>
 						</c:when>
 						<c:otherwise>
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-32 text-center" href="<c:url value="/buy/${param.offerId}"/>">
-								Comprar
+								<messages:message code="buy"/>
 							</a>
 						</c:otherwise>
 					</c:choose>

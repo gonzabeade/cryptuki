@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
@@ -28,25 +29,25 @@
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">
     <div class="flex flex-col my-auto mx-3">
-        <label for="coin"  class="font-sans text-sm font-semibold text-center">Criptomoneda</label>
+        <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
         <select name="coin" id="coin" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected>Selecciona una opción</option>
+            <option disabled selected><messages:message code="chooseAnOption"/></option>
             <c:forEach items="${cryptocurrencies}" var="coin">
                 <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
             </c:forEach>
         </select>
     </div>
     <div class="flex flex-col my-auto justify-center mx-3">
-        <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center">Medio de Pago</label>
+        <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center"><messages:message code="paymentMethod"/></label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
-            <option disabled selected>Selecciona una opción</option>
+            <option disabled selected><messages:message code="chooseAnOption"/></option>
             <c:forEach items="${paymentMethods}" var="paymentMethod">
                 <option value="${paymentMethod.name}"><c:out value="${paymentMethod.description}"/></option>
             </c:forEach>
         </select>
      </div>
     <div class="flex flex-col my-auto justify-center mx-3">
-        <label for="price" class="font-sans text-sm font-semibold ml-2 text-center">Quiero comprar...</label>
+        <label for="price" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="wantToBuy"/></label>
         <div class="flex flex-row ">
             <input type="number" id="price" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
             <h1 class="font-sans font-semibold my-auto">ARS</h1>
@@ -61,14 +62,14 @@
 </div>
 </div>
 <div class="flex flex-row justify-center mt-3">
-    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset">Limpiar filtros</button>
+    <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
 </div>
 <div class=" flex justify-center mx-20">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/welcome_message.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
-    <h1 class="text-right text-gray-400 mx-5">Obtuviste ${offerCount} resultado/s</h1>
+    <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
     <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
@@ -96,8 +97,9 @@
        <jsp:include page="../components/paginator.jsp">
            <jsp:param name="activePage" value="${activePage}"/>
            <jsp:param name="pages" value="${pages}"/>
+           <jsp:param name="baseUrl" value="/"/>
        </jsp:include>
-        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+        <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 </div>
 <div class="shape-blob"></div>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -16,11 +17,12 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 
-<h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar">Chequea tu correo electronico</h1>
+<h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar"><messages:message code="checkEmail"/></h1>
 
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
@@ -28,10 +30,6 @@
 <div class="shape-blob" style="left: 50%"></div>
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
-
-
-
-
 
 </body>
 </html>

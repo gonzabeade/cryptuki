@@ -14,4 +14,6 @@ public interface ComplainDao {
     void updateModerator(int complainId, String username);
     void updateModeratorComment(int complain, String comments);
 
+
+
 }

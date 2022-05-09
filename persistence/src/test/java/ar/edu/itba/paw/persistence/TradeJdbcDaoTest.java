@@ -23,7 +23,6 @@ import java.util.Optional;
 @ContextConfiguration(classes = TestConfig.class)
 public class TradeJdbcDaoTest {
     private static final String TRADE_TABLE = "trade";
-    private static final float DELTA = (float) 0.0000000000001;
     private static final int TEST_INDEX = 0;
 
     private ArrayList<Trade.Builder> trades;
@@ -116,33 +115,83 @@ public class TradeJdbcDaoTest {
     }
 
     @Test
-    public void getSellingTradesByUsernameTest(){
-
-    }
-
-    @Test
     public void getSellingTradesByUsernameCountTest(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(Trade.Builder trade : trades){
+            insertTrade(trade.build());
+        }
 
+        // Execute
+        int testedCount = tradeJdbcDao.getSellingTradesByUsernameCount("scastagnino");
+
+        //Validations
+        Assert.assertEquals(1, testedCount);
     }
 
     @Test
     public void getBuyingTradesByUsernameByPageTest(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(Trade.Builder trade : trades){
+            insertTrade(trade.build());
+        }
 
+        // Execute
+        Collection<Trade> testedTrades = tradeJdbcDao.getBuyingTradesByUsername("gbeade", 1, 3);
+
+        //Validations
+        Assert.assertNotNull(testedTrades);
+        Assert.assertEquals(1, testedTrades.size());
+        Assert.assertTrue(testedTrades.contains(trades.get(2).build()));
     }
 
     @Test
     public void getBuyingTradesByUsernameTest(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(Trade.Builder trade : trades){
+            insertTrade(trade.build());
+        }
 
+        // Execute
+        int testedCount = tradeJdbcDao.getBuyingTradesByUsername("scastagnino");
+
+        //Validations
+        Assert.assertEquals(2, testedCount);
     }
 
     @Test
     public void getTradesByUsernameTest(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(Trade.Builder trade : trades){
+            insertTrade(trade.build());
+        }
 
+        // Execute
+        Collection<Trade> testedTrades = tradeJdbcDao.getTradesByUsername("scastagnino", 1, 2);
+
+        //Validations
+        Assert.assertNotNull(testedTrades);
+        Assert.assertEquals(2, testedTrades.size());
+        Assert.assertTrue(testedTrades.contains(trades.get(0).build()));
+        Assert.assertTrue(testedTrades.contains(trades.get(1).build()));
     }
 
     @Test
     public void getTradesByUsernameCountTest(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(Trade.Builder trade : trades){
+            insertTrade(trade.build());
+        }
 
+        // Execute
+        int testedCount = tradeJdbcDao.getTradesByUsernameCount("gbeade");
+
+        //Validations
+        Assert.assertEquals(3, testedCount);
     }
 
     private void insertTrade(Trade trade){

@@ -65,34 +65,6 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
 INSERT INTO status (code, status_description) VALUES ('DEL', 'Deleted by user');
 INSERT INTO status (code, status_description) VALUES ('APR', 'Approved');
 
-CREATE VIEW offer_complete as
-SELECT offer_id,
-       seller_id,
-       offer_date,
-       crypto_code,
-       status_code,
-       asking_price,
-       min_quantity,
-       max_quantity,
-       email,
-       rating_sum,
-       rating_count,
-       phone_number,
-       market_price,
-       commercial_name,
-       payment_code,
-       status_description,
-       payment_description,
-       last_login,
-       uname
-FROM offer
-         JOIN users ON offer.seller_id = users.id
-         JOIN auth ON users.id = auth.user_id
-         JOIN cryptocurrency c on offer.crypto_code = c.code
-         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
-         JOIN status s on s.code = offer.status_code
-         LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
-
 create unique index user_role_description_uindex on user_role (description);
 
 CREATE TABLE profile_pic(
@@ -131,66 +103,6 @@ CREATE TABLE complain (
                           FOREIGN KEY (complainer_id) REFERENCES users (id) ON DELETE CASCADE,
                           FOREIGN KEY (moderator_id) REFERENCES users (id) ON DELETE NO ACTION
 );
-CREATE VIEW trade_complete AS
-SELECT
-    trade_id,
-    offer_id,
-    buyer_auth.uname as buyer_uname,
-    seller_auth.uname as seller_uname,
-    start_date,
-    trade.status,
-    quantity
-FROM trade
-         JOIN offer ON trade.offer_id = offer.id
-         JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id
-         JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id;
-
-CREATE VIEW complain_complete AS
-SELECT
-    complain_id,
-    trade_id,
-    complainer_auth.uname complainer_uname,
-    moderator_auth.uname as moderator_uname,
-    complainer_comments,
-    complain.status status,
-    moderator_comments
-FROM complain
-         JOIN auth complainer_auth ON complainer_auth.user_id = complain.complainer_id
-         LEFT OUTER JOIN auth moderator_auth ON moderator_auth.user_id = complain.moderator_id;
-
-drop view offer_complete;
-
-CREATE VIEW offer_complete as
-SELECT offer_id,
-       seller_id,
-       offer_date,
-       crypto_code,
-       status_code,
-       asking_price,
-       min_quantity,
-       max_quantity,
-       email,
-       rating_sum,
-       rating_count,
-       phone_number,
-       market_price,
-       commercial_name,
-       payment_code,
-       status_description,
-       payment_description,
-       last_login,
-       uname
-FROM offer
-         JOIN users ON offer.seller_id = users.id
-         JOIN auth ON users.id = auth.user_id
-         JOIN cryptocurrency c on offer.crypto_code = c.code
-         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
-         JOIN status s on s.code = offer.status_code
-         LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
-
-/* =========================== */
-
-DROP VIEW trade_complete;
 
 CREATE VIEW trade_complete AS
 SELECT
@@ -210,7 +122,6 @@ FROM trade
          JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
          JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;
 
-DROP VIEW offer_complete;
 CREATE VIEW offer_complete as
 SELECT offer_id,
        seller_id,
@@ -239,9 +150,6 @@ FROM offer
          LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
          JOIN status s on s.code = offer.status_code
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
-
-
-DROP VIEW complain_complete;
 
 CREATE VIEW complain_complete AS
 SELECT

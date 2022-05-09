@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
+import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.RatingService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ import java.util.Optional;
 public class TradeFluxController {
     private final OfferService offerService;
     private final TradeService tradeService;
-
     private final UserService us;
 
     @Autowired
@@ -116,11 +115,9 @@ public class TradeFluxController {
 
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
+    public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm form, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
         ModelAndView mav = new ModelAndView("views/receiptDescription");
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
-
-
         if(!trade.isPresent()){
             return null;
         }

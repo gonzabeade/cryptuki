@@ -41,6 +41,8 @@ public class TradeDaoImpl implements TradeDao {
                         .withStartDate(rs.getTimestamp("start_date").toLocalDateTime())
                         .withAskedPrice(rs.getFloat("asking_price"))
                         .withCryptoCurrency(crypto)
+                        .withRatedBuyer(rs.getBoolean("rated_buyer"))
+                        .withRatedSeller(rs.getBoolean("rated_seller"))
                         .build();
                 } ;
     @Autowired
@@ -162,6 +164,24 @@ public class TradeDaoImpl implements TradeDao {
 
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{username,username}, Integer.class);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+    @Override
+    public void rateBuyer(int tradeId){
+        final String query = "UPDATE trade SET rated_buyer = true WHERE trade_id = ?";
+        try {
+            jdbcTemplate.update(query,  tradeId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+    @Override
+    public void rateSeller(int tradeId){
+        final String query = "UPDATE trade SET rated_seller = true WHERE trade_id = ?";
+        try {
+            jdbcTemplate.update(query, tradeId);
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

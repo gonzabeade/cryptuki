@@ -205,4 +205,26 @@ public class TradeServiceImpl implements TradeService {
             throw new ServiceDataAccessException(pe);
         }
     }
+
+    @Override
+    @Transactional
+    public void updateRatedSeller(int tradeId) {
+        try{
+            tradeDao.rateSeller(tradeId);
+        }catch (PersistenceException pe){
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updatedRatedBuyer(int tradeId) {
+        try{
+            tradeDao.rateBuyer(tradeId);
+        }catch (PersistenceException pe){
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+
 }

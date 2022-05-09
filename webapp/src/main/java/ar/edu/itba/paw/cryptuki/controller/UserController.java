@@ -81,20 +81,21 @@ public class UserController {
 
 
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username){
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username,@RequestParam(value = "error", required = false) boolean error){
         ModelAndView mav = new ModelAndView("views/code_verification");
         mav.addObject("username", username);
+        mav.addObject("error", error);
         return mav;
     }
 
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
         if(errors.hasErrors()){
-            return verify(form, form.getUsername());
+            return verify(form, form.getUsername(), false);
         }
            if ( ! userService.verifyUser(form.getUsername(), form.getCode()) ) {
-               errors.addError(new FieldError("CodeForm", "code", "El código ingresado no es correcto"));
-               return verify(form, form.getUsername());
+              return verify(form, form.getUsername(), true);
+
            }
 
         return logInProgrammatically(form.getUsername());

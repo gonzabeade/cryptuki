@@ -10,6 +10,9 @@
     <h3 class="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3"><messages:message code="weSentYourCode"/></h3>
 
     <div class="flex flex-col">
+        <c:if test="${param.error == true}">
+            <p class="text-red-400 text-center"><messages:message code="incorrectCode"/></p>
+        </c:if>
         <form:errors path="code" cssClass="text-red-400 text-center" element="p"/>
         <form:label path="code" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="code"/></form:label>
         <form:input type="number" path="code" cssClass="rounded-lg p-3 mx-auto"/>

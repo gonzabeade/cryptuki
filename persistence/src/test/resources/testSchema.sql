@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
 INSERT INTO status (code, status_description) VALUES ('DEL', 'Deleted by user');
 INSERT INTO status (code, status_description) VALUES ('APR', 'Approved');
 
-create unique index user_role_description_uindex on user_role (description);
+/*create unique index user_role_description_uindex on user_role (description);*/
 
 CREATE TABLE profile_pic(
                         user_id INT PRIMARY KEY,

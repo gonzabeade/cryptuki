@@ -64,6 +64,7 @@ public class UserJdbcDaoTest {
     public void createUserTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
 
         // Execute
         User testedUser = userJdbcDao.createUser(users.get(TESTING_INDEX));
@@ -87,6 +88,8 @@ public class UserJdbcDaoTest {
     public void getUserByEmailTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
+
         for(User.Builder user: users){
             insertUser(user.build());
         }
@@ -99,10 +102,13 @@ public class UserJdbcDaoTest {
         Assert.assertEquals(users.get(TESTING_INDEX).build(), testedUser.get());
     }
 
+
     @Test
     public void getUserByUsernameTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
+
         for(User.Builder user: users){
             insertUser(user.build());
         }

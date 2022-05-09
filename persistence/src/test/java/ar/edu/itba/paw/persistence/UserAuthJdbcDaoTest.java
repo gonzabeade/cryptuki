@@ -42,8 +42,7 @@ public class UserAuthJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName(AUTH_TABLE)
-                .usingGeneratedKeyColumns("id");
+                .withTableName(AUTH_TABLE);
         roleJdbcDao = new RoleJdbcDao(ds);
         authJdbcDao = new UserAuthJdbcDao(ds, roleJdbcDao);
         JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);

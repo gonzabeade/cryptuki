@@ -3,18 +3,21 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
-
-    <div class="basis-1/5 ">
-        <h1 class="font-sans"><messages:message code="seller"/>: </h1>
-        <h3 class="font-bold font-sans"><c:out value="${param.sellerUsername}"/></h3>
+<div class="shadow-xl flex rounded-lg justify-between py-5 px-24 bg-[#FAFCFF] mt-3">
+    <div class="mr-10 my-auto">
+        <c:if test="${username == param.buyerUsername}">
+            <div class="bg-ngreen w-20 text-white  text-center p-2">
+                <messages:message code="buy"/>
+            </div>
+        </c:if>
+        <c:if test="${username == param.sellerUsername}">
+            <div class="bg-nred w-20 text-white  text-center p-2">
+                <messages:message code="sell"/>
+            </div>
+        </c:if>
     </div>
-    <div class="basis-1/5 ">
-        <h1 class="font-sans"><messages:message code="buyer"/>: </h1>
-        <h3 class="font-bold font-sans"><c:out value="${param.buyerUsername}"/></h3>
-    </div>
 
-    <div class="basis-1/5 font-sans mr-20 justify-center items-center">
+    <div class=" mr-10 font-sans justify-center items-center my-auto">
         <c:if test="${username ==  param.buyerUsername }">
             <h1 class="font-sans"><messages:message code="youBoughtFor"/>: </h1>
         </c:if>
@@ -24,19 +27,18 @@
         <h3 class="font-sans font-semibold"><c:out value="${param.quantity}"/>$AR</h3>
     </div>
 
-    <div class="flex flex-col basis-1/5 font-sans">
-        <div class="flex flex-row">
-            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-5 h-5"/>
+    <div class="flex flex-col font-sans mr-10 my-auto">
+        <div class="flex flex-col mx-auto">
+            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-5 h-5 mx-auto"/>
             <h1 class="font-sans font-semibold"><c:out value="${param.cryptoCurrencyCode}"/></h1>
         </div>
-        <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${param.quantity/param.askedPrice}"/></h1>
+        <h1 class="text-xl mx-auto font-bold font-sans text-center"><fmt:formatNumber type="number" maxFractionDigits="6" value="${param.quantity/param.askedPrice}"/></h1>
     </div>
 
-    <div class="flex basis-1/5">
-        <a class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center" href="<c:url value="/receiptDescription/${param.tradeId}"/>">
+    <div class="flex my-auto">
+        <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${param.tradeId}"/>">
         <messages:message code="help"/>
         </a>
     </div>
 </div>
 
-</div>

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
+    <script src="<c:url value="/public/js/feedback.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -21,8 +22,16 @@
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5 h-screen">
-        <div class="mt-10 mx-10 flex flex-col  p-5">
-            <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center "><messages:message code="transactionInformation"/>:</h1>
+        <div class=" mx-10 flex flex-col  p-5">
+            <div class="mb-5 mt-5">
+                <c:if test="${rated == true }">
+                    <c:set var="ratingSent"><messages:message code="ratingSent"/></c:set>
+                    <jsp:include page="../components/confirmationToggle.jsp">
+                        <jsp:param name="title" value="${ratingSent}"/>
+                    </jsp:include>
+                </c:if>
+            </div>
+            <h1 class=" mt-10text-polard font-extrabold text-4xl font-sans mx-5 text-center "><messages:message code="transactionInformation"/>:</h1>
             <div class="flex flex-col mt-10">
                 <div class="mx-auto">
                     <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>

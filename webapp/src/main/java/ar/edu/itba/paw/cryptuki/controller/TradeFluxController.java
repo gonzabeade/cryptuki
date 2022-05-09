@@ -117,7 +117,7 @@ public class TradeFluxController {
 
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm form, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
+    public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm form, @PathVariable("tradeId") final int tradeId, final Authentication authentication, @RequestParam(value = "rated", required = false) final boolean rated){
         ModelAndView mav = new ModelAndView("views/receiptDescription");
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
         if(!trade.isPresent()){
@@ -130,7 +130,7 @@ public class TradeFluxController {
         Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
-
+        mav.addObject("rated", rated);
         if(authentication != null){
             mav.addObject("username", authentication.getName());
             User user = us.getUserInformation(authentication.getName()).get();
@@ -142,9 +142,9 @@ public class TradeFluxController {
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
     public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
+            return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication, false);
         }
         ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
-        return new ModelAndView("redirect:/");
+        return receiptDescription(ratingForm,ratingForm.getTradeId(),authentication, true);
     }
 }

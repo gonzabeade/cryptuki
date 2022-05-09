@@ -156,4 +156,13 @@ public final class Complain {
                 ", tradeId=" + tradeId +
                 '}';
     }
+
+    public boolean equals(Object object) {
+        if (object == this)
+            return true;
+        if (!(object instanceof Complain))
+            return false;
+        Complain testedComplain = (Complain) object;
+        return testedComplain.getComplainId() == this.getComplainId();
+    }
 }

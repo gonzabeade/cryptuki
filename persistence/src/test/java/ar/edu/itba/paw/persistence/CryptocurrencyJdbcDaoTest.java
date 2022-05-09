@@ -22,7 +22,6 @@ import java.util.Optional;
 public class CryptocurrencyJdbcDaoTest {
 
     private static final String CRYPTO_TABLE = "cryptocurrency";
-    private static final int ROW_COUNT = 4;
     private static final int TESTED_INDEX = 1;
     private static final double MARKET_PRICE = 2.4;
 

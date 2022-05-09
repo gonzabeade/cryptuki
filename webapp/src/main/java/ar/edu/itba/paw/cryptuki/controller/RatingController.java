@@ -24,6 +24,9 @@ public class RatingController {
     }
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
     public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return null;
+        }
         ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
         return new ModelAndView("redirect:/");
     }

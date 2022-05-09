@@ -21,13 +21,13 @@
 </jsp:include>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5 h-screen">
-        <div class="mt-10 mx-10 flex flex-col bg-stormd/[0.9] border-2 border-polard rounded-lg p-5">
+        <div class="mt-10 mx-10 flex flex-col  p-5">
             <h1 class="text-polard font-extrabold text-4xl font-sans mx-5 text-center "><messages:message code="transactionInformation"/>:</h1>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>
+            <div class="flex flex-col mt-10">
+                <div class="mx-auto">
+                    <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>
                 </div>
-                <div class="flex">
+                <div class="flex mx-auto">
                     <div class="mr-3">
                         <h1 class="text-3xl text-polard font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h1>
                     </div>
@@ -39,35 +39,42 @@
                     </div>
                 </div>
             </div>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="inExchangeOf"/>:</h1>
+            <div class="flex flex-col mt-5">
+                <div class="mx-auto">
+                    <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="inExchangeOf"/>:</h1>
                 </div>
                 <div>
-                    <h1 class="text-polard font-sans text-center text-3xl">${trade.quantity}$ARS</h1>
+                    <h1 class="text-polard font-sans font-bold text-center text-3xl">${trade.quantity}$ARS</h1>
                 </div>
             </div>
-            <div class="flex">
-                <div class="mx-5">
-                    <h1 class="text-polard font-bold font-sans text-center text-3xl"><messages:message code="trasactionDate"/>:</h1>
+            <div class="flex flex-col mt-5">
+                <div class="mx-auto">
+                    <h1 class="text-polard  font-sans text-center text-3xl"><messages:message code="trasactionDate"/>:</h1>
                 </div>
                 <div>
-                    <h1 class="text-polard font-sans text-center text-3xl">${trade.startDate.get().toString()}</h1>
+                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto">${trade.startDate.get().toString()}</h1>
                 </div>
             </div>
         </div>
         <div class="flex flex-row mt-10">
-                <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
+        </div>
+        <div class="flex flex-col mx-auto mt-10">
+
+            <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">
+                <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.sellerUsername == username? trade.buyerUsername : trade.buyerUsername}</h1>
                 <c:url value="/rate" var="postUrl"/>
                 <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
+                    <form:errors path="rating"/>
                     <form:hidden path="tradeId" value="${trade.tradeId}"/>
-                    <form:input path="rating"/>
-                    <button type="submit">Enviar</button>
+                    <div class="flex flex-col">
+                        <form:input path="rating" cssClass="p-3 w-10 rounded-lg mx-auto mt-5"/>
+                        <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
+                    </div>
+
                 </form:form>
             </c:if>
-
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
         </div>
 
 

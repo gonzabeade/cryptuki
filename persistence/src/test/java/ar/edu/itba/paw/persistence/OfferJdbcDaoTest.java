@@ -27,9 +27,7 @@ public class OfferJdbcDaoTest {
     private static final String OFFER_VIEW = "offer_complete";
     private static final String STATUS_CODE = "APR";
     private static final String STATUS_DESC = "Approved";
-    private static final int OFFER_COUNT = 3;
-    private static final int TESTING_OFFER_INDEX = 2;
-    private static final int TESTING_FILTER_INDEX= 0;
+    private static final float DELTA = (float) 0.0000000000001;
 
     private ArrayList<Offer> offers;
     private OfferFilter testingFilter;
@@ -70,7 +68,12 @@ public class OfferJdbcDaoTest {
     public void TestMakeOffer(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        OfferDigest offerDigest = new OfferDigest.Builder( 0, "ETH", 11.2).build();
+        OfferDigest offerDigest = new OfferDigest.Builder( 0, "ETH", 54.0)
+                .withMinQuantity(10)
+                .withMaxQuantity(20)
+                .withPaymentMethod("Cash")
+                .withComments("This is a test for the offer dao")
+                .build();
 
         // Exercise
         int offerId = offerJdbcDao.makeOffer(offerDigest);
@@ -83,23 +86,23 @@ public class OfferJdbcDaoTest {
     public void TestGetOfferCount(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        for(int i=0; i<OFFER_COUNT; i++){
-            insertOffer(offers.get(i), i);
+        for(Offer offer: offers){
+            insertOffer(offer);
         }
 
         // Exercise
         int tested_count = offerJdbcDao.getOfferCount(testingFilter);
 
         // Validations
-        Assert.assertEquals(3, tested_count);
+        Assert.assertEquals(offers.size(), tested_count);
     }
 
     @Test
     public void TestGetOffersBy(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        for(int i=0; i<OFFER_COUNT; i++){
-            insertOffer(offers.get(i), i);
+        for(Offer offer: offers){
+            insertOffer(offer);
         }
 
         // Exercise
@@ -107,42 +110,28 @@ public class OfferJdbcDaoTest {
 
         // Validations
         Assert.assertNotNull(testedOffers);
-        //TODO hacer los contains a mano porque solo vamos a usar un par
-        /*
-        for (Offer testedOffer : testedOffers)
-            Assert.assertNotNull(testedOffer);
-        Iterator<Offer> originalIterator = offers.iterator();
-        Iterator<Offer> testedIterator = testedOffers.iterator();
-        while(originalIterator.hasNext()){
-            Assert.assertEquals(originalIterator.hasNext(), testedIterator.hasNext());
-            Offer testedOffer = testedIterator.next();
-            System.out.println("Seller:" + testedOffer.getSeller());
-            System.out.println("Offer id:" + testedOffer.getId());
-            assertOffer(originalIterator.next(), testedOffer);
-        }
-        Assert.assertEquals(originalIterator.hasNext(), testedIterator.hasNext());
-         */
+        Assert.assertEquals(offers.size(), testedOffers.size());
+        Assert.assertTrue(testedOffers.containsAll(offers));
     }
 
-    private void insertOffer(Offer offer, int i){
+    private void insertOffer(Offer offer){
         HashMap<String, Object> offerMap = new HashMap<>();
 
-        //offerMap.put("seller_id", offer.getSeller().getId());
-        offerMap.put("offer_date", "date");
+        offerMap.put("offer_date", "2022-05-01 02:08:03.777554");
         offerMap.put("crypto_code", offer.getCrypto().getCode());
         offerMap.put("status_code", offer.getStatus().getCode());
         offerMap.put("asking_price", offer.getAskingPrice());
         offerMap.put("min_quantity", offer.getMinQuantity());
         offerMap.put("max_quantity", offer.getMaxQuantity());
         offerMap.put("comments", offer.getComments());
+        offerMap.put("seller_id", offer.getSeller().getId());
 
         jdbcInsert.execute(offerMap);
 
     }
 
-    //TODO: mirar que hacer con los metodos deprecados mirar que hacer con los metodos deprecados
     private void assertOffer(Offer originalOffer, Offer testedOffer){
-        Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice());
+        Assert.assertEquals(originalOffer.getAskingPrice(), testedOffer.getAskingPrice(), DELTA);
 
         Assert.assertEquals(originalOffer.getSeller().getEmail(), testedOffer.getSeller().getEmail());
         Assert.assertEquals(originalOffer.getSeller().getId(), testedOffer.getSeller().getId());
@@ -150,8 +139,8 @@ public class OfferJdbcDaoTest {
         Assert.assertEquals(originalOffer.getCrypto().getCode(), testedOffer.getCrypto().getCode());
         Assert.assertEquals(originalOffer.getCrypto().getCommercialName(), testedOffer.getCrypto().getCommercialName());
 
-        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity());
-        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity());
+        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity(), DELTA);
+        Assert.assertEquals(originalOffer.getMaxQuantity(), testedOffer.getMaxQuantity(), DELTA);
 
         Assert.assertEquals(originalOffer.getComments(), testedOffer.getComments());
     }

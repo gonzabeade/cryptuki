@@ -1,6 +1,8 @@
 INSERT INTO user_role (description) VALUES ('supervisor');
 INSERT INTO user_role (description) VALUES ('seller');
 
+INSERT INTO payment_method (code, payment_description) VALUES ('Cash', 'Paper money');
+
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('gbeade@itba.edu.ar', 0, 0);
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('shadad@itba.edu.ar', 0, 0);
 INSERT INTO users (email, rating_sum, rating_count) VALUES ('mdedeu@itba.edu.ar', 0, 0);

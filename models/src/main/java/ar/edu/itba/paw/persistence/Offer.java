@@ -137,4 +137,13 @@ public final class Offer {
     public String getComments() {
         return comments;
     }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof Offer))
+            return false;
+        Offer testedOffer= (Offer) object;
+        return testedOffer.getId() == this.getId();
+    }
 }

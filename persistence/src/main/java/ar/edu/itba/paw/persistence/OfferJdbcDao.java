@@ -159,7 +159,7 @@ public class OfferJdbcDao implements OfferDao {
         Map<String,Object> args = new HashMap<>();
 
         args.put("seller_id", digest.getSellerId());
-        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth());
+        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth()+" "+digest.getDate().getHour()+":"+digest.getDate().getMinute()+":"+digest.getDate().getSecond());
         args.put("crypto_code", digest.getCryptoCode());
         args.put("status_code", "APR");
         args.put("asking_price", digest.getAskingPrice());

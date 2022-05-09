@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 @Configuration
 public class TestConfig {
 
-    //TODO: mirar de armar correctamente el path del archivo de creacion de las tablas
     @Value("classpath:testSchema.sql")
     private Resource schemaSql;
 

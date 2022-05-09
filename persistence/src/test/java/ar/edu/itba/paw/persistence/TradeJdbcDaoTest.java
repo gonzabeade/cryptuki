@@ -46,17 +46,17 @@ public class TradeJdbcDaoTest {
 
         trades = new ArrayList<>();
         trades.add(new Trade.Builder(0, "scastagnino@itba.edu.ar")
-                .withQuantity((float)3.4)
+                .withQuantity(3.4f)
                 .withTradeStatus(TradeStatus.OPEN)
                 .withTradeId(0)
                 .withSellerUsername("gbeade@itba.edu.ar"));
         trades.add(new Trade.Builder(1, "scastagnino@itba.edu.ar")
-                .withQuantity((float)5.6)
+                .withQuantity(5.6f)
                 .withTradeStatus(TradeStatus.OPEN)
                 .withTradeId(1)
                 .withSellerUsername("gbeade@itba.edu.ar"));
         trades.add(new Trade.Builder(2, "gbeade@itba.edu.ar")
-                .withQuantity((float)10.8)
+                .withQuantity(10.8f)
                 .withTradeStatus(TradeStatus.OPEN)
                 .withTradeId(2)
                 .withSellerUsername("scastagnino@itba.edu.ar"));

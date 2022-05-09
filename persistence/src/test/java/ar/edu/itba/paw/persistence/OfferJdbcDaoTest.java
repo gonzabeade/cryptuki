@@ -27,7 +27,7 @@ public class OfferJdbcDaoTest {
     private static final String OFFER_VIEW = "offer_complete";
     private static final String STATUS_CODE = "APR";
     private static final String STATUS_DESC = "Approved";
-    private static final float DELTA = (float) 0.0000000000001;
+    private static final float DELTA = 0.0000000000001f;
 
     private ArrayList<Offer> offers;
     private OfferFilter testingFilter;
@@ -51,13 +51,13 @@ public class OfferJdbcDaoTest {
         offers = new ArrayList<>(Arrays.asList(
                 new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),
                         Cryptocurrency.getInstance("ETH", "Ether"),
-                        (float)54.0).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
+                        54.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
                 new Offer.Builder(1, new User.Builder("shadad@itba.edu.ar").withId(1).build(),
                         Cryptocurrency.getInstance("ADA", "Cardano"),
-                        (float)9.0).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
+                        9.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
                 new Offer.Builder(2, new User.Builder("mdedeu@itba.edu.ar").withId(2).build(),
                         Cryptocurrency.getInstance("DOT", "Polkadot"),
-                        (float)2.65).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build()
+                        2.65f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build()
         ));
 
         testingFilter = new OfferFilter();

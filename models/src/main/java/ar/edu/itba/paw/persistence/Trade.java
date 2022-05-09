@@ -153,4 +153,13 @@ public final class Trade {
     public float getAskedPrice() {
         return askedPrice;
     }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof User))
+            return false;
+        Trade testedTrade= (Trade) object;
+        return testedTrade.getTradeId() == this.getTradeId();
+    }
 }

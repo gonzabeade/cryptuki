@@ -35,7 +35,7 @@
             <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="limits"/>*</h2>
             <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
             <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
-            <form:errors cssClass="text-red-500  mx-auto text-center" id="minMaxValidation"><messages:message code="minSmallerThanMax"/></form:errors>
+            <form:errors cssClass="text-red-500 mx-auto"/>
             <div class="flex flex-row justify-center">
                 <div>
                     <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/> <p id="minCoin" class="mx-2">BTC</p></form:label>
@@ -62,21 +62,34 @@
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="paymentMethods"/>*</form:label>
             <div class="flex flex-row justify-center mx-auto">
                 <c:forEach items="${paymentMethods}" var="paymentMethod">
-                    <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[25%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)">
-                        <div class="flex flex-row">
-                            <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
-                            <c:out value="${paymentMethod.description}"/>
-                        </div>
-                    </form:label>
+                    <c:choose>
+                        <c:when test="${selectedPayments.contains(paymentMethod.name)}">
+                            <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="checked border-2 border-frostdr mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[25%] hover:cursor-pointer  " onclick="changeBorderColor(this)">
+                                <div class="flex flex-row">
+                                    <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
+                                    <c:out value="${paymentMethod.description}"/>
+                                </div>
+                            </form:label>
+                        </c:when>
+                        <c:otherwise>
+                            <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[25%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)">
+                                <div class="flex flex-row">
+                                    <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
+                                    <c:out value="${paymentMethod.description}"/>
+                                </div>
+                            </form:label>
+                        </c:otherwise>
+                    </c:choose>
+
                     <form:checkbox path="paymentMethods" id="${paymentMethod.name}" value="${paymentMethod.name}" cssClass="hidden"/>
-                 </c:forEach>
+                </c:forEach>
             </div>
         </div>
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
             <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>
-            <div class="flex flex-row justify-center w-96">
-                <form:textarea path="message" cssClass="min-w-full h-36 rounded-lg mx-auto p-5"/>
+            <div class="flex flex-row justify-center w-96 mx-auto">
+                <form:textarea path="message" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>
             </div>
         </div>
 

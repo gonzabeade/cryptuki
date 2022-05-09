@@ -18,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -49,6 +51,11 @@ public class OfferController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("username", authentication == null ? null : authentication.getName());
+        if(form.getPaymentMethods()!=null){
+            List<String> stringList = new ArrayList<>(Arrays.asList(form.getPaymentMethods()));
+            mav.addObject("selectedPayments", stringList);
+        }
+
 
         return mav;
 

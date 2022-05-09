@@ -83,6 +83,8 @@ CREATE TABLE trade (
                        start_date timestamp,
                        status VARCHAR(10) DEFAULT 'OPEN' CHECK(status IN ('OPEN', 'CLOSED')),
                        quantity NUMERIC CHECK(quantity >= 0),
+                       rated_buyer boolean DEFAULT false NOT NULL,
+                       rated_seller boolean DEFAULT false NOT NULL,
 
                        FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE SET NULL,
                        FOREIGN KEY (seller_id) REFERENCES users (id) ON DELETE SET NULL,
@@ -115,7 +117,9 @@ SELECT
     quantity,
     asking_price,
     crypto_code,
-    commercial_name
+    commercial_name,
+    rated_buyer,
+    rated_seller
 FROM trade
          JOIN offer ON trade.offer_id = offer.id
          JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id

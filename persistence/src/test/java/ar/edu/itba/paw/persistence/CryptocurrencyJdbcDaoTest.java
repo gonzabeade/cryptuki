@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -56,12 +57,12 @@ public class CryptocurrencyJdbcDaoTest {
         insertCrypto(cryptos.get(TESTED_INDEX));
 
         // Exercise
-        Cryptocurrency testedCrypto = cryptoJdbcDao.getCryptocurrency(cryptos.get(TESTED_INDEX).getCode());
+        Optional<Cryptocurrency> testedCrypto = cryptoJdbcDao.getCryptocurrency(cryptos.get(TESTED_INDEX).getCode());
 
         //Validations
-        Assert.assertNotNull(testedCrypto);
-        Assert.assertEquals(cryptos.get(TESTED_INDEX).getCode(), testedCrypto.getCode());
-        Assert.assertEquals(cryptos.get(TESTED_INDEX).getCommercialName(), testedCrypto.getCommercialName());
+        Assert.assertTrue(testedCrypto.isPresent());
+        Assert.assertEquals(cryptos.get(TESTED_INDEX).getCode(), testedCrypto.get().getCode());
+        Assert.assertEquals(cryptos.get(TESTED_INDEX).getCommercialName(), testedCrypto.get().getCommercialName());
     }
 
     @Test

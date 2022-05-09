@@ -90,7 +90,7 @@ public class UserAuthJdbcDaoTest {
         }
 
         // Execute
-        Optional<UserAuth> testedAuth = authJdbcDao.getUsernameByEmail(users.get(TESTING_INDEX).getEmail());
+        Optional<UserAuth> testedAuth = authJdbcDao.getUserAuthByEmail(users.get(TESTING_INDEX).getEmail());
 
         //Validations
         Assert.assertTrue(testedAuth.isPresent());

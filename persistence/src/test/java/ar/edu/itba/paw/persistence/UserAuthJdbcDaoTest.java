@@ -24,16 +24,18 @@ import java.util.Optional;
 @ContextConfiguration(classes = TestConfig.class)
 public class UserAuthJdbcDaoTest {
 
-    private static final String USERS_TABLE = "users";
+    private static final String AUTH_TABLE = "auth";
+    private static final int ROLE_ID = 1;
     private static final int TESTING_INDEX = 0;
 
-    private ArrayList<User.Builder> users;
-    private ArrayList<UserAuth> auths;
+    private ArrayList<UserAuth.Builder> auths;
+    private ArrayList<User> users;
 
     @Autowired
     private DataSource ds;
 
-    private UserJdbcDao userJdbcDao;
+    private UserAuthJdbcDao authJdbcDao;
+    private RoleJdbcDao roleJdbcDao;
     private SimpleJdbcInsert jdbcInsert;
     private JdbcTemplate jdbcTemplate;
 
@@ -41,104 +43,84 @@ public class UserAuthJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName(USERS_TABLE)
+                .withTableName(AUTH_TABLE)
                 .usingGeneratedKeyColumns("id");
-        userJdbcDao = new UserJdbcDao(ds);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
+        roleJdbcDao = new RoleJdbcDao(ds);
+        authJdbcDao = new UserAuthJdbcDao(ds, roleJdbcDao);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
 
         users= new ArrayList<>();
-        users.add(new User.Builder("gbeade@itba.edu.ar").withId(0).withPhoneNumber("12345678").withRatingSum(20).withRatingCount(5).withLastLogin(LocalDateTime.parse("2022-05-01T02:08:03")));
-        users.add(new User.Builder("scastagnino@itba.edu.ar").withId(1).withPhoneNumber("87654321").withRatingSum(14).withRatingCount(7).withLastLogin(LocalDateTime.parse("2022-05-01T02:08:03")));
+        users.add(new User.Builder("gbeade@itba.edu.ar").withId(0).withPhoneNumber("12345678").withRatingSum(20).withRatingCount(5).withLastLogin(LocalDateTime.parse("2022-05-01T02:08:03")).build());
+        users.add(new User.Builder("scastagnino@itba.edu.ar").withId(1).withPhoneNumber("87654321").withRatingSum(14).withRatingCount(7).withLastLogin(LocalDateTime.parse("2022-05-01T02:08:03")).build());
 
         auths= new ArrayList<>();
-        auths.add(new UserAuth.Builder("gbeade", "pass_gbeade").withId(0).withRole("supervisor").withCode(1234).build());
-        auths.add(new UserAuth.Builder("scastagnino", "pass_scastagnino").withId(1).withRole("seller").withCode(4321).build());
+        auths.add(new UserAuth.Builder("gbeade", "pass_gbeade").withId(0).withRole("supervisor").withCode(1234));
+        auths.add(new UserAuth.Builder("scastagnino", "pass_scastagnino").withId(1).withRole("seller").withCode(4321));
     }
 
 
     @Test
     public void createUserTest(){
         // Set up
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
 
         // Execute
-        User testedUser = userJdbcDao.createUser(users.get(TESTING_INDEX));
+        UserAuth testedAuth = authJdbcDao.createUserAuth(auths.get(TESTING_INDEX));
 
         //Validations
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USERS_TABLE));
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, AUTH_TABLE));
 
-        Assert.assertNotNull(testedUser);
+        Assert.assertNotNull(testedAuth);
 
-        User originalUser = users.get(TESTING_INDEX).build();
-        Assert.assertEquals(originalUser.getId(), testedUser.getId());
-        Assert.assertEquals(originalUser.getPhoneNumber(), testedUser.getPhoneNumber());
-        Assert.assertEquals(originalUser.getRatingCount(), testedUser.getRatingCount());
-        Assert.assertEquals(originalUser.getRatingSum(), testedUser.getRatingSum());
-        Assert.assertEquals(originalUser.getEmail(), testedUser.getEmail());
-        Assert.assertEquals(originalUser.getLastLogin(), testedUser.getLastLogin());
+        UserAuth originalAuth = auths.get(TESTING_INDEX).build();
+        Assert.assertEquals(originalAuth.getId(), testedAuth.getId());
+        Assert.assertEquals(originalAuth.getUsername(), testedAuth.getUsername());
+        Assert.assertEquals(originalAuth.getCode(), testedAuth.getCode());
+        Assert.assertEquals(originalAuth.getPassword(), testedAuth.getPassword());
+        Assert.assertEquals(originalAuth.getUserStatus(), testedAuth.getUserStatus());
+        Assert.assertEquals(originalAuth.getRole(), testedAuth.getRole());
 
     }
 
     @Test
     public void getUserByEmailTest(){
         // Set up
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
-        for(User.Builder user: users){
-            insertUser(user.build());
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
+        for(UserAuth.Builder auth: auths){
+            insertAuth(auth.build());
         }
 
         // Execute
-        Optional<User> testedUser = userJdbcDao.getUserByEmail(users.get(TESTING_INDEX).getEmail());
+        Optional<UserAuth> testedAuth = authJdbcDao.getUsernameByEmail(users.get(TESTING_INDEX).getEmail());
 
         //Validations
-        Assert.assertTrue(testedUser.isPresent());
-        Assert.assertEquals(users.get(TESTING_INDEX).build(), testedUser.get());
+        Assert.assertTrue(testedAuth.isPresent());
+        Assert.assertEquals(auths.get(TESTING_INDEX).build(), testedAuth.get());
     }
 
     @Test
-    public void getUserByUsernameTest(){
+    public void getUserAuthByUsernameTest(){
         // Set up
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, USERS_TABLE);
-        for(User.Builder user: users){
-            insertUser(user.build());
-        }
-
-        for(UserAuth auth: auths){
-            insertAuth(auth);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
+        for(UserAuth.Builder auth: auths){
+            insertAuth(auth.build());
         }
 
         // Execute
-        Optional<User> testedUser = userJdbcDao.getUserByUsername(auths.get(TESTING_INDEX).getUsername());
+        Optional<UserAuth> testedAuth = authJdbcDao.getUserAuthByUsername(auths.get(TESTING_INDEX).getUsername());
 
         //Validations
-        Assert.assertTrue(testedUser.isPresent());
-        Assert.assertEquals(users.get(TESTING_INDEX).build(), testedUser.get());
-    }
-
-    private void insertUser(User user){
-        HashMap<String, Object> userMap = new HashMap<>();
-
-        userMap.put("email", user.getEmail());
-        userMap.put("rating_sum", user.getRatingSum());
-        userMap.put("rating_count", user.getRatingCount());
-        userMap.put("phone_number", user.getPhoneNumber());
-        userMap.put("last_login",user.getLastLogin().getYear()+
-                "-"+user.getLastLogin().getMonthValue()+
-                "-"+user.getLastLogin().getDayOfMonth()+
-                " "+user.getLastLogin().getHour()+
-                ":"+user.getLastLogin().getMinute()+
-                ":"+user.getLastLogin().getSecond());
-
-        jdbcInsert.execute(userMap);
+        Assert.assertTrue(testedAuth.isPresent());
+        Assert.assertEquals(auths.get(TESTING_INDEX).build(), testedAuth.get());
     }
 
     private void insertAuth(UserAuth auth){
         HashMap<String, Object> authMap = new HashMap<>();
 
-        authMap.put("status", auth.getUserStatus());
+        authMap.put("status", UserStatus.valueOf(auth.getUserStatus().toString()).ordinal());
         authMap.put("code", auth.getCode());
         authMap.put("user_id", auth.getId());
-        authMap.put("role_id", auth.getId());
+        authMap.put("role_id", ROLE_ID);
         authMap.put("uname", auth.getUsername());
         authMap.put("password", auth.getPassword());
 

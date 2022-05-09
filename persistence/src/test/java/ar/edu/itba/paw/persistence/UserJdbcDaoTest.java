@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import jdk.nashorn.internal.runtime.options.Option;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +25,7 @@ public class UserJdbcDaoTest {
 
     private static final String USERS_TABLE = "users";
     private static final String AUTH_TABLE = "auth";
+    private static final int ROLE_ID = 1;
     private static final int TESTING_INDEX = 0;
 
     private ArrayList<User.Builder> users;
@@ -141,7 +141,7 @@ public class UserJdbcDaoTest {
         authMap.put("status", UserStatus.valueOf(auth.getUserStatus().toString()).ordinal());
         authMap.put("code", auth.getCode());
         authMap.put("user_id", auth.getId());
-        authMap.put("role_id", auth.getId());
+        authMap.put("role_id", ROLE_ID);
         authMap.put("uname", auth.getUsername());
         authMap.put("password", auth.getPassword());
 

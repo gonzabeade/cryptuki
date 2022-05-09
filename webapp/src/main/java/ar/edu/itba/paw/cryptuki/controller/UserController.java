@@ -160,7 +160,7 @@ public class UserController {
     }
 
     @RequestMapping(value="/user")
-    public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
+    public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "updatedPass",required = false) final boolean updatedPass){
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
         ModelAndView mav = new ModelAndView("views/user_profile");
@@ -174,6 +174,7 @@ public class UserController {
         mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
+        mav.addObject("updatedPass", updatedPass);
 
         return mav;
     }
@@ -193,7 +194,7 @@ public class UserController {
 
         //check current password.
         userService.changePassword(authentication.getName(), form.getPassword());
-        return new ModelAndView("redirect:/user");
+        return new ModelAndView("redirect:/user"+"?updatedPass=true");
     }
 
 

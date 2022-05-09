@@ -1,21 +1,21 @@
 package ar.edu.itba.paw.cryptuki.form.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.validator.AmountValidator;
+import ar.edu.itba.paw.cryptuki.form.validator.MinMaxValidator;
+import ar.edu.itba.paw.cryptuki.form.validator.PasswordMatchValidator;
 
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-
-@Constraint(validatedBy = AmountValidator.class)
+@Constraint(validatedBy = PasswordMatchValidator.class)
 @Target( ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AmountCheck {
+public @interface PasswordMatch {
     //error message
-    public String message() default "Debe enviar una cantidad mayor o igual al mínimo y menor o igual al máximo";
+    public String message() default "Las contraseñas no coinciden";
     //represents group of constraints
     public Class<?>[] groups() default {};
     //represents additional information about annotation

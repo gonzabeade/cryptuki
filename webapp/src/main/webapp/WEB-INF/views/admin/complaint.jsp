@@ -22,36 +22,43 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col ml-80">
+    <div class="flex flex-col  ml-96 mr-20">
         <div class="flex">
-            <div class="flex flex-col mx-auto mt-10">
-                <h2 class="font-sans font-semibold text-polard text-5xl text-center">Reclamo # <c:url value="${complain.complainId}"/> </h2>
-                <h2 class="font-sans font-medium text-polard text-3xl text-center">Efectuado el <c:url value="${complain.date}"/></h2>
+            <div class="flex flex-col mt-10">
+                <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-center">Reclamo # <c:url value="${complain.complainId}"/> </h2>
+                <h2 class="font-sans font-medium text-polard text-2xl">Efectuado el <c:url value="${complain.date}"/></h2>
             </div>
         </div>
-        <div class="flex flex-col mt-10 mx-20">
-            <h1 class="font-sans font-medium text-polard text-2xl text-center">Descripción del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify"><c:url value="${complain.complainerComments.get()}"/></p>
+        <div class="flex flex-col mt-10">
+            <h1 class="font-sans font-medium text-polard text-2xl r">Descripción del reclamo:</h1>
+            <p class="rounded-lg"><c:url value="${complain.complainerComments.get()}"/></p>
         </div>
-        <div class="flex flex-col mt-6 mx-52">
-            <h1 class="font-sans font-medium text-polard text-2xl text-center">Usuario del reclamo:</h1>
-            <p class="mx-auto rounded-lg text-justify text-xl"><c:url value="${complain.complainerUsername}"/></p>
-            <p class="mx-auto rounded-lg text-justify text-lg"><c:url value="${complainer.email}"/></p>
-            <p class="mx-auto rounded-lg text-justify text-gray-400">Última vez activo: <c:url value="${complainer.lastLogin.toLocalDate()}"/></p>
+        <div class="flex flex-col mt-6">
+            <h1 class="font-sans font-medium text-polard text-2xl">Usuario del reclamo:</h1>
+            <c:choose>
+                <c:when test="${complain.complainerUsername != null}">
+                    <p class="rounded-lg text-xl"><c:url value="${complain.complainerUsername}"/></p>
+                    <p class="rounded-lg text-gray-400">Última vez activo: <c:url value="${complainer.lastLogin.toLocalDate()}"/></p>
+                </c:when>
+                <c:otherwise>
+                    <p class="rounded-lg text-lg"><c:url value="${complainer.email}"/></p>
+                </c:otherwise>
+            </c:choose>
+
         </div>
-        <div class="flex flex-row">
+        <div class="flex flex-row mx-auto">
                 <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"> Volver a Reclamos Pendientes</a>
                 <div class="flex flex-row  mx-auto mt-10">
                     <c:url value="/admin/selfassign/${complain.complainId}" var="postUrl"/>
                     <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
-                        <button type="submit" class="bg-frostdr text-white text-center mx-auto p-3 rounded-md font-sans">Asignarme el reclamo</button>
+                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans">Asignarme el reclamo</button>
                     </form:form>
                 </div>
         </div>
 
     </div>
     <c:if test="${trade!=null}">
-    <div class="flex flex-col mt-6 mx-auto">
+    <div class="flex flex-col mt-6">
         <h1 class="font-sans font-medium text-polard text-2xl text-center">Detalles del trade</h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
             <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>

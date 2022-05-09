@@ -74,6 +74,7 @@
 
     </div>
     <div class="flex flex-row mt-10">
+        <% request.setCharacterEncoding("utf-8"); %>
         <jsp:include page="../components/seller_info.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>

@@ -15,10 +15,12 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex mt-10 mb-10">
+    <% request.setCharacterEncoding("utf-8"); %>
     <jsp:include page="../components/recover_password_form.jsp">
         <jsp:param name="username" value="${username}"/>
         <jsp:param name="username" value="${code}"/>

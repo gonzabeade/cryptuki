@@ -43,6 +43,7 @@
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
             <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="${passwordPlaceholder}" onchange="passwordMatch()"/>
+            <form:errors cssClass="text-red-400"/>
             <p class="text-red-400 hidden" id="passError"><messages:message code="passwordsDontMatch"/></p>
         </div>
     </div>

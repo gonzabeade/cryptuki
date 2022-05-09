@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.Cryptocurrency;
+import java.util.Collection;
+import java.util.Optional;
 
 public interface CryptocurrencyService {
 
-    Cryptocurrency getCryptocurrency(String id);
-    Iterable<Cryptocurrency> getAllCryptocurrencies();
+    Optional<Cryptocurrency> getCryptocurrency(String id);
+    Collection<Cryptocurrency> getAllCryptocurrencies();
 
 }

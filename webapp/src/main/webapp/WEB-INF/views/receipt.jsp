@@ -29,7 +29,7 @@
             <h1 class="text-ngreen text-4xl text-center"><messages:message code="done"/>!</h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
-            <messages:message code="sellerWillTransfer"/> <b><c:out value="${trade.quantity}"/> <c:out value="${offer.crypto.code}"/></b> <messages:message code="toYourWallet"/>.
+            <messages:message code="sellerWillTransfer"/> <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/> <c:out value="${offer.crypto.code}"/></b> <messages:message code="toYourWallet"/>.
         </div>
         <div class="mt-10 mx-auto flex flex-col">
             <h1 class="text-polard font-extrabold text-2xl font-sans"><messages:message code="offerInformation"/>:</h1>
@@ -43,7 +43,7 @@
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="trasactionDate"/></h1>
-                <p class="text-polard font-sans text-center">2022-02-21</p>
+                <p class="text-polard font-sans text-center">${trade.startDate.get()}</p>
             </div>
         </div>
         <div class="flex flex-row mt-10">
@@ -68,7 +68,7 @@
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
-                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+                <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
             </jsp:include>
         </div>
 

@@ -76,6 +76,9 @@
       <div>
         <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center"><messages:message code="changePassword"/></a>
       </div>
+      <div>
+        <a href="<c:url value="/complaints"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Ver mis reclamos</a>
+      </div>
     </div>
   </div>
 
@@ -83,10 +86,10 @@
 
 </div>
   <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10"><messages:message code="myTransactions"/>: </h2>
-  <div  class="flex flex-col mx-80 justify-center">
-    <div>
+  <div  class="flex flex-col  justify-center">
       <c:forEach var="trade" items="${tradeList}">
-      <li>
+      <li class="list-none mx-96">
+        <% request.setCharacterEncoding("utf-8"); %>
         <jsp:include page="../components/trade_card.jsp">
           <jsp:param name="username" value="${username}"/>
           <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
@@ -96,11 +99,10 @@
           <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
           <jsp:param name="tradeId" value="${trade.tradeId}"/>
         </jsp:include>
-
      </li>
     </c:forEach>
-    </div>
     <div class="flex flex-col mt-3">
+      <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../components/paginator.jsp">
         <jsp:param name="activePage" value="${activePage}"/>
         <jsp:param name="pages" value="${pages}"/>

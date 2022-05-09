@@ -31,6 +31,7 @@
     <jsp:include page="../components/contact_text.jsp"/>
 </div>
 <div class="flex justify-center">
+    <% request.setCharacterEncoding("utf-8"); %>
     <jsp:include page="../components/form.jsp">
         <jsp:param name="url" value="support"/>
         <jsp:param name="tradeId" value="${tradeId}"/>

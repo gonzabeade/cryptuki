@@ -51,7 +51,7 @@
         <div>
           <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/> <p id="minCoin" class="mx-2"><c:out value="${selectedCrypto}"/></p></form:label>
           <div class="flex flex-row justify-center mx-auto">
-            <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
+            <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" />
             <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
           </div>
         </div>
@@ -61,7 +61,7 @@
         <div>
           <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center"><messages:message code="maxIn"/> <p id="maxCoin" class="mx-2"><c:out value="${selectedCrypto}"/></p></form:label>
           <div class="flex flex-row justify-center mx-auto">
-            <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" onchange="checkMinMax()"/>
+            <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
             <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
           </div>
         </div>

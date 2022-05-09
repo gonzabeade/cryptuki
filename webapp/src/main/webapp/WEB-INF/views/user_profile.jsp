@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
   <script src="<c:url value="/public/js/filterLink.js"/>" ></script>
+  <script src="<c:url value="/public/js/feedback.js"/>"></script>
   <script src="<c:url value="/public/js/profilePic.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,9 +18,17 @@
   <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden flex flex-col">
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp">
   <jsp:param name="username" value="${username}"/>
 </jsp:include>
+<% request.setCharacterEncoding("utf-8"); %>
+<c:if test="${updatedPass == true}">
+  <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>
+  <jsp:include page="../components/confirmationToggle.jsp">
+    <jsp:param name="title" value="${updatedPass}"/>
+  </jsp:include>
+</c:if>
 <div class="flex">
   <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="myProfile"/></h1>
 </div>

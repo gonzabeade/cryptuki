@@ -53,11 +53,11 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public int makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status) {
-        final String getUserId = "SELECT user_id FROM auth WHERE auth.uname = ?";
+        final String getUserIdQuery = "SELECT user_id FROM auth WHERE auth.uname = ?";
         Integer userId;
         try{
-             userId = jdbcTemplate.query(getUserId, (rs,i) -> rs.getInt("user_id"),buyerUsername).get(0);
-        }catch (DataAccessException dae) {
+             userId = jdbcTemplate.queryForObject(getUserIdQuery, Integer.class, buyerUsername);
+        } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
 

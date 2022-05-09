@@ -22,7 +22,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:if test="${completed == true}">
         <jsp:include page="../components/confirmationToggle.jsp">
-            <jsp:param name="title" value="Recibimos tu consulta. La atenderemos a la brevedad"/>
+            <jsp:param name="title" value="Cargaste tu reclamo con éxito."/>
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>
@@ -30,13 +30,14 @@
 </div>
 <div class="flex justify-center">
     <% request.setCharacterEncoding("utf-8"); %>
-    <jsp:include page="../components/form.jsp">
+    <jsp:include page="../components/complain_form.jsp">
         <jsp:param name="url" value="support"/>
         <jsp:param name="tradeId" value="${tradeId}"/>
         <jsp:param name="username" value="${username}"/>
         <jsp:param name="complainerId" value="${complainerId}"/>
     </jsp:include>
 </div>
+
 
 </body>
 </html>

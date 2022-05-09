@@ -1,17 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:url value="/contact" var="postUrl"/>
+<c:url value="/complain" var="postUrl"/>
 <%--@elvariable id="supportForm" type=""--%>
 <form:form modelAttribute="supportForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
-        <div class="flex flex-col p-5 justify-center">
-            <form:errors path="email" cssClass="text-red-500"/>
-            <form:label  path="email" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Correo electrónico *</form:label>
-            <div class="flex-row justify-center">
-                    <form:input type="email" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
-            </div>
+    <form:input path="tradeId" type="hidden" value="${param.tradeId}"/>
+    <form:input path="complainerId" type="hidden" value="${param.complainerId}"/>
+    <form:input path="username" type="hidden" value="${param.username}"/>
+    <form:input type="hidden" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
 
-        </div>
     <div class="flex flex-col p-5 ">
         <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Mensaje *</form:label>

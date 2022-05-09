@@ -150,7 +150,7 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-        final String query = "SELECT * FROM trade_complete WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
+        final String query = "SELECT * FROM (SELECT * FROM trade_complete JOIN offer o on trade_complete.offer_id = o.id WHERE o.status_code!='DEL') as temp WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
         try {
             return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, username, pageSize, pageSize * page));
         } catch (DataAccessException dae) {

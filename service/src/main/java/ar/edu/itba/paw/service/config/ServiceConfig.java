@@ -1,26 +1,20 @@
 package ar.edu.itba.paw.service.config;
 
 import ar.edu.itba.paw.service.ContactService;
-import ar.edu.itba.paw.service.MailMessage;
-import ar.edu.itba.paw.service.MailService;
+import ar.edu.itba.paw.service.mailing.MailMessage;
+import ar.edu.itba.paw.service.mailing.MailService;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.util.FileCopyUtils;
 
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 
 
 @ComponentScan({

@@ -3,11 +3,13 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
+import ar.edu.itba.paw.service.mailing.MailMessage;
+import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
+import ar.edu.itba.paw.service.mailing.ThymeleafMailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -147,10 +149,11 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
+
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        mailMessage.setBody("Tu consulta: " + digest.getBody());
-        mailMessage.setSubject("Hemos recibido tu consulta");
-        mailContactService.sendMessage(mailMessage);
+        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage);
+        needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");
+        mailContactService.sendMessage(needHelpThymeleafMailMessage);
     }
 
 

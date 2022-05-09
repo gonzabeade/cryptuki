@@ -1,9 +1,10 @@
-package ar.edu.itba.paw.service;
+package ar.edu.itba.paw.service.mailing;
 
+import ar.edu.itba.paw.service.ContactService;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -15,6 +16,10 @@ public final class MailService implements ContactService<MailMessage> {
 
     @Override
     public void sendMessage(MailMessage message) {
+
+        if (!message.getFrom().equals(mainSender))
+            throw new IllegalArgumentException("Cannot send emails from other account than the one configured");
+
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
         // TODO: What goes instead of UTF-8?
         final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
@@ -22,7 +27,7 @@ public final class MailService implements ContactService<MailMessage> {
             messageHelper.setSubject(message.getSubject());
             messageHelper.setFrom(message.getFrom());
             messageHelper.setTo(message.getTo());
-            messageHelper.setText(message.getBody());
+            messageHelper.setText(message.getBody(), message.isHtml());
         } catch (MessagingException e) {
             e.printStackTrace();//TODO: replace with logger.
         }
@@ -33,7 +38,6 @@ public final class MailService implements ContactService<MailMessage> {
     public MailMessage createMessage(String to) {
         return new MailMessage(mainSender, to);
     }
-
 
     public MailService(String email, String password) {
 

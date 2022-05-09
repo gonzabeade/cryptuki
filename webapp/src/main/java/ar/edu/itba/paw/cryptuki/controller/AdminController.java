@@ -124,7 +124,6 @@ public class AdminController {
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        System.out.println(complain);
         User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
         Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
 
@@ -161,7 +160,6 @@ public class AdminController {
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        System.out.println(complain);
         User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
         Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
 

@@ -35,7 +35,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #filter.complainerUsername == authentication.principal.username")
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -50,7 +50,6 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
     public Optional<Complain> getComplainById(int id) {
 
         if (id < 0)
@@ -62,7 +61,6 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
     public int countComplainsBy(ComplainFilter filter) {
 
         if (filter == null)

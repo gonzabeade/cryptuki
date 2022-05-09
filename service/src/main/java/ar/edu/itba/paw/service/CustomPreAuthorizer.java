@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.OfferDao;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeDao;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,19 +11,22 @@ import java.util.Optional;
 public class CustomPreAuthorizer {
 
     private final UserDao userDao;
+    private final UserAuthDao userAuthDao;
+
     private final OfferDao offerDao;
     private final TradeDao tradeDao;
 
 
     @Autowired
-    public CustomPreAuthorizer(UserDao userDao, OfferDao offerDao, TradeDao tradeDao) {
+    public CustomPreAuthorizer(UserDao userDao, UserAuthDao userAuthDao, OfferDao offerDao, TradeDao tradeDao) {
         this.userDao = userDao;
+        this.userAuthDao = userAuthDao;
         this.offerDao = offerDao;
         this.tradeDao = tradeDao;
     }
 
     public boolean isUserAuthorized(int userId, UserDetails userDetails) {
-        Optional<User> user = userDao.getUserInformation(userDetails.getUsername());
+        Optional<User> user = userDao.getUserByUsername(userDetails.getUsername());
         return user.isPresent() && user.get().getId() == userId;
     }
 
@@ -47,6 +47,12 @@ public class CustomPreAuthorizer {
                 trade.get().getBuyerUsername().equals(userDetails.getUsername())
                 || trade.get().getSellerUsername().equals(userDetails.getUsername())
         );
+    }
+
+    public boolean doesUserHaveCode(String username, int code) {
+        Optional<UserAuth> user = userAuthDao.getUserAuthByUsername(username);
+        boolean v = user.isPresent() && user.get().getCode() == code;
+        return v;
     }
 
 }

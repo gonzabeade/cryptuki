@@ -6,7 +6,7 @@ import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserDao;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,10 +22,10 @@ public class TradeFluxController {
     private final OfferService offerService;
     private final TradeService tradeService;
 
-    private final UserDao us;
+    private final UserService us;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserDao us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us) {
         this.offerService = offerService;
         this.tradeService = tradeService;
         this.us = us;

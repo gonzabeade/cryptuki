@@ -11,6 +11,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.Locale;
 
 @ControllerAdvice
 class ErrorControllerAdvice {
@@ -21,34 +24,35 @@ class ErrorControllerAdvice {
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView serviceDataAccess(ServiceDataAccessException sdae) {
         LOGGER.warn("Captured ServiceDataAccessException", sdae);
-        return new ModelAndView("redirect://500");
+        return new ModelAndView("forward:/500");
     }
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ModelAndView nullPointer(NullPointerException npe) {
         LOGGER.warn("Captured NullPointerException", npe);
-        return new ModelAndView("redirect://400");
+        return new ModelAndView("forward:/400");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ModelAndView illegalArgument(IllegalArgumentException iae) {
         LOGGER.warn("Captured IllegalArgumentException", iae);
-        return new ModelAndView("redirect://400");
+        return new ModelAndView("forward:/400");
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView notFound(NoHandlerFoundException nfhe) {
         LOGGER.warn("Captured NoHandlerFoundException", nfhe);
-        return new ModelAndView("redirect://500");
+        return new ModelAndView("forward:/500");
     }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
-    public ModelAndView notFound(AccessDeniedException ade) {
+    public ModelAndView accessDenied(AccessDeniedException ade) {
         LOGGER.warn("Captured AccessDeniedException", ade);
-        return new ModelAndView("redirect://403");
+        return new ModelAndView("forward:/403");
     }
 }

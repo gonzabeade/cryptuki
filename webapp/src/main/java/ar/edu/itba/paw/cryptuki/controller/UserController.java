@@ -7,10 +7,11 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserDao;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,14 +35,14 @@ import java.util.Optional;
 
 @Controller
 public class UserController {
-    private  final UserDao userService;
+    private  final UserService userService;
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
     private static int PAGE_SIZE = 3 ;
 
     @Autowired
-    public UserController(UserDao userService, ProfilePicService profilePicService, TradeService tradeService) {
+    public UserController(UserService userService, ProfilePicService profilePicService, TradeService tradeService) {
         this.userService = userService;
         this.profilePicService = profilePicService;
         this.tradeService=tradeService;
@@ -113,7 +114,7 @@ public class UserController {
         if(errors.hasErrors())
             return passwordSendMailGet(form);
         try{
-//            userService.sendChangePasswordMail(form.getEmail()); TODO: ESTO ESTA MAL!! ES LOGICA DE NEGOCIO!!
+            userService.changePasswordAnonymously(form.getEmail());
         }catch (Exception e ){
             return new ModelAndView("redirect:/errors");
         }
@@ -208,14 +209,13 @@ public class UserController {
 
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.POST})
-    public ModelAndView recoverPasswordGet(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
+    public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return recoverPasswordGet(new recoverPasswordForm(),form.getUsername(), form.getCode());
         //check this before login
+
         userService.changePassword(form.getUsername(), form.getCode(), form.getPassword());
-
         return logInProgrammatically(form.getUsername());
-
     }
 
     private ModelAndView logInProgrammatically(String username ){

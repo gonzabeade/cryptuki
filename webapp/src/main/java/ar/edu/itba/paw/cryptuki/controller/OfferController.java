@@ -7,7 +7,7 @@ import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.CryptocurrencyService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.PaymentMethodService;
-import ar.edu.itba.paw.service.UserDao;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,13 +25,13 @@ public class OfferController {
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
     private  final OfferService offerService;
-    private final UserDao us;
+    private final UserService us;
 
     @Autowired
     public OfferController(CryptocurrencyService cryptocurrencyService,
                            PaymentMethodService paymentMethodService,
                            OfferService offerService,
-                           UserDao us) {
+                           UserService us) {
 
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;

@@ -61,8 +61,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login", "/register", "/verify**").anonymous()
-                .antMatchers("/", "/contact","/coins", "/403", "/400", "/404", "/500", "/caca").permitAll()
+                .antMatchers("/login", "/register", "/verify**", "/passwordRecovery", "/recoverPassword").anonymous()
+                .antMatchers("/", "/contact","/coins", "/403", "/400", "/404", "/500").permitAll()
                 .antMatchers("/admin**").hasRole("ADMIN")
                 .antMatchers("/**").authenticated()
                 .and().formLogin()
@@ -79,8 +79,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
-                .and().exceptionHandling()
-                .accessDeniedPage("/403")
+//                .and().exceptionHandling()
+//                .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
 

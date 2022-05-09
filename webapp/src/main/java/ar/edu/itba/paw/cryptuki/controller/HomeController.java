@@ -25,7 +25,7 @@ import java.util.Optional;
 @Controller  /* Requests can be dispatched to this class */
 public class HomeController {
 
-    private final UserDao us;
+    private final UserService us;
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
@@ -35,7 +35,7 @@ public class HomeController {
 
 
     @Autowired
-    public HomeController(UserDao us,
+    public HomeController(UserService us,
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
                           PaymentMethodService paymentMethodService,

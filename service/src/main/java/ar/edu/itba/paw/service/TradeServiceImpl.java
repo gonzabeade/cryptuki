@@ -21,10 +21,10 @@ public class TradeServiceImpl implements TradeService {
     private final OfferService offerService;
     private final TradeDao tradeDao;
 
-    private final UserDao userService;
+    private final UserService userService;
 
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserDao userService) {
+    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserService userService) {
         this.mailContactService = mailContactService;
         this.offerService = offerService;
         this.tradeDao = tradeDao;

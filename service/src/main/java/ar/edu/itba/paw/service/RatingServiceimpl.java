@@ -27,13 +27,10 @@ public class RatingServiceimpl implements RatingService{
         if(username.equals(trade.get().getBuyerUsername())){
             userService.incrementUserRating(trade.get().getSellerUsername(), rating);
             tradeService.updatedRatedBuyer(tradeId);
-            return;
         }
         else if(username.equals(trade.get().getSellerUsername())){
             userService.incrementUserRating(trade.get().getBuyerUsername(), rating);
             tradeService.updateRatedSeller(tradeId);
-            return;
         }
-        throw new IllegalArgumentException("Wrong username");
     }
 }

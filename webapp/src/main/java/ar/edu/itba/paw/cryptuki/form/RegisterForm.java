@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.PasswordMatch;
+import ar.edu.itba.paw.cryptuki.form.annotation.UserExists;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import org.hibernate.validator.constraints.Email;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @PasswordMatch
+@UserExists
 public class RegisterForm {
 
 

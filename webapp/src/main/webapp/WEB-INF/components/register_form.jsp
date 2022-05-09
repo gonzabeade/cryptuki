@@ -15,6 +15,7 @@
 <form:form modelAttribute="registerForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard" onsubmit="event.preventDefault(); preventSubmitPasswordNotMatching()">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="register"/></h2>
     <h3 class="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3"><messages:message code="createAccountForPublishing"/></h3>
+    <form:errors cssClass=" mx-auto text-red-400"/>
     <div class="flex flex-col mt-3">
         <form:label path="email" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="emailAddress"/></form:label>
         <form:errors path="email" cssClass="text-red-400" element="p"/>
@@ -43,7 +44,6 @@
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
             <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="${passwordPlaceholder}" onchange="passwordMatch()"/>
-            <form:errors cssClass="text-red-400"/>
             <p class="text-red-400 hidden" id="passError"><messages:message code="passwordsDontMatch"/></p>
         </div>
     </div>

@@ -194,4 +194,9 @@ public class UserServiceImpl implements UserService {
             throw new ServiceDataAccessException(pe);
         }
     }
+
+    @Override
+    public boolean userExists(String username, String email) {
+         return userDao.getUserByEmail(email).isPresent() || userDao.getUserByUsername(username).isPresent();
+    }
 }

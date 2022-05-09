@@ -62,8 +62,6 @@ public class UserController {
             userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         }
         catch(Exception e ){
-            errors.addError(new FieldError("registerForm","email","El nombre de usuario o correo electrónico ya fueron utilizados."));
-            form.setUsername("");
             return registerGet(form);
         }
 

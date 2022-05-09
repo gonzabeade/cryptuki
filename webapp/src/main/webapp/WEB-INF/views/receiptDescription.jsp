@@ -57,8 +57,8 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
         </div>
         <div class="flex flex-col mx-auto mt-10">
 
@@ -66,11 +66,13 @@
                 <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.sellerUsername == username? trade.buyerUsername : trade.buyerUsername}</h1>
                 <c:url value="/rate" var="postUrl"/>
                 <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
-                    <form:errors path="rating"/>
+
                     <form:hidden path="tradeId" value="${trade.tradeId}"/>
                     <div class="flex flex-col">
-                        <form:input path="rating" cssClass="p-3 w-10 rounded-lg mx-auto mt-5"/>
-                        <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress">Enviar</button>
+                        <form:errors path="rating" cssClass="mx-auto text-red-400"/>
+                        <form:label path="rating" cssClass="mx-auto"><messages:message code="ratingConditions"/></form:label>
+                        <form:input path="rating"  type="number" cssClass="p-3 w-16 rounded-lg mx-auto mt-5 none"/>
+                        <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress"><messages:message code="send"/> </button>
                     </div>
 
                 </form:form>

@@ -23,12 +23,14 @@ import java.util.Optional;
 public class TradeFluxController {
     private final OfferService offerService;
     private final TradeService tradeService;
+    private final RatingService ratingService;
     private final UserService us;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, RatingService ratingService, UserService us) {
         this.offerService = offerService;
         this.tradeService = tradeService;
+        this.ratingService = ratingService;
         this.us = us;
     }
 
@@ -136,6 +138,13 @@ public class TradeFluxController {
             mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
         }
         return mav;
-
+    }
+    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+    public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
+        }
+        ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
+        return new ModelAndView("redirect:/");
     }
 }

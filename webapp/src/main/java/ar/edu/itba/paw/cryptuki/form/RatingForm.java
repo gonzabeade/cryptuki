@@ -10,7 +10,7 @@ public class RatingForm {
     @NotNull
     @Min(1)
     @Max(10)
-    private int rating;
+    private Integer rating;
 
     public int getTradeId() {
         return tradeId;
@@ -20,11 +20,11 @@ public class RatingForm {
         this.tradeId = tradeId;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 }

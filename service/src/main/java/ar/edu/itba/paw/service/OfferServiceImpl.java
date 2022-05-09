@@ -121,7 +121,6 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserAuthorized(#digest.sellerId, authentication.principal)")
     public void modifyOffer(OfferDigest digest) {
 
         if (digest == null)
@@ -151,7 +150,6 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
     public void pauseOffer(int offerId) {
 
         if (offerId < 0)

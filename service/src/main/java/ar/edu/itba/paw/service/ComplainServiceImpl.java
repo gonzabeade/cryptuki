@@ -35,7 +35,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #filter.complainerUsername == authentication.principal.username")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserAuthorized(#filter.complainerUsername.orElse(null), authentication.principal)")
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -76,7 +76,7 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    @PreAuthorize("#complain.complainer == authentication.principal.username")
+    @PreAuthorize("#complain.complainer == authentication.principal.username and @customPreAuthorizer.isUserPartOfTrade(#complain.tradeId, authentication.principal)")
     public void makeComplain(Complain.Builder complain) {
 
         if (complain == null)

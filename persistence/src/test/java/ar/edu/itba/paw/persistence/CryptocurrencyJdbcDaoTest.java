@@ -76,18 +76,17 @@ public class CryptocurrencyJdbcDaoTest {
         Collection<Cryptocurrency> testedCryptos = cryptoJdbcDao.getAllCryptocurrencies();
 
         //Validations
-        Assert.assertEquals(ROW_COUNT, JdbcTestUtils.countRowsInTable(jdbcTemplate, CRYPTO_TABLE));
         Assert.assertTrue(testedCryptos.containsAll(cryptos));
     }
 
     private void insertCrypto(Cryptocurrency crypto){
-        HashMap<String, Object> offerMap = new HashMap<>();
+        HashMap<String, Object> cryptoMap = new HashMap<>();
 
-        offerMap.put("code", crypto.getCode());
-        offerMap.put("market_price", MARKET_PRICE);
-        offerMap.put("commercial_name", crypto.getCommercialName());
+        cryptoMap.put("code", crypto.getCode());
+        cryptoMap.put("market_price", MARKET_PRICE);
+        cryptoMap.put("commercial_name", crypto.getCommercialName());
 
-        jdbcInsert.execute(offerMap);
+        jdbcInsert.execute(cryptoMap);
 
     }
 }

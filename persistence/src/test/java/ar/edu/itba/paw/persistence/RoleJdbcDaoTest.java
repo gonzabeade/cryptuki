@@ -66,11 +66,11 @@ public class RoleJdbcDaoTest {
     }
 
     private void insertRole(Role role){
-        HashMap<String, Object> offerMap = new HashMap<>();
+        HashMap<String, Object> roleMap= new HashMap<>();
 
-        offerMap.put("description", role.getDescription());
+        roleMap.put("description", role.getDescription());
 
-        jdbcInsert.execute(offerMap);
+        jdbcInsert.execute(roleMap);
 
     }
 }

@@ -82,4 +82,13 @@ public final class User {
     public LocalDateTime getLastLogin() {
         return lastLogin;
     }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof User))
+            return false;
+        User testedUser= (User) object;
+        return testedUser.getId() == this.getId();
+    }
 }

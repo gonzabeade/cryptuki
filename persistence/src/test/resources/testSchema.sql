@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS auth (
     uname VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES user_role
+    FOREIGN KEY (role_id) REFERENCES user_role(id)
     );
 
 CREATE TABLE IF NOT EXISTS cryptocurrency (

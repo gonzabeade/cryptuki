@@ -79,12 +79,12 @@ public class PaymentMethodJdbcDaoTest {
     }
 
     private void insertPaymentMethod(PaymentMethod paymentMethod){
-        HashMap<String, Object> offerMap = new HashMap<>();
+        HashMap<String, Object> paymentMethodMap = new HashMap<>();
 
-        offerMap.put("code", paymentMethod.getName());
-        offerMap.put("payment_description", paymentMethod.getDescription());
+        paymentMethodMap.put("code", paymentMethod.getName());
+        paymentMethodMap.put("payment_description", paymentMethod.getDescription());
 
-        jdbcInsert.execute(offerMap);
+        jdbcInsert.execute(paymentMethodMap);
 
     }
 }

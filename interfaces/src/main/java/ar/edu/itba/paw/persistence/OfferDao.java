@@ -20,4 +20,6 @@ public interface OfferDao {
     void resumeOffer(int offerId);
 
     Optional<String> getOwner(int offerId);
+
+    void setMaxQuantity(int offerId, float newQuantity);
 }

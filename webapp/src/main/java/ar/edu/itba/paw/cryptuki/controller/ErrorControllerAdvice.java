@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,12 @@ class ErrorControllerAdvice {
         return new ModelAndView("forward:/500");
     }
 
+    @ExceptionHandler(NoSuchOfferException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView notFound(NoSuchOfferException nsoe) {
+        LOGGER.debug("Captured NoSuchOfferException", nsoe);
+        return new ModelAndView("forward:/404");
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)

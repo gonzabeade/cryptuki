@@ -233,12 +233,23 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public Optional<String> getOwner(int offerId) {
-        final String query = "SELECT uname FROM offer_complete WHERE offer_id = ?";
+        final String query = "SELECT DISTINCT uname FROM offer_complete WHERE offer_id = ?";
 
         try {
             return Optional.of(jdbcTemplate.queryForObject(query, String.class, offerId));
         } catch (EmptyResultDataAccessException erde) {
             return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+
+    @Override
+    public void setMaxQuantity(int offerId, float newQuantity) {
+        final String query = "UPDATE offer SET max_quantity = ? WHERE id = ?";
+
+        try {
+            jdbcTemplate.update(query, newQuantity, offerId);
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

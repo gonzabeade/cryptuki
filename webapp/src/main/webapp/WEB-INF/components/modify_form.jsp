@@ -4,7 +4,7 @@
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="selectedCrypto" scope="request" type="java.lang.String"/>
-<jsp:useBean id="selectedPayments" scope="request" type="java.util.ArrayList"/>
+<jsp:useBean id="selectedPayments" scope="request" type="java.util.List"/>
 <div class="flex flex-col">
 
   <c:url value="${param.saveUrl}" var="postUrl"/>

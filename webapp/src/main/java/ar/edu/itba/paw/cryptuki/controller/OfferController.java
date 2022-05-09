@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.CryptocurrencyService;
 import ar.edu.itba.paw.service.OfferService;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Controller
@@ -39,28 +42,59 @@ public class OfferController {
         this.us = us;
     }
 
-
-
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-
         ModelAndView mav = new ModelAndView("views/upload_page");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
-
+        mav.addObject("username", authentication.getName());
         return mav;
-
     }
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
 
-        if(errors.hasErrors()){
-            return uploadOffer(form,authentication);
-        }
+        if (errors.hasErrors())
+            return uploadOffer(form, authentication);
+
         int id = us.getUserInformation(authentication.getName()).get().getId();
         int offerId = offerService.makeOffer(form.toOfferDigest(id));
-        return seeOffer(offerId,authentication, true,false);
+        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
+    }
+
+    @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
+    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication){
+
+        Optional<Offer> offer = offerService.getOfferById(offerId);
+        if (!offer.isPresent())
+            throw new NoSuchOfferException(offerId);
+
+        return seeOffer(offer.get(), authentication, false, false);
+    }
+
+    @RequestMapping(value = "/offer/{offerId}/creationsuccess", method = RequestMethod.GET)
+    public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
+        Offer offer = offerService.getOfferIfAuthorized(offerId).get();
+        return seeOffer(offer, authentication, true, false);
+    }
+
+    @RequestMapping(value = "/offer/{offerId}/editsuccess", method = RequestMethod.GET)
+    public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
+        Offer offer = offerService.getOfferIfAuthorized(offerId).get();
+        return seeOffer(offer, authentication, false, true);
+    }
+
+
+    private ModelAndView seeOffer(Offer offer, Authentication authentication, boolean creation, boolean edit) {
+        ModelAndView mav = new ModelAndView("views/see_offer");
+        mav.addObject("offer", offer);
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
+        mav.addObject("creation", creation);
+        mav.addObject("edit", edit);
+        mav.addObject("username", authentication.getName());
+        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
+        return mav;
     }
 
 
@@ -69,95 +103,47 @@ public class OfferController {
                                @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final Authentication authentication){
 
-        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
+        Optional<Offer> offerOptional = offerService.getOfferIfAuthorized(offerId);
 
-        if(offer == null){
-            return new ModelAndView("redirect:/errors");
-        }
+        if (!offerOptional.isPresent())
+            throw new NoSuchOfferException(offerId);
+
+        Offer offer = offerOptional.get();
+        form.fillFromOffer(offer);
 
         ModelAndView mav = new ModelAndView("views/modify");
-
-        form.setMinAmount(offer.getMinQuantity());
-        form.setMaxAmount(offer.getMaxQuantity());
-        form.setCryptocurrency(offer.getCrypto().getCode());
-        form.setPrice(offer.getAskingPrice());
-        form.setMessage(offer.getComments());
-
-        ArrayList<String> pm =  new ArrayList<>();
-        offer.getPaymentMethods().forEach(paymentMethod -> pm.add(paymentMethod.getName()));
-        form.setPaymentMethods(pm.toArray(new String[0]));
-
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("username", authentication.getName());
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("selectedCrypto", offer.getCrypto().getCode());
-        mav.addObject("selectedPayments", pm);
-
+        mav.addObject("selectedPayments", Arrays.asList(form.getPaymentMethods()));
         return mav;
     }
+
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.POST)
     public ModelAndView modify(@PathVariable("offerId") final int offerId,
                                @Valid @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final BindingResult errors,
                                final Authentication authentication){
 
-        if(errors.hasErrors()){
+        if(errors.hasErrors())
             return modify(offerId, form, authentication);
-        }
-        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
-        if(offer == null){
-            return new ModelAndView("redirect:/errors");
-        }
-        offerService.modifyOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
-        return seeOffer(offer.getId(),authentication,false,true);
+
+        int id = us.getUserInformation(authentication.getName()).get().getId();
+        OfferDigest digest = form.toOfferDigest(id);
+        offerService.modifyOffer(digest);
+        return new ModelAndView("redirect:/offer/"+offerId+"/editsuccess");
     }
+
     @RequestMapping(value = "/delete/{offerId}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("offerId") final int offerId,
                                final Authentication authentication){
-        Offer offer = checkOfferPermissionAndGetOffer(offerId,authentication);
-        if(offer == null){
-            return new ModelAndView("redirect:/errors");
-        }
         offerService.deleteOffer(offerId);
         ModelAndView mav = new ModelAndView("views/deleted_offer");
-        if(null != authentication){
-            mav.addObject("username", authentication.getName());
-        }
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 
-    @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
-    public  ModelAndView seeOffer(@PathVariable("offerId") final int offerId,
-                                  final Authentication authentication,
-                                  @RequestParam(value = "creation", required = false) boolean creation,
-                                  @RequestParam(value = "edit", required = false) boolean edit){
 
-        Optional<Offer> offer = offerService.getOfferById(offerId);
-        if( !offer.isPresent()) {
-            return null;
-        }
-
-        ModelAndView mav = new ModelAndView("views/see_offer");
-        mav.addObject("offer", offer.get());
-        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.get().getSeller().getLastLogin()));
-        mav.addObject("creation", creation);
-        mav.addObject("edit", edit);
-        if(null != authentication){
-            mav.addObject("username", authentication.getName());
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
-        }
-        return mav;
-    }
-    private Offer checkOfferPermissionAndGetOffer(int offerId, final Authentication authentication){
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
-        if(authentication !=null){
-            if(!(offer.getSeller().getEmail().equals(us.getUserInformation(authentication.getName()).get().getEmail())) && authentication.getAuthorities().stream().noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))){
-                return null;
-            }
-        }
-
-        return offer;
-    }
 }

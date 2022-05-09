@@ -45,38 +45,17 @@ public class TradeServiceImpl implements TradeService {
         UserAuth userAuth = userService.getUserAuthByEmail(offer.getSeller().getEmail()).get();
 
         try {
-            //modify offer
-            OfferDigest.Builder digestBuilder = new OfferDigest.Builder(offer.getSeller().getId(),offer.getCrypto().getCode(),offer.getAskingPrice());
-            digestBuilder.withId(offer.getId());
-            digestBuilder.withComments(offer.getComments());
-            offer.getPaymentMethods().forEach(paymentMethod -> digestBuilder.withPaymentMethod(paymentMethod.getName()));
-
-            float remaining = offer.getMaxQuantity() - (trade.getQuantity()/offer.getAskingPrice());
-
-            if( remaining <= 0){
-                offerService.pauseOffer(offer.getId());
-            }
-
-
-            digestBuilder.withMaxQuantity(remaining);
-            float newMin =(offer.getMinQuantity() > remaining ) ? 0 : (offer.getMinQuantity());
-            if(newMin == 0){
-                offerService.pauseOffer(offer.getId());
-            }
-            else{
-                digestBuilder.withMinQuantity(newMin);
-                offerService.modifyOffer(digestBuilder.build());
-            }
+           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
             //create trade.
             trade.withTradeStatus(TradeStatus.OPEN)
                     .withSellerUsername(userAuth.getUsername());
             int tradeId = tradeDao.makeTrade(trade);
 
             //send email to seller
-            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
-            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
-            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
-            mailContactService.sendMessage(message);
+//            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
+//            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
+//            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
+//            mailContactService.sendMessage(message);
 
             return tradeId;
         } catch (PersistenceException pe) {

@@ -28,7 +28,7 @@
       <h1 class="text-ngreen text-4xl text-center">Listo!</h1>
     </div>
     <div class="mx-auto  text-polard text-2xl mt-10">
-     La ofeta fue eliminada satisfactoriamente.
+     La oferta fue eliminada satisfactoriamente.
     </div>
     <a href="<c:url value="/"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10">Volver al Home</a>
   </div>

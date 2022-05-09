@@ -42,6 +42,14 @@ public class ErrorController {
         return mav;
     }
 
+    @RequestMapping(value = "/405", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView methodNotAllowed(Locale locale) {
+        ModelAndView mav = new ModelAndView("views/error_page");
+        mav.addObject("errorMsg", messageSource.getMessage("error.405", null, locale));
+        mav.addObject("code", HttpStatus.METHOD_NOT_ALLOWED.value());
+        return mav;
+    }
+
     @RequestMapping(value = "/500", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView internalServerError(Locale locale) {
         ModelAndView mav = new ModelAndView("views/error_page");

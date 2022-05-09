@@ -85,10 +85,7 @@
         <a href="<c:url value="/changePassword"/>" class="mx-auto bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center"><messages:message code="changePassword"/></a>
       </div>
       <div>
-        <a href="<c:url value="/complaints"/>" class="mx-auto bg-nred  hover:bg-nred/[.6] text-white p-3 rounded-md font-sans text-center ml-5"><messages:message code="seeComplaints"/></a>
-      </div>
-      <div>
-        <a href="<c:url value="/myoffers"/>" class="mx-auto bg-frostdr  hover:bg-frostdr/[.6] text-white p-3 rounded-md font-sans text-center ml-5">See my offers</a>
+        <a href="<c:url value="/complaints"/>" class="mx-auto bg-frostdr  hover:bg-frostdr/[.6] text-white p-3 rounded-md font-sans text-center ml-5"><messages:message code="seeComplaints"/></a>
       </div>
     </div>
   </div>

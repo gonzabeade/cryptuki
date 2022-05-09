@@ -65,7 +65,10 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username));
+            return offerDao.getOffersBy(new OfferFilter().byUsername(username)
+                    .byStatus("APR")
+                    .byStatus("PSE")
+                    .byStatus("PSU"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -107,7 +110,10 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOfferCount(new OfferFilter().byUsername(username));
+            return offerDao.getOfferCount(new OfferFilter().byUsername(username)
+                    .byStatus("APR")
+                    .byStatus("PSE")
+                    .byStatus("PSU"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

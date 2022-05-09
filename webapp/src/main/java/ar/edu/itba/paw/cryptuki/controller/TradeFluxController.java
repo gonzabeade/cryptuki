@@ -123,6 +123,8 @@ public class TradeFluxController {
         }
 
         mav.addObject("trade" , trade.get());
+        mav.addObject("ratedBySeller", trade.get().getRatedSeller());
+        mav.addObject("ratedByBuyer", trade.get().getRatedBuyer());
         Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));

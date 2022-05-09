@@ -57,12 +57,15 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <c:url value="/rate" var="postUrl"/>
-            <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
-                <form:hidden path="tradeId" value="${trade.tradeId}"/>
-                <form:input path="rating"></form:input>
-                <button type="submit">Enviar</button>
-            </form:form>
+                <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">
+                <c:url value="/rate" var="postUrl"/>
+                <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
+                    <form:hidden path="tradeId" value="${trade.tradeId}"/>
+                    <form:input path="rating"/>
+                    <button type="submit">Enviar</button>
+                </form:form>
+            </c:if>
+
             <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/user"/>"><messages:message code="goBack"/></a>
         </div>

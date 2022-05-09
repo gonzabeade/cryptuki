@@ -1,30 +1,29 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.exception.DuplicateEmailException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserDao {
 
-    private final UserDao userDao;
+    private final ar.edu.itba.paw.persistence.UserDao userDao;
     private final UserAuthDao userAuthDao;
     private final PasswordEncoder passwordEncoder;
     private final ContactService<MailMessage> contactService;
 
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
+    public UserServiceImpl(final ar.edu.itba.paw.persistence.UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;
@@ -34,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
 
         if (authBuilder == null || userBuilder == null)
@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("#username == authentication.principal.username")
     public boolean changePassword(String username, int code, String newPassword) {
 
         if (newPassword == null)
@@ -118,8 +119,6 @@ public class UserServiceImpl implements UserService {
 
         if (code < 0)
             throw new IllegalArgumentException("Code must be non negative");
-
-        // TODO: Validate permissions !! Check!!
 
         Optional<UserAuth> userAuth;
         try {
@@ -135,6 +134,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public boolean changePassword(String username, String newPassword) {
 
         if (newPassword == null)
@@ -148,9 +148,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("#username == authentication.principal.username")
     public void updateLastLogin(String username) {
-
-        // TODO: Permissions
 
         try {
             userDao.updateLastLogin(username);
@@ -179,6 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("#username == authentication.principal.username")
     public void incrementUserRating(String username, int rating) {
 
         if (rating < 0)

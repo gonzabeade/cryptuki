@@ -9,6 +9,8 @@ import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
+    @Secured("ROLE_ADMIN")
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -45,6 +48,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
+    @Secured("ROLE_ADMIN")
     public Optional<Complain> getComplainById(int id) {
 
         if (id < 0)
@@ -56,6 +60,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
+    @Secured("ROLE_ADMIN")
     public int countComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -70,6 +75,8 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
+    @Secured("ROLE_USER")
+    @PreAuthorize("#complain.complainer == authentication.principal.username")
     public void makeComplain(Complain.Builder complain) {
 
         if (complain == null)
@@ -84,6 +91,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
 
         if (complainId < 0)
@@ -101,6 +109,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateModerator(int complainId, String username) {
 
         if (complainId < 0)
@@ -115,6 +124,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateModeratorComment(int complainId, String comments) {
 
         if (complainId < 0)
@@ -129,6 +139,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateModerator(int complainId, String username, String comment) {
         updateModerator(complainId, username);
         updateModeratorComment(complainId, comment);

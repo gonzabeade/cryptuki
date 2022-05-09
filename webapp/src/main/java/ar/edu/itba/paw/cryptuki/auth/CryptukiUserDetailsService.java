@@ -2,7 +2,7 @@ package ar.edu.itba.paw.cryptuki.auth;
 
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.persistence.UserStatus;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +18,7 @@ import java.util.Collection;
 public class CryptukiUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private UserDao userService;
 
     private static class UserDetailsImpl extends org.springframework.security.core.userdetails.User{
         private boolean enabled;

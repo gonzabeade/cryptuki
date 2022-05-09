@@ -9,12 +9,11 @@ import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,11 +26,11 @@ public class AdminController {
 
     private static final int PAGE_SIZE = 5;
     private final ComplainService complainService;
-    private final UserService userService;
+    private final UserDao userService;
     private final TradeService tradeService;
 
     @Autowired
-    public AdminController(ComplainService complainService, UserService userService, TradeService tradeService) {
+    public AdminController(ComplainService complainService, UserDao userService, TradeService tradeService) {
         this.complainService = complainService;
         this.userService = userService;
         this.tradeService = tradeService;

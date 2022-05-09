@@ -81,7 +81,10 @@ public class UploadOfferForm {
     }
 
     public OfferDigest toOfferDigest(int sellerId) {
-        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price).withMinQuantity(minAmount).withMaxQuantity(maxAmount).withComments(message);
+        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price)
+                .withMinQuantity(minAmount)
+                .withMaxQuantity(maxAmount)
+                .withComments(message);
         for (String pm: paymentMethods)
                 builder.withPaymentMethod(pm);
         return builder.build();

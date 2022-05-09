@@ -7,7 +7,7 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +34,14 @@ import java.util.Optional;
 
 @Controller
 public class UserController {
-    private  final UserService userService;
+    private  final UserDao userService;
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
     private static int PAGE_SIZE = 3 ;
 
     @Autowired
-    public UserController(UserService userService, ProfilePicService profilePicService,TradeService tradeService) {
+    public UserController(UserDao userService, ProfilePicService profilePicService, TradeService tradeService) {
         this.userService = userService;
         this.profilePicService = profilePicService;
         this.tradeService=tradeService;

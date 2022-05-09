@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.nio.file.AccessDeniedException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Controller  /* Requests can be dispatched to this class */
 public class HomeController {
 
-    private final UserService us;
+    private final UserDao us;
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
@@ -34,7 +35,7 @@ public class HomeController {
 
 
     @Autowired
-    public HomeController(UserService us,
+    public HomeController(UserDao us,
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
                           PaymentMethodService paymentMethodService,
@@ -146,6 +147,13 @@ public class HomeController {
 
         mav.addObject("username",authentication.getName());
         return mav;
+    }
+
+    @RequestMapping(value="/caca", method = {RequestMethod.GET})
+    public ModelAndView caca(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication) throws AccessDeniedException {
+
+        offerService.deleteOffer(17);
+        return null;
     }
 
 }

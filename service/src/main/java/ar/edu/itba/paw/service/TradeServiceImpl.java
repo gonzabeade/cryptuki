@@ -3,16 +3,15 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 public class TradeServiceImpl implements TradeService {
@@ -21,10 +20,10 @@ public class TradeServiceImpl implements TradeService {
     private final OfferService offerService;
     private final TradeDao tradeDao;
 
-    private final UserService userService;
+    private final UserDao userService;
 
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserService userService) {
+    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserDao userService) {
         this.mailContactService = mailContactService;
         this.offerService = offerService;
         this.tradeDao = tradeDao;
@@ -34,6 +33,8 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
+    @Secured("ROLE_USER")
+    @PreAuthorize("#trade.buyerUsername == authentication.principal.username")
     public int makeTrade(Trade.Builder trade) {
 
         if (trade == null)
@@ -84,6 +85,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateStatus(int tradeId, TradeStatus status) {
 
         if (tradeId < 0)
@@ -115,6 +117,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -132,6 +135,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getSellingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -146,6 +150,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -163,6 +168,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getBuyingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -177,6 +183,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -194,6 +201,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getTradesByUsernameCount(String username) {
 
         if (username == null)

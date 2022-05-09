@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,10 +22,10 @@ public class TradeFluxController {
     private final OfferService offerService;
     private final TradeService tradeService;
 
-    private final UserService us;
+    private final UserDao us;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, UserDao us) {
         this.offerService = offerService;
         this.tradeService = tradeService;
         this.us = us;

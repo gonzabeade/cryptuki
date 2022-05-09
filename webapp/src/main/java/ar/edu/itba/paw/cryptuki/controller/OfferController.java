@@ -7,8 +7,7 @@ import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.service.CryptocurrencyService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.PaymentMethodService;
-import ar.edu.itba.paw.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import ar.edu.itba.paw.service.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -26,13 +25,13 @@ public class OfferController {
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
     private  final OfferService offerService;
-    private final UserService us;
+    private final UserDao us;
 
     @Autowired
     public OfferController(CryptocurrencyService cryptocurrencyService,
                            PaymentMethodService paymentMethodService,
                            OfferService offerService,
-                           UserService us) {
+                           UserDao us) {
 
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
@@ -59,11 +58,12 @@ public class OfferController {
         if(errors.hasErrors()){
             return uploadOffer(form,authentication);
         }
-
-        int offerId = offerService.makeOffer(form.toOfferDigest(us.getUserInformation(authentication.getName()).get().getId()));
+        int id = us.getUserInformation(authentication.getName()).get().getId();
+        int offerId = offerService.makeOffer(form.toOfferDigest(id));
         return seeOffer(offerId,authentication, true,false);
-
     }
+
+
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
     public ModelAndView modify(@PathVariable("offerId") final int offerId,
                                @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,

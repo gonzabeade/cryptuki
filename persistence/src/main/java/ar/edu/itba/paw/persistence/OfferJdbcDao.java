@@ -232,6 +232,19 @@ public class OfferJdbcDao implements OfferDao {
     }
 
     @Override
+    public Optional<String> getOwner(int offerId) {
+        final String query = "SELECT uname FROM offer_complete WHERE offer_id = ?";
+
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(query, String.class, offerId));
+        } catch (EmptyResultDataAccessException erde) {
+            return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+
+    @Override
     public void modifyOffer(OfferDigest digest) {
         final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity, comments = :comments, crypto_code = :crypto_code WHERE id = :offer_id";
         final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";

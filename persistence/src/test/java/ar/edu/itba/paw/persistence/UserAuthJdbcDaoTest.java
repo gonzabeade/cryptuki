@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import jdk.nashorn.internal.runtime.options.Option;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +59,7 @@ public class UserAuthJdbcDaoTest {
 
 
     @Test
-    public void createUserTest(){
+    public void createUserAuthTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
 
@@ -83,7 +82,7 @@ public class UserAuthJdbcDaoTest {
     }
 
     @Test
-    public void getUserByEmailTest(){
+    public void getUserAuthByEmailTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, AUTH_TABLE);
         for(UserAuth.Builder auth: auths){

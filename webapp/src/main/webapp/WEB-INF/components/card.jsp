@@ -2,13 +2,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-
 <jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
+
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
-					<h1 class="fotn-sans"><messages:message code="seller"/>: </h1>
+					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
 					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/></h4>
+					<div class="flex flex-row">
+						<c:if test="${param.minutesSinceLastLogin <= 5}">
+							<div class="bg-ngreen rounded-full w-2 h-2 my-auto"></div>
+							<p class="ml-1"><messages:message code="online"/></p>
+						</c:if>
+						<c:if test="${param.minutesSinceLastLogin > 5}">
+							<p><messages:message code="lastLogin"/> ${param.lastLogin}
+							</p>
+						</c:if>
+					</div>
 				</div>
 
 				<div class="flex flex-col basis-1/4 font-sans">

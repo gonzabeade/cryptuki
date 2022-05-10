@@ -65,7 +65,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="${staticTitle}">¡Nueva Oferta!</span></h1>
+                                                                <h1><span th:text="#{newOfferTemplate.title}">¡Nueva Oferta!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -98,21 +98,22 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
-                                                                <p><b><span th:text="${staticHello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
-                                                                <p>Tu nueva oferta se cargo exitosamente!</p>
+                                                                <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
+                                                                <p><span th:text="#{offerLoadedSuccessfully}">¡Tu nueva oferta se cargo exitosamente!</span></p>
                                                                 <ul>
-                                                                    <li><b><span th:text="${staticCoin}">Moneda</span>:</b><span th:text="${coinCode}">Moneda</span></li>
-                                                                    <li><b><span th:text="${staticPrice}">Precio</span>:</b><span th:text="${price}">Precio</span></li>
-                                                                    <li><b><span th:text="${staticAmount}">Cantidad</span>:</b><span th:text="${amount}">Cantidad</span></li>
+                                                                    <li><b><span th:text="#{coin}">Moneda</span>:</b><span th:text="${coinCode}">Moneda</span></li>
+                                                                    <li><b><span th:text="#{askingPrice}">Precio pedido</span>:</b><span th:text="${askingPrice}">Precio</span></li>
+                                                                    <li><b><span th:text="#{minAmount}">Cantidad mínima</span>:</b><span th:text="${minQuantity}">Cantidad mínima</span></li>
+                                                                    <li><b><span th:text="#{maxAmount}">Cantidad máxima</span>:</b><span th:text="${maxQuantity}">Cantidad máxima</span></li>
                                                                 </ul>
-                                                                <p><span th:text="${staticSeeOfferBy}">Podrás ver tu nueva oferta entrando al siguiente link</span></p>
+                                                                <p><span th:text="#{seeOfferBy}">Podrás ver tu nueva oferta entrando al siguiente link</span></p>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="esd-block-button es-p35t es-p35b es-p10r es-p10l" style="text-align: center; padding-bottom: 20px;">
                                                                                         <span class="es-button-border" style="border-color: #8ed3d5; background: #8ed3d5;">
                                                                                             <a href="http://localhost:8080" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5;">
-                                                                                                <span th:text="${staticSeeOffer}">Ver Oferta</span>
+                                                                                                <span th:text="#{seeOffer}">Ver Oferta</span>
                                                                                             </a>
                                                                                         </span>
                                                             </td>
@@ -186,9 +187,15 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p30t es-p25b es-p30r es-p30l"  esd-links-color="#111111" style="padding-bottom: 15px;">
+<<<<<<< HEAD
+                                                                <a class="esd-anchor" name="http://locahost:8080/webapp/contact" style="color: #111111;"></a>
+                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
+                                                                <a href="http://locahost:8080/webapp/contact" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escríbenos</span></a>
+=======
                                                                 <a class="esd-anchor" name="http://locahost:8080" style="color: #111111;"></a>
-                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="${staticNeedMoreHelp}">¿Necesitas más ayuda?</span></h3>
-                                                                <a href="www.google.com" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="${staticWriteUs}">Escríbenos</span></a>
+                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
+                                                                <a href="www.google.com" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escríbenos</span></a>
+>>>>>>> bee769c51461f9d1194f4713bc18898c59a6e15d
                                                             </td>
                                                         </tr>
                                                         </tbody>

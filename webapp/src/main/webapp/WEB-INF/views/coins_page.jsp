@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,7 @@
 <jsp:include page="../components/header.jsp">
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
-<h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20">Conoce las principales criptomonedas del mercado.</h1>
+<h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20"><messages:message code="getToKnowMainCryptocurrencies"/></h1>
 <div class="mx-48">
     <ol class="min-w-50%">
         <div class="flex justify-center flex-wrap">

@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="claimSent"><messages:message code="claimSent"/></c:set>
 
 <html>
 <head>
@@ -22,7 +24,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:if test="${completed == true}">
         <jsp:include page="../components/confirmationToggle.jsp">
-            <jsp:param name="title" value="Cargaste tu reclamo con éxito."/>
+            <jsp:param name="title" value="${claimSent}."/>
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>

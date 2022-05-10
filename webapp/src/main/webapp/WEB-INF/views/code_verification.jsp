@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="username" scope="request" type="java.lang.String"/>
 <html>
 <head>
@@ -23,6 +23,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/verify_form.jsp">
         <jsp:param name="username" value="${username}"/>
+        <jsp:param name="error" value="${error}"/>
     </jsp:include>
 </div>
 <div class="shape-blob"></div>

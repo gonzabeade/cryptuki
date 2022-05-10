@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -22,9 +23,10 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex">
-    <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar">Subí tu anuncio</h1>
+    <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="uploadYourAdvertisement"/></h1>
 </div>
 <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
+<c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/upload_form.jsp"/>
 <div class="shape-blob"></div>

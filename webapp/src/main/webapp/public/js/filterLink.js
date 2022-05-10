@@ -1,10 +1,17 @@
 window.onload = function getFilters() {
     if(window.location.search.length > 0 ){
         var searchParams = new URLSearchParams(window.location.search);
+        let elementToSelect;
         for(const [key,value] of searchParams){
-            document.getElementById(key).value = value;
+            elementToSelect = document.getElementById(key);
+            if(elementToSelect != null){
+                elementToSelect.value = value;
+            }
         }
-        document.getElementById("reset").classList.remove("hidden");
+        let reset = document.getElementById("reset");
+        if(reset !== null){
+            reset.classList.remove("hidden");
+        }
     }
 
 }
@@ -12,7 +19,7 @@ function resetAllFilters(){
     document.getElementById("reset").classList.add("hidden")
     document.getElementById("coin").options[0].selected = true
     document.getElementById("pm").options[0].selected = true
-    document.getElementById("price").value = 0;
+    document.getElementById("price").value = null;
 
     deleteParams();
 }

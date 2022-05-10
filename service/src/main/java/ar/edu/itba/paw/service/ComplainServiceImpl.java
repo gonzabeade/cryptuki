@@ -9,7 +9,7 @@ import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafMailMessage;
+import ar.edu.itba.paw.service.mailing.ThymeleafMailHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,17 +25,20 @@ public class ComplainServiceImpl implements ComplainService{
     private final ComplainDao complainDao;
     private final ContactService<MailMessage> mailContactService;
 
+    private final ThymeleafMailHelper thymeleafMailHelper;
+
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService) {
+    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafMailHelper thymeleafMailHelper) {
         this.complainDao = complainDao;
         this.mailContactService = mailContactService;
+        this.thymeleafMailHelper = thymeleafMailHelper;
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserAuthorized(#filter.complainerUsername.orElse(null), authentication.principal)")
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -50,7 +53,6 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
     public Optional<Complain> getComplainById(int id) {
 
         if (id < 0)
@@ -62,7 +64,6 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("ROLE_ADMIN")
     public int countComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
@@ -78,7 +79,7 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    @PreAuthorize("#complain.complainer == authentication.principal.username")
+    @PreAuthorize("#complain.complainer == authentication.principal.username and @customPreAuthorizer.isUserPartOfTrade(#complain.tradeId, authentication.principal)")
     public void makeComplain(Complain.Builder complain) {
 
         if (complain == null)
@@ -151,7 +152,9 @@ public class ComplainServiceImpl implements ComplainService{
     public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
 
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage);
+        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafMailHelper);
+
+
         needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");
         mailContactService.sendMessage(needHelpThymeleafMailMessage);
     }

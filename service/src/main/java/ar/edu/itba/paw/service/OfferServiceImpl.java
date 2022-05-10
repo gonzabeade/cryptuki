@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.exception.ForbiddenServiceException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Offer;
@@ -10,8 +9,6 @@ import ar.edu.itba.paw.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +68,10 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username));
+            return offerDao.getOffersBy(new OfferFilter().byUsername(username)
+                    .byStatus("APR")
+                    .byStatus("PSE")
+                    .byStatus("PSU"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -113,7 +113,10 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOfferCount(new OfferFilter().byUsername(username));
+            return offerDao.getOfferCount(new OfferFilter().byUsername(username)
+                    .byStatus("APR")
+                    .byStatus("PSE")
+                    .byStatus("PSU"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -121,8 +124,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @Secured("ROLE_USER")
-    @PreAuthorize("@customPreAuthorizer.isUserAuthorized(#digest.sellerId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal)")
     public void modifyOffer(OfferDigest digest) {
 
         if (digest == null)
@@ -152,7 +154,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-//    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
     public void pauseOffer(int offerId) {
 
         if (offerId < 0)
@@ -194,6 +196,30 @@ public class OfferServiceImpl implements OfferService {
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public void decrementOfferMaxQuantity(Offer offer, float sold) {
+
+        float remaining = offer.getMaxQuantity() - (sold/offer.getAskingPrice());
+        try {
+            if (remaining <= offer.getMinQuantity())
+                offerDao.pauseOffer(offer.getId());
+            else
+                offerDao.setMaxQuantity(offer.getId(), remaining);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
+
+    }
+
+    @Override
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    public Optional<Offer> getOfferIfAuthorized(int offerId) {
+        return getOfferById(offerId);
     }
 
 

@@ -1,12 +1,16 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.TradeForm;
+import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.RatingService;
 import ar.edu.itba.paw.service.TradeService;
-import ar.edu.itba.paw.service.UserDao;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,127 +23,139 @@ import java.util.Optional;
 
 @Controller
 public class TradeFluxController {
+
     private final OfferService offerService;
     private final TradeService tradeService;
-
-    private final UserDao us;
+    private final RatingService ratingService;
+    private final UserService us;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserDao us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, RatingService ratingService, UserService us) {
         this.offerService = offerService;
         this.tradeService = tradeService;
+        this.ratingService = ratingService;
         this.us = us;
     }
 
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId,
-                                 @ModelAttribute("offerBuyForm") final OfferBuyForm form,
-                                 final Authentication authentication){
+    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
         ModelAndView mav = new ModelAndView("views/buy_offer");
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(RuntimeException::new);
+
+        Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
+        if (!offerOptional.isPresent())
+            throw new NoSuchOfferException(offerId);
+
+        Offer offer = offerOptional.get();
+
         mav.addObject("offer", offer);
-        if( authentication != null ){
-            mav.addObject("username", authentication.getName());
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        }
+        mav.addObject("username", authentication.getName());
+        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
         return mav;
     }
 
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
-        if(errors.hasErrors()){
-            return buyOffer(form.getOfferId(), form,authentication);
-        }
+    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final BindingResult errors, final Authentication authentication){
 
-//        TradeForm tradeForm =  new TradeForm();
-//        tradeForm.setAmount(form.getAmount());
-//        tradeForm.setOfferId(form.getOfferId());
+        if(errors.hasErrors())
+            return buyOffer(offerBuyForm.getOfferId(), offerBuyForm, authentication);
 
-        return new ModelAndView("redirect:/trade?offerId="+form.getOfferId()+"&amount="+form.getAmount());
-//        return executeTrade(tradeForm, authentication);
-
+        return executeTrade(offerBuyForm, authentication);
     }
+
+
     @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade(@RequestParam(value="offerId") Integer offerId,
-                                     @RequestParam (value="amount") float amount,
-                                     @ModelAttribute("tradeForm") final TradeForm form,
-                                     final Authentication authentication){
+    public ModelAndView executeTrade( @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final Authentication authentication){
+
+        int offerId = offerBuyForm.getOfferId();
+        Optional<Offer> offerOptional = offerService.getOfferById(offerId);
+        if (!offerOptional.isPresent())
+            throw new NoSuchOfferException(offerId);
+
+        Offer offer = offerOptional.get();
+
         ModelAndView mav = new ModelAndView("views/trade");
-//        mav.addObject("tradeForm", form);
-        Offer offer = offerService.getOfferById(offerId).get();
         mav.addObject("offer", offer);
-        mav.addObject("amount", amount);
-        mav.addObject("username", authentication == null ? null : authentication.getName());
+        mav.addObject("amount", offerBuyForm.getAmount());
+        mav.addObject("username", authentication.getName());
+        mav.addObject("offerBuyForm", offerBuyForm);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
     }
+
+
     @RequestMapping(value = "/trade", method = RequestMethod.POST)
-    public ModelAndView executeTradePost(@Valid @ModelAttribute("tradeForm")  final TradeForm form, final BindingResult errors, final Authentication authentication){
-        if(errors.hasErrors()){
-            return executeTrade(form.getOfferId(), form.getAmount(), form,authentication);
+    public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final BindingResult errors, final Authentication authentication){
+
+        if(errors.hasErrors()) {
+            return executeTrade(offerBuyForm, authentication);
         }
 
-        Integer tradeId = tradeService.makeTrade(new Trade.Builder(form.getOfferId(),authentication.getName())
-                .withQuantity(form.getAmount()));
-
-        return receipt(tradeId,authentication);
+        int tradeId = tradeService.makeTrade(offerBuyForm.toTradeBuilder(authentication.getName()));
+        return new ModelAndView("redirect:/receipt/"+tradeId);
     }
+
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/receipt");
-        Optional<Trade> trade = tradeService.getTradeById(tradeId);
-
-        if(!trade.isPresent()){
-            return null;
-        }
-
-        mav.addObject("trade" , trade.get());
-        Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
-        mav.addObject("offer", offer);
-        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
-
-
-        if(authentication != null){
-            mav.addObject("username", authentication.getName());
-            User user = us.getUserInformation(authentication.getName()).get();
-            mav.addObject("user", user);
-            mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
-        }
-        return mav;
+    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication) {
+        return receiptView("views/receipt", tradeId, authentication);
     }
-
-
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/receiptDescription");
-        Optional<Trade> trade = tradeService.getTradeById(tradeId);
-
-
-        if(!trade.isPresent()){
-            return null;
-        }
-
-        mav.addObject("trade" , trade.get());
-        Offer offer = offerService.getOfferById(trade.get().getOfferId()).get();
-        mav.addObject("offer", offer);
-        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
-
-        if(authentication != null){
-            mav.addObject("username", authentication.getName());
-            User user = us.getUserInformation(authentication.getName()).get();
-            mav.addObject("user", user);
-            mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
-        }
+    public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        mav.addObject("rated", false);
         return mav;
+    }
 
+    @RequestMapping(value = "/receiptDescription/{tradeId}/success", method = RequestMethod.GET)
+    public ModelAndView receiptDescriptionSuccess(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        mav.addObject("rated", true);
+        return mav;
     }
 
 
+    private ModelAndView receiptView(String viewName, int tradeId, Authentication authentication) {
+        ModelAndView mav = new ModelAndView(viewName);
+
+        Optional<Trade> tradeOptional = tradeService.getTradeById(tradeId);
+
+        if (!tradeOptional.isPresent())
+            throw new NoSuchTradeException(tradeId);
+
+        Trade trade = tradeOptional.get();
 
 
+        Optional<Offer> offerOptional = offerService.getOfferById(trade.getOfferId());
+        if (!offerOptional.isPresent())
+            throw new NoSuchOfferException(trade.getOfferId());
 
+
+        User user = us.getUserInformation(authentication.getName()).get();
+        Offer offer = offerOptional.get();
+
+        mav.addObject("username", authentication.getName());
+        mav.addObject("user", user);
+
+        mav.addObject("trade", trade);
+        mav.addObject("offer", offer);
+        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
+        mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
+        mav.addObject("ratedBySeller", trade.getRatedSeller());
+        mav.addObject("ratedByBuyer", trade.getRatedBuyer());
+        return mav;
+    }
+
+
+    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+    public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
+        }
+
+        ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
+        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getRating()+"/success");
+    }
 }

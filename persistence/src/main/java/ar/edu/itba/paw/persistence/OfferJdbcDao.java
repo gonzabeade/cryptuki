@@ -67,7 +67,7 @@ public class OfferJdbcDao implements OfferDao {
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
-        Map<Integer, Offer.Builder> map = new HashMap<>();
+        Map<Integer, Offer.Builder> map = new LinkedHashMap<>();
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
             String paymentCode = resultSet.getString("payment_code");
@@ -97,9 +97,9 @@ public class OfferJdbcDao implements OfferDao {
                 .addValue("payment_codes", filter.getPaymentMethods().isEmpty() ? null : filter.getPaymentMethods())
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize())
-                .addValue("min", filter.getMinPrice())
-                .addValue("max", filter.getMaxPrice())
-                .addValue("uname", filter.getUsername())
+                .addValue("min", filter.getMinPrice().isPresent() ? filter.getMinPrice().getAsDouble() : null)
+                .addValue("max", filter.getMaxPrice().isPresent() ? filter.getMaxPrice().getAsDouble() : null)
+                .addValue("uname", filter.getUsername().orElse(null))
                 .addValue("status", filter.getStatus().isEmpty() ? null: filter.getStatus());
     }
 
@@ -124,8 +124,8 @@ public class OfferJdbcDao implements OfferDao {
                 "\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min >= asking_price*min_quantity AND\n" +
-                "          :max <= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:min) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
@@ -148,11 +148,12 @@ public class OfferJdbcDao implements OfferDao {
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min >= asking_price*min_quantity AND\n" +
-                "          :max <= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:min) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
-                ")";
+                "   LIMIT :limit OFFSET :offset" +
+                ") ORDER BY last_login DESC";
 
         try {
             return namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
@@ -233,12 +234,23 @@ public class OfferJdbcDao implements OfferDao {
 
     @Override
     public Optional<String> getOwner(int offerId) {
-        final String query = "SELECT uname FROM offer_complete WHERE offer_id = ?";
+        final String query = "SELECT DISTINCT uname FROM offer_complete WHERE offer_id = ?";
 
         try {
             return Optional.of(jdbcTemplate.queryForObject(query, String.class, offerId));
         } catch (EmptyResultDataAccessException erde) {
             return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+
+    @Override
+    public void setMaxQuantity(int offerId, float newQuantity) {
+        final String query = "UPDATE offer SET max_quantity = ? WHERE id = ?";
+
+        try {
+            jdbcTemplate.update(query, newQuantity, offerId);
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

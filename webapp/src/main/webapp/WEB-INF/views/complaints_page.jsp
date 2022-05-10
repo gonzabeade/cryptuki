@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -22,11 +23,9 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex flex-col">
-    <div class="flex justify-between mt-10 mb-5">
-        <h2 class="text-center text-3xl  ml-32 font-semibold font-sans text-polar mt-10">Tus reclamos: </h2>
-        <div class="flex justify-center items-center">
-            <a href="<c:url value="/user"/>" class="h-12 mr-32 bg-frost text-white p-3 font-sans rounded-lg mx-auto">Volver</a>
-        </div>
+    <div class="flex mt-10 mb-5 ml-20">
+        <a href="<c:url value="/user"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg"><messages:message code="goBack"/></a>
+        <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto ml-10"><messages:message code="yourComplaints"/></h2>
     </div>
     <div  class="flex flex-col justify-center">
                 <c:forEach var="complaint" items="${complaintsList}">
@@ -48,7 +47,7 @@
                 <jsp:param name="pages" value="${pages}"/>
                 <jsp:param name="baseUrl" value="/complaints"/>
             </jsp:include>
-            <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+            <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 </div>
 </body>

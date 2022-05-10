@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserDao {
+public class UserServiceImpl implements UserService {
 
     private final ar.edu.itba.paw.persistence.UserDao userDao;
     private final UserAuthDao userAuthDao;
@@ -98,21 +98,9 @@ public class UserServiceImpl implements UserDao {
         return verified;
     }
 
-    private void sendChangePasswordMail(String email){
-        Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
-        if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
-            throw new RuntimeException("Invalid email");
-
-        UserAuth user = maybeUser.get();
-        MailMessage message = contactService.createMessage(email);
-        message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/webapp/recoverPassword?user="+user.getUsername()+"&code="+user.getCode());
-        contactService.sendMessage(message);
-    }
-
     @Override
     @Transactional
-    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("@customPreAuthorizer.doesUserHaveCode(#username, #code)")
     public boolean changePassword(String username, int code, String newPassword) {
 
         if (newPassword == null)
@@ -135,7 +123,7 @@ public class UserServiceImpl implements UserDao {
 
     @Override
     @Transactional
-    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    @PreAuthorize("#username == authentication.principal.username")
     public boolean changePassword(String username, String newPassword) {
 
         if (newPassword == null)
@@ -179,7 +167,6 @@ public class UserServiceImpl implements UserDao {
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal.username")
     public void incrementUserRating(String username, int rating) {
 
         if (rating < 0)
@@ -194,5 +181,24 @@ public class UserServiceImpl implements UserDao {
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+    }
+
+    @Override
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    public void changePasswordAnonymously(String email) {
+        Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
+        if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
+            throw new RuntimeException("Invalid email");
+
+        UserAuth user = maybeUser.get();
+        MailMessage message = contactService.createMessage(email);
+        message.setSubject("Change your password");
+        message.setBody("http://localhost:8080/webapp/recoverPassword?user=" + user.getUsername() + "&code=" + user.getCode());
+        contactService.sendMessage(message);
+    }
+
+    @Override
+    public boolean userExists(String username, String email) {
+         return userDao.getUserByEmail(email).isPresent() || userDao.getUserByUsername(username).isPresent();
     }
 }

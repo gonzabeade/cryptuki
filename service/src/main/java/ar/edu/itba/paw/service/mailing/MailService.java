@@ -4,17 +4,19 @@ import ar.edu.itba.paw.service.ContactService;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public final class MailService implements ContactService<MailMessage> {
+public class MailService implements ContactService<MailMessage> {
 
     private JavaMailSender mailSender;
     private String mainSender;
 
     @Override
+    @Async
     public void sendMessage(MailMessage message) {
 
         if (!message.getFrom().equals(mainSender))

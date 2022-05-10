@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -25,29 +26,29 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-60 w-60 ml-14" fill="none" viewBox="0 0 24 24" stroke="#A3BE8C" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <h1 class="text-ngreen text-4xl text-center">Listo!</h1>
+            <h1 class="text-ngreen text-4xl text-center"><messages:message code="done"/>!</h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
-            El vendedor te va a transferir <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/> <c:out value="${offer.crypto.code}"/></b> a tu wallet.
+            <messages:message code="sellerWillTransfer"/> <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/> <c:out value="${offer.crypto.code}"/></b> <messages:message code="toYourWallet"/>.
         </div>
         <div class="mt-10 mx-auto flex flex-col">
-            <h1 class="text-polard font-extrabold text-2xl font-sans">Datos de la oferta:</h1>
+            <h1 class="text-polard font-extrabold text-2xl font-sans"><messages:message code="offerInformation"/>:</h1>
             <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Criptomoneda</h1>
+                <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="cryptocurrency"/></h1>
                 <p class="text-polard font-sans text-center">${offer.crypto.commercialName}</p>
             </div>
             <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Precio por Moneda</h1>
+                <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="absolutePriceByCurrency"/></h1>
                 <p class="text-polard font-sans text-center">${offer.askingPrice} ARS</p>
             </div>
             <div class="mx-auto">
-                <h1 class="text-polard font-bold font-sans text-center text-lg">Fecha de la transacción</h1>
+                <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="trasactionDate"/></h1>
                 <p class="text-polard font-sans text-center">${trade.startDate.get()}</p>
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> ">Tuve un problema</a>
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>">Volver al Home</a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>"><messages:message code="returnHome"/></a>
         </div>
 
 
@@ -61,6 +62,7 @@
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                 <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
                 <jsp:param name="message" value="${offer.comments}"/>
+                <jsp:param name="rating" value="${offer.seller.rating}"/>
             </jsp:include>
             <% request.setCharacterEncoding("UTF-8"); %>
             <jsp:include page="../components/buyer_info.jsp">
@@ -68,6 +70,7 @@
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
                 <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
+                <jsp:param name="rating" value="${user.rating}"/>
             </jsp:include>
         </div>
 

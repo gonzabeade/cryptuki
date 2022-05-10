@@ -5,7 +5,7 @@ import ar.edu.itba.paw.persistence.UserAuth;
 
 import java.util.Optional;
 
-public interface UserDao {
+public interface UserService {
 
     void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
     Optional<UserAuth> getUserByUsername(String username);
@@ -18,5 +18,7 @@ public interface UserDao {
     Optional<UserAuth> getUserAuthByEmail(String email);
 
     void incrementUserRating(String username, int rating);
+    boolean userExists(String username, String email);
+    void changePasswordAnonymously(String email);
 
 }

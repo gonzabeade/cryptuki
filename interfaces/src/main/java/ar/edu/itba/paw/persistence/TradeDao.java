@@ -22,6 +22,8 @@ public interface TradeDao {
 
     Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
     int getTradesByUsernameCount(String username);
+    void rateSeller(int tradeId);
+    void rateBuyer(int tradeId);
 
 
 }

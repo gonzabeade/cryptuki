@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 @ContextConfiguration(classes = TestConfig.class)
 public class ComplainJdbcDaoTest {
     private static final String COMPLAIN_TABLE = "complain";
+    private static final String COMPLAIN_VIEW="complain_complete";
     private static final int TEST_INDEX = 0;
 
     private ArrayList<Complain.Builder> complains;
@@ -32,6 +34,7 @@ public class ComplainJdbcDaoTest {
     @Autowired
     private DataSource ds;
 
+    @Autowired
     private ComplainJdbcDao complainJdbcDao;
     private SimpleJdbcInsert jdbcInsert;
     private JdbcTemplate jdbcTemplate;
@@ -41,8 +44,7 @@ public class ComplainJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(COMPLAIN_TABLE)
-                .usingGeneratedKeyColumns("trade_id");
-        complainJdbcDao = new ComplainJdbcDao(ds);
+                .usingGeneratedKeyColumns("complain_id");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
 
         complains = new ArrayList<>();
@@ -52,21 +54,27 @@ public class ComplainJdbcDaoTest {
                 .withModeratorComments("The complaint will be answered soon")
                 .withComplainerComments("There was a problem with the offer")
                 .withTradeId(0)
-                .withComplainStatus(ComplainStatus.ASSIGNED));
+                .withComplainStatus(ComplainStatus.ASSIGNED)
+                .withDate(LocalDateTime.now())
+        );
         complains.add(new Complain
                 .Builder("scastagnino")
                 .withModerator("mdedeu")
                 .withModeratorComments("The complaint will be answered soon")
                 .withComplainerComments("There was a problem with the offer")
                 .withTradeId(0)
-                .withComplainStatus(ComplainStatus.ASSIGNED));
+                .withComplainStatus(ComplainStatus.ASSIGNED)
+                .withDate(LocalDateTime.now())
+        );
         complains.add(new Complain
                 .Builder("gbeade")
                 .withModerator("mdedeu")
                 .withModeratorComments("The complaint will be answered soon")
                 .withComplainerComments("There was a problem with the offer")
                 .withTradeId(1)
-                .withComplainStatus(ComplainStatus.ASSIGNED));
+                .withComplainStatus(ComplainStatus.ASSIGNED)
+                .withDate(LocalDateTime.now())
+        );
 
         filter = new ComplainFilter.Builder();
 
@@ -81,22 +89,25 @@ public class ComplainJdbcDaoTest {
     public void getComplainsByTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
+        filter = new ComplainFilter.Builder();
         for(Complain.Builder complain : complains){
             insertComplain(complain.build());
         }
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_VIEW);
 
         // Execute
-        Collection<Complain> testedComplains = complainJdbcDao.getComplainsBy(filter.build());
+        Collection<Complain> testedComplains = complainJdbcDao.getComplainsBy(filter.withPageSize(rows).build());
 
         // Validations
         Assert.assertNotNull(testedComplains);
-        Assert.assertEquals(complains.size(), testedComplains.size());
+        Assert.assertEquals(rows, testedComplains.size());
     }
 
     @Test
     public void countComplainByTest(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
+        filter = new ComplainFilter.Builder();
         for(Complain.Builder complain : complains){
             insertComplain(complain.build());
         }
@@ -105,7 +116,7 @@ public class ComplainJdbcDaoTest {
         int testedCount = complainJdbcDao.countComplainsBy(filter.build());
 
         // Validations
-        Assert.assertEquals(complains.size(), testedCount);
+        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_TABLE), testedCount);
     }
 
     @Test
@@ -123,12 +134,13 @@ public class ComplainJdbcDaoTest {
     private void insertComplain(Complain complain){
         HashMap<String, Object> complainMap = new HashMap<>();
 
-        complainMap.put("trade_id", complain.getTradeId());
+        complainMap.put("trade_id", complain.getTradeId().get());
         complainMap.put("complainer_id", users.get(complain.getComplainer()));
-        complainMap.put("complainer_comments", complain.getComplainerComments());
-        complainMap.put("moderator_comments", complain.getModeratorComments());
+        complainMap.put("complainer_comments", complain.getComplainerComments().get());
+        complainMap.put("moderator_comments", complain.getModeratorComments().get());
         complainMap.put("moderator_id", users.get(complain.getModerator().get()));
         complainMap.put("status", complain.getStatus().toString());
+        complainMap.put("complain_date",complain.getDate());
 
         jdbcInsert.execute(complainMap);
 

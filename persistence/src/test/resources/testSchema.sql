@@ -1,3 +1,6 @@
+SET DATABASE SQL SYNTAX PGS TRUE;
+
+
 CREATE TABLE IF NOT EXISTS users (
     id INT IDENTITY PRIMARY KEY,
     email VARCHAR(50) NOT NULL UNIQUE,
@@ -40,8 +43,8 @@ CREATE TABLE IF NOT EXISTS offer (
     offer_date varchar(100) NOT NULL,
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
-    asking_price DECIMAL NOT NULL,
-    max_quantity DECIMAL NOT NULL,
+    asking_price numeric NOT NULL,
+    max_quantity numeric NOT NULL,
     min_quantity numeric DEFAULT 0,
     comments varchar(280) DEFAULT 'No comments.',
     FOREIGN KEY (crypto_code) REFERENCES cryptocurrency(code) ON DELETE CASCADE,
@@ -106,68 +109,68 @@ CREATE TABLE complain (
                           FOREIGN KEY (moderator_id) REFERENCES users (id) ON DELETE NO ACTION
 );
 
-CREATE VIEW trade_complete AS
+CREATE view  trade_complete AS
 SELECT
-    trade_id,
-    offer_id,
-    buyer_auth.uname as buyer_uname,
-    seller_auth.uname as seller_uname,
-    start_date,
-    trade.status,
-    quantity,
-    asking_price,
-    crypto_code,
-    commercial_name,
-    rated_buyer,
-    rated_seller
-FROM trade
-         JOIN offer ON trade.offer_id = offer.id
-         JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id
-         JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
-         JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;
+     trade_id,
+     offer_id,
+     buyer_auth.uname as buyer_uname,
+     seller_auth.uname as seller_uname,
+     start_date,
+     trade.status,
+     quantity,
+     asking_price,
+     crypto_code,
+     commercial_name,
+     rated_buyer,
+     rated_seller
+ FROM trade
+          JOIN offer ON trade.offer_id = offer.id
+          JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id
+          JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
+          JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;
 
-CREATE VIEW offer_complete as
+CREATE view offer_complete as
 SELECT offer_id,
-       seller_id,
-       offer.comments as comments,
-       offer_date,
-       crypto_code,
-       status_code,
-       asking_price,
-       min_quantity,
-       max_quantity,
-       email,
-       rating_sum,
-       rating_count,
-       phone_number,
-       market_price,
-       commercial_name,
-       payment_code,
-       status_description,
-       payment_description,
-       last_login,
-       uname
-FROM offer
-         JOIN users ON offer.seller_id = users.id
-         JOIN auth ON users.id = auth.user_id
-         JOIN cryptocurrency c on offer.crypto_code = c.code
-         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
-         JOIN status s on s.code = offer.status_code
-         LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
+        seller_id,
+        offer.comments as comments,
+        offer_date,
+        crypto_code,
+        status_code,
+        asking_price,
+        min_quantity,
+        max_quantity,
+        email,
+        rating_sum,
+        rating_count,
+        phone_number,
+        market_price,
+        commercial_name,
+        payment_code,
+        status_description,
+        payment_description,
+        last_login,
+        uname
+ FROM offer
+          JOIN users ON offer.seller_id = users.id
+          JOIN auth ON users.id = auth.user_id
+          JOIN cryptocurrency c on offer.crypto_code = c.code
+          LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
+          JOIN status s on s.code = offer.status_code
+          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
 
-CREATE VIEW complain_complete AS
+CREATE view complain_complete AS
 SELECT
-    complain_id,
-    t.trade_id trade_id,
-    complainer_auth.uname complainer_uname,
-    moderator_auth.uname as moderator_uname,
-    complainer_comments,
-    complain.status status,
-    moderator_comments,
-    complain_date,
-    offer_id
-FROM complain
-         JOIN auth complainer_auth ON complainer_auth.user_id = complain.complainer_id
-         LEFT OUTER JOIN auth moderator_auth ON moderator_auth.user_id = complain.moderator_id
-         LEFT OUTER JOIN trade t on complain.trade_id = t.trade_id;
+     complain_id,
+     t.trade_id trade_id,
+     complainer_auth.uname complainer_uname,
+     moderator_auth.uname as moderator_uname,
+     complainer_comments,
+     complain.status status,
+     moderator_comments,
+     complain_date,
+     offer_id
+ FROM complain
+          JOIN auth complainer_auth ON complainer_auth.user_id = complain.complainer_id
+          LEFT OUTER JOIN auth moderator_auth ON moderator_auth.user_id = complain.moderator_id
+          LEFT OUTER JOIN trade t on complain.trade_id = t.trade_id;
 

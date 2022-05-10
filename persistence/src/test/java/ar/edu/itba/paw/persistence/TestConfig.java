@@ -25,7 +25,6 @@ public class TestConfig {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
         ds.setUrl("jdbc:hsqldb:mem:paw");
-        //TODO: mirar credenciales
         ds.setUsername("ha");
         ds.setPassword("");
         return ds;
@@ -36,14 +35,12 @@ public class TestConfig {
         DataSourceInitializer dsi = new DataSourceInitializer();
         dsi.setDataSource(dataSource());
         dsi.setDatabasePopulator(databasePopulator());
-
         return dsi;
     }
 
     private DatabasePopulator databasePopulator(){
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaSql);
-
         return populator;
     }
 }

@@ -35,6 +35,7 @@ public class OfferJdbcDaoTest {
     @Autowired
     private DataSource ds;
 
+    @Autowired
     private OfferJdbcDao offerJdbcDao;
     private SimpleJdbcInsert jdbcInsert;
     private JdbcTemplate jdbcTemplate;
@@ -45,19 +46,24 @@ public class OfferJdbcDaoTest {
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(OFFER_TABLE)
                 .usingGeneratedKeyColumns("id");
-        offerJdbcDao = new OfferJdbcDao(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,OFFER_TABLE);
-
         offers = new ArrayList<>(Arrays.asList(
+
                 new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),
                         Cryptocurrency.getInstance("ETH", "Ether"),
-                        54.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
+                        54.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC))
+                        .withPaymentMethod(PaymentMethod.getInstance("Cash","Paper Money"))
+                        .build(),
                 new Offer.Builder(1, new User.Builder("shadad@itba.edu.ar").withId(1).build(),
                         Cryptocurrency.getInstance("ADA", "Cardano"),
-                        9.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build(),
+                        9.0f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC))
+                        .withPaymentMethod(PaymentMethod.getInstance("Cash","Paper Money"))
+                        .build(),
                 new Offer.Builder(2, new User.Builder("mdedeu@itba.edu.ar").withId(2).build(),
                         Cryptocurrency.getInstance("DOT", "Polkadot"),
-                        2.65f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC)).build()
+                        2.65f).withDate(LocalDateTime.now()).withStatus(OfferStatus.getInstance(STATUS_CODE, STATUS_DESC))
+                        .withPaymentMethod(PaymentMethod.getInstance("Cash","Paper Money"))
+                        .build()
         ));
 
         testingFilter = new OfferFilter();
@@ -76,7 +82,7 @@ public class OfferJdbcDaoTest {
                 .build();
 
         // Exercise
-        int offerId = offerJdbcDao.makeOffer(offerDigest);
+        offerJdbcDao.makeOffer(offerDigest);
 
         // Validations
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
@@ -94,30 +100,29 @@ public class OfferJdbcDaoTest {
         int tested_count = offerJdbcDao.getOfferCount(testingFilter);
 
         // Validations
-        Assert.assertEquals(offers.size(), tested_count);
+        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
     }
 
     @Test
     public void TestGetOffersBy(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        int id ;
         for(Offer offer: offers){
-            insertOffer(offer);
+             insertOffer(offer);
         }
-
         // Exercise
         Collection<Offer> testedOffers = offerJdbcDao.getOffersBy(testingFilter);
 
         // Validations
         Assert.assertNotNull(testedOffers);
-        Assert.assertEquals(offers.size(), testedOffers.size());
-        Assert.assertTrue(testedOffers.containsAll(offers));
+        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW),testedOffers.size());
     }
 
     private void insertOffer(Offer offer){
         HashMap<String, Object> offerMap = new HashMap<>();
 
-        offerMap.put("offer_date", "2022-05-01 02:08:03.777554");
+        offerMap.put("offer_date", LocalDateTime.now());
         offerMap.put("crypto_code", offer.getCrypto().getCode());
         offerMap.put("status_code", offer.getStatus().getCode());
         offerMap.put("asking_price", offer.getAskingPrice());
@@ -125,9 +130,7 @@ public class OfferJdbcDaoTest {
         offerMap.put("max_quantity", offer.getMaxQuantity());
         offerMap.put("comments", offer.getComments());
         offerMap.put("seller_id", offer.getSeller().getId());
-
-        jdbcInsert.execute(offerMap);
-
+        jdbcInsert.executeAndReturnKey(offerMap).intValue();
     }
 
     private void assertOffer(Offer originalOffer, Offer testedOffer){

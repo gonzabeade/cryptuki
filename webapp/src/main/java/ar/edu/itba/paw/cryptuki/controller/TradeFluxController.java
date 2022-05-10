@@ -5,7 +5,6 @@ import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
-import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.RatingService;
@@ -50,7 +49,7 @@ public class TradeFluxController {
 
         mav.addObject("offer", offer);
         mav.addObject("username", authentication.getName());
-        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
         return mav;
@@ -126,8 +125,6 @@ public class TradeFluxController {
             throw new NoSuchTradeException(tradeId);
 
         Trade trade = tradeOptional.get();
-
-
         Optional<Offer> offerOptional = offerService.getOfferById(trade.getOfferId());
         if (!offerOptional.isPresent())
             throw new NoSuchOfferException(trade.getOfferId());

@@ -27,6 +27,6 @@ public class UserExistsValidator implements ConstraintValidator<UserExists,Objec
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
         RegisterForm form = (RegisterForm) o;
-        return !userService.userExists(form.getUsername(), form.getEmail());
+        return ! userService.userExists(form.getUsername(), form.getEmail());
    }
 }

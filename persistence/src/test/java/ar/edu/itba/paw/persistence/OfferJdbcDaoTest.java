@@ -71,7 +71,7 @@ public class OfferJdbcDaoTest {
     }
 
     @Test
-    public void TestMakeOffer(){
+    public void testMakeOffer(){
         // Setup
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         OfferDigest offerDigest = new OfferDigest.Builder( 0, "ETH", 54.0)
@@ -87,9 +87,52 @@ public class OfferJdbcDaoTest {
         // Validations
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
     }
+    @Test
+    public void testPauseOffer(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        int offerId= insertOffer(offers.get(0));
+
+        offerJdbcDao.pauseOffer(offerId);
+
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, OFFER_TABLE,"status_code = 'PSE'"));
+
+    }
+    @Test
+    public void testHardPauseOffer(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        int offerId= insertOffer(offers.get(0));
+
+        offerJdbcDao.hardPauseOffer(offerId);
+
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, OFFER_TABLE,"status_code = 'PSU'"));
+
+    }
+    @Test
+    public void testDeleteOffer(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        int offerId= insertOffer(offers.get(0));
+
+        offerJdbcDao.deleteOffer(offerId);
+
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, OFFER_TABLE,"status_code = 'DEL'"));
+
+    }
+    @Test
+    public void resumeOffer(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        int offerId= insertOffer(offers.get(0));
+
+        offerJdbcDao.resumeOffer(offerId);
+
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, OFFER_TABLE,"status_code = 'APR'"));
+
+    }
 
 
-    private void insertOffer(Offer offer){
+
+
+
+    private int insertOffer(Offer offer){
         HashMap<String, Object> offerMap = new HashMap<>();
 
         offerMap.put("offer_date", LocalDateTime.now());
@@ -100,7 +143,7 @@ public class OfferJdbcDaoTest {
         offerMap.put("max_quantity", offer.getMaxQuantity());
         offerMap.put("comments", offer.getComments());
         offerMap.put("seller_id", offer.getSeller().getId());
-        jdbcInsert.executeAndReturnKey(offerMap).intValue();
+        return jdbcInsert.executeAndReturnKey(offerMap).intValue();
     }
 
     private void assertOffer(Offer originalOffer, Offer testedOffer){

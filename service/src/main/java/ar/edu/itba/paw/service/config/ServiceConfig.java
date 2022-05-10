@@ -9,6 +9,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.FileCopyUtils;
@@ -41,20 +43,24 @@ public class ServiceConfig {
     }
 
     @Bean
-    public TemplateEngine templateEngine(MessageSource messageSource) {
+    public TemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-
         templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("XHTML");
         templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         templateResolver.setCacheable(false);
-        templateEngine.setTemplateEngineMessageSource(messageSource);
-
-
+        templateEngine.setTemplateEngineMessageSource(newMessageSource());
         templateEngine.addTemplateResolver(templateResolver);
         return templateEngine;
+    }
+
+    public MessageSource newMessageSource() {
+        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("/i18n/mailing/messages");
+        messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
+        return messageSource;
     }
 
 

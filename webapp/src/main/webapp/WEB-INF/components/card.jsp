@@ -49,12 +49,12 @@
 				<div class="flex basis-1/4 justify-center">
 					<c:choose>
 						<c:when test="${param.userEmail == param.owner || param.isAdmin}">
-							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-32 text-center" href="<c:url value="/offer/${param.offerId}"/>">
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>">
 								<messages:message code="seeOffer"/>
 							</a>
 						</c:when>
 						<c:otherwise>
-							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-32 text-center" href="<c:url value="/buy/${param.offerId}"/>">
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/buy/${param.offerId}"/>">
 								<messages:message code="buy"/>
 							</a>
 						</c:otherwise>

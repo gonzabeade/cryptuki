@@ -12,7 +12,7 @@ function resetAllFilters(){
     document.getElementById("reset").classList.add("hidden")
     document.getElementById("coin").options[0].selected = true
     document.getElementById("pm").options[0].selected = true
-    document.getElementById("price").value = 0;
+    document.getElementById("price").value = " ";
 
     deleteParams();
 }

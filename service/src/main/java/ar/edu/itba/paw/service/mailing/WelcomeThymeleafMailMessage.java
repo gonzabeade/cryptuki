@@ -6,6 +6,7 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "WelcomeTemplate";
 
     private String username;
+    private String verifyCode;
 
     public WelcomeThymeleafMailMessage(String from, String to) {
         super(from, to, template);
@@ -15,14 +16,15 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username) {
+    public void setParameters(String username, String verifyCode) {
         this.username = username;
+        this.verifyCode = verifyCode;
     }
 
     @Override
     protected Context getContext() {
 
-        if ( username == null)
+        if ( username == null || verifyCode == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
@@ -34,6 +36,7 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("staticVerifyAccount", "Verificar cuenta");
         context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
         context.setVariable("staticWriteUs", "Escríbenos");
+        context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);
 
 
         context.setVariable("username", username);

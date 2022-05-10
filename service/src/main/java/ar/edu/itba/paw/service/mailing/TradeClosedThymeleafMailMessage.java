@@ -49,6 +49,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("staticReceipt", "Recibo");
         context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
         context.setVariable("staticWriteUs", "Escríbenos");
+        context.setVariable("receiptLink", "http://locahost:8080/webapp/buy/" + tradeCode);
 
 
         context.setVariable("username", username);

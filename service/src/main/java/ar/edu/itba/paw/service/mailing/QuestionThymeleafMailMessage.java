@@ -2,24 +2,21 @@ package ar.edu.itba.paw.service.mailing;
 
 import org.thymeleaf.context.Context;
 
-public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
-
-    private final static String template = "NeedHelpTemplate";
+public class QuestionThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "QuestionTemplate";
 
     private String username;
     private String question;
-    private String answer;
 
-    public NeedHelpThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+    public QuestionThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
         super(from, to, template, helper);
     }
-    public NeedHelpThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+    public QuestionThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
         super(mailMessage, template, helper);
     }
 
 
-    public void setParameters(String username, String question, String answer) {
-        this.answer = answer;
+    public void setParameters(String username, String question) {
         this.question = question;
         this.username = username;
     }
@@ -27,14 +24,13 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
     @Override
     protected Context getContext() {
 
-        if ( username == null || question == null || answer == null )
+        if ( username == null || question == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
 
         context.setVariable("question", question);
         context.setVariable("username", username);
-        context.setVariable("answer", answer);
         return context;
     }
 }

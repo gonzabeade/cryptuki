@@ -8,16 +8,20 @@
 				<div class="flex-row basis-1/4 ">
 					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
-					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
+					<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
 					<div class="flex flex-row">
-						<c:if test="${param.minutesSinceLastLogin <= 5}">
-							<div class="bg-ngreen rounded-full w-2 h-2 my-auto"></div>
-							<p class="ml-1"><messages:message code="online"/></p>
-						</c:if>
-						<c:if test="${param.minutesSinceLastLogin > 5}">
-							<p><messages:message code="lastLogin"/> ${param.lastLogin}
-							</p>
-						</c:if>
+						<c:choose>
+							<c:when test="${false}">
+								<div class="bg-ngreen rounded-full w-2 h-2 my-auto"></div>
+								<p class="ml-1"><messages:message code="online"/></p>
+							</c:when>
+							<c:when test="${param.minutesSinceLastLogin <= 60}">
+								<p class="ml-1"><messages:message code="lastLogin"/>: ${param.lastLoginTime}</p>
+							</c:when>
+							<c:otherwise>
+								<p><messages:message code="lastLogin"/>: ${param.lastLogin}</p>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 

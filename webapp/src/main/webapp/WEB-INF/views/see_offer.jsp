@@ -35,6 +35,7 @@
         <jsp:param name="title" value="${modifiedOffer}"/>
     </jsp:include>
 </c:if>
+
 <div class="flex flex-col mt-10">
     <div class="flex flex-col">
         <div class="flex">
@@ -89,10 +90,12 @@
     <div class="shape-blob one"></div>
     <div class="shape-blob two"></div>
     <div class="shape-blob" style="left: 50%"></div>
-
     <div class="shape-blob" style="left: 5%; top: 80%"></div>
+    <a href="<c:url value="/"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnHome"/></a>
 
 </div>
+
+
 
 
 </body>

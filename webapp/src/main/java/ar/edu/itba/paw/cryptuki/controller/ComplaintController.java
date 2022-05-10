@@ -34,8 +34,6 @@ public class ComplaintController {
         this.complainService = complainService;
     }
 
-
-
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
 
@@ -84,8 +82,7 @@ public class ComplaintController {
         if(errors.hasErrors())
             return complain(form, authentication, form.getTradeId());
 
-        complainService.makeComplain( form.toComplainBuilder() );
-
+        complainService.makeComplain(form.toComplainBuilder());
         return new ModelAndView("redirect:/complain/success");
     }
 

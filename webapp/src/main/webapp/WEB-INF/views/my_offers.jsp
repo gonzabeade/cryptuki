@@ -44,6 +44,7 @@
                     <jsp:param name="userEmail" value="${userEmail}"/>
                     <jsp:param name="isAdmin" value="${isAdmin}"/>
                     <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
+                    <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
                     <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                     <jsp:param name="rating" value="${offer.seller.rating}"/>
 
@@ -60,6 +61,12 @@
         </jsp:include>
         <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
+
+    <div class="shape-blob"></div>
+    <div class="shape-blob one"></div>
+    <div class="shape-blob two"></div>
+    <div class="shape-blob" style="left: 50%"></div>
+    <div class="shape-blob" style="left: 5%; top: 80%"></div>
 </div>
 </body>
 </html>

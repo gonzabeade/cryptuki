@@ -22,6 +22,8 @@ public class RatingServiceimpl implements RatingService{
     @Override
     @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public void rate(int tradeId, String username, int rating) {
+        if(rating < 1 || rating > 10)
+            throw new IllegalArgumentException("Rating Invalid");
 
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
         if (!trade.isPresent())

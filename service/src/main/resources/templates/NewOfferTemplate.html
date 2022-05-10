@@ -7,7 +7,6 @@
             font-family: sans-serif;
         }
     </style>
-
     <meta charset="UTF-8">
 </head>
 
@@ -66,7 +65,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="${staticTitle}">¡Bienvenido!</span></h1>
+                                                                <h1><span th:text="${staticTitle}">¡Nueva Oferta!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -99,16 +98,22 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
-                                                                <p><b><span th:text="${staticHello}">Hola</span> <span th:text="${username}">usuario</span>, <span th:text="${staticGreeting}">¡bienvenido a Cryptuki!</span></b></p>
-                                                                <p><span th:text="${staticVerifyBeforeStarting}">Antes de empezar a comprar o vender crypto deberás verificar tu cuenta de email.</span></p>
-                                                                <p><span th:text="${staticVerifyWithLink}">Verifica tu cuenta de mail entrando al siguiente link</span>:</p>
+                                                                <p><b><span th:text="${staticHello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
+                                                                <p><span th:text="${staticNewOfferLoaded}">¡Tu nueva oferta se cargo exitosamente!</span></p>
+                                                                <ul>
+                                                                    <li><b><span th:text="${staticCoin}">Moneda</span>:</b><span th:text="${coinCode}">Moneda</span></li>
+                                                                    <li><b><span th:text="${staticAskingPrice}">Precio pedido</span>:</b><span th:text="${askingPrice}">Precio</span></li>
+                                                                    <li><b><span th:text="${staticMinAmount}">Cantidad mínima</span>:</b><span th:text="${minQuantity}">Cantidad mínima</span></li>
+                                                                    <li><b><span th:text="${staticMaxAmount}">Cantidad máxima</span>:</b><span th:text="${maxQuantity}">Cantidad máxima</span></li>
+                                                                </ul>
+                                                                <p><span th:text="${staticSeeOfferBy}">Podrás ver tu nueva oferta entrando al siguiente link</span></p>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="esd-block-button es-p35t es-p35b es-p10r es-p10l" style="text-align: center; padding-bottom: 20px;">
                                                                                         <span class="es-button-border" style="border-color: #8ed3d5; background: #8ed3d5;">
                                                                                             <a href="http://localhost:8080" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5;">
-                                                                                                <span th:text="${staticVerifyAccount}">Verificar cuenta</span>
+                                                                                                <span th:text="${staticSeeOffer}">Ver Oferta</span>
                                                                                             </a>
                                                                                         </span>
                                                             </td>

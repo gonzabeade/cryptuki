@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.*;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
@@ -11,7 +12,6 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,7 +39,7 @@ public class UserController {
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
-    private static int PAGE_SIZE = 3 ;
+    private static final int PAGE_SIZE = 3 ;
 
     @Autowired
     public UserController(UserService userService, ProfilePicService profilePicService, TradeService tradeService) {
@@ -105,7 +105,7 @@ public class UserController {
 
     @RequestMapping(value="/passwordRecovery")
     public ModelAndView passwordSendMailGet(@ModelAttribute("EmailForm") EmailForm form){
-        return new ModelAndView("/views/passwordRecovery");
+        return new ModelAndView("views/password_recovery");
     }
 
     @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
@@ -115,9 +115,9 @@ public class UserController {
         try{
             userService.changePasswordAnonymously(form.getEmail());
         }catch (Exception e ){
-            return new ModelAndView("redirect:/errors");
+            throw new NoSuchUserException(form.getEmail());
         }
-        return new ModelAndView("views/ChangePasswordMailSent");
+        return new ModelAndView("views/change_password_mail_sent");
 
     }
 
@@ -162,6 +162,9 @@ public class UserController {
 
     @RequestMapping(value="/user")
     public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "updatedPass",required = false) final boolean updatedPass){
+        if(bindingResult.hasErrors()){
+            throw new IllegalArgumentException();
+        }
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
         ModelAndView mav = new ModelAndView("views/user_profile");
@@ -201,7 +204,7 @@ public class UserController {
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
     public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
-        ModelAndView mav = new ModelAndView("views/recoverPassword");
+        ModelAndView mav = new ModelAndView("views/recover_password");
         mav.addObject("username",username);
         mav.addObject("code",code);
         return mav;

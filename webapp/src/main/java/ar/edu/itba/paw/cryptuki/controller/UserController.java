@@ -59,13 +59,7 @@ public class UserController {
         if(errors.hasErrors()){
             return registerGet(form);
         }
-        try{
-            userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
-        }
-        catch(Exception e ){
-            return registerGet(form);
-        }
-
+        userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
         return new ModelAndView("redirect:/verify?user="+form.getUsername());
     }
 
@@ -82,7 +76,7 @@ public class UserController {
 
 
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
-    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username,@RequestParam(value = "error", required = false) boolean error){
+    public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) boolean error){
         ModelAndView mav = new ModelAndView("views/code_verification");
         mav.addObject("username", username);
         mav.addObject("error", error);
@@ -91,13 +85,12 @@ public class UserController {
 
     @RequestMapping(value = "/verify",method = RequestMethod.POST)
     public ModelAndView verify( @Valid @ModelAttribute("CodeForm") CodeForm form, BindingResult errors){
-        if(errors.hasErrors()){
-            return verify(form, form.getUsername(), false);
-        }
-           if ( ! userService.verifyUser(form.getUsername(), form.getCode()) ) {
-              return verify(form, form.getUsername(), true);
 
-           }
+        if(errors.hasErrors())
+            return verify(form, form.getUsername(), false);
+
+        if ( ! userService.verifyUser(form.getUsername(), form.getCode()) )
+              return verify(form, form.getUsername(), true);
 
         return logInProgrammatically(form.getUsername());
     }

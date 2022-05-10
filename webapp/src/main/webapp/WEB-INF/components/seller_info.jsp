@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <div class="flex flex-col mx-auto">
     <div class="flex  flex-col mx-auto text-center mb-10 w-full">
         <h1 class="font-sans font-bold text-3xl mt-3"><messages:message code="sellersInfo"/></h1>
@@ -8,7 +10,8 @@
             <h3 class="font-sans text-2xl my-3 text-polard font-semibold"><c:out value="${param.email}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="phoneNumber"/>: </b><c:out value="${param.phone}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="tradeQuantity"/>: </b><c:out value="${param.trades}"/></h3>
-            <h3 class="font-sans my-3"><b><messages:message code="lastLogin"/>: </b><c:out value="${param.lastLogin}"/></h3>
+            <h3 class="font-sans my-3"><b><messages:message code="lastLogin"/>: </b><messages:message code="${param.lastLogin}"/></h3>
+            <h3 class="font-sans my-3"><b><messages:message code="rating"/>: </b><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h3>
         </div>
     </div>
     <div class="flex  flex-col mx-auto text-center mb-10 w-full">

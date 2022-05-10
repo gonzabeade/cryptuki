@@ -1,13 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html;charset=ISO-8859-1"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
   <script src="<c:url value="/public/js/feedback.js"/>"></script>
+  <script src="<c:url value="/public/js/filterLink.js"/>"></script>
   <script src="<c:url value="/public/js/profilePic.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,6 +71,14 @@
       </div>
       <div class="flex">
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.phoneNumber}"/></h2>
+      </div>
+    </div>
+    <div class="flex  rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
+      <div class="flex">
+        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto" ><messages:message code="rating"/>: </h2>
+      </div>
+      <div class="flex">
+        <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.rating}"/></h2>
       </div>
     </div>
     <div class="flex  rounded-lg h-12 mb-5  mt-5 mr-5 mx-10">

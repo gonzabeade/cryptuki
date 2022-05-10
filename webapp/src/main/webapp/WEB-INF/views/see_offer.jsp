@@ -81,6 +81,7 @@
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
             <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
             <jsp:param name="message" value="${offer.comments}"/>
+            <jsp:param name="rating" value="${offer.seller.rating}"/>
         </jsp:include>
     </div>
 

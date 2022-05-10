@@ -14,11 +14,11 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyerEmail;
     private String tradeCode;
 
-    public TradeClosedThymeleafMailMessage(String from, String to) {
-        super(from, to, template);
+    public TradeClosedThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+        super(from, to, template, helper);
     }
-    public TradeClosedThymeleafMailMessage(MailMessage mailMessage) {
-        super(mailMessage, template);
+    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+        super(mailMessage, template, helper);
     }
 
 

@@ -11,11 +11,11 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
     private String minQuantity;
     private String maxQuantity;
 
-    public NewOfferThymeleafMailMessage(String from, String to) {
-        super(from, to, template);
+    public NewOfferThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+        super(from, to, template, helper);
     }
-    public NewOfferThymeleafMailMessage(MailMessage mailMessage) {
-        super(mailMessage, template);
+    public NewOfferThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+        super(mailMessage, template, helper);
     }
 
 

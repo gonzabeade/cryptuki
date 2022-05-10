@@ -8,11 +8,11 @@ public class QuestionThymeleafMailMessage extends ThymeleafMailMessage{
     private String username;
     private String question;
 
-    public QuestionThymeleafMailMessage(String from, String to) {
-        super(from, to, template);
+    public QuestionThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+        super(from, to, template, helper);
     }
-    public QuestionThymeleafMailMessage(MailMessage mailMessage) {
-        super(mailMessage, template);
+    public QuestionThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+        super(mailMessage, template, helper);
     }
 
 

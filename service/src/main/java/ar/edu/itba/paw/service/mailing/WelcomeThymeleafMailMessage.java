@@ -8,11 +8,11 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
     private String username;
     private String verifyCode;
 
-    public WelcomeThymeleafMailMessage(String from, String to) {
-        super(from, to, template);
+    public WelcomeThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+        super(from, to, template, helper);
     }
-    public WelcomeThymeleafMailMessage(MailMessage mailMessage) {
-        super(mailMessage, template);
+    public WelcomeThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+        super(mailMessage, template, helper);
     }
 
 

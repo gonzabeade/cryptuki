@@ -1,7 +1,5 @@
 package ar.edu.itba.paw;
 
-import ar.edu.itba.paw.persistence.Offer;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;

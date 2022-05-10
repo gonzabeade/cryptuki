@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
+
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.PaymentMethod;
 import ar.edu.itba.paw.persistence.PaymentMethodDao;
 import org.springframework.beans.factory.annotation.Autowired;

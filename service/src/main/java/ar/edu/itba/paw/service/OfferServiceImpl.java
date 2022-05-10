@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
-import ar.edu.itba.paw.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -40,12 +40,13 @@
                     <div class="mr-3">
                         <h1 class="text-3xl text-polard font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h1>
                     </div>
+                    <div>
+                        <h1 class="ml-2 text-3xl text-polard font-sans font-semibold"><c:out value="${offer.crypto.code}"/>&nbsp;</h1>
+                    </div>
                     <div class="mr-3">
                         <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.code}"/>" class="w-8 h-8"/>
                     </div>
-                    <div>
-                        <h1 class="ml-2 text-3xl text-polard font-sans font-semibold"><c:out value="${offer.crypto.code}"/></h1>
-                    </div>
+
                 </div>
             </div>
             <div class="flex flex-col mt-5">

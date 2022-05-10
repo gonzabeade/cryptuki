@@ -8,7 +8,7 @@
 				<div class="flex-row basis-1/4 ">
 					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
-					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/></h4>
+					<h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
 					<div class="flex flex-row">
 						<c:if test="${param.minutesSinceLastLogin <= 5}">
 							<div class="bg-ngreen rounded-full w-2 h-2 my-auto"></div>

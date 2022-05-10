@@ -72,6 +72,14 @@
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.phoneNumber}"/></h2>
       </div>
     </div>
+    <div class="flex  rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
+      <div class="flex">
+        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto" ><messages:message code="rating"/>: </h2>
+      </div>
+      <div class="flex">
+        <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.rating}"/></h2>
+      </div>
+    </div>
     <div class="flex  rounded-lg h-12 mb-5  mt-5 mr-5 mx-10">
       <div class="flex">
         <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto"><messages:message code="tradeQuantity"/>:</h2>

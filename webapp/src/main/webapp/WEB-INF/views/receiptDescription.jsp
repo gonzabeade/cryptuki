@@ -99,6 +99,7 @@
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                 <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
+                <jsp:param name="rating" value="${offer.seller.rating}"/>
             </jsp:include>
             <% request.setCharacterEncoding("utf-8"); %>
             <jsp:include page="../components/buyer_info.jsp">
@@ -106,6 +107,7 @@
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
                 <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
+                <jsp:param name="rating" value="${user.rating}"/>
             </jsp:include>
         </div>
 

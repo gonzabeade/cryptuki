@@ -81,7 +81,7 @@ public final class User {
         return ratingCount;
     }
 
-    public float getRating() { return getRatingCount() == 0 ? 0 : getRatingSum() / getRatingCount(); }
+    public float getRating() { return getRatingCount() == 0 ? 0 : (float)getRatingSum() / getRatingCount(); }
 
     public String getPhoneNumber(){return phoneNumber;}
 

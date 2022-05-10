@@ -100,6 +100,20 @@ public class OfferCompleteTest {
         for(Offer offer : testedOffers)
             Assert.assertTrue(offer.getPaymentMethods().contains(paymentMethod));
     }
+    @Test
+    public void testGetOffersByPageAndPageSize(){
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
+        testingFilter=new OfferFilter().withPageSize(rows-1).fromPage(0);
+
+        // Exercise
+        Collection<Offer> testedOffers = offerJdbcDao.getOffersBy(testingFilter);
+
+        // Validations
+        Assert.assertNotNull(testedOffers);
+        Assert.assertEquals(rows-1,testedOffers.size());
+    }
+
+
 
 
 }

@@ -28,18 +28,9 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Bienvenido!");
-        context.setVariable("staticHello", "Hola");
-        context.setVariable("staticGreeting", "¡bienvenido a Cryptuki!");
-        context.setVariable("staticVerifyBeforeStarting", "Antes de empezar a comprar o vender crypto deberás verificar tu cuenta de email.");
-        context.setVariable("staticVerifyWithLink", "Verifica tu cuenta de mail entrando al siguiente link");
-        context.setVariable("staticVerifyAccount", "Verificar cuenta");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-        context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);
-
 
         context.setVariable("username", username);
+        context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);
         return context;
     }
 }

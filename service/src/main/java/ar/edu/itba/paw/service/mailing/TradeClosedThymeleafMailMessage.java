@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.thymeleaf.context.Context;
 
 public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
@@ -38,18 +39,6 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Trade Finalizada!");
-        context.setVariable("staticHello", "Hola");
-        context.setVariable("staticTradeWith", "La trade con");
-        context.setVariable("staticFor", "por");
-        context.setVariable("staticHasFinished", "ha finalizado.");
-        context.setVariable("staticTransferToWallet", "Deberás transferir el monto acordado a la wallet");
-        context.setVariable("staticWriteToEmail", "o escribirle a su mail");
-        context.setVariable("staticDetailsWithLink", "Puedes ver los detalles del recibo a través de tu cuenta o entrando al siguiente link");
-        context.setVariable("staticReceipt", "Recibo");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-        context.setVariable("receiptLink", "http://locahost:8080/webapp/buy/" + tradeCode);
 
 
         context.setVariable("username", username);
@@ -59,6 +48,8 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("wallet", wallet);
         context.setVariable("buyerEmail", buyerEmail);
         context.setVariable("tradeCode", tradeCode);
+        context.setVariable("receiptLink", "http://locahost:8080/webapp/buy/" + tradeCode);
+
         return context;
     }
 }

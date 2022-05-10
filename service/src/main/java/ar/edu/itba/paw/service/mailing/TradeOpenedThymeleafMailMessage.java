@@ -36,15 +36,6 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Trade Abierta!");
-        context.setVariable("staticHello", "Hola");
-        context.setVariable("staticCongratulations", "Felicitaciones, el usuario");
-        context.setVariable("staticHasOpenedTrade", "ha abierto un trade por");
-        context.setVariable("staticBuyerMessage", "te ha dejado el siguiente mensaje");
-        context.setVariable("staticContact", "Te podrás contactar con este a través de su mail");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);

@@ -26,14 +26,6 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Nueva Contraseña");
-        context.setVariable("staticHello", "Hola!");
-        context.setVariable("staticYouForgotYourPassword", "Parece que olvidaste tu contraseña.");
-        context.setVariable("staticChangePasswordWithLink", "Podrás cambiarla ingresando al siguiente link");
-        context.setVariable("staticChangePassword", "Cambiar Contraseña");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-
 
         context.setVariable("username", username);
         return context;

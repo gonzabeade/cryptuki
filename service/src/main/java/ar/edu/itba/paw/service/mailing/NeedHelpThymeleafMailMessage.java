@@ -31,15 +31,6 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Consulta Contestada!");
-        context.setVariable("staticHello", "Hola!");
-        context.setVariable("staticQuestionReceived", "Hemos recibido tu consulta.");
-        context.setVariable("staticYourQuestion", "Tu consulta");
-        context.setVariable("staticAnswer", "Respuesta");
-        context.setVariable("staticRewriteUs", "En caso de que la respuesta no sea lo que estabas buscando podrás volver a escribirnos.");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-
 
         context.setVariable("question", question);
         context.setVariable("username", username);

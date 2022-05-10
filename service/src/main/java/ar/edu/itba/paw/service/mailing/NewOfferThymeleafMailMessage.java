@@ -34,18 +34,6 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();
-        context.setVariable("staticTitle", "¡Nueva Oferta!");
-        context.setVariable("staticHello", "Hola");
-        context.setVariable("staticNewOfferLoaded", "¡Tu nueva oferta se cargo exitosamente! ");
-        context.setVariable("staticCoin", "Moneda");
-        context.setVariable("staticAskingPrice", "Precio pedido");
-        context.setVariable("staticMinAmount", "Cantidad mínima");
-        context.setVariable("staticMaxAmount", "Cantidad máxima");
-        context.setVariable("staticSeeOfferBy", "Podrás ver tu nueva oferta entrando al siguiente link");
-        context.setVariable("staticSeeOffer", "Ver oferta");
-        context.setVariable("staticNeedMoreHelp", "¿Necesitas más ayuda?");
-        context.setVariable("staticWriteUs", "Escríbenos");
-
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);

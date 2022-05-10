@@ -7,10 +7,10 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
 
-    public ChangePasswordThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+    public ChangePasswordThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
         super(from, to, template, helper);
     }
-    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
         super(mailMessage, template, helper);
     }
 

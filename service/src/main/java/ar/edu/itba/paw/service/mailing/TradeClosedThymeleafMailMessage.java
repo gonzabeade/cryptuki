@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service.mailing;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.thymeleaf.context.Context;
 
 public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
@@ -14,10 +13,10 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyerEmail;
     private String tradeCode;
 
-    public TradeClosedThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+    public TradeClosedThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
         super(from, to, template, helper);
     }
-    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
         super(mailMessage, template, helper);
     }
 

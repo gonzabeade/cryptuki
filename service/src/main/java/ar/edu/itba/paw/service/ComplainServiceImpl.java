@@ -9,7 +9,7 @@ import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafMailHelper;
+import ar.edu.itba.paw.service.mailing.ThymeleafProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,15 +24,14 @@ public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
     private final ContactService<MailMessage> mailContactService;
-
-    private final ThymeleafMailHelper thymeleafMailHelper;
+    private final ThymeleafProcessor thymeleafProcessor;
 
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafMailHelper thymeleafMailHelper) {
+    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafProcessor thymeleafProcessor) {
         this.complainDao = complainDao;
         this.mailContactService = mailContactService;
-        this.thymeleafMailHelper = thymeleafMailHelper;
+        this.thymeleafProcessor = thymeleafProcessor;
     }
 
 
@@ -152,7 +151,7 @@ public class ComplainServiceImpl implements ComplainService{
     public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
 
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafMailHelper);
+        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafProcessor);
 
 
         needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");

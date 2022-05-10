@@ -1,18 +1,17 @@
 package ar.edu.itba.paw.service.mailing;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Component
-public class ThymeleafMailHelper {
+public class ThymeleafProcessor {
 
     private TemplateEngine templateEngine;
 
     @Autowired
-    public ThymeleafMailHelper(TemplateEngine templateEngine) {
+    public ThymeleafProcessor(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 

@@ -10,10 +10,10 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
     private String question;
     private String answer;
 
-    public NeedHelpThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+    public NeedHelpThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
         super(from, to, template, helper);
     }
-    public NeedHelpThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+    public NeedHelpThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
         super(mailMessage, template, helper);
     }
 

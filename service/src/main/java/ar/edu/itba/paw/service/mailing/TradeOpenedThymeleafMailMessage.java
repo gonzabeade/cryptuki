@@ -12,10 +12,10 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyerMessage;
     private String buyerMail;
 
-    public TradeOpenedThymeleafMailMessage(String from, String to, ThymeleafMailHelper helper) {
+    public TradeOpenedThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
         super(from, to, template, helper);
     }
-    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, ThymeleafMailHelper helper) {
+    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
         super(mailMessage, template, helper);
     }
 

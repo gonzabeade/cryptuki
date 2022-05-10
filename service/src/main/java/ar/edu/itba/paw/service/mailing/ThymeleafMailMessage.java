@@ -1,28 +1,21 @@
 package ar.edu.itba.paw.service.mailing;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
-import java.nio.charset.StandardCharsets;
 
 public abstract class ThymeleafMailMessage extends MailMessage {
 
     private String template;
 
-    private ThymeleafMailHelper helper;
+    private ThymeleafProcessor helper;
 
-    public ThymeleafMailMessage(String from, String to, String template, ThymeleafMailHelper helper) {
+    public ThymeleafMailMessage(String from, String to, String template, ThymeleafProcessor helper) {
         super(from, to);
         super.setHtml(true);
         this.template = template;
         this.helper = helper;
     }
 
-    public ThymeleafMailMessage(MailMessage mailMessage, String template, ThymeleafMailHelper helper) {
+    public ThymeleafMailMessage(MailMessage mailMessage, String template, ThymeleafProcessor helper) {
         super(mailMessage);
         super.setHtml(true);
         this.template = template;

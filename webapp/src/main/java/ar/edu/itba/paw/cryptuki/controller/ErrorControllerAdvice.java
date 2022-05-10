@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,5 +62,12 @@ class ErrorControllerAdvice {
     public ModelAndView accessDenied(AccessDeniedException ade) {
         LOGGER.warn("Captured AccessDeniedException", ade);
         return new ModelAndView("forward:/403");
+    }
+
+    @ExceptionHandler(NoSuchTradeException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView noSuchTrade(NoSuchTradeException nste) {
+        LOGGER.warn("Captured NotSuchTradeException", nste);
+        return new ModelAndView("forward:/404");
     }
 }

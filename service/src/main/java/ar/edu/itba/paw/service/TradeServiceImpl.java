@@ -83,6 +83,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public Optional<Trade> getTradeById(int tradeId) {
 
         if (tradeId < 0)

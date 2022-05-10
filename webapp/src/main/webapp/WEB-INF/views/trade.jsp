@@ -46,14 +46,16 @@
             </div>
             <c:url value="/trade" var="postUrl"/>
 
-            <form:form  modelAttribute="tradeForm" action="${postUrl}" method="post">
-                <form:hidden path="amount" value="${amount}"/>
-                <form:hidden path="offerId" value="${ offer.id}"/>
-                <div class="flex flex-col mx-auto mt-7">
-                    <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>
-                    <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto">Pega la dirección donde querés recibir los ${offer.crypto.code}</form:label>
-                    <form:input  cssClass="rounded-lg p-3 mx-auto mt-3" type="text" path="wallet"/>
-                </div>
+            <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post">
+                <form:input type="hidden" path="offerId"/>
+                <form:input type="hidden" path="email"/>
+                <form:input type="hidden" path="amount"/>
+                <form:input type="hidden" path="message"/>
+                <form:input type="hidden" path="wallet"/>
+
+
+
+
                 <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

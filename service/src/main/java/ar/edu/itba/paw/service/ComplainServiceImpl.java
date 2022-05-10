@@ -9,7 +9,7 @@ import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafMailMessage;
+import ar.edu.itba.paw.service.mailing.ThymeleafMailHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,11 +25,14 @@ public class ComplainServiceImpl implements ComplainService{
     private final ComplainDao complainDao;
     private final ContactService<MailMessage> mailContactService;
 
+    private final ThymeleafMailHelper thymeleafMailHelper;
+
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService) {
+    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafMailHelper thymeleafMailHelper) {
         this.complainDao = complainDao;
         this.mailContactService = mailContactService;
+        this.thymeleafMailHelper = thymeleafMailHelper;
     }
 
 
@@ -149,7 +152,7 @@ public class ComplainServiceImpl implements ComplainService{
     public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
 
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage);
+        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafMailHelper);
 
 
         needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");

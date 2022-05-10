@@ -1,45 +1,32 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.nio.charset.StandardCharsets;
 
 public abstract class ThymeleafMailMessage extends MailMessage {
 
-    private TemplateEngine templateEngine;
-    private ClassLoaderTemplateResolver templateResolver;
-
     private String template;
 
-    private void configureClasses() {
+    private ThymeleafMailHelper helper;
 
-        templateEngine = new TemplateEngine();
-        templateResolver = new ClassLoaderTemplateResolver();
-
-        templateResolver.setPrefix("/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("XHTML");
-        templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        templateResolver.setCacheable(false);
-
-        templateEngine.addTemplateResolver(templateResolver);
-    }
-
-
-    public ThymeleafMailMessage(String from, String to, String template) {
+    public ThymeleafMailMessage(String from, String to, String template, ThymeleafMailHelper helper) {
         super(from, to);
-        configureClasses();
-        this.template = template;
         super.setHtml(true);
+        this.template = template;
+        this.helper = helper;
     }
 
-    public ThymeleafMailMessage(MailMessage mailMessage, String template) {
+    public ThymeleafMailMessage(MailMessage mailMessage, String template, ThymeleafMailHelper helper) {
         super(mailMessage);
-        configureClasses();
-        this.template = template;
         super.setHtml(true);
+        this.template = template;
+        this.helper = helper;
     }
 
     @Override
@@ -52,9 +39,8 @@ public abstract class ThymeleafMailMessage extends MailMessage {
     }
     protected abstract Context getContext();
 
-
     public String getBody() {
-        return templateEngine.process(getTemplate(), getContext());
+        return helper.process(getTemplate(), getContext());
     }
 
 

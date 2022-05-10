@@ -20,7 +20,7 @@ public interface ComplainService {
 
     void updateComplainStatus(int complainId, ComplainStatus complainStatus);
     void updateModerator(int complainId, String username);
-    void updateModeratorComment(int complain, String comments);
+    void updateModeratorComment(int complainId, String comments);
     void updateModerator(int complainId, String username, String comment);
 
     void getSupportFor(SupportDigest digest);

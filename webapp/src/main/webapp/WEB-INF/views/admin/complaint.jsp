@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -80,7 +81,7 @@
             </div>
             <div class="flex flex-col mx-auto mt-3">
                 <h2 class="font-sans font-semibold font-polard text-2xl text-center ">Estado del Trade</h2>
-                <h3 class="text-xl font-sans font-polard text-center"><c:out value="${trade.status}"/></h3>
+                <h3 class="text-xl font-sans font-polard text-center"><messages:message code="${trade.status}"/></h3>
             </div>
         </div>
     </c:if>

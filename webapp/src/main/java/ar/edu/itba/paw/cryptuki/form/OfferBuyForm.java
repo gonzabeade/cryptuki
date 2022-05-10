@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
+import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.service.digests.BuyDigest;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -27,6 +28,11 @@ public class OfferBuyForm {
     @NotEmpty
     private String message;
 
+    @NotNull
+    @Size(min=1, max = 140)
+    private String wallet;
+
+
     public void setOfferId(int offerId) {
         this.offerId = offerId;
     }
@@ -39,6 +45,11 @@ public class OfferBuyForm {
     public void setAmount(Float amount) {
         this.amount = amount;
     }
+
+    public void setWallet(String wallet) {
+        this.wallet = wallet;
+    }
+
 
     public String getEmail() {
         return email;
@@ -53,6 +64,9 @@ public class OfferBuyForm {
         return amount;
     }
 
+    public String getWallet() {
+        return wallet;
+    }
 
     public BuyDigest toDigest() {
 
@@ -66,4 +80,8 @@ public class OfferBuyForm {
         return digest;
     }
 
+    public Trade.Builder toTradeBuilder(String username) {
+        return new Trade.Builder(offerId, username)
+                .withQuantity(amount);
+    }
 }

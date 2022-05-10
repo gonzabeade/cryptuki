@@ -1,14 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html;charset=ISO-8859-1"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
-  <script src="<c:url value="/public/js/filterLink.js"/>" ></script>
   <script src="<c:url value="/public/js/feedback.js"/>"></script>
+  <script src="<c:url value="/public/js/filterLink.js"/>"></script>
   <script src="<c:url value="/public/js/profilePic.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +32,7 @@
 <div class="flex">
   <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="myProfile"/></h1>
 </div>
-<div class=" p-12 mx-96 rounded-lg bg-stormd/[0.9] flex  border-2 border-polard flex flex-row">
+<div class=" py-12 px-40 mx-auto rounded-lg bg-stormd/[0.9] flex  border-2 border-polard flex flex-row">
   <div class="flex flex-col height-auto mx-auto my-auto">
     <div class="flex flex-col">
       <c:url value="/profilePicSelector" var="postUrl"/>
@@ -73,6 +73,14 @@
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.phoneNumber}"/></h2>
       </div>
     </div>
+    <div class="flex  rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
+      <div class="flex">
+        <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto" ><messages:message code="rating"/>: </h2>
+      </div>
+      <div class="flex">
+        <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.rating}"/></h2>
+      </div>
+    </div>
     <div class="flex  rounded-lg h-12 mb-5  mt-5 mr-5 mx-10">
       <div class="flex">
         <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto"><messages:message code="tradeQuantity"/>:</h2>
@@ -81,23 +89,20 @@
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.ratingCount}"/></h2>
       </div>
     </div>
-    <div class="flex mt-10" >
+    <div class="flex mt-10 justify-center" >
       <div>
-        <a href="<c:url value="/changePassword"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center"><messages:message code="changePassword"/></a>
+        <a href="<c:url value="/changePassword"/>" class="mx-auto bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center"><messages:message code="changePassword"/></a>
       </div>
       <div>
-        <a href="<c:url value="/complaints"/>" class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center">Ver mis reclamos</a>
+        <a href="<c:url value="/complaints"/>" class="mx-auto bg-frostdr  hover:bg-frostdr/[.6] text-white p-3 rounded-md font-sans text-center ml-5"><messages:message code="seeComplaints"/></a>
       </div>
     </div>
   </div>
-
-
-
 </div>
-  <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10"><messages:message code="myTransactions"/>: </h2>
-  <div  class="flex flex-col  justify-center">
+
+<h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10"><messages:message code="myTransactions"/>: </h2>
+<div  class="flex flex-col justify-center mx-auto mt-10">
       <c:forEach var="trade" items="${tradeList}">
-      <li class="list-none mx-96">
         <% request.setCharacterEncoding("utf-8"); %>
         <jsp:include page="../components/trade_card.jsp">
           <jsp:param name="username" value="${username}"/>
@@ -108,9 +113,11 @@
           <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
           <jsp:param name="tradeId" value="${trade.tradeId}"/>
         </jsp:include>
-     </li>
     </c:forEach>
-    <div class="flex flex-col mt-3">
+</div>
+
+
+<div class="flex flex-col mt-3">
       <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../components/paginator.jsp">
         <jsp:param name="activePage" value="${activePage}"/>
@@ -118,8 +125,8 @@
         <jsp:param name="baseUrl" value="/user"/>
       </jsp:include>
       <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-    </div>
 </div>
+
 
 
 <div class="shape-blob"></div>

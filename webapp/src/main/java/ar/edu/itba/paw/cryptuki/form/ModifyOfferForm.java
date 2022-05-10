@@ -2,10 +2,14 @@ package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.annotation.MinMax;
+import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.persistence.PaymentMethod;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @MinMax
 public class ModifyOfferForm extends UploadOfferForm {
@@ -28,6 +32,17 @@ public class ModifyOfferForm extends UploadOfferForm {
         return builder.build();
     }
 
+    public void fillFromOffer(Offer offer) {
+        setOfferId(offer.getId());
+        setMinAmount(offer.getMinQuantity());
+        setMaxAmount(offer.getMaxQuantity());
+        setCryptocurrency(offer.getCrypto().getCode());
+        setPrice(offer.getAskingPrice());
+        setMessage(offer.getComments());
+        setPaymentMethods(
+                offer.getPaymentMethods().stream().map(pm -> pm.getName()).toArray(String[]::new)
+        );
+    }
 
 }
 

@@ -19,5 +19,6 @@ public interface UserService {
 
     void incrementUserRating(String username, int rating);
     boolean userExists(String username, String email);
+    void changePasswordAnonymously(String email);
 
 }

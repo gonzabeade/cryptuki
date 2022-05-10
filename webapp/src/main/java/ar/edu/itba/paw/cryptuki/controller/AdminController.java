@@ -165,7 +165,10 @@ public class AdminController {
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
         User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
-        Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
+        Trade trade = null;
+        if(complain.getTradeId().isPresent()){
+            trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
+        }
 
         mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("isAdmin", true);

@@ -162,7 +162,7 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public int getTradesByUsernameCount(String username) {
-        final String query = "SELECT COUNT(*) FROM trade_complete WHERE ( buyer_uname = ? OR seller_uname = ?)";
+        final String query = "SELECT COUNT(*) FROM (SELECT * FROM trade_complete JOIN offer o on trade_complete.offer_id = o.id WHERE o.status_code!='DEL') as temp WHERE ( buyer_uname = ? OR seller_uname = ?)";
 
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{username,username}, Integer.class);

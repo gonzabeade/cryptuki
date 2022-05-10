@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>
 <html>
 <head>

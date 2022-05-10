@@ -88,36 +88,6 @@ public class OfferJdbcDaoTest {
         Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, OFFER_TABLE));
     }
 
-    @Test
-    public void TestGetOfferCount(){
-        // Setup
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        for(Offer offer: offers){
-            insertOffer(offer);
-        }
-
-        // Exercise
-        int tested_count = offerJdbcDao.getOfferCount(testingFilter);
-
-        // Validations
-        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
-    }
-
-    @Test
-    public void TestGetOffersBy(){
-        // Setup
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        int id ;
-        for(Offer offer: offers){
-             insertOffer(offer);
-        }
-        // Exercise
-        Collection<Offer> testedOffers = offerJdbcDao.getOffersBy(testingFilter);
-
-        // Validations
-        Assert.assertNotNull(testedOffers);
-        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW),testedOffers.size());
-    }
 
     private void insertOffer(Offer offer){
         HashMap<String, Object> offerMap = new HashMap<>();

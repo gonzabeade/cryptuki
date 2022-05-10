@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.nio.file.AccessDeniedException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -75,7 +74,6 @@ public class HomeController {
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
             mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
-
         return mav;
     }
 
@@ -95,6 +93,7 @@ public class HomeController {
             String username= authentication.getName();
             User user = us.getUserInformation(username).get();
             form.setEmail(user.getEmail());
+            mav.addObject("username",  authentication.getName());
         }
 
         mav.addObject("supportForm", form);

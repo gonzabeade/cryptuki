@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>
+<c:set var="continue"><messages:message code="continue"/></c:set>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +21,7 @@
 <% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp"/>
 <div>
-    <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-10">Te enviaremos un link para que recuperes la contraseña</h1>
+    <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-10"><messages:message code="weSentLinkToRecoverPassword"/></h1>
     <c:url value="/passwordRecovery" var="postPath"/>
     <%--@elvariable id="EmailForm" type="ar.edu.itba.paw.cryptuki.form"--%>
     <form:form modelAttribute="EmailForm" action="${postPath}" method="post">
@@ -26,14 +29,14 @@
             <div class="flex flex-col mb-10 items-center justify-center">
                 <form:errors path="email" cssClass="formError mx-auto text-red-500" element="p"/>
                 <div class="mb-5">
-                    <form:label path="email" class="text-center text-2xl font-bold font-sans text-polar my-2">Ingresa tu correo electronico </form:label>
+                    <form:label path="email" class="text-center text-2xl font-bold font-sans text-polar my-2"><messages:message code="insertEmailAddress"/></form:label>
                 </div>
                 <div>
-                    <form:input type="text" path="email" placeholder="e.g pepe@gmail.com" cssClass="rounded-lg p-3"/>
+                    <form:input type="text" path="email" placeholder="${emailPlaceholder}" cssClass="rounded-lg p-3"/>
                 </div>
             </div>
             <div>
-                <input type="submit" value="Continuar" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
+                <input type="submit" value="${continue}" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
             </div>
         </div>
     </form:form>

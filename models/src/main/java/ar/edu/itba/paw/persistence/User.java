@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public final class User {
 
@@ -77,9 +81,15 @@ public final class User {
         return ratingCount;
     }
 
+    public float getRating() { return getRatingCount() == 0 ? 0 : getRatingSum() / getRatingCount(); }
+
     public String getPhoneNumber(){return phoneNumber;}
 
     public LocalDateTime getLastLogin() {
         return lastLogin;
+    }
+    public long getMinutesSinceLastLogin(){
+        Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
+        return loggedIn.toMinutes();
     }
 }

@@ -18,6 +18,8 @@ public final class Trade {
     private final Cryptocurrency cryptoCurrency;
 
     private final float askedPrice;
+    private boolean ratedBuyer;
+    private boolean ratedSeller;
 
 
     public static class Builder {
@@ -34,11 +36,15 @@ public final class Trade {
         private  Cryptocurrency cryptoCurrency;
 
         private float askedPrice;
+        private boolean ratedBuyer;
+        private boolean ratedSeller;
 
 
         public Builder(int offerId, String buyerUsername) {
             this.offerId = offerId;
             this.buyerUsername = buyerUsername;
+            this.ratedBuyer = false;
+            this.ratedSeller = false;
         }
 
         public Builder withTradeId(int tradeId) {
@@ -47,6 +53,14 @@ public final class Trade {
         }
         public Builder withSellerUsername(String sellerUsername) {
             this.sellerUsername = sellerUsername;
+            return this;
+        }
+        public Builder withRatedBuyer(boolean rated){
+            this.ratedBuyer = rated;
+            return this;
+        }
+        public Builder withRatedSeller(boolean rated){
+            this.ratedSeller = rated;
             return this;
         }
 
@@ -72,10 +86,6 @@ public final class Trade {
             this.askedPrice=askedPrice;
             return this;
         }
-
-
-
-
 
         public int getTradeId() {
             return tradeId;
@@ -106,6 +116,12 @@ public final class Trade {
         public float getAskedPrice() {
             return askedPrice;
         }
+        public boolean getRatedBuyer(){
+            return ratedBuyer;
+        }
+        public boolean getRatedSeller(){
+            return ratedSeller;
+        }
 
         protected Trade build() {
             return new Trade(this);
@@ -123,6 +139,8 @@ public final class Trade {
         this.status = builder.status;
         this.askedPrice= builder.getAskedPrice();
         this.cryptoCurrency =builder.getCryptoCurrency();
+        this.ratedBuyer = builder.getRatedBuyer();
+        this.ratedSeller = builder.getRatedSeller();
 
     }
 
@@ -154,5 +172,11 @@ public final class Trade {
 
     public float getAskedPrice() {
         return askedPrice;
+    }
+    public boolean getRatedBuyer(){
+        return ratedBuyer;
+    }
+    public boolean getRatedSeller(){
+        return ratedSeller;
     }
 }

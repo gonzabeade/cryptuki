@@ -41,6 +41,8 @@ public class TradeDaoImpl implements TradeDao {
                         .withStartDate(rs.getTimestamp("start_date").toLocalDateTime())
                         .withAskedPrice(rs.getFloat("asking_price"))
                         .withCryptoCurrency(crypto)
+                        .withRatedBuyer(rs.getBoolean("rated_buyer"))
+                        .withRatedSeller(rs.getBoolean("rated_seller"))
                         .build();
                 } ;
     @Autowired
@@ -62,11 +64,13 @@ public class TradeDaoImpl implements TradeDao {
         }
 
         Map<String,Object> args = new HashMap<>();
-            args.put("offer_id",offerId);
-            args.put("buyer_id",userId);
-            args.put("start_date", LocalDateTime.now());
-            args.put("status",status.toString());
-            args.put("quantity",quantity);
+        args.put("offer_id",offerId);
+        args.put("buyer_id",userId);
+        args.put("start_date", LocalDateTime.now());
+        args.put("status",status.toString());
+        args.put("quantity",quantity);
+        args.put("rated_buyer", false);
+        args.put("rated_seller", false);
 
         try {
             return jdbcTradeInsert.executeAndReturnKey(args).intValue();
@@ -148,7 +152,7 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-        final String query = "SELECT * FROM trade_complete WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
+        final String query = "SELECT * FROM (SELECT * FROM trade_complete JOIN offer o on trade_complete.offer_id = o.id WHERE o.status_code!='DEL') as temp WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
         try {
             return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, username, pageSize, pageSize * page));
         } catch (DataAccessException dae) {
@@ -162,6 +166,24 @@ public class TradeDaoImpl implements TradeDao {
 
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{username,username}, Integer.class);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+    @Override
+    public void rateBuyer(int tradeId){
+        final String query = "UPDATE trade SET rated_buyer = true WHERE trade_id = ?";
+        try {
+            jdbcTemplate.update(query,  tradeId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+    @Override
+    public void rateSeller(int tradeId){
+        final String query = "UPDATE trade SET rated_seller = true WHERE trade_id = ?";
+        try {
+            jdbcTemplate.update(query, tradeId);
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

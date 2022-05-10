@@ -13,6 +13,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -29,6 +31,7 @@ public class OfferController {
     private final PaymentMethodService paymentMethodService;
     private  final OfferService offerService;
     private final UserService us;
+    private static final int PAGE_SIZE= 10;
 
     @Autowired
     public OfferController(CryptocurrencyService cryptocurrencyService,
@@ -48,6 +51,12 @@ public class OfferController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("username", authentication.getName());
+
+        if (form.getPaymentMethods() != null){
+            List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
+            mav.addObject("selectedPayments", paymentCodesAlreadySelected);
+        }
+
         return mav;
     }
 
@@ -145,5 +154,22 @@ public class OfferController {
         return mav;
     }
 
+
+    @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
+    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication){
+        ModelAndView mav = new ModelAndView("views/my_offers");
+        int pageNumber = page.orElse(0);
+        int offerCount = offerService.countOffersByUsername(authentication.getName());
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+
+        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName()));
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+        mav.addObject("username",  authentication.getName());
+        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
+
+        return mav;
+    }
 
 }

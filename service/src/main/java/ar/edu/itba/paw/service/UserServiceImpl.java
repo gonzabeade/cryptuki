@@ -167,7 +167,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal.username")
     public void incrementUserRating(String username, int rating) {
 
         if (rating < 0)
@@ -186,15 +185,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-    public void changePasswordAnonymously(String email){
+    public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
-        if(!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
+        if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new RuntimeException("Invalid email");
 
         UserAuth user = maybeUser.get();
         MailMessage message = contactService.createMessage(email);
         message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/webapp/recoverPassword?user="+user.getUsername()+"&code="+user.getCode());
+        message.setBody("http://localhost:8080/webapp/recoverPassword?user=" + user.getUsername() + "&code=" + user.getCode());
         contactService.sendMessage(message);
+    }
+
+    @Override
+    public boolean userExists(String username, String email) {
+         return userDao.getUserByEmail(email).isPresent() || userDao.getUserByUsername(username).isPresent();
     }
 }

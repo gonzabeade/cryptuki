@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
+import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.RatingService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +26,14 @@ public class TradeFluxController {
 
     private final OfferService offerService;
     private final TradeService tradeService;
+    private final RatingService ratingService;
     private final UserService us;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, RatingService ratingService, UserService us) {
         this.offerService = offerService;
         this.tradeService = tradeService;
+        this.ratingService = ratingService;
         this.us = us;
     }
 
@@ -98,9 +103,19 @@ public class TradeFluxController {
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receiptDescription(@PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        return receiptView("views/receiptDescription", tradeId, authentication);
+    public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        mav.addObject("rated", false);
+        return mav;
     }
+
+    @RequestMapping(value = "/receiptDescription/{tradeId}/success", method = RequestMethod.GET)
+    public ModelAndView receiptDescriptionSuccess(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
+        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        mav.addObject("rated", true);
+        return mav;
+    }
+
 
     private ModelAndView receiptView(String viewName, int tradeId, Authentication authentication) {
         ModelAndView mav = new ModelAndView(viewName);
@@ -117,19 +132,30 @@ public class TradeFluxController {
         if (!offerOptional.isPresent())
             throw new NoSuchOfferException(trade.getOfferId());
 
+
+        User user = us.getUserInformation(authentication.getName()).get();
         Offer offer = offerOptional.get();
 
-        mav.addObject("trade" , trade);
+        mav.addObject("username", authentication.getName());
+        mav.addObject("user", user);
+
+        mav.addObject("trade", trade);
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
-        if(authentication != null){
-            mav.addObject("username", authentication.getName());
-            User user = us.getUserInformation(authentication.getName()).get();
-            mav.addObject("user", user);
-            mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
-        }
-
+        mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
+        mav.addObject("ratedBySeller", trade.getRatedSeller());
+        mav.addObject("ratedByBuyer", trade.getRatedBuyer());
         return mav;
     }
 
+
+    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+    public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
+        }
+
+        ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
+        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getRating()+"/success");
+    }
 }

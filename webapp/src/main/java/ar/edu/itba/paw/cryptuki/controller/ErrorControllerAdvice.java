@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,14 @@ class ErrorControllerAdvice {
     @ExceptionHandler(NoSuchTradeException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView noSuchTrade(NoSuchTradeException nste) {
-        LOGGER.warn("Captured NotSuchTradeException", nste);
+        LOGGER.warn("Captured NoSuchTradeException", nste);
+        return new ModelAndView("forward:/404");
+    }
+
+    @ExceptionHandler(NoSuchUserException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView noSuchUser(NoSuchUserException nsue) {
+        LOGGER.warn("Captured NoSuchUserException", nsue);
         return new ModelAndView("forward:/404");
     }
 }

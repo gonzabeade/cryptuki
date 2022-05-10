@@ -23,6 +23,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/verify_form.jsp">
         <jsp:param name="username" value="${username}"/>
+        <jsp:param name="error" value="${error}"/>
     </jsp:include>
 </div>
 <div class="shape-blob"></div>

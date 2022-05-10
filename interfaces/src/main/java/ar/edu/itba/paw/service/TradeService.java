@@ -24,5 +24,7 @@ public interface TradeService {
 
     Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
     int getTradesByUsernameCount(String username);
+    void updateRatedSeller(int tradeId);
+    void updatedRatedBuyer(int tradeId);
 
 }

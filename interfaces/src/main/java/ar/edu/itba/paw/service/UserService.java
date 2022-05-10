@@ -17,8 +17,8 @@ public interface UserService {
 
     Optional<UserAuth> getUserAuthByEmail(String email);
 
-
     void incrementUserRating(String username, int rating);
-
+    boolean userExists(String username, String email);
     void changePasswordAnonymously(String email);
+
 }

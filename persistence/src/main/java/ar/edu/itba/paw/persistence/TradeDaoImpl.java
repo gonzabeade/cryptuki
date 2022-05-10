@@ -58,7 +58,7 @@ public class TradeDaoImpl implements TradeDao {
         final String getUserIdQuery = "SELECT user_id FROM auth WHERE auth.uname = ?";
         Integer userId;
         try{
-            userId = jdbcTemplate.queryForObject(getUserIdQuery, Integer.class, buyerUsername);
+             userId = jdbcTemplate.queryForObject(getUserIdQuery, Integer.class, buyerUsername);
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -69,6 +69,8 @@ public class TradeDaoImpl implements TradeDao {
         args.put("start_date", LocalDateTime.now());
         args.put("status",status.toString());
         args.put("quantity",quantity);
+        args.put("rated_buyer", false);
+        args.put("rated_seller", false);
 
         try {
             return jdbcTradeInsert.executeAndReturnKey(args).intValue();
@@ -108,6 +110,7 @@ public class TradeDaoImpl implements TradeDao {
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
         final String query = "SELECT * FROM trade_complete WHERE seller_uname = ? LIMIT ? OFFSET ?";
+
         try {
             return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, pageSize, pageSize * page));
         } catch (DataAccessException dae) {
@@ -149,7 +152,7 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-        final String query = "SELECT * FROM trade_complete WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
+        final String query = "SELECT * FROM (SELECT * FROM trade_complete JOIN offer o on trade_complete.offer_id = o.id WHERE o.status_code!='DEL') as temp WHERE (buyer_uname = ? OR seller_uname = ? ) LIMIT ? OFFSET ?";
         try {
             return Collections.unmodifiableCollection(jdbcTemplate.query(query, TRADE_COMPLETE_ROW_MAPPER, username, username, pageSize, pageSize * page));
         } catch (DataAccessException dae) {
@@ -159,7 +162,7 @@ public class TradeDaoImpl implements TradeDao {
 
     @Override
     public int getTradesByUsernameCount(String username) {
-        final String query = "SELECT COUNT(*) FROM trade_complete WHERE ( buyer_uname = ? OR seller_uname = ?)";
+        final String query = "SELECT COUNT(*) FROM (SELECT * FROM trade_complete JOIN offer o on trade_complete.offer_id = o.id WHERE o.status_code!='DEL') as temp WHERE ( buyer_uname = ? OR seller_uname = ?)";
 
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{username,username}, Integer.class);

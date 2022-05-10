@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -125,9 +124,12 @@ public class AdminController {
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        System.out.println(complain);
         User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
-        Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
+        Trade trade = null;
+
+        if(complain.getTradeId().isPresent()){
+            trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
+        }
 
         mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("trade", trade);
@@ -162,9 +164,11 @@ public class AdminController {
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        System.out.println(complain);
         User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
-        Trade trade = tradeService.getTradeById(complain.getTradeId().orElse(-1)).orElse(null);
+        Trade trade = null;
+        if(complain.getTradeId().isPresent()){
+            trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
+        }
 
         mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("isAdmin", true);

@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="flex flex-row mt-10">
-            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/contact?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+            <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>"><messages:message code="returnHome"/></a>
         </div>
 
@@ -62,6 +62,7 @@
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                 <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
                 <jsp:param name="message" value="${offer.comments}"/>
+                <jsp:param name="rating" value="${offer.seller.rating}"/>
             </jsp:include>
             <% request.setCharacterEncoding("UTF-8"); %>
             <jsp:include page="../components/buyer_info.jsp">
@@ -69,6 +70,7 @@
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>
                 <jsp:param name="lastLogin" value="${buyerLastLogin.relativeTime}"/>
+                <jsp:param name="rating" value="${user.rating}"/>
             </jsp:include>
         </div>
 

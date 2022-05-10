@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import java.util.Map;
 
-interface Message {
+public interface Message {
     String getTo();
     String getFrom();
 }

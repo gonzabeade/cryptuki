@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.persistence.Trade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,12 +20,15 @@ public class RatingServiceimpl implements RatingService{
     }
 
     @Override
+    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public void rate(int tradeId, String username, int rating) {
+        if(rating < 1 || rating > 10)
+            throw new IllegalArgumentException("Rating Invalid");
 
         Optional<Trade> trade = tradeService.getTradeById(tradeId);
-        if(!trade.isPresent()){
-            throw new IllegalArgumentException("Non-existant trade");
-        }
+        if (!trade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+
         if(username.equals(trade.get().getBuyerUsername())){
             userService.incrementUserRating(trade.get().getSellerUsername(), rating);
             tradeService.updatedRatedBuyer(tradeId);

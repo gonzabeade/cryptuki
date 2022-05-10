@@ -10,6 +10,11 @@
         </div>
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
+                <c:if test="${param.username != null && !param.username.isEmpty()}">
+                    <li>
+                        <a href="<c:url value="/myoffers"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8"><messages:message code="yourOffers"/></a>
+                    </li>
+                </c:if>
                 <li>
                     <a href="<c:url value="/"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8"><messages:message code="explore"/></a>
                 </li>

@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.service;
+package ar.edu.itba.paw.service.mailing;
+import ar.edu.itba.paw.service.Message;
 
-
-// TODO: Validate. Do not leave MailMessage in a inconsistent state
 public class MailMessage implements Message {
 
     private String from;
@@ -9,9 +8,18 @@ public class MailMessage implements Message {
     private String subject = "";
     private String body = "";
 
-    protected MailMessage(String from, String to) {
+    private boolean isHtml = false;
+
+    public MailMessage(String from, String to) {
         this.from = from;
         this.to = to;
+    }
+
+    public MailMessage(MailMessage mailMessage) {
+        this.from = mailMessage.from;
+        this.isHtml = mailMessage.isHtml;
+        this.to = mailMessage.to;
+        this.body = mailMessage.body;
     }
 
     @Override
@@ -31,5 +39,11 @@ public class MailMessage implements Message {
 
     public void setSubject (String subject) { this.subject = subject; }
     public void setBody (String body) { this.body = body; }
+
+
+    public void setHtml(boolean isHtml) {
+        this.isHtml = isHtml;
+    }
+    public boolean isHtml() { return isHtml; }
 
 }

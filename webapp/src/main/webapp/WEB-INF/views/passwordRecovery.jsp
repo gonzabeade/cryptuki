@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>
-<c:set var="continue"><messages:message code="continue"/></c:set>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +35,9 @@
                 </div>
             </div>
             <div>
-                <input type="submit" value="${continue}" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg"/>
+                <button type="submit" class="rounded-lg bg-frost py-3 px-5 text-white cursor-pointer shadow-lg">
+                    <messages:message code="continue"/>
+                </button>
             </div>
         </div>
     </form:form>

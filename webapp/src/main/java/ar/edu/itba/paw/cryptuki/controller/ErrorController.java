@@ -12,10 +12,13 @@ import java.util.Locale;
 
 @Controller
 public class ErrorController {
+
+
     @Autowired
     private MessageSource messageSource;
 
-    @RequestMapping(value = "/404", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/404", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView notFound(Locale locale) {
         ModelAndView mav = new ModelAndView("views/error_page");
         mav.addObject("errorMsg", messageSource.getMessage("error.404", null, locale));
@@ -23,7 +26,7 @@ public class ErrorController {
         return mav;
     }
 
-    @RequestMapping(value = "/400", method = RequestMethod.GET)
+    @RequestMapping(value = "/400", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView badRequest(Locale locale) {
         ModelAndView mav = new ModelAndView("views/error_page");
         mav.addObject("errorMsg", messageSource.getMessage("error.400", null, locale));
@@ -31,15 +34,23 @@ public class ErrorController {
         return mav;
     }
 
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public ModelAndView renderErrorPage(Locale locale) {
+    @RequestMapping(value = "/403", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView accessDenied(Locale locale) {
         ModelAndView mav = new ModelAndView("views/error_page");
         mav.addObject("errorMsg", messageSource.getMessage("error.403", null, locale));
         mav.addObject("code", HttpStatus.FORBIDDEN.value());
         return mav;
     }
 
-    @RequestMapping(value = "/500", method = RequestMethod.GET)
+    @RequestMapping(value = "/405", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView methodNotAllowed(Locale locale) {
+        ModelAndView mav = new ModelAndView("views/error_page");
+        mav.addObject("errorMsg", messageSource.getMessage("error.405", null, locale));
+        mav.addObject("code", HttpStatus.METHOD_NOT_ALLOWED.value());
+        return mav;
+    }
+
+    @RequestMapping(value = "/500", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView internalServerError(Locale locale) {
         ModelAndView mav = new ModelAndView("views/error_page");
         mav.addObject("errorMsg", messageSource.getMessage("error.500", null, locale));

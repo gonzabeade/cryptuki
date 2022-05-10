@@ -6,6 +6,8 @@ import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.ProfilePicDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,8 @@ public class ProfilePicServiceImpl implements ProfilePicService {
     }
 
     @Override
+    @Secured("ROLE_USER")
+    @PreAuthorize("#username == authentication.principal.username")
     public void uploadProfilePicture(String username, byte[] profilePicture, String type) {
 
         if (username == null)

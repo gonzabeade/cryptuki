@@ -3,16 +3,16 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.service.digests.BuyDigest;
+import ar.edu.itba.paw.service.mailing.MailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 public class TradeServiceImpl implements TradeService {
@@ -34,6 +34,8 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
+    @Secured("ROLE_USER")
+    @PreAuthorize("#trade.buyerUsername == authentication.principal.username")
     public int makeTrade(Trade.Builder trade) {
 
         if (trade == null)
@@ -43,38 +45,17 @@ public class TradeServiceImpl implements TradeService {
         UserAuth userAuth = userService.getUserAuthByEmail(offer.getSeller().getEmail()).get();
 
         try {
-            //modify offer
-            OfferDigest.Builder digestBuilder = new OfferDigest.Builder(offer.getSeller().getId(),offer.getCrypto().getCode(),offer.getAskingPrice());
-            digestBuilder.withId(offer.getId());
-            digestBuilder.withComments(offer.getComments());
-            offer.getPaymentMethods().forEach(paymentMethod -> digestBuilder.withPaymentMethod(paymentMethod.getName()));
-
-            float remaining = offer.getMaxQuantity() - (trade.getQuantity()/offer.getAskingPrice());
-
-            if( remaining <= 0){
-                offerService.pauseOffer(offer.getId());
-            }
-
-
-            digestBuilder.withMaxQuantity(remaining);
-            float newMin =(offer.getMinQuantity() > remaining ) ? 0 : (offer.getMinQuantity());
-            if(newMin == 0){
-                offerService.pauseOffer(offer.getId());
-            }
-            else{
-                digestBuilder.withMinQuantity(newMin);
-                offerService.modifyOffer(digestBuilder.build());
-            }
+           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
             //create trade.
             trade.withTradeStatus(TradeStatus.OPEN)
                     .withSellerUsername(userAuth.getUsername());
             int tradeId = tradeDao.makeTrade(trade);
 
             //send email to seller
-            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
-            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
-            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
-            mailContactService.sendMessage(message);
+//            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
+//            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
+//            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
+//            mailContactService.sendMessage(message);
 
             return tradeId;
         } catch (PersistenceException pe) {
@@ -84,6 +65,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateStatus(int tradeId, TradeStatus status) {
 
         if (tradeId < 0)
@@ -101,6 +83,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public Optional<Trade> getTradeById(int tradeId) {
 
         if (tradeId < 0)
@@ -115,6 +98,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -132,6 +116,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getSellingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -146,6 +131,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -163,6 +149,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getBuyingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -177,6 +164,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -194,6 +182,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public int getTradesByUsernameCount(String username) {
 
         if (username == null)

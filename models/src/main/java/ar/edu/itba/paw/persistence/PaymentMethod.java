@@ -27,4 +27,13 @@ public final class PaymentMethod {
     public String getDescription() {
         return description;
     }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof PaymentMethod))
+            return false;
+        PaymentMethod testedPaymentMethod= (PaymentMethod) object;
+        return testedPaymentMethod.getName().equals(this.getName());
+    }
 }

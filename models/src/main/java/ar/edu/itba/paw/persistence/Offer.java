@@ -48,7 +48,7 @@ public final class Offer {
             this.date = date; // Immutable
             return this;
         }
-        protected Builder withStatus(OfferStatus statusCode) { this.status = status; return this; }
+        protected Builder withStatus(OfferStatus status) { this.status = status; return this; }
         public Builder withPaymentMethod(PaymentMethod method) {
             if (method != null) paymentMethods.add(method);
             return this;
@@ -136,5 +136,14 @@ public final class Offer {
 
     public String getComments() {
         return comments;
+    }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof Offer))
+            return false;
+        Offer testedOffer= (Offer) object;
+        return testedOffer.getId() == this.getId();
     }
 }

@@ -20,10 +20,10 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final ar.edu.itba.paw.persistence.UserDao userDao;
-    private final UserAuthDao userAuthDao;
-    private final PasswordEncoder passwordEncoder;
-    private final MessageSenderFacade messageSenderFacade;
+    private  UserDao userDao;
+    private  UserAuthDao userAuthDao;
+    private  PasswordEncoder passwordEncoder;
+    private  MessageSenderFacade messageSenderFacade;
 
 
     @Autowired

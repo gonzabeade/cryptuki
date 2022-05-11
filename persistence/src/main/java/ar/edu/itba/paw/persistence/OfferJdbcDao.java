@@ -125,8 +125,8 @@ public class OfferJdbcDao implements OfferDao {
                 "\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          ( COALESCE(:min) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
-                "          ( COALESCE(:max) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
+                "          ( COALESCE(:min,null) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max,null) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
@@ -149,11 +149,11 @@ public class OfferJdbcDao implements OfferDao {
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          ( COALESCE(:min) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
-                "          ( COALESCE(:max) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
+                "          ( COALESCE(:min,null) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max,null) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
                 "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
-                "   LIMIT :limit OFFSET :offset" +
+                "   LIMIT :limit OFFSET :offset " +
                 ") ORDER BY last_login DESC";
 
         try {
@@ -171,7 +171,7 @@ public class OfferJdbcDao implements OfferDao {
         Map<String,Object> args = new HashMap<>();
 
         args.put("seller_id", digest.getSellerId());
-        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth());
+        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth()+" "+digest.getDate().getHour()+":"+digest.getDate().getMinute()+":"+digest.getDate().getSecond());
         args.put("crypto_code", digest.getCryptoCode());
         args.put("status_code", "APR");
         args.put("asking_price", digest.getAskingPrice());

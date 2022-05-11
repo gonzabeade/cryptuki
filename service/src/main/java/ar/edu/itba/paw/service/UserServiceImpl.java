@@ -17,14 +17,14 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final ar.edu.itba.paw.persistence.UserDao userDao;
-    private final UserAuthDao userAuthDao;
-    private final PasswordEncoder passwordEncoder;
-    private final ContactService<MailMessage> contactService;
+    private  UserDao userDao;
+    private  UserAuthDao userAuthDao;
+    private  PasswordEncoder passwordEncoder;
+    private  ContactService<MailMessage> contactService;
 
 
     @Autowired
-    public UserServiceImpl(final ar.edu.itba.paw.persistence.UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
+    public UserServiceImpl(final UserDao userDao,final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;

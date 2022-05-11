@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.RatingService;
@@ -14,10 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -39,16 +45,9 @@ public class TradeFluxController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
-        ModelAndView mav = new ModelAndView("views/buy_offer");
-
-        Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(offerId);
-
-        Offer offer = offerOptional.get();
-
+        ModelAndView mav = new ModelAndView("buyOffer");
+        Offer offer =  offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication.getName());
         mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
@@ -69,16 +68,11 @@ public class TradeFluxController {
     public ModelAndView executeTrade( @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final Authentication authentication){
 
         int offerId = offerBuyForm.getOfferId();
-        Optional<Offer> offerOptional = offerService.getOfferById(offerId);
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(offerId);
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
 
-        Offer offer = offerOptional.get();
-
-        ModelAndView mav = new ModelAndView("views/trade");
+        ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
         mav.addObject("amount", offerBuyForm.getAmount());
-        mav.addObject("username", authentication.getName());
         mav.addObject("offerBuyForm", offerBuyForm);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
@@ -98,19 +92,19 @@ public class TradeFluxController {
 
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
     public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication) {
-        return receiptView("views/receipt", tradeId, authentication);
+        return receiptView("receipt", tradeId, authentication);
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
     public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        ModelAndView mav = receiptView("receiptDescription", tradeId, authentication);
         mav.addObject("rated", false);
         return mav;
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}/success", method = RequestMethod.GET)
     public ModelAndView receiptDescriptionSuccess(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        ModelAndView mav = receiptView("receiptDescription", tradeId, authentication);
         mav.addObject("rated", true);
         return mav;
     }
@@ -119,23 +113,11 @@ public class TradeFluxController {
     private ModelAndView receiptView(String viewName, int tradeId, Authentication authentication) {
         ModelAndView mav = new ModelAndView(viewName);
 
-        Optional<Trade> tradeOptional = tradeService.getTradeById(tradeId);
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        Offer offer = offerService.getOfferById(trade.getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOfferId()));
+        User user = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
 
-        if (!tradeOptional.isPresent())
-            throw new NoSuchTradeException(tradeId);
-
-        Trade trade = tradeOptional.get();
-        Optional<Offer> offerOptional = offerService.getOfferById(trade.getOfferId());
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(trade.getOfferId());
-
-
-        User user = us.getUserInformation(authentication.getName()).get();
-        Offer offer = offerOptional.get();
-
-        mav.addObject("username", authentication.getName());
         mav.addObject("user", user);
-
         mav.addObject("trade", trade);
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
@@ -153,6 +135,6 @@ public class TradeFluxController {
         }
 
         ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
-        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getRating()+"/success");
+        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
 }

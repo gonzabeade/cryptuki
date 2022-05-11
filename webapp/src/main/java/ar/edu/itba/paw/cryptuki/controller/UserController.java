@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.*;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
@@ -11,7 +12,6 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,7 +39,7 @@ public class UserController {
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
-    private static int PAGE_SIZE = 3 ;
+    private static final int PAGE_SIZE = 3 ;
 
     @Autowired
     public UserController(UserService userService, ProfilePicService profilePicService, TradeService tradeService) {
@@ -51,7 +51,7 @@ public class UserController {
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
     public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
-        return new ModelAndView("views/register");
+        return new ModelAndView("register");
     }
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
@@ -66,7 +66,7 @@ public class UserController {
 
     @RequestMapping("/login")
     public ModelAndView login(@RequestParam(value = "error" , required = false) String error){
-        ModelAndView mav = new ModelAndView("views/login");
+        ModelAndView mav = new ModelAndView("login");
         if(error != null){
             mav.addObject("error", true);
             return mav;
@@ -77,9 +77,9 @@ public class UserController {
 
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) boolean error){
-        ModelAndView mav = new ModelAndView("views/code_verification");
-        mav.addObject("username", username);
+        ModelAndView mav = new ModelAndView("codeVerification");
         mav.addObject("error", error);
+        mav.addObject("username", username);
         return mav;
     }
 
@@ -98,19 +98,16 @@ public class UserController {
 
     @RequestMapping(value="/passwordRecovery")
     public ModelAndView passwordSendMailGet(@ModelAttribute("EmailForm") EmailForm form){
-        return new ModelAndView("/views/passwordRecovery");
+        return new ModelAndView("passwordRecovery");
     }
 
     @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
     public ModelAndView passwordSendMail(@Valid @ModelAttribute("EmailForm") EmailForm form, BindingResult errors){
         if(errors.hasErrors())
             return passwordSendMailGet(form);
-        try{
-            userService.changePasswordAnonymously(form.getEmail());
-        }catch (Exception e ){
-            return new ModelAndView("redirect:/errors");
-        }
-        return new ModelAndView("views/ChangePasswordMailSent");
+        userService.changePasswordAnonymously(form.getEmail());
+
+        return new ModelAndView("changePasswordMailSent");
 
     }
 
@@ -133,9 +130,7 @@ public class UserController {
 
     @RequestMapping(value= "/profilePicSelector", method = {RequestMethod.GET})
     public ModelAndView profilePicSelectorGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
-
-
-        return new ModelAndView("views/upload_picture");
+        return new ModelAndView("uploadPicture");
     }
 
     @RequestMapping(value = "/profilePicSelector", method = { RequestMethod.POST })
@@ -147,18 +142,19 @@ public class UserController {
             return profilePicSelectorGet(form);
         }
 
-
-
         profilePicService.uploadProfilePicture(authentication.getName(), form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
         return new ModelAndView("redirect:/user");
     }
 
     @RequestMapping(value="/user")
     public ModelAndView user(@ModelAttribute("ProfilePicForm") ProfilePicForm form, BindingResult bindingResult, Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "updatedPass",required = false) final boolean updatedPass){
+        if(bindingResult.hasErrors()){
+            throw new IllegalArgumentException();
+        }
         String username = authentication.getName();
-        User user = userService.getUserInformation(username).get();
-        ModelAndView mav = new ModelAndView("views/user_profile");
-        mav.addObject("username",username);
+        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+
+        ModelAndView mav = new ModelAndView("userProfile");
         mav.addObject("user",user);
 
         int pageNumber= page.orElse(0);
@@ -169,50 +165,45 @@ public class UserController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
         mav.addObject("updatedPass", updatedPass);
-
         return mav;
     }
 
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
-    public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/changePassword");
-        mav.addObject("username",authentication.getName());
-        return mav;
+    public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") ChangePasswordForm form){
+        return new ModelAndView("changePassword");
     }
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.POST})
-    public ModelAndView changePassword(@Valid @ModelAttribute("changePasswordForm") changePasswordForm form, BindingResult bindingResult, Authentication authentication){
+    public ModelAndView changePassword(@Valid @ModelAttribute("changePasswordForm") ChangePasswordForm form, BindingResult bindingResult, Authentication authentication){
         if(bindingResult.hasErrors())
-            return changePasswordGet(new changePasswordForm(),authentication);
-
-        //check current password.
+            return changePasswordGet(new ChangePasswordForm());
         userService.changePassword(authentication.getName(), form.getPassword());
         return new ModelAndView("redirect:/user"+"?updatedPass=true");
     }
 
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
-    public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
-        ModelAndView mav = new ModelAndView("views/recoverPassword");
-        mav.addObject("username",username);
-        mav.addObject("code",code);
+    public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") RecoverPasswordForm form, @RequestParam(value = "user") String username, @RequestParam(value = "code") Integer code){
+        ModelAndView mav = new ModelAndView("recoverPassword");
+        mav.addObject("code", code);
+        mav.addObject("username", username);
         return mav;
     }
 
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.POST})
-    public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
+    public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") RecoverPasswordForm form, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return recoverPasswordGet(new recoverPasswordForm(),form.getUsername(), form.getCode());
-        //check this before login
+            return recoverPasswordGet(new RecoverPasswordForm(),form.getUsername(), form.getCode());
+        if(!userService.changePassword(form.getUsername(), form.getCode(), form.getPassword()))
+            throw new NoSuchUserException(form.getUsername());
 
-        userService.changePassword(form.getUsername(), form.getCode(), form.getPassword());
         return logInProgrammatically(form.getUsername());
     }
 
     private ModelAndView logInProgrammatically(String username ){
-        UserAuth user = userService.getUserByUsername(username).orElseThrow(RuntimeException::new);
+        UserAuth user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
         Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
         SecurityContextHolder.getContext().setAuthentication(auth);

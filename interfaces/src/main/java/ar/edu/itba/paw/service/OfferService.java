@@ -17,7 +17,7 @@ public interface OfferService {
     int countOffersBy(OfferFilter filter);
 
     int countOffersByUsername(String username);
-    Collection<Offer> getOffersByUsername(String username);
+    Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
 
 
     void modifyOffer(OfferDigest digest);

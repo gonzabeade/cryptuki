@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 
-// TODO! Return optionals
 public class ComplainFilter {
 
     private final int page;

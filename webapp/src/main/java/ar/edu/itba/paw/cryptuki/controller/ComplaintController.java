@@ -1,11 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.service.ComplainService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class ComplaintController {
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("views/complaints_page");
+        ModelAndView mav = new ModelAndView("complaintsPage");
 
         int pageNumber= page.orElse(0);
         int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
@@ -51,19 +52,16 @@ public class ComplaintController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject("username",authentication.getName());
         return mav;
     }
 
     @RequestMapping(value = "/complain", method = RequestMethod.GET)
     public ModelAndView complain(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
-        ModelAndView mav =  new ModelAndView("views/complain");
-
+        ModelAndView mav =  new ModelAndView("complain");
         String username= authentication.getName();
-        User user = us.getUserInformation(username).get();
+        User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
         form.setEmail(user.getEmail());
         mav.addObject("complainerId",user.getId());
-        mav.addObject("username", authentication.getName());
         mav.addObject("supportForm", form);
         mav.addObject("tradeId", tradeId);
         return mav;
@@ -77,7 +75,7 @@ public class ComplaintController {
     }
 
     @RequestMapping(value = "/complain", method = RequestMethod.POST)
-    public ModelAndView createComplain(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
+    public ModelAndView createComplain(@Valid @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors())
             return complain(form, authentication, form.getTradeId());

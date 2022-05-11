@@ -7,9 +7,6 @@ import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
-import ar.edu.itba.paw.service.mailing.MailMessage;
-import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafMailHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,16 +20,15 @@ import java.util.Optional;
 public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
-    private final ContactService<MailMessage> mailContactService;
+    private final MessageSenderFacade messageSenderFacade;
 
-    private final ThymeleafMailHelper thymeleafMailHelper;
+
 
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafMailHelper thymeleafMailHelper) {
+    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade) {
         this.complainDao = complainDao;
-        this.mailContactService = mailContactService;
-        this.thymeleafMailHelper = thymeleafMailHelper;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
 
@@ -90,6 +86,8 @@ public class ComplainServiceImpl implements ComplainService{
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+
+        messageSenderFacade.sendComplaintReceipt(complain.getComplainer(), complain.getComplainerComments());
     }
 
     @Override
@@ -143,20 +141,62 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_ADMIN")
+    public void closeComplainWithComment(int complainId, String comments) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.CLOSED);
+            complainDao.updateModeratorComment(complainId, comments);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
+    public void unassignComplain(int complainId) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.PENDING);
+            complainDao.updateModerator(complainId, null);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
+    public void assignComplain(int complainId,String username) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.ASSIGNED);
+            complainDao.updateModerator(complainId, username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateModerator(int complainId, String username, String comment) {
         updateModerator(complainId, username);
         updateModeratorComment(complainId, comment);
     }
 
     @Override
-    public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
-
-        MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafMailHelper);
-
-
-        needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");
-        mailContactService.sendMessage(needHelpThymeleafMailMessage);
+    public void getSupportFor(SupportDigest digest) {
+        messageSenderFacade.sendAnonymousComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
     }
 
 

@@ -68,7 +68,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="${staticTitle}">¿Necesitas Ayuda?</span></h1>
+                                                                <h1><span th:text="#{needHelpTemplate.title}">¡Consulta Contestada!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -101,11 +101,11 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
-                                                                <p><b><span th:text="${staticHello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
-                                                                <p><span th:text="${staticQuestionReceived}">Hemos recibido tu consulta.</span></p>
-                                                                <p><b><span th:text="${staticYourQuestion}">Tu consulta:</span></b> <span th:text="${question}">Tu consulta</span></p>
-                                                                <p><b><span th:text="${staticAnswer}">Respuesta:</span></b> <span th:text="${answer}">Respuesta</span></p>
-                                                                <p><span th:text="${staticRewriteUs}">En caso de que la respuesta no sea lo que estabas buscando podras volver a escribirnos.</span></p>
+                                                                <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
+                                                                <p><span th:text="#{questionReceived}">Hemos recibido tu consulta.</span></p>
+                                                                <p><b><span th:text="#{yourQuestion}">Tu consulta:</span></b> <span th:text="${question}">Tu consulta</span></p>
+                                                                <p><b><span th:text="#{answer}">Respuesta</span>:</b> <span th:text="${answer}">Respuesta</span></p>
+                                                                <p><span th:text="#{rewriteUs}">En caso de que la respuesta no sea lo que estabas buscando podrás volver a escribirnos.</span></p>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -177,9 +177,9 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p30t es-p25b es-p30r es-p30l"  esd-links-color="#111111" style="padding-bottom: 15px;">
-                                                                <a class="esd-anchor" name="http://locahost:8080" style="color: #111111;"></a>
-                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="${staticNeedMoreHelp}">¿Necesitas más ayuda?</span></h3>
-                                                                <a href="www.google.com" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="${staticWriteUs}">Escribinos</span></a>
+                                                                <a class="esd-anchor" name="http://locahost:8080/webapp/contact" style="color: #111111;"></a>
+                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
+                                                                <a href="http://locahost:8080/webapp/contact" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escribinos</span></a>
                                                             </td>
                                                         </tr>
                                                         </tbody>

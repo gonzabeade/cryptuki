@@ -1,5 +1,6 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,12 +17,10 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex mt-10 mb-10">
     <% request.setCharacterEncoding("utf-8"); %>
-    <jsp:include page="../components/recover_password_form.jsp">
+    <jsp:include page="../components/recoverPasswordForm.jsp">
         <jsp:param name="username" value="${username}"/>
         <jsp:param name="username" value="${code}"/>
     </jsp:include>

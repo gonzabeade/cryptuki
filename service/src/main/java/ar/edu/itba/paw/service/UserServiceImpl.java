@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.service.mailing.ChangePasswordThymeleafMailMessage;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -12,23 +14,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private  UserDao userDao;
-    private  UserAuthDao userAuthDao;
-    private  PasswordEncoder passwordEncoder;
-    private  ContactService<MailMessage> contactService;
+    private final ar.edu.itba.paw.persistence.UserDao userDao;
+    private final UserAuthDao userAuthDao;
+    private final PasswordEncoder passwordEncoder;
+    private final MessageSenderFacade messageSenderFacade;
 
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao,final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
+    public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, MessageSenderFacade messageSender) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;
-        this.contactService = contactService;
+        this.messageSenderFacade = messageSender;
     }
 
 
@@ -60,17 +63,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceDataAccessException(pe);
         }
 
-        // TODO: modularizar y logica de negocio con Salva!
-
-       String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
-                + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
-                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode()
-                + " en el lugar indicado o entrando al siguiente link:\n"
-                + "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername() +"&code="+authBuilder.getCode();
-        MailMessage message = contactService.createMessage(userBuilder.getEmail());
-        message.setSubject("Verifica tu cuenta.");
-        message.setBody(message_body);
-        contactService.sendMessage(message);
+        messageSenderFacade.sendWelcomeMessage(userBuilder.getEmail(), authBuilder.getUsername(), authBuilder.getCode());
     }
 
     @Override
@@ -84,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public boolean verifyUser(String username, Integer code) {
 
         boolean verified;
@@ -188,13 +181,10 @@ public class UserServiceImpl implements UserService {
     public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
-            throw new RuntimeException("Invalid email");
+            throw new NoSuchUserException(email);
 
         UserAuth user = maybeUser.get();
-        MailMessage message = contactService.createMessage(email);
-        message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/webapp/recoverPassword?user=" + user.getUsername() + "&code=" + user.getCode());
-        contactService.sendMessage(message);
+        messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
     }
 
     @Override

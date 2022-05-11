@@ -34,6 +34,7 @@ public class OfferJdbcDao implements OfferDao {
                         .withPhoneNumber(resultSet.getString("phone_number"))
                         .withRatingCount(resultSet.getInt("rating_count"))
                         .withRatingSum(resultSet.getInt("rating_sum"))
+                        .withUsername(resultSet.getString("uname"))
                         .withLastLogin(resultSet.getTimestamp("last_login").toLocalDateTime())
                         .build();
 

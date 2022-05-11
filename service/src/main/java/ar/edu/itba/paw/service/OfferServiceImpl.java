@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.OfferDao;
-import ar.edu.itba.paw.OfferFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class OfferServiceImpl implements OfferService {
 
     private final OfferDao offerDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public OfferServiceImpl(OfferDao offerDao) {
+    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade) {
         this.offerDao = offerDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
@@ -35,7 +38,9 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
-            return offerDao.makeOffer(digest);
+            int offerId = offerDao.makeOffer(digest);
+            messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), digest,  offerId);
+            return offerId;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -62,16 +67,18 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Offer> getOffersByUsername(String username) {
+    public Collection<Offer> getOffersByUsername(String username, int page, int pageSize) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username)
+            return offerDao.getOffersBy(new OfferFilter().byUsername(username).withPageSize(pageSize)
                     .byStatus("APR")
                     .byStatus("PSE")
-                    .byStatus("PSU"));
+                    .byStatus("PSU")
+                    .fromPage(page)
+            );
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

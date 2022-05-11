@@ -1,22 +1,15 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.exception.NoSuchOfferException;
-import ar.edu.itba.paw.exception.NoSuchTradeException;
-import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
+import ar.edu.itba.paw.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.Locale;
 
 @ControllerAdvice
 class ErrorControllerAdvice {
@@ -57,6 +50,14 @@ class ErrorControllerAdvice {
         LOGGER.debug("Captured NoSuchOfferException", nsoe);
         return new ModelAndView("forward:/404");
     }
+
+    @ExceptionHandler(NoSuchComplainException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView notFound(NoSuchComplainException nsce) {
+        LOGGER.debug("Captured NoSuchOfferException", nsce);
+        return new ModelAndView("forward:/404");
+    }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)

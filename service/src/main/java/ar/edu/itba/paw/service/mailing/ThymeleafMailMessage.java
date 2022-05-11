@@ -1,36 +1,31 @@
 package ar.edu.itba.paw.service.mailing;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 public abstract class ThymeleafMailMessage extends MailMessage {
 
     private String template;
 
-    private ThymeleafMailHelper helper;
+    private TemplateEngine templateEngine;
+    private Locale locale = Locale.ENGLISH;
 
-    public ThymeleafMailMessage(String from, String to, String template, ThymeleafMailHelper helper) {
-        super(from, to);
-        super.setHtml(true);
-        this.template = template;
-        this.helper = helper;
-    }
-
-    public ThymeleafMailMessage(MailMessage mailMessage, String template, ThymeleafMailHelper helper) {
+    public ThymeleafMailMessage(MailMessage mailMessage, String template, TemplateEngine templateEngine) {
         super(mailMessage);
         super.setHtml(true);
         this.template = template;
-        this.helper = helper;
+        this.templateEngine = templateEngine;
     }
 
     @Override
     public void setHtml(boolean isHtml) {
+        throw new UnsupportedOperationException("Thymeleaf emails are always html.");
+    }
+
+    @Override
+    public void setBody(String message) {
         throw new UnsupportedOperationException("Thymeleaf emails are always html.");
     }
 
@@ -40,9 +35,16 @@ public abstract class ThymeleafMailMessage extends MailMessage {
     protected abstract Context getContext();
 
     public String getBody() {
-        return helper.process(getTemplate(), getContext());
+        return templateEngine.process(getTemplate(), getContext());
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
 
 }

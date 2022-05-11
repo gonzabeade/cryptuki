@@ -1,15 +1,13 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
-import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.Optional;
 
 
@@ -48,7 +45,7 @@ public class HomeController {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
 
-        final ModelAndView mav = new ModelAndView("views/index");
+        final ModelAndView mav = new ModelAndView("index");
 
         int pageNumber = page.orElse(0);
         OfferFilter filter = new OfferFilter()
@@ -70,30 +67,26 @@ public class HomeController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("username",  authentication.getName());
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
         }
         return mav;
     }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET)
     public ModelAndView coins(final Authentication authentication) {
-        final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("coinsPage"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView contact(@ModelAttribute("supportForm") final SupportForm form, Authentication authentication){
-        ModelAndView mav =  new ModelAndView("views/contact");
+        ModelAndView mav =  new ModelAndView("contact");
 
         if ( null != authentication ) {
             String username= authentication.getName();
-            User user = us.getUserInformation(username).get();
+            User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
             form.setEmail(user.getEmail());
-            mav.addObject("username",  authentication.getName());
         }
 
         mav.addObject("supportForm", form);

@@ -23,9 +23,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">
     <div class="flex flex-col my-auto mx-3">
@@ -66,7 +64,7 @@
 </div>
 <div class=" flex justify-center mx-20">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/welcome_message.jsp"/>
+    <jsp:include page="../components/welcomeMessage.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
     <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
@@ -75,19 +73,19 @@
             <c:forEach var="offer" items="${offerList}">
                 <li>
                     <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
+                    <c:set  var="owner" value="${offer.seller.username.isPresent() ? offer.seller.username.get() : offer.seller.email}" scope="request"/>
                     <% request.setCharacterEncoding("UTF-8"); %>
                     <jsp:include page="../components/card.jsp">
                         <jsp:param name="currency" value="${offer.crypto.code}"/>
-                        <jsp:param name="owner" value="${offer.seller.email}"/>
+                        <jsp:param name="owner" value="${owner}"/>
                         <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                         <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                         <jsp:param name="offerId" value="${offer.id}"/>
                         <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                         <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                         <jsp:param name="userEmail" value="${userEmail}"/>
-                        <jsp:param name="isAdmin" value="${isAdmin}"/>
                         <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
-                        <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
+                        <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().toString()}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                         <jsp:param name="rating" value="${offer.seller.rating}"/>
                     </jsp:include>

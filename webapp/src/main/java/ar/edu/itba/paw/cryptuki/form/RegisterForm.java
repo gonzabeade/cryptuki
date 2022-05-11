@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
+import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateUsername;
+import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
 import ar.edu.itba.paw.cryptuki.form.annotation.PasswordMatch;
-import ar.edu.itba.paw.cryptuki.form.annotation.UserExists;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserAuth;
 import org.hibernate.validator.constraints.Email;
@@ -9,15 +11,20 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@PasswordMatch
-@UserExists
+
+@EqualFields(
+        field1="password",
+        field2="repeatPassword"
+)
 public class RegisterForm {
 
 
     @Size(min=6, max= 100)
+    @DuplicateEmail
     @Pattern(regexp=".+@.+\\..+")
     private String email;
     @Size(min = 6, max = 100)
+    @DuplicateUsername
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String username;
 

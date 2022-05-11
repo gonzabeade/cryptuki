@@ -166,7 +166,6 @@ public class AdminController {
             trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
         }
 
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("trade", trade);
         mav.addObject("complain", complain);
         mav.addObject("complainer", complainer);

@@ -134,7 +134,6 @@ public class TradeFluxController {
         User user = us.getUserInformation(authentication.getName()).get();
         Offer offer = offerOptional.get();
 
-        mav.addObject("username", authentication.getName());
         mav.addObject("user", user);
 
         mav.addObject("trade", trade);

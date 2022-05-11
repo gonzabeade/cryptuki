@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
@@ -18,6 +19,7 @@
   <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden flex flex-col">
+<sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/header.jsp"/>
 <% request.setCharacterEncoding("utf-8"); %>

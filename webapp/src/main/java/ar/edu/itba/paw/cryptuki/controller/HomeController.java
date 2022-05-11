@@ -86,7 +86,6 @@ public class HomeController {
             String username= authentication.getName();
             User user = us.getUserInformation(username).get();
             form.setEmail(user.getEmail());
-            mav.addObject("username",  authentication.getName());
         }
 
         mav.addObject("supportForm", form);

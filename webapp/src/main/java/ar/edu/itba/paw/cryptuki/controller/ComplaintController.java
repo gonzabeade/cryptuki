@@ -62,7 +62,6 @@ public class ComplaintController {
         User user = us.getUserInformation(username).get();
         form.setEmail(user.getEmail());
         mav.addObject("complainerId",user.getId());
-        mav.addObject("username", authentication.getName());
         mav.addObject("supportForm", form);
         mav.addObject("tradeId", tradeId);
         return mav;

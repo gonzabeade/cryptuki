@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="claimSent"><messages:message code="claimSent"/></c:set>
-
+<sec:authentication property="name" var="username"/>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

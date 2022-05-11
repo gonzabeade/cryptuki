@@ -78,7 +78,6 @@ public class UserController {
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) boolean error){
         ModelAndView mav = new ModelAndView("codeVerification");
-        mav.addObject("username", username);
         mav.addObject("error", error);
         return mav;
     }
@@ -161,7 +160,6 @@ public class UserController {
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
         ModelAndView mav = new ModelAndView("userProfile");
-        mav.addObject("username",username);
         mav.addObject("user",user);
 
         int pageNumber= page.orElse(0);
@@ -197,7 +195,6 @@ public class UserController {
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
     public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
         ModelAndView mav = new ModelAndView("recoverPassword");
-        mav.addObject("username",username);
         mav.addObject("code",code);
         return mav;
     }

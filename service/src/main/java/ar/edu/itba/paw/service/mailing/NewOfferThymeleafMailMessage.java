@@ -31,7 +31,7 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
         if ( username == null || coinCode == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);

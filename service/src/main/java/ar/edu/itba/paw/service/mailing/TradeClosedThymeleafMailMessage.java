@@ -36,7 +36,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         if ( username == null || coinCode == null || buyer == null || wallet == null || buyerEmail == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
 
         context.setVariable("username", username);

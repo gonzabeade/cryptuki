@@ -25,7 +25,7 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
         if ( username == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
         context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);

@@ -33,7 +33,7 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
         if ( username == null || coinCode == null || buyer == null || buyerMessage == null || buyerMail == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);

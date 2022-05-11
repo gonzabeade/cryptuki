@@ -23,7 +23,7 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
         if (username == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
         return context;

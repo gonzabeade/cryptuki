@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
@@ -12,8 +13,8 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyerMessage;
     private String buyerMail;
 
-    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 

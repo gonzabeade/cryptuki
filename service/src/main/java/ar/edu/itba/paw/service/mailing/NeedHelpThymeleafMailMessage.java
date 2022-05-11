@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
@@ -10,11 +11,8 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
     private String question;
     private String answer;
 
-    public NeedHelpThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public NeedHelpThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public NeedHelpThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 

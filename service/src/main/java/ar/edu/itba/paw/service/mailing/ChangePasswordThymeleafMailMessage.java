@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
@@ -7,11 +8,8 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
 
-    public ChangePasswordThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 

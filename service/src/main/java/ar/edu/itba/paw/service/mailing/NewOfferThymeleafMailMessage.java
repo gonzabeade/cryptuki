@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
@@ -11,11 +12,8 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
     private String minQuantity;
     private String maxQuantity;
 
-    public NewOfferThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public NewOfferThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public NewOfferThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 

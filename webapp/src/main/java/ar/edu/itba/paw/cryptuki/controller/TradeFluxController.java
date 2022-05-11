@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.RatingService;
@@ -45,13 +46,7 @@ public class TradeFluxController {
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
         ModelAndView mav = new ModelAndView("buyOffer");
-
-        Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(offerId);
-
-        Offer offer = offerOptional.get();
-
+        Offer offer =  offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         mav.addObject("offer", offer);
         mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
@@ -73,11 +68,7 @@ public class TradeFluxController {
     public ModelAndView executeTrade( @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final Authentication authentication){
 
         int offerId = offerBuyForm.getOfferId();
-        Optional<Offer> offerOptional = offerService.getOfferById(offerId);
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(offerId);
-
-        Offer offer = offerOptional.get();
+        Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
 
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
@@ -94,9 +85,6 @@ public class TradeFluxController {
         if(errors.hasErrors()) {
             return executeTrade(offerBuyForm, authentication);
         }
-
-
-
 
         int tradeId = tradeService.makeTrade(offerBuyForm.toTradeBuilder(authentication.getName()));
         return new ModelAndView("redirect:/receipt/"+tradeId);
@@ -125,22 +113,11 @@ public class TradeFluxController {
     private ModelAndView receiptView(String viewName, int tradeId, Authentication authentication) {
         ModelAndView mav = new ModelAndView(viewName);
 
-        Optional<Trade> tradeOptional = tradeService.getTradeById(tradeId);
-
-        if (!tradeOptional.isPresent())
-            throw new NoSuchTradeException(tradeId);
-
-        Trade trade = tradeOptional.get();
-        Optional<Offer> offerOptional = offerService.getOfferById(trade.getOfferId());
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(trade.getOfferId());
-
-
-        User user = us.getUserInformation(authentication.getName()).get();
-        Offer offer = offerOptional.get();
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        Offer offer = offerService.getOfferById(trade.getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOfferId()));
+        User user = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
 
         mav.addObject("user", user);
-
         mav.addObject("trade", trade);
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));

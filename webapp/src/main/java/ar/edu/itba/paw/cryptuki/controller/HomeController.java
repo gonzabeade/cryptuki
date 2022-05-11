@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class HomeController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
+            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
         }
         return mav;
     }
@@ -84,7 +85,7 @@ public class HomeController {
 
         if ( null != authentication ) {
             String username= authentication.getName();
-            User user = us.getUserInformation(username).get();
+            User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
             form.setEmail(user.getEmail());
         }
 

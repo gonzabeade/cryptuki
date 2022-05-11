@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.ComplainService;
@@ -57,9 +58,8 @@ public class ComplaintController {
     @RequestMapping(value = "/complain", method = RequestMethod.GET)
     public ModelAndView complain(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
         ModelAndView mav =  new ModelAndView("complain");
-
         String username= authentication.getName();
-        User user = us.getUserInformation(username).get();
+        User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
         form.setEmail(user.getEmail());
         mav.addObject("complainerId",user.getId());
         mav.addObject("supportForm", form);

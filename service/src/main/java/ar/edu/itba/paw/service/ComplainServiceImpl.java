@@ -141,6 +141,54 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_ADMIN")
+    public void closeComplainWithComment(int complainId, String comments) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.CLOSED);
+            complainDao.updateModeratorComment(complainId, comments);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
+    public void unassignComplain(int complainId) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.PENDING);
+            complainDao.updateModerator(complainId, null);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
+    public void assignComplain(int complainId,String username) {
+
+        if (complainId < 0)
+            throw new IllegalArgumentException("Complain id can only be non negative.");
+
+        try {
+            complainDao.updateComplainStatus(complainId, ComplainStatus.ASSIGNED);
+            complainDao.updateModerator(complainId, username);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+
+    @Override
+    @Transactional
+    @Secured("ROLE_ADMIN")
     public void updateModerator(int complainId, String username, String comment) {
         updateModerator(complainId, username);
         updateModeratorComment(complainId, comment);

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.admin;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.persistence.ComplainStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
@@ -64,12 +65,16 @@ public class ComplainFilterResult {
         this.complainer= complainer;
     }
 
-    public ComplainFilter.Builder toComplainFilterBuilder() {
+    public ComplainFilter.Builder toComplainFilterBuilder(Optional<Integer> page, int page_size, ComplainStatus status ) {
         return new ComplainFilter.Builder()
                 .withComplainerUsername(complainer)
                 .withTradeId(tradeId)
                 .withOfferId(offerId)
                 .from(fromDate)
-                .to(toDate);
+                .to(toDate)
+                .withPage(page.orElse(0))
+                .withPageSize(page_size)
+                .withComplainStatus(status)
+                ;
     }
 }

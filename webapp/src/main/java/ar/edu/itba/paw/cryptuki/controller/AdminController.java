@@ -3,6 +3,9 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
+import ar.edu.itba.paw.exception.NoSuchComplainException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.persistence.Trade;
@@ -38,161 +41,97 @@ public class AdminController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ,   final Authentication authentication){
-        if(result.hasErrors()){
-            return null;
-        }
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("admin/complaints");
-        ComplainFilter filter = builder
-                .withComplainStatus(ComplainStatus.PENDING)
-                .withPage(page.orElse(0))
-                .withPageSize(PAGE_SIZE)
-                .build();
-
-
-        mav.addObject("baseUrl", "/admin"); // TODO: check
-        mav.addObject("title", "Reclamos pendientes");
-
-        int complainCount = complainService.countComplainsBy(filter);
-        int pageNumber = page.orElse(0);
-        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("complainList", complainService.getComplainsBy(filter));
-
-        return mav;
+    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ){
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.PENDING);
+        ComplainFilter filter = builder.build();
+        return getComplaintsByFilter(filter,"admin/complaints","/admin");
     }
 
 
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
     public ModelAndView assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
-
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("admin/complaints");
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.ASSIGNED);
         ComplainFilter filter = builder
-                .withComplainStatus(ComplainStatus.ASSIGNED)
-                .withPage(page.orElse(0))
-                .withPageSize(PAGE_SIZE)
                 .withModeratorUsername(authentication.getName())
                 .build();
-
-
-        mav.addObject("baseUrl", "/admin/assigned"); // TODO: check
-        mav.addObject("title", "Reclamos asignados a mí");
-
-        int complainCount = complainService.countComplainsBy(filter);
-        int pageNumber = page.orElse(0);
-        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("complainList", complainService.getComplainsBy(filter));
-
-        return mav;
+        return getComplaintsByFilter(filter,"admin/complaints","/admin/assigned");
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
-    public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
-
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("admin/complaints");
+    public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult){
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.CLOSED);
         ComplainFilter filter = builder
-                .withComplainStatus(ComplainStatus.CLOSED)
-                .withPage(page.orElse(0))
-                .withPageSize(PAGE_SIZE)
                 .build();
-
-
-        mav.addObject("baseUrl", "/admin/solved"); // TODO: check
-        mav.addObject("title", "Reclamos resueltos");
-
-        int complainCount = complainService.countComplainsBy(filter);
-        int pageNumber = page.orElse(0);
-        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("complainList", complainService.getComplainsBy(filter));
-
-        return mav;
+        return getComplaintsByFilter(filter,"admin/complaints","/admin/solved");
     }
 
     @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
-    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("admin/complaint");
-
-
-        Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
-        Trade trade = null;
-
-        if(complain.getTradeId().isPresent()){
-            trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
-        }
-
-        mav.addObject("trade", trade);
-        mav.addObject("complain", complain);
-        mav.addObject("complainer", complainer);
-
-        return mav;
-    }
-
-
-    @RequestMapping(value = "/selfassign/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView selfAssign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
-
-        // TODO: Esto esta mal: tiene que ser Transactional y estar en la capa de servicio
-        complainService.updateComplainStatus(complaintId, ComplainStatus.ASSIGNED);
-        complainService.updateModerator(complaintId, authentication.getName());
-        return new ModelAndView("redirect:/admin/solve/"+complaintId); //TODO !!!!!!!!!!!!!!
-    }
-    @RequestMapping(value = "/unassign/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView unassign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
-
-        // TODO: Esto esta mal: tiene que ser Transactional y estar en la capa de servicio
-        complainService.updateComplainStatus(complaintId, ComplainStatus.PENDING);
-        complainService.updateModerator(complaintId, null);
-        return new ModelAndView("redirect:/admin/"); //TODO !!!!!!!!!!!!!!
+    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId){
+        return setUpComplaintView("admin/complaint",complaintId);
     }
 
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
-    public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
+    public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId){
+        return setUpComplaintView("admin/solveComplaint",complaintId);
+    }
 
-        ModelAndView mav = new ModelAndView("admin/solveComplaint");
-
-
-        Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
-        User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(RuntimeException::new);
-        Trade trade = null;
-        if(complain.getTradeId().isPresent()){
-            trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
+    @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId){
+        if(result.hasErrors()){
+            return solveComplaint(form,complaintId);
         }
+        complainService.closeComplainWithComment(complaintId, form.getComments());
+        return new ModelAndView("redirect:/admin/success");
+    }
 
+
+    @RequestMapping(value = "/unassign/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView unassign(@PathVariable(value = "complaintId") final int complaintId) {
+        complainService.unassignComplain(complaintId);
+        return new ModelAndView("redirect:/admin/");
+    }
+
+    @RequestMapping(value = "/selfassign/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView selfAssign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
+        complainService.assignComplain(complaintId, authentication.getName());
+        return new ModelAndView("redirect:/admin/solve/"+complaintId);
+    }
+
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public ModelAndView solveSuccess() {
+        return new ModelAndView("admin/solvedComplaint");
+    }
+
+
+    private ModelAndView getComplaintsByFilter(ComplainFilter filter,String view,String url){
+        ModelAndView mav = new ModelAndView(view);
+        mav.addObject("baseUrl", url);
+        mav.addObject("title", "Reclamos pendientes");
+        int complainCount = complainService.countComplainsBy(filter);
+        int pageNumber = filter.getPage();
+        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+        mav.addObject("complainList", complainService.getComplainsBy(filter));
+        return mav;
+
+    }
+
+
+    private ModelAndView setUpComplaintView(String view,int complaintId){
+        Complain complain = complainService.getComplainById(complaintId).orElseThrow(()->new NoSuchComplainException(complaintId));
+        User complainer = userService.getUserInformation(complain.getComplainer()).orElseThrow(()->new NoSuchUserException(complain.getComplainer()));
+        Trade trade;
+        if(complain.getTradeId().isPresent()){
+            trade = tradeService.getTradeById(complain.getTradeId().get()).orElseThrow(() -> new NoSuchTradeException(complain.getTradeId().get()));
+        }else
+            trade=null;
+        ModelAndView mav = new ModelAndView(view);
         mav.addObject("trade", trade);
         mav.addObject("complain", complain);
         mav.addObject("complainer", complainer);
         return mav;
     }
-    @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
-        if(result.hasErrors()){
-            return solveComplaint(form,complaintId,authentication);
-        }
 
 
-        // TODO!!! Deberia ser un metodo del servicio Transactional
-        complainService.updateComplainStatus(complaintId, ComplainStatus.CLOSED);
-        complainService.updateModeratorComment(complaintId, form.getComments());
-
-        return new ModelAndView("redirect:/admin/success");
-    }
-
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public ModelAndView solveSuccess() {
-        ModelAndView mav = new ModelAndView("admin/solvedComplaint");
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile")
-    public ModelAndView adminProfile(final Authentication authentication){
-        return null;
-    }
 }

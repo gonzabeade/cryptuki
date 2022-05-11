@@ -7,38 +7,28 @@ import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
-import ar.edu.itba.paw.service.mailing.MailMessage;
-import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.QuestionThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
-    private final ContactService<MailMessage> mailContactService;
-    private final ThymeleafProcessor thymeleafProcessor;
-    private final MessageSource messageSource;
+    private final MessageSenderFacade messageSenderFacade;
+
 
 
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafProcessor thymeleafProcessor, MessageSource messageSource) {
+    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade) {
         this.complainDao = complainDao;
-        this.mailContactService = mailContactService;
-        this.thymeleafProcessor = thymeleafProcessor;
-        this.messageSource = messageSource;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
 
@@ -156,11 +146,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     public void getSupportFor(SupportDigest digest) {
-        MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        QuestionThymeleafMailMessage questionMailMessage= new QuestionThymeleafMailMessage(mailMessage, thymeleafProcessor);
-        questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, Locale.ENGLISH));
-        questionMailMessage.setParameters(digest.getAuthor(), digest.getBody());
-        mailContactService.sendMessage(questionMailMessage);
+        messageSenderFacade.sendComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
     }
 
 

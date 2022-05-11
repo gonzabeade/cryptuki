@@ -3,42 +3,34 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.service.mailing.MailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafProcessor;
-import ar.edu.itba.paw.service.mailing.TradeOpenedThymeleafMailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.TemplateEngine;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class TradeServiceImpl implements TradeService {
 
-    private final ContactService<MailMessage> mailContactService;
     private final OfferService offerService;
     private final TradeDao tradeDao;
 
     private final UserService userService;
 
-    private final MessageSource messageSource;
-    private final ThymeleafProcessor mailProcessor;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserService userService, ThymeleafProcessor mailProcessor, MessageSource messageSource) {
-        this.mailContactService = mailContactService;
+    public TradeServiceImpl(OfferService offerService,
+                            TradeDao tradeDao,
+                            UserService userService,
+                            MessageSenderFacade messageSenderFacade) {
         this.offerService = offerService;
         this.tradeDao = tradeDao;
         this.userService = userService;
-        this.mailProcessor = mailProcessor;
-        this.messageSource = messageSource;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
 
@@ -61,12 +53,17 @@ public class TradeServiceImpl implements TradeService {
                     .withSellerUsername(userAuth.getUsername());
             int tradeId = tradeDao.makeTrade(trade);
 
-            //send email to seller
-            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
-            TradeOpenedThymeleafMailMessage tradeOpenMessage = new TradeOpenedThymeleafMailMessage(message, mailProcessor);
-            tradeOpenMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, Locale.ENGLISH));
-            tradeOpenMessage.setParameters(trade.getSellerUsername(), trade.getCryptoCurrency().getCode(), trade.getQuantity(), trade.getBuyerUsername(), "", "");
-            mailContactService.sendMessage(message);
+
+            messageSenderFacade.sendNewTradeNotification(
+                    offer.getSeller().getEmail(),
+                    trade.getSellerUsername(),
+                    trade.getCryptoCurrency().getCode(),
+                    trade.getQuantity(),
+                    trade.getBuyerUsername(),
+                    "",
+                    "",
+                    tradeId
+            );
 
             return tradeId;
         } catch (PersistenceException pe) {

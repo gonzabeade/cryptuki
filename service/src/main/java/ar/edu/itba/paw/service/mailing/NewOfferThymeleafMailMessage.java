@@ -8,16 +8,16 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private String coinCode;
-    private String askingPrice;
-    private String minQuantity;
-    private String maxQuantity;
+    private double askingPrice;
+    private double minQuantity;
+    private double maxQuantity;
 
     public NewOfferThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String coinCode, String askingPrice, String minQuantity, String maxQuantity) {
+    public void setParameters(String username, String coinCode, double askingPrice, double minQuantity, double maxQuantity) {
         this.username = username;
         this.coinCode = coinCode;
         this.askingPrice = askingPrice;
@@ -28,7 +28,7 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || askingPrice == null || minQuantity == null || maxQuantity == null)
+        if ( username == null || coinCode == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context();

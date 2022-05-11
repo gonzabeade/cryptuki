@@ -19,10 +19,12 @@ import java.util.Optional;
 public class OfferServiceImpl implements OfferService {
 
     private final OfferDao offerDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public OfferServiceImpl(OfferDao offerDao) {
+    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade) {
         this.offerDao = offerDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
@@ -35,7 +37,16 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
-            return offerDao.makeOffer(digest);
+            int offerId = offerDao.makeOffer(digest);
+            messageSenderFacade.sendOfferUploadedMessage("email",
+                    "username",
+                    digest.getCryptoCode(),
+                    digest.getAskingPrice(),
+                    digest.getMinQuantity(),
+                    digest.getMaxQuantity(),
+                    offerId
+                    );
+            return offerId;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

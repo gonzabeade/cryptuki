@@ -156,7 +156,7 @@ public class OfferController {
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
-        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName(), PAGE_SIZE));
+        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName(), pageNumber, PAGE_SIZE));
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());

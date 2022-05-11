@@ -66,7 +66,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="#{tradeClosed.title}">¡Trade Finalizada!</span></h1>
+                                                                <h1><span th:text="#{tradeOpened.title}">¡Trade Abierto!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -108,10 +108,11 @@
                                                         <tr>
                                                             <td class="esd-block-button es-p35t es-p35b es-p10r es-p10l" style="text-align: center; padding-bottom: 20px;">
                                                                                         <span class="es-button-border" style="border-color: #8ed3d5; background: #8ed3d5;">
-                                                                                            <a th:href="${receitpLink}" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5;">
-                                                                                                <span th:text="#{receipt}">Recibo</span>
+                                                                                            <a th:href="'http://pawserver.it.itba.edu.ar/paw-2022a-01/receiptDescription'+${code}" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5; padding: 7px; border: 2px solid #8ed3d5;border-radius:0.5rem; text-decoration: none; color: #f4f4f4">
+                                                                                                <span th:text="#{receipt}" style="font-family: sans-serif">Recibo</span>
                                                                                             </a>
                                                                                         </span>
+                                                            </td>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -183,9 +184,9 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p30t es-p25b es-p30r es-p30l"  esd-links-color="#111111" style="padding-bottom: 15px;">
-                                                                <a class="esd-anchor" name="http://locahost:8080/webapp/contact" style="color: #111111;"></a>
+                                                                <a class="esd-anchor" name="contact" style="color: #111111;"></a>
                                                                 <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
-                                                                <a href="http://locahost:8080/webapp/contact" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escríbenos</span></a>
+                                                                <a href="http://pawserver.it.itba.edu.ar/paw-2022a-01/contact" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escríbenos</span></a>
                                                             </td>
                                                         </tr>
                                                         </tbody>

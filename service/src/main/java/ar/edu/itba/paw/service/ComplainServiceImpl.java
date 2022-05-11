@@ -7,9 +7,6 @@ import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
-import ar.edu.itba.paw.service.mailing.MailMessage;
-import ar.edu.itba.paw.service.mailing.NeedHelpThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.ThymeleafProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,15 +20,15 @@ import java.util.Optional;
 public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
-    private final ContactService<MailMessage> mailContactService;
-    private final ThymeleafProcessor thymeleafProcessor;
+    private final MessageSenderFacade messageSenderFacade;
+
+
 
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, ContactService<MailMessage> mailContactService, ThymeleafProcessor thymeleafProcessor) {
+    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade) {
         this.complainDao = complainDao;
-        this.mailContactService = mailContactService;
-        this.thymeleafProcessor = thymeleafProcessor;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
 
@@ -148,12 +145,8 @@ public class ComplainServiceImpl implements ComplainService{
     }
 
     @Override
-    public void getSupportFor(SupportDigest digest) { // TODO: Improve radically
-
-        MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
-        NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafProcessor);
-        needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");
-        mailContactService.sendMessage(needHelpThymeleafMailMessage);
+    public void getSupportFor(SupportDigest digest) {
+        messageSenderFacade.sendComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
     }
 
 

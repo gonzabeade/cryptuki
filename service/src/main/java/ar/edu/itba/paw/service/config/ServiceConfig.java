@@ -4,6 +4,7 @@ import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.MailService;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -51,12 +52,14 @@ public class ServiceConfig {
         templateResolver.setTemplateMode("XHTML");
         templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         templateResolver.setCacheable(false);
-        templateEngine.setTemplateEngineMessageSource(newMessageSource());
+        templateEngine.setTemplateEngineMessageSource(mailingMessageSource());
         templateEngine.addTemplateResolver(templateResolver);
         return templateEngine;
     }
 
-    public MessageSource newMessageSource() {
+    @Bean
+    @Qualifier("mailingMessageSource")
+    public MessageSource mailingMessageSource() {
         final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("/i18n/mailing/messages");
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());

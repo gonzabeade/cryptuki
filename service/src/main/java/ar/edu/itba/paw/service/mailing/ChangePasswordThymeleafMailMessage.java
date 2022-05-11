@@ -1,22 +1,22 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "NeedHelpTemplate";
 
     private String username;
+    private int code;
 
-    public ChangePasswordThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username) {
+    public void setParameters(String username, int code) {
         this.username = username;
+        this.code = code;
     }
 
     @Override
@@ -25,9 +25,10 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
         if (username == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
+        context.setVariable("code", code);
         return context;
     }
 }

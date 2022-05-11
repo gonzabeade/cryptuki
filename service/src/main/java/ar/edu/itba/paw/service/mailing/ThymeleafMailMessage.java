@@ -1,29 +1,31 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.Locale;
 
 public abstract class ThymeleafMailMessage extends MailMessage {
 
     private String template;
 
-    private ThymeleafProcessor helper;
+    private TemplateEngine templateEngine;
+    private Locale locale = Locale.ENGLISH;
 
-    public ThymeleafMailMessage(String from, String to, String template, ThymeleafProcessor helper) {
-        super(from, to);
-        super.setHtml(true);
-        this.template = template;
-        this.helper = helper;
-    }
-
-    public ThymeleafMailMessage(MailMessage mailMessage, String template, ThymeleafProcessor helper) {
+    public ThymeleafMailMessage(MailMessage mailMessage, String template, TemplateEngine templateEngine) {
         super(mailMessage);
         super.setHtml(true);
         this.template = template;
-        this.helper = helper;
+        this.templateEngine = templateEngine;
     }
 
     @Override
     public void setHtml(boolean isHtml) {
+        throw new UnsupportedOperationException("Thymeleaf emails are always html.");
+    }
+
+    @Override
+    public void setBody(String message) {
         throw new UnsupportedOperationException("Thymeleaf emails are always html.");
     }
 
@@ -33,9 +35,16 @@ public abstract class ThymeleafMailMessage extends MailMessage {
     protected abstract Context getContext();
 
     public String getBody() {
-        return helper.process(getTemplate(), getContext());
+        return templateEngine.process(getTemplate(), getContext());
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
 
 }

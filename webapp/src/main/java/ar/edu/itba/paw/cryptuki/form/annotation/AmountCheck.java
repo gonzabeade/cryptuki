@@ -22,4 +22,6 @@ public @interface AmountCheck {
     public Class<? extends Payload>[] payload() default {};
 
     String offerId();
+    String amount();
+
 }

@@ -1,26 +1,24 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "TradeOpened";
 
     private String username;
-    private String quantity;
+    private float quantity;
     private String coinCode;
     private String buyer;
     private String buyerMessage;
     private String buyerMail;
 
-    public TradeOpenedThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
-        super(mailMessage, template, helper);
+    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String coinCode, String quantity, String buyer, String buyerMessage, String buyerMail) {
+    public void setParameters(String username, String coinCode, float quantity, String buyer, String buyerMessage, String buyerMail) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
@@ -32,10 +30,10 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || quantity == null || buyer == null || buyerMessage == null || buyerMail == null)
+        if ( username == null || coinCode == null || buyer == null || buyerMessage == null || buyerMail == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);

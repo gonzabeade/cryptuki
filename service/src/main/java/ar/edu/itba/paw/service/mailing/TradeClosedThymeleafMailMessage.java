@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service.mailing;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
@@ -7,21 +8,19 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private String buyer;
-    private String quantity;
+    private float quantity;
     private String coinCode;
     private String wallet;
     private String buyerEmail;
-    private String tradeCode;
+    private int tradeCode;
 
-    public TradeClosedThymeleafMailMessage(String from, String to, ThymeleafProcessor helper) {
-        super(from, to, template, helper);
-    }
-    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, ThymeleafProcessor helper) {
+
+    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine helper) {
         super(mailMessage, template, helper);
     }
 
 
-    public void setParameters(String username, String coinCode, String quantity, String buyer, String wallet, String buyerMail, String tradeCode) {
+    public void setParameters(String username, String coinCode, float quantity, String buyer, String wallet, String buyerMail, int tradeCode) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
@@ -34,10 +33,10 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || quantity == null || buyer == null || wallet == null || buyerEmail == null || tradeCode == null)
+        if ( username == null || coinCode == null || buyer == null || wallet == null || buyerEmail == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
-        Context context = new Context();
+        Context context = new Context(getLocale());
 
 
         context.setVariable("username", username);
@@ -47,8 +46,6 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("wallet", wallet);
         context.setVariable("buyerEmail", buyerEmail);
         context.setVariable("tradeCode", tradeCode);
-        context.setVariable("receiptLink", "http://locahost:8080/webapp/buy/" + tradeCode);
-
         return context;
     }
 }

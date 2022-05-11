@@ -3,7 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.service.mailing.MailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,18 +15,22 @@ import java.util.Optional;
 @Service
 public class TradeServiceImpl implements TradeService {
 
-    private final ContactService<MailMessage> mailContactService;
     private final OfferService offerService;
     private final TradeDao tradeDao;
 
     private final UserService userService;
 
+    private final MessageSenderFacade messageSenderFacade;
+
     @Autowired
-    public TradeServiceImpl(ContactService<MailMessage> mailContactService, OfferService offerService, TradeDao tradeDao, UserService userService) {
-        this.mailContactService = mailContactService;
+    public TradeServiceImpl(OfferService offerService,
+                            TradeDao tradeDao,
+                            UserService userService,
+                            MessageSenderFacade messageSenderFacade) {
         this.offerService = offerService;
         this.tradeDao = tradeDao;
         this.userService = userService;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
 
@@ -50,11 +53,17 @@ public class TradeServiceImpl implements TradeService {
                     .withSellerUsername(userAuth.getUsername());
             int tradeId = tradeDao.makeTrade(trade);
 
-            //send email to seller
-//            MailMessage message = mailContactService.createMessage(offer.getSeller().getEmail());
-//            message.setSubject("Te compraron " +trade.getQuantity()/offer.getAskingPrice()+" "+offer.getCrypto().getCode());
-//            message.setBody("Quedan por vender "+ remaining +" "+offer.getCrypto().getCode() );
-//            mailContactService.sendMessage(message);
+
+            messageSenderFacade.sendNewTradeNotification(
+                    offer.getSeller().getEmail(),
+                    trade.getSellerUsername(),
+                    trade.getCryptoCurrency().getCode(),
+                    trade.getQuantity(),
+                    trade.getBuyerUsername(),
+                    "",
+                    "",
+                    tradeId
+            );
 
             return tradeId;
         } catch (PersistenceException pe) {

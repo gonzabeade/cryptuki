@@ -46,7 +46,7 @@ public class OfferJdbcDaoTest {
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(OFFER_TABLE)
                 .usingGeneratedKeyColumns("id");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,OFFER_TABLE);
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate,OFFER_TABLE);
         offers = new ArrayList<>(Arrays.asList(
 
                 new Offer.Builder(0, new User.Builder("gbeade@itba.edu.ar").withId(0).build(),

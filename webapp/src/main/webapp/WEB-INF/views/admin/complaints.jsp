@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="complainList" scope="request" type="java.util.Collection"/>
 
@@ -23,7 +24,7 @@
   <% request.setCharacterEncoding("utf-8"); %>
   <jsp:include page="../../components/admin/header.jsp"/>
   <div class="flex flex-col ml-96 my-10 h-screen w-screen">
-    <h1 class="font-sans text-4xl font-bold">${title}</h1>
+    <h1 class="font-sans text-4xl font-bold"><messages:message code="${title}"/></h1>
     <div class="flex flex-row mt-10 divide-x h-full">
       <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../../components/admin/filters.jsp">
@@ -49,7 +50,7 @@
           <jsp:param name="pages" value="${pages}"/>
           <jsp:param name="baseUrl" value="${baseUrl}"/>
         </jsp:include>
-        <h1 class="mx-auto text-gray-400 mx-auto">Total de páginas: ${pages}</h1>
+        <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
       </div>
     </div>
 

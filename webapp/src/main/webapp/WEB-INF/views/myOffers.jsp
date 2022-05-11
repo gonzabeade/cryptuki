@@ -34,7 +34,6 @@
                 <c:set  var="owner" value="${offer.seller.username.isPresent() ? offer.seller.username.get() : offer.seller.email}" scope="request"/>
 
                 <jsp:include page="../components/card.jsp">
-
                     <jsp:param name="currency" value="${offer.crypto.code}"/>
                     <jsp:param name="owner" value="${owner}"/>
                     <jsp:param name="asking_price" value="${offer.askingPrice}"/>

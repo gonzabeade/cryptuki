@@ -74,4 +74,13 @@ public final class UserAuth{
         return userStatus;
     }
     public int getCode() { return code; };
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof UserAuth))
+            return false;
+        UserAuth testedAuth= (UserAuth) object;
+        return testedAuth.getId() == this.getId();
+    }
 }

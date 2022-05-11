@@ -23,29 +23,29 @@
     <div class="flex flex-col ml-96">
         <div class="flex">
             <div class="flex flex-col  mt-10">
-                <h2 class="font-sans font-semibold text-polard text-5xl">Reclamo #<c:out value="${complain.complainId}"/></h2>
-                <h2 class="font-sans font-medium text-polard text-3xl">Efectuado el <c:out value="${complain.date}"/></h2>
+                <h2 class="font-sans font-semibold text-polard text-5xl"><messages:message code="claim"/> #<c:out value="${complain.complainId}"/></h2>
+                <h2 class="font-sans font-medium text-polard text-3xl"><messages:message code="carriedOutOn"/> <c:out value="${complain.date}"/></h2>
             </div>
         </div>
         <div class="flex flex-col mt-10">
-            <h1 class="font-sans font-medium text-polard text-2xl">Descripción del reclamo:</h1>
+            <h1 class="font-sans font-medium text-polard text-2xl"><messages:message code="claimDescription"/> :</h1>
             <p class=" rounded-lg"><c:out value="${complain.complainerComments.orElse('No hay comentarios')}"/></p>
         </div>
         <div class="flex flex-col mt-6">
-            <h1 class="font-sans font-medium text-polard text-2xl">Usuario del reclamo:</h1>
+            <h1 class="font-sans font-medium text-polard text-2xl"><messages:message code="claimUser"/>:</h1>
             <p class="rounded-lg text-xl"><c:out value="${complain.complainerUsername}"/></p>
             <p class="rounded-lg text-lg"><c:out value="${complainer.email}"/></p>
-            <p class="rounded-lg text-gray-400">Última vez activo: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
+            <p class="rounded-lg text-gray-400"><messages:message code="lastTimeActive"/>: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
         </div>
         <div class="flex flex-col mt-3">
              <c:url value="/admin/solve/${complaintId}" var="postUrl"/>
             <form:form modelAttribute="solveComplaintForm" action="${postUrl}" method="post" cssClass="flex flex-col mx-auto">
                 <form:errors path="comments" cssClass="text-center text-red-400 mx-auto"/>
-                <form:label path="comments" cssClass="font-sans font-medium text-polard text-2xl text-center ">Escribí un comentario antes de cerrar el reclamo</form:label>
+                <form:label path="comments" cssClass="font-sans font-medium text-polard text-2xl text-center "><messages:message code="writeCommentBeforeClosingClaim"/></form:label>
                 <form:textarea path="comments" cssClass="rounded-lg h-64 p-3 mt-2" />
                 <div class="flex flex-row">
-                    <a href="<c:url value="/admin/assigned"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"> Volver a Reclamos Asignados a mí</a>
-                    <button type="submit" class="bg-frostdr text-white p-3 font-sans rounded-lg mx-auto mt-10">Cerrar reclamo</button>
+                    <a href="<c:url value="/admin/assigned"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="backToself-assigedClaims"/></a>
+                    <button type="submit" class="bg-frostdr text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="closeClaim"/></button>
                 </div>
                 </form:form>
         </div>
@@ -53,21 +53,21 @@
     </div>
     <c:if test="${trade!=null}">
     <div class="flex flex-col mt-6 mx-auto">
-        <h1 class="font-sans font-medium text-polard text-2xl text-center">Detalles del trade</h1>
+        <h1 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="tradeDetails"/></h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
-            <h1 class="font-sans font-medium text-polard text-xl text-center ">Trade #<c:out value="${trade.tradeId}"/></h1>
-            <h1 class="font-sans font-medium text-polard text-m text-center ">Realizado sobre la oferta #<c:out value="${trade.offerId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-xl text-center "><messages:message code="trade"/> #<c:out value="${trade.tradeId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offerId}"/></h1>
             <div class="flex flex-col mx-auto mt-5">
-                <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center">Participantes</h2>
-                <p class="font-sans font-polard"><b>Comprador:</b> <c:out value="${trade.buyerUsername}"/></p>
-                <p class="font-sans font-polard"><b>Vendedor:</b> <c:out value="${trade.sellerUsername}"/></p>
+                <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center"><messages:message code="participants"/></h2>
+                <p class="font-sans font-polard"><b><messages:message code="buyer"/>:</b> <c:out value="${trade.buyerUsername}"/></p>
+                <p class="font-sans font-polard"><b><messages:message code="seller"/>:</b> <c:out value="${trade.sellerUsername}"/></p>
             </div>
             <div class="flex flex-col mx-auto mt-3">
-                <h2 class="font-sans font-semibold font-polard text-2xl text-center ">Cantidad ofertada</h2>
+                <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="offeredAmount"/></h2>
                 <h3 class="text-xl font-sans font-polard text-center"><c:out value="${trade.quantity}"/> ARS</h3>
             </div>
             <div class="flex flex-col mx-auto mt-3">
-                <h2 class="font-sans font-semibold font-polard text-2xl text-center ">Estado del Trade</h2>
+                <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="tradeState"/></h2>
                 <h3 class="text-xl font-sans font-polard text-center"><messages:message code="${trade.status}"/></h3>
             </div>
         </div>

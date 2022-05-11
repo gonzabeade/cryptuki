@@ -19,8 +19,8 @@ import java.util.Optional;
 @Service
 public class OfferServiceImpl implements OfferService {
 
-    private final OfferDao offerDao;
-    private final MessageSenderFacade messageSenderFacade;
+    private  OfferDao offerDao;
+    private  MessageSenderFacade messageSenderFacade;
 
     @Autowired
     public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade) {

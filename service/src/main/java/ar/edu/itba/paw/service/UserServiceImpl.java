@@ -3,18 +3,17 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
-import ar.edu.itba.paw.persistence.UserAuthDao;
-import ar.edu.itba.paw.persistence.UserStatus;
-import ar.edu.itba.paw.service.mailing.MailMessage;
+import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.service.mailing.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -24,14 +23,18 @@ public class UserServiceImpl implements UserService {
     private final UserAuthDao userAuthDao;
     private final PasswordEncoder passwordEncoder;
     private final ContactService<MailMessage> contactService;
+    private final ThymeleafProcessor mailProcessor;
+    private final MessageSource messageSource;
 
 
     @Autowired
-    public UserServiceImpl(final ar.edu.itba.paw.persistence.UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService) {
+    public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, ContactService<MailMessage> contactService, ThymeleafProcessor mailProcessor, MessageSource messageSource) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;
         this.contactService = contactService;
+        this.mailProcessor = mailProcessor;
+        this.messageSource = messageSource;
     }
 
 
@@ -63,16 +66,10 @@ public class UserServiceImpl implements UserService {
             throw new ServiceDataAccessException(pe);
         }
 
-        // TODO: modularizar y logica de negocio con Salva!
-
-       String message_body =  "Hola " + authBuilder.getUsername() + ",\n"
-                + "Antes de que puedas comenzar a comprar y vender crypto debes verificar tu identidad.\n"
-                + "Puedes hacer esto ingresando el codigo " + authBuilder.getCode()
-                + " en el lugar indicado o entrando al siguiente link:\n"
-                + "http://pawserver.it.itba.edu.ar/paw-2022a-01/verify?user="+authBuilder.getUsername() +"&code="+authBuilder.getCode();
         MailMessage message = contactService.createMessage(userBuilder.getEmail());
-        message.setSubject("Verifica tu cuenta.");
-        message.setBody(message_body);
+        WelcomeThymeleafMailMessage welcomeMailMessage= new WelcomeThymeleafMailMessage(message, mailProcessor);
+        welcomeMailMessage.setSubject(messageSource.getMessage("accountVerification", null, Locale.ENGLISH));
+        welcomeMailMessage.setParameters(authBuilder.getUsername(), authBuilder.getCode());
         contactService.sendMessage(message);
     }
 
@@ -133,6 +130,12 @@ public class UserServiceImpl implements UserService {
             throw new NullPointerException("New password cannot be null");
 
         try {
+            MailMessage message = contactService.createMessage(getUserInformation(username).get().getEmail());
+            ChangePasswordThymeleafMailMessage changePasswordThymeleafMailMessage= new ChangePasswordThymeleafMailMessage(message, mailProcessor);
+            changePasswordThymeleafMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, Locale.ENGLISH));
+            changePasswordThymeleafMailMessage.setParameters(username);
+            contactService.sendMessage(message);
+
             return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -195,8 +198,9 @@ public class UserServiceImpl implements UserService {
 
         UserAuth user = maybeUser.get();
         MailMessage message = contactService.createMessage(email);
-        message.setSubject("Change your password");
-        message.setBody("http://localhost:8080/webapp/recoverPassword?user=" + user.getUsername() + "&code=" + user.getCode());
+        ChangePasswordThymeleafMailMessage changePasswordThymeleafMailMessage= new ChangePasswordThymeleafMailMessage(message, mailProcessor);
+        changePasswordThymeleafMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, Locale.ENGLISH));
+        changePasswordThymeleafMailMessage.setParameters("");
         contactService.sendMessage(message);
     }
 

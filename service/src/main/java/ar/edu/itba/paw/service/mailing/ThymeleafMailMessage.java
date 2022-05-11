@@ -27,6 +27,11 @@ public abstract class ThymeleafMailMessage extends MailMessage {
         throw new UnsupportedOperationException("Thymeleaf emails are always html.");
     }
 
+    @Override
+    public void setBody(String message) {
+        throw new UnsupportedOperationException("Thymeleaf emails are always html.");
+    }
+
     protected String getTemplate() {
         return this.template;
     }

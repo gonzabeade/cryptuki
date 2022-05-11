@@ -1,8 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,30 +23,43 @@ public class ComplainJdbcDao implements ComplainDao {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComplainJdbcDao.class);
+
     private static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
-            (rs, i) -> new Complain.Builder(
-                    rs.getString("complainer_uname"))
-                    .withTradeId(rs.getInt("trade_id"))
-                    .withComplainId(rs.getInt("complain_id"))
-                    .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
-                    .withComplainerComments(rs.getString("complainer_comments"))
-                    .withModeratorComments(rs.getString("moderator_comments"))
-                    .withModerator(rs.getString("moderator_uname"))
-                    .build();
+            (rs, i) -> {
+                Complain.Builder builder= new Complain.Builder(
+                        rs.getString("complainer_uname"))
+                        .withComplainStatus( ComplainStatus.valueOf(rs.getString("status")))
+                        .withComplainerComments(rs.getString("complainer_comments"))
+                        .withModeratorComments(rs.getString("moderator_comments"))
+                        .withModerator(rs.getString("moderator_uname"))
+                        .withComplainId(rs.getInt("complain_id"))
+                        .withDate(rs.getTimestamp("complain_date").toLocalDateTime())
+                        .withTradeId(rs.getInt("trade_id"));
+                if(rs.wasNull()){
+                    builder.withTradeId(null);
+                }
+
+                return builder.build();
+};
+
 
     @Autowired
     public ComplainJdbcDao(DataSource dataSource) {
-        this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.namedJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     private static MapSqlParameterSource toMapSqlParameterSource(ComplainFilter filter) {
         return new MapSqlParameterSource()
-                .addValue("complainer_uname", filter.getComplainerUsername())
-                .addValue("complain_status", filter.getComplainStatus() == null ? null : filter.getComplainStatus().toString())
-                .addValue("moderator_uname", filter.getModeratorUsername())
-                .addValue("trade_id", filter.getTradeId())
-                .addValue("complain_id", filter.getComplainId())
+                .addValue("complainer_uname", filter.getComplainerUsername().orElse(null))
+                .addValue("from_date", filter.getFrom().orElse(null))
+                .addValue("to_date", filter.getTo().orElse(null))
+                .addValue("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get().toString() : null)
+                .addValue("moderator_uname", filter.getModeratorUsername().orElse(null))
+                .addValue("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)
+                .addValue("trade_id", filter.getTradeId().isPresent() ? filter.getTradeId().getAsInt() : null)
+                .addValue("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null)
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize());
     }
@@ -63,17 +80,21 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT *\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (COALESCE(:trade_id) IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (COALESCE(:complain_status) IS NULL OR status = :complain_status) AND\n" +
-                "    (COALESCE(:moderator_uname) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (COALESCE(:complainer_uname) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (COALESCE(:complain_id) IS NULL OR complain_id = :complain_id)\n" +
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id, null) IS NULL OR complain_id = :complain_id)\n" +
                 "    LIMIT :limit OFFSET :offset;";
 
-
-
-        Collection<Complain> c = Collections.unmodifiableCollection(namedJdbcTemplate.query(query, toMapSqlParameterSource(filter), COMPLAIN_ROW_MAPPER));
-        return c;
+        try {
+            return Collections.unmodifiableCollection(namedJdbcTemplate.query(query, toMapSqlParameterSource(filter), COMPLAIN_ROW_MAPPER));
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -81,15 +102,22 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "SELECT COUNT(complain_id)\n" +
                 "FROM complain_complete\n" +
                 "WHERE\n" +
-                "    (:trade_id IS NULL OR trade_id = :trade_id) AND\n" +
-                "    (:complain_status IS NULL OR status = :complain_status) AND\n" +
-                "    (:moderator_uname IS NULL OR moderator_uname = :moderator_uname) AND\n" +
-                "    (:complainer_uname IS NULL OR complainer_uname = :complainer_uname) AND\n" +
-                "    (:complain_id IS NULL OR complain_id = :complain_id)\n" +
-                "    LIMIT :limit OFFSET :offset;";
+                "    (COALESCE(:trade_id, null) IS NULL OR trade_id = :trade_id) AND\n" +
+                "    (COALESCE(:complain_status, null) IS NULL OR status = :complain_status) AND\n" +
+                "    (COALESCE(:moderator_uname, null) IS NULL OR moderator_uname = :moderator_uname) AND\n" +
+                "    (COALESCE(:complainer_uname, null) IS NULL OR complainer_uname = :complainer_uname) AND\n" +
+                "    (COALESCE(:from_date, null) IS NULL OR  complain_date >= :from_date) AND\n" +
+                "    (COALESCE(:to_date, null) IS NULL OR  complain_date <= :to_date) AND\n" +
+                "    (COALESCE(:offer_id, null) IS NULL OR  offer_id = :offer_id) AND\n" +
+                "    (COALESCE(:complain_id , null) IS NULL OR complain_id = :complain_id)\n";
 
-
-        return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);
+        try {
+            return namedJdbcTemplate.queryForObject(query, toMapSqlParameterSource(filter), Integer.class);
+        } catch (EmptyResultDataAccessException erde) {
+            return 0;
+        } catch (DataAccessException dae){
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -97,16 +125,23 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "INSERT INTO complain (trade_id, complainer_id, complainer_comments, status, moderator_comments, moderator_id)\n" +
                 "VALUES (:trade_id, (SELECT user_id FROM auth WHERE uname = :complainer_uname), :complainer_comments, :complain_status, :moderator_comments, (SELECT user_id FROM auth WHERE uname = :moderator_uname))";
 
-
-        namedJdbcTemplate.update(query, toMapSqlParameterSource(complain));
-
+        try {
+            namedJdbcTemplate.update(query, toMapSqlParameterSource(complain));
+            LOGGER.info("Complain created");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public void updateComplainStatus(int complainId, ComplainStatus complainStatus) {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
-
-        jdbcTemplate.update(query, complainStatus.toString(), complainId);
+        try {
+            jdbcTemplate.update(query, complainStatus.toString(), complainId);
+            LOGGER.info("Complaint status updated");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
@@ -115,12 +150,23 @@ public class ComplainJdbcDao implements ComplainDao {
                 "SET moderator_id = (SELECT user_id FROM auth WHERE uname = ? )\n" +
                 "WHERE complain_id = ?";
 
-        jdbcTemplate.update(query, username, complainId);
+        try {
+            jdbcTemplate.update(query, username, complainId);
+            LOGGER.info("Moderator claimed the complaint successfully");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public void updateModeratorComment(int complainId, String comments) {
         final String query = "UPDATE complain SET moderator_comments = ? WHERE complain_id = ?";
-        jdbcTemplate.update(query, comments, complainId);
+
+        try {
+            jdbcTemplate.update(query, comments, complainId);
+            LOGGER.info("Moderator closed the complaint successfully");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 }

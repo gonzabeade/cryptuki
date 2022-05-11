@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.persistence.Cryptocurrency;
-import ar.edu.itba.paw.persistence.Offer;
-import org.hibernate.validator.constraints.NotEmpty;
+import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
-
+@MinLessThanMax(
+        min="minAmount",
+        max="maxAmount"
+)
 public class UploadOfferForm {
 
     @NotNull
@@ -29,18 +30,15 @@ public class UploadOfferForm {
 
     @Size(min = 1)
     private String[] paymentMethods;
-
-    @Size(max = 40)
-    private String location;
-
-    public String getLocation() {
-        return location;
+    @Size(min = 1, max = 140)
+    private String message;
+    public String getMessage() {
+        return message;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setMessage(String message) {
+        this.message = message;
     }
-
 
     public Float getMinAmount() {
         return minAmount;
@@ -83,7 +81,10 @@ public class UploadOfferForm {
     }
 
     public OfferDigest toOfferDigest(int sellerId) {
-        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price).withMinQuantity(minAmount).withMaxQuantity(maxAmount);
+        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price)
+                .withMinQuantity(minAmount)
+                .withMaxQuantity(maxAmount)
+                .withComments(message);
         for (String pm: paymentMethods)
                 builder.withPaymentMethod(pm);
         return builder.build();

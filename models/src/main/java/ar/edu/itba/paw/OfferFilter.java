@@ -1,7 +1,6 @@
 package ar.edu.itba.paw;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+
+import java.util.*;
 
 public class OfferFilter {
     private final Collection<String> paymentMethods = new LinkedList<>();
@@ -11,10 +10,12 @@ public class OfferFilter {
     private int page = 0;
     private int pageSize = 1;
 
-    private double minPrice = 0;
-    private double maxPrice = Double.MAX_VALUE;
+    private Double minPrice;
+    private Double maxPrice;
 
-    private String username = null;
+    private String username;
+
+    private Collection<String> status = new LinkedList<>();
 
 
     public Collection<String> getPaymentMethods() {
@@ -28,26 +29,39 @@ public class OfferFilter {
     }
     public int getPage() { return page; }
     public int getPageSize() { return pageSize; }
-    public double getMaxPrice() { return maxPrice; }
-    public double getMinPrice() { return minPrice; }
-    public String getUsername() { return username; }
+    public OptionalDouble getMaxPrice() { return maxPrice == null ? OptionalDouble.empty() : OptionalDouble.of(maxPrice); }
+    public OptionalDouble getMinPrice() { return minPrice == null ? OptionalDouble.empty() : OptionalDouble.of(minPrice); }
+    public Optional<String> getUsername() { return Optional.ofNullable(username); }
+    public Collection<String> getStatus() {
+        return Collections.unmodifiableCollection(status);
+    }
 
+
+
+    public OfferFilter byStatus(String status) {
+        if ( status != null)
+            this.status.add(status);
+        return this;
+    }
 
     public OfferFilter byCryptoCode(String cryptoCode) {
-        this.cryptoCodes.add(cryptoCode);
+        if ( cryptoCode != null)
+            this.cryptoCodes.add(cryptoCode);
         return this;
     }
 
     public OfferFilter byPaymentMethod(String paymentMethod) {
-        this.paymentMethods.add(paymentMethod);
+        if ( paymentMethod != null)
+            this.paymentMethods.add(paymentMethod);
         return this;
     }
-    public OfferFilter byOfferId(int id) {
-        this.ids.add(id);
+    public OfferFilter byOfferId(Integer id) {
+        if ( id != null)
+            this.ids.add(id);
         return this;
     }
 
-    public OfferFilter byMinPrice(double minPrice) {
+    public OfferFilter byMinPrice(Double minPrice) {
         this.minPrice = minPrice;
         return this;
     }
@@ -57,7 +71,7 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter byMaxPrice(double maxPrice) {
+    public OfferFilter byMaxPrice(Double maxPrice) {
         this.maxPrice = maxPrice;
         return this;
     }

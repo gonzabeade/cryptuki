@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS offers(
                 seller_id INT NOT NULL,
                 offer_date TIMESTAMP NOT NULL,
                 coin_id VARCHAR(5) NOT NULL,
-                asking_price DOUBLE NOT NULL,
-                coin_amount DOUBLE NOT NULL);
+                asking_price FLOAT NOT NULL,
+                coin_amount FLOAT NOT NULL);

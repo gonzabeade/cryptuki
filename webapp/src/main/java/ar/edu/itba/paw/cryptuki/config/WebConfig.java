@@ -1,15 +1,14 @@
 package ar.edu.itba.paw.cryptuki.config;
 
-import ar.edu.itba.paw.service.ContactService;
-import ar.edu.itba.paw.service.MailMessage;
-import ar.edu.itba.paw.service.MailService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -18,20 +17,18 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
 
 @EnableTransactionManagement
 @ComponentScan({
@@ -41,19 +38,14 @@ import java.nio.charset.StandardCharsets;
 })
 @EnableWebMvc
 @Configuration
+@PropertySource("classpath:application.properties")
 public class WebConfig {
 
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
-    @Value("classpath:info")
-    private Resource info;
-
-
-    @Bean /*Use WebMVC **BUT** use this particular view resolver*/
+    @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setViewClass(JstlView.class);
-        resolver.setPrefix("/WEB-INF/");
+        resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
         return resolver;
     }
@@ -66,14 +58,16 @@ public class WebConfig {
     }
 
     @Bean
-    public DataSource dataSource() throws IOException {
+    public DataSource dataSource(
+            @Value("${database.url}") String databaseUrl,
+            @Value("${database.username}") String databaseUsername,
+            @Value("${database.password}") String databasePassword
+    )  {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        Reader reader = new InputStreamReader(info.getInputStream());
-        JSONObject jsonObject = new JSONObject(FileCopyUtils.copyToString(reader));
-        ds.setUrl(jsonObject.getString("databaseUrl"));
-        ds.setUsername(jsonObject.getString("databaseUsername"));
-        ds.setPassword(jsonObject.getString("databasePassword"));
+        ds.setUrl(databaseUrl);
+        ds.setUsername(databaseUsername);
+        ds.setPassword(databasePassword);
         return ds;
     }
 
@@ -87,15 +81,14 @@ public class WebConfig {
 
     private DatabasePopulator databasePopulator(){
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        //dbp.addScript(schemaSql);
         return dbp;
     }
+
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setBasenames("classpath:i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
-        messageSource.setCacheSeconds(5);
         return messageSource;
     }
 
@@ -103,6 +96,21 @@ public class WebConfig {
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);
     }
+
+    @Value("${webappBaseUrl}")
+    private String webappBaseUrl;
+
+    @Bean(name="baseUrl")
+    public String baseUrl() {
+        return webappBaseUrl;
+    }
+
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
 
 
 }

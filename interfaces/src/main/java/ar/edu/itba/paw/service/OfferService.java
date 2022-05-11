@@ -8,16 +8,16 @@ import java.util.Optional;
 
 public interface OfferService {
 
-    // Todo: Immutable Collections
-    void makeOffer(OfferDigest digest);
+
+    int makeOffer(OfferDigest digest);
     Optional<Offer> getOfferById(int id);
 
-    Collection<Offer> getOffersByUsername(String username);
 
     Collection<Offer> getOfferBy(OfferFilter filter);
     int countOffersBy(OfferFilter filter);
 
     int countOffersByUsername(String username);
+    Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
 
 
     void modifyOffer(OfferDigest digest);
@@ -27,5 +27,7 @@ public interface OfferService {
     void pauseOffer(int offerId);
     void resumeOffer(int offerId);
 
+    void decrementOfferMaxQuantity(Offer offer, float sold);
 
+    Optional<Offer> getOfferIfAuthorized(int offerId);
 }

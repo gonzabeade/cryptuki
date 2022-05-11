@@ -2,7 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +29,8 @@ public class OfferJdbcDao implements OfferDao {
     private SimpleJdbcInsert jdbcOfferInsert;
     private SimpleJdbcInsert jdbcPaymentMethodAtOfferInsert;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OfferJdbcDao.class);
+
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
                 User seller = new User.Builder( resultSet.getString("email") )
@@ -31,6 +38,7 @@ public class OfferJdbcDao implements OfferDao {
                         .withPhoneNumber(resultSet.getString("phone_number"))
                         .withRatingCount(resultSet.getInt("rating_count"))
                         .withRatingSum(resultSet.getInt("rating_sum"))
+                        .withUsername(resultSet.getString("uname"))
                         .withLastLogin(resultSet.getTimestamp("last_login").toLocalDateTime())
                         .build();
 
@@ -58,30 +66,31 @@ public class OfferJdbcDao implements OfferDao {
                         .withMaxQuantity(resultSet.getFloat("max_quantity"))
                         .withPaymentMethod(pm)
                         .withDate(resultSet.getTimestamp("offer_date").toLocalDateTime())
+                        .withComments(resultSet.getString("comments"))
                         .withStatus(offerStatus);
             };
 
     private final static ResultSetExtractor<List<Offer.Builder>> OFFER_MULTIROW_MAPPER = resultSet -> {
         int i = 0;
-        Map<Integer, Offer.Builder> cache = new HashMap<>(); // TODO - rename
+        Map<Integer, Offer.Builder> map = new LinkedHashMap<>();
         while (resultSet.next()) {
             int offerId = resultSet.getInt("offer_id");
-            String paymentCode = resultSet.getString("payment_code");  // TODO: Improve
+            String paymentCode = resultSet.getString("payment_code");
             PaymentMethod pm = paymentCode == null ? null : PaymentMethod.getInstance( paymentCode, resultSet.getString("payment_description"));
-            Offer.Builder instance = cache.getOrDefault(
+            Offer.Builder instance = map.getOrDefault(
                     offerId,
                     OFFER_ROW_MAPPER.mapRow(resultSet, i)
             ).withPaymentMethod(pm);
-            cache.putIfAbsent(offerId, instance);
+            map.putIfAbsent(offerId, instance);
             i ++;
         }
-        return cache.values().stream().collect(Collectors.toList());
+        return map.values().stream().collect(Collectors.toList());
     };
 
     @Autowired
     public OfferJdbcDao(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        namedJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         jdbcOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("offer").usingGeneratedKeyColumns("id");
         jdbcPaymentMethodAtOfferInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("payment_methods_at_offer");
     }
@@ -93,15 +102,18 @@ public class OfferJdbcDao implements OfferDao {
                 .addValue("payment_codes", filter.getPaymentMethods().isEmpty() ? null : filter.getPaymentMethods())
                 .addValue("limit", filter.getPageSize())
                 .addValue("offset", filter.getPage()*filter.getPageSize())
-                .addValue("min", filter.getMinPrice())
-                .addValue("max", filter.getMaxPrice())
-                .addValue("uname", filter.getUsername());
+                .addValue("min", filter.getMinPrice().isPresent() ? filter.getMinPrice().getAsDouble() : null)
+                .addValue("max", filter.getMaxPrice().isPresent() ? filter.getMaxPrice().getAsDouble() : null)
+                .addValue("uname", filter.getUsername().orElse(null))
+                .addValue("status", filter.getStatus().isEmpty() ? null: filter.getStatus());
     }
 
     private static MapSqlParameterSource toMapSqlParameterSource(OfferDigest digest) {
         return new MapSqlParameterSource()
                 .addValue("min_quantity", digest.getMinQuantity())
+                .addValue("crypto_code", digest.getCryptoCode())
                 .addValue("max_quantity", digest.getMaxQuantity())
+                .addValue("comments", digest.getComments())
                 .addValue("asking_price", digest.getAskingPrice())
                 .addValue("offer_id", digest.getId());
     }
@@ -109,74 +121,104 @@ public class OfferJdbcDao implements OfferDao {
     @Override
     public int getOfferCount(OfferFilter filter) {
 
-        final String countQuery = "SELECT COUNT(DISTINCT offer_id)\n" +
-                "FROM offer_complete\n" +
+        final String countQuery = "SELECT COUNT( DISTINCT offer_id) FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
                 "    FROM offer_complete\n" +
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
+                "\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min <= asking_price*max_quantity AND\n" +
-                "          :max >= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:min,null) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max,null) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          status_code = 'APR'" +
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
                 ")";
 
-        return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
+        try {
+            return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
+        } catch (EmptyResultDataAccessException erde) {
+            LOGGER.warn("No offers fetched");
+            return 0;
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-
-        final String allQuery = "SELECT *\n" +
-                "FROM offer_complete\n" +
+        final String allQuery = "SELECT * FROM offer_complete\n" +
                 "WHERE offer_id IN (\n" +
                 "    SELECT DISTINCT offer_id\n" +
                 "    FROM offer_complete\n" +
                 "    WHERE ( COALESCE(:offer_ids, null) IS NULL OR offer_id IN (:offer_ids)) AND\n" +
                 "          ( COALESCE(:payment_codes, null) IS NULL OR payment_code IN (:payment_codes)) AND\n" +
                 "          ( COALESCE(:crypto_codes, null) IS NULL OR crypto_code IN (:crypto_codes)) AND\n" +
-                "          :min <= asking_price*max_quantity AND\n" +
-                "          :max >= asking_price*max_quantity AND\n" +
+                "          ( COALESCE(:min,null) IS NULL OR :min >= asking_price*min_quantity) AND\n" +
+                "          ( COALESCE(:max,null) IS NULL OR :max <= asking_price*max_quantity) AND\n" +
                 "          ( COALESCE(:uname, null) IS NULL or uname = :uname) AND\n" +
-                "          status_code = 'APR'" +
-                "    LIMIT :limit OFFSET :offset\n" +
-                ")";
+                "          ( COALESCE(:status, null) IS NULL or status_code IN (:status))\n" +
+                "   LIMIT :limit OFFSET :offset " +
+                ") ORDER BY last_login DESC";
 
-        List<Offer> x =  namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
-                .stream()
-                .map(Offer.Builder::build)
-                .collect(Collectors.toList());
-        return x;
+        try {
+            return namedJdbcTemplate.query(allQuery, toMapSqlParameterSource(filter), OFFER_MULTIROW_MAPPER)
+                    .stream()
+                    .map(Offer.Builder::build)
+                    .collect(Collectors.toList());
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override
-    public void makeOffer(OfferDigest digest) {
+    public int makeOffer(OfferDigest digest) {
         Map<String,Object> args = new HashMap<>();
 
         args.put("seller_id", digest.getSellerId());
-        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth());
+        args.put("offer_date", digest.getDate().getYear()+"-"+digest.getDate().getMonthValue()+"-"+digest.getDate().getDayOfMonth()+" "+digest.getDate().getHour()+":"+digest.getDate().getMinute()+":"+digest.getDate().getSecond());
         args.put("crypto_code", digest.getCryptoCode());
         args.put("status_code", "APR");
         args.put("asking_price", digest.getAskingPrice());
         args.put("max_quantity", digest.getMaxQuantity());
         args.put("min_quantity", digest.getMinQuantity());
+        args.put("comments", digest.getComments());
 
-        int offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
-        args.clear();
+        int offerId;
+        try {
+            offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
+            LOGGER.info("Offer created");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
 
-        args.put("offer_id", offerId);
-        for (String pm: digest.getPaymentMethods()) {
-            args.put("payment_code", pm);
-            jdbcPaymentMethodAtOfferInsert.execute(args);
+        addPaymentMethodsToOffer(offerId, digest.getPaymentMethods());
+        LOGGER.info("Payment Methods added");
+        return offerId;
+    }
+
+    private void addPaymentMethodsToOffer(int offerId, Collection<String> paymentMethods) {
+        final String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
+
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", offerId)
+                .addValue("pm", paymentMethods);
+        try {
+            namedJdbcTemplate.update(paymentMethodQuery, map);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
         }
     }
 
 
     private void changeOfferStatus(int offerId, String statusCode) {
         String query = "UPDATE offer SET status_code= ? WHERE id = ?";
-        jdbcTemplate.update(query, statusCode, offerId);
+        try {
+            jdbcTemplate.update(query, statusCode, offerId);
+            LOGGER.info("Offer Status changed");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
     @Override
     public void deleteOffer(int offerId) {
@@ -199,19 +241,43 @@ public class OfferJdbcDao implements OfferDao {
     }
 
     @Override
-    public void modifyOffer(OfferDigest digest) {
-        final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity WHERE id = :offer_id";
-        namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
+    public Optional<String> getOwner(int offerId) {
+        final String query = "SELECT DISTINCT uname FROM offer_complete WHERE offer_id = ?";
 
-        final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
-        jdbcTemplate.update(deleteQuery, digest.getId());
-
-        final String paymentMethodQuery = "INSERT INTO payment_methods_at_offer SELECT id, code FROM offer, payment_method WHERE code IN (:pm) AND id = :id";
-        MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", digest.getId())
-                .addValue("pm", digest.getPaymentMethods().isEmpty() ? null : digest.getPaymentMethods());
-        namedJdbcTemplate.update(paymentMethodQuery, map);
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(query, String.class, offerId));
+        } catch (EmptyResultDataAccessException erde) {
+            return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
+    @Override
+    public void setMaxQuantity(int offerId, float newQuantity) {
+        final String query = "UPDATE offer SET max_quantity = ? WHERE id = ?";
+
+        try {
+            jdbcTemplate.update(query, newQuantity, offerId);
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+    }
+
+    @Override
+    public void modifyOffer(OfferDigest digest) {
+        final String baseQuery = "UPDATE offer SET asking_price = :asking_price, max_quantity = :max_quantity, min_quantity = :min_quantity, comments = :comments, crypto_code = :crypto_code WHERE id = :offer_id";
+        final String deleteQuery = "DELETE FROM payment_methods_at_offer WHERE offer_id = ?";
+
+        try {
+            namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
+            jdbcTemplate.update(deleteQuery, digest.getId());
+            LOGGER.info("Offer modified succesfully");
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
+
+        addPaymentMethodsToOffer(digest.getId(), digest.getPaymentMethods());
+    }
 
 }

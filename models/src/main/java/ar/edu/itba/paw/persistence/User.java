@@ -1,17 +1,22 @@
 package ar.edu.itba.paw.persistence;
 
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public final class User {
 
     private final int id;
     private final String email;
+    private final String username;
+
     private final int ratingSum;
     private final int ratingCount;
 
     private final LocalDateTime lastLogin;
     private final String phoneNumber;
+
 
     public static class Builder {
 
@@ -24,6 +29,7 @@ public final class User {
         private LocalDateTime lastLogin = LocalDateTime.now();
 
         private String phoneNumber;
+        private String username;
 
         public Builder(String email) {
             this.email = email;
@@ -34,6 +40,7 @@ public final class User {
         public Builder withId(int id) {this.id = id; return this; }
         public Builder withPhoneNumber(String phoneNumber){this.phoneNumber = phoneNumber; return this;}
         public Builder withLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; return this; }
+        public Builder withUsername(String username) {this.username = username; return this; }
 
         public Integer getId() {
             return id;
@@ -50,6 +57,9 @@ public final class User {
         public String getPhoneNumber(){return phoneNumber;}
         public LocalDateTime getLastLogin(){return lastLogin;}
 
+        public String getUsername() {
+            return username;
+        }
 
         protected User build() {return new User(this);}
     }
@@ -61,6 +71,7 @@ public final class User {
         this.ratingSum = builder.ratingSum;
         this.phoneNumber= builder.phoneNumber;
         this.lastLogin = builder.lastLogin;
+        this.username = builder.username;
     }
 
     public int getId() {
@@ -76,6 +87,30 @@ public final class User {
         return ratingCount;
     }
 
-    public String phoneNumber(){return phoneNumber;}
+    public float getRating() { return getRatingCount() == 0 ? 0 : (float)getRatingSum() / getRatingCount(); }
 
+    public String getPhoneNumber(){return phoneNumber;}
+
+    public Optional<String> getUsername() {
+        return Optional.ofNullable(username);
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+
+    public boolean equals(Object object) {
+        if (object == this)
+            return true;
+        if (!(object instanceof User))
+            return false;
+        User testedUser = (User) object;
+        return testedUser.getId() == this.getId();
+    }
+
+    public long getMinutesSinceLastLogin(){
+        Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
+        return loggedIn.toMinutes();
+    }
 }

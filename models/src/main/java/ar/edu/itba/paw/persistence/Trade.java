@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class Trade {
 
@@ -12,6 +13,12 @@ public final class Trade {
     private final Optional<LocalDateTime> startDate;
     private final TradeStatus status;
     private final float quantity;
+
+    private final Cryptocurrency cryptoCurrency;
+
+    private final float askedPrice;
+    private boolean ratedBuyer;
+    private boolean ratedSeller;
 
 
     public static class Builder {
@@ -25,10 +32,19 @@ public final class Trade {
         private float quantity = 0f;
         private Integer tradeId;
 
+        private  Cryptocurrency cryptoCurrency;
+        private String wallet;
+
+        private float askedPrice;
+        private boolean ratedBuyer;
+        private boolean ratedSeller;
+
 
         public Builder(int offerId, String buyerUsername) {
             this.offerId = offerId;
             this.buyerUsername = buyerUsername;
+            this.ratedBuyer = false;
+            this.ratedSeller = false;
         }
 
         public Builder withTradeId(int tradeId) {
@@ -37,6 +53,14 @@ public final class Trade {
         }
         public Builder withSellerUsername(String sellerUsername) {
             this.sellerUsername = sellerUsername;
+            return this;
+        }
+        public Builder withRatedBuyer(boolean rated){
+            this.ratedBuyer = rated;
+            return this;
+        }
+        public Builder withRatedSeller(boolean rated){
+            this.ratedSeller = rated;
             return this;
         }
 
@@ -50,6 +74,20 @@ public final class Trade {
         }
         public Builder withQuantity(float quantity) {
             this.quantity = quantity;
+            return this;
+        }
+
+        public Builder withWallet(String wallet) {
+            this.wallet = wallet;
+            return this;
+        }
+
+        public Builder withCryptoCurrency(Cryptocurrency cryptoCurrency) {
+            this.cryptoCurrency =cryptoCurrency;
+            return this;
+        }
+        public Builder withAskedPrice(float askedPrice) {
+            this.askedPrice=askedPrice;
             return this;
         }
 
@@ -75,6 +113,23 @@ public final class Trade {
             return quantity;
         }
 
+        public Cryptocurrency getCryptoCurrency() {
+            return cryptoCurrency;
+        }
+
+        public float getAskedPrice() {
+            return askedPrice;
+        }
+        public boolean getRatedBuyer(){
+            return ratedBuyer;
+        }
+        public boolean getRatedSeller(){
+            return ratedSeller;
+        }
+        public String getWallet(){
+            return wallet;
+        }
+
         protected Trade build() {
             return new Trade(this);
         }
@@ -89,6 +144,11 @@ public final class Trade {
         this.startDate = Optional.ofNullable(builder.startDate);
         this.sellerUsername = builder.sellerUsername;
         this.status = builder.status;
+        this.askedPrice= builder.getAskedPrice();
+        this.cryptoCurrency =builder.getCryptoCurrency();
+        this.ratedBuyer = builder.getRatedBuyer();
+        this.ratedSeller = builder.getRatedSeller();
+
     }
 
     public int getTradeId() {
@@ -103,8 +163,8 @@ public final class Trade {
     public String getBuyerUsername() {
         return buyerUsername;
     }
-    public Optional<LocalDateTime> getStartDate() {
-        return startDate;
+    public Optional<String> getStartDate() {
+        return startDate.isPresent()?Optional.ofNullable(startDate.get().format(ISO_LOCAL_DATE)):Optional.empty();
     }
     public TradeStatus getStatus() {
         return status;
@@ -113,4 +173,27 @@ public final class Trade {
         return quantity;
     }
 
+    public Cryptocurrency getCryptoCurrency() {
+        return cryptoCurrency;
+    }
+
+    public float getAskedPrice() {
+        return askedPrice;
+    }
+
+    public boolean equals(Object object) {
+        if (object == this)
+            return true;
+        if (!(object instanceof User))
+            return false;
+        Trade testedTrade = (Trade) object;
+        return testedTrade.getTradeId() == this.getTradeId();
+    }
+
+    public boolean getRatedBuyer(){
+        return ratedBuyer;
+    }
+    public boolean getRatedSeller(){
+        return ratedSeller;
+    }
 }

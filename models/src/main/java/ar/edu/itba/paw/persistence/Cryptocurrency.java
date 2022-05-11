@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class Cryptocurrency {
 
@@ -26,6 +25,15 @@ public final class Cryptocurrency {
     }
     public String getCommercialName() {
         return commercialName;
+    }
+
+    public boolean equals(Object object){
+        if(object == this)
+            return true;
+        if(!(object instanceof Cryptocurrency))
+            return false;
+        Cryptocurrency testedCrypto = (Cryptocurrency) object;
+        return testedCrypto.getCode().equals(this.getCode());
     }
 
 }

@@ -3,7 +3,10 @@ package ar.edu.itba.paw;
 import ar.edu.itba.paw.persistence.ComplainStatus;
 
 
+import java.time.LocalDate;
 import java.util.Optional;
+import java.util.OptionalInt;
+
 
 public class ComplainFilter {
 
@@ -12,9 +15,15 @@ public class ComplainFilter {
     private final String complainerUsername;
     private final ComplainStatus complainStatus;
     private final String moderatorUsername;
-    private final Integer tradeId;
+
+    private final LocalDate from;
+
+    private final LocalDate to;
 
     private final Integer complainId;
+    private final Integer tradeId;
+    private final Integer offerId;
+
 
 
     public static final class Builder {
@@ -23,9 +32,14 @@ public class ComplainFilter {
         private String complainerUsername;
         private ComplainStatus complainStatus;
         private String moderatorUsername;
-        private Integer tradeId;
+
+        private LocalDate from;
+        private LocalDate to;
 
         private Integer complainId;
+        private Integer tradeId;
+        private Integer offerId;
+
 
         public Builder withPage(int page) {
             this.page = page;
@@ -52,12 +66,28 @@ public class ComplainFilter {
             return this;
         }
 
-        public Builder withTradeId(int tradeId) {
+        public Builder withTradeId(Integer tradeId) {
             this.tradeId = tradeId;
             return this;
         }
 
-        public Builder withComplainId(int complainId) {
+        public Builder withOfferId(Integer offerId) {
+            this.offerId = offerId;
+            return this;
+        }
+
+        public Builder from(LocalDate from) {
+            this.from = from;
+            return this;
+        }
+
+        public Builder to(LocalDate to) {
+            this.to = to;
+            return this;
+        }
+
+
+        public Builder withComplainId(Integer complainId) {
             this.complainId = complainId;
             return this;
         }
@@ -75,6 +105,9 @@ public class ComplainFilter {
         this.tradeId = builder.tradeId;
         this.complainStatus = builder.complainStatus;
         this.complainId = builder.complainId;
+        this.from = builder.from;
+        this.to = builder.to;
+        this.offerId = builder.offerId;
     }
 
     public int getPage() {
@@ -85,23 +118,35 @@ public class ComplainFilter {
         return pageSize;
     }
 
-    public String getComplainerUsername() {
-        return complainerUsername;
+    public Optional<String> getComplainerUsername() {
+        return Optional.ofNullable(complainerUsername);
     }
 
-    public ComplainStatus getComplainStatus() {
-        return complainStatus;
+    public Optional<ComplainStatus> getComplainStatus() {
+        return Optional.ofNullable(complainStatus);
     }
 
-    public String getModeratorUsername() {
-        return moderatorUsername;
+    public Optional<String> getModeratorUsername() {
+        return Optional.ofNullable(moderatorUsername);
     }
 
-    public Integer getTradeId() {
-        return tradeId;
+    public OptionalInt getTradeId() {
+        return tradeId == null ? OptionalInt.empty() : OptionalInt.of(tradeId);
     }
 
-    public Integer getComplainId() {
-        return complainId;
+    public OptionalInt getOfferId() {
+        return offerId == null ? OptionalInt.empty() : OptionalInt.of(offerId);
+    }
+
+    public OptionalInt getComplainId() {
+        return complainId == null ? OptionalInt.empty() : OptionalInt.of(complainId);
+    }
+
+    public Optional<LocalDate> getFrom() {
+        return Optional.ofNullable(from);
+    }
+
+    public Optional<LocalDate> getTo() {
+        return Optional.ofNullable(to);
     }
 }

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,11 +14,11 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${null}"/>
-</jsp:include>
+<% request.setCharacterEncoding("UTF-8"); %>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex mt-10 mb-10">
-    <jsp:include page="../components/register_form.jsp"/>
+    <% request.setCharacterEncoding("UTF-8"); %>
+    <jsp:include page="../components/registerForm.jsp"/>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -26,9 +27,9 @@
             <h1 class="text-ngreen text-4xl text-center">Listo!</h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
-            El reclamo fue resuelto satisfactoriamente.
+            <messages:message code="successfulClaim"/>
         </div>
-        <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10">Volver a Reclamos Pendientes</a>
+        <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="backToPendingClaims"/></a>
     </div>
 </div>
 </body>

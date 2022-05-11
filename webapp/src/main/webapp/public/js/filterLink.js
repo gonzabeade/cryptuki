@@ -57,9 +57,12 @@ function resetAllAdminFilters(){
 }
 function deleteParams() {
     const searchParams = new URLSearchParams(window.location.search);
-    for(const [key] of searchParams){
-        searchParams.delete(key)
+    const searchParamsCopy = new URLSearchParams(window.location.search)
+
+    for(let [key] of searchParamsCopy){
+        searchParams.delete(key);
     }
+
     const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;

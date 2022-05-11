@@ -50,7 +50,7 @@
                 <div class="flex flex-row  mx-auto mt-10">
                     <c:url value="/admin/selfassign/${complain.complainId}" var="postUrl"/>
                     <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
-                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans"><messages:message code="self-assignedClaims"/></button>
+                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans"><messages:message code="assignMe"/></button>
                     </form:form>
                 </div>
         </div>

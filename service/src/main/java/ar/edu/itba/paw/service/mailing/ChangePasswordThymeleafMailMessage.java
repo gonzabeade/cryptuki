@@ -7,14 +7,16 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "NeedHelpTemplate";
 
     private String username;
+    private int code;
 
     public ChangePasswordThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username) {
+    public void setParameters(String username, int code) {
         this.username = username;
+        this.code = code;
     }
 
     @Override
@@ -26,6 +28,7 @@ public class ChangePasswordThymeleafMailMessage extends ThymeleafMailMessage{
         Context context = new Context();
 
         context.setVariable("username", username);
+        context.setVariable("code", code);
         return context;
     }
 }

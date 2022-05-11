@@ -100,8 +100,7 @@ public class OfferController {
         mav.addObject("edit", edit);
         mav.addObject("username", authentication.getName());
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
-        return mav;
+         return mav;
     }
 
 
@@ -164,7 +163,6 @@ public class OfferController {
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
 
         return mav;
     }

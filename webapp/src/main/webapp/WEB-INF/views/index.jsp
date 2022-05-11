@@ -83,7 +83,6 @@
                         <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                         <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                         <jsp:param name="userEmail" value="${userEmail}"/>
-                        <jsp:param name="isAdmin" value="${isAdmin}"/>
                         <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
                         <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>

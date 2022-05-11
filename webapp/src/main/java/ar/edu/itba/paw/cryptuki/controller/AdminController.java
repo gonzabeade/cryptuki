@@ -167,7 +167,6 @@ public class AdminController {
         }
 
         mav.addObject("username", authentication == null ? null : authentication.getName());
-        mav.addObject("isAdmin", true);
         mav.addObject("trade", trade);
         mav.addObject("complain", complain);
         mav.addObject("complainer", complainer);

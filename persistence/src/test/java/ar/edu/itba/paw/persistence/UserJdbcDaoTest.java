@@ -99,7 +99,7 @@ public class UserJdbcDaoTest {
 
         //Validations
         Assert.assertTrue(testedUser.isPresent());
-        Assert.assertEquals(users.get(TESTING_INDEX).build(), testedUser.get());
+        Assert.assertEquals(users.get(TESTING_INDEX).build().getEmail(), testedUser.get().getEmail());
     }
 
 
@@ -121,7 +121,7 @@ public class UserJdbcDaoTest {
 
         //Validations
         Assert.assertTrue(testedUser.isPresent());
-        Assert.assertEquals(users.get(TESTING_INDEX).build(), testedUser.get());
+        Assert.assertEquals(users.get(TESTING_INDEX).build().getEmail(), testedUser.get().getEmail());
     }
 
     private void insertUser(User user){

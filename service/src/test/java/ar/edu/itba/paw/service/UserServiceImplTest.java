@@ -24,7 +24,7 @@ public class UserServiceImplTest {
     private UserDao userdao;
 
     @Mock
-    private ContactService<MailMessage> contactService;
+    private MessageSenderFacade messageSenderFacade;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -35,67 +35,12 @@ public class UserServiceImplTest {
 
 
     @InjectMocks
-    private UserService userService = new UserServiceImpl(userdao,userAuthDao,passwordEncoder,contactService);
-
-    private class UserAuthPublic extends UserAuth.Builder{
+    private UserService userService = new UserServiceImpl(userdao,userAuthDao,passwordEncoder,messageSenderFacade);
 
 
-        public UserAuthPublic(String username, String password) {
-            super(username, password);
-        }
-
-        @Override
-        protected UserAuth build() {
-            return super.build();
-        }
-    }
-
-
-    private class UserPublic extends User.Builder{
-        public UserPublic(String email) {
-            super(email);
-        }
-
-        @Override
-        protected User build() {
-            return super.build();
-        }
-    }
-
-    private class OfferPublic extends Offer.Builder{
-        public OfferPublic(int id, User seller, Cryptocurrency crypto, float askingPrice) {
-            super(id, seller, crypto, askingPrice);
-        }
-
-        @Override
-        protected Offer build() {
-            return super.build();
-        }
-    }
-
-    private class complainPublic extends Complain.Builder{
-        public complainPublic(String complainerUsername) {
-            super(complainerUsername);
-        }
-
-        @Override
-        protected Complain build() {
-            return super.build();
-        }
-    }
-
-    private class tradePublic extends Trade.Builder{
-        public tradePublic(int offerId, String buyerUsername) {
-            super(offerId, buyerUsername);
-        }
-        @Override
-        protected Trade build() {
-            return super.build();
-        }
-    }
     @Test
     public void BadCodechangePasswordTest()  {
-        UserAuthPublic userAuthPublic = (UserAuthPublic) new UserAuthPublic(username,password).withCode(code).withId(0).withRole("seller").withUserStatus(UserStatus.UNVERIFIED);
+        UtilsClass.UserAuthPublic userAuthPublic = (UtilsClass.UserAuthPublic) new UtilsClass.UserAuthPublic(username,password).withCode(code).withId(0).withRole("seller").withUserStatus(UserStatus.UNVERIFIED);
         when(userAuthDao.getUserAuthByUsername(username)).thenReturn(
                 Optional.of(userAuthPublic.build())
         );
@@ -107,7 +52,7 @@ public class UserServiceImplTest {
 
     @Test
     public void SuccessCodechangePasswordTest()  {
-        UserAuthPublic userAuthPublic = (UserAuthPublic) new UserAuthPublic(username,password).withCode(code).withId(0).withRole("seller").withUserStatus(UserStatus.UNVERIFIED);
+        UtilsClass.UserAuthPublic userAuthPublic = (UtilsClass.UserAuthPublic) new UtilsClass.UserAuthPublic(username,password).withCode(code).withId(0).withRole("seller").withUserStatus(UserStatus.UNVERIFIED);
         when(userAuthDao.getUserAuthByUsername(username)).thenReturn(
                 Optional.of(userAuthPublic.build())
         );

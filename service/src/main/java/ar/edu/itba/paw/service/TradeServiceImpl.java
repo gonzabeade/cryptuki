@@ -17,11 +17,11 @@ import java.util.Optional;
 @Service
 public class TradeServiceImpl implements TradeService {
 
-    private final OfferService offerService;
-    private final TradeDao tradeDao;
-    private final UserAuthDao userAuthDao;
+    private  OfferService offerService;
+    private  TradeDao tradeDao;
+    private  UserAuthDao userAuthDao;
 
-    private final MessageSenderFacade messageSenderFacade;
+    private  MessageSenderFacade messageSenderFacade;
 
     @Autowired
     public TradeServiceImpl(OfferService offerService,

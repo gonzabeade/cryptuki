@@ -13,16 +13,18 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
     private String username;
     private String question;
     private String answer;
+    private String url;
 
     public NeedHelpThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String question, String answer) {
+    public void setParameters(String username, String question, String answer, String url) {
         this.answer = answer;
         this.question = question;
         this.username = username;
+        this.url = url;
     }
 
     @Override
@@ -35,6 +37,8 @@ public class NeedHelpThymeleafMailMessage extends ThymeleafMailMessage {
         context.setVariable("question", question);
         context.setVariable("username", username);
         context.setVariable("answer", answer);
+        context.setVariable("url", url);
+
         return context;
     }
 }

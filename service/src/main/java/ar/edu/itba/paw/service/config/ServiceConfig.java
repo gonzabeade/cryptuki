@@ -33,14 +33,13 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableAsync
 public class ServiceConfig {
-    @Value("classpath:info")
-    private Resource info;
 
     @Bean
-    public ContactService<MailMessage> contactService() throws IOException {
-        Reader reader = new InputStreamReader(info.getInputStream());
-        JSONObject jsonObject = new JSONObject(FileCopyUtils.copyToString(reader));
-        return new MailService(jsonObject.getString("mailUsername"), jsonObject.getString("mailPassword"));
+    public ContactService<MailMessage> contactService(
+            @Value("${mail.username}") String mail,
+            @Value("${mail.password}") String password
+    ) {
+        return new MailService(mail, password);
     }
 
     @Bean

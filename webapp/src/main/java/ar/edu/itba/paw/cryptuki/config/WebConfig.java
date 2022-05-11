@@ -6,6 +6,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
 
 @EnableTransactionManagement
 @ComponentScan({
@@ -36,13 +39,8 @@ import java.nio.charset.StandardCharsets;
 })
 @EnableWebMvc
 @Configuration
+@PropertySource("classpath:application.properties")
 public class WebConfig {
-
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
-    @Value("classpath:info")
-    private Resource info;
-
 
     @Bean
     public ViewResolver viewResolver() {
@@ -61,14 +59,16 @@ public class WebConfig {
     }
 
     @Bean
-    public DataSource dataSource() throws IOException {
+    public DataSource dataSource(
+            @Value("${database.url}") String databaseUrl,
+            @Value("${database.username}") String databaseUsername,
+            @Value("${database.password}") String databasePassword
+    )  {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        Reader reader = new InputStreamReader(info.getInputStream());
-        JSONObject jsonObject = new JSONObject(FileCopyUtils.copyToString(reader));
-        ds.setUrl(jsonObject.getString("databaseUrl"));
-        ds.setUsername(jsonObject.getString("databaseUsername"));
-        ds.setPassword(jsonObject.getString("databasePassword"));
+        ds.setUrl(databaseUrl);
+        ds.setUsername(databaseUsername);
+        ds.setPassword(databasePassword);
         return ds;
     }
 
@@ -82,7 +82,6 @@ public class WebConfig {
 
     private DatabasePopulator databasePopulator(){
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        //dbp.addScript(schemaSql);
         return dbp;
     }
 
@@ -94,10 +93,25 @@ public class WebConfig {
         return messageSource;
     }
 
-
     @Bean
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);
     }
+
+    @Value("${webappBaseUrl}")
+    private String webappBaseUrl;
+
+    @Bean(name="baseUrl")
+    public String baseUrl() {
+        return webappBaseUrl;
+    }
+
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+
 
 }

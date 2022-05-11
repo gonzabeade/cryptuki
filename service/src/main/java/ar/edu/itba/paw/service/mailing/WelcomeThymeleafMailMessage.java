@@ -9,14 +9,17 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
     private String username;
     private int verifyCode;
 
+    private String url;
+
     public WelcomeThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, int verifyCode) {
+    public void setParameters(String username, int verifyCode, String url) {
         this.username = username;
         this.verifyCode = verifyCode;
+        this.url = url;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
 
         context.setVariable("username", username);
         context.setVariable("code", verifyCode);
-        context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);
+        context.setVariable("url", url);
         return context;
     }
 }

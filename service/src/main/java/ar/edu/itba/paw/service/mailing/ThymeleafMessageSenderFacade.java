@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
@@ -23,6 +24,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     private final TemplateEngine templateEngine;
     private final ContactService<MailMessage> mailMessageContactService;
     private final UserDao userDao;
+    private final Environment environment;
+
     private MessageSource messageSource;
 
     private String getTo(String username) {
@@ -32,11 +35,16 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         return userOptional.get().getEmail();
     }
 
+    private String getUrl() {
+       return environment.getProperty("webappBaseUrl");
+    }
+
     @Autowired
-    public ThymeleafMessageSenderFacade(TemplateEngine templateEngine, ContactService<MailMessage> mailMessageContactService, UserDao userDao, @Qualifier("mailingMessageSource") MessageSource messageSource) {
+    public ThymeleafMessageSenderFacade(TemplateEngine templateEngine, ContactService<MailMessage> mailMessageContactService, UserDao userDao, Environment environment, @Qualifier("mailingMessageSource") MessageSource messageSource) {
         this.templateEngine = templateEngine;
         this.mailMessageContactService = mailMessageContactService;
         this.userDao = userDao;
+        this.environment = environment;
         this.messageSource = messageSource;
     }
 
@@ -47,7 +55,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         welcomeMailMessage.setSubject(messageSource.getMessage("accountVerification", null, locale));
         welcomeMailMessage.setLocale(locale);
-        welcomeMailMessage.setParameters(username, veryCode);
+        welcomeMailMessage.setParameters(username, veryCode, getUrl());
         mailMessageContactService.sendMessage(welcomeMailMessage);
     }
 
@@ -58,7 +66,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         changePasswordMailMessage.setLocale(locale);
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
-        changePasswordMailMessage.setParameters(username, code);
+        changePasswordMailMessage.setParameters(username, code, getUrl());
         mailMessageContactService.sendMessage(changePasswordMailMessage);
     }
 
@@ -75,7 +83,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 digest.getAskingPrice(),
                 digest.getMinQuantity(),
                 digest.getMaxQuantity(),
-                offerId);
+                offerId,
+                getUrl());
         mailMessageContactService.sendMessage(newOfferMailMessage);
     }
 
@@ -86,7 +95,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         questionMailMessage.setLocale(locale);
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, locale));
-        questionMailMessage.setParameters(username, question);
+        questionMailMessage.setParameters(username, question, getUrl());
         mailMessageContactService.sendMessage(questionMailMessage);
     }
 
@@ -97,7 +106,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         questionMailMessage.setLocale(locale);
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
-        questionMailMessage.setParameters(username, question);
+        questionMailMessage.setParameters(username, question, getUrl());
         mailMessageContactService.sendMessage(questionMailMessage);
     }
 
@@ -114,7 +123,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 trade.getQuantity(),
                 trade.getBuyerUsername(),
                 trade.getWallet(),
-                tradeId);
+                tradeId, getUrl());
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
     }
 }

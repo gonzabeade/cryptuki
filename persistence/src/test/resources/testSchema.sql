@@ -67,6 +67,8 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
 
 INSERT INTO status (code, status_description) VALUES ('DEL', 'Deleted by user');
 INSERT INTO status (code, status_description) VALUES ('APR', 'Approved');
+INSERT INTO status (code, status_description) VALUES ('PSE', 'Paused by Seller');
+INSERT INTO status (code, status_description) VALUES ('PSU', 'Paused by Supervisor');
 
 /*create unique index user_role_description_uindex on user_role (description);*/
 

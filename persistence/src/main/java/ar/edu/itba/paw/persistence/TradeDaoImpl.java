@@ -58,6 +58,7 @@ public class TradeDaoImpl implements TradeDao {
         Integer userId;
         try{
              userId = jdbcTemplate.queryForObject(getUserIdQuery, Integer.class, buyerUsername);
+
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

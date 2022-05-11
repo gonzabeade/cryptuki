@@ -37,7 +37,7 @@ public class ComplaintController {
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("views/complaints_page");
+        ModelAndView mav = new ModelAndView("complaints_page");
 
         int pageNumber= page.orElse(0);
         int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
@@ -57,7 +57,7 @@ public class ComplaintController {
 
     @RequestMapping(value = "/complain", method = RequestMethod.GET)
     public ModelAndView complain(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
-        ModelAndView mav =  new ModelAndView("views/complain");
+        ModelAndView mav =  new ModelAndView("complain");
 
         String username= authentication.getName();
         User user = us.getUserInformation(username).get();
@@ -77,7 +77,7 @@ public class ComplaintController {
     }
 
     @RequestMapping(value = "/complain", method = RequestMethod.POST)
-    public ModelAndView createComplain(@Valid  @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
+    public ModelAndView createComplain(@Valid @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors())
             return complain(form, authentication, form.getTradeId());

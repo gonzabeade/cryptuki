@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordMatch {
     //error message
-    public String message() default "Las contraseñas no coinciden";
+    String message() default "Las contraseñas no coinciden";
     //represents group of constraints
-    public Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
     //represents additional information about annotation
-    public Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
@@ -191,7 +192,7 @@ public class UserServiceImpl implements UserService {
     public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
-            throw new RuntimeException("Invalid email");
+            throw new NoSuchUserException(email);
 
         UserAuth user = maybeUser.get();
         MailMessage message = contactService.createMessage(email);

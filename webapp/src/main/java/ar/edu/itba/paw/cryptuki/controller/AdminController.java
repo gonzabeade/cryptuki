@@ -43,7 +43,7 @@ public class AdminController {
             return null;
         }
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ModelAndView mav = new ModelAndView("admin/complaints");
         ComplainFilter filter = builder
                 .withComplainStatus(ComplainStatus.PENDING)
                 .withPage(page.orElse(0))
@@ -70,7 +70,7 @@ public class AdminController {
     public ModelAndView assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ModelAndView mav = new ModelAndView("admin/complaints");
         ComplainFilter filter = builder
                 .withComplainStatus(ComplainStatus.ASSIGNED)
                 .withPage(page.orElse(0))
@@ -96,7 +96,7 @@ public class AdminController {
     public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
 
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder();
-        ModelAndView mav = new ModelAndView("views/admin/complaints");
+        ModelAndView mav = new ModelAndView("admin/complaints");
         ComplainFilter filter = builder
                 .withComplainStatus(ComplainStatus.CLOSED)
                 .withPage(page.orElse(0))
@@ -120,7 +120,7 @@ public class AdminController {
 
     @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
     public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/admin/complaint");
+        ModelAndView mav = new ModelAndView("admin/complaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -160,7 +160,7 @@ public class AdminController {
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
     public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("views/admin/solve_complaint");
+        ModelAndView mav = new ModelAndView("admin/solve_complaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -193,7 +193,7 @@ public class AdminController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView solveSuccess() {
-        ModelAndView mav = new ModelAndView("views/admin/solved_complaint");
+        ModelAndView mav = new ModelAndView("admin/solved_complaint");
         return mav;
     }
 

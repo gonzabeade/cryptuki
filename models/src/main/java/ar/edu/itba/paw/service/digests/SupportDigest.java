@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service.digests;
 
 public final class SupportDigest {
 
-    private final String author; // TODO -- Question: Should be an instance of User?
+    private final String author;
     private final String body;
 
     public SupportDigest(String body, String author) {

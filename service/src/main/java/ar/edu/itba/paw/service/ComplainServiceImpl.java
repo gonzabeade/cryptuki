@@ -152,8 +152,6 @@ public class ComplainServiceImpl implements ComplainService{
 
         MailMessage mailMessage = mailContactService.createMessage(digest.getAuthor());
         NeedHelpThymeleafMailMessage needHelpThymeleafMailMessage = new NeedHelpThymeleafMailMessage(mailMessage, thymeleafProcessor);
-
-
         needHelpThymeleafMailMessage.setParameters(digest.getAuthor(), "Cuantas empanadas como?", "Dos de pollo");
         mailContactService.sendMessage(needHelpThymeleafMailMessage);
     }

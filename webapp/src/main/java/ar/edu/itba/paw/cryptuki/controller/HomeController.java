@@ -44,7 +44,7 @@ public class HomeController {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
 
-        final ModelAndView mav = new ModelAndView("views/index");
+        final ModelAndView mav = new ModelAndView("index");
 
         int pageNumber = page.orElse(0);
         OfferFilter filter = new OfferFilter()
@@ -75,7 +75,7 @@ public class HomeController {
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET)
     public ModelAndView coins(final Authentication authentication) {
-        final ModelAndView mav = new ModelAndView("views/coins_page"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("coins_page"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
@@ -83,7 +83,7 @@ public class HomeController {
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public ModelAndView contact(@ModelAttribute("supportForm") final SupportForm form, Authentication authentication){
-        ModelAndView mav =  new ModelAndView("views/contact");
+        ModelAndView mav =  new ModelAndView("contact");
 
         if ( null != authentication ) {
             String username= authentication.getName();

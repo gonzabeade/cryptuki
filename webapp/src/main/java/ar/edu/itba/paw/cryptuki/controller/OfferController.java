@@ -45,7 +45,7 @@ public class OfferController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/upload_page");
+        ModelAndView mav = new ModelAndView("upload_page");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("username", authentication.getName());
@@ -93,7 +93,7 @@ public class OfferController {
 
 
     private ModelAndView seeOffer(Offer offer, Authentication authentication, boolean creation, boolean edit) {
-        ModelAndView mav = new ModelAndView("views/see_offer");
+        ModelAndView mav = new ModelAndView("see_offer");
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         mav.addObject("creation", creation);
@@ -118,7 +118,7 @@ public class OfferController {
         Offer offer = offerOptional.get();
         form.fillFromOffer(offer);
 
-        ModelAndView mav = new ModelAndView("views/modify");
+        ModelAndView mav = new ModelAndView("modify");
         mav.addObject("offer", offer);
         mav.addObject("username", authentication.getName());
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
@@ -147,7 +147,7 @@ public class OfferController {
     public ModelAndView delete(@PathVariable("offerId") final int offerId,
                                final Authentication authentication){
         offerService.deleteOffer(offerId);
-        ModelAndView mav = new ModelAndView("views/deleted_offer");
+        ModelAndView mav = new ModelAndView("deleted_offer");
         mav.addObject("username", authentication.getName());
         return mav;
     }
@@ -155,7 +155,7 @@ public class OfferController {
 
     @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
     public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/my_offers");
+        ModelAndView mav = new ModelAndView("my_offers");
         int pageNumber = page.orElse(0);
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

@@ -71,6 +71,7 @@ public class OfferBuyForm {
 
     public Trade.Builder toTradeBuilder(String username) {
         return new Trade.Builder(offerId, username)
+                .withWallet(wallet)
                 .withQuantity(amount);
     }
 }

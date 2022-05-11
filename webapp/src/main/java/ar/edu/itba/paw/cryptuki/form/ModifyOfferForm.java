@@ -2,15 +2,9 @@ package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
-import ar.edu.itba.paw.cryptuki.form.annotation.MinMax;
 import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.PaymentMethod;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @MinLessThanMax(
         min="minAmount",

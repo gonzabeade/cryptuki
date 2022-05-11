@@ -1,36 +1,22 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import javax.validation.constraints.NotNull;
+import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
+
 import javax.validation.constraints.Size;
 
-public class recoverPasswordForm {
-
-    @NotNull
-    private Integer code;
-
-    private String username;
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+@EqualFields(
+        field1="password",
+        field2="repeatPassword"
+)
+public class ChangePasswordForm {
 
     @Size(min = 6, max = 100)
     private String password;
 
     @Size(min = 6, max = 100)
     private String repeatPassword;
+
+
 
     public String getPassword() {
         return password;

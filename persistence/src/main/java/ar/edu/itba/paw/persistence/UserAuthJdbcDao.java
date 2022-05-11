@@ -62,8 +62,13 @@ public class UserAuthJdbcDao implements UserAuthDao{
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
         final String query = "SELECT * FROM (SELECT * FROM auth WHERE uname = ?) AS temp JOIN user_role ON temp.role_id=id ";
-        UserAuth userAuthList = jdbcTemplate.queryForObject(query, AUTH_ROLE_ROW_MAPPER, username);
-        return Optional.ofNullable(userAuthList);
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(query, AUTH_ROLE_ROW_MAPPER, username));
+        } catch (EmptyResultDataAccessException erde) {
+            return Optional.empty();
+        } catch (DataAccessException dae) {
+            throw new UncategorizedPersistenceException(dae);
+        }
     }
 
     @Override

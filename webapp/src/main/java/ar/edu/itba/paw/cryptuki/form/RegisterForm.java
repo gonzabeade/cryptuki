@@ -11,9 +11,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@PasswordMatch
-@DuplicateUsername
-@DuplicateEmail
+
 @EqualFields(
         field1="password",
         field2="repeatPassword"
@@ -22,9 +20,11 @@ public class RegisterForm {
 
 
     @Size(min=6, max= 100)
+//    @DuplicateEmail
     @Pattern(regexp=".+@.+\\..+")
     private String email;
     @Size(min = 6, max = 100)
+//    @DuplicateUsername
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String username;
 

@@ -9,18 +9,18 @@ import java.util.Objects;
 
 public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Object> {
 
-    private String field;
-    private String fieldMatch;
+    private String field1;
+    private String field2;
 
     public void initialize(EqualFields constraintAnnotation) {
-        this.field = constraintAnnotation.field1();
-        this.fieldMatch = constraintAnnotation.field2();
+        this.field1 = constraintAnnotation.field1();
+        this.field2 = constraintAnnotation.field2();
     }
 
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
 
-        Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field);
-        Object fieldMatchValue = new BeanWrapperImpl(value).getPropertyValue(fieldMatch);
+        Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field1);
+        Object fieldMatchValue = new BeanWrapperImpl(value).getPropertyValue(field2);
 
         boolean isValid = Objects.equals(fieldValue, fieldMatchValue);
         return isValid;

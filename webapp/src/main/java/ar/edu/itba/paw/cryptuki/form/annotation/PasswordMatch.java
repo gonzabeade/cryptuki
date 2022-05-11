@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.form.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.validator.MinMaxValidator;
 import ar.edu.itba.paw.cryptuki.form.validator.PasswordMatchValidator;
 
 import javax.validation.Constraint;

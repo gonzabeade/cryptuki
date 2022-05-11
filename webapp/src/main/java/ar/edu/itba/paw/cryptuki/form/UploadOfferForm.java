@@ -1,12 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
 import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
-import ar.edu.itba.paw.cryptuki.form.annotation.MinMax;
-import ar.edu.itba.paw.persistence.Cryptocurrency;
-import ar.edu.itba.paw.persistence.Offer;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;

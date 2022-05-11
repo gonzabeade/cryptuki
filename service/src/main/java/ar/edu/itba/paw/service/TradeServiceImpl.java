@@ -1,14 +1,16 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
+import ar.edu.itba.paw.exception.*;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -17,19 +19,18 @@ public class TradeServiceImpl implements TradeService {
 
     private final OfferService offerService;
     private final TradeDao tradeDao;
-
-    private final UserService userService;
+    private final UserAuthDao userAuthDao;
 
     private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
     public TradeServiceImpl(OfferService offerService,
                             TradeDao tradeDao,
-                            UserService userService,
+                            UserAuthDao userAuthDao,
                             MessageSenderFacade messageSenderFacade) {
         this.offerService = offerService;
         this.tradeDao = tradeDao;
-        this.userService = userService;
+        this.userAuthDao = userAuthDao;
         this.messageSenderFacade = messageSenderFacade;
     }
 
@@ -43,32 +44,45 @@ public class TradeServiceImpl implements TradeService {
         if (trade == null)
             throw new NullPointerException("Trade Builder cannot be null");
 
-        Offer offer = offerService.getOfferById(trade.getOfferId()).get();
-        UserAuth userAuth = userService.getUserAuthByEmail(offer.getSeller().getEmail()).get();
-
+        Optional<Offer> offerOptional;
         try {
-           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
-            //create trade.
-            trade.withTradeStatus(TradeStatus.OPEN)
-                    .withSellerUsername(userAuth.getUsername());
-            int tradeId = tradeDao.makeTrade(trade);
-
-
-            messageSenderFacade.sendNewTradeNotification(
-                    offer.getSeller().getEmail(),
-                    trade.getSellerUsername(),
-                    trade.getCryptoCurrency().getCode(),
-                    trade.getQuantity(),
-                    trade.getBuyerUsername(),
-                    "",
-                    "",
-                    tradeId
-            );
-
-            return tradeId;
+            offerOptional =  offerService.getOfferById(trade.getOfferId());
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+
+        if (!offerOptional.isPresent())
+            throw new NoSuchOfferException(trade.getOfferId());
+        Offer offer = offerOptional.get();
+
+
+        Optional<UserAuth> userAuthOptional;
+        try {
+            userAuthOptional = userAuthDao.getUserAuthByEmail(offer.getSeller().getEmail());
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
+        if (!userAuthOptional.isPresent())
+            throw new NoSuchUserException(offer.getSeller().getEmail());
+        UserAuth userAuth = userAuthOptional.get();
+
+        trade.withCryptoCurrency(offer.getCrypto())
+            .withStartDate(LocalDateTime.now())
+            .withTradeStatus(TradeStatus.OPEN)
+            .withSellerUsername(userAuth.getUsername())
+            .withSellerUsername(userAuth.getUsername());
+
+        int tradeId;
+        try {
+           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
+           tradeId = tradeDao.makeTrade(trade);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+
+        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId);
+        return tradeId;
     }
 
     @Override

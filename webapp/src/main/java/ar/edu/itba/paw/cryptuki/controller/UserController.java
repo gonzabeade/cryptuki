@@ -79,6 +79,7 @@ public class UserController {
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) boolean error){
         ModelAndView mav = new ModelAndView("codeVerification");
         mav.addObject("error", error);
+        mav.addObject("username", username);
         return mav;
     }
 
@@ -176,15 +177,15 @@ public class UserController {
 
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
-    public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
+    public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") ChangePasswordForm form, Authentication authentication){
         ModelAndView mav = new ModelAndView("changePassword");
         return mav;
     }
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.POST})
-    public ModelAndView changePassword(@Valid @ModelAttribute("changePasswordForm") changePasswordForm form, BindingResult bindingResult, Authentication authentication){
+    public ModelAndView changePassword(@Valid @ModelAttribute("changePasswordForm") ChangePasswordForm form, BindingResult bindingResult, Authentication authentication){
         if(bindingResult.hasErrors())
-            return changePasswordGet(new changePasswordForm(),authentication);
+            return changePasswordGet(new ChangePasswordForm(),authentication);
 
         //check current password.
         userService.changePassword(authentication.getName(), form.getPassword());
@@ -193,17 +194,18 @@ public class UserController {
 
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
-    public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
+    public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") RecoverPasswordForm form, @RequestParam(value = "user") String username, @RequestParam(value = "code") Integer code){
         ModelAndView mav = new ModelAndView("recoverPassword");
-        mav.addObject("code",code);
+        mav.addObject("code", code);
+        mav.addObject("username", username);
         return mav;
     }
 
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.POST})
-    public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") recoverPasswordForm form,BindingResult bindingResult){
+    public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") RecoverPasswordForm form, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return recoverPasswordGet(new recoverPasswordForm(),form.getUsername(), form.getCode());
+            return recoverPasswordGet(new RecoverPasswordForm(),form.getUsername(), form.getCode());
         //check this before login
 
         userService.changePassword(form.getUsername(), form.getCode(), form.getPassword());

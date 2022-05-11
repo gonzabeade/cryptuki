@@ -33,6 +33,7 @@ public final class Trade {
         private Integer tradeId;
 
         private  Cryptocurrency cryptoCurrency;
+        private String wallet;
 
         private float askedPrice;
         private boolean ratedBuyer;
@@ -76,6 +77,10 @@ public final class Trade {
             return this;
         }
 
+        public Builder withWallet(String wallet) {
+            this.wallet = wallet;
+            return this;
+        }
 
         public Builder withCryptoCurrency(Cryptocurrency cryptoCurrency) {
             this.cryptoCurrency =cryptoCurrency;
@@ -120,6 +125,9 @@ public final class Trade {
         }
         public boolean getRatedSeller(){
             return ratedSeller;
+        }
+        public String getWallet(){
+            return wallet;
         }
 
         protected Trade build() {

@@ -28,6 +28,7 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
         Context context = new Context(getLocale());
 
         context.setVariable("username", username);
+        context.setVariable("code", verifyCode);
         context.setVariable("verifyLink", "http://localhost:8080/webapp/verify?user=" + username + "&code=" + verifyCode);
         return context;
     }

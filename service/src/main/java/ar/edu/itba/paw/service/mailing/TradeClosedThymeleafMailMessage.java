@@ -46,8 +46,6 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("wallet", wallet);
         context.setVariable("buyerEmail", buyerEmail);
         context.setVariable("tradeCode", tradeCode);
-        context.setVariable("receiptLink", "http://locahost:8080/webapp/receiptDescription/" + tradeCode);
-
         return context;
     }
 }

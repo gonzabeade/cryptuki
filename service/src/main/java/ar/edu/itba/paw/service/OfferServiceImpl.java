@@ -62,13 +62,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Offer> getOffersByUsername(String username) {
+    public Collection<Offer> getOffersByUsername(String username, int pageSize) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username)
+            return offerDao.getOffersBy(new OfferFilter().byUsername(username).withPageSize(10)
                     .byStatus("APR")
                     .byStatus("PSE")
                     .byStatus("PSU"));

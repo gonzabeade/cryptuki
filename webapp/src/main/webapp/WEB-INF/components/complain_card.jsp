@@ -17,7 +17,7 @@
         <h1 class="font-sans">Fecha: </h1>
         <h3 class="font-bold font-sans"><c:out value="${param.date}"/></h3>
     </div>
-    <c:if test="${Integer.valueOf(param.tradeId) >= 0 }">
+    <c:if test="${Integer.valueOf(param.tradeId) >= 0  && param.status!='CLOSED'}">
         <div  class="flex basis-1/4 justify-center items-center">
             <a class="mx-36 bg-frost  hover:bg-frost/[.6] text-white p-3 rounded-md font-sans text-center" href="<c:url value="/receiptDescription/${param.tradeId}"/>" />
             <messages:message code="seeTransaction"/>

@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="claimSent"><messages:message code="claimSent"/></c:set>
-
+<sec:authentication property="name" var="username"/>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,9 +18,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class=" flex  flex-col justify-center mx-10">
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:if test="${completed == true}">
@@ -28,7 +27,7 @@
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/contact_text.jsp"/>
+    <jsp:include page="../components/contactText.jsp"/>
 </div>
 <div class="flex justify-center">
     <% request.setCharacterEncoding("utf-8"); %>

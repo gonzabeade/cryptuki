@@ -34,7 +34,7 @@
 
         <div class="flex flex-col mx-auto mt-7">
             <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>
-            <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto">Pega la dirección donde querés recibir los ${offer.crypto.code}</form:label>
+            <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto"><messages:message code="postYourWallet"/> ${offer.crypto.code}</form:label>
             <form:input  cssClass="rounded-lg p-3 mx-auto mt-3" type="text" path="wallet"/>
         </div>
 

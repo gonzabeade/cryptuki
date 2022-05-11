@@ -15,9 +15,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20"><messages:message code="getToKnowMainCryptocurrencies"/></h1>
 <div class="mx-48">
     <ol class="min-w-50%">
@@ -25,7 +23,7 @@
             <% request.setCharacterEncoding("UTF-8"); %>
             <c:forEach var="coin" items="${coinList}">
                 <li class="m-10">
-                    <jsp:include page="../components/crypto_card.jsp">
+                    <jsp:include page="../components/cryptoCard.jsp">
                         <jsp:param name="code" value="${coin.code}"/>
                         <jsp:param name="commercialName" value="${coin.commercialName}"/>
                     </jsp:include>

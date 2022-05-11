@@ -19,9 +19,7 @@
 
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex flex-col">
     <div class="flex justify-between mt-10 mb-5">
         <div class="flex mt-10 mb-5 ml-20">
@@ -42,7 +40,6 @@
                     <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                     <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                     <jsp:param name="userEmail" value="${userEmail}"/>
-                    <jsp:param name="isAdmin" value="${isAdmin}"/>
                     <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
                     <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
                     <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
@@ -57,7 +54,7 @@
         <jsp:include page="../components/paginator.jsp">
             <jsp:param name="activePage" value="${activePage}"/>
             <jsp:param name="pages" value="${pages}"/>
-            <jsp:param name="baseUrl" value="/complaints"/>
+            <jsp:param name="baseUrl" value="/myoffers"/>
         </jsp:include>
         <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>

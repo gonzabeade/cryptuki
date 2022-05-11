@@ -42,7 +42,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
-        ModelAndView mav = new ModelAndView("buy_offer");
+        ModelAndView mav = new ModelAndView("buyOffer");
 
         Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
         if (!offerOptional.isPresent())
@@ -51,7 +51,6 @@ public class TradeFluxController {
         Offer offer = offerOptional.get();
 
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication.getName());
         mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
@@ -81,7 +80,6 @@ public class TradeFluxController {
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
         mav.addObject("amount", offerBuyForm.getAmount());
-        mav.addObject("username", authentication.getName());
         mav.addObject("offerBuyForm", offerBuyForm);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
@@ -136,7 +134,6 @@ public class TradeFluxController {
         User user = us.getUserInformation(authentication.getName()).get();
         Offer offer = offerOptional.get();
 
-        mav.addObject("username", authentication.getName());
         mav.addObject("user", user);
 
         mav.addObject("trade", trade);

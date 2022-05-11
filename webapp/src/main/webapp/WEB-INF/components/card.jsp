@@ -2,7 +2,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
+<sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 
 <div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
@@ -52,7 +54,7 @@
 				</div>
 				<div class="flex basis-1/4 justify-center">
 					<c:choose>
-						<c:when test="${param.userEmail == param.owner || param.isAdmin}">
+						<c:when test="${param.userEmail == param.owner || isAdmin}">
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>">
 								<messages:message code="seeOffer"/>
 							</a>

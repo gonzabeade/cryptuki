@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
@@ -18,10 +19,9 @@
   <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden flex flex-col">
+<sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-  <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>
@@ -104,7 +104,7 @@
 <div  class="flex flex-col justify-center mx-auto mt-10">
       <c:forEach var="trade" items="${tradeList}">
         <% request.setCharacterEncoding("utf-8"); %>
-        <jsp:include page="../components/trade_card.jsp">
+        <jsp:include page="../components/tradeCard.jsp">
           <jsp:param name="username" value="${username}"/>
           <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
           <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -14,10 +15,9 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
+<sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class=" flex  flex-col justify-center mx-10">
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:if test="${completed == true}">
@@ -26,11 +26,11 @@
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/contact_text.jsp"/>
+    <jsp:include page="../components/contactText.jsp"/>
 </div>
 <div class="flex justify-center">
     <% request.setCharacterEncoding("utf-8"); %>
-    <jsp:include page="../components/complain_form.jsp">
+    <jsp:include page="../components/complainForm.jsp">
         <jsp:param name="url" value="support"/>
         <jsp:param name="tradeId" value="${tradeId}"/>
         <jsp:param name="username" value="${username}"/>

@@ -9,7 +9,7 @@
             <h3 class="font-sans text-2xl my-3 text-polard font-semibold"><c:out value="${param.email}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="phoneNumber"/>: </b><c:out value="${param.phone}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="tradeQuantity"/>: </b><c:out value="${param.trades}"/></h3>
-            <h3 class="font-sans my-3"><b><messages:message code="lastLogin"/>: </b><c:out value="${param.lastLogin}"/></h3>
+            <h3 class="font-sans my-3"><b><messages:message code="lastLogin"/>: </b><messages:message code="${param.lastLogin}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="rating"/>: </b><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h3>
         </div>
     </div>

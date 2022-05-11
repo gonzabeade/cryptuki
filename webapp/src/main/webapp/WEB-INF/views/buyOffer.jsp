@@ -16,9 +16,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
         <div class="flex">
@@ -35,7 +33,7 @@
         </div>
         <div>
             <% request.setCharacterEncoding("UTF-8"); %>
-            <jsp:include page="../components/buy_form.jsp">
+            <jsp:include page="../components/buyForm.jsp">
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.askingPrice}"/>
@@ -47,7 +45,7 @@
     </div>
     <% request.setCharacterEncoding("utf-8"); %>
     <div class="flex flex-row w-2/5">
-        <jsp:include page="../components/seller_info.jsp">
+        <jsp:include page="../components/sellerInfo.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>

@@ -15,12 +15,10 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${null}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex mt-10 mb-10">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/register_form.jsp"/>
+    <jsp:include page="../components/registerForm.jsp"/>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

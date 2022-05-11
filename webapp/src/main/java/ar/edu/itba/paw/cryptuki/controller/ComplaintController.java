@@ -37,7 +37,7 @@ public class ComplaintController {
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("complaints_page");
+        ModelAndView mav = new ModelAndView("complaintsPage");
 
         int pageNumber= page.orElse(0);
         int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
@@ -51,7 +51,6 @@ public class ComplaintController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject("username",authentication.getName());
         return mav;
     }
 
@@ -63,7 +62,6 @@ public class ComplaintController {
         User user = us.getUserInformation(username).get();
         form.setEmail(user.getEmail());
         mav.addObject("complainerId",user.getId());
-        mav.addObject("username", authentication.getName());
         mav.addObject("supportForm", form);
         mav.addObject("tradeId", tradeId);
         return mav;

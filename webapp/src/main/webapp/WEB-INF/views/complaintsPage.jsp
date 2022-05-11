@@ -19,9 +19,7 @@
 
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <div class="flex flex-col">
     <div class="flex mt-10 mb-5 ml-20">
         <a href="<c:url value="/user"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg"><messages:message code="goBack"/></a>
@@ -31,7 +29,7 @@
                 <c:forEach var="complaint" items="${complaintsList}">
                     <li class="list-none mx-20">
                         <% request.setCharacterEncoding("utf-8"); %>
-                        <jsp:include page="../components/complain_card.jsp">
+                        <jsp:include page="../components/complainCard.jsp">
                             <jsp:param name="status" value="${complaint.status}"/>
                             <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
                             <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />

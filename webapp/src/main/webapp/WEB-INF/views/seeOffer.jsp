@@ -2,9 +2,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="modifiedOffer"><messages:message code="modifiedOffer"/></c:set>
 <c:set var="createdOffer"><messages:message code="createdOffer"/></c:set>
+<sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,9 +22,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <c:if test="${creation == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">
@@ -43,23 +43,23 @@
                 <div class="flex flex-row justify-center">
                     <h2 class="font-sans font-semibold text-polard text-4xl text-center my-auto"><messages:message code="offer"/> # <c:out value="${offer.id}"/></h2>
                     <c:if test="${isAdmin || offer.seller.email == userEmail}">
-                        <div class="flex flex-row mx-auto my-4">
-                            <a class="active:cursor-progress my-auto mx-3" href="<c:url value="/modify/${offer.id}"/>">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                            </a>
-                            <div class="my-auto">
-                                <c:url value="/delete/${offer.id}" var="deleteUrl"/>
-                                <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
-                                    <button type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </form:form>
+                            <div class="flex flex-row mx-auto my-4">
+                                <a class="active:cursor-progress my-auto mx-3" href="<c:url value="/modify/${offer.id}"/>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </a>
+                                <div class="my-auto">
+                                    <c:url value="/delete/${offer.id}" var="deleteUrl"/>
+                                    <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
+                                        <button type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form:form>
+                                </div>
                             </div>
-                        </div>
                     </c:if>
 
                 </div>
@@ -76,7 +76,7 @@
     </div>
     <div class="flex flex-row mt-10">
         <% request.setCharacterEncoding("utf-8"); %>
-        <jsp:include page="../components/seller_info.jsp">
+        <jsp:include page="../components/sellerInfo.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>

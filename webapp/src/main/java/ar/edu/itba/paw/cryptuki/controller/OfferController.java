@@ -45,10 +45,10 @@ public class OfferController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("upload_page");
+        ModelAndView mav = new ModelAndView("uploadPage");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-        mav.addObject("username", authentication.getName());
+
 
         if (form.getPaymentMethods() != null){
             List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
@@ -93,15 +93,13 @@ public class OfferController {
 
 
     private ModelAndView seeOffer(Offer offer, Authentication authentication, boolean creation, boolean edit) {
-        ModelAndView mav = new ModelAndView("see_offer");
+        ModelAndView mav = new ModelAndView("seeOffer");
         mav.addObject("offer", offer);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         mav.addObject("creation", creation);
         mav.addObject("edit", edit);
-        mav.addObject("username", authentication.getName());
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
-        return mav;
+         return mav;
     }
 
 
@@ -120,7 +118,6 @@ public class OfferController {
 
         ModelAndView mav = new ModelAndView("modify");
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication.getName());
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
         mav.addObject("selectedCrypto", offer.getCrypto().getCode());
@@ -147,25 +144,22 @@ public class OfferController {
     public ModelAndView delete(@PathVariable("offerId") final int offerId,
                                final Authentication authentication){
         offerService.deleteOffer(offerId);
-        ModelAndView mav = new ModelAndView("deleted_offer");
-        mav.addObject("username", authentication.getName());
+        ModelAndView mav = new ModelAndView("deletedOffer");
         return mav;
     }
 
 
     @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
     public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("my_offers");
+        ModelAndView mav = new ModelAndView("myOffers");
         int pageNumber = page.orElse(0);
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
-        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName()));
+        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName(), PAGE_SIZE));
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
-        mav.addObject("username",  authentication.getName());
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-        mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
 
         return mav;
     }

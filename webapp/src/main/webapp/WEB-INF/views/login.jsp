@@ -18,7 +18,7 @@
 <jsp:include page="../components/header.jsp"/>
 <div class="flex mt-20 mb-10">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/login_form.jsp">
+    <jsp:include page="../components/loginForm.jsp">
         <jsp:param name="error" value="${error}"/>
     </jsp:include>
 </div>

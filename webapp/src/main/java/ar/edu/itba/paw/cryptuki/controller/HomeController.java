@@ -66,18 +66,15 @@ public class HomeController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
-            mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
         return mav;
     }
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET)
     public ModelAndView coins(final Authentication authentication) {
-        final ModelAndView mav = new ModelAndView("coins_page"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("coinsPage"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
 
@@ -89,7 +86,6 @@ public class HomeController {
             String username= authentication.getName();
             User user = us.getUserInformation(username).get();
             form.setEmail(user.getEmail());
-            mav.addObject("username",  authentication.getName());
         }
 
         mav.addObject("supportForm", form);

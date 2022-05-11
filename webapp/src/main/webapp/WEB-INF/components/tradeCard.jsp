@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<sec:authentication property="name" var="username"/>
 <div class="shadow-xl flex rounded-lg justify-between py-5 px-24 bg-[#FAFCFF] mt-3">
     <div class="mr-10 my-auto">
         <c:if test="${username == param.buyerUsername}">

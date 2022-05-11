@@ -7,6 +7,8 @@ import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.MessageSenderFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -24,6 +26,9 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     private final ContactService<MailMessage> mailMessageContactService;
     private final UserDao userDao;
     private MessageSource messageSource;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThymeleafMessageSenderFacade.class);
+
 
     private String getTo(String username) {
         Optional<User> userOptional =  userDao.getUserByUsername(username);
@@ -49,6 +54,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         welcomeMailMessage.setLocale(locale);
         welcomeMailMessage.setParameters(username, veryCode);
         mailMessageContactService.sendMessage(welcomeMailMessage);
+        LOGGER.info("Welcome mail sent");
     }
 
     @Override
@@ -60,6 +66,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
         changePasswordMailMessage.setParameters(username, code);
         mailMessageContactService.sendMessage(changePasswordMailMessage);
+        LOGGER.info("Change password mail sent");
     }
 
     @Override
@@ -77,6 +84,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 digest.getMaxQuantity(),
                 offerId);
         mailMessageContactService.sendMessage(newOfferMailMessage);
+        LOGGER.info("Uploaded offer mail sent");
     }
 
     @Override
@@ -88,6 +96,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, locale));
         questionMailMessage.setParameters(username, question);
         mailMessageContactService.sendMessage(questionMailMessage);
+        LOGGER.info("Complaint receipt sent to Anonymous");
     }
 
     @Override
@@ -99,6 +108,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
         questionMailMessage.setParameters(username, question);
         mailMessageContactService.sendMessage(questionMailMessage);
+        LOGGER.info("Complaint receipt sent to user");
     }
 
     @Override
@@ -116,5 +126,6 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 trade.getWallet(),
                 tradeId);
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
+        LOGGER.info("Received Trade notification sent");
     }
 }

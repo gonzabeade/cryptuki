@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,6 +28,8 @@ public class OfferJdbcDao implements OfferDao {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private SimpleJdbcInsert jdbcOfferInsert;
     private SimpleJdbcInsert jdbcPaymentMethodAtOfferInsert;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OfferJdbcDao.class);
 
     private final static RowMapper<Offer.Builder> OFFER_ROW_MAPPER =
             (resultSet, i) -> {
@@ -134,6 +138,7 @@ public class OfferJdbcDao implements OfferDao {
         try {
             return namedJdbcTemplate.queryForObject(countQuery, toMapSqlParameterSource(filter), Integer.class);
         } catch (EmptyResultDataAccessException erde) {
+            LOGGER.warn("No offers fetched");
             return 0;
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
@@ -182,12 +187,13 @@ public class OfferJdbcDao implements OfferDao {
         int offerId;
         try {
             offerId = jdbcOfferInsert.executeAndReturnKey(args).intValue();
+            LOGGER.info("Offer created");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
 
         addPaymentMethodsToOffer(offerId, digest.getPaymentMethods());
-
+        LOGGER.info("Payment Methods added");
         return offerId;
     }
 
@@ -209,6 +215,7 @@ public class OfferJdbcDao implements OfferDao {
         String query = "UPDATE offer SET status_code= ? WHERE id = ?";
         try {
             jdbcTemplate.update(query, statusCode, offerId);
+            LOGGER.info("Offer Status changed");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -265,6 +272,7 @@ public class OfferJdbcDao implements OfferDao {
         try {
             namedJdbcTemplate.update(baseQuery, toMapSqlParameterSource(digest));
             jdbcTemplate.update(deleteQuery, digest.getId());
+            LOGGER.info("Offer modified succesfully");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

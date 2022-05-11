@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +22,8 @@ public class ComplainJdbcDao implements ComplainDao {
 
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComplainJdbcDao.class);
 
     private static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
             (rs, i) -> {
@@ -123,6 +127,7 @@ public class ComplainJdbcDao implements ComplainDao {
 
         try {
             namedJdbcTemplate.update(query, toMapSqlParameterSource(complain));
+            LOGGER.info("Complain created");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -133,6 +138,7 @@ public class ComplainJdbcDao implements ComplainDao {
         final String query = "UPDATE complain SET status = ? WHERE complain_id = ?";
         try {
             jdbcTemplate.update(query, complainStatus.toString(), complainId);
+            LOGGER.info("Complaint status updated");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -146,6 +152,7 @@ public class ComplainJdbcDao implements ComplainDao {
 
         try {
             jdbcTemplate.update(query, username, complainId);
+            LOGGER.info("Moderator claimed the complaint successfully");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -157,6 +164,7 @@ public class ComplainJdbcDao implements ComplainDao {
 
         try {
             jdbcTemplate.update(query, comments, complainId);
+            LOGGER.info("Moderator closed the complaint successfully");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

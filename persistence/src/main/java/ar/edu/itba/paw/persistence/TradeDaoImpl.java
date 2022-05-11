@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +22,8 @@ public class TradeDaoImpl implements TradeDao {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcTradeInsert;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TradeDaoImpl.class);
 
 
 
@@ -58,7 +62,7 @@ public class TradeDaoImpl implements TradeDao {
         Integer userId;
         try{
              userId = jdbcTemplate.queryForObject(getUserIdQuery, Integer.class, buyerUsername);
-
+            LOGGER.info("Trade created successfully");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -90,6 +94,7 @@ public class TradeDaoImpl implements TradeDao {
 
         try {
             jdbcTemplate.update(query, status.toString(), tradeId);
+            LOGGER.info("Trade Status uploaded successfully");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -175,6 +180,7 @@ public class TradeDaoImpl implements TradeDao {
         final String query = "UPDATE trade SET rated_buyer = true WHERE trade_id = ?";
         try {
             jdbcTemplate.update(query,  tradeId);
+            LOGGER.info("Buyer rated his seller");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }
@@ -184,6 +190,7 @@ public class TradeDaoImpl implements TradeDao {
         final String query = "UPDATE trade SET rated_seller = true WHERE trade_id = ?";
         try {
             jdbcTemplate.update(query, tradeId);
+            LOGGER.info("Seller rated his buyer");
         } catch (DataAccessException dae) {
             throw new UncategorizedPersistenceException(dae);
         }

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.config;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

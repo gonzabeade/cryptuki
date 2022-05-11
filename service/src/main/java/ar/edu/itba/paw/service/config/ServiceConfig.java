@@ -3,7 +3,6 @@ package ar.edu.itba.paw.service.config;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.MailService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

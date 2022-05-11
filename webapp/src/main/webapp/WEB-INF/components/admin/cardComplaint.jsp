@@ -10,11 +10,11 @@
             </h1>
             <h3 class="text-gray-300"> <messages:message code="carriedOutOn"/> <c:out value="${param.date}"/></h3>
         </div>
-        <div class="flex flex-col my-auto mx-7">
+        <div class="flex flex-col h-28 my-auto mx-7">
             <h1 class="font-sans font-polard text-2xl font-semibold">
                 <messages:message code="user"/>:  <b><c:out value="${param.complainerUsername}"/></b>
             </h1>
-            <h3 class="text-gray-300"><messages:message code="comment"/>: <c:out value="${param.complainerComments}"/></h3>
+            <h3 class="text-gray-300 overflow-y-hidden" ><messages:message code="comment"/>: <c:out value="${param.complainerComments}"/></h3>
         </div>
     </div>
     <c:if test="${param.complainStatus != 'CLOSED'}">

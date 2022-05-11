@@ -105,11 +105,8 @@ public class UserController {
     public ModelAndView passwordSendMail(@Valid @ModelAttribute("EmailForm") EmailForm form, BindingResult errors){
         if(errors.hasErrors())
             return passwordSendMailGet(form);
-        try{
-            userService.changePasswordAnonymously(form.getEmail());
-        }catch (Exception e ){
-            throw new NoSuchUserException(form.getEmail());
-        }
+        userService.changePasswordAnonymously(form.getEmail());
+
         return new ModelAndView("changePasswordMailSent");
 
     }

@@ -20,11 +20,11 @@ public class RegisterForm {
 
 
     @Size(min=6, max= 100)
-//    @DuplicateEmail
+    @DuplicateEmail
     @Pattern(regexp=".+@.+\\..+")
     private String email;
     @Size(min = 6, max = 100)
-//    @DuplicateUsername
+    @DuplicateUsername
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String username;
 

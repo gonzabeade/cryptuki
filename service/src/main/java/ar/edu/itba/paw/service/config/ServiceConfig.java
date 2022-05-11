@@ -3,7 +3,6 @@ package ar.edu.itba.paw.service.config;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.MailService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -33,14 +32,13 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableAsync
 public class ServiceConfig {
-    @Value("classpath:info")
-    private Resource info;
 
     @Bean
-    public ContactService<MailMessage> contactService() throws IOException {
-        Reader reader = new InputStreamReader(info.getInputStream());
-        JSONObject jsonObject = new JSONObject(FileCopyUtils.copyToString(reader));
-        return new MailService(jsonObject.getString("mailUsername"), jsonObject.getString("mailPassword"));
+    public ContactService<MailMessage> contactService(
+            @Value("${mail.username}") String mail,
+            @Value("${mail.password}") String password
+    ) {
+        return new MailService(mail, password);
     }
 
     @Bean

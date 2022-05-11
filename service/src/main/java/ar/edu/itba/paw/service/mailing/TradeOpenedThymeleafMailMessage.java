@@ -12,19 +12,21 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyer;
     private String buyerMessage;
     private String buyerMail;
+    private String url;
 
     public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String coinCode, float quantity, String buyer, String buyerMessage, String buyerMail) {
+    public void setParameters(String username, String coinCode, float quantity, String buyer, String buyerMessage, String buyerMail, String url) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
         this.buyer = buyer;
         this.buyerMessage = buyerMessage;
         this.buyerMail = buyerMail;
+        this.url = url;
     }
 
     @Override
@@ -41,6 +43,8 @@ public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("buyer", buyer);
         context.setVariable("buyerMessage", buyerMessage);
         context.setVariable("buyerMail", buyerMail);
+        context.setVariable("url", url);
+
         return context;
     }
 }

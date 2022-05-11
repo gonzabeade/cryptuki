@@ -8,15 +8,18 @@ public class ComplaintThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private String complaint;
+    private String url;
+
 
     public ComplaintThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String complaint) {
+    public void setParameters(String username, String complaint, String url) {
         this.complaint = complaint;
         this.username = username;
+        this.url = url;
     }
 
     @Override
@@ -28,6 +31,8 @@ public class ComplaintThymeleafMailMessage extends ThymeleafMailMessage{
         Context context = new Context(getLocale());
         context.setVariable("complaint", complaint);
         context.setVariable("username", username);
+        context.setVariable("url", url);
+
         return context;
     }
 }

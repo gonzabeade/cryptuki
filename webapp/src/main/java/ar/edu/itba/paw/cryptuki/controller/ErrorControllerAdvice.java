@@ -47,14 +47,14 @@ class ErrorControllerAdvice {
     @ExceptionHandler(NoSuchOfferException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView notFound(NoSuchOfferException nsoe) {
-        LOGGER.debug("Captured NoSuchOfferException", nsoe);
+        LOGGER.warn("Captured NoSuchOfferException", nsoe);
         return new ModelAndView("forward:/404");
     }
 
     @ExceptionHandler(NoSuchComplainException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView notFound(NoSuchComplainException nsce) {
-        LOGGER.debug("Captured NoSuchOfferException", nsce);
+        LOGGER.warn("Captured NoSuchOfferException", nsce);
         return new ModelAndView("forward:/404");
     }
 

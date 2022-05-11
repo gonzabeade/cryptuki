@@ -42,7 +42,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
-        ModelAndView mav = new ModelAndView("views/buy_offer");
+        ModelAndView mav = new ModelAndView("buy_offer");
 
         Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
         if (!offerOptional.isPresent())
@@ -78,7 +78,7 @@ public class TradeFluxController {
 
         Offer offer = offerOptional.get();
 
-        ModelAndView mav = new ModelAndView("views/trade");
+        ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
         mav.addObject("amount", offerBuyForm.getAmount());
         mav.addObject("username", authentication.getName());
@@ -101,19 +101,19 @@ public class TradeFluxController {
 
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
     public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication) {
-        return receiptView("views/receipt", tradeId, authentication);
+        return receiptView("receipt", tradeId, authentication);
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
     public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        ModelAndView mav = receiptView("receiptDescription", tradeId, authentication);
         mav.addObject("rated", false);
         return mav;
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}/success", method = RequestMethod.GET)
     public ModelAndView receiptDescriptionSuccess(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
-        ModelAndView mav = receiptView("views/receiptDescription", tradeId, authentication);
+        ModelAndView mav = receiptView("receiptDescription", tradeId, authentication);
         mav.addObject("rated", true);
         return mav;
     }

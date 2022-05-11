@@ -43,7 +43,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         changePasswordMailMessage.setLocale(locale);
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
-        changePasswordMailMessage.setParameters(username);
+        changePasswordMailMessage.setParameters(username, code);
         mailMessageContactService.sendMessage(message);
     }
 
@@ -54,7 +54,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = LocaleContextHolder.getLocale();
         newOfferMailMessage.setLocale(locale);
         newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
-        newOfferMailMessage.setParameters(username,coinCode,askingPrice,minQuantity,maxQuantity);
+        newOfferMailMessage.setParameters(username,coinCode,askingPrice,minQuantity,maxQuantity, offerId);
         mailMessageContactService.sendMessage(message);
 
     }

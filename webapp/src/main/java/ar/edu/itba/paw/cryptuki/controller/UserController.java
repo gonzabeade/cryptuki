@@ -51,7 +51,7 @@ public class UserController {
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
     public ModelAndView registerGet(@ModelAttribute("registerForm") final RegisterForm form){
-        return new ModelAndView("views/register");
+        return new ModelAndView("register");
     }
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
@@ -66,7 +66,7 @@ public class UserController {
 
     @RequestMapping("/login")
     public ModelAndView login(@RequestParam(value = "error" , required = false) String error){
-        ModelAndView mav = new ModelAndView("views/login");
+        ModelAndView mav = new ModelAndView("login");
         if(error != null){
             mav.addObject("error", true);
             return mav;
@@ -77,7 +77,7 @@ public class UserController {
 
     @RequestMapping(value="/verify",method = {RequestMethod.GET})
     public ModelAndView verify( @ModelAttribute("CodeForm") final CodeForm form, @RequestParam(value = "user") String username, @RequestParam(value = "error", required = false) boolean error){
-        ModelAndView mav = new ModelAndView("views/code_verification");
+        ModelAndView mav = new ModelAndView("code_verification");
         mav.addObject("username", username);
         mav.addObject("error", error);
         return mav;
@@ -98,7 +98,7 @@ public class UserController {
 
     @RequestMapping(value="/passwordRecovery")
     public ModelAndView passwordSendMailGet(@ModelAttribute("EmailForm") EmailForm form){
-        return new ModelAndView("views/password_recovery");
+        return new ModelAndView("password_recovery");
     }
 
     @RequestMapping(value = "/passwordRecovery",method = RequestMethod.POST)
@@ -110,7 +110,7 @@ public class UserController {
         }catch (Exception e ){
             throw new NoSuchUserException(form.getEmail());
         }
-        return new ModelAndView("views/change_password_mail_sent");
+        return new ModelAndView("change_password_mail_sent");
 
     }
 
@@ -135,7 +135,7 @@ public class UserController {
     public ModelAndView profilePicSelectorGet(@ModelAttribute("ProfilePicForm") ProfilePicForm form){
 
 
-        return new ModelAndView("views/upload_picture");
+        return new ModelAndView("upload_picture");
     }
 
     @RequestMapping(value = "/profilePicSelector", method = { RequestMethod.POST })
@@ -160,7 +160,7 @@ public class UserController {
         }
         String username = authentication.getName();
         User user = userService.getUserInformation(username).get();
-        ModelAndView mav = new ModelAndView("views/user_profile");
+        ModelAndView mav = new ModelAndView("user_profile");
         mav.addObject("username",username);
         mav.addObject("user",user);
 
@@ -179,7 +179,7 @@ public class UserController {
 
     @RequestMapping(value="/changePassword", method = {RequestMethod.GET})
     public ModelAndView changePasswordGet(@ModelAttribute("changePasswordForm") changePasswordForm form, Authentication authentication){
-        ModelAndView mav = new ModelAndView("views/changePassword");
+        ModelAndView mav = new ModelAndView("changePassword");
         mav.addObject("username",authentication.getName());
         return mav;
     }
@@ -197,7 +197,7 @@ public class UserController {
 
     @RequestMapping(value ="/recoverPassword", method = {RequestMethod.GET})
     public ModelAndView recoverPasswordGet(@ModelAttribute("recoverPasswordForm") recoverPasswordForm form,@RequestParam(value = "user") String username,@RequestParam(value = "code") Integer code){
-        ModelAndView mav = new ModelAndView("views/recover_password");
+        ModelAndView mav = new ModelAndView("recover_password");
         mav.addObject("username",username);
         mav.addObject("code",code);
         return mav;

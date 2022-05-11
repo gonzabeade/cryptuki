@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class Cryptocurrency {
 

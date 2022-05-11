@@ -2,7 +2,6 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.TradeStatus;
-import ar.edu.itba.paw.service.digests.BuyDigest;
 
 import java.util.Collection;
 import java.util.Optional;

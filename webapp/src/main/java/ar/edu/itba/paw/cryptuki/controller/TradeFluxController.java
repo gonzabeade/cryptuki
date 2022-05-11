@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -93,6 +95,9 @@ public class TradeFluxController {
             return executeTrade(offerBuyForm, authentication);
         }
 
+
+
+
         int tradeId = tradeService.makeTrade(offerBuyForm.toTradeBuilder(authentication.getName()));
         return new ModelAndView("redirect:/receipt/"+tradeId);
     }
@@ -153,6 +158,6 @@ public class TradeFluxController {
         }
 
         ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
-        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getRating()+"/success");
+        return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
 }

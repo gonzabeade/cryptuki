@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public boolean verifyUser(String username, Integer code) {
 
         boolean verified;
@@ -123,14 +123,7 @@ public class UserServiceImpl implements UserService {
             throw new NullPointerException("New password cannot be null");
 
         try {
-            boolean result = userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
-
-            messageSenderFacade.sendChangePasswordMessage(getUserInformation(username).get().getEmail(),
-                    username,
-                    getUserByUsername(username).get().getCode()
-                    );
-
-            return result;
+            return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -191,7 +184,7 @@ public class UserServiceImpl implements UserService {
             throw new NoSuchUserException(email);
 
         UserAuth user = maybeUser.get();
-        messageSenderFacade.sendChangePasswordMessage(email,user.getUsername(), user.getCode());
+        messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
     }
 
     @Override

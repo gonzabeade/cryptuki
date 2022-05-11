@@ -9,6 +9,7 @@ import ar.edu.itba.paw.persistence.OfferDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +39,7 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             int offerId = offerDao.makeOffer(digest);
-            messageSenderFacade.sendOfferUploadedMessage("email",
-                    "username",
-                    digest.getCryptoCode(),
-                    digest.getAskingPrice(),
-                    digest.getMinQuantity(),
-                    digest.getMaxQuantity(),
-                    offerId
-                    );
+            messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), digest,  offerId);
             return offerId;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -79,7 +73,7 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username).withPageSize(10)
+            return offerDao.getOffersBy(new OfferFilter().byUsername(username).withPageSize(pageSize)
                     .byStatus("APR")
                     .byStatus("PSE")
                     .byStatus("PSU"));

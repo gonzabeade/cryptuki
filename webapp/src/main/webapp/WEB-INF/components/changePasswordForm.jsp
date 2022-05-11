@@ -3,7 +3,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 
 <c:url value="/changePassword" var="postPath"/>
-<%--@elvariable id="changePasswordForm" type="ar.edu.itba.paw.cryptuki.form.changePasswordForm"--%>
+<%--@elvariable id="changePasswordForm" type="ar.edu.itba.paw.cryptuki.form.ChangePasswordForm"--%>
 <form:form modelAttribute="changePasswordForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard" onsubmit="event.preventDefault(); preventChangePasswordNotMatching()">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="changeYourPassword"/></h2>
 

@@ -86,6 +86,8 @@ public class ComplainServiceImpl implements ComplainService{
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+
+        messageSenderFacade.sendComplaintReceipt(complain.getComplainer(), complain.getComplainerComments());
     }
 
     @Override
@@ -146,7 +148,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     public void getSupportFor(SupportDigest digest) {
-        messageSenderFacade.sendComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
+        messageSenderFacade.sendAnonymousComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
     }
 
 

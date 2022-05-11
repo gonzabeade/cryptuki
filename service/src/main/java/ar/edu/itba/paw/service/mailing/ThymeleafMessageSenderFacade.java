@@ -1,5 +1,10 @@
 package ar.edu.itba.paw.service.mailing;
 
+import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.MessageSenderFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,57 +15,72 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     private final TemplateEngine templateEngine;
     private final ContactService<MailMessage> mailMessageContactService;
+    private final UserDao userDao;
     private MessageSource messageSource;
 
+    private String getTo(String username) {
+        Optional<User> userOptional =  userDao.getUserByUsername(username);
+        if (!userOptional.isPresent())
+            throw new NoSuchUserException(username);
+        return userOptional.get().getEmail();
+    }
+
     @Autowired
-    public ThymeleafMessageSenderFacade(TemplateEngine templateEngine, ContactService<MailMessage> mailMessageContactService, @Qualifier("mailingMessageSource") MessageSource messageSource) {
+    public ThymeleafMessageSenderFacade(TemplateEngine templateEngine, ContactService<MailMessage> mailMessageContactService, UserDao userDao, @Qualifier("mailingMessageSource") MessageSource messageSource) {
         this.templateEngine = templateEngine;
         this.mailMessageContactService = mailMessageContactService;
+        this.userDao = userDao;
         this.messageSource = messageSource;
     }
 
     @Override
-    public void sendWelcomeMessage(String to, String username, int veryCode) {
-        MailMessage message = mailMessageContactService.createMessage(to);
+    public void sendWelcomeMessage(String email, String username, int veryCode) {
+        MailMessage message = mailMessageContactService.createMessage(email);
         WelcomeThymeleafMailMessage welcomeMailMessage= new WelcomeThymeleafMailMessage(message, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
         welcomeMailMessage.setSubject(messageSource.getMessage("accountVerification", null, locale));
         welcomeMailMessage.setLocale(locale);
         welcomeMailMessage.setParameters(username, veryCode);
-        mailMessageContactService.sendMessage(message);
+        mailMessageContactService.sendMessage(welcomeMailMessage);
     }
 
     @Override
-    public void sendChangePasswordMessage(String to, String username, int code) {
-        MailMessage message = mailMessageContactService.createMessage(to);
+    public void sendChangePasswordMessage(String username, int code) {
+        MailMessage message = mailMessageContactService.createMessage(getTo(username));
         ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
         changePasswordMailMessage.setLocale(locale);
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
         changePasswordMailMessage.setParameters(username, code);
-        mailMessageContactService.sendMessage(message);
+        mailMessageContactService.sendMessage(changePasswordMailMessage);
     }
 
     @Override
-    public void sendOfferUploadedMessage(String to, String username, String coinCode, double askingPrice, double minQuantity, double maxQuantity, int offerId) {
-        MailMessage message = mailMessageContactService.createMessage(to);
+    public void sendOfferUploadedMessage(String username, OfferDigest digest, int offerId) {
+        MailMessage message = mailMessageContactService.createMessage(getTo(username));
         NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
         newOfferMailMessage.setLocale(locale);
         newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
-        newOfferMailMessage.setParameters(username,coinCode,askingPrice,minQuantity,maxQuantity, offerId);
-        mailMessageContactService.sendMessage(message);
-
+        newOfferMailMessage.setParameters(
+                username,
+                digest.getCryptoCode(),
+                digest.getAskingPrice(),
+                digest.getMinQuantity(),
+                digest.getMaxQuantity(),
+                offerId);
+        mailMessageContactService.sendMessage(newOfferMailMessage);
     }
 
     @Override
-    public void sendComplaintReceipt(String to, String username, String question) {
+    public void sendAnonymousComplaintReceipt(String to, String username, String question) {
         MailMessage mailMessage = mailMessageContactService.createMessage(to);
         QuestionThymeleafMailMessage questionMailMessage= new QuestionThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
@@ -71,13 +91,30 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     }
 
     @Override
-    public void sendNewTradeNotification(String to, String username, String coinCode, float quantity, String buyer, String wallet, String buyerMail, int tradeCode){
-        MailMessage mailMessage = mailMessageContactService.createMessage(to);
+    public void sendComplaintReceipt(String username, String question) {
+        MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
+        ComplaintThymeleafMailMessage questionMailMessage= new ComplaintThymeleafMailMessage(mailMessage, templateEngine);
+        Locale locale = LocaleContextHolder.getLocale();
+        questionMailMessage.setLocale(locale);
+        questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
+        questionMailMessage.setParameters(username, question);
+        mailMessageContactService.sendMessage(questionMailMessage);
+    }
+
+    @Override
+    public void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId){
+        MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
         TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
         tradeClosedMailMessage.setLocale(locale);
         tradeClosedMailMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, locale));
-        tradeClosedMailMessage.setParameters(username, coinCode, quantity, buyer, wallet, buyerMail, tradeCode);
+        tradeClosedMailMessage.setParameters(
+                username,
+                trade.getCryptoCurrency().getCode(),
+                trade.getQuantity(),
+                trade.getBuyerUsername(),
+                trade.getWallet(),
+                tradeId);
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
     }
 }

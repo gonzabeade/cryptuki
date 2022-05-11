@@ -7,7 +7,15 @@
 
     <div class="basis-1/4">
         <h1 class="font-sans">Estado: </h1>
-        <h3 class="font-bold font-sans"><c:out value="${param.status}"/></h3>
+        <c:choose>
+            <c:when test="${param.status}=='CLOSED'">
+                <h3 class="font-bold font-sans"><messages:message code="closedComplaintState"/></h3>
+            </c:when>
+            <c:otherwise>
+                <h3 class="font-bold font-sans"><messages:message code="openComplaintState"/></h3>
+            </c:otherwise>
+
+        </c:choose>
     </div>
     <div class="basis-1/4">
         <h1 class="font-sans">Mensaje: </h1>

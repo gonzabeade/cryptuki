@@ -4,7 +4,7 @@
 
 
 <c:url value="/recoverPassword" var="postPath"/>
-<%--@elvariable id="recoverPasswordForm" type="ar.edu.itba.paw.cryptuki.form.recoverPasswordForm"--%>
+<%--@elvariable id="recoverPasswordForm" type="ar.edu.itba.paw.cryptuki.form.RecoverPasswordForm"--%>
 <form:form modelAttribute="recoverPasswordForm" action="${postPath}" method="post" cssClass=" py-12 px-36 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard" onsubmit="event.preventDefault(); preventRecoverPasswordNotMatching()">
     <h2 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="insertNewPassword"/></h2>
 

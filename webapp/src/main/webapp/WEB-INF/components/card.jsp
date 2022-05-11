@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
@@ -18,10 +19,10 @@
 								<p class="ml-1"><messages:message code="online"/></p>
 							</c:when>
 							<c:when test="${param.minutesSinceLastLogin <= 60}">
-								<p class="ml-1"><messages:message code="lastLogin"/>: ${param.lastLoginTime}</p>
+								<p class="ml-1"><messages:message code="lastLogin"/>: <c:out value="${fn:substring(param.lastLoginTime, 0, 5)}"/></p>
 							</c:when>
 							<c:otherwise>
-								<p><messages:message code="lastLogin"/>: ${param.lastLogin}</p>
+								<p><messages:message code="lastLogin"/>: <c:out value="${param.lastLogin}"/></p>
 							</c:otherwise>
 						</c:choose>
 					</div>

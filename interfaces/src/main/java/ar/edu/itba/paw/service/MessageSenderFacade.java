@@ -1,9 +1,13 @@
 package ar.edu.itba.paw.service;
+import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.persistence.Trade;
 
 public interface MessageSenderFacade {
-    void sendWelcomeMessage(String to, String username, int veryCode);
-    void sendChangePasswordMessage(String to, String username, int code);
-    void sendOfferUploadedMessage(String to, String username, String coinCode, double askingPrice, double minQuantity, double maxQuantity, int offerId);
-    void sendComplaintReceipt(String to, String username, String question);
-    void sendNewTradeNotification(String to, String username, String coinCode, float quantity, String buyer, String wallet, String buyerMail, int tradeCode);
+    void sendWelcomeMessage(String email, String username, int veryCode);
+    void sendChangePasswordMessage(String username, int code);
+    void sendOfferUploadedMessage(String username, OfferDigest offerDigest, int offerId);
+    void sendAnonymousComplaintReceipt(String to, String username, String question);
+    void sendComplaintReceipt(String username, String question);
+
+    void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId);
 }

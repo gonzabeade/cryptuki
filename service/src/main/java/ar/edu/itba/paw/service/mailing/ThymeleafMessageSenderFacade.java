@@ -37,7 +37,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         MailMessage message = mailMessageContactService.createMessage(to);
         ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, Locale.ENGLISH));
-        changePasswordMailMessage.setParameters(username);
+        changePasswordMailMessage.setParameters(username,code);
         mailMessageContactService.sendMessage(message);
     }
 
@@ -46,7 +46,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         MailMessage message = mailMessageContactService.createMessage(to);
         NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
         newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, Locale.ENGLISH));
-        newOfferMailMessage.setParameters(username,coinCode,askingPrice,minQuantity,maxQuantity);
+        newOfferMailMessage.setParameters(username,coinCode,askingPrice,minQuantity,maxQuantity,offerId);
         mailMessageContactService.sendMessage(message);
 
     }

@@ -44,7 +44,7 @@ public class AdminController {
     public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ){
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.PENDING);
         ComplainFilter filter = builder.build();
-        return getComplaintsByFilter(filter,"admin/complaints","/admin");
+        return getComplaintsByFilter(filter,"admin/complaints","/admin", "pendingClaims");
     }
 
 
@@ -54,14 +54,14 @@ public class AdminController {
         ComplainFilter filter = builder
                 .withModeratorUsername(authentication.getName())
                 .build();
-        return getComplaintsByFilter(filter,"admin/complaints","/admin/assigned");
+        return getComplaintsByFilter(filter,"admin/complaints","/admin/assigned", "self-assignedClaims");
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
     public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult){
         ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.CLOSED);
         ComplainFilter filter = builder
                 .build();
-        return getComplaintsByFilter(filter,"admin/complaints","/admin/solved");
+        return getComplaintsByFilter(filter,"admin/complaints","/admin/solved", "solvedClaims");
     }
 
     @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
@@ -103,10 +103,10 @@ public class AdminController {
     }
 
 
-    private ModelAndView getComplaintsByFilter(ComplainFilter filter,String view,String url){
+    private ModelAndView getComplaintsByFilter(ComplainFilter filter,String view,String url,String title){
         ModelAndView mav = new ModelAndView(view);
         mav.addObject("baseUrl", url);
-        mav.addObject("title", "Reclamos pendientes");
+        mav.addObject("title", title);
         int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = filter.getPage();
         int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;

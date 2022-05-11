@@ -24,7 +24,7 @@
   <% request.setCharacterEncoding("utf-8"); %>
   <jsp:include page="../../components/admin/header.jsp"/>
   <div class="flex flex-col ml-96 my-10 h-screen w-screen">
-    <h1 class="font-sans text-4xl font-bold">${title}</h1>
+    <h1 class="font-sans text-4xl font-bold"><messages:message code="${title}"/></h1>
     <div class="flex flex-row mt-10 divide-x h-full">
       <% request.setCharacterEncoding("utf-8"); %>
       <jsp:include page="../../components/admin/filters.jsp">

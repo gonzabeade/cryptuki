@@ -15,9 +15,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${null}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 
 <div class="flex mt-20 mb-10">
     <% request.setCharacterEncoding("UTF-8"); %>

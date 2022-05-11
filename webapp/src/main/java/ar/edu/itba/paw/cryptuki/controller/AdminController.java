@@ -53,7 +53,6 @@ public class AdminController {
 
         mav.addObject("baseUrl", "/admin"); // TODO: check
         mav.addObject("title", "Reclamos pendientes");
-        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
         int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
@@ -81,7 +80,6 @@ public class AdminController {
 
         mav.addObject("baseUrl", "/admin/assigned"); // TODO: check
         mav.addObject("title", "Reclamos asignados a mí");
-        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
         int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
@@ -106,7 +104,6 @@ public class AdminController {
 
         mav.addObject("baseUrl", "/admin/solved"); // TODO: check
         mav.addObject("title", "Reclamos resueltos");
-        mav.addObject("username", authentication == null ? null : authentication.getName()); // TODO: check
 
         int complainCount = complainService.countComplainsBy(filter);
         int pageNumber = page.orElse(0);
@@ -131,7 +128,6 @@ public class AdminController {
             trade = tradeService.getTradeById(complain.getTradeId().get()).orElse(null);
         }
 
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         mav.addObject("trade", trade);
         mav.addObject("complain", complain);
         mav.addObject("complainer", complainer);
@@ -160,7 +156,7 @@ public class AdminController {
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
     public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("solveComplaint");
+        ModelAndView mav = new ModelAndView("admin/solveComplaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -193,7 +189,7 @@ public class AdminController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView solveSuccess() {
-        ModelAndView mav = new ModelAndView("solvedComplaint");
+        ModelAndView mav = new ModelAndView("admin/solvedComplaint");
         return mav;
     }
 

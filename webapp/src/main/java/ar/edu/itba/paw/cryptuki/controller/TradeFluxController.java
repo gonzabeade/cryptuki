@@ -51,7 +51,6 @@ public class TradeFluxController {
         Offer offer = offerOptional.get();
 
         mav.addObject("offer", offer);
-        mav.addObject("username", authentication.getName());
         mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
 
@@ -81,7 +80,6 @@ public class TradeFluxController {
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
         mav.addObject("amount", offerBuyForm.getAmount());
-        mav.addObject("username", authentication.getName());
         mav.addObject("offerBuyForm", offerBuyForm);
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;

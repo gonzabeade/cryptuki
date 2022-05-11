@@ -19,9 +19,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden flex flex-col">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp">
-  <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>

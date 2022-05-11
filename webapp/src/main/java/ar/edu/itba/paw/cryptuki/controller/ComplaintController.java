@@ -51,7 +51,6 @@ public class ComplaintController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
 
-        mav.addObject("username",authentication.getName());
         return mav;
     }
 

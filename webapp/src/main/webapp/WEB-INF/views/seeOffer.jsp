@@ -20,9 +20,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp">
-    <jsp:param name="username" value="${username}"/>
-</jsp:include>
+<jsp:include page="../components/header.jsp"/>
 <c:if test="${creation == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">

@@ -163,7 +163,6 @@ public class OfferController {
         mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName(), PAGE_SIZE));
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
-        mav.addObject("username",  authentication.getName());
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
         mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
 

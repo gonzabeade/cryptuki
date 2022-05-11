@@ -66,7 +66,6 @@ public class HomeController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("username",  authentication.getName());
             mav.addObject("userEmail", us.getUserInformation(authentication.getName()).get().getEmail());
             mav.addObject("isAdmin", authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")));
         }
@@ -77,7 +76,6 @@ public class HomeController {
     public ModelAndView coins(final Authentication authentication) {
         final ModelAndView mav = new ModelAndView("coinsPage"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;
     }
 

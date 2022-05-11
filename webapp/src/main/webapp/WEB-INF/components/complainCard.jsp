@@ -6,7 +6,7 @@
 <div class="shadow-xl flex  rounded-lg  m-5 p-7 bg-[#FAFCFF] mx-10">
 
     <div class="basis-1/4">
-        <h1 class="font-sans"><messages:message code="status"></h1>
+        <h1 class="font-sans"><messages:message code="status"/></h1>
         <c:choose>
             <c:when test="${param.status}=='CLOSED'">
                 <h3 class="font-bold font-sans"><messages:message code="closedComplaintState"/></h3>
@@ -32,6 +32,6 @@
             </a>
         </div>
     </c:if>
-</div>
 
 </div>
+

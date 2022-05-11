@@ -160,7 +160,7 @@ public class AdminController {
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.GET)
     public ModelAndView solveComplaint(@ModelAttribute("solveComplaintForm") SolveComplainForm form, @PathVariable(value = "complaintId") final int complaintId, final Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("admin/solve_complaint");
+        ModelAndView mav = new ModelAndView("solveComplaint");
 
 
         Complain complain = complainService.getComplainsBy(new ComplainFilter.Builder().withComplainId(complaintId).build()).iterator().next();  // TODO: Refactor, ugly
@@ -193,7 +193,7 @@ public class AdminController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView solveSuccess() {
-        ModelAndView mav = new ModelAndView("admin/solved_complaint");
+        ModelAndView mav = new ModelAndView("solvedComplaint");
         return mav;
     }
 

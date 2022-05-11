@@ -28,7 +28,7 @@
 <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
 <c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/upload_form.jsp"/>
+<jsp:include page="../components/uploadForm.jsp"/>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
 <div class="shape-blob two"></div>

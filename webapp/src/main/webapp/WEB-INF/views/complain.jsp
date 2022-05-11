@@ -26,11 +26,11 @@
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/contact_text.jsp"/>
+    <jsp:include page="../components/contactText.jsp"/>
 </div>
 <div class="flex justify-center">
     <% request.setCharacterEncoding("utf-8"); %>
-    <jsp:include page="../components/complain_form.jsp">
+    <jsp:include page="../components/complainForm.jsp">
         <jsp:param name="url" value="support"/>
         <jsp:param name="tradeId" value="${tradeId}"/>
         <jsp:param name="username" value="${username}"/>

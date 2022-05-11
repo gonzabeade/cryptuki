@@ -28,7 +28,7 @@
         </jsp:include>
     </c:if>
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/contact_text.jsp"/>
+    <jsp:include page="../components/contactText.jsp"/>
 </div>
 <div class="flex justify-center">
     <% request.setCharacterEncoding("utf-8"); %>

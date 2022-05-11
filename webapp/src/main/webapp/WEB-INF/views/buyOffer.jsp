@@ -35,7 +35,7 @@
         </div>
         <div>
             <% request.setCharacterEncoding("UTF-8"); %>
-            <jsp:include page="../components/buy_form.jsp">
+            <jsp:include page="../components/buyForm.jsp">
                 <jsp:param name="offer_id" value="${offer.id}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.askingPrice}"/>
@@ -47,7 +47,7 @@
     </div>
     <% request.setCharacterEncoding("utf-8"); %>
     <div class="flex flex-row w-2/5">
-        <jsp:include page="../components/seller_info.jsp">
+        <jsp:include page="../components/sellerInfo.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
             <jsp:param name="trades" value="${offer.seller.ratingCount}"/>

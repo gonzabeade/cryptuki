@@ -66,7 +66,7 @@
 </div>
 <div class=" flex justify-center mx-20">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/welcome_message.jsp"/>
+    <jsp:include page="../components/welcomeMessage.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
     <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>

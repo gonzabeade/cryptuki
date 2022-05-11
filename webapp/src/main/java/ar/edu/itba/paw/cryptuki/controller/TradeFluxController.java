@@ -42,7 +42,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
     public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
-        ModelAndView mav = new ModelAndView("buy_offer");
+        ModelAndView mav = new ModelAndView("buyOffer");
 
         Optional<Offer> offerOptional =  offerService.getOfferById(offerId);
         if (!offerOptional.isPresent())

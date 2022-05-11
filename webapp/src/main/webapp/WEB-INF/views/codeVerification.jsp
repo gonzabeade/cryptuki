@@ -21,7 +21,7 @@
 
 <div class="flex mt-20 mb-10">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <jsp:include page="../components/verify_form.jsp">
+    <jsp:include page="../components/verifyForm.jsp">
         <jsp:param name="username" value="${username}"/>
         <jsp:param name="error" value="${error}"/>
     </jsp:include>

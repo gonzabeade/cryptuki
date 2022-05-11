@@ -75,7 +75,7 @@ public class HomeController {
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET)
     public ModelAndView coins(final Authentication authentication) {
-        final ModelAndView mav = new ModelAndView("coins_page"); /* Load a jsp file */
+        final ModelAndView mav = new ModelAndView("coinsPage"); /* Load a jsp file */
         mav.addObject("coinList", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("username", authentication == null ? null : authentication.getName());
         return mav;

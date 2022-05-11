@@ -37,7 +37,7 @@ public class ComplaintController {
     @RequestMapping(value="/complaints", method = {RequestMethod.GET})
     public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
 
-        ModelAndView mav = new ModelAndView("complaints_page");
+        ModelAndView mav = new ModelAndView("complaintsPage");
 
         int pageNumber= page.orElse(0);
         int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());

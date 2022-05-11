@@ -104,7 +104,7 @@
 <div  class="flex flex-col justify-center mx-auto mt-10">
       <c:forEach var="trade" items="${tradeList}">
         <% request.setCharacterEncoding("utf-8"); %>
-        <jsp:include page="../components/trade_card.jsp">
+        <jsp:include page="../components/tradeCard.jsp">
           <jsp:param name="username" value="${username}"/>
           <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
           <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>

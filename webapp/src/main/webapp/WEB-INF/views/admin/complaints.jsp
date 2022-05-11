@@ -36,7 +36,7 @@
         <c:forEach var="complain" items="${complainList}">
           <li style="list-style-type: none" class="my-3">
             <% request.setCharacterEncoding("utf-8"); %>
-            <jsp:include page="../../components/admin/card_complaint.jsp">
+            <jsp:include page="../../components/admin/cardComplaint.jsp">
               <jsp:param name="date" value="${complain.date}"/>
               <jsp:param name="complainId" value="${complain.complainId}"/>
               <jsp:param name="complainerUsername" value="${complain.complainerUsername}"/>

@@ -31,7 +31,7 @@
                 <c:forEach var="complaint" items="${complaintsList}">
                     <li class="list-none mx-20">
                         <% request.setCharacterEncoding("utf-8"); %>
-                        <jsp:include page="../components/complain_card.jsp">
+                        <jsp:include page="../components/complainCard.jsp">
                             <jsp:param name="status" value="${complaint.status}"/>
                             <jsp:param name="message" value="${complaint.complainerComments.get()}"/>
                             <jsp:param name="tradeId" value="${complaint.tradeId.orElse(-1)}" />

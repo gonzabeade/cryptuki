@@ -20,7 +20,7 @@
     <jsp:param name="username" value="${username}"/>
 </jsp:include>
 <div class="flex mt-10 mb-10">
-    <jsp:include page="../components/change_password_form.jsp"/>
+    <jsp:include page="../components/changePasswordForm.jsp"/>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

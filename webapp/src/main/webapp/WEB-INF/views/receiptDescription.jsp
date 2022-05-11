@@ -95,7 +95,7 @@
         <div class="flex flex-col ml-32">
 
             <% request.setCharacterEncoding("utf-8"); %>
-            <jsp:include page="../components/seller_info.jsp">
+            <jsp:include page="../components/sellerInfo.jsp">
                 <jsp:param name="email" value="${offer.seller.email}"/>
                 <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
                 <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
@@ -103,7 +103,7 @@
                 <jsp:param name="rating" value="${offer.seller.rating}"/>
             </jsp:include>
             <% request.setCharacterEncoding("utf-8"); %>
-            <jsp:include page="../components/buyer_info.jsp">
+            <jsp:include page="../components/buyerInfo.jsp">
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="trades" value="${user.ratingCount}"/>
                 <jsp:param name="phone" value="${user.phoneNumber}"/>

@@ -31,9 +31,12 @@
             <li class="list-none mx-20">
                 <% request.setCharacterEncoding("utf-8"); %>
                 <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
+                <c:set  var="owner" value="${offer.seller.username.isPresent() ? offer.seller.username.get() : offer.seller.email}" scope="request"/>
+
                 <jsp:include page="../components/card.jsp">
+
                     <jsp:param name="currency" value="${offer.crypto.code}"/>
-                    <jsp:param name="owner" value="${offer.seller.email}"/>
+                    <jsp:param name="owner" value="${owner}"/>
                     <jsp:param name="asking_price" value="${offer.askingPrice}"/>
                     <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                     <jsp:param name="offerId" value="${offer.id}"/>

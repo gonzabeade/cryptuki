@@ -29,6 +29,7 @@ public class UserJdbcDao implements UserDao{
                     .withId(resultSet.getInt("id"))
                     .withPhoneNumber(resultSet.getString("phone_number"))
                     .withRatingCount(resultSet.getInt("rating_count"))
+                    .withUsername(resultSet.getString("uname"))
                     .withRatingSum(resultSet.getInt("rating_sum"))
                     .withLastLogin(resultSet.getTimestamp("last_login").toLocalDateTime())
                     .build();
@@ -41,7 +42,7 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        final String query ="SELECT * FROM users where email = ?";
+        final String query ="SELECT * FROM users LEFT OUTER JOIN auth ON id = user_id where email = ?";
         try {
             return Optional.of(jdbcTemplate.queryForObject(query, USER_EMAIL_ROW_MAPPER, email));
         } catch (EmptyResultDataAccessException erde) {

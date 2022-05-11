@@ -14,11 +14,11 @@
 					<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
 					<div class="flex flex-row">
 						<c:choose>
-							<c:when test="${false}">
+							<c:when test="${param.minutesSinceLastLogin <= 5}">
 								<div class="bg-ngreen rounded-full w-2 h-2 my-auto"></div>
 								<p class="ml-1"><messages:message code="online"/></p>
 							</c:when>
-							<c:when test="${param.minutesSinceLastLogin <= 60}">
+							<c:when test="${5 < param.minutesSinceLastLogin && param.minutesSinceLastLogin <= 60}">
 								<p class="ml-1"><messages:message code="lastLogin"/>: <c:out value="${fn:substring(param.lastLoginTime, 0, 5)}"/></p>
 							</c:when>
 							<c:otherwise>

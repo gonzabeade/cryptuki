@@ -36,7 +36,7 @@ public class CryptukiUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final UserAuth userAuth = userService.getUserByUsername(username).orElseThrow( ()-> new UsernameNotFoundException(""));
 
-        final Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(userAuth.getRole()));// get roles of username
+        final Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(userAuth.getRole().getDescription()));// get roles of username
         //        if(userAuth.getUserStatus().equals(UserStatus.UNVERIFIED)){
 //            throw new RuntimeException("Username not verified");
 //        }

@@ -8,19 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -29,12 +24,8 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-import java.util.function.Supplier;
 
 @EnableTransactionManagement
 @ComponentScan({
@@ -65,11 +56,14 @@ public class WebConfig {
 
     @Bean
     public DataSource dataSource(
-            @Value("${database.url}") String databaseUrl,
-            @Value("${database.username}") String databaseUsername,
-            @Value("${database.password}") String databasePassword
+//            @Value("${database.url}") String databaseUrl,
+//            @Value("${database.username}") String databaseUsername,
+//            @Value("${database.password}") String databasePassword
     )  {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        String databaseUrl="jdbc:postgresql://localhost:5432/postgres";
+        String databaseUsername="postgres";
+        String databasePassword="postgres";
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl(databaseUrl);
         ds.setUsername(databaseUsername);
@@ -124,10 +118,10 @@ public class WebConfig {
 
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("ar.edu.itba.model");
-        factoryBean.setDataSource(dataSource);
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.persistence");
+        factoryBean.setDataSource(dataSource());
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();

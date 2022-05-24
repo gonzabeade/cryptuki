@@ -1,15 +1,26 @@
 package ar.edu.itba.paw.persistence;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+
+@Entity
+@Table(name="payment_method")
 public final class PaymentMethod {
 
-    private final String name;
-    private final String description;
+    PaymentMethod(){}
+    @Id
+    @Column(name="code",length = 5)
+    private  String name;
+    @Column(name="payment_description",length = 20)
+    private  String description;
 
     private static Map<String, PaymentMethod> cache = new HashMap<>();
+
 
     private PaymentMethod(String name, String description) {
         this.name = name;

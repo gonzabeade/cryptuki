@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class UserAuthJdbcDao implements UserAuthDao{
 
     private JdbcTemplate jdbcTemplate;

@@ -1,11 +1,27 @@
 package ar.edu.itba.paw.persistence;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity
+@Table(name="cryptocurrency")
 public final class Cryptocurrency {
 
+    Cryptocurrency(){}
+
+    @Id
+    @Column(name="code",nullable = false)
     private String code;
+
+    @Column(name="market_price")
+    private double marketPrice;
+
+    @Column(name="commercial_name",nullable = false,length = 20)
     private String commercialName;
 
     private static Map<String, Cryptocurrency> cache = new HashMap<>();
@@ -34,6 +50,14 @@ public final class Cryptocurrency {
             return false;
         Cryptocurrency testedCrypto = (Cryptocurrency) object;
         return testedCrypto.getCode().equals(this.getCode());
+    }
+
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
     }
 
 }

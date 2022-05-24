@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class CryptocurrencyJdbcDao implements CryptocurrencyDao {
 
     private JdbcTemplate jdbcTemplate;

@@ -1,13 +1,35 @@
 package ar.edu.itba.paw.persistence;
 
-public final class UserAuth{
+import javax.persistence.*;
 
-    private int id;
+@Entity
+@Table(name = "auth")
+public final class UserAuth  {
+
+
+    @Column(length = 100,nullable = false)
     private String password;
+
+    @Column(name="uname",nullable = false,length = 50)
+    @Id
     private String username;
-    private String roleDescriptor;
+
+    @ManyToOne()
+    @JoinColumn(name="role_id")
+    private Role role;
+
+    @Column(name="code")
     private Integer code;
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
     private UserStatus userStatus;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    UserAuth(){}
 
     public static class Builder {
         private Integer id;
@@ -52,28 +74,62 @@ public final class UserAuth{
     }
 
     private UserAuth(Builder builder) {
-        this.id = builder.id;
+//        this.id = builder.id;
         this.username = builder.username;
         this.password = builder.password;
         this.code = builder.code;
-        this.roleDescriptor = builder.role; //only creating instance in persistence
+//        this.role = builder.role; //only creating instance in persistence
         this.userStatus = builder.userStatus;
     }
 
     public int getId() {
-        return id;
+        return user.getId();
     }
     public String getUsername() {
         return username;
     }
     public String getPassword(){return password;}
-    public String getRole() {
-        return roleDescriptor;
+    public Role getRole() {
+        return role;
     }
     public UserStatus getUserStatus() {
         return userStatus;
     }
     public int getCode() { return code; };
+
+
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public boolean equals(Object object){
         if(object == this)

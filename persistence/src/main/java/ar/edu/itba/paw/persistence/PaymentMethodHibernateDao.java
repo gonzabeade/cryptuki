@@ -23,7 +23,7 @@ public class PaymentMethodHibernateDao implements PaymentMethodDao {
 
     @Override
     public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
-        TypedQuery<PaymentMethod> query = entityManager.createQuery("from PaymentMethod as pm where pm.code = :code",PaymentMethod.class);
+        TypedQuery<PaymentMethod> query = entityManager.createQuery("from PaymentMethod as pm where pm.name = :code",PaymentMethod.class);
         query.setParameter("code",code);
         List<PaymentMethod> paymentMethodList = query.getResultList();
         return paymentMethodList.isEmpty() ? Optional.empty() : Optional.of(paymentMethodList.get(0));

@@ -121,7 +121,7 @@ public class WebConfig {
             @Value("${database.password}") String databasePassword
     ) {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("ar.edu.itba.paw.persistence");
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.persistence","ar.edu.itba.paw");
         factoryBean.setDataSource(dataSource(databaseUrl,databaseUsername,databasePassword));
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);

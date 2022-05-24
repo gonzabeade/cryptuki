@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Repository
+//@Repository
 public class OfferJdbcDao implements OfferDao {
 
     private JdbcTemplate jdbcTemplate;

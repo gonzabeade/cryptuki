@@ -1,24 +1,56 @@
 package ar.edu.itba.paw;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
+@Entity
+@Table(name="offer")
 public class OfferDigest {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_id_seq")
+    @SequenceGenerator(sequenceName = "offer_id_seq", name = "offer_id_seq", allocationSize = 1)
     private Integer id;
-    private final int sellerId;
-    private final String cryptoCode;
-    private final double askingPrice;
 
-    private final double minQuantity;
+    @Column(name = "seller_id",nullable = false)
+    private final int sellerId;
+
+    @Column(name="offer_date",nullable = false)
+    private final LocalDateTime date;
+    @Column(name="crypto_code",length = 5,nullable = false)
+    private final String cryptoCode;
+
+    @Column(name="status_code",length = 3,nullable = false)
+    private  String statusCode = "APR";
+    @Column(name="asking_price",nullable = false)
+    private final double askingPrice;
+    @Column(name="max_quantity",nullable = false)
     private final double maxQuantity;
 
-    private final Collection<String> paymentMethods;
-    private final LocalDateTime date;
+    @Column(name="min_quantity",nullable = false)
+    private final double minQuantity;
 
+
+    @Column(name="comments",length = 280)
     private final String comments;
+
+
+    @Transient
+    private final Collection<String> paymentMethods;
+
+
+
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
 
     public static class Builder {
 

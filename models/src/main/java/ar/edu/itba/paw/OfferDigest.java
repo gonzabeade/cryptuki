@@ -16,33 +16,68 @@ public class OfferDigest {
     private Integer id;
 
     @Column(name = "seller_id",nullable = false)
-    private final int sellerId;
+    private  int sellerId;
 
     @Column(name="offer_date",nullable = false)
-    private final LocalDateTime date;
+    private  LocalDateTime date;
     @Column(name="crypto_code",length = 5,nullable = false)
-    private final String cryptoCode;
+    private  String cryptoCode;
 
     @Column(name="status_code",length = 3,nullable = false)
     private  String statusCode = "APR";
     @Column(name="asking_price",nullable = false)
-    private final double askingPrice;
+    private  double askingPrice;
     @Column(name="max_quantity",nullable = false)
-    private final double maxQuantity;
+    private  double maxQuantity;
 
     @Column(name="min_quantity",nullable = false)
-    private final double minQuantity;
+    private  double minQuantity;
 
 
     @Column(name="comments",length = 280)
-    private final String comments;
+    private  String comments;
 
 
     @Transient
-    private final Collection<String> paymentMethods;
+    private  Collection<String> paymentMethods;
 
+    OfferDigest(){}
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setCryptoCode(String cryptoCode) {
+        this.cryptoCode = cryptoCode;
+    }
+
+    public void setAskingPrice(double askingPrice) {
+        this.askingPrice = askingPrice;
+    }
+
+    public void setMaxQuantity(double maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public void setMinQuantity(double minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public void setPaymentMethods(Collection<String> paymentMethods) {
+        this.paymentMethods = paymentMethods;
+    }
 
     public String getStatusCode() {
         return statusCode;

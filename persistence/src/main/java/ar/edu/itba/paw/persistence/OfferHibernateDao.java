@@ -20,6 +20,7 @@ public class OfferHibernateDao implements OfferDao{
     @Autowired
     private PaymentMethodDao paymentMethodDao;
 
+
     @Override
     public int getOfferCount(OfferFilter filter) {
         return 0;
@@ -45,23 +46,26 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public void deleteOffer(int offerId) {
-
+        changeStatus(offerId,"DEL");
     }
 
     @Override
     public void hardPauseOffer(int offerId) {
-
+        changeStatus(offerId,"PSU");
     }
+
 
     @Override
     public void pauseOffer(int offerId) {
-
+        changeStatus(offerId,"PSE");
     }
 
     @Override
     public void resumeOffer(int offerId) {
-
+        changeStatus(offerId,"APR");
     }
+
+
 
     @Override
     public Optional<String> getOwner(int offerId) {
@@ -70,6 +74,22 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public void setMaxQuantity(int offerId, float newQuantity) {
-
+        OfferDigest offerDigest = getOfferDigestById(offerId);
+        offerDigest.setMaxQuantity(newQuantity);
+        entityManager.persist(offerDigest);
     }
+
+    private void changeStatus(int offerId,String statusCode){
+        OfferDigest offerDigest = getOfferDigestById(offerId);
+        offerDigest.setStatusCode(statusCode);
+        entityManager.persist(offerDigest);
+    }
+
+    private OfferDigest getOfferDigestById(int offerId){
+        TypedQuery<OfferDigest> query = entityManager.createQuery("from OfferDigest as od where od.id = :offerId ",OfferDigest.class);
+        query.setParameter("offerId",offerId);
+        return query.getSingleResult();
+    }
+
+
 }

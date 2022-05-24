@@ -56,14 +56,11 @@ public class WebConfig {
 
     @Bean
     public DataSource dataSource(
-//            @Value("${database.url}") String databaseUrl,
-//            @Value("${database.username}") String databaseUsername,
-//            @Value("${database.password}") String databasePassword
+            @Value("${database.url}") String databaseUrl,
+            @Value("${database.username}") String databaseUsername,
+            @Value("${database.password}") String databasePassword
     )  {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-        String databaseUrl="jdbc:postgresql://localhost:5432/postgres";
-        String databaseUsername="postgres";
-        String databasePassword="postgres";
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl(databaseUrl);
         ds.setUsername(databaseUsername);
@@ -118,10 +115,14 @@ public class WebConfig {
 
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            @Value("${database.url}") String databaseUrl,
+            @Value("${database.username}") String databaseUsername,
+            @Value("${database.password}") String databasePassword
+    ) {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPackagesToScan("ar.edu.itba.paw.persistence");
-        factoryBean.setDataSource(dataSource());
+        factoryBean.setDataSource(dataSource(databaseUrl,databaseUsername,databasePassword));
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();

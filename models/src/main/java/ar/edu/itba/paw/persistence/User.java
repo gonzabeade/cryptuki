@@ -2,8 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 
 import javax.persistence.*;
-
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,8 +23,8 @@ public final class User {
     @Column(name="rating_count",nullable = false)
     private  int ratingCount;
 
-//    @Column(name="last_login")
-//    private LocalDateTime lastLogin;
+    @Column(name="last_login")
+    private LocalDateTime lastLogin;
     @Column(name="phone_number",length = 10)
     private  String phoneNumber;
 
@@ -80,12 +78,12 @@ public final class User {
     }
 
     private User (Builder builder) {
-        this.id = builder.id;
+//        this.id = builder.id;
         this.email = builder.email;
         this.ratingCount = builder.ratingCount;
         this.ratingSum = builder.ratingSum;
         this.phoneNumber= builder.phoneNumber;
-//        this.lastLogin = builder.lastLogin;
+        this.lastLogin = builder.lastLogin;
     }
 
     public int getId() {
@@ -112,8 +110,7 @@ public final class User {
     }
 
     public LocalDateTime getLastLogin() {
-        return LocalDateTime.now();
-        //        return lastLogin;
+        return lastLogin;
     }
 
     public UserAuth getUserAuth() {
@@ -136,9 +133,9 @@ public final class User {
         this.ratingCount = ratingCount;
     }
 
-//    public void setLastLogin(LocalDateTime lastLogin) {
-//        this.lastLogin = lastLogin;
-//    }
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -158,9 +155,8 @@ public final class User {
     }
 
     public long getMinutesSinceLastLogin(){
-//        Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
-//        return loggedIn.toMinutes();
-        return 15l;
+        Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
+        return loggedIn.toMinutes();
     }
 
 

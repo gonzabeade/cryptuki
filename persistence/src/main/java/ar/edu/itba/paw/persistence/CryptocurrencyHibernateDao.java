@@ -17,14 +17,15 @@ public class CryptocurrencyHibernateDao implements  CryptocurrencyDao{
 
     @Override
     public Optional<Cryptocurrency> getCryptocurrency(String code) {
-        return Optional.ofNullable(entityManager.find(Cryptocurrency.class,code));
+        TypedQuery<Cryptocurrency> query = entityManager.createQuery("from Cryptocurrency as c where c.code = :code",Cryptocurrency.class);
+        query.setParameter("code",code);
+        List<Cryptocurrency> cryptocurrencies = query.getResultList();
+        return cryptocurrencies.isEmpty() ? Optional.empty() : Optional.of(cryptocurrencies.get(0));
     }
 
     @Override
     public Collection<Cryptocurrency> getAllCryptocurrencies() {
         final TypedQuery<Cryptocurrency> query = entityManager.createQuery("from Cryptocurrency as c",Cryptocurrency.class);
-        List<Cryptocurrency> cryptocurrencies = query.getResultList();
-        return cryptocurrencies;
-
+        return query.getResultList();
     }
 }

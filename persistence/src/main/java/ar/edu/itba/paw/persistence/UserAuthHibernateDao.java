@@ -23,9 +23,9 @@ public class UserAuthHibernateDao implements UserAuthDao{
 
     @Override
     public UserAuth createUserAuth(UserAuth.Builder userAuthBuilder) {
-        UserAuth userAuth = userAuthBuilder.build();
-        entityManager.persist(userAuth);
-        return userAuth;
+        entityManager.persist(userAuthBuilder);
+//        return getUserAuthByUsername(userAuthBuilder.getUsername()).get();
+        return userAuthBuilder.build();
     }
 
     @Override
@@ -49,9 +49,9 @@ public class UserAuthHibernateDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUserAuthByEmail(String email) {
-        TypedQuery<UserAuth> query = entityManager.createQuery("from UserAuth as ua where ua.userInformation.email = :email",UserAuth.class);
+        TypedQuery<UserAuth> query = entityManager.createQuery("from UserAuth as ua where ua.user.email = :email",UserAuth.class);
         query.setParameter("email",email);
         List<UserAuth> list= query.getResultList();
-        return list.size()==0?Optional.empty():Optional.of(list.get(0));
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 }

@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table(name = "auth")
 public final class UserAuth  {
 
-
     @Column(length = 100,nullable = false)
     private String password;
 
@@ -30,14 +29,27 @@ public final class UserAuth  {
 
 
     UserAuth(){}
-
+    @Entity
+    @Table(name = "auth")
     public static class Builder {
+        @Id
+        @Column(name="user_id",nullable = false)
         private Integer id;
+        @Column(name="uname",nullable = false,length = 50)
         private String username;
+        @Column(length = 100,nullable = false)
         private String password;
-        private String role;
+        @Column(name="role_id")
+        private Integer roleId = 2;
+        @Transient
+        private String roleDescriptor;
+
+        @Column(name="code")
         private Integer code;
+        @Column(name = "status")
+        @Enumerated(EnumType.ORDINAL)
         private UserStatus userStatus = UserStatus.UNVERIFIED;
+
 
         public Builder(String username, String password) {
             this.username = username;
@@ -45,7 +57,7 @@ public final class UserAuth  {
         }
 
         public Builder withId(int id) { this.id = id; return this; }
-        public Builder withRole(String role){this.role = role; return this; }
+        public Builder withRole(String role){this.roleDescriptor = role; return this; }
         public Builder withPassword(String password){this.password = password; return this; }
 
         public Builder withCode(Integer code){this.code = code ; return this;}
@@ -61,7 +73,7 @@ public final class UserAuth  {
         public String getPassword() {
             return password;
         }
-        public String getRole(){return role; }
+        public String getRole(){return roleDescriptor; }
         public int getCode() {
             return code;
         }
@@ -78,7 +90,7 @@ public final class UserAuth  {
         this.username = builder.username;
         this.password = builder.password;
         this.code = builder.code;
-//        this.role = builder.role; //only creating instance in persistence
+//        this.roleDescriptor = builder.role; //only creating instance in persistence
         this.userStatus = builder.userStatus;
     }
 
@@ -92,13 +104,14 @@ public final class UserAuth  {
     public Role getRole() {
         return role;
     }
+
     public UserStatus getUserStatus() {
         return userStatus;
     }
     public int getCode() { return code; };
 
 
-//
+
 //    public void setId(int id) {
 //        this.id = id;
 //    }

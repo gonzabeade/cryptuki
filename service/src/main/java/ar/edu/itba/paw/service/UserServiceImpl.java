@@ -131,6 +131,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("#username == authentication.principal.username")
+    @Transactional
     public void updateLastLogin(String username) {
 
         try {
@@ -160,6 +161,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void incrementUserRating(String username, int rating) {
 
         if (rating < 0)

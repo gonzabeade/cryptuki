@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,9 @@ public class PaymentMethodHibernateDao implements PaymentMethodDao {
 
     @Override
     public Optional<PaymentMethod> getPaymentMethodByCode(String code) {
-        return Optional.ofNullable(entityManager.find(PaymentMethod.class,code));
+        TypedQuery<PaymentMethod> query = entityManager.createQuery("from PaymentMethod as pm where pm.code = :code",PaymentMethod.class);
+        query.setParameter("code",code);
+        List<PaymentMethod> paymentMethodList = query.getResultList();
+        return paymentMethodList.isEmpty() ? Optional.empty() : Optional.of(paymentMethodList.get(0));
     }
 }

@@ -1,37 +1,90 @@
 package ar.edu.itba.paw.persistence;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-
+@Entity
+@Table(name="complain")
 public final class Complain {
 
-    private final Integer complainId;
-    private final ComplainStatus status;
-    private final String complainerUsername;
+    Complain(){}
 
-    private final LocalDateTime date;
-    private final String complainerComments;
-    private final String moderatorUsername;
-    private final String moderatorComments;
-    private final Integer tradeId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complain_complain_id_seq")
+    @SequenceGenerator(sequenceName = "complain_complain_id_seq", name = "complain_complain_id_seq", allocationSize = 1)
+    @Column(name="complain_id")
+    private  Integer complainId;
+    @OneToOne
+    @JoinColumn(name="trade_id")
+    private  Trade trade;
 
+    @Column(name="status",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private  ComplainStatus status;
+
+    @OneToOne
+    @JoinColumn(name="complainer_id")
+    private User complainer;
+
+    @OneToOne
+    @JoinColumn(name="moderator_id")
+    private User moderator;
+
+    @Column(name="complain_date")
+    private  LocalDateTime date;
+    @Column(name="complainer_comments",nullable = false)
+    private  String complainerComments;
+    @Column(name="moderator_comments",nullable = false)
+    private  String moderatorComments;
+
+
+    public Trade getTrade() {
+        return trade;
+    }
+
+    public void setTrade(Trade trade) {
+        this.trade = trade;
+    }
+
+    @Entity
+    @Table(name="complain")
     public static class Builder {
 
-        private final String complainerUsername;
 
-        private Integer tradeId;
-        private ComplainStatus status = ComplainStatus.PENDING;
-        private String complainerComments;
-        private String moderatorUsername;
-        private String moderatorComments;
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complain_complain_id_seq")
+        @SequenceGenerator(sequenceName = "complain_complain_id_seq", name = "complain_complain_id_seq", allocationSize = 1)
+        @Column(name="complain_id")
         private Integer complainId;
 
+        @Column(name="trade_id")
+        private Integer tradeId;
+
+        @Column(name="complainer_id",nullable = false)
+        private Integer complainerId;
+
+
+        @Column(name="status",nullable = false)
+        @Enumerated(EnumType.STRING)
+        private ComplainStatus status = ComplainStatus.PENDING;
+        @Column(name="complainer_comments",nullable = false)
+        private String complainerComments;
+        @Column(name="complain_date")
         private LocalDateTime date;
+        @Transient
+        private String moderatorUsername;
+        @Transient
+        private String moderatorComments;
+
+        @Transient
+        private final String complainerUsername;
+
 
 
         public Builder(String complainerUsername) {
             this.complainerUsername = complainerUsername;
+            this.date = LocalDateTime.now();
         }
 
         public Builder withComplainId(Integer complainId) {
@@ -41,6 +94,10 @@ public final class Complain {
 
         public Builder withTradeId(Integer tradeId) {
             this.tradeId = tradeId;
+            return this;
+        }
+        public Builder withComplainerId(Integer complainerId) {
+            this.complainerId = complainerId;
             return this;
         }
 
@@ -92,13 +149,10 @@ public final class Complain {
     }
 
     private Complain(Complain.Builder builder) {
-        this.complainerUsername = builder.complainerUsername;
         this.complainId = builder.complainId;
         this.complainerComments = builder.getComplainerComments();
         this.status = builder.status;
-        this.moderatorUsername = builder.getModerator();
         this.moderatorComments = builder.moderatorComments;
-        this.tradeId = builder.tradeId;
         this.date = builder.date;
     }
 
@@ -112,7 +166,7 @@ public final class Complain {
     }
 
     public String getComplainer() {
-        return complainerUsername;
+        return complainer.getUserAuth().getUsername();
     }
 
     public Optional<String> getComplainerComments() {
@@ -120,7 +174,7 @@ public final class Complain {
     }
 
     public Optional<String> getModerator() {
-        return Optional.ofNullable(moderatorUsername);
+        return Optional.ofNullable(moderator.getUserAuth().getUsername());
     }
 
     public Optional<String> getModeratorComments() {
@@ -128,7 +182,7 @@ public final class Complain {
     }
 
     public String getComplainerUsername() {
-        return complainerUsername;
+        return complainer.getUserAuth().getUsername();
     }
 
     public String getDate() {
@@ -136,25 +190,25 @@ public final class Complain {
     }
 
     public Optional<String> getModeratorUsername() {
-        return Optional.ofNullable(moderatorUsername);
+        return Optional.ofNullable(moderator.getUserAuth().getUsername());
     }
 
     public Optional<Integer> getTradeId() {
-        return Optional.ofNullable(tradeId);
+        return Optional.ofNullable(trade.getTradeId());
     }
 
-    @Override
-    public String toString() {
-        return "Complain{" +
-                "complainId=" + complainId +
-                ", status=" + status +
-                ", complainerUsername='" + complainerUsername + '\'' +
-                ", complainerComments=" + complainerComments +
-                ", moderatorUsername=" + moderatorUsername +
-                ", moderatorComments=" + moderatorComments +
-                ", tradeId=" + tradeId +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Complain{" +
+//                "complainId=" + complainId +
+//                ", status=" + status +
+//                ", complainerUsername='" + complainerUsername + '\'' +
+//                ", complainerComments=" + complainerComments +
+//                ", moderatorUsername=" + moderatorUsername +
+//                ", moderatorComments=" + moderatorComments +
+//                ", tradeId=" + tradeId +
+//                '}';
+//    }
 
     public boolean equals(Object object) {
         if (object == this)
@@ -163,5 +217,35 @@ public final class Complain {
             return false;
         Complain testedComplain = (Complain) object;
         return testedComplain.getComplainId() == this.getComplainId();
+    }
+
+
+    public void setComplainer(User complainer) {
+        this.complainer = complainer;
+    }
+
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
+    }
+
+    public void setComplainId(Integer complainId) {
+        this.complainId = complainId;
+    }
+
+
+    public void setStatus(ComplainStatus status) {
+        this.status = status;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setComplainerComments(String complainerComments) {
+        this.complainerComments = complainerComments;
+    }
+
+    public void setModeratorComments(String moderatorComments) {
+        this.moderatorComments = moderatorComments;
     }
 }

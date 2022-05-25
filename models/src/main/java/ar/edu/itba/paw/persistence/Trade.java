@@ -112,7 +112,7 @@ public final class Trade {
             this.ratedBuyer = rated;
             return this;
         }
-        public Builder withBuyedId(Integer buyerId){
+        public Builder withBuyerId(Integer buyerId){
             this.buyerId = buyerId;
             return this;
         }

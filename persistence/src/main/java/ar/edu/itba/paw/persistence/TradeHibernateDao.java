@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class TradeHibernateDao implements TradeDao{
     @Override
     public int makeTrade(Trade.Builder builder) {
         int buyerId =userAuthDao.getUserAuthByUsername(builder.getBuyerUsername()).get().getId();
-        builder.withBuyedId(buyerId);
+        builder.withBuyerId(buyerId);
         entityManager.persist(builder);
         return builder.getTradeId();
     }

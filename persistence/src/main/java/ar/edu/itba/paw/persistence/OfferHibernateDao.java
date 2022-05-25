@@ -23,12 +23,14 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public int getOfferCount(OfferFilter filter) {
-        return 0;
+        TypedQuery<Offer> query = entityManager.createQuery("from Offer",Offer.class);
+        return query.getResultList().size();
     }
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-        return new ArrayList<>();
+        TypedQuery<Offer> query = entityManager.createQuery("from Offer",Offer.class);
+        return query.getResultList();
     }
 
     @Override

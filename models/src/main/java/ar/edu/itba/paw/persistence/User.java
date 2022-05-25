@@ -159,5 +159,4 @@ public final class User {
         return loggedIn.toMinutes();
     }
 
-
 }

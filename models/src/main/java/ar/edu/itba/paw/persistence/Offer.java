@@ -3,6 +3,13 @@ package ar.edu.itba.paw.persistence;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+
+
+
+
 @Entity
 @Table(name="offer")
 public final class Offer {
@@ -76,6 +83,15 @@ public final class Offer {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    public boolean acceptPaymentMethodCode(Collection<String> paymentMethodCode){
+        return this.paymentMethodAtOffers.stream()
+                        .map(paymentMethodAtOffer -> PaymentMethod.getInstance(paymentMethodAtOffer.getPaymentMethod().getName(),paymentMethodAtOffer.getPaymentMethod().getDescription()))
+                .collect(Collectors.toCollection(ArrayList::new)).containsAll(paymentMethodCode)
+        ;
+
+    }
+
 
     public void setPaymentMethodAtOffers(Collection<PaymentMethodAtOffer> paymentMethodAtOffers) {
         this.paymentMethodAtOffers = paymentMethodAtOffers;

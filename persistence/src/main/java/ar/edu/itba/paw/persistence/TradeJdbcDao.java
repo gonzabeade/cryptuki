@@ -16,14 +16,14 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Repository
-public class TradeDaoImpl implements TradeDao {
+//@Repository
+public class TradeJdbcDao implements TradeDao {
 
     private NamedParameterJdbcTemplate namedJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcTradeInsert;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TradeDaoImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TradeJdbcDao.class);
 
 
 
@@ -49,7 +49,7 @@ public class TradeDaoImpl implements TradeDao {
                         .build();
                 } ;
     @Autowired
-    public TradeDaoImpl(DataSource dataSource) {
+    public TradeJdbcDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcTradeInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("trade").usingGeneratedKeyColumns("trade_id");

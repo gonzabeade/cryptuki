@@ -7,16 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,7 +26,7 @@ public class TradeCompleteTest {
     private DataSource ds;
 
     @Autowired
-    private TradeDaoImpl tradeJdbcDao;
+    private TradeJdbcDao tradeJdbcDao;
     private JdbcTemplate jdbcTemplate;
 
 

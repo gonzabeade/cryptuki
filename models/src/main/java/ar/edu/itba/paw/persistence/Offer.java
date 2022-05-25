@@ -38,7 +38,7 @@ public final class Offer {
     @Column(name="comments",length = 280)
     private  String comments;
 
-    @OneToMany(mappedBy = "offer")
+    @OneToMany(mappedBy = "offer",orphanRemoval = true)
     private  Collection<PaymentMethodAtOffer> paymentMethodAtOffers ;
 
    @Transient
@@ -90,6 +90,14 @@ public final class Offer {
                 .collect(Collectors.toCollection(ArrayList::new)).containsAll(paymentMethodCode)
         ;
 
+    }
+
+    public void addPaymentMethodAtOffers(PaymentMethodAtOffer paymentMethodAtOffer){
+        this.paymentMethodAtOffers.add(paymentMethodAtOffer);
+    }
+
+    public void clearPaymentMethodAtOffers(){
+        this.paymentMethodAtOffers.clear();
     }
 
 

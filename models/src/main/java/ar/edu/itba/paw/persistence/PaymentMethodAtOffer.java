@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Table(name="payment_methods_at_offer")
 public class PaymentMethodAtOffer implements Serializable {
     @Id
-    @Column(name="offer_id",nullable = false,unique = true)
+    @Column(name="offer_id",nullable = false)
     private int offerId;
 
     @Id
@@ -19,7 +19,7 @@ public class PaymentMethodAtOffer implements Serializable {
     private PaymentMethod paymentMethod;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="offer_id")
+    @JoinColumn(name="offer_id",insertable = false,updatable = false)
     private Offer offer;
 
     PaymentMethodAtOffer(){}
@@ -51,5 +51,23 @@ public class PaymentMethodAtOffer implements Serializable {
 
     public void setPaymentCode(String paymentCode) {
         this.paymentCode = paymentCode;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(!(obj instanceof PaymentMethodAtOffer))
+            return false;
+        PaymentMethodAtOffer other = (PaymentMethodAtOffer) obj;
+        return other.getOfferId() == this.getOfferId() && other.getPaymentCode().equals(this.paymentCode);
     }
 }

@@ -2,17 +2,20 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -28,8 +31,6 @@ public class OfferHibernateDao implements OfferDao{
         query
                 .setParameter("crypto_codes", filter.getCryptoCodes().isEmpty() ? null: filter.getCryptoCodes())
                 .setParameter("offer_ids", filter.getIds().isEmpty() ? null : filter.getIds())
-//                .setParameter("limit", filter.getPageSize())
-//                .setParameter("offset", filter.getPage()*filter.getPageSize())
                 .setParameter("min", filter.getMinPrice().isPresent() ? (float)filter.getMinPrice().getAsDouble() : null)
                 .setParameter("max", filter.getMaxPrice().isPresent() ? (float)filter.getMaxPrice().getAsDouble() : null)
                 .setParameter("uname", filter.getUsername().orElse(null))
@@ -37,35 +38,62 @@ public class OfferHibernateDao implements OfferDao{
     }
 
 
+    private List<Integer> filterByPaymentMethod(OfferFilter filter){
+        String paymentCodeQueryDescriptor=" from PaymentMethodAtOffer AS pmao WHERE ( COALESCE(:payment_codes,null) IS NULL OR pmao.paymentCode IN (:payment_codes) ) ";
+        TypedQuery<PaymentMethodAtOffer> paymentCodeQuery = entityManager.createQuery(paymentCodeQueryDescriptor,PaymentMethodAtOffer.class);
+        paymentCodeQuery.setParameter("payment_codes",filter.getPaymentMethods().isEmpty()?null:filter.getPaymentMethods());
+        return paymentCodeQuery.getResultList().stream().map(paymentMethodAtOffer -> paymentMethodAtOffer.getOfferId()).collect(Collectors.toCollection(ArrayList::new));
+    }
+
     @Override
     public int getOfferCount(OfferFilter filter) {
-        return getOffersBy(filter).size();
+        List<Integer> paymentMethodAtOffersList = filterByPaymentMethod(filter);
+        if(paymentMethodAtOffersList.isEmpty() ) //no offers with such payment method
+            return 0;
+        return getOffersByIdList(filter,paymentMethodAtOffersList).size();
     }
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-            String paymentCodeQueryDescriptor=" from PaymentMethodAtOffer AS pmao WHERE ( COALESCE(:payment_codes,null) IS NULL OR pmao.paymentCode IN (:payment_codes) ) ";
-            TypedQuery<PaymentMethodAtOffer> paymentCodeQuery = entityManager.createQuery(paymentCodeQueryDescriptor,PaymentMethodAtOffer.class);
-            paymentCodeQuery.setParameter("payment_codes",filter.getPaymentMethods().isEmpty()?null:filter.getPaymentMethods());
-            List<Integer> paymentMethodAtOffersList = paymentCodeQuery.getResultList().stream().map(paymentMethodAtOffer -> paymentMethodAtOffer.getOfferId()).collect(Collectors.toCollection(ArrayList::new));
-            if(paymentMethodAtOffersList.isEmpty()) //no offers with such payment method
-                return new ArrayList<>();
+        List<Integer> paymentMethodAtOffersList = filterByPaymentMethod(filter);
+        if(paymentMethodAtOffersList.isEmpty() ) //no offers with such payment method
+        {
+            return new ArrayList<>();
+        }
 
-            String queryDescriptor="from Offer as offerRow" +
+        List<Integer> otherFilterIds =  getOffersByIdList(filter,paymentMethodAtOffersList).stream().map((o)->o.getId()).collect(Collectors.toCollection(ArrayList::new));
+        if(otherFilterIds.isEmpty())
+            return new ArrayList<>();
+
+        Query pagingQuery = entityManager.createNativeQuery("SELECT id from offer where id in (:ids) limit :limit OFFSET :offset");
+        pagingQuery.setParameter("limit",filter.getPageSize());
+        pagingQuery.setParameter("offset",filter.getPage()*filter.getPageSize());
+        pagingQuery.setParameter("ids",otherFilterIds);
+        List<Integer> offerPagedIds = (List<Integer>) pagingQuery.getResultList().stream().collect(Collectors.toCollection(ArrayList::new));
+
+        Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) ",Offer.class);
+        query.setParameter("offerPagedIds",offerPagedIds);
+        return query.getResultList();
+    }
+
+    private Collection<Offer> getOffersByIdList(OfferFilter filter,List<Integer> idsAccepted){
+        String queryDescriptor="from Offer as offerRow" +
                 "   WHERE ( COALESCE(:offer_ids, null) IS NULL OR offerRow.id IN (:offer_ids)) AND " +
                 "( COALESCE(:crypto_codes, null) IS NULL OR offerRow.crypto.code IN (:crypto_codes)) AND "+
                 "( COALESCE(:min,null) IS NULL OR :min >= offerRow.askingPrice*offerRow.minQuantity) AND "+
                 "( COALESCE(:max,null) IS NULL OR :max <= offerRow.askingPrice*offerRow.maxQuantity) AND "+
                 "( COALESCE(:uname, null) IS NULL or offerRow.seller.userAuth.username = :uname) AND "+
-                "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status)) AND" +
-                "( offerRow.id IN ( :paymentMethodAtOffersList) )"+
+                "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status) ) AND" +
+                "( offerRow.id IN ( :idsAccepted)  ) "+
                 ")";
 
-            TypedQuery<Offer> query = entityManager.createQuery(queryDescriptor,Offer.class);
-            addParameters(filter,query);
-            query.setParameter("paymentMethodAtOffersList", paymentMethodAtOffersList );
-            return query.getResultList();
+        TypedQuery<Offer> query = entityManager.createQuery(queryDescriptor,Offer.class);
+        addParameters(filter,query);
+        query.setParameter("idsAccepted", idsAccepted );
+        return query.getResultList();
     }
+
+
 
     @Override
     public int makeOffer(OfferDigest digest) {
@@ -77,7 +105,17 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public void modifyOffer(OfferDigest digest) {
-
+        Offer offer = getOffersBy(new OfferFilter().byOfferId(digest.getId())).stream().findFirst().orElseThrow(()->new NoSuchOfferException(digest.getId()));
+//        offer.clearPaymentMethodAtOffers();
+//        for(String pmCode : digest.getPaymentMethods()){
+//            PaymentMethodAtOffer pam = new PaymentMethodAtOffer(offer.getId(),pmCode);
+//            pam.setOffer(offer);
+//            offer.addPaymentMethodAtOffers(pam);
+//        }
+        offer.setMinQuantity((float) digest.getMinQuantity());
+        offer.setMaxQuantity((float) digest.getMaxQuantity());
+        offer.setAskingPrice((float) digest.getAskingPrice());
+        offer.setComments(digest.getComments());
     }
 
     @Override
@@ -105,7 +143,10 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Optional<String> getOwner(int offerId) {
-        return Optional.empty();
+        String queryDescriptor = "from Offer as o where o.id = :offerId";
+        TypedQuery<Offer> query = entityManager.createQuery(queryDescriptor,Offer.class);
+        query.setParameter("offerId",offerId);
+        return Optional.ofNullable(query.getSingleResult().getSeller().getUserAuth().getUsername());
     }
 
     @Override

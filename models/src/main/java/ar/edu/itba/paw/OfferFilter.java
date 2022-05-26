@@ -17,6 +17,8 @@ public class OfferFilter {
 
     private Collection<String> status = new LinkedList<>();
 
+    private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
+
 
     public Collection<String> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
@@ -35,6 +37,10 @@ public class OfferFilter {
     public Collection<String> getStatus() {
         return Collections.unmodifiableCollection(status);
     }
+    public OfferOrderCriteria getOrderCriteria() {
+        return orderCriteria;
+    }
+
 
 
 
@@ -82,6 +88,11 @@ public class OfferFilter {
     }
     public OfferFilter withPageSize(int page) {
         this.pageSize = page;
+        return this;
+    }
+
+    public OfferFilter withOrderCriteria(OfferOrderCriteria orderCriteria) {
+        this.orderCriteria = orderCriteria;
         return this;
     }
 }

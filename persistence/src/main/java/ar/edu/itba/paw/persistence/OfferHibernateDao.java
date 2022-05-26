@@ -11,10 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -73,7 +70,9 @@ public class OfferHibernateDao implements OfferDao{
 
         Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) ",Offer.class);
         query.setParameter("offerPagedIds",offerPagedIds);
-        return query.getResultList();
+        List list = query.getResultList();
+        Collections.sort(list, filter.getOrderCriteria().getCriteria());
+        return list;
     }
 
     private Collection<Offer> getOffersByIdList(OfferFilter filter,List<Integer> idsAccepted){

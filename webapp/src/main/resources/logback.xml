@@ -20,10 +20,14 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="root-appender" />
     </root>
+    <logger name="ar.edu.itba.paw.cryptuki" level="WARN" additivity="false">
+        <appender-ref ref="root-appender"/>
+    </logger>
     <logger name="ar.edu.itba.paw.cryptuki" level="INFO" additivity="false">
         <appender-ref ref="paw-appender"/>
     </logger>
+
 </configuration>

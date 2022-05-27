@@ -46,7 +46,7 @@
         </c:if>
 
         <c:if test="${param.tradeStatus == 'ACCEPTED' }">
-            <div class="bg-lime-300 w-30 text-white  text-center p-2"><messages:message code="accepted"/> </div>
+            <div class="bg-ngreen w-30 text-white  text-center p-2"><messages:message code="accepted"/> </div>
         </c:if>
 
         <c:if test="${param.tradeStatus == 'SOLD' }">
@@ -55,9 +55,16 @@
     </div>
 
     <div class="flex my-auto">
-        <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/trade?tradeId=${param.tradeId}"/>">
-        <messages:message code="help"/>
-        </a>
+       <c:if test="${! (param.tradeStatus == 'SOLD')}">
+           <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/trade?tradeId=${param.tradeId}"/>">
+               <messages:message code="help"/>
+           </a>
+       </c:if>
+       <c:if test="${ param.tradeStatus == 'SOLD'}">
+           <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${param.tradeId}"/>">
+                <messages:message code="help"/>
+           </a>
+       </c:if>
     </div>
 </div>
 

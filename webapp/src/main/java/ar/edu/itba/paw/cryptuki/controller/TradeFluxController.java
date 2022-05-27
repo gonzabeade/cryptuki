@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.form.RatingForm;
+import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.xml.ws.Binding;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -55,15 +57,18 @@ public class TradeFluxController {
 
 
     @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade( Integer tradeId){
+    public ModelAndView executeTrade(@ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, Integer tradeId , Authentication authentication){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         Offer offer = trade.getOffer();
 
         ModelAndView mav = new ModelAndView("trade");
+        mav.addObject("buying",!offer.getSeller().getUsername().equals(authentication.getName()));
+        mav.addObject("tradeId",trade.getTradeId());
         mav.addObject("offer", offer);
         mav.addObject("amount", trade.getQuantity());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         mav.addObject("status",trade.getStatus().toString());
+
         return mav;
     }
 
@@ -109,6 +114,7 @@ public class TradeFluxController {
         mav.addObject("user", user);
         mav.addObject("trade", trade);
         mav.addObject("offer", offer);
+        mav.addObject("buying",!offer.getSeller().getUsername().equals(authentication.getName()));
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
         mav.addObject("ratedBySeller", trade.getRatedSeller());
@@ -139,6 +145,15 @@ public class TradeFluxController {
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
         return mav;
+    }
+
+
+    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
+    public ModelAndView updateStatus(@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
+        if (! errors.hasErrors())
+            tradeService.updateStatus(statusTradeForm.getTradeId(), TradeStatus.valueOf(statusTradeForm.getNewStatus()));
+
+        return executeTrade(new StatusTradeForm(),statusTradeForm.getTradeId(),authentication);
     }
 
 

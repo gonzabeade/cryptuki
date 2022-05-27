@@ -87,7 +87,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
+//    @Secured("ROLE_ADMIN")
     public void updateStatus(int tradeId, TradeStatus status) {
 
         if (tradeId < 0)

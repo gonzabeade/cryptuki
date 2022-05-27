@@ -69,7 +69,7 @@ public final class Trade {
 
         @Column(name="status",length = 10)
         @Enumerated(EnumType.STRING)
-        private TradeStatus status = TradeStatus.OPEN;
+        private TradeStatus status = TradeStatus.PENDING;
         @Column(name="quantity")
         private float quantity = 0f;
 

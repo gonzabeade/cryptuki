@@ -20,13 +20,27 @@
 <jsp:include page="../components/header.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
-        <div class="flex flex-col">
-            <div class="flex flex-col mx-auto mt-10">
-                <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="yourBuying"/></h2>
+        <div class="flex flex-col mx-auto mt-10">
+            <c:if test="${status.equals('PENDING')}">
+                <div class="bg-amber-300">
+                    <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="yourProposingPending"/></h2>
+                </div>
+            </c:if>
+            <c:if test="${status.equals('REJECTED')}">
+                <div class="bg-red-300">
+                    <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="yourProposingClose"/></h2>
+                </div>
+            </c:if>
+            <c:if test="${status.equals('ACCEPTED')}">
+                <div class="bg-lime-300">
+                    <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="yourProposingAccepted"/></h2>
+                </div>
+            </c:if>
+            <div class="flex flex-col mt-10">
                 <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="to"/> <c:out value="${offer.askingPrice}"/> ARS </h2>
-                <div class="flex flex-row mt-3 font-sans ">
+                <div class="flex flex-row mt-3 font-sans justify-between">
                     <h2 class="font-sans mx-2"><b><messages:message code="minimum"/></b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.minQuantity}"/> ARS </h2>
                     <h2 class="font-sans"> <b><messages:message code="maximum"/></b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.maxQuantity}"/> ARS </h2>
                 </div>

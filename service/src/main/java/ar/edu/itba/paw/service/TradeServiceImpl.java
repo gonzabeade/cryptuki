@@ -69,7 +69,7 @@ public class TradeServiceImpl implements TradeService {
 
         trade.withCryptoCurrency(offer.getCrypto())
             .withStartDate(LocalDateTime.now())
-            .withTradeStatus(TradeStatus.OPEN)
+            .withTradeStatus(TradeStatus.PENDING)
             .withSellerUsername(userAuth.getUsername())
             .withSellerUsername(userAuth.getUsername());
 

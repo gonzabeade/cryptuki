@@ -64,6 +64,7 @@ public class TradeFluxController {
         mav.addObject("offer", offer);
         mav.addObject("amount", trade.getQuantity());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
+        mav.addObject("status",trade.getStatus().toString());
         return mav;
     }
 

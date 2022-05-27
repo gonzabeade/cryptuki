@@ -55,7 +55,7 @@
     </div>
 
     <div class="flex my-auto">
-        <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${param.tradeId}"/>">
+        <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/trade?tradeId=${param.tradeId}"/>">
         <messages:message code="help"/>
         </a>
     </div>

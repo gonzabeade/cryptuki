@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/formValidations.js"/>"></script>
+    <script src="<c:url value="/public/js/filterLink.js"/>"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -43,7 +45,7 @@
         <jsp:include page="../components/paginator.jsp">
             <jsp:param name="activePage" value="${activePage}"/>
             <jsp:param name="pages" value="${pages}"/>
-            <jsp:param name="baseUrl" value="/user"/>
+            <jsp:param name="baseUrl" value="/mytrades"/>
         </jsp:include>
         <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>

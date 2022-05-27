@@ -36,6 +36,24 @@
         <h1 class="text-xl mx-auto font-bold font-sans text-center"><fmt:formatNumber type="number" maxFractionDigits="6" value="${param.quantity/param.askedPrice}"/></h1>
     </div>
 
+    <div class="flex flex-col font-sans mr-10 my-auto">
+        <c:if test="${param.tradeStatus == 'PENDING' }">
+            <div class="bg-amber-300 w-30 text-white  text-center p-2"><messages:message code="pending"/> </div>
+        </c:if>
+
+        <c:if test="${param.tradeStatus == 'REJECTED' }">
+            <div class="bg-red-300 w-30 text-white  text-center p-2"><messages:message code="rejected"/> </div>
+        </c:if>
+
+        <c:if test="${param.tradeStatus == 'ACCEPTED' }">
+            <div class="bg-lime-300 w-30 text-white  text-center p-2"><messages:message code="accepted"/> </div>
+        </c:if>
+
+        <c:if test="${param.tradeStatus == 'SOLD' }">
+            <div class="bg-ngreen w-30 text-white  text-center p-2"><messages:message code="sold"/> </div>
+        </c:if>
+    </div>
+
     <div class="flex my-auto">
         <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${param.tradeId}"/>">
         <messages:message code="help"/>

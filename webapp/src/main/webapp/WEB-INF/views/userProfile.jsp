@@ -112,6 +112,8 @@
           <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
           <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
           <jsp:param name="tradeId" value="${trade.tradeId}"/>
+          <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
+
         </jsp:include>
     </c:forEach>
 </div>

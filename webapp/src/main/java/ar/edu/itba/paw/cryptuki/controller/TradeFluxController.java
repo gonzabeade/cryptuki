@@ -166,6 +166,12 @@ public class TradeFluxController {
         }
 
         int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        if(tradeList.isEmpty())
+            if(role.get().equals("buying"))
+                mav.addObject("noBuyingTrades",true);
+            else
+                mav.addObject("noSellingTrades",true);
+
         mav.addObject("tradeStatusList",TradeStatus.values());
         mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);

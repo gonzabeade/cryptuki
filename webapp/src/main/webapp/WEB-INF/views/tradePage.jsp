@@ -67,18 +67,28 @@
         </c:forEach>
     </div>
 
+    <c:if test="${noBuyingTrades}">
+            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noBuyingProposalSend"/></h2>
+            <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startBuying"/></a>
+    </c:if>
 
-    <div class="flex flex-col mt-3">
-        <% request.setCharacterEncoding("utf-8"); %>
-        <jsp:include page="../components/paginator.jsp">
-            <jsp:param name="activePage" value="${activePage}"/>
-            <jsp:param name="pages" value="${pages}"/>
-            <jsp:param name="baseUrl" value="/mytrades"/>
-        </jsp:include>
-        <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-    </div>
+    <c:if test="${noSellingTrades}">
+        <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noSellingProposalReceived"/></h2>
+        <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
+    </c:if>
 
 
+    <c:if test="${!noSellingTrades && !noBuyingTrades}">
+        <div class="flex flex-col mt-3">
+            <% request.setCharacterEncoding("utf-8"); %>
+            <jsp:include page="../components/paginator.jsp">
+                <jsp:param name="activePage" value="${activePage}"/>
+                <jsp:param name="pages" value="${pages}"/>
+                <jsp:param name="baseUrl" value="/mytrades"/>
+            </jsp:include>
+            <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+        </div>
+    </c:if>
 </div>
 </div>
 

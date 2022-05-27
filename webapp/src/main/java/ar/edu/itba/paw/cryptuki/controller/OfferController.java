@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -149,8 +150,11 @@ public class OfferController {
         int pageNumber = page.orElse(0);
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
+        if(offers.isEmpty())
+            mav.addObject("noOffers",true);
 
-        mav.addObject("offerList", offerService.getOffersByUsername(authentication.getName(), pageNumber, PAGE_SIZE));
+        mav.addObject("offerList",offers);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());

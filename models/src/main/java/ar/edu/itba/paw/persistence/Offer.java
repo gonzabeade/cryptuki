@@ -41,7 +41,18 @@ public final class Offer {
     @OneToMany(mappedBy = "offer",orphanRemoval = true)
     private  Collection<PaymentMethodAtOffer> paymentMethodAtOffers ;
 
-   @Transient
+    @OneToMany(mappedBy = "offer",fetch = FetchType.LAZY)
+    private Collection<Trade> associatedTrades;
+
+    public Collection<Trade> getAssociatedTrades() {
+        return associatedTrades.stream().filter((e)->e.getStatus().equals(TradeStatus.PENDING)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void setAssociatedTrades(Collection<Trade> associatedTrades) {
+        this.associatedTrades = associatedTrades;
+    }
+
+    @Transient
    private  Collection<PaymentMethod> paymentMethods = new ArrayList<>();
 
     public Collection<PaymentMethodAtOffer> getPaymentMethodAtOffers() {

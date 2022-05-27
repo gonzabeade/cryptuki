@@ -15,7 +15,7 @@ public final class Trade {
     @Column(name="trade_id")
     private int tradeId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="offer_id")
     private Offer offer;
 

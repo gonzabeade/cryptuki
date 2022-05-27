@@ -39,7 +39,7 @@ public class UserController {
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
-    private static final int PAGE_SIZE = 3 ;
+
 
     @Autowired
     public UserController(UserService userService, ProfilePicService profilePicService, TradeService tradeService) {
@@ -156,14 +156,6 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("userProfile");
         mav.addObject("user",user);
-
-        int pageNumber= page.orElse(0);
-        int tradeCount = tradeService.getTradesByUsernameCount(username);
-        int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
-        Collection<Trade> tradeList = tradeService.getTradesByUsername(authentication.getName(),pageNumber,PAGE_SIZE);
-        mav.addObject("tradeList",tradeList);
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
         mav.addObject("updatedPass", updatedPass);
         return mav;
     }

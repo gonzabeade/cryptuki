@@ -13,6 +13,9 @@
             <ol class="flex justify-between mt-4">
                 <sec:authorize access="isAuthenticated()">
                     <li>
+                        <a href="<c:url value="/mytrades"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="yourTrades"/></a>
+                    </li>
+                    <li>
                         <a href="<c:url value="/myoffers"/>" class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8"><messages:message code="yourOffers"/></a>
                     </li>
                 </sec:authorize>

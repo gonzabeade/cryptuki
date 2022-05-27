@@ -15,15 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Optional;
 
 @Controller
@@ -33,6 +31,7 @@ public class TradeFluxController {
     private final TradeService tradeService;
     private final RatingService ratingService;
     private final UserService us;
+    private static final int PAGE_SIZE = 7;
 
     @Autowired
     public TradeFluxController(OfferService offerService, TradeService tradeService, RatingService ratingService, UserService us) {
@@ -127,4 +126,22 @@ public class TradeFluxController {
         ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
         return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
+
+    @RequestMapping(value = "/mytrades", method = RequestMethod.GET)
+    public ModelAndView getMyTrades(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
+        ModelAndView mav = new ModelAndView("tradePage");
+        String username = authentication.getName();
+        int pageNumber= page.orElse(0);
+        int tradeCount = tradeService.getTradesByUsernameCount(username);
+        int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        Collection<Trade> tradeList = tradeService.getTradesByUsername(authentication.getName(),pageNumber,PAGE_SIZE);
+        mav.addObject("tradeList",tradeList);
+        mav.addObject("pages",pages);
+        mav.addObject("activePage",pageNumber);
+        return mav;
+    }
+
+
+
+
 }

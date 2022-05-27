@@ -35,10 +35,10 @@
             <div class="py-12 px-40 mx-auto rounded-lg bg-stormd/[0.9] flex  border-2 border-polard flex-col">
                 <div class="flex justify-between rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
                     <div class="flex">
-                        <c:if test="${!buying}">
+                        <c:if test="${buying}">
                                 <h2 class="text-2xl font-semibold font-sans text-polar my-auto"><messages:message code="youBought"/>:</h2>
                             </c:if>
-                            <c:if test="${buying}">
+                            <c:if test="${!buying}">
                                 <h2 class="text-2xl font-semibold font-sans text-polar my-auto"><messages:message code="youSoldFor"/>:</h2>
                             </c:if>
                     </div>
@@ -68,47 +68,6 @@
                         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2">${trade.startDate.get().toString()}</h2>
                     </div>
                 </div>
-
-            <%--            <div class="bg-slate-300">--%>
-<%--                <div class="flex  mt-10 ">--%>
-<%--                    <div class="mx-auto">--%>
-<%--                        <c:if test="${!buying}">--%>
-<%--                            <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="youBought"/>:</h1>--%>
-<%--                        </c:if>--%>
-<%--                        <c:if test="${buying}">--%>
-<%--                            <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="youSoldFor"/>:</h1>--%>
-<%--                        </c:if>--%>
-<%--                    </div>--%>
-<%--                    <div class="flex mx-auto">--%>
-<%--                        <div class="mr-3">--%>
-<%--                            <h1 class="text-3xl text-polard font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h1>--%>
-<%--                        </div>--%>
-<%--                        <div>--%>
-<%--                            <h1 class="ml-2 text-3xl text-polard font-sans font-semibold"><c:out value="${offer.crypto.code}"/>&nbsp;</h1>--%>
-<%--                        </div>--%>
-<%--                        <div class="mr-3">--%>
-<%--                            <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.code}"/>" class="w-8 h-8"/>--%>
-<%--                        </div>--%>
-
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="flex  mt-5">--%>
-<%--                    <div class="mx-auto">--%>
-<%--                        <h1 class="text-polard font-sans text-center text-3xl"><messages:message code="inExchangeOf"/>:</h1>--%>
-<%--                    </div>--%>
-<%--                    <div>--%>
-<%--                        <h1 class="text-polard font-sans font-bold text-center text-3xl">${trade.quantity}$ARS</h1>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="flex  mt-5">--%>
-<%--                    <div class="mx-auto">--%>
-<%--                        <h1 class="text-polard  font-sans text-center text-3xl"><messages:message code="trasactionDate"/>:</h1>--%>
-<%--                    </div>--%>
-<%--                    <div>--%>
-<%--                        <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto">${trade.startDate.get().toString()}</h1>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
             </div>
 
         <div class="flex flex-row mt-10">
@@ -121,15 +80,29 @@
     </div>
     <div class="flex flex-col w-2/5">
         <div class="flex flex-col ml-32">
+            <c:if test="${buying}">
+                <% request.setCharacterEncoding("utf-8"); %>
+                <jsp:include page="../components/sellerInfo.jsp">
+                    <jsp:param name="email" value="${offer.seller.email}"/>
+                    <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
+                    <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
+                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
+                    <jsp:param name="rating" value="${offer.seller.rating}"/>
+                    <jsp:param name="message" value="${offer.comments}"/>
+                </jsp:include>
+            </c:if>
 
-            <% request.setCharacterEncoding("utf-8"); %>
-            <jsp:include page="../components/sellerInfo.jsp">
-                <jsp:param name="email" value="${offer.seller.email}"/>
-                <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
-                <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
-                <jsp:param name="rating" value="${offer.seller.rating}"/>
-            </jsp:include>
+            <c:if test="${!buying}">
+                <% request.setCharacterEncoding("utf-8"); %>
+                <jsp:include page="../components/buyerInfo.jsp">
+                    <jsp:param name="email" value="${trade.user.email}"/>
+                    <jsp:param name="phone" value="${trade.user.phoneNumber}"/>
+                    <jsp:param name="trades" value="${trade.user.ratingCount}"/>
+                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
+                    <jsp:param name="rating" value="${trade.user.rating}"/>
+                </jsp:include>
+            </c:if>
+
             <div class="flex flex-col mx-auto mt-10">
 
                 <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">

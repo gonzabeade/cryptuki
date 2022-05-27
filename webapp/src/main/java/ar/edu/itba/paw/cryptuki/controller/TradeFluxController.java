@@ -60,13 +60,15 @@ public class TradeFluxController {
     public ModelAndView executeTrade(@ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, Integer tradeId , Authentication authentication){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         Offer offer = trade.getOffer();
+        boolean buying = !offer.getSeller().getUsername().get().equals(authentication.getName());
 
         ModelAndView mav = new ModelAndView("trade");
-        mav.addObject("buying",!offer.getSeller().getUsername().equals(authentication.getName()));
+        mav.addObject("buying",buying);
         mav.addObject("tradeId",trade.getTradeId());
+        mav.addObject("trade",trade);
         mav.addObject("offer", offer);
         mav.addObject("amount", trade.getQuantity());
-        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
+        mav.addObject("otherLastLogin",buying? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()):LastConnectionUtils.toRelativeTime(trade.getUser().getLastLogin()));
         mav.addObject("status",trade.getStatus().toString());
 
         return mav;
@@ -110,13 +112,13 @@ public class TradeFluxController {
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         Offer offer = offerService.getOfferById(trade.getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOfferId()));
         User user = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
+        boolean buying = !offer.getSeller().getUsername().get().equals(authentication.getName());
 
         mav.addObject("user", user);
         mav.addObject("trade", trade);
         mav.addObject("offer", offer);
-        mav.addObject("buying",!offer.getSeller().getUsername().equals(authentication.getName()));
-        mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
-        mav.addObject("buyerLastLogin", LastConnectionUtils.toRelativeTime(user.getLastLogin()));
+        mav.addObject("buying",buying);
+        mav.addObject("otherLastLogin",buying ? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()) : LastConnectionUtils.toRelativeTime(trade.getUser().getLastLogin()));
         mav.addObject("ratedBySeller", trade.getRatedSeller());
         mav.addObject("ratedByBuyer", trade.getRatedBuyer());
         return mav;

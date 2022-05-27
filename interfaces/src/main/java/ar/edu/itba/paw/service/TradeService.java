@@ -20,6 +20,14 @@ public interface TradeService {
     Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
     int getBuyingTradesByUsernameCount(String username);
 
+    Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
+    int getSellingTradesByUsernameCount(String username,TradeStatus status);
+
+
+    Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
+    int getBuyingTradesByUsernameCount(String username,TradeStatus status);
+
+
 
     Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
     int getTradesByUsernameCount(String username);

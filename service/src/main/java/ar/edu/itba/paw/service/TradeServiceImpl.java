@@ -178,11 +178,66 @@ public class TradeServiceImpl implements TradeService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return tradeDao.getSellingTradesByUsernameCount(username);
+            return tradeDao.getBuyingTradesByUsername(username);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
     }
+
+    @Override
+    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        if (page < 0 || pageSize < 0)
+            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
+
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getSellingTradesByUsername(username, page, pageSize,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    public int getSellingTradesByUsernameCount(String username, TradeStatus status) {
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getSellingTradesByUsernameCount(username,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        if (page < 0 || pageSize < 0)
+            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
+
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getBuyingTradesByUsername(username, page, pageSize,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+    }
+
+    }
+    @Override
+    public int getBuyingTradesByUsernameCount(String username, TradeStatus status) {
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getBuyingTradesByUsername(username,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
 
     @Override
     @Transactional(readOnly = true)

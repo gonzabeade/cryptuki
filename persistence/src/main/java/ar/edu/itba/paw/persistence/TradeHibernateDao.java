@@ -79,6 +79,40 @@ public class TradeHibernateDao implements TradeDao{
     }
 
     @Override
+    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        TypedQuery<Trade> query  = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status",Trade.class);
+        query.setParameter("username",username);
+        query.setParameter("status",status);
+        query.setMaxResults(pageSize);
+        query.setFirstResult(page*pageSize);
+        return query.getResultList();
+    }
+
+    @Override
+    public int getSellingTradesByUsernameCount(String username, TradeStatus status) {
+        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status",Trade.class);
+        query.setParameter("username",username);
+        query.setParameter("status",status);
+        return query.getResultList().size();
+    }
+
+    @Override
+    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username and t.status= :status",Trade.class);
+        query.setParameter("username",username);
+        query.setParameter("status",status);
+        return query.getResultList();
+    }
+
+    @Override
+    public int getBuyingTradesByUsername(String username, TradeStatus status) {
+        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username and t.status= :status",Trade.class);
+        query.setParameter("username",username);
+        query.setParameter("status",status);
+        return query.getResultList().size();
+    }
+
+    @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
         TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)",Trade.class);
         query.setParameter("username",username);

@@ -9,6 +9,7 @@ public interface TradeDao {
 
     int makeTrade(Trade.Builder builder);
 
+
     void updateStatus(int tradeId, TradeStatus status);
 
     Optional<Trade> getTradeById(int tradeId);
@@ -18,6 +19,13 @@ public interface TradeDao {
 
     Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
     int getBuyingTradesByUsername(String username);
+
+    Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
+    int getSellingTradesByUsernameCount(String username,TradeStatus status);
+
+    Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
+    int getBuyingTradesByUsername(String username,TradeStatus status);
+
 
     Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
     int getTradesByUsernameCount(String username);

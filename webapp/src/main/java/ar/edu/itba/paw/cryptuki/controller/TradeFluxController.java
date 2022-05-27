@@ -137,13 +137,36 @@ public class TradeFluxController {
     }
 
     @RequestMapping(value = "/mytrades", method = RequestMethod.GET)
-    public ModelAndView getMyTrades(Authentication authentication,@RequestParam(value = "page") final Optional<Integer> page){
+    public ModelAndView getMyTrades(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "role", required = false) Optional<String> role, @RequestParam(value = "status", required = false) final Optional<String> status){
         ModelAndView mav = new ModelAndView("tradePage");
         String username = authentication.getName();
         int pageNumber= page.orElse(0);
-        int tradeCount = tradeService.getTradesByUsernameCount(username);
+
+        if(!role.isPresent()){
+            role = Optional.of("buying");
+        }
+        if((!role.get().equals("buying")&&!role.get().equals("selling")))
+            throw new IllegalArgumentException();
+
+        TradeStatus askedStatus;
+        if(!status.isPresent()){
+            askedStatus = TradeStatus.PENDING;
+        }else
+            askedStatus = TradeStatus.valueOf(status.get());
+
+        int tradeCount;
+        Collection<Trade> tradeList;
+        if(role.get().equals("buying")){
+            tradeCount= tradeService.getBuyingTradesByUsernameCount(username,askedStatus);
+            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE,askedStatus);
+        }
+        else{
+            tradeCount = tradeService.getSellingTradesByUsernameCount(username,askedStatus);
+            tradeList = tradeService.getSellingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE,askedStatus);
+        }
+
         int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
-        Collection<Trade> tradeList = tradeService.getTradesByUsername(authentication.getName(),pageNumber,PAGE_SIZE);
+        mav.addObject("tradeStatusList",TradeStatus.values());
         mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);

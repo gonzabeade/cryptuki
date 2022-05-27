@@ -2,6 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="message" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -22,17 +23,29 @@
 
     <div class="flex flex-col w-3/5 mt-10">
             <c:if test="${status.equals('PENDING')}">
-                <h2 class="bg-amber-300 mx-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingPending"/></h2>
+                <div class="flex">
+                    <h2 class="bg-amber-300 mx-auto my-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingPending"/></h2>
+                    <c:if test="${buying}">
+                        <form method="post" action="<c:url value="/deleteTrade/${tradeId}"/>">
+                            <button class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40" type="submit"><messages:message code="removeTrade"/></button>
+                        </form>
+                    </c:if>
+                </div>
             </c:if>
             <c:if test="${status.equals('REJECTED')}">
-                <h2 class="bg-red-300 mx-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingRejected"/></h2>
+                <div class="flex">
+                    <h2 class="bg-red-300 mx-auto my-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingRejected"/></h2>
+                    <c:if test="${buying}">
+                        <form method="post" action="<c:url value="/deleteTrade/${tradeId}"/>">
+                            <button class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40" type="submit"><messages:message code="removeTrade"/></button>
+                        </form>
+                    </c:if>
+                </div>
             </c:if>
             <c:if test="${status.equals('ACCEPTED')}">
                 <h2 class=" bg-ngreen mx-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingAccepted"/></h2>
             </c:if>
-            <c:if test="${status.equals('SOLD')}">
-                <h2 class="bg-amber-300 mx-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingDone"/></h2>
-            </c:if>
+
             <div class="flex flex-col w-full mt-10">
                 <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
@@ -70,10 +83,6 @@
                 <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post">
                     <form:hidden  path="newStatus" value="${newStatus}"/>
                     <form:hidden  path="tradeId" value="${tradeId}"/>
-
-                <c:if test="${buying}">
-                    <button onclick="updateStatus('CANCELED')" type="submit" class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans"><messages:message code="removeTrade"/></button>
-                </c:if>
                 <c:if test="${!buying}">
                         <c:if test="${!status.equals('ACCEPTED')}">
                              <button onclick="updateStatus('REJECTED')" type="submit" class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40 "><messages:message code="rejectTrade"/></button>
@@ -89,8 +98,6 @@
                         </c:if>
                 </c:if>
                 </form:form>
-
-
 
             </div>
 

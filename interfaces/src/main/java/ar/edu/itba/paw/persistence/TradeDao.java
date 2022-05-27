@@ -32,5 +32,7 @@ public interface TradeDao {
     void rateSeller(int tradeId);
     void rateBuyer(int tradeId);
 
+    void deleteTrade(int tradeId);
+
 
 }

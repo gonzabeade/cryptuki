@@ -34,4 +34,6 @@ public interface TradeService {
     void updateRatedSeller(int tradeId);
     void updatedRatedBuyer(int tradeId);
 
+    void deleteTrade(int tradeId);
+
 }

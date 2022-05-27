@@ -292,5 +292,12 @@ public class TradeServiceImpl implements TradeService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteTrade(int tradeId) {
+        //validate authorization
+        tradeDao.deleteTrade(tradeId);
+    }
+
 
 }

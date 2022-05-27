@@ -20,7 +20,12 @@
 
     <div class=" mr-10 font-sans justify-center items-center my-auto">
         <c:if test="${username ==  param.buyerUsername }">
-            <h1 class="font-sans"><messages:message code="youBoughtFor"/>: </h1>
+            <c:if test="${param.tradeStatus == 'SOLD'}">
+                <h1 class="font-sans"><messages:message code="youBoughtFor"/>: </h1>
+            </c:if>
+            <c:if test="${! (param.tradeStatus=='SOLD')}">
+                <h1 class="font-sans"><messages:message code="youProposedFor"/>: </h1>
+            </c:if>
         </c:if>
         <c:if test="${username == param.sellerUsername}">
             <h1 class="font-sans"><messages:message code="youSoldFor"/>: </h1>

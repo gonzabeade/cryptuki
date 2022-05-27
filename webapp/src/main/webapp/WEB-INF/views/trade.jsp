@@ -75,10 +75,23 @@
                     <button onclick="updateStatus('CANCELED')" type="submit" class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans"><messages:message code="removeTrade"/></button>
                 </c:if>
                 <c:if test="${!buying}">
-                        <button onclick="updateStatus('REJECTED')" type="submit" class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40 "><messages:message code="rejectTrade"/></button>
-                        <button onclick="updateStatus('ACCEPTED')" type="submit" class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40"><messages:message code="acceptTrade"/></button>
+                        <c:if test="${!status.equals('ACCEPTED')}">
+                             <button onclick="updateStatus('REJECTED')" type="submit" class="bg-red-300 text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40 "><messages:message code="rejectTrade"/></button>
+                            <button onclick="updateStatus('ACCEPTED')" type="submit" class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40"><messages:message code="acceptTrade"/></button>
+                        </c:if>
+                        <c:if test="${status.equals('ACCEPTED')}">
+                        <c:url value="/closeTrade" var="postUrl"/>
+                        <form:form modelAttribute="soldTradeForm" action="${postUrl}" method="post">
+                            <form:hidden  path="offerId" value="${offer.id}"/>
+                            <form:hidden  path="trade" value="${tradeId}"/>
+                            <button type="submit" class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-40"><messages:message code="soldTrade"/></button>
+                        </form:form>
+                        </c:if>
                 </c:if>
                 </form:form>
+
+
+
             </div>
 
 

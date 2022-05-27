@@ -75,7 +75,7 @@ public class TradeServiceImpl implements TradeService {
 
         int tradeId;
         try {
-           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
+//           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
            tradeId = tradeDao.makeTrade(trade);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);

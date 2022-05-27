@@ -9,7 +9,6 @@ public interface TradeDao {
 
     int makeTrade(Trade.Builder builder);
 
-
     void updateStatus(int tradeId, TradeStatus status);
 
     Optional<Trade> getTradeById(int tradeId);

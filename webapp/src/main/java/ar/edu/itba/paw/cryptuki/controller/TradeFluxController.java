@@ -54,40 +54,29 @@ public class TradeFluxController {
         return mav;
     }
 
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final BindingResult errors, final Authentication authentication){
-
-        if(errors.hasErrors())
-            return buyOffer(offerBuyForm.getOfferId(), offerBuyForm, authentication);
-
-        return executeTrade(offerBuyForm, authentication);
-    }
-
 
     @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade( @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final Authentication authentication){
-
-        int offerId = offerBuyForm.getOfferId();
-        Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
+    public ModelAndView executeTrade( Integer tradeId){
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        Offer offer = trade.getOffer();
 
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("offer", offer);
-        mav.addObject("amount", offerBuyForm.getAmount());
-        mav.addObject("offerBuyForm", offerBuyForm);
+        mav.addObject("amount", trade.getQuantity());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         return mav;
     }
 
 
-    @RequestMapping(value = "/trade", method = RequestMethod.POST)
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors()) {
-            return executeTrade(offerBuyForm, authentication);
+            return buyOffer(offerBuyForm.getOfferId(), offerBuyForm, authentication);
         }
 
         int tradeId = tradeService.makeTrade(offerBuyForm.toTradeBuilder(authentication.getName()));
-        return new ModelAndView("redirect:/receipt/"+tradeId);
+        return new ModelAndView("redirect:/trade"+"?tradeId="+tradeId);
     }
 
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)

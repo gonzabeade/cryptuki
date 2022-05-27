@@ -8,7 +8,7 @@
 <div class="flex flex-col">
     <c:url value="/buy" var="getUrl"/>
     <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.OfferBuyForm"--%>
-    <form:form modelAttribute="offerBuyForm" action="${getUrl}" method="get" class="flex flex-col">
+    <form:form modelAttribute="offerBuyForm" action="${getUrl}" method="post" class="flex flex-col">
 
         <input type="hidden" name="email"  id="email" value="${param.userEmail}">
         <div class="flex flex-col justify-center mt-3">
@@ -24,19 +24,19 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col mt-3 mx-52">
-            <form:errors path="message" cssClass="text-red-500 mx-auto"/>
-            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="yourMessage"/>: *</form:label>
-            <div class="flex-row justify-center">
-                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="${yourMessagePlaceholder}" />
-            </div>
-        </div>
+<%--        <div class="flex flex-col mt-3 mx-52">--%>
+<%--            <form:errors path="message" cssClass="text-red-500 mx-auto"/>--%>
+<%--            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="yourMessage"/>: *</form:label>--%>
+<%--            <div class="flex-row justify-center">--%>
+<%--                <form:textarea class="min-w-full h-36 rounded-lg mx-auto p-5"  path="message" placeholder="${yourMessagePlaceholder}" />--%>
+<%--            </div>--%>
+<%--        </div>--%>
 
-        <div class="flex flex-col mx-auto mt-7">
-            <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>
-            <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto"><messages:message code="postYourWallet"/> ${offer.crypto.code}</form:label>
-            <form:input  cssClass="rounded-lg p-3 mx-auto mt-3" type="text" path="wallet"/>
-        </div>
+<%--        <div class="flex flex-col mx-auto mt-7">--%>
+<%--            <form:errors path="wallet" cssClass="text-red-400 mx-auto"/>--%>
+<%--            <form:label path="wallet" cssClass="text-xl font-sans font-polard font-semibold mx-auto"><messages:message code="postYourWallet"/> ${offer.crypto.code}</form:label>--%>
+<%--            <form:input  cssClass="rounded-lg p-3 mx-auto mt-3" type="text" path="wallet"/>--%>
+<%--        </div>--%>
 
 
 

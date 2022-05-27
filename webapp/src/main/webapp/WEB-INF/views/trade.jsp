@@ -44,29 +44,29 @@
                     <h1 class="text-center text-3xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
-            <c:url value="/trade" var="postUrl"/>
+<%--            <c:url value="/trade" var="postUrl"/>--%>
 
-            <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post">
-                <form:input type="hidden" path="offerId"/>
-                <form:input type="hidden" path="email"/>
-                <form:input type="hidden" path="amount"/>
-                <form:input type="hidden" path="message"/>
-                <form:input type="hidden" path="wallet"/>
-
-
+<%--            <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post">--%>
+<%--                <form:input type="hidden" path="offerId"/>--%>
+<%--                <form:input type="hidden" path="email"/>--%>
+<%--                <form:input type="hidden" path="amount"/>--%>
+<%--                <form:input type="hidden" path="message"/>--%>
+<%--                <form:input type="hidden" path="wallet"/>--%>
 
 
-                <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h1 class="mx-2 text-lg my-auto"><messages:message code="depositeToSeller"/></h1>
-                </div>
-                <div class="flex flex-row justify-between">
-                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>"><messages:message code="cancelTrade"/></a>
-                    <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit"><messages:message code="iPayed"/></button>
-                </div>
-            </form:form>
+
+
+<%--                <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">--%>
+<%--                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">--%>
+<%--                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />--%>
+<%--                    </svg>--%>
+<%--                    <h1 class="mx-2 text-lg my-auto"><messages:message code="depositeToSeller"/></h1>--%>
+<%--                </div>--%>
+<%--                <div class="flex flex-row justify-between">--%>
+<%--                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>"><messages:message code="cancelTrade"/></a>--%>
+<%--                    <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit"><messages:message code="iPayed"/></button>--%>
+<%--                </div>--%>
+<%--            </form:form>--%>
 
 
 

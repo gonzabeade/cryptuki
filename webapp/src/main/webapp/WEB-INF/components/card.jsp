@@ -30,13 +30,15 @@
 				</div>
 
 				<div class="flex flex-col basis-1/4 font-sans">
+					<h1 class="font-sans"><messages:message code="price"/>: </h1>
 					<div class="flex flex-row">
-						<img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2"/>
-						<h1 class="font-sans font-semibold"><c:out value="${param.currency}"/></h1>
+						<h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
+						<p class="my-auto mx-2"> <messages:message code="for"/> </p>
+						<img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2 my-auto"/>
+						<h1 class="font-sans font-semibold my-auto"><c:out value="${param.currency}"/></h1>
 					</div>
-					<h1 class="text-xl font-bold font-sans mx-2"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
 					<div class="flex flex-row">
-						<h4 class="text-gray-400 font-sans mx-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
+						<h4 class="text-gray-400 font-sans mr-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
 						<p class="text-gray-400 font-sans">-</p>
 						<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.maxCoinAmount}"/> ARS </h4>
 
@@ -57,7 +59,7 @@
 				<div class="flex basis-1/4 justify-center">
 					<c:choose>
 						<c:when test="${param.userEmail == param.owner || username==param.owner || isAdmin}">
-							<a class=" pb-6 px-7 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>">
+							<a class=" pb-6 px-5 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>">
 								<messages:message code="seeOffer"/>
 							</a>
 						</c:when>

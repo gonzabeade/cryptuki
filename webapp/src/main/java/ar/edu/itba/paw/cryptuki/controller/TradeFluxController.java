@@ -16,6 +16,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,8 +61,15 @@ public class TradeFluxController {
     @RequestMapping(value="/trade", method = RequestMethod.GET)
     public ModelAndView executeTrade(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, Integer tradeId , Authentication authentication){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+
         Offer offer = trade.getOffer();
         boolean buying = !offer.getSeller().getUsername().get().equals(authentication.getName());
+
+        if(trade.getStatus() == TradeStatus.SOLD){
+            ModelAndView mav = new ModelAndView("redirect:/receiptDescription/"+trade.getTradeId());
+            mav.addObject("buying",buying);
+            return mav;
+        }
 
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);

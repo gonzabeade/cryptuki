@@ -34,7 +34,7 @@
             <select name="status" id="status" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
                 <c:forEach items="${tradeStatusList}" var="status">
-                    <option value="${status.toString()}"><c:out value="${status.toString()}"/></option>
+                    <option value="${status.toString()}"><messages:message code="${status.toString()}"/></option>
                 </c:forEach>
             </select>
         </div>

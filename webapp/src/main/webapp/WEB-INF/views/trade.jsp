@@ -42,9 +42,19 @@
                 </div>
             </c:if>
             <c:if test="${status.equals('REJECTED')}">
-                <div class="flex">
-                    <h2 class="bg-red-300 mx-auto my-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingRejected"/></h2>
-
+                <div class="flex bg-nred p-5 text-center rounded-lg mx-auto border-2 border-[#816327]">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+                             stroke="#816327" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-[#816327] text-left text-xl"><b><messages:message code="ProposingRejected"/></b>
+                        </p>
+                        <p><messages:message code="waitForTheSeller"/></p>
+                    </div>
                 </div>
             </c:if>
             <c:if test="${status.equals('ACCEPTED')}">
@@ -98,27 +108,31 @@
             </c:if>
         </div>
 
-            <c:url value="/changeStatus" var="postUrl"/>
-            <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post">
-            <form:hidden  path="newStatus" value="${newStatus}"/>
-            <form:hidden  path="tradeId" value="${tradeId}"/>
-            <div class="flex mt-10 w-full justify-around">
-                        <c:if test="${!buying}">
-                            <c:if test="${!status.equals('ACCEPTED')}">
-                                <button onclick="updateStatus('REJECTED')" type="submit" class="bg-red-400 text-white  mt-4 mb-4 p-3  rounded-md font-sans"><messages:message code="rejectTrade"/></button>
-                                <button onclick="updateStatus('ACCEPTED')" type="submit" class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans"><messages:message code="acceptTrade"/></button>
-                           </c:if>
-                            <c:if test="${status.equals('ACCEPTED')}">
-                                <c:url value="/closeTrade" var="postUrl"/>
-                                <form:form modelAttribute="soldTradeForm" action="${postUrl}" method="post">
-                                    <form:hidden  path="offerId" value="${offer.id}"/>
-                                    <form:hidden  path="trade" value="${tradeId}"/>
-                                    <button type="submit" class="w-fit bg-ngreen text-white mt-4 mb-4 p-3 rounded-md font-sans mx-auto"><messages:message code="soldTrade"/></button>
-                                </form:form>
-                            </c:if>
-                        </c:if>
-            </div>
-            </form:form>
+        <c:if test="${!buying}">
+            <c:if test="${!status.equals('ACCEPTED')}">
+                <c:url value="/changeStatus" var="postUrl"/>
+                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post">
+                    <form:hidden path="newStatus" value="${newStatus}"/>
+                    <form:hidden path="tradeId" value="${tradeId}"/>
+
+                    <button onclick="updateStatus('REJECTED')" type="submit"
+                            class="bg-red-400 text-white  mt-4 mb-4 p-3  rounded-md font-sans"><messages:message
+                            code="rejectTrade"/></button>
+                    <button onclick="updateStatus('ACCEPTED')" type="submit"
+                            class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans"><messages:message
+                            code="acceptTrade"/></button>
+                </form:form>
+            </c:if>
+            <c:if test="${status.equals('ACCEPTED')}">
+                    <c:url value="/closeTrade" var="formUrl"/>
+                    <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex">
+                        <form:hidden path="offerId" value="${offer.id}"/>
+                        <form:hidden path="trade" value="${tradeId}"/>
+                        <button type="submit" class="w-fit bg-ngreen text-white mt-4 mb-4 p-3 rounded-md font-sans mx-auto">
+                            <messages:message code="soldTrade"/></button>
+                    </form:form>
+            </c:if>
+        </c:if>
 
 
         </div>

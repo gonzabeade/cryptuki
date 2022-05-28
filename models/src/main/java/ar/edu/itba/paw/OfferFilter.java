@@ -19,7 +19,7 @@ public class OfferFilter {
 
     private Collection<String> status = new LinkedList<>();
 
-    private OfferOrderCriteria orderCriteria = OfferOrderCriteria.RATE;
+    private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
     private OfferOrderDirection orderDirection = OfferOrderDirection.DESC;
 
 

@@ -64,6 +64,7 @@ public class OfferHibernateDao implements OfferDao{
             return new ArrayList<>();
 
         String orderCriterion, modelOrderCriterion;
+
         switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
             case 1:
                orderCriterion = "asking_price";
@@ -82,12 +83,12 @@ public class OfferHibernateDao implements OfferDao{
                 modelOrderCriterion = "o.date";
         }
 
-        orderCriterion = "rating_sum";
-        modelOrderCriterion = "o.seller.ratingSum";
+        orderCriterion = "last_login";
+        modelOrderCriterion = "o.seller.lastLogin";
 
         Query pagingQuery = entityManager.createNativeQuery("SELECT ordered_offers.offer_id FROM " +
                 "(SELECT * FROM offer_complete ORDER BY " +
-                orderCriterion +
+                orderCriterion + " " + filter.getOrderDirection().toString() +
                 ", offer_id) AS ordered_offers " +
                 "WHERE ordered_offers.offer_id IN (:ids) " +
                 "limit :limit OFFSET :offset");
@@ -97,7 +98,8 @@ public class OfferHibernateDao implements OfferDao{
         pagingQuery.setParameter("ids",otherFilterIds);
         List<Integer> offerPagedIds = (List<Integer>) pagingQuery.getResultList().stream().collect(Collectors.toCollection(ArrayList::new));
 
-        Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) order by " + modelOrderCriterion, Offer.class);
+        Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) order by " +
+                modelOrderCriterion + " " + filter.getOrderDirection().toString(), Offer.class);
         query.setParameter("offerPagedIds", offerPagedIds);
         List list = query.getResultList();
         //Collections.sort(list, filter.getOrderCriteria().getCriteria());

@@ -18,6 +18,7 @@ public class OfferFilter {
     private Collection<String> status = new LinkedList<>();
 
     private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
+    private OfferOrderDirection orderDirection = OfferOrderDirection.DESC;
 
 
     public Collection<String> getPaymentMethods() {
@@ -94,5 +95,9 @@ public class OfferFilter {
     public OfferFilter withOrderCriteria(OfferOrderCriteria orderCriteria) {
         this.orderCriteria = orderCriteria;
         return this;
+    }
+
+    public OfferOrderDirection getOrderDirection() {
+        return orderDirection;
     }
 }

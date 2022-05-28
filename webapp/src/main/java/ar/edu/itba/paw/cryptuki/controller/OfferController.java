@@ -2,15 +2,17 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
+import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
+import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.service.CryptocurrencyService;
-import ar.edu.itba.paw.service.OfferService;
-import ar.edu.itba.paw.service.PaymentMethodService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.persistence.TradeStatus;
+import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,8 @@ public class OfferController {
     private final CryptocurrencyService cryptocurrencyService;
     private final PaymentMethodService paymentMethodService;
     private  final OfferService offerService;
+
+    private final TradeService tradeService;
     private final UserService us;
     private static final int PAGE_SIZE= 10;
 
@@ -40,11 +44,13 @@ public class OfferController {
     public OfferController(CryptocurrencyService cryptocurrencyService,
                            PaymentMethodService paymentMethodService,
                            OfferService offerService,
+                           TradeService tradeService,
                            UserService us) {
 
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
         this.offerService = offerService;
+        this.tradeService = tradeService;
         this.us = us;
     }
 
@@ -75,7 +81,7 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
-    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication){
+    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, false);
     }
@@ -145,7 +151,7 @@ public class OfferController {
 
 
     @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
-    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication){
+    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         ModelAndView mav = new ModelAndView("myOffers");
         int pageNumber = page.orElse(0);
         int offerCount = offerService.countOffersByUsername(authentication.getName());
@@ -161,5 +167,16 @@ public class OfferController {
 
         return mav;
     }
+
+    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
+    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
+        if (! errors.hasErrors())
+            tradeService.updateStatus(statusTradeForm.getTradeId(), TradeStatus.valueOf(statusTradeForm.getNewStatus()));
+
+        Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
+
+        return seeOffer(trade.getOfferId(),authentication, new SoldTradeForm(),new StatusTradeForm() );
+    }
+
 
 }

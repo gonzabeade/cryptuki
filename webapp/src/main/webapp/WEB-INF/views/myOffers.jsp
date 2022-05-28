@@ -14,6 +14,13 @@
     <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
     <title>cryptuki</title>
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
+    <style>
+        div.scroll {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+    </style>
 
 </head>
 
@@ -30,7 +37,7 @@
     </div>
     <div  class="flex flex-col justify-center">
         <c:forEach var="offer" items="${offerList}">
-            <li class="list-none mx-20">
+            <li class="list-none mx-20 my-10">
                 <% request.setCharacterEncoding("utf-8"); %>
                 <c:set  var="accepted_payments" value="${offer.paymentMethods}" scope="request"/>
                 <c:set  var="owner" value="${offer.seller.username.isPresent() ? offer.seller.username.get() : offer.seller.email}" scope="request"/>
@@ -48,12 +55,41 @@
                     <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
                     <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                     <jsp:param name="rating" value="${offer.seller.rating}"/>
-
                 </jsp:include>
+                <div id="${offer.id}" style="display: none" class="flex scroll bg-stormd/[0.9]">
+                    <div class="flex w-1/2 mt-2 bg-stormd/[0.9]">
+                        <c:if test="${(offer.associatedTrades.size() == 0)}">
+                            <h2 class="text-center text-4xl font-semibold font-sans text-polar mt-4"><messages:message code="noAssociatedPendignProposes"/> </h2>
+                        </c:if>
+                        <c:if test="${!(offer.associatedTrades.size() == 0) }">
+<%--                            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="associatedTransactions"/> </h2>--%>
+                            <c:forEach var="trade" items="${offer.associatedTrades}">
+                                <% request.setCharacterEncoding("utf-8"); %>
+                                <jsp:include page="../components/SellingTradeCard.jsp">
+                                    <jsp:param name="username" value="${username}"/>
+                                    <jsp:param name="tradeId" value="${trade.tradeId}"/>
+                                    <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
+                                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
+                                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+                                    <jsp:param name="quantity" value="${trade.quantity}"/>
+                                    <jsp:param name="offerId" value="${trade.offer.id}"/>
+                                    <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
+                                    <jsp:param name="buyerMail" value="${trade.user.email}"/>
+                                    <jsp:param name="buyerPhone" value="${trade.user.phoneNumber}"/>
+                                    <jsp:param name="buyerRating" value="${trade.user.rating}"/>
+                                </jsp:include>
+                            </c:forEach>
+                        </c:if>
+                    </div>
+
+
+                </div>
+
+
+
             </li>
         </c:forEach>
     </div>
-
     <c:if test="${noOffers}">
         <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noOffersUploaded"/></h2>
         <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
@@ -78,5 +114,20 @@
 </div>
 </body>
 </html>
+<script>
+    function show(id){
+        document.getElementById(id).setAttribute('style','display');
+        document.getElementById('show-'+id).setAttribute('style','display: none');
+        document.getElementById('hide-'+id).setAttribute('style','display');
+
+    }
+
+    function hide(id){
+        document.getElementById(id).setAttribute("style","display: none");
+        document.getElementById("hide-"+id).setAttribute("style","display: none");
+        document.getElementById("show-"+id).setAttribute("style","display");
+    }
+
+</script>
 
 

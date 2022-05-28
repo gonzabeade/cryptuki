@@ -48,84 +48,52 @@ public class TradeHibernateDao implements TradeDao{
 
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
-        TypedQuery<Trade> query  = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username",Trade.class);
-        query.setParameter("username",username);
-        query.setMaxResults(pageSize);
-        query.setFirstResult(page*pageSize);
-        return query.getResultList();
+        return getTradeCollection(username,page,pageSize,"from Trade as t where t.offer.seller.userAuth.username = :username order by t.startDate desc");
     }
 
     @Override
     public int getSellingTradesByUsernameCount(String username) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username",Trade.class);
-        query.setParameter("username",username);
-        return query.getResultList().size();
+      return getTradeCollection(username,"from Trade as t where t.offer.seller.userAuth.username = :username").size();
     }
 
     @Override
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username",Trade.class);
-        query.setParameter("username",username);
-        query.setMaxResults(pageSize);
-        query.setFirstResult(page*pageSize);
-        return query.getResultList();
+        return getTradeCollection(username,page,pageSize,"from Trade as t where t.user.userAuth.username = :username order by t.startDate desc");
     }
 
     @Override
     public int getBuyingTradesByUsername(String username) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username",Trade.class);
-        query.setParameter("username",username);
-        return query.getResultList().size();
+        return getTradeCollection(username,"from Trade as t where t.user.userAuth.username = :username").size();
     }
 
     @Override
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
-        TypedQuery<Trade> query  = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status",Trade.class);
-        query.setParameter("username",username);
-        query.setParameter("status",status);
-        query.setMaxResults(pageSize);
-        query.setFirstResult(page*pageSize);
-        return query.getResultList();
+        return getTradeCollection(username,page,pageSize,status,"from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status order by t.startDate desc");
     }
 
     @Override
     public int getSellingTradesByUsernameCount(String username, TradeStatus status) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status",Trade.class);
-        query.setParameter("username",username);
-        query.setParameter("status",status);
-        return query.getResultList().size();
+        return getTradeCollection(username,status,"from Trade as t where t.offer.seller.userAuth.username = :username and t.status= :status").size();
     }
 
     @Override
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username and t.status= :status",Trade.class);
-        query.setParameter("username",username);
-        query.setParameter("status",status);
-        return query.getResultList();
+        return getTradeCollection(username,page,pageSize,status,"from Trade as t where t.user.userAuth.username = :username and t.status= :status order by t.startDate desc");
     }
 
     @Override
     public int getBuyingTradesByUsername(String username, TradeStatus status) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.user.userAuth.username = :username and t.status= :status",Trade.class);
-        query.setParameter("username",username);
-        query.setParameter("status",status);
-        return query.getResultList().size();
+        return getTradeCollection(username,status,"from Trade as t where t.user.userAuth.username = :username and t.status= :status").size();
     }
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)",Trade.class);
-        query.setParameter("username",username);
-        query.setMaxResults(pageSize);
-        query.setFirstResult(page*pageSize);
-        return query.getResultList();
+        return getTradeCollection(username,page,pageSize,"from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)");
     }
 
     @Override
     public int getTradesByUsernameCount(String username) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)",Trade.class);
-        query.setParameter("username",username);
-        return query.getResultList().size();
+        return getTradeCollection(username,"from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)").size();
     }
 
     @Override
@@ -147,6 +115,38 @@ public class TradeHibernateDao implements TradeDao{
         Trade trade = getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         entityManager.remove(trade);
     }
+
+
+
+    private Collection<Trade> getTradeCollection(String username, int page, int pageSize,TradeStatus status,String query){
+        TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
+        typedQuery.setParameter("username",username);
+        typedQuery.setParameter("status",status);
+        typedQuery.setMaxResults(pageSize);
+        typedQuery.setFirstResult(page*pageSize);
+        return typedQuery.getResultList();
+    }
+    private Collection<Trade> getTradeCollection(String username, TradeStatus status,String query){
+        TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
+        typedQuery.setParameter("username",username);
+        typedQuery.setParameter("status",status);
+        return typedQuery.getResultList();
+    }
+
+    private Collection<Trade> getTradeCollection(String username, String query){
+        TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
+        typedQuery.setParameter("username",username);
+        return typedQuery.getResultList();
+    }
+
+    private Collection<Trade> getTradeCollection(String username, int page, int pageSize,String query){
+        TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
+        typedQuery.setParameter("username",username);
+        typedQuery.setMaxResults(pageSize);
+        typedQuery.setFirstResult(page*pageSize);
+        return typedQuery.getResultList();
+    }
+
 
 
 }

@@ -104,9 +104,4 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter withOrderCriteria(OfferOrderCriteria orderCriteria) {
-        this.orderCriteria = orderCriteria;
-        return this;
-    }
-
 }

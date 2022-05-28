@@ -25,7 +25,7 @@
 </c:if>
 
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
             <c:if test="${status.equals('PENDING')}">

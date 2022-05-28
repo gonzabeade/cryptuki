@@ -22,7 +22,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <c:if test="${creation == true}">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/confirmationToggle.jsp">

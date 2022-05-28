@@ -18,7 +18,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-col">
     <div class="mx-auto flex  mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x" >
         <div class="flex flex-col my-auto mx-3">

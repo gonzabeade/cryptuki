@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
@@ -23,7 +24,13 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+
+<sec:authorize access="isAuthenticated()">
+    <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+</sec:authorize>
+<sec:authorize access="!isAuthenticated()">
+    <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+</sec:authorize>
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">
     <div class="flex flex-col my-auto mx-3">
@@ -67,6 +74,8 @@
     <jsp:include page="../components/welcomeMessage.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
+
+
     <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
     <ol class="min-w-full">
         <div>
@@ -103,7 +112,10 @@
        </jsp:include>
         <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
+
 </div>
+<%--<jsp:include page="../components/footer.jsp"/>--%>
+
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
 <div class="shape-blob two"></div>

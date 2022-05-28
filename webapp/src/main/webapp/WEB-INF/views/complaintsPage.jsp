@@ -19,7 +19,7 @@
 
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-col">
     <div class="flex mt-10 mb-5 ml-20">
         <a href="<c:url value="/user"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg"><messages:message code="goBack"/></a>

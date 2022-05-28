@@ -20,7 +20,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex">
     <div class="flex flex-row mx-auto">
         <h1 class="my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="modifyAdvertisement"/></h1>

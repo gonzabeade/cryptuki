@@ -15,7 +15,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20"><messages:message code="getToKnowMainCryptocurrencies"/></h1>
 <div class="mx-48">
     <ol class="min-w-50%">

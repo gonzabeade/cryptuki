@@ -19,7 +19,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex">
     <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="uploadYourAdvertisement"/></h1>
 </div>

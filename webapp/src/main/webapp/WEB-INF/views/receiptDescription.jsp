@@ -19,7 +19,7 @@
 <body class="bg-storml overflow-x-hidden">
 <sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-5">
     <div class="flex flex-col w-3/5 h-screen">
         <c:if test="${rated == true }">

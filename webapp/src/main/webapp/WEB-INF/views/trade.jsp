@@ -27,48 +27,51 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/header.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
-
-    <div class="flex flex-col w-3/5 mt-10">
+    <div class="flex flex-col w-3/5">
             <c:if test="${status.equals('PENDING')}">
-                <div class="flex">
-                    <h2 class="bg-yellow-200 mx-auto my-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingPending"/></h2>
-                    <c:if test="${buying}">
-                        <form class="mr-20" method="post" action="<c:url value="/deleteTrade/${tradeId}"/>">
-                            <button type="submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </form>
-                    </c:if>
+                <div class="flex bg-nyellow p-5 text-center rounded-lg mx-auto border-2 border-[#816327]">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#816327" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-[#816327] text-left text-xl"><b><messages:message code="ProposingPending"/></b></p>
+                        <p><messages:message code="waitForTheSeller"/></p>
+                    </div>
                 </div>
             </c:if>
             <c:if test="${status.equals('REJECTED')}">
                 <div class="flex">
                     <h2 class="bg-red-300 mx-auto my-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingRejected"/></h2>
-                    <c:if test="${buying}">
-                        <form class="mr-20" method="post" action="<c:url value="/deleteTrade/${tradeId}"/>">
-                            <button type="submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </form>
-                    </c:if>
+
                 </div>
             </c:if>
             <c:if test="${status.equals('ACCEPTED')}">
-                <h2 class=" bg-ngreen mx-auto font-sans font-semibold text-polard text-4xl text-center"><messages:message code="ProposingAccepted"/></h2>
+                <div class="flex bg-ngreen p-5 text-center rounded-lg mx-auto border-2 border-[#364427]">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#364427" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-[#364427] text-left text-xl"><b><messages:message code="ProposingAccepted"/></b></p>
+                        <p><messages:message code="furtherInstructions"/></p>
+                    </div>
+                </div>
             </c:if>
-            <div class="flex flex-row mt-10 justify-center">
+        <div class="flex flex-col">
+            <h1 class="text-3xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
+            <div class="flex flex-row justify-center">
+
                 <div class="flex flex-col mx-10 order-1" id="left">
                     <c:if test="${buying}">
-                        <h1 class="text-center text-3xl"><messages:message code="youPay"/></h1>
+                        <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
                     </c:if>
                     <c:if test="${!buying}">
-                        <h1 class="text-center text-3xl"><messages:message code="youReceive"/></h1>
+                        <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
                     </c:if>
-                    <h1 class="text-center text-3xl font-semibold font-polard">${amount} ARS</h1>
+                    <h1 class="text-center text-2xl font-semibold font-polard">${amount} ARS</h1>
 
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-5 order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
@@ -76,15 +79,25 @@
                 </svg>
                 <div class="flex flex-col mx-10 order-3" id="right">
                     <c:if test="${!buying}">
-                        <h1 class="text-center text-3xl"><messages:message code="youPay"/></h1>
+                        <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
                     </c:if>
                     <c:if test="${buying}">
-                        <h1 class="text-center text-3xl"><messages:message code="youReceive"/></h1>
+                        <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
                     </c:if>
-                        <h1 class="text-center text-3xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
-                        <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
+                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
+
+            <c:if test="${buying}">
+                <form  method="post"
+                      action="<c:url value="/deleteTrade/${tradeId}"/>" class="mx-auto my-10">
+                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg mx-auto">
+                       Cancelar oferta
+                    </button>
+                </form>
+            </c:if>
+        </div>
+
             <c:url value="/changeStatus" var="postUrl"/>
             <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post">
             <form:hidden  path="newStatus" value="${newStatus}"/>

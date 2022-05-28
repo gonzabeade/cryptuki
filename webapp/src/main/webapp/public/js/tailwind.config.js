@@ -19,8 +19,8 @@ theme: {
 
         nred: '#BF616A', 
         norange: '#D08770', 
-        nyellow: '#EBCB8B', 
-        ngreen: '#A3BE8C', 
+        nyellow: '#EBCB8B',
+        ngreen: '#A3BE8C',
         npurple: '#B48EAD'
 
     }, 

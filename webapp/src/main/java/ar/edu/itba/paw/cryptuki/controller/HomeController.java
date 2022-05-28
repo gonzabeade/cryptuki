@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -43,7 +40,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, @RequestParam(value = "orderingDirection", required = false) final int orderingDirection, @RequestParam(value = "orderingCriterion", required = false) final int orderingCriterion, final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("index");
 
@@ -54,9 +51,9 @@ public class HomeController {
                 .byMinPrice(price)
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
-                .fromPage(pageNumber);
-                //.withOrderingCriterion(orderingCriterion)
-                //.withOrderingDirection(orderingDirection);
+                .fromPage(pageNumber)
+                .withOrderingCriterion(orderingCriterion)
+                .withOrderingDirection(orderingDirection);
 
         int offerCount = offerService.countOffersBy(filter);
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

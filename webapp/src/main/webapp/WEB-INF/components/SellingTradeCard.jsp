@@ -9,7 +9,12 @@
 <div class="shadow-xl flex rounded-lg justify-between py-5 px-12 bg-[#FAFCFF] mt-3 mx-10">
 
     <div class="flex flex-col  font-sans justify-center">
-        <h1 class="font-sans"><messages:message code="youWouldReceive"/>: </h1>
+        <c:if test="${!(param.tradeStatus == 'SOLD')}">
+            <h1 class="font-sans"><messages:message code="youWouldReceive"/>: </h1>
+        </c:if>
+        <c:if test="${param.tradeStatus == 'SOLD'}">
+            <h1 class="font-sans"><messages:message code="youReceived"/>: </h1>
+        </c:if>
         <h3 class="font-sans font-semibold"><c:out value="${param.quantity}"/>$AR</h3>
     </div>
 

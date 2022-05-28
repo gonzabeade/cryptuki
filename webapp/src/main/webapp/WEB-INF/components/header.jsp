@@ -3,7 +3,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <nav class="bg-[#FAFCFF] border-gray-200 py-3 h-20"> <!--OK-->
-    <div class="container flex flex-wrap mx-auto my-auto px-[10%] h-full justify-between">
+    <div class="container flex flex-wrap mx-auto my-auto px-4 h-full justify-between">
         <div class="flex justify-center center w-[15%] my-auto xl:w-1/4">
             <div class="flex w-full my-2">
                 <a href="<c:url value="/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>

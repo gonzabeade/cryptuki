@@ -68,11 +68,10 @@
                     <c:if test="${!buying}">
                         <h1 class="text-center text-3xl"><messages:message code="youReceive"/></h1>
                     </c:if>
-                    <h1 class="text-center text-3xl font-semibold font-polard">${amount}</h1>
-                    <img src="<c:url value="/public/images/ars.png"/>" class="w-20 h-20 mx-auto">
+                    <h1 class="text-center text-3xl font-semibold font-polard">${amount} ARS</h1>
 
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 my-auto order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-5 order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
                 <div class="flex flex-col mx-10 order-3" id="right">

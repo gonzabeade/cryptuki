@@ -88,7 +88,7 @@ public class TradeHibernateDao implements TradeDao{
 
     @Override
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-        return getTradeCollection(username,page,pageSize,"from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username)");
+        return getTradeCollection(username,page,pageSize,"from Trade as t where (t.user.userAuth.username = :username or t.offer.seller.userAuth.username=:username) order by t.startDate desc");
     }
 
     @Override

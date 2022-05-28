@@ -26,22 +26,45 @@
         </c:if>
     </div>
 
-    <div class="flex flex font-sans justify-center my-5">
+    <div class="flex flex font-sans justify-between my-3">
         <c:if test="${!(param.tradeStatus == 'SOLD')}">
             <h1 class="font-sans"><messages:message code="youWouldReceive"/>: </h1>
         </c:if>
         <c:if test="${param.tradeStatus == 'SOLD'}">
             <h1 class="font-sans"><messages:message code="youReceived"/>: </h1>
         </c:if>
-        <h3 class="ml-5 font-sans font-semibold"><c:out value="${param.quantity}"/>$ARS</h3>
+        <div class="flex">
+           <h3 class="ml-5 font-sans font-semibold"><c:out value="${param.quantity}"/>$ARS</h3>
+        </div>
     </div>
 
-    <div class="flex flex-col font-sans justify-center my-5">
+    <div class="flex font-sans justify-between my-3">
         <h1 class="font-sans"><messages:message code="onExchangeOf"/>: </h1>
         <div class="flex">
-            <h1 class="text-xl font-sans font-bold"><fmt:formatNumber type="number" maxFractionDigits="6" value="${param.quantity/param.askedPrice}"/></h1>
-            <h1 class="text-xl font-sans font-bold mx-2"><c:out value="${param.cryptoCurrencyCode}"/></h1>
-            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-7 h-7 mx-auto"/>
+            <h1 class="font-sans font-semibold ml-5 mr-2"><fmt:formatNumber type="number" maxFractionDigits="6"
+                                                                            value="${param.quantity/param.askedPrice}"/></h1>
+            <h1 class="font-sans font-semibold"><c:out value="${param.cryptoCurrencyCode}"/></h1>
+        <%--            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-7 h-7 mx-auto"/>--%>
+        </div>
+    </div>
+
+    <div class="flex flex-col px-5 py-5 rounded-lg bg-stormd/[0.9]  border-2 border-polard ">
+        <h1 class="font-sans mx-auto"><messages:message code="buyerInformation"/>:</h1>
+        <div class="flex justify-between">
+            <h1 class="font-sans"><messages:message code="username"/>:</h1>
+            <h1 class="font-sans font-semibold"><c:out value="${param.buyerUsername}"/></h1>
+        </div>
+        <div class="flex">
+            <h1 class="font-sans mr-5"><messages:message code="emailAddress"/>:</h1>
+            <h1 class="font-sans font-semibold"><c:out value="${param.buyerMail}"/></h1>
+        </div>
+        <div class="flex">
+            <h1 class="font-sans mr-5"><messages:message code="phoneNumber"/>:</h1>
+            <h1 class="font-sans font-semibold"><c:out value="${param.buyerPhone}"/></h1>
+        </div>
+        <div class="flex">
+            <h1 class="font-sans mr-5"><messages:message code="rating"/>:</h1>
+            <h1 class="font-sans font-semibold"><c:out value="${param.buyerRating}"/></h1>
         </div>
     </div>
 

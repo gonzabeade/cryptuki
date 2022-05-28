@@ -73,6 +73,10 @@
                                     <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
                                     <jsp:param name="quantity" value="${trade.quantity}"/>
                                     <jsp:param name="offerId" value="${trade.offer.id}"/>
+                                    <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
+                                    <jsp:param name="buyerMail" value="${trade.user.email}"/>
+                                    <jsp:param name="buyerPhone" value="${trade.user.phoneNumber}"/>
+                                    <jsp:param name="buyerRating" value="${trade.user.rating}"/>
                                 </jsp:include>
                             </c:forEach>
                         </c:if>

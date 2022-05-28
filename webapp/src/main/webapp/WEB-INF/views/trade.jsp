@@ -111,15 +111,15 @@
         <c:if test="${!buying}">
             <c:if test="${!status.equals('ACCEPTED')}">
                 <c:url value="/changeStatus" var="postUrl"/>
-                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post">
+                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex">
                     <form:hidden path="newStatus" value="${newStatus}"/>
                     <form:hidden path="tradeId" value="${tradeId}"/>
 
                     <button onclick="updateStatus('REJECTED')" type="submit"
-                            class="bg-red-400 text-white  mt-4 mb-4 p-3  rounded-md font-sans"><messages:message
+                            class="bg-red-400 text-white  mt-4 mb-4 p-3  rounded-md font-sans mx-auto"><messages:message
                             code="rejectTrade"/></button>
                     <button onclick="updateStatus('ACCEPTED')" type="submit"
-                            class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans"><messages:message
+                            class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-auto"><messages:message
                             code="acceptTrade"/></button>
                 </form:form>
             </c:if>
@@ -128,7 +128,7 @@
                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex">
                         <form:hidden path="offerId" value="${offer.id}"/>
                         <form:hidden path="trade" value="${tradeId}"/>
-                        <button type="submit" class="w-fit bg-ngreen text-white mt-4 mb-4 p-3 rounded-md font-sans mx-auto">
+                        <button type="submit" class="w-fit bg-frostdr text-white mt-4 mb-4 p-3 rounded-md font-sans mx-auto">
                             <messages:message code="soldTrade"/></button>
                     </form:form>
             </c:if>

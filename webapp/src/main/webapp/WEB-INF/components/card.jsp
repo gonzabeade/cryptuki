@@ -59,9 +59,9 @@
 				<div class="flex basis-1/4 justify-center">
 					<c:choose>
 						<c:when test="${param.userEmail == param.owner || username==param.owner || isAdmin}">
-							<a class=" pb-6 px-5 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>">
-								<messages:message code="seeOffer"/>
-							</a>
+<%--								<a class=" pb-6 px-5 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>"><messages:message code="seeOffer"/></a>--%>
+									<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto" id="show-${param.offerId}" onclick="show(${param.offerId})"><messages:message code="show"/></button>
+									<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto" id="hide-${param.offerId}" onclick="hide(${param.offerId})" style="display: none"><messages:message code="hide"/></button>
 						</c:when>
 						<c:otherwise>
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/buy/${param.offerId}"/>">
@@ -70,5 +70,12 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-
 		</div>
+		<div id="offerId" style="display: none">
+			<h1>${param.offerId}</h1>
+		</div>
+
+
+
+
+

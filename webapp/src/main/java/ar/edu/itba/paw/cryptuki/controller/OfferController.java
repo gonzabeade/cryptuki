@@ -151,7 +151,7 @@ public class OfferController {
 
 
     @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
-    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication){
+    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         ModelAndView mav = new ModelAndView("myOffers");
         int pageNumber = page.orElse(0);
         int offerCount = offerService.countOffersByUsername(authentication.getName());

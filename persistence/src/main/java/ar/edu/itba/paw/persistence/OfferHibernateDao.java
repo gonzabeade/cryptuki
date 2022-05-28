@@ -66,15 +66,15 @@ public class OfferHibernateDao implements OfferDao{
         String orderCriterion, modelOrderCriterion;
 
         switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
-            case 1:
+            case 0:
                orderCriterion = "asking_price";
                modelOrderCriterion = "o.askingPrice";
                break;
-            case 2:
+            case 1:
                 orderCriterion = "last_login";
                 modelOrderCriterion = "o.seller.lastLogin";
                 break;
-            case 4:
+            case 2:
                 orderCriterion = "rating_sum";
                 modelOrderCriterion = "o.seller.ratingSum";
                 break;
@@ -83,8 +83,8 @@ public class OfferHibernateDao implements OfferDao{
                 modelOrderCriterion = "o.date";
         }
 
-        orderCriterion = "last_login";
-        modelOrderCriterion = "o.seller.lastLogin";
+        //orderCriterion = "rating";
+        //modelOrderCriterion = "o.seller.ratingSum";
 
         Query pagingQuery = entityManager.createNativeQuery("SELECT ordered_offers.offer_id FROM " +
                 "(SELECT * FROM offer_complete ORDER BY " +

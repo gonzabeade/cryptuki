@@ -45,7 +45,7 @@ public final class Offer {
     private Collection<Trade> associatedTrades;
 
     public Collection<Trade> getAssociatedTrades() {
-        return associatedTrades.stream().filter((e)->e.getStatus().equals(TradeStatus.PENDING)).collect(Collectors.toCollection(ArrayList::new));
+        return associatedTrades;
     }
 
     public void setAssociatedTrades(Collection<Trade> associatedTrades) {

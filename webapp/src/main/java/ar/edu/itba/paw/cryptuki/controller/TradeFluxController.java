@@ -188,14 +188,6 @@ public class TradeFluxController {
     }
 
 
-    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
-    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
-        if (! errors.hasErrors())
-            tradeService.updateStatus(statusTradeForm.getTradeId(), TradeStatus.valueOf(statusTradeForm.getNewStatus()));
-
-        return executeTrade(soldTradeForm,new StatusTradeForm(),statusTradeForm.getTradeId(),authentication);
-    }
-
     @RequestMapping(value = "/closeTrade",method = RequestMethod.POST)
     public ModelAndView closeTransaction(final @Valid @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
         if(errors.hasErrors())

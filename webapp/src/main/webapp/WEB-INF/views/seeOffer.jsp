@@ -103,18 +103,16 @@
         </c:if>
         <c:if test="${!(offer.associatedTrades.size() == 0) }">
             <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="associatedTransactions"/> </h2>
-
             <c:forEach var="trade" items="${offer.associatedTrades}">
                 <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../components/tradeCard.jsp">
+                <jsp:include page="../components/SellingTradeCard.jsp">
                     <jsp:param name="username" value="${username}"/>
-                    <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
-                    <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
-                    <jsp:param name="quantity" value="${trade.quantity}"/>
-                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
-                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
+                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
+                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+                    <jsp:param name="quantity" value="${trade.quantity}"/>
+                    <jsp:param name="offerId" value="${trade.offer.id}"/>
                 </jsp:include>
             </c:forEach>
         </c:if>

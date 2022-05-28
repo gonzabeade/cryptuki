@@ -50,19 +50,16 @@
 </div>
     <div class="flex flex-col mt-5 mb-10">
 <%--    <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="myTransactions"/>: </h2>--%>
-    <div  class="flex flex-col justify-center mx-auto mt-10">
+    <div  class="flex flex-col justify-center w-1/2 mx-auto mt-10">
         <c:forEach var="trade" items="${tradeList}">
             <% request.setCharacterEncoding("utf-8"); %>
-            <jsp:include page="../components/tradeCard.jsp">
+            <jsp:include page="../components/BuyingTradeCard.jsp">
                 <jsp:param name="username" value="${username}"/>
-                <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
-                <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
-                <jsp:param name="quantity" value="${trade.quantity}"/>
-                <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
                 <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
-                <jsp:param name="tradeId" value="${trade.tradeId}"/>
+                <jsp:param name="quantity" value="${trade.quantity}"/>
                 <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
-
+                <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+                <jsp:param name="tradeId" value="${trade.tradeId}"/>
             </jsp:include>
         </c:forEach>
     </div>

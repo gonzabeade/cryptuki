@@ -75,16 +75,13 @@ public class OfferHibernateDao implements OfferDao{
                 modelOrderCriterion = "o.seller.lastLogin";
                 break;
             case 2:
-                orderCriterion = "rating_sum";
-                modelOrderCriterion = "o.seller.ratingSum";
+                orderCriterion = "rating";
+                modelOrderCriterion = "o.seller.rating";
                 break;
             default:
                 orderCriterion = "offer_date";
                 modelOrderCriterion = "o.date";
         }
-
-        //orderCriterion = "rating";
-        //modelOrderCriterion = "o.seller.ratingSum";
 
         Query pagingQuery = entityManager.createNativeQuery("SELECT ordered_offers.offer_id FROM " +
                 "(SELECT * FROM offer_complete ORDER BY " +

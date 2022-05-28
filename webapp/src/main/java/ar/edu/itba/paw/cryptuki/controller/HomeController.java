@@ -55,6 +55,8 @@ public class HomeController {
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
                 .fromPage(pageNumber);
+                //.withOrderingCriterion(orderingCriterion)
+                //.withOrderingDirection(orderingDirection);
 
         int offerCount = offerService.countOffersBy(filter);
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

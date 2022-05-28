@@ -6,18 +6,19 @@ import java.util.Comparator;
 
 public enum OfferOrderCriteria {
 
-    PRICE( (o1, o2) -> (int) (o2.getAskingPrice() - o2.getAskingPrice())),
-    LAST_LOGIN( (o1, o2) -> o2.getSeller().getLastLogin().compareTo(o1.getSeller().getLastLogin())),
-    DATE(Comparator.comparing(Offer::getDate)),
-    RATE( (o1, o2)-> (int) (o2.getSeller().getRating() - o1.getSeller().getRating()));
+    PRICE("o.askingPrice"),
+    LAST_LOGIN("o.seller.lastLogin"),
+    DATE("o.date"),
+    RATE("o.seller.ratingSum");
 
-    Comparator<Offer> criteria;
+    private final String path;
 
-    OfferOrderCriteria(Comparator<Offer> criteria) {
-        this.criteria = criteria;
+    OfferOrderCriteria(String path){
+        this.path = path;
     }
 
-    public Comparator<Offer> getCriteria() {
-        return criteria;
+    public String getPath(){
+        return path;
     }
+
 }

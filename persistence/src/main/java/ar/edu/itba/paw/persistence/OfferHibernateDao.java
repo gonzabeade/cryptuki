@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.OfferOrderCriteria;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -62,16 +63,44 @@ public class OfferHibernateDao implements OfferDao{
         if(otherFilterIds.isEmpty())
             return new ArrayList<>();
 
-        Query pagingQuery = entityManager.createNativeQuery("SELECT id from offer where id in (:ids) limit :limit OFFSET :offset");
+        String orderCriterion, modelOrderCriterion;
+        switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
+            case 1:
+               orderCriterion = "asking_price";
+               modelOrderCriterion = "o.askingPrice";
+               break;
+            case 2:
+                orderCriterion = "last_login";
+                modelOrderCriterion = "o.seller.lastLogin";
+                break;
+            case 4:
+                orderCriterion = "rating_sum";
+                modelOrderCriterion = "o.seller.ratingSum";
+                break;
+            default:
+                orderCriterion = "offer_date";
+                modelOrderCriterion = "o.date";
+        }
+
+        orderCriterion = "rating_sum";
+        modelOrderCriterion = "o.seller.ratingSum";
+
+        Query pagingQuery = entityManager.createNativeQuery("SELECT ordered_offers.offer_id FROM " +
+                "(SELECT * FROM offer_complete ORDER BY " +
+                orderCriterion +
+                ", offer_id) AS ordered_offers " +
+                "WHERE ordered_offers.offer_id IN (:ids) " +
+                "limit :limit OFFSET :offset");
+
         pagingQuery.setParameter("limit",filter.getPageSize());
         pagingQuery.setParameter("offset",filter.getPage()*filter.getPageSize());
         pagingQuery.setParameter("ids",otherFilterIds);
         List<Integer> offerPagedIds = (List<Integer>) pagingQuery.getResultList().stream().collect(Collectors.toCollection(ArrayList::new));
 
-        Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) ",Offer.class);
-        query.setParameter("offerPagedIds",offerPagedIds);
+        Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) order by " + modelOrderCriterion, Offer.class);
+        query.setParameter("offerPagedIds", offerPagedIds);
         List list = query.getResultList();
-        Collections.sort(list, filter.getOrderCriteria().getCriteria());
+        //Collections.sort(list, filter.getOrderCriteria().getCriteria());
         return list;
     }
 

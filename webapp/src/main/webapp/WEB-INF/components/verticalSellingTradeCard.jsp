@@ -73,13 +73,13 @@
             <c:if test="${param.tradeStatus.equals('PENDING')}">
                 <c:url value="/seller/changeStatus" var="postUrl"/>
                 <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex w-2/5 justify-center mx-auto my-5">
-                    <form:hidden path="newStatus" value="${param.tradeStatus}"/>
+                    <form:hidden path="newStatus" id="newStatus-${param.tradeId}" value="${param.tradeStatus}"/>
                     <form:hidden path="tradeId" value="${param.tradeId}"/>
 
-                    <button onclick="updateStatus('REJECTED')" type="submit"
+                    <button onclick="updateStatus('REJECTED', ${param.tradeId})" type="submit"
                             class="bg-red-400 text-white p-3  rounded-md font-sans mr-4"><messages:message
                             code="rejectTrade"/></button>
-                    <button onclick="updateStatus('ACCEPTED')" type="submit"
+                    <button onclick="updateStatus('ACCEPTED', ${param.tradeId})" type="submit"
                             class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
                             code="acceptTrade"/></button>
                 </form:form>
@@ -101,9 +101,4 @@
 
 </div>
 
-<script>
-    function updateStatus(newStatusName) {
-        document.getElementById('newStatus').setAttribute('value',newStatusName)
-    }
-</script>
 

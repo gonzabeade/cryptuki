@@ -127,6 +127,9 @@
         document.getElementById("hide-"+id).setAttribute("style","display: none");
         document.getElementById("show-"+id).setAttribute("style","display");
     }
+    function updateStatus(newStatusName, tradeId) {
+        document.getElementById('newStatus-'+tradeId).setAttribute('value',newStatusName)
+    }
 
 </script>
 

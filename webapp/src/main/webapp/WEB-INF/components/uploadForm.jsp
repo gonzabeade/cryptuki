@@ -55,8 +55,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="location" cssClass="text-red-500 mx-auto"/>
             <form:label path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="offerLocation"/> *</form:label>

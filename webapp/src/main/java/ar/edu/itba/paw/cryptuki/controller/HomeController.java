@@ -40,7 +40,13 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, @RequestParam(value = "orderingDirection", required = false) final int orderingDirection, @RequestParam(value = "orderingCriterion", required = false) final int orderingCriterion, final Authentication authentication) {
+    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page,
+                                @RequestParam(value = "coin", required = false) final String coin,
+                                @RequestParam(value = "pm", required = false) final String paymentMethod,
+                                @RequestParam(value = "price", required = false) final Double price,
+                                @RequestParam(value = "orderingDirection", required = false) final Optional<Integer> orderingDirection,
+                                @RequestParam(value = "orderingCriterion", required = false) final Optional<Integer> orderingCriterion,
+                                final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("index");
 
@@ -52,8 +58,8 @@ public class HomeController {
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
                 .fromPage(pageNumber)
-                .withOrderingCriterion(orderingCriterion)
-                .withOrderingDirection(orderingDirection);
+                .withOrderingCriterion(orderingCriterion.orElse(0))
+                .withOrderingDirection(orderingDirection.orElse(0));
 
         int offerCount = offerService.countOffersBy(filter);
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

@@ -67,8 +67,45 @@
     <jsp:include page="../components/welcomeMessage.jsp"/>
 </div>
 <div class="flex flex-col justify-center mx-60">
-    <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
-    <ol class="min-w-full">
+    <div class="flex flex-row justify-between">
+        <div class="flex flex-row">
+            <div class="my-auto mr-5" onclick="sendGet()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+            </div>
+            <select name="orderingCriterion" id="orderingCriterion" class=" rounded-sm p-2 my-auto " onchange="addQueryParam(this.id);sendGet()">
+                <option value="0">Precio</option>
+                <option value="1">Last Login</option>
+                <option value="2">Rate</option>
+                <option value="3">Date</option>
+            </select>
+            <div id="orderingDirection" name="desc" class="mx-2 my-auto hidden"
+                 onclick="hide('desc');addQueryParamOrder(this.id, 1);sendGet();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                </svg>
+            </div>
+            <div class="mx-2 my-auto hidden" name="asc" id="orderingDirection" onclick="hide('asc');addQueryParamOrder(this.id, 0);sendGet();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" />
+                </svg>
+            </div>
+<%--            <select id="orderDirection" name="orderDirection">--%>
+<%--                <option value="0">--%>
+<%--                    DESC--%>
+<%--                </option>--%>
+<%--                <option value="1">--%>
+<%--                    ASC--%>
+<%--                </option>--%>
+<%--            </select>--%>
+
+        </div>
+        <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
+    </div>
+
+  <ol class="min-w-full">
         <div>
             <c:forEach var="offer" items="${offerList}">
                 <li>
@@ -110,7 +147,21 @@
 <div class="shape-blob" style="left: 50%"></div>
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
+<script>
+    window.onload = function (){
+        var searchParams = new URLSearchParams(window.location.search);
+        var orderingDirection = searchParams.get("orderingDirection");
+        if(orderingDirection!= null){
+            if(orderingDirection == 1){
+                document.getElementsByName("asc")[0].classList.remove("hidden");
+                return;
+            }
+        }
+        document.getElementsByName("desc")[0].classList.remove("hidden");
 
+
+    }
+</script>
 
 
 

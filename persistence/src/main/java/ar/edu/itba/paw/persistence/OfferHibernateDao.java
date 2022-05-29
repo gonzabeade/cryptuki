@@ -66,7 +66,7 @@ public class OfferHibernateDao implements OfferDao{
         String orderCriterion, modelOrderCriterion;
 
         switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
-            case 0:
+            case 3:
                orderCriterion = "asking_price";
                modelOrderCriterion = "o.askingPrice";
                break;

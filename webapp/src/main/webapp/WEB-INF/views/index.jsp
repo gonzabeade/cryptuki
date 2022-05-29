@@ -75,10 +75,10 @@
                 </svg>
             </div>
             <select name="orderingCriterion" id="orderingCriterion" class=" rounded-sm p-2 my-auto " onchange="addQueryParam(this.id);sendGet()">
-                <option value="0">Precio</option>
-                <option value="1">Last Login</option>
-                <option value="2">Rate</option>
-                <option value="3">Date</option>
+                <option value="0"><messages:message code="dateOrder"/> </option>
+                <option value="1"><messages:message code="lastLogin"/></option>
+                <option value="2"><messages:message code="rating"/></option>
+                <option value="3"><messages:message code="price"/></option>
             </select>
             <div id="orderingDirection" name="desc" class="mx-2 my-auto hidden"
                  onclick="hide('desc');addQueryParamOrder(this.id, 1);sendGet();">
@@ -158,6 +158,11 @@
             }
         }
         document.getElementsByName("desc")[0].classList.remove("hidden");
+
+        var orderingCriterion = searchParams.get("orderingCriterion");
+        if(orderingCriterion!=null){
+            document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
+        }
 
 
     }

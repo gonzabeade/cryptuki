@@ -29,7 +29,7 @@
     <jsp:include page="../components/buyer/buyerHeader.jsp"/>
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
-    <jsp:include page="../components/buyer/anonimousHeader.jsp"/>
+    <jsp:include page="../components/anon/anonymousHeader.jsp"/>
 </sec:authorize>
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">

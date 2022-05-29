@@ -18,7 +18,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/buyer/anonimousHeader.jsp"/>
+<jsp:include page="../components/anon/anonymousHeader.jsp"/>
 <div>
     <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-10"><messages:message code="weSentLinkToRecoverPassword"/></h1>
     <c:url value="/passwordRecovery" var="postPath"/>

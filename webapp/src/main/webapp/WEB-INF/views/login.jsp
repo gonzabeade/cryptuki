@@ -15,7 +15,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/buyer/anonimousHeader.jsp"/>
+<jsp:include page="../components/anon/anonymousHeader.jsp"/>
 <div class="flex mt-20 mb-10">
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/loginForm.jsp">

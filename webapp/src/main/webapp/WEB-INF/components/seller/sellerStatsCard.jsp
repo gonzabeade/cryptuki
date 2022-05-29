@@ -13,7 +13,7 @@
 <div class="bg-white shadow rounded-lg py-1">
     <div class="flex flex-col">
         <div class="flex flex-col gap-1 items-center">
-            <div class="flex flex-col">
+            <div class="flex flex-col mt-5">
                 <c:url value="/profilePicSelector" var="postUrl"/>
                 <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
                     <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>

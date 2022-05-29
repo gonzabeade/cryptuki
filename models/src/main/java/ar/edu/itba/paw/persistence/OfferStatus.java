@@ -34,7 +34,7 @@ public final class OfferStatus {
         cache.put(code, this);
     }
 
-    protected static OfferStatus getInstance(String code, String description) {
+    public static OfferStatus getInstance(String code, String description) {
         return cache.getOrDefault(code, new OfferStatus(code, description));
     }
 
@@ -44,5 +44,6 @@ public final class OfferStatus {
     public String getDescription() {
         return description;
     }
+
 
 }

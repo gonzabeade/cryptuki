@@ -27,7 +27,7 @@ public interface OfferService {
     void pauseOffer(int offerId);
     void resumeOffer(int offerId);
 
-    void decrementOfferMaxQuantity(Offer offer, float sold);
+    void soldOffer(Offer offer, float sold, int tradeId);
 
     Optional<Offer> getOfferIfAuthorized(int offerId);
 }

@@ -190,17 +190,7 @@ public class OfferHibernateDao implements OfferDao{
     private void changeStatus(int offerId,String statusCode){
         OfferDigest offerDigest = getOfferDigestById(offerId);
         offerDigest.setStatusCode(statusCode);
-        if(statusCode.equals("PSE"))
-            offerDigest.setMinQuantity(0);
         entityManager.persist(offerDigest);
-        if(!statusCode.equals("APR")){
-            Offer offer = getOffersBy(new OfferFilter().byOfferId(offerDigest.getId())).stream().findFirst().get();
-            offer.getAssociatedTrades().stream().forEach(trade -> {
-              if(trade.getStatus().equals(TradeStatus.PENDING))
-                  trade.setStatus(TradeStatus.REJECTED);
-            });
-            entityManager.persist(offer);
-        }
     }
 
     private OfferDigest getOfferDigestById(int offerId){

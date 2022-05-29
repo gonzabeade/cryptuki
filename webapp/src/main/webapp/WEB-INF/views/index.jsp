@@ -88,6 +88,7 @@
                         <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().toString()}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                         <jsp:param name="rating" value="${offer.seller.rating}"/>
+                        <jsp:param name="location" value="${offer.location}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

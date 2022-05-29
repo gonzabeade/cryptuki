@@ -78,13 +78,41 @@
                     <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
+            <c:if test="${status.equals('ACCEPTED')}">
+                <div class="flex flex-col mx-auto">
+                    <div class="flex flex-row mx-auto mt-10">
+                        <h1 class="text-polard text-xl font-bold text-center mr-5 ">Algunos consejos para comprar P2P en persona</h1>
+                    </div>
+                    <ul class="mx-20 list-decimal my-3">
+                        <li class="mt-5 text-polard text-lg">
+                           <messages:message code="advice1"/>
+                            </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                               </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="advice3"></messages:message>
+                            </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="adivce4"></messages:message>
+                            </p>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </c:if>
 
             <div class="flex justify-around mt-5">
-                <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg" href="<c:url value="/buyer/"/>"><messages:message code="goBack"/></a>
+                <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center" href="<c:url value="/buyer/market"/>"><messages:message code="returnHome"/></a>
 
                 <form  method="post"
                        action="<c:url value="/deleteTrade/${tradeId}"/>" class="flex">
-                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg">
+                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg w-40">
                         <messages:message code="removeTrade"/>
                     </button>
                 </form>

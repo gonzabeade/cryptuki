@@ -45,7 +45,7 @@
 					<div class="flex flex-row">
 						<c:choose>
 							<c:when test="${param.location != ''}">
-								<h1 class="flex flex-row"><messages:message code="location"/>:  <span class="font-sans font-bold"><c:out value="${param.location}"/></span></h1>
+								<h1 class="flex flex-row"><messages:message code="location"/>: <span class="font-sans font-bold"><c:out value="${param.location}"/></span></h1>
 							</c:when>
 						</c:choose>
 					</div>

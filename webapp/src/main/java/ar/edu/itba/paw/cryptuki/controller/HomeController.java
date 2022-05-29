@@ -43,7 +43,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+    public ModelAndView landing(@RequestParam(value = "location", required = false) final String location, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("index");
 
@@ -54,6 +54,7 @@ public class HomeController {
                 .byMinPrice(price)
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
+                .byLocation(location)
                 .fromPage(pageNumber);
 
         int offerCount = offerService.countOffersBy(filter);

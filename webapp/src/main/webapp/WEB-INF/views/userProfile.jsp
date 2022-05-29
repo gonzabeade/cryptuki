@@ -21,7 +21,7 @@
 <body class="bg-storml overflow-x-hidden flex flex-col">
 <sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>

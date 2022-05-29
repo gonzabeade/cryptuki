@@ -17,15 +17,9 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 
-<c:if test="${buying}" >
-    <body class="bg-storml overflow-x-hidden">
-</c:if>
-<c:if test="${!buying}">
-<body class="bg-storml overflow-x-hidden" onload="accommodate()">
-</c:if>
-
+<body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
             <c:if test="${status.equals('PENDING')}">
@@ -73,71 +67,66 @@
             <div class="flex flex-row justify-center">
 
                 <div class="flex flex-col mx-10 order-1" id="left">
-                    <c:if test="${buying}">
                         <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
-                    </c:if>
-                    <c:if test="${!buying}">
-                        <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
-                    </c:if>
-                    <h1 class="text-center text-2xl font-semibold font-polard">${amount} ARS</h1>
-
+                        <h1 class="text-center text-2xl font-semibold font-polard">${amount} ARS</h1>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-5 order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
                 <div class="flex flex-col mx-10 order-3" id="right">
-                    <c:if test="${!buying}">
-                        <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
-                    </c:if>
-                    <c:if test="${buying}">
-                        <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
-                    </c:if>
+                    <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
                     <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
+            <c:if test="${status.equals('ACCEPTED')}">
+                <div class="flex flex-col mx-auto">
+                    <div class="flex flex-row mx-auto mt-10">
+                        <h1 class="text-polard text-xl font-bold text-center mr-5 ">Algunos consejos para comprar P2P en persona</h1>
+                    </div>
+                    <ul class="mx-20 list-decimal my-3">
+                        <li class="mt-5 text-polard text-lg">
+                           <messages:message code="advice1"/>
+                            </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                               </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="advice3"></messages:message>
+                            </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="adivce4"></messages:message>
+                            </p>
+                        </li>
+                    </ul>
 
-            <c:if test="${buying}">
+                </div>
+
+            </c:if>
+
+            <div class="flex justify-around mt-5">
+                <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center" href="<c:url value="/buyer/market"/>"><messages:message code="returnHome"/></a>
+
                 <form  method="post"
-                      action="<c:url value="/deleteTrade/${tradeId}"/>" class="mx-auto my-10">
-                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg mx-auto">
-                       Cancelar oferta
+                       action="<c:url value="/deleteTrade/${tradeId}"/>" class="flex">
+                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg w-40">
+                        <messages:message code="removeTrade"/>
                     </button>
                 </form>
-            </c:if>
+            </div>
+
         </div>
 
-        <c:if test="${!buying}">
-            <c:if test="${!status.equals('ACCEPTED')}">
-                <c:url value="/changeStatus" var="postUrl"/>
-                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex">
-                    <form:hidden path="newStatus" value="${newStatus}"/>
-                    <form:hidden path="tradeId" value="${tradeId}"/>
 
-                    <button onclick="updateStatus('REJECTED')" type="submit"
-                            class="bg-red-400 text-white  mt-4 mb-4 p-3  rounded-md font-sans mx-auto"><messages:message
-                            code="rejectTrade"/></button>
-                    <button onclick="updateStatus('ACCEPTED')" type="submit"
-                            class="bg-ngreen text-white  mt-4 mb-4 p-3 rounded-md font-sans mx-auto"><messages:message
-                            code="acceptTrade"/></button>
-                </form:form>
-            </c:if>
-            <c:if test="${status.equals('ACCEPTED')}">
-                    <c:url value="/closeTrade" var="formUrl"/>
-                    <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex">
-                        <form:hidden path="offerId" value="${offer.id}"/>
-                        <form:hidden path="trade" value="${tradeId}"/>
-                        <button type="submit" class="w-fit bg-frostdr text-white mt-4 mb-4 p-3 rounded-md font-sans mx-auto">
-                            <messages:message code="soldTrade"/></button>
-                    </form:form>
-            </c:if>
-        </c:if>
 
 
         </div>
 
     <div class="flex w-2/5 ">
         <div class="ml-32">
-            <c:if test="${buying}">
                 <% request.setCharacterEncoding("utf-8"); %>
                 <jsp:include page="../components/sellerInfo.jsp">
                     <jsp:param name="email" value="${offer.seller.email}"/>
@@ -147,30 +136,9 @@
                     <jsp:param name="rating" value="${offer.seller.rating}"/>
                     <jsp:param name="message" value="${offer.comments}"/>
                 </jsp:include>
-            </c:if>
-            <c:if test="${!buying}">
-                <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../components/buyerInfo.jsp">
-                    <jsp:param name="email" value="${trade.user.email}"/>
-                    <jsp:param name="phone" value="${trade.user.phoneNumber}"/>
-                    <jsp:param name="trades" value="${trade.user.ratingCount}"/>
-                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
-                    <jsp:param name="rating" value="${trade.user.rating}"/>
-                </jsp:include>
-            </c:if>
         </div>
     </div>
 </div>
 </body>
-<script>
-    function updateStatus(newStatusName) {
-        document.getElementById('newStatus').setAttribute('value',newStatusName)
-    }
-
-    function accommodate(){
-        document.getElementById("left").setAttribute('class','order-3');
-        document.getElementById("right").setAttribute('class','order-1');
-    }
-</script>
 </html>
 

@@ -18,7 +18,7 @@
 
             <div class="flex flex-col justify-center mx-auto">
                 <form:input type="number" path="amount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".01"/>
-                <div class="flex flex-row mx-auto">
+                <div class="flex flex-row mx-auto mt-2">
                     <h1 class="my-auto" id="coinAmount">~0.00000</h1>
                     <p class="my-auto mx-2 font-semibold"><c:out value="${param.coin}"/> </p>
                 </div>
@@ -42,7 +42,7 @@
 
         <div class="flex flex-row p-5 mx-60">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>"><messages:message code="cancel"/></a>
-            <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress"><messages:message code="openTrade"/></button>
+            <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress"><messages:message code="createOffer"/></button>
         </div>
         <form:input type="hidden" path="offerId"  value="${param.offerId}"/>
 

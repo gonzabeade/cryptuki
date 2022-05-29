@@ -1,18 +1,37 @@
 window.onload = function getFilters() {
-    if(window.location.search.length > 0 ){
+    if (window.location.search.length > 0) {
         var searchParams = new URLSearchParams(window.location.search);
         let elementToSelect;
-        for(const [key,value] of searchParams){
+        for (const [key, value] of searchParams) {
             elementToSelect = document.getElementById(key);
-            if(elementToSelect != null){
+            if (elementToSelect != null) {
                 elementToSelect.value = value;
             }
         }
-        let reset = document.getElementById("reset");
-        if(reset !== null){
-            reset.classList.remove("hidden");
+        // let reset = document.getElementById("reset");
+        // if (reset !== null) {
+        //     reset.classList.remove("hidden");
+        // }
+    }
+    if(searchParams==null){
+        document.getElementsByName("desc")[0].classList.remove("hidden");
+        return;
+    }
+
+    var orderingCriterion = searchParams.get("orderingCriterion");
+    if (orderingCriterion != null) {
+        document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
+    }
+
+    var orderingDirection = searchParams.get("orderingDirection");
+    if (orderingDirection != null) {
+        if (orderingDirection == 1) {
+            document.getElementsByName("asc")[0].classList.remove("hidden");
+            return;
         }
     }
+    document.getElementsByName("desc")[0].classList.remove("hidden");
+
 
 }
 function resetAllFilters(){
@@ -42,7 +61,9 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    document.getElementById("reset").classList.remove("hidden");
+    console.log(id)
+    if(id!='orderingCriterion')
+        document.getElementById("reset").classList.remove("hidden");
 }
 function resetAllAdminFilters(){
     document.getElementById("reset").classList.add("hidden")
@@ -64,6 +85,32 @@ function deleteParams() {
     }
 
     const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newRelativePathQuery);
+    document.getElementById("link").href = newRelativePathQuery;
+}
+function hide(name){
+    if(name === "desc"){
+        document.getElementsByName("asc")[0].classList.remove("hidden");
+    }else{
+        document.getElementsByName("desc")[0].classList.remove("hidden");
+    }
+    document.getElementsByName(name)[0].classList.add("hidden");
+}
+function sendGet(){
+    var searchParams = new URLSearchParams(window.location.search);
+    document.getElementById("link").href = window.location.pathname + '?' + searchParams.toString();
+    console.log(document.getElementById("link").href)
+    document.getElementById("link").click();
+}
+function addQueryParamOrder(id, value) {
+    var searchParams = new URLSearchParams(window.location.search);
+    if(value === ''){
+        searchParams.delete(id);
+    }else{
+        searchParams.set(id,value);
+    }
+    searchParams.delete("page")
+    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
 }

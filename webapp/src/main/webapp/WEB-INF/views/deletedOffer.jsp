@@ -17,7 +17,7 @@
 <body class="bg-storml overflow-x-hidden">
 
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row  mt-10">
   <div class="flex flex-col mx-auto">
     <div class="mx-auto">
@@ -29,7 +29,7 @@
     <div class="mx-auto  text-polard text-2xl mt-10">
      <messages:message code="offerWasDeleted"/>
     </div>
-    <a href="<c:url value="/"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="returnHome"/></a>
+    <a href="<c:url value="/seller/myoffers"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="returnMyAdvertisements"/></a>
   </div>
 </div>
 </body>

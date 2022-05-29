@@ -2,10 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.OfferDao;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +21,15 @@ public class OfferServiceImpl implements OfferService {
 
     private  OfferDao offerDao;
     private  MessageSenderFacade messageSenderFacade;
+    private OfferStatusDao offerStatusDao;
+    private TradeDao tradeDao ;
 
     @Autowired
-    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade) {
+    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade, OfferStatusDao offerStatusDao, TradeDao tradeDao) {
         this.offerDao = offerDao;
         this.messageSenderFacade = messageSenderFacade;
+        this.offerStatusDao = offerStatusDao;
+        this.tradeDao = tradeDao;
     }
 
     @Override
@@ -222,12 +226,22 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void decrementOfferMaxQuantity(Offer offer, float sold) {
+    public void soldOffer(Offer offer, float sold, int tradeId) {
 
+        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
         float remaining = offer.getMaxQuantity() - (sold/offer.getAskingPrice());
         try {
-            if (remaining <= offer.getMinQuantity())
-                offerDao.pauseOffer(offer.getId());
+            if (remaining <= offer.getMinQuantity()){
+                Offer mergeOffer = offerDao.getOffersBy(new OfferFilter().byOfferId(offer.getId())).stream().findFirst().orElseThrow(()->new NoSuchOfferException(offer.getId()));
+                OfferStatus offerStatus = this.offerStatusDao.getOfferStatusByCode("PSE").get();
+                mergeOffer.setStatus(offerStatus);
+                mergeOffer.getAssociatedTrades().stream().forEach(trade -> {
+                    if(trade.getStatus().equals(TradeStatus.PENDING))
+                        trade.setStatus(TradeStatus.REJECTED);
+                });
+                mergeOffer.setMinQuantity(0);
+                mergeOffer.setMaxQuantity(remaining);
+            }
             else
                 offerDao.setMaxQuantity(offer.getId(), remaining);
         } catch (PersistenceException pe) {

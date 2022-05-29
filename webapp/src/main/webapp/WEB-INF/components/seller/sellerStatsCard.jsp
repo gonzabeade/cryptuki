@@ -21,19 +21,19 @@
                         <form:label path="multipartFile">
                             <div class="flex flex-col mx-auto">
                                 <img src="<c:url value="/profilepic/${username}"/>"  class=" shadow rounded-full w-36 object-cover mx-auto group-hover:opacity-60" alt="profile" >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 invisible group-hover:visible mx-auto -mt-20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 invisible group-hover:visible mx-auto -mt-20" fill="none" viewBox="0 0 24 24" stroke="#000000" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" ></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" ></path>
                                 </svg>
                             </div>
                         </form:label>
+                        <form:input path="buyer" type="hidden" value="${param.isBuyer}"/>
                         <form:input type="file" path="multipartFile" cssClass="invisible before:bg-red-400 w-0" onchange="showSendButton()"/>
                     </div>
-                    <button type="submit" id="sendProfile" class="invisible bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress"><messages:message code="save"/></button>
+                    <button type="submit" id="sendProfile" class="hidden bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress"><messages:message code="save"/></button>
                 </form:form>
-                <p class="mx-auto font-bold text-polard text-2xl -mt-10"><c:out value="${username}"/></p>
+                <p class="mx-auto font-bold text-polard text-2xl mt-2"><c:out value="${username}"/></p>
             </div>
-            <p class="font-semibold">${param.username}</p>
         </div>
         <div class="flex flex-col justify-start ml-3 my-2">
             <div class="text-sm leading-normal text-gray-400 flex justify-start items-center mt-1">

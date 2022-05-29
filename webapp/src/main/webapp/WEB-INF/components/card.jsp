@@ -53,13 +53,13 @@
 						<div class="pt-2 flex flex-row justify-start">
 							<c:choose>
 								<c:when test="${param.location == ''}">
-									<h1 class="font-sans font-bold pr-3"><messages:message code="unknown"/></h1>
+									<h1 class="font-sans font-bold pr-3 mt-1"><messages:message code="unknown"/></h1>
 								</c:when>
 								<c:otherwise>
-									<h1 class="font-sans font-bold pr-3"><c:out value="${param.location}"/></h1>
+									<h1 class="font-sans font-bold pr-3 mt-1"><c:out value="${param.location}"/></h1>
 								</c:otherwise>
 							</c:choose>
-							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2 " title="location">
+							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2" title="location">
 							<%--
 							<c:forEach  var="payment_method" items="${accepted_payments}">
 								<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">

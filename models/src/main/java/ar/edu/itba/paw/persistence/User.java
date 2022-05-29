@@ -22,7 +22,7 @@ public final class User {
     private  int ratingSum;
     @Column(name="rating_count",nullable = false)
     private  int ratingCount;
-    @Column(name="rating", nullable = false)
+    @Column(name="rating", nullable = false,insertable = false,updatable = false)
     private float rating;
 
     @Column(name="last_login")

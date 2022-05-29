@@ -44,7 +44,6 @@ public class UserHibernateDao implements UserDao{
     public void updateLastLogin(String username) {
         User user = getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         user.setLastLogin(LocalDateTime.now());
-        entityManager.persist(user);
     }
 
     @Override

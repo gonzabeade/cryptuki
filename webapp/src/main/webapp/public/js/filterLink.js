@@ -1,19 +1,32 @@
 window.onload = function getFilters() {
-    if(window.location.search.length > 0 ){
+    if (window.location.search.length > 0) {
         var searchParams = new URLSearchParams(window.location.search);
         let elementToSelect;
-        for(const [key,value] of searchParams){
+        for (const [key, value] of searchParams) {
             elementToSelect = document.getElementById(key);
-            if(elementToSelect != null){
+            if (elementToSelect != null) {
                 elementToSelect.value = value;
             }
         }
         let reset = document.getElementById("reset");
-        if(reset !== null){
+        if (reset !== null) {
             reset.classList.remove("hidden");
         }
     }
 
+    var orderingDirection = searchParams.get("orderingDirection");
+    if (orderingDirection != null) {
+        if (orderingDirection == 1) {
+            document.getElementsByName("asc")[0].classList.remove("hidden");
+            return;
+        }
+    }
+    document.getElementsByName("desc")[0].classList.remove("hidden");
+
+    var orderingCriterion = searchParams.get("orderingCriterion");
+    if (orderingCriterion != null) {
+        document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
+    }
 }
 function resetAllFilters(){
     document.getElementById("reset").classList.add("hidden")
@@ -42,7 +55,8 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    document.getElementById("reset").classList.remove("hidden");
+    if(id!=='orderingCriterion')
+        document.getElementById("reset").classList.remove("hidden");
 }
 function resetAllAdminFilters(){
     document.getElementById("reset").classList.add("hidden")
@@ -78,6 +92,7 @@ function hide(name){
 function sendGet(){
     var searchParams = new URLSearchParams(window.location.search);
     document.getElementById("link").href = window.location.pathname + '?' + searchParams.toString();
+    console.log(document.getElementById("link").href)
     document.getElementById("link").click();
 }
 function addQueryParamOrder(id, value) {
@@ -91,5 +106,4 @@ function addQueryParamOrder(id, value) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    document.getElementById("reset").classList.remove("hidden");
 }

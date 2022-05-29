@@ -158,24 +158,7 @@
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
 <script>
-    window.onload = function (){
-        var searchParams = new URLSearchParams(window.location.search);
-        var orderingDirection = searchParams.get("orderingDirection");
-        if(orderingDirection!= null){
-            if(orderingDirection == 1){
-                document.getElementsByName("asc")[0].classList.remove("hidden");
-                return;
-            }
-        }
-        document.getElementsByName("desc")[0].classList.remove("hidden");
 
-        var orderingCriterion = searchParams.get("orderingCriterion");
-        if(orderingCriterion!=null){
-            document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
-        }
-
-
-    }
 </script>
 
 

@@ -36,8 +36,8 @@
     </jsp:include>
 </c:if>
 
-<div class="flex flex-row divide-x-2 divide-polard mt-10">
-    <div class="flex flex-col w-1/2 mt-10">
+<%--<div class="flex flex-col divide-x-2 divide-polard mt-10">--%>
+<%--    <div class="flex flex-col w-1/2 mt-10">--%>
 
 
         <div class="flex flex-col">
@@ -88,36 +88,38 @@
                 <jsp:param name="rating" value="${offer.seller.rating}"/>
             </jsp:include>
         </div>
+        <div class="flex justify-center">
+            <a href="<c:url value="/seller/myoffers"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnMyAdvertisements"/></a>
+        </div>
 
-        <div class="shape-blob"></div>
-        <div class="shape-blob one"></div>
-        <div class="shape-blob two"></div>
-        <div class="shape-blob" style="left: 50%"></div>
-        <div class="shape-blob" style="left: 5%; top: 80%"></div>
-        <a href="<c:url value="/"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnHome"/></a>
+<div class="shape-blob"></div>
+<div class="shape-blob one"></div>
+<div class="shape-blob two"></div>
+<div class="shape-blob" style="left: 50%"></div>
+<div class="shape-blob" style="left: 5%; top: 80%"></div>
 
     </div>
-    <div class="flex flex-col w-1/2 mt-10 ">
-        <c:if test="${(offer.associatedTrades.size() == 0)}">
-            <h2 class="text-center text-4xl font-semibold font-sans text-polar mt-4"><messages:message code="noAssociatedPendignProposes"/> </h2>
-        </c:if>
-        <c:if test="${!(offer.associatedTrades.size() == 0) }">
-            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="associatedTransactions"/> </h2>
-            <c:forEach var="trade" items="${offer.associatedTrades}">
-                <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../components/verticalSellingTradeCard.jsp">
-                    <jsp:param name="username" value="${username}"/>
-                    <jsp:param name="tradeId" value="${trade.tradeId}"/>
-                    <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
-                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
-                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
-                    <jsp:param name="quantity" value="${trade.quantity}"/>
-                    <jsp:param name="offerId" value="${trade.offer.id}"/>
-                </jsp:include>
-            </c:forEach>
-        </c:if>
-    </div>
-</div>
+<%--    <div class="flex flex-col w-1/2 mt-10 ">--%>
+<%--        <c:if test="${(offer.associatedTrades.size() == 0)}">--%>
+<%--            <h2 class="text-center text-4xl font-semibold font-sans text-polar mt-4"><messages:message code="noAssociatedPendignProposes"/> </h2>--%>
+<%--        </c:if>--%>
+<%--        <c:if test="${!(offer.associatedTrades.size() == 0) }">--%>
+<%--            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="associatedTransactions"/> </h2>--%>
+<%--            <c:forEach var="trade" items="${offer.associatedTrades}">--%>
+<%--                <% request.setCharacterEncoding("utf-8"); %>--%>
+<%--                <jsp:include page="../components/horizontalSellingTradeCard.jsp">--%>
+<%--                    <jsp:param name="username" value="${username}"/>--%>
+<%--                    <jsp:param name="tradeId" value="${trade.tradeId}"/>--%>
+<%--                    <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>--%>
+<%--                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>--%>
+<%--                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>--%>
+<%--                    <jsp:param name="quantity" value="${trade.quantity}"/>--%>
+<%--                    <jsp:param name="offerId" value="${trade.offer.id}"/>--%>
+<%--                </jsp:include>--%>
+<%--            </c:forEach>--%>
+<%--        </c:if>--%>
+<%--    </div>--%>
+<%--</div>--%>
 
 
 

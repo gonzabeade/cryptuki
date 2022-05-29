@@ -87,13 +87,13 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer/{offerId}/creationsuccess", method = RequestMethod.GET)
-    public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
+    public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, true, false);
     }
 
     @RequestMapping(value = "/offer/{offerId}/editsuccess", method = RequestMethod.GET)
-    public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
+    public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, true);
     }

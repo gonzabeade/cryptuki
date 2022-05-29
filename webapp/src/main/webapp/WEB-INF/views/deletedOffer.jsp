@@ -29,7 +29,7 @@
     <div class="mx-auto  text-polard text-2xl mt-10">
      <messages:message code="offerWasDeleted"/>
     </div>
-    <a href="<c:url value="/"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="returnHome"/></a>
+    <a href="<c:url value="/seller/myoffers"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"><messages:message code="returnMyAdvertisements"/></a>
   </div>
 </div>
 </body>

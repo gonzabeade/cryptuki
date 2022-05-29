@@ -113,7 +113,7 @@ public class SellerController {
             return uploadOffer(form, authentication);
         int id = userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
         int offerId = offerService.makeOffer(form.toOfferDigest(id));
-        return new ModelAndView("redirect:/seller/myoffers");
+        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
     }
 
 }

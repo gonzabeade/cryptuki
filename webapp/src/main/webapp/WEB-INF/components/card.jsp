@@ -32,7 +32,7 @@
 				<div class="flex flex-col basis-1/4 font-sans justify-center">
 					<div class="flex flex-row">
 						<h1 class="font-sans"><messages:message code="price"/>: </h1>
-						<h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
+						<h1 class="pl-1 text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
 						<p class="my-auto mx-2"> <messages:message code="for"/> </p>
 						<img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2 my-auto"/>
 						<h1 class="font-sans font-semibold my-auto"><c:out value="${param.currency}"/></h1>
@@ -45,7 +45,7 @@
 					<div class="flex flex-row">
 						<c:choose>
 							<c:when test="${param.location != ''}">
-								<h1 class="flex flex-row"><messages:message code="location"/>: <span class="font-sans font-bold"><c:out value="${param.location}"/></span></h1>
+								<h1 class="flex flex-row"><messages:message code="location"/>: <span class="pl-1 font-sans font-bold"><c:out value="${param.location}"/></span></h1>
 							</c:when>
 						</c:choose>
 					</div>

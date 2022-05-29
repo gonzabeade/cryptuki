@@ -12,20 +12,15 @@
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
                 <li class="mx-2">
-                    <a href="<c:url value="/myoffers"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Ver anuncios</a>
+                    <a href="<c:url value="/seller/myoffers"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Ver anuncios</a>
                 </li>
 
                 <li class="mx-2">
-                    <a href="<c:url value="/upload"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Subir anuncio</a>
+                    <a href="<c:url value="/seller/upload"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Subir anuncio</a>
                 </li>
-
-                <li class="mt-1 mx-2">
-                    <a href="<c:url value="/buyer/"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto">Cambiar a Comprador</a>
-                </li>
-
 
                 <li class="-mt-3 mx-2">
-                    <a href="<c:url value="/user"/>" class="text-polar font-bold text-xl">
+                    <a href="<c:url value="/seller/"/>" class="text-polar font-bold text-xl">
                         <div class="flex flex-col">
                             <div class="mx-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#3B4252" stroke-width="2">
@@ -33,12 +28,17 @@
                                 </svg>
                             </div>
                             <div class="mx-2 font-sans text-sm text-polar">
-                                    <sec:authentication property="name"/>
+                                <sec:authentication property="name"/>
                             </div>
                         </div>
 
                     </a>
                 </li>
+
+                <li class="mt-1 mx-2">
+                    <a href="<c:url value="/buyer/"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto">Cambiar a Comprador</a>
+                </li>
+
                 <li class="-mt-3 mx-2">
                     <a href="<c:url value="/logout"/>" >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="#3B4252" stroke-width="2">

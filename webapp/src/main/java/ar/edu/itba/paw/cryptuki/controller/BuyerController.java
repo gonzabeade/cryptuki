@@ -1,17 +1,28 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
+import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
+import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.persistence.Cryptocurrency;
+import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.TradeStatus;
-import ar.edu.itba.paw.service.TradeService;
+import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,11 +30,23 @@ import java.util.Optional;
 public class BuyerController {
 
     private final TradeService tradeService;
+    private final OfferService offerService;
+
+    private final CryptocurrencyService cryptocurrencyService;
+
+    private final PaymentMethodService paymentMethodService;
+
+    private final UserService userService;
     private static final int PAGE_SIZE = 5;
 
     @Autowired
-    public BuyerController(TradeService tradeService) {
+    public BuyerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    {
         this.tradeService = tradeService;
+        this.offerService = offerService;
+        this.userService = userService;
+        this.cryptocurrencyService = cryptocurrencyService;
+        this.paymentMethodService = paymentMethodService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -49,5 +72,7 @@ public class BuyerController {
         mav.addObject("activePage",pageNumber);
         return mav;
     }
+
+
 
 }

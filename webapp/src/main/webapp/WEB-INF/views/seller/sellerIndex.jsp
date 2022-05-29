@@ -22,16 +22,22 @@
 <div class="flex h-full w-full px-20 my-10">
     <!-- Left Panel: chat and seller stats -->
     <div class="flex flex-col h-full mx-20 w-1/5">
-        <div class="">
-            <jsp:include page="../../components/seller/sellerStatsCard.jsp"/>
+        <div>
+            <jsp:include page="../../components/seller/sellerStatsCard.jsp">
+                <jsp:param name="username" value="${username}"/>
+                <jsp:param name="email" value="${user.email}"/>
+                <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
+                <jsp:param name="rating" value="${user.rating}"/>
+                <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+            </jsp:include>
         </div>
-        <div class="my-5">
-            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>
-        </div>
+<%--        <div class="my-5">--%>
+<%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
+<%--        </div>--%>
     </div>
 
     <!-- Middle Panel: trade -->
-    <div class="flex flex-col h-full mr-20 w-2/5">
+    <div class="flex flex-col h-full mr-20 w-3/5">
 
 
         <div  class="flex flex-col justify-center w-full mx-auto mt-10">
@@ -68,12 +74,12 @@
 
     <!-- Right Panel: crypto dashboard -->
 
-    <div class="flex flex-col h-full mr-10 w-1/5">
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-    </div>
+<%--    <div class="flex flex-col h-full mr-10 w-1/5">--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--    </div>--%>
 
 </div>
 

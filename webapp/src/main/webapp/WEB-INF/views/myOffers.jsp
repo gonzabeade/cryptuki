@@ -26,7 +26,7 @@
 
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/buyer/buyerHeader.jsp"/>
+<jsp:include page="../components/seller/sellerHeader.jsp"/>
 <div class="flex flex-col">
     <div class="flex justify-between mt-10 mb-5">
         <div class="flex mt-10 mb-5 ml-20">
@@ -92,7 +92,7 @@
     </div>
     <c:if test="${noOffers}">
         <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noOffersUploaded"/></h2>
-        <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
+        <a href="<c:url value="/seller/upload"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
     </c:if>
 
     <c:if test="${!noOffers}">
@@ -101,7 +101,7 @@
             <jsp:include page="../components/paginator.jsp">
                 <jsp:param name="activePage" value="${activePage}"/>
                 <jsp:param name="pages" value="${pages}"/>
-                <jsp:param name="baseUrl" value="/myoffers"/>
+                <jsp:param name="baseUrl" value="/seller/myoffers"/>
             </jsp:include>
             <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
         </div>

@@ -54,31 +54,31 @@ public class OfferController {
         this.us = us;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-        ModelAndView mav = new ModelAndView("uploadPage");
-        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+//    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+//    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
+//        ModelAndView mav = new ModelAndView("uploadPage");
+//        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+//        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+//
+//
+//        if (form.getPaymentMethods() != null){
+//            List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
+//            mav.addObject("selectedPayments", paymentCodesAlreadySelected);
+//        }
+//
+//        return mav;
+//    }
 
-
-        if (form.getPaymentMethods() != null){
-            List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
-            mav.addObject("selectedPayments", paymentCodesAlreadySelected);
-        }
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
-
-        if (errors.hasErrors())
-            return uploadOffer(form, authentication);
-
-        int id = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        int offerId = offerService.makeOffer(form.toOfferDigest(id));
-        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
-    }
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
+//
+//        if (errors.hasErrors())
+//            return uploadOffer(form, authentication);
+//
+//        int id = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
+//        int offerId = offerService.makeOffer(form.toOfferDigest(id));
+//        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
+//    }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
     public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
@@ -150,23 +150,23 @@ public class OfferController {
     }
 
 
-    @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
-    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
-        ModelAndView mav = new ModelAndView("myOffers");
-        int pageNumber = page.orElse(0);
-        int offerCount = offerService.countOffersByUsername(authentication.getName());
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
-        if(offers.isEmpty())
-            mav.addObject("noOffers",true);
-
-        mav.addObject("offerList",offers);
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-
-        return mav;
-    }
+//    @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
+//    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
+//        ModelAndView mav = new ModelAndView("myOffers");
+//        int pageNumber = page.orElse(0);
+//        int offerCount = offerService.countOffersByUsername(authentication.getName());
+//        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+//        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
+//        if(offers.isEmpty())
+//            mav.addObject("noOffers",true);
+//
+//        mav.addObject("offerList",offers);
+//        mav.addObject("pages", pages);
+//        mav.addObject("activePage", pageNumber);
+//        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+//
+//        return mav;
+//    }
 
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
     public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){

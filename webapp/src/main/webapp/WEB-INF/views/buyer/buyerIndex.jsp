@@ -61,7 +61,7 @@
 
         <c:if test="${noBuyingTrades}">
             <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noBuyingProposalSend"/></h2>
-            <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startBuying"/></a>
+<%--            <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startBuying"/></a>--%>
         </c:if>
 
         <c:if test="${!noBuyingTrades}">

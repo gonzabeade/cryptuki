@@ -114,6 +114,20 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
+    public Collection<Offer> getMarketOffersBy(OfferFilter filter, String buyerUsername){
+        filter.whereUsernameNot(buyerUsername);
+        return getOfferBy(filter);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int countMarketOffersBy(OfferFilter filter, String buyerUsername){
+        filter.whereUsernameNot(buyerUsername);
+        return countOffersBy(filter);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public int countOffersByUsername(String username) {
 
         if (username == null)

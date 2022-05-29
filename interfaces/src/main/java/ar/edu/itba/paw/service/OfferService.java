@@ -16,6 +16,9 @@ public interface OfferService {
     Collection<Offer> getOfferBy(OfferFilter filter);
     int countOffersBy(OfferFilter filter);
 
+    Collection<Offer> getMarketOffersBy(OfferFilter filter, String buyerUsername);
+    int countMarketOffersBy(OfferFilter filter, String buyerUsername);
+
     int countOffersByUsername(String username);
     Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
 

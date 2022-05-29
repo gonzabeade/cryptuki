@@ -27,6 +27,7 @@
                                 </svg>
                             </div>
                         </form:label>
+                        <form:input path="buyer" type="hidden" value="${param.isBuyer}"/>
                         <form:input type="file" path="multipartFile" cssClass="invisible before:bg-red-400 w-0" onchange="showSendButton()"/>
                     </div>
                     <button type="submit" id="sendProfile" class="hidden bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress"><messages:message code="save"/></button>

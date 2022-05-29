@@ -143,7 +143,7 @@ public class UserController {
         }
 
         profilePicService.uploadProfilePicture(authentication.getName(), form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
-        return new ModelAndView("redirect:/user");
+        return new ModelAndView("redirect:/buyer/");
     }
 
     @RequestMapping(value="/user")

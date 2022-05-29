@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
@@ -48,7 +49,7 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView buyer(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "status", required = false) final Optional<String> status){
+    public ModelAndView buyer(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "status", required = false) final Optional<String> status,@ModelAttribute("ProfilePicForm") ProfilePicForm form){
         ModelAndView mav = new ModelAndView("buyer/buyerIndex");
 
         String username = authentication.getName();

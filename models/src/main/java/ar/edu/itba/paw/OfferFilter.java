@@ -1,5 +1,7 @@
 package ar.edu.itba.paw;
 
+import ar.edu.itba.paw.persistence.Offer;
+
 import java.util.*;
 
 public class OfferFilter {
@@ -14,6 +16,7 @@ public class OfferFilter {
     private Double maxPrice;
 
     private String username;
+    private String location;
 
     private Collection<String> status = new LinkedList<>();
 
@@ -39,6 +42,9 @@ public class OfferFilter {
     }
     public OfferOrderCriteria getOrderCriteria() {
         return orderCriteria;
+    }
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
     }
 
 
@@ -91,8 +97,14 @@ public class OfferFilter {
         return this;
     }
 
+    public OfferFilter byLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
     public OfferFilter withOrderCriteria(OfferOrderCriteria orderCriteria) {
         this.orderCriteria = orderCriteria;
         return this;
     }
+
 }

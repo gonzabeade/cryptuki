@@ -31,7 +31,8 @@ public class OfferHibernateDao implements OfferDao{
                 .setParameter("min", filter.getMinPrice().isPresent() ? (float)filter.getMinPrice().getAsDouble() : null)
                 .setParameter("max", filter.getMaxPrice().isPresent() ? (float)filter.getMaxPrice().getAsDouble() : null)
                 .setParameter("uname", filter.getUsername().orElse(null))
-                .setParameter("status", filter.getStatus().isEmpty() ? null: filter.getStatus());
+                .setParameter("status", filter.getStatus().isEmpty() ? null: filter.getStatus())
+                .setParameter("location", filter.getLocation().orElse(null));
     }
 
 
@@ -82,6 +83,7 @@ public class OfferHibernateDao implements OfferDao{
                 "( COALESCE(:min,null) IS NULL OR :min >= offerRow.askingPrice*offerRow.minQuantity) AND "+
                 "( COALESCE(:max,null) IS NULL OR :max <= offerRow.askingPrice*offerRow.maxQuantity) AND "+
                 "( COALESCE(:uname, null) IS NULL or offerRow.seller.userAuth.username = :uname) AND "+
+                "( COALESCE(:location, null) IS NULL or offerRow.location = :location) AND "+
                 "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status) ) AND" +
                 "( offerRow.id IN ( :idsAccepted)  ) "+
                 ")";
@@ -115,6 +117,7 @@ public class OfferHibernateDao implements OfferDao{
         offer.setMaxQuantity((float) digest.getMaxQuantity());
         offer.setAskingPrice((float) digest.getAskingPrice());
         offer.setComments(digest.getComments());
+        offer.setLocation(digest.getLocation());
     }
 
     @Override

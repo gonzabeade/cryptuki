@@ -33,10 +33,11 @@ public class OfferDigest {
     @Column(name="min_quantity",nullable = false)
     private  double minQuantity;
 
+    @Column(name="location", length = 100)
+    private String location;
 
     @Column(name="comments",length = 280)
     private  String comments;
-
 
     @Transient
     private  Collection<String> paymentMethods;
@@ -87,13 +88,18 @@ public class OfferDigest {
         this.statusCode = statusCode;
     }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
     public static class Builder {
 
         private final String cryptoCode;
         private final double askingPrice;
         private final int sellerId;
 
-
+        private String location;
         private String comments;
 
         private Collection<String> paymentMethods = new LinkedList<>();
@@ -143,6 +149,10 @@ public class OfferDigest {
         public Builder withMaxQuantity(float quantity) { this.maxQuantity = quantity; return this; }
         public Builder withComments(String comments) { this.comments = comments; return this; }
         public Builder withId(int id) { this.id = id; return this; }
+        public Builder withLocation(String location) {
+            this.location = location;
+            return this;
+        }
 
         public OfferDigest build() { return new OfferDigest(this); }
     }
@@ -157,6 +167,7 @@ public class OfferDigest {
         paymentMethods = Collections.unmodifiableList(new LinkedList<>(builder.paymentMethods));
         date = builder.date;
         comments = builder.comments;
+        location = builder.location;
     }
 
     public int getId() {
@@ -183,6 +194,10 @@ public class OfferDigest {
     }
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public String getComments() {

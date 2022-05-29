@@ -55,8 +55,16 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="flex flex-col mx-auto mt-6">
+            <form:errors path="location" cssClass="text-red-500 mx-auto"/>
+            <form:label path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="offerLocation"/> *</form:label>
+            <div class="flex flex-row justify-center w-96 mx-auto">
+                <form:textarea path="location" cssClass="w-full h-10 justify-center rounded-lg mx-auto p-3"/>
+            </div>
+        </div>
+        <%--
         <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="paymentMethods"/>*</form:label>
@@ -85,6 +93,7 @@
                 </c:forEach>
             </div>
         </div>
+        --%>
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
             <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>

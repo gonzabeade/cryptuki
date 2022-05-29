@@ -16,6 +16,7 @@ public class OfferFilter {
     private Double maxPrice;
 
     private String username;
+    private String location;
 
     private Collection<String> status = new LinkedList<>();
 
@@ -45,6 +46,9 @@ public class OfferFilter {
     }
     public OfferOrderCriteria getOrderCriteria() {
         return orderCriteria;
+    }
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
     }
 
     public OfferFilter byStatus(String status) {
@@ -91,6 +95,11 @@ public class OfferFilter {
     }
     public OfferFilter withPageSize(int page) {
         this.pageSize = page;
+        return this;
+    }
+
+    public OfferFilter byLocation(String location) {
+        this.location = location;
         return this;
     }
 

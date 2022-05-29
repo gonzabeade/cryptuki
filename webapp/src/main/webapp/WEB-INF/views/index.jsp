@@ -42,6 +42,7 @@
             </c:forEach>
         </select>
     </div>
+    <%--
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center"><messages:message code="paymentMethod"/></label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
@@ -51,6 +52,15 @@
             </c:forEach>
         </select>
      </div>
+     --%>
+
+    <div class="flex flex-col my-auto justify-center mx-3">
+        <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="location"/></label>
+        <div class="flex flex-row ">
+            <input type="text" id="location" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
+        </div>
+    </div>
+
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="price" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="wantToBuy"/></label>
         <div class="flex flex-row ">
@@ -133,6 +143,7 @@
                         <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().toString()}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                         <jsp:param name="rating" value="${offer.seller.rating}"/>
+                        <jsp:param name="location" value="${offer.location}"/>
                     </jsp:include>
                 </li>
             </c:forEach>

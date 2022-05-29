@@ -81,6 +81,7 @@ public class BuyerController {
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
     public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page,
+                                @RequestParam(value = "location", required = false) final String location,
                                 @RequestParam(value = "coin", required = false) final String coin,
                                 @RequestParam(value = "pm", required = false) final String paymentMethod,
                                 @RequestParam(value = "price", required = false) final Double price,
@@ -98,6 +99,7 @@ public class BuyerController {
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
                 .fromPage(pageNumber)
+                .byLocation(location)
                 .withOrderingCriterion(orderingCriterion.orElse(0))
                 .withOrderingDirection(orderingDirection.orElse(0));;
 

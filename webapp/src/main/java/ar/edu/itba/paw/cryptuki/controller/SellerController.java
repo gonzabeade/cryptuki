@@ -98,6 +98,7 @@ public class SellerController {
         ModelAndView mav = new ModelAndView("uploadPage");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("location", form.getLocation());
 
 
         if (form.getPaymentMethods() != null){
@@ -108,6 +109,7 @@ public class SellerController {
         return mav;
     }
 
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
         if (errors.hasErrors())
@@ -116,6 +118,10 @@ public class SellerController {
         int offerId = offerService.makeOffer(form.toOfferDigest(id));
         return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
     }
+
+
+
+
 
 
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)

@@ -22,6 +22,8 @@ public final class User {
     private  int ratingSum;
     @Column(name="rating_count",nullable = false)
     private  int ratingCount;
+    @Column(name="rating", nullable = false,insertable = false,updatable = false)
+    private float rating;
 
     @Column(name="last_login")
     private LocalDateTime lastLogin;
@@ -99,7 +101,9 @@ public final class User {
         return ratingCount;
     }
 
-    public float getRating() { return getRatingCount() == 0 ? 0 : (float)getRatingSum() / getRatingCount(); }
+    public float getRating(){
+        return rating;
+    }
 
     public String getPhoneNumber(){return phoneNumber;}
 
@@ -131,6 +135,10 @@ public final class User {
 
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     public void setLastLogin(LocalDateTime lastLogin) {

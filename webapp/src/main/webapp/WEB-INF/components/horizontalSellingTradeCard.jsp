@@ -48,7 +48,7 @@
 
 
   <c:if test="${param.tradeStatus.equals('PENDING')}">
-    <c:url value="/changeStatus" var="postUrl"/>
+    <c:url value="/seller/changeStatus" var="postUrl"/>
     <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex w-2/5 justify-center my-auto">
       <form:hidden path="newStatus" value="${param.tradeStatus}"/>
       <form:hidden path="tradeId" value="${param.tradeId}"/>

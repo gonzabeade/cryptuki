@@ -49,7 +49,10 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView buyer(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "status", required = false) final Optional<String> status, @ModelAttribute("ProfilePicForm") ProfilePicForm form){
+    public ModelAndView buyer(Authentication authentication,
+                              @RequestParam(value = "page") final Optional<Integer> page,
+                              @RequestParam(value = "status", required = false) final Optional<String> status,
+                              @ModelAttribute("ProfilePicForm") ProfilePicForm form){
         ModelAndView mav = new ModelAndView("buyer/buyerIndex");
 
         String username = authentication.getName();
@@ -77,7 +80,13 @@ public class BuyerController {
     }
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page,
+                                @RequestParam(value = "coin", required = false) final String coin,
+                                @RequestParam(value = "pm", required = false) final String paymentMethod,
+                                @RequestParam(value = "price", required = false) final Double price,
+                                @RequestParam(value = "orderingDirection", required = false) final Optional<Integer> orderingDirection,
+                                @RequestParam(value = "orderingCriterion", required = false) final Optional<Integer> orderingCriterion,
+                                final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("index");
 
@@ -88,7 +97,9 @@ public class BuyerController {
                 .byMinPrice(price)
                 .byMaxPrice(price)
                 .withPageSize(PAGE_SIZE)
-                .fromPage(pageNumber);
+                .fromPage(pageNumber)
+                .withOrderingCriterion(orderingCriterion.orElse(0))
+                .withOrderingDirection(orderingDirection.orElse(0));;
 
         int offerCount = offerService.countOffersBy(filter);
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

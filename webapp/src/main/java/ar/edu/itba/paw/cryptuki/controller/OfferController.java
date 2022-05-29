@@ -168,15 +168,7 @@ public class OfferController {
 //        return mav;
 //    }
 
-    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
-    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
-        if (! errors.hasErrors())
-            tradeService.updateStatus(statusTradeForm.getTradeId(), TradeStatus.valueOf(statusTradeForm.getNewStatus()));
 
-        Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
-
-        return seeOffer(trade.getOfferId(),authentication, new SoldTradeForm(),new StatusTradeForm() );
-    }
 
 
 }

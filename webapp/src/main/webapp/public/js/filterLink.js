@@ -8,10 +8,19 @@ window.onload = function getFilters() {
                 elementToSelect.value = value;
             }
         }
-        let reset = document.getElementById("reset");
-        if (reset !== null) {
-            reset.classList.remove("hidden");
-        }
+        // let reset = document.getElementById("reset");
+        // if (reset !== null) {
+        //     reset.classList.remove("hidden");
+        // }
+    }
+    if(searchParams==null){
+        document.getElementsByName("desc")[0].classList.remove("hidden");
+        return;
+    }
+
+    var orderingCriterion = searchParams.get("orderingCriterion");
+    if (orderingCriterion != null) {
+        document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
     }
 
     var orderingDirection = searchParams.get("orderingDirection");
@@ -23,10 +32,7 @@ window.onload = function getFilters() {
     }
     document.getElementsByName("desc")[0].classList.remove("hidden");
 
-    var orderingCriterion = searchParams.get("orderingCriterion");
-    if (orderingCriterion != null) {
-        document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
-    }
+
 }
 function resetAllFilters(){
     document.getElementById("reset").classList.add("hidden")
@@ -55,7 +61,8 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    if(id!=='orderingCriterion')
+    console.log(id)
+    if(id!='orderingCriterion')
         document.getElementById("reset").classList.remove("hidden");
 }
 function resetAllAdminFilters(){

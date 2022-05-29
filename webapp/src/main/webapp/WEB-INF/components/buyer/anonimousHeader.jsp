@@ -24,6 +24,16 @@
                     <a href="<c:url value="/coins"/>"
                        class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8"><messages:message code="cryptocurrencies"/></a>
                 </li>
+                    <li class="mt-1 mr-2">
+                        <a href="<c:url value="/login"/>"
+                           class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message
+                                code="logIn"/></a>
+                    </li>
+                    <li class="mt-1">
+                        <a href="<c:url value="/register"/>"
+                           class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message
+                                code="register"/></a>
+                    </li>
                 <%--                <li>--%>
                 <%--                    <a href="<c:url value="/contact"/>"--%>
                 <%--                       class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="contact"/></a>--%>

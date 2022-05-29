@@ -38,8 +38,11 @@
 
     <!-- Middle Panel: trade -->
     <div class="flex flex-col h-full mr-20 w-3/5">
+        <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="offersCreated"/></h1>
 
-    <jsp:include page="../../components/tradeFilter.jsp"/>
+        <jsp:include page="../../components/tradeFilter.jsp">
+            <jsp:param name="url" value="/buyer"/>
+        </jsp:include>
 
 
     <div  class="flex flex-col justify-center w-full mx-auto mt-10">

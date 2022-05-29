@@ -53,6 +53,7 @@ public class OfferController {
         ModelAndView mav = new ModelAndView("uploadPage");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        //mav.addObject("location", form.getLocation());
 
 
         if (form.getPaymentMethods() != null){

@@ -19,7 +19,14 @@
 <body class="bg-storml overflow-x-hidden">
 <sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/buyer/buyerHeader.jsp"/>
+<c:choose>
+    <c:when test="${username == trade.buyerUsername}">
+        <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+    </c:when>
+<c:otherwise>
+    <jsp:include page="../components/seller/sellerHeader.jsp"/>
+</c:otherwise>
+</c:choose>
 <div class="flex flex-row divide-x-2 divide-polard mt-5">
     <div class="flex flex-col w-3/5 h-screen">
         <c:if test="${rated == true }">
@@ -92,7 +99,8 @@
 
 
         <div class="flex flex-row mt-10">
-            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="/mytrades"/>"><messages:message code="goBack"/></a>
+            <c:set var="urlBack" value="${trade.buyerUsername == username ? '/buyer':'/seller'}"/>
+            <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="${urlBack}"/>"><messages:message code="goBack"/></a>
             <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
         </div>
 

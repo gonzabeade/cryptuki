@@ -102,8 +102,12 @@
 									</form:form>
 								</div>
 							</div>
-							<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto" id="show-${param.offerId}" onclick="show(${param.offerId})"><messages:message code="show"/></button>
-							<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-14 text-polard mx-auto" id="hide-${param.offerId}" onclick="hide(${param.offerId})" style="display: none"><messages:message code="hide"/></button>
+							<button class=" text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-16 text-polard mx-auto my-auto" id="show-${param.offerId}" onclick="show(${param.offerId})">
+								<p class="my-1"><messages:message code="show"/></p>
+							</button>
+							<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-16 text-polard mx-auto my-auto" id="hide-${param.offerId}" onclick="hide(${param.offerId})" style="display: none">
+								<messages:message code="hide"/>
+							</button>
 						</c:when>
 						<c:otherwise>
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/buy/${param.offerId}"/>">

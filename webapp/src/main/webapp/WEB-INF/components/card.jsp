@@ -8,10 +8,10 @@
 <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 <sec:authentication property="name" var="username"/>
 
-<div class="shadow-xl flex rounded-lg space-x-40 m-5 p-7 bg-[#FAFCFF]">
-				<div class="flex-row basis-1/4 justify-center">
-					<h1 class="font-sans"><messages:message code="seller"/>: <span class="font-bold font-sans"><c:out value="${param.owner}"/></span></h1>
-					<%--<p class="font-bold font-sans"><c:out value="${param.owner}"/></p>--%>
+<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
+				<div class="flex-row basis-1/4 ">
+					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
+					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
 					<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
 					<div class="flex flex-row">
 						<c:choose>
@@ -29,10 +29,10 @@
 					</div>
 				</div>
 
-				<div class="flex flex-col basis-1/4 font-sans justify-center">
+				<div class="flex flex-col basis-1/4 font-sans">
+					<h1 class="font-sans"><messages:message code="price"/>: </h1>
 					<div class="flex flex-row">
-						<h1 class="font-sans"><messages:message code="price"/>: </h1>
-						<h1 class="pl-1 text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
+						<h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
 						<p class="my-auto mx-2"> <messages:message code="for"/> </p>
 						<img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2 my-auto"/>
 						<h1 class="font-sans font-semibold my-auto"><c:out value="${param.currency}"/></h1>
@@ -41,18 +41,33 @@
 						<h4 class="text-gray-400 font-sans mr-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
 						<p class="text-gray-400 font-sans">-</p>
 						<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.maxCoinAmount}"/> ARS </h4>
-					</div>
-					<div class="flex flex-row">
-						<c:choose>
-							<c:when test="${param.location != ''}">
-								<h1 class="flex flex-row"><messages:message code="location"/>: <span class="pl-1 font-sans font-bold"><c:out value="${param.location}"/></span></h1>
-							</c:when>
-						</c:choose>
-					</div>
 
+					</div>
 					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>
-				<%--
+
+				<div class="flex flex-row basis-1/4 justify-center">
+					<div class="flex-col">
+						<h1 class="font-sans"><messages:message code="location"/>: </h1>
+						<div class="pt-2 flex flex-row justify-start">
+							<c:choose>
+								<c:when test="${param.location == ''}">
+									<h1 class="font-sans font-bold pr-3"><messages:message code="unknown"/></h1>
+								</c:when>
+								<c:otherwise>
+									<h1 class="font-sans font-bold pr-3"><c:out value="${param.location}"/></h1>
+								</c:otherwise>
+							</c:choose>
+							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2 " title="location">
+							<%--
+							<c:forEach  var="payment_method" items="${accepted_payments}">
+								<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">
+							</c:forEach>
+							--%>
+						</div>
+					</div>
+				</div>
+	<%--
 				<div class="flex flex-row basis-1/4 justify-between">
 					<div class="flex-col">
 						<h1 class="font-sans"><messages:message code="paymentMethods"/>: </h1>
@@ -64,7 +79,7 @@
 						</div>
 					</div>
 				</div>
-				--%>
+	--%>
 				<div class="flex basis-1/4 justify-center">
 					<c:choose>
 						<c:when test="${param.userEmail == param.owner || username==param.owner || isAdmin}">

@@ -35,7 +35,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h1 class="p-4 text-polard font-bold text-3xl font-sans mx-5 text-center "><messages:message code="ProposingDone"/></h1>
-            <h3 class="mx-auto text-polard text-center text-xl text-gray-500"> Gracias por usar Cryptuki!</h3>
+            <h3 class="mx-auto text-polard text-center text-xl text-gray-500"> <messages:message code="thankForUsingCryptuki"/></h3>
         </div>
         <div class="flex flex-col">
             <h1 class="mx-auto text-polard font-bold text-2xl mt-10 mb-5">Datos del intercambio</h1>

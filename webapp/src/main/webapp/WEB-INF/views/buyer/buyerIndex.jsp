@@ -17,8 +17,7 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>"/>
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../../components/seller/sellerHeader.jsp"/>
-
+<jsp:include page="../../components/buyer/buyerHeader.jsp"/>
 <div class="flex h-full w-full px-20 my-10">
     <!-- Left Panel: chat and seller stats -->
     <div class="flex flex-col h-full mx-20 w-1/5">
@@ -33,11 +32,13 @@
     <!-- Middle Panel: trade -->
     <div class="flex flex-col h-full mr-20 w-2/5">
 
+    <jsp:include page="../../components/tradeFilter.jsp"/>
 
-        <div  class="flex flex-col justify-center w-full mx-auto mt-10">
+
+    <div  class="flex flex-col justify-center w-full mx-auto mt-10">
             <c:forEach var="trade" items="${tradeList}">
                 <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../../components/horizontalSellingTradeCard.jsp">
+                <jsp:include page="../../components/BuyingTradeCard.jsp">
                     <jsp:param name="username" value="${username}"/>
                     <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
                     <jsp:param name="quantity" value="${trade.quantity}"/>
@@ -48,12 +49,12 @@
             </c:forEach>
         </div>
 
-        <c:if test="${noSellingTrades}">
+        <c:if test="${noBuyingTrades}">
             <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noBuyingProposalSend"/></h2>
             <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startBuying"/></a>
         </c:if>
 
-        <c:if test="${!noSellingTrades}">
+        <c:if test="${!noBuyingTrades}">
             <div class="flex flex-col mt-3">
                 <% request.setCharacterEncoding("utf-8"); %>
                 <jsp:include page="../../components/paginator.jsp">

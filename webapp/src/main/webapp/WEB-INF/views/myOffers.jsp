@@ -65,7 +65,7 @@
 <%--                            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="associatedTransactions"/> </h2>--%>
                             <c:forEach var="trade" items="${offer.associatedTrades}">
                                 <% request.setCharacterEncoding("utf-8"); %>
-                                <jsp:include page="../components/SellingTradeCard.jsp">
+                                <jsp:include page="../components/verticalSellingTradeCard.jsp">
                                     <jsp:param name="username" value="${username}"/>
                                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
                                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>

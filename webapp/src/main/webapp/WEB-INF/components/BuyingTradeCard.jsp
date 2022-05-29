@@ -8,8 +8,27 @@
 
 <div class="shadow-xl flex rounded-lg justify-between py-5 px-12 bg-[#FAFCFF] mt-3 mx-10">
 
+    <div class="flex flex-col font-sans my-auto">
+        <c:if test="${param.tradeStatus == 'PENDING' }">
+            <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message code="pending"/> </div>
+        </c:if>
 
-    <div class=" flex flex-col  font-sans justify-center">
+        <c:if test="${param.tradeStatus == 'REJECTED' }">
+            <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message code="rejected"/> </div>
+        </c:if>
+
+        <c:if test="${param.tradeStatus == 'ACCEPTED' }">
+            <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/> </div>
+        </c:if>
+
+        <c:if test="${param.tradeStatus == 'SOLD' }">
+            <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message code="sold"/> </div>
+        </c:if>
+    </div>
+
+
+
+    <div class=" flex flex-col font-sans justify-center">
             <c:if test="${param.tradeStatus == 'SOLD'}">
                 <h1 class="font-sans"><messages:message code="youBoughtFor"/>: </h1>
             </c:if>
@@ -28,23 +47,6 @@
         </div>
     </div>
 
-    <div class="flex flex-col font-sans my-auto">
-        <c:if test="${param.tradeStatus == 'PENDING' }">
-            <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message code="pending"/> </div>
-        </c:if>
-
-        <c:if test="${param.tradeStatus == 'REJECTED' }">
-            <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message code="rejected"/> </div>
-        </c:if>
-
-        <c:if test="${param.tradeStatus == 'ACCEPTED' }">
-            <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/> </div>
-        </c:if>
-
-        <c:if test="${param.tradeStatus == 'SOLD' }">
-            <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message code="sold"/> </div>
-        </c:if>
-    </div>
 
     <div class="flex my-auto">
        <c:if test="${! (param.tradeStatus == 'SOLD')}">

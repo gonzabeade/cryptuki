@@ -12,7 +12,7 @@
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
                 <li class="mx-2">
-                    <a href="<c:url value="/upload"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Ver anuncios</a>
+                    <a href="<c:url value="/myoffers"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 ">Ver anuncios</a>
                 </li>
 
                 <li class="mx-2">
@@ -20,7 +20,7 @@
                 </li>
 
                 <li class="mt-1 mx-2">
-                    <a href="<c:url value="/"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto">Cambiar a Comprador</a>
+                    <a href="<c:url value="/buyer/"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto">Cambiar a Comprador</a>
                 </li>
 
 

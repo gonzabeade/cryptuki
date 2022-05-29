@@ -79,12 +79,17 @@
                 </div>
             </div>
 
+            <div class="flex justify-around mt-5">
+                <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg" href="<c:url value="/buyer/"/>"><messages:message code="goBack"/></a>
+
                 <form  method="post"
-                      action="<c:url value="/deleteTrade/${tradeId}"/>" class="mx-auto my-10">
-                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg mx-auto">
-                       Cancelar oferta
+                       action="<c:url value="/deleteTrade/${tradeId}"/>" class="flex">
+                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg">
+                        <messages:message code="removeTrade"/>
                     </button>
                 </form>
+            </div>
+
         </div>
 
 

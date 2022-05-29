@@ -30,9 +30,12 @@
                     <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.maxQuantity}"/> ARS </h2>
                 </div>
                 <c:choose>
-                    <c:when test="${offer.location != null}">
-                        <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <c:out value="${offer.location}"/></h2>
+                    <c:when test="${offer.location == null}">
+                        <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <messages:message code="unknown"/></h2>
                     </c:when>
+                    <c:otherwise>
+                        <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <c:out value="${offer.location}"/></h2>
+                    </c:otherwise>
                 </c:choose>
             </div>
         </div>

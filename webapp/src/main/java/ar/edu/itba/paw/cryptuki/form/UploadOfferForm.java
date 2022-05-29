@@ -35,7 +35,7 @@ public class UploadOfferForm {
     @Size(min = 1, max = 140)
     private String message;
 
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 30)
     private String location;
 
     public String getMessage() {

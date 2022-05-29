@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Offer;
 import ar.edu.itba.paw.persistence.Trade;
@@ -115,5 +116,17 @@ public class SellerController {
         int offerId = offerService.makeOffer(form.toOfferDigest(id));
         return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
     }
+
+
+    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
+    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
+        if (! errors.hasErrors())
+            tradeService.updateStatus(statusTradeForm.getTradeId(), TradeStatus.valueOf(statusTradeForm.getNewStatus()));
+
+        Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
+
+        return new ModelAndView("redirect:/seller/myoffers");
+    }
+
 
 }

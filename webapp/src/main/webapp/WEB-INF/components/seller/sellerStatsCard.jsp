@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<sec:authentication property="name" var="username"/>
+
 <%--<head>--%>
 <%--    <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>--%>
 <%--    <script src="<c:url value="/public/js/profilePic.js"/>"></script>--%>

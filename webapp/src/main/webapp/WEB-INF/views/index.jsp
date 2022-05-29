@@ -29,7 +29,7 @@
     <jsp:include page="../components/buyer/buyerHeader.jsp"/>
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
-    <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+    <jsp:include page="../components/buyer/anonimousHeader.jsp"/>
 </sec:authorize>
 <div class="flex">
 <div class=" flex mx-auto mt-10 bg-[#FAFCFF]/[0.9] p-4 rounded-full drop-shadow-md divide-x">
@@ -108,7 +108,7 @@
        <jsp:include page="../components/paginator.jsp">
            <jsp:param name="activePage" value="${activePage}"/>
            <jsp:param name="pages" value="${pages}"/>
-           <jsp:param name="baseUrl" value="/"/>
+           <jsp:param name="baseUrl" value="/buyer/market"/>
        </jsp:include>
         <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>

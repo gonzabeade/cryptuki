@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Cryptocurrency;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeStatus;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -62,14 +60,48 @@ public class BuyerController {
         Collection<Trade> tradeList;
         tradeCount= tradeService.getBuyingTradesByUsernameCount(username,askedStatus);
         tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
+        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+
 
         int pages = (tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
 
+        mav.addObject("username",username);
+        mav.addObject("user",user);
         mav.addObject("noBuyingTrades", tradeList.isEmpty());
         mav.addObject("tradeStatusList",TradeStatus.values());
         mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
+        return mav;
+    }
+
+    @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
+    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
+
+        final ModelAndView mav = new ModelAndView("index");
+
+        int pageNumber = page.orElse(0);
+        OfferFilter filter = new OfferFilter()
+            .byCryptoCode(coin)
+                .byPaymentMethod(paymentMethod)
+                .byMinPrice(price)
+                .byMaxPrice(price)
+                .withPageSize(PAGE_SIZE)
+                .fromPage(pageNumber);
+
+        int offerCount = offerService.countOffersBy(filter);
+        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+
+        mav.addObject("offerList", offerService.getOfferBy(filter));
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("offerCount", offerCount);
+
+        if( null != authentication){
+            mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+        }
         return mav;
     }
 

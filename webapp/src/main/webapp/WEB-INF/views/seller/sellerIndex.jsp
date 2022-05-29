@@ -2,6 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="message" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<sec:authentication property="name" var="username"/>
 
 <html>
 <head>
@@ -50,12 +52,13 @@
                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
                     <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
+                    <jsp:param name="offerId" value="${trade.offerId}"/>
                 </jsp:include>
             </c:forEach>
         </div>
 
         <c:if test="${noSellingTrades}">
-            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noBuyingProposalSend"/></h2>
+            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noSellingProposalReceived"/></h2>
             <a href="<c:url value="/"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startBuying"/></a>
         </c:if>
 

@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="message" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<sec:authentication property="name" var="username"/>
 
 <html>
 <head>
@@ -22,15 +23,21 @@
     <!-- Left Panel: chat and seller stats -->
     <div class="flex flex-col h-full mx-20 w-1/5">
         <div class="">
-            <jsp:include page="../../components/seller/sellerStatsCard.jsp"/>
+            <jsp:include page="../../components/seller/sellerStatsCard.jsp">
+                <jsp:param name="username" value="${username}"/>
+                <jsp:param name="email" value="${user.email}"/>
+                <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
+                <jsp:param name="rating" value="${user.rating}"/>
+                <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+            </jsp:include>
         </div>
-        <div class="my-5">
-            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>
-        </div>
+<%--        <div class="my-5">--%>
+<%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
+<%--        </div>--%>
     </div>
 
     <!-- Middle Panel: trade -->
-    <div class="flex flex-col h-full mr-20 w-2/5">
+    <div class="flex flex-col h-full mr-20 w-3/5">
 
     <jsp:include page="../../components/tradeFilter.jsp"/>
 
@@ -69,12 +76,12 @@
 
     <!-- Right Panel: crypto dashboard -->
 
-    <div class="flex flex-col h-full mr-10 w-1/5">
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>
-    </div>
+<%--    <div class="flex flex-col h-full mr-10 w-1/5">--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
+<%--    </div>--%>
 
 </div>
 

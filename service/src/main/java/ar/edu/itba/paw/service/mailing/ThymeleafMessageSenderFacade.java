@@ -132,8 +132,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 trade.getCryptoCurrency().getCode(),
                 trade.getQuantity(),
                 trade.getBuyerUsername(),
-                trade.getWallet(),
-                tradeId, getUrl());
+                tradeId,
+                getUrl());
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
         LOGGER.info("Received Trade notification sent");
     }

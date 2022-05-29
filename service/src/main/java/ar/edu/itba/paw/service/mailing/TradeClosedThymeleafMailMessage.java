@@ -10,7 +10,6 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     private String buyer;
     private float quantity;
     private String coinCode;
-    private String wallet;
     private int tradeCode;
 
     private String url;
@@ -21,12 +20,11 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username, String coinCode, float quantity, String buyer, String wallet, int tradeCode, String url) {
+    public void setParameters(String username, String coinCode, float quantity, String buyer, int tradeCode, String url) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
         this.buyer = buyer;
-        this.wallet = wallet;
         this.tradeCode = tradeCode;
         this.url = url;
     }
@@ -34,7 +32,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || buyer == null || wallet == null )
+        if ( username == null || coinCode == null || buyer == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context(getLocale());
@@ -44,7 +42,6 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("coinCode", coinCode);
         context.setVariable("quantity", quantity);
         context.setVariable("buyer", buyer);
-        context.setVariable("wallet", wallet);
         context.setVariable("tradeCode", tradeCode);
         context.setVariable("url", url);
 

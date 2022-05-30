@@ -64,7 +64,6 @@
                 </div>
             </c:if>
         <div class="flex flex-col mx-auto my-4">
-            <h1 class="text-polard text-3xl font-bold text-center my-4">Proceso de compra</h1>
             <c:choose>
                 <c:when test="${status.equals('PENDING')}">
                     <c:set var="step" value="0"/>
@@ -81,6 +80,7 @@
             </c:choose>
 
             <c:if test="${step < 3}">
+                <h1 class="text-polard text-3xl font-bold text-center my-4">Proceso de compra</h1>
                 <jsp:include page="../components/stepper.jsp">
                     <jsp:param name="active" value="${step}"/>
                 </jsp:include>

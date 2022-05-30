@@ -35,8 +35,8 @@
         <div class="flex flex-col mt-6">
             <h1 class="font-sans font-medium text-polard text-2xl"><messages:message code="claimUser"/>:</h1>
             <c:choose>
-                <c:when test="${complain.complainerUsername != null}">
-                    <p class="rounded-lg text-xl"><c:url value="${complain.complainerUsername}"/></p>
+                <c:when test="${complain.complainer.username.get() != null}">
+                    <p class="rounded-lg text-xl"><c:url value="${complain.complainer.username.get()}"/></p>
                     <p class="rounded-lg text-gray-400"><messages:message code="lastTimeActive"/>: <c:url value="${complainer.lastLogin.toLocalDate()}"/></p>
                 </c:when>
                 <c:otherwise>

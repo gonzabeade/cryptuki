@@ -33,7 +33,7 @@
         </div>
         <div class="flex flex-col mt-6">
             <h1 class="font-sans font-medium text-polard text-2xl"><messages:message code="claimUser"/>:</h1>
-            <p class="rounded-lg text-xl"><c:out value="${complain.complainerUsername}"/></p>
+            <p class="rounded-lg text-xl"><c:out value="${complain.complainer.username.get()}"/></p>
             <p class="rounded-lg text-lg"><c:out value="${complainer.email}"/></p>
             <p class="rounded-lg text-gray-400"><messages:message code="lastTimeActive"/>: <c:out value="${complainer.lastLogin.toLocalDate()}"/></p>
         </div>

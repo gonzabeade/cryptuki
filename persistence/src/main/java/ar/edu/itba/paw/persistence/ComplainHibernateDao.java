@@ -20,27 +20,28 @@ public class ComplainHibernateDao implements ComplainDao{
 
     private static void addParameters(TypedQuery<Complain> query,ComplainFilter filter) {
         query
-//                        .setParameter("complainer_uname", filter.getComplainerUsername().orElse(null))
-//                .setParameter("from_date", filter.getFrom().orElse(null))
-//                .setParameter("to_date", filter.getTo().orElse(null))
+                .setParameter("complainer_uname", filter.getComplainerUsername().orElse(null))
+                .setParameter("from_date", filter.getFrom().orElse(null))
+                .setParameter("to_date", filter.getTo().orElse(null))
                 .setParameter("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get() : null)
-//                        .setParameter("moderator_uname", filter.getModeratorUsername().orElse(null));
-//                        .setParameter("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)
+                //.setParameter("moderator_uname", filter.getModeratorUsername().orElse(null))
+                .setParameter("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)
                 .setParameter("trade_id", filter.getTradeId().isPresent() ? filter.getTradeId().getAsInt() : null)
-//                        .setParameter("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null)
-        ;
+                .setParameter("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null);
     }
+
+    //TODO SALVA: mirar que hacer con el filtrado por moderator
     @Override
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
         String filterQuery="from Complain as c where" +
-                "(COALESCE(:trade_id, null) IS NULL OR (c.trade.tradeId = :trade_id)) AND" +
-                "(COALESCE(:complain_status, null) IS NULL OR c.status =:complain_status) )"+
-//                "(COALESCE(:moderator_uname, null) IS NULL OR c.moderator.userAuth.username = :moderator_uname)  " ;
-//                "(COALESCE(:complainer_uname, null) IS NULL OR c.complainer = :complainer_uname)  "
-//                "(COALESCE(:from_date, null) IS NULL OR  c.date >= :from_date) AND" +
-//                "(COALESCE(:to_date, null) IS NULL OR  c.date <= :to_date)" ;
-                "(COALESCE(:offer_id, null) IS NULL OR  c.trade.offer.id = :offer_id) ";
-//                "(COALESCE(:complain_id, null) IS NULL OR c.complainId = :complain_id) " ;
+                "((COALESCE(:trade_id, null) IS NULL OR c.trade.tradeId = :trade_id) AND" +
+                "(COALESCE(:complain_status, null) IS NULL OR c.status = :complain_status) AND"+
+                //"(CASE WHEN COALESCE(:moderator_uname, null) IS NULL THEN TRUE ELSE (c.moderator.userAuth.username = :moderator_uname) END) AND" +
+                "(COALESCE(:complainer_uname, null) IS NULL OR c.complainer.userAuth.username = :complainer_uname) AND" +
+                "(COALESCE(:from_date, null) IS NULL OR  c.date >= :from_date) AND" +
+                "(COALESCE(:to_date, null) IS NULL OR  c.date <= :to_date) AND" +
+                "(COALESCE(:offer_id, null) IS NULL OR  c.trade.offer.id = :offer_id) AND" +
+                "(COALESCE(:complain_id, null) IS NULL OR c.complainId = :complain_id))" ;
 
         TypedQuery<Complain> query = entityManager.createQuery(filterQuery,Complain.class);
         query.setMaxResults(filter.getPageSize());
@@ -67,10 +68,13 @@ public class ComplainHibernateDao implements ComplainDao{
         entityManager.persist(complain);
     }
 
+    //TODO SALVA:mirar que hacer con ese null
     @Override
     public void updateModerator(int complainId, String username) {
         Complain complain = getComplainById(complainId);
-        complain.setModerator(userAuthDao.getUserAuthByUsername(username).get().getUser());
+        if(username == null)
+            complain.setModerator(null);
+        else complain.setModerator(userAuthDao.getUserAuthByUsername(username).get().getUser());
         entityManager.persist(complain);
     }
 

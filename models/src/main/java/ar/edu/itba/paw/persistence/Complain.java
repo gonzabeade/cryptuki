@@ -14,6 +14,7 @@ public final class Complain {
     @SequenceGenerator(sequenceName = "complain_complain_id_seq", name = "complain_complain_id_seq", allocationSize = 1)
     @Column(name="complain_id")
     private  Integer complainId;
+
     @OneToOne
     @JoinColumn(name="trade_id")
     private  Trade trade;
@@ -194,22 +195,21 @@ public final class Complain {
         this.date = date;
     }
 
-    public String getComplainerComments() {
-        return complainerComments;
+    public Optional<String> getComplainerComments() {
+        return Optional.ofNullable(complainerComments);
     }
 
     public void setComplainerComments(String complainerComments) {
         this.complainerComments = complainerComments;
     }
 
-    public String getModeratorComments() {
-        return moderatorComments;
+    public Optional<String> getModeratorComments() {
+        return Optional.ofNullable(moderatorComments);
     }
 
     public void setModeratorComments(String moderatorComments) {
         this.moderatorComments = moderatorComments;
     }
-
 
     public Optional<Integer> getTradeId(){
         return Optional.ofNullable(trade.getTradeId());

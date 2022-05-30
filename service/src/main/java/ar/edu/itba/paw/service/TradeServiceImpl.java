@@ -80,7 +80,7 @@ public class TradeServiceImpl implements TradeService {
             throw new ServiceDataAccessException(pe);
         }
 
-        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId);
+        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId, offer.getId());
         return tradeId;
     }
 

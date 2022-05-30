@@ -121,7 +121,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     }
 
     @Override
-    public void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId){
+    public void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId,int offerId){
         MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
         TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
@@ -133,7 +133,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 trade.getQuantity(),
                 trade.getBuyerUsername(),
                 tradeId,
-                getUrl());
+                getUrl(),
+                offerId);
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
         LOGGER.info("Received Trade notification sent");
     }

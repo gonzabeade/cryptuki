@@ -12,6 +12,8 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     private String coinCode;
     private int tradeCode;
 
+    private int offerId;
+
     private String url;
 
 
@@ -20,13 +22,14 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username, String coinCode, float quantity, String buyer, int tradeCode, String url) {
+    public void setParameters(String username, String coinCode, float quantity, String buyer, int tradeCode, String url,int offerId) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
         this.buyer = buyer;
         this.tradeCode = tradeCode;
         this.url = url;
+        this.offerId=offerId;
     }
 
     @Override
@@ -44,6 +47,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("buyer", buyer);
         context.setVariable("tradeCode", tradeCode);
         context.setVariable("url", url);
+        context.setVariable("offerId",offerId);
 
         return context;
     }

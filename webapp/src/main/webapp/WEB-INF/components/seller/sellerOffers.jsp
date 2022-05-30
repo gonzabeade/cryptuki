@@ -46,7 +46,7 @@
       <jsp:include page="../../components/paginator.jsp">
         <jsp:param name="activePage" value="${activePage}"/>
         <jsp:param name="pages" value="${pages}"/>
-        <jsp:param name="baseUrl" value="/myoffers"/>
+        <jsp:param name="baseUrl" value="/seller/"/>
       </jsp:include>
       <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>

@@ -46,4 +46,8 @@ public final class OfferStatus {
     }
 
 
+    @Override
+    public String toString() {
+        return code;
+    }
 }

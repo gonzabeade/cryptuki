@@ -97,7 +97,7 @@
             </jsp:include>
         </div>
         <div class="flex justify-center">
-            <a href="<c:url value="/seller/myoffers"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnMyAdvertisements"/></a>
+            <a href="<c:url value="/seller/"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnMyAdvertisements"/></a>
         </div>
 
 <div class="shape-blob"></div>

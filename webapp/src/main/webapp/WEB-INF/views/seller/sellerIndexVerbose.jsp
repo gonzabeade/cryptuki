@@ -57,11 +57,11 @@
 
 
         <div class="flex flex-wrap h-full mr-20 w-full">
-
-
             <c:forEach var="offer" items="${offerList}">
-                <div class="flex flex-row my-5 mx-5 h-2/5 ">
 
+
+
+                <div class="flex flex-row my-5 mx-5 h-2/5 ">
                         <%--    Tarjeta de anuncio--%>
                     <div class="shadow-xl w-[270px] flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start">
 
@@ -92,20 +92,31 @@
                                 <p><messages:message code="date"/> <c:out value="${offer.date.toLocalDate()}"/></p>
                             </div>
                             <div class="flex flex-col font-sans mt-3">
-                                <p><messages:message code="offerLocation"/>: <c:out value="${offer.location}"/></p>
+                                <p><messages:message code="offerLocation"/>:
+                                    <c:if test="${empty offer.location}">
+                                        <messages:message code="unknown"/>
+                                    </c:if>
+                                    <c:if test="${!(empty offer.location)}">
+                                        <c:out value="${offer.location}"/>
+                                    </c:if>
+                                </p>
                             </div>
                         </div>
 
 
-                        <div class="flex flex-row mx-auto mt-5">
+                        <div class="flex flex-row mx-auto mt-5 ">
                             <a href="<c:url value="/modify/${offer.id}"/>"
-                               class="flex rounded-lg bg-storml h-8 w-8 mr-3 hover:bg-stormd">
-                                <img class="m-auto h-5 w-5" src="<c:url value="/public/images/edit.png"/>"/>
+                               class="flex mr-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
                             </a>
 
                             <form action="<c:url value="/delete/${offer.id}"/>" method="post">
-                                <button class="flex rounded-lg bg-storml  h-8 w-8 hover:bg-stormd">
-                                    <img class="m-auto h-5 w-5" src="<c:url value="/public/images/delete.png"/>"/>
+                                <button class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
                                 </button>
                             </form>
                         </div>
@@ -114,7 +125,7 @@
                     <div id="<c:out value="${offer.id}" />"
                          class="flex flex-row shadow-xl rounded-lg  w-[800px] bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden">
                         <c:if test="${offer.associatedTrades.size() == 0}">
-                            <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message
+                            <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
                         </c:if>
                         <c:forEach var="trade" items="${offer.associatedTrades}">
@@ -142,35 +153,41 @@
                                     </c:if>
                                 </div>
 
-                                <div class="flex flex font-sans my-3  w-52 mx-auto text-semibold">
-                                    <h1 class="mx-auto"><c:out value="${offer.minQuantity}"/><c:out
-                                            value=" ${offer.crypto.code}"/> ⟶ <c:out
+                                <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
+                                    <h1 class="mx-auto">
+                                        <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/>
+                                        <c:out value=" ${offer.crypto.code}"/> ⟶ <c:out
                                             value="${trade.quantity} "/>ARS</h1>
                                 </div>
 
-                                <div class="flex flex-col">
-                                    <div class="flex">
-                                        <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
-                                            <%--            <h1 class="font-sans font-semibold"><c:out value="${param.buyerUsername}"/></h1>--%>
-                                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyerUsername}"/></h1>
+                                <c:if test="${!(trade.status =='SOLD')}">
+                                    <div class="flex flex-col">
+                                        <div class="flex">
+                                            <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
+                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyerUsername}"/></h1>
+                                        </div>
+                                        <div class="flex">
+                                            <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
+                                            <h1 class="font-sans font-semibold"><c:out value="${trade.user.email}"/></h1>
+                                        </div>
+                                        <div class="flex">
+                                            <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
+                                            <h1 class="font-sans font-semibold"><c:out
+                                                    value="${trade.user.phoneNumber}"/></h1>
+                                        </div>
+                                        <div class="flex">
+                                            <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
+                                            <h1 class="font-sans font-semibold"><c:out value="${trade.user.rating}"/></h1>
+                                        </div>
                                     </div>
-                                    <div class="flex">
-                                        <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
-                                            <%--            <h1 class="font-sans font-semibold"><c:out value="${param.buyerMail}"/></h1>--%>
-                                        <h1 class="font-sans font-semibold"><c:out value="${trade.user.email}"/></h1>
-                                    </div>
-                                    <div class="flex">
-                                        <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
-                                        <h1 class="font-sans font-semibold"><c:out
-                                                value="${trade.user.phoneNumber}"/></h1>
-                                    </div>
-                                    <div class="flex">
-                                        <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
-                                        <h1 class="font-sans font-semibold"><c:out value="${trade.user.rating}"/></h1>
-                                    </div>
-                                </div>
+                                </c:if>
+                                <c:if test="${(trade.status =='SOLD')}">
+                                    <a class="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${trade.tradeId}"/>">
+                                        <messages:message code="help"/>
+                                    </a>
+                                </c:if>
 
-                                    <%--                            CASE - PENDING--%>
+                            <%--                            CASE - PENDING--%>
                                 <c:if test="${trade.status == 'PENDING'}">
                                     <c:url value="/seller/changeStatus" var="postUrl"/>
                                     <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
@@ -210,11 +227,21 @@
                         </c:forEach>
                     </div>
 
-                    <div class="flex flex-col w-10 -ml-5 h-full justify-center"
+                            <div class="flex flex-col w-10 -ml-5 h-full justify-center"
                          onClick="toggle(<c:out value="${offer.id}" />) ">
                             <%--                    <div class="flex rotate-90 whitespace-nowrap">hola mundo</div>--%>
-                        <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>
+                                    <%--                                <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>--%>
+
+<%--                                <c:if test="${offer.status.toString() == 'PSE'}">--%>
+                                    <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 my-auto">
+                                    </div>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${offer.status.toString() == 'APR'}">--%>
+<%--                                    <div class="flex bg-ngreen shadow-xl rounded-lg h-5/6 my-auto">--%>
+<%--                                    </div>--%>
+<%--                                </c:if>--%>
                     </div>
+
 
                 </div>
             </c:forEach>

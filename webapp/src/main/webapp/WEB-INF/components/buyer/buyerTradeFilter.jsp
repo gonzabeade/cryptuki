@@ -7,26 +7,26 @@
             <ol class="flex justify-center mt-4">
                 <li class="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
                     <div class="py-2 pr-4 pl-3 text-polar text-l font-bold">
-                        <c:if test="${param.status != 'PENDING'}"> <a href="<c:url value="/buyer/?status=PENDING"/>"><messages:message code="pending"/></a> </c:if>
-                        <c:if test="${param.status == 'PENDING'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=PENDING"/>"><messages:message code="pending"/></a> </c:if>
+                        <c:if test="${param.status != 'PENDING'}"> <a href="<c:url value="/buyer/?status=PENDING"/>"><messages:message code="pendingOffers"/></a> </c:if>
+                        <c:if test="${param.status == 'PENDING'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=PENDING"/>"><messages:message code="pendingOffers"/></a> </c:if>
                     </div>
                 </li>
                 <li class="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
                     <div class="py-2 pr-4 pl-3 text-polar text-l font-bold">
-                        <c:if test="${param.status != 'ACCEPTED'}"> <a href="<c:url value="/buyer/?status=ACCEPTED"/>"><messages:message code="accepted"/></a> </c:if>
-                        <c:if test="${param.status == 'ACCEPTED'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=ACCEPTED"/>"><messages:message code="accepted"/></a> </c:if>
+                        <c:if test="${param.status != 'ACCEPTED'}"> <a href="<c:url value="/buyer/?status=ACCEPTED"/>"><messages:message code="acceptedOffers"/></a> </c:if>
+                        <c:if test="${param.status == 'ACCEPTED'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=ACCEPTED"/>"><messages:message code="acceptedOffers"/></a> </c:if>
                     </div>
                 </li>
                 <li class="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
                     <div class="py-2 pr-4 pl-3 text-polar text-l font-bold">
-                        <c:if test="${param.status != 'REJECTED'}"> <a href="<c:url value="/buyer/?status=REJECTED"/>"><messages:message code="rejected"/></a> </c:if>
-                        <c:if test="${param.status == 'REJECTED'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=REJECTED"/>"><messages:message code="rejected"/></a></c:if>
+                        <c:if test="${param.status != 'REJECTED'}"> <a href="<c:url value="/buyer/?status=REJECTED"/>"><messages:message code="rejectedOffers"/></a> </c:if>
+                        <c:if test="${param.status == 'REJECTED'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=REJECTED"/>"><messages:message code="rejectedOffers"/></a></c:if>
                     </div>
                 </li>
                 <li class="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
                     <div class="py-2 pr-4 pl-3 text-polar text-l font-bold">
-                        <c:if test="${param.status != 'SOLD'}"> <a href="<c:url value="/buyer/?status=SOLD"/>"><messages:message code="sold"/></a> </c:if>
-                        <c:if test="${param.status == 'SOLD'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=SOLD"/>"><messages:message code="sold"/></a> </c:if>
+                        <c:if test="${param.status != 'SOLD'}"> <a href="<c:url value="/buyer/?status=SOLD"/>"><messages:message code="soldOffers"/></a> </c:if>
+                        <c:if test="${param.status == 'SOLD'}"> <a class="decoration-frostdr underline underline-offset-8" href="<c:url value="/buyer/?status=SOLD"/>"><messages:message code="soldOffers"/></a> </c:if>
                     </div>
                 </li>
 

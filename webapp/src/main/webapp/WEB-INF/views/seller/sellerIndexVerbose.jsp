@@ -60,17 +60,17 @@
             <c:forEach var="offer" items="${offerList}">
 
 
-
-                <div class="flex flex-row my-5 mx-5 h-2/5 ">
+                <div class="flex flex-col w-full">
+                <div class="flex flex-row mx-5">
                         <%--    Tarjeta de anuncio--%>
-                    <div class="shadow-xl w-[270px] flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start">
+                    <div class="shadow-xl flex flex-col rounded-lg px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start ">
 
-                        <div class="flex flex-col items-center mt-5 mb-5">
-                            <h1 class="text-[30px] font-bold font-sans"><c:out value="Anuncio #${offer.id}"/></h1>
+                        <div class="flex flex-col items-center mt-5 mb-2">
+                            <h1 class="text-2xl font-bold font-sans"><c:out value="Anuncio #${offer.id}"/></h1>
                         </div>
 
-                        <div class="flex flex-row items-center">
-                            <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number"
+                        <div class="flex flex-row ">
+                            <h1 class="text-lg font-bold font-sans text-center"><fmt:formatNumber type="number"
                                                                                       maxFractionDigits="2"
                                                                                       value="${offer.askingPrice}"/>
                                 ARS </h1>
@@ -104,7 +104,7 @@
                         </div>
 
 
-                        <div class="flex flex-row mx-auto mt-5 ">
+                        <div class="flex flex-row mx-auto mt-2 ">
                             <a href="<c:url value="/modify/${offer.id}"/>"
                                class="flex mr-5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
@@ -123,7 +123,7 @@
                     </div>
 
                     <div id="<c:out value="${offer.id}" />"
-                         class="flex flex-row shadow-xl rounded-lg  w-[800px] bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden">
+                         class="flex flex-row shadow-xl rounded-lg bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden w-full">
                         <c:if test="${offer.associatedTrades == null}">
                             <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
@@ -245,8 +245,7 @@
 
                 </div>
             </c:forEach>
-            <div>
-
+            <div class="mx-auto">
 
                 <c:if test="${noSellingTrades}">
                     <a href="<c:url value="/seller/upload"/>"
@@ -254,7 +253,7 @@
                             code="uploadAdvertisement"/></a>
                 </c:if>
                 <c:if test="${!noSellingTrades}">
-                    <div class="flex flex-col mt-3 mx-80">
+                    <div class="flex flex-col mt-3 mx-auto">
                         <% request.setCharacterEncoding("utf-8"); %>
                         <jsp:include page="../../components/paginator.jsp">
                             <jsp:param name="activePage" value="${activePage}"/>
@@ -265,7 +264,8 @@
                                 code="totalPageAmount"/>: ${pages}</h1>
                     </div>
                 </c:if>
-        </div>
+            </div>
+            </div>
 
 
             <!-- Right Panel: crypto dashboard -->

@@ -37,7 +37,7 @@
         </div>
         <div class="mx-auto mt-10">
             <a href="<c:url value="/seller/upload"/>"
-               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">Subir anuncio</a>
+               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="uploadAdvertisement"/></a>
         </div>
 <%--        <div class="my-5">--%>
 <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
@@ -46,13 +46,28 @@
 
     <!-- Middle Panel: trade -->
 
-    <div class="flex flex-wrap h-full mr-20 w-3/5">
+    <div class="flex flex-col h-full mr-20 w-3/5">
 
-<%--        <div class="shadow-xl w-full h-1/7 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF]">--%>
-<%--            Hola--%>
-<%--        </div>--%>
+        <div class="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
+            <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="offersCreated"/></h1>
+        </div>
 
-        <c:forEach var="offer" items="${offerList}">
+        <c:if test="${!noSellingTrades}">
+        <div class="flex flex-col mt-3">
+            <% request.setCharacterEncoding("utf-8"); %>
+            <jsp:include page="../../components/paginator.jsp">
+                <jsp:param name="activePage" value="${activePage}"/>
+                <jsp:param name="pages" value="${pages}"/>
+                <jsp:param name="baseUrl" value="/mytrades"/>
+            </jsp:include>
+            <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+        </div>
+        </c:if>
+
+    <div class="flex flex-wrap h-full mr-20 w-full">
+
+
+    <c:forEach var="offer" items="${offerList}">
             <div class="flex flex-row my-5 mx-5 h-2/5 ">
 
                     <%--    Tarjeta de anuncio--%>
@@ -77,10 +92,10 @@
                             <p><c:out value="Max: ${offer.maxQuantity}"/><c:out value=" ${offer.crypto.code}"/></p>
                         </div>
                         <div class="flex flex-col font-sans mt-3">
-                            <p>Fecha: <c:out value="${offer.date.toLocalDate()}"/></p>
+                            <p><messages:message code="date"/> <c:out value="${offer.date.toLocalDate()}"/></p>
                         </div>
                         <div class="flex flex-col font-sans mt-3">
-                            <p>Ubicación: <c:out value="${offer.location}"/></p>
+                            <p><messages:message code="offerLocation"/>: <c:out value="${offer.location}"/></p>
                         </div>
                     </div>
 
@@ -189,40 +204,14 @@
 
             </div>
         </c:forEach>
+        <div>
 
-
-
-        <div  class="flex flex-col justify-center w-full mx-auto mt-10">
-            <c:forEach var="trade" items="${tradeList}">
-                <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../../components/horizontalSellingTradeCard.jsp">
-                    <jsp:param name="username" value="${username}"/>
-                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
-                    <jsp:param name="quantity" value="${trade.quantity}"/>
-                    <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
-                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
-                    <jsp:param name="tradeId" value="${trade.tradeId}"/>
-                    <jsp:param name="offerId" value="${trade.offerId}"/>
-                </jsp:include>
-            </c:forEach>
-        </div>
 
         <c:if test="${noSellingTrades}">
             <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noSellingProposalReceived"/></h2>
             <a href="<c:url value="/seller/myoffers"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="seeAdvertisements"/></a>
         </c:if>
 
-        <c:if test="${!noSellingTrades}">
-            <div class="flex flex-col mt-3">
-                <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../../components/paginator.jsp">
-                    <jsp:param name="activePage" value="${activePage}"/>
-                    <jsp:param name="pages" value="${pages}"/>
-                    <jsp:param name="baseUrl" value="/mytrades"/>
-                </jsp:include>
-                <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-            </div>
-        </c:if>
     </div>
 
     <!-- Right Panel: crypto dashboard -->

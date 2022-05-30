@@ -38,7 +38,7 @@ public class SellerController {
     private final PaymentMethodService paymentMethodService;
 
     private final UserService userService;
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 6;
 
     @Autowired
     public SellerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)

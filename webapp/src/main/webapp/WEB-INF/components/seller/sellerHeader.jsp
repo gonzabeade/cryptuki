@@ -11,12 +11,6 @@
         </div>
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
-                <li class="mx-2">
-                    <a href="<c:url value="/seller/myoffers"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="seeAdvertisements"/></a>
-                </li>
-                <li class="mx-2">
-                    <a href="<c:url value="/seller/upload"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="uploadAdvertisement"/></a>
-                </li>
                 <li>
                     <a href="<c:url value="/contact"/>"
                        class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="contact"/></a>

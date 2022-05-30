@@ -202,7 +202,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/deleteTrade/{tradeId}", method = RequestMethod.POST)
     public ModelAndView deleteTrade(@PathVariable("tradeId") final int tradeId){
         tradeService.deleteTrade(tradeId);
-        return new ModelAndView("redirect:/mytrades");
+        return new ModelAndView("redirect:/buyer/");
     }
 
 

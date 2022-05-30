@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@Repository
+//@Repository
 public class ComplainHibernateDao implements ComplainDao{
 
     @PersistenceContext

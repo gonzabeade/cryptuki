@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.Collections;
 
-//@Repository
+@Repository
 public class ComplainJdbcDao implements ComplainDao {
 
     private NamedParameterJdbcTemplate namedJdbcTemplate;

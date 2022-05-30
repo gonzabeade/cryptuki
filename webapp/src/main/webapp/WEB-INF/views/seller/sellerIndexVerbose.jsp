@@ -124,7 +124,7 @@
 
                     <div id="<c:out value="${offer.id}" />"
                          class="flex flex-row shadow-xl rounded-lg bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden w-full">
-                        <c:if test="${offer.associatedTrades == null}">
+                        <c:if test="${empty offer.associatedTrades}">
                             <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
                         </c:if>

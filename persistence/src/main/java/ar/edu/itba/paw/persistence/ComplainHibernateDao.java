@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Repository
@@ -21,8 +22,8 @@ public class ComplainHibernateDao implements ComplainDao{
     private static void addParameters(TypedQuery<Complain> query,ComplainFilter filter) {
         query
                 .setParameter("complainer_uname", filter.getComplainerUsername().orElse(null))
-                .setParameter("from_date", filter.getFrom().orElse(null))
-                .setParameter("to_date", filter.getTo().orElse(null))
+                .setParameter("from_date", filter.getFrom().isPresent()? filter.getFrom().get().atStartOfDay(): null)
+                .setParameter("to_date", filter.getTo().isPresent()? filter.getTo().get().atStartOfDay(): null)
                 .setParameter("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get() : null)
                 //.setParameter("moderator_uname", filter.getModeratorUsername().orElse(null))
                 .setParameter("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)

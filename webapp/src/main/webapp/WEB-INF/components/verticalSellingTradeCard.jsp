@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -10,19 +10,19 @@
 
     <div class="flex font-sans h-fit my-5">
         <c:if test="${param.tradeStatus == 'PENDING' }">
-            <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message code="pending"/> </div>
+            <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message code="pending"/></div>
         </c:if>
 
         <c:if test="${param.tradeStatus == 'REJECTED' }">
-            <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message code="rejected"/> </div>
+            <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message code="rejected"/></div>
         </c:if>
 
         <c:if test="${param.tradeStatus == 'ACCEPTED' }">
-            <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/> </div>
+            <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>
         </c:if>
 
         <c:if test="${param.tradeStatus == 'SOLD' }">
-            <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message code="sold"/> </div>
+            <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message code="sold"/></div>
         </c:if>
     </div>
 
@@ -34,7 +34,7 @@
             <h1 class="font-sans"><messages:message code="youReceived"/>: </h1>
         </c:if>
         <div class="flex">
-           <h3 class="ml-5 font-sans font-semibold"><c:out value="${param.quantity}"/>$ARS</h3>
+            <h3 class="ml-5 font-sans font-semibold"><c:out value="${param.quantity}"/>$ARS</h3>
         </div>
     </div>
 
@@ -44,60 +44,71 @@
             <h1 class="font-sans font-semibold ml-5 mr-2"><fmt:formatNumber type="number" maxFractionDigits="6"
                                                                             value="${param.quantity/param.askedPrice}"/></h1>
             <h1 class="font-sans font-semibold"><c:out value="${param.cryptoCurrencyCode}"/></h1>
-        <%--            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-7 h-7 mx-auto"/>--%>
+            <%--            <img src="<c:url value="/public/images/${param.cryptoCurrencyCode}.png"/>" alt="<c:out value="${param.cryptoCurrencyCode}"/>" class="w-7 h-7 mx-auto"/>--%>
         </div>
     </div>
 
-    <div class="flex flex-col px-5 py-5 rounded-lg bg-stormd/[0.9]  border-2 border-polard ">
-        <h1 class="font-sans mx-auto"><messages:message code="buyerInformation"/>:</h1>
-        <div class="flex justify-between">
-            <h1 class="font-sans"><messages:message code="username"/>:</h1>
-            <h1 class="font-sans font-semibold"><c:out value="${param.buyerUsername}"/></h1>
+    <c:if test="${!(param.tradeStatus == 'SOLD') }">
+        <div class="flex flex-col px-5 py-5 rounded-lg bg-stormd/[0.9]  border-2 border-polard ">
+            <h1 class="font-sans mx-auto"><messages:message code="buyerInformation"/>:</h1>
+            <div class="flex justify-between">
+                <h1 class="font-sans"><messages:message code="username"/>:</h1>
+                <h1 class="font-sans font-semibold"><c:out value="${param.buyerUsername}"/></h1>
+            </div>
+            <div class="flex">
+                <h1 class="font-sans mr-5"><messages:message code="emailAddress"/>:</h1>
+                <h1 class="font-sans font-semibold"><c:out value="${param.buyerMail}"/></h1>
+            </div>
+            <div class="flex">
+                <h1 class="font-sans mr-5"><messages:message code="phoneNumber"/>:</h1>
+                <h1 class="font-sans font-semibold"><c:out value="${param.buyerPhone}"/></h1>
+            </div>
+            <div class="flex">
+                <h1 class="font-sans mr-5"><messages:message code="rating"/>:</h1>
+                <h1 class="font-sans font-semibold"><c:out value="${param.buyerRating}"/></h1>
+            </div>
         </div>
-        <div class="flex">
-            <h1 class="font-sans mr-5"><messages:message code="emailAddress"/>:</h1>
-            <h1 class="font-sans font-semibold"><c:out value="${param.buyerMail}"/></h1>
+    </c:if>
+    <c:if test="${(param.tradeStatus == 'SOLD') }">
+        <div class="flex justify-center mt-5">
+            <a class="flex bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
+               href="<c:url value="/receiptDescription/${param.tradeId}"/>">
+                <messages:message code="help"/>
+            </a>
         </div>
-        <div class="flex">
-            <h1 class="font-sans mr-5"><messages:message code="phoneNumber"/>:</h1>
-            <h1 class="font-sans font-semibold"><c:out value="${param.buyerPhone}"/></h1>
-        </div>
-        <div class="flex">
-            <h1 class="font-sans mr-5"><messages:message code="rating"/>:</h1>
-            <h1 class="font-sans font-semibold"><c:out value="${param.buyerRating}"/></h1>
-        </div>
-    </div>
+    </c:if>
 
 
+    <c:if test="${param.tradeStatus.equals('PENDING')}">
+        <c:url value="/seller/changeStatus" var="postUrl"/>
+        <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
+                   cssClass="flex w-2/5 justify-center mx-auto my-5">
+            <form:hidden path="newStatus" id="newStatus-${param.tradeId}" value="${param.tradeStatus}"/>
+            <form:hidden path="tradeId" value="${param.tradeId}"/>
 
-            <c:if test="${param.tradeStatus.equals('PENDING')}">
-                <c:url value="/seller/changeStatus" var="postUrl"/>
-                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex w-2/5 justify-center mx-auto my-5">
-                    <form:hidden path="newStatus" id="newStatus-${param.tradeId}" value="${param.tradeStatus}"/>
-                    <form:hidden path="tradeId" value="${param.tradeId}"/>
+            <button onclick="updateStatus('REJECTED', ${param.tradeId})" type="submit"
+                    class="bg-red-400 text-white p-3  rounded-md font-sans mr-4"><messages:message
+                    code="rejectTrade"/></button>
+            <button onclick="updateStatus('ACCEPTED', ${param.tradeId})" type="submit"
+                    class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
+                    code="acceptTrade"/></button>
+        </form:form>
+    </c:if>
+    <c:if test="${param.tradeStatus.equals('ACCEPTED')}">
+        <c:url value="/closeTrade" var="formUrl"/>
+        <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
+                   cssClass="flex w-2/5 justify-center mx-auto my-5">
+            <form:hidden path="offerId" value="${param.offerId}"/>
+            <form:hidden path="trade" value="${param.tradeId}"/>
+            <button type="submit"
+                    class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
+                <messages:message code="soldTrade"/></button>
+        </form:form>
+    </c:if>
 
-                    <button onclick="updateStatus('REJECTED', ${param.tradeId})" type="submit"
-                            class="bg-red-400 text-white p-3  rounded-md font-sans mr-4"><messages:message
-                            code="rejectTrade"/></button>
-                    <button onclick="updateStatus('ACCEPTED', ${param.tradeId})" type="submit"
-                            class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
-                            code="acceptTrade"/></button>
-                </form:form>
-            </c:if>
-            <c:if test="${param.tradeStatus.equals('ACCEPTED')}">
-                <c:url value="/closeTrade" var="formUrl"/>
-                <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex w-2/5 justify-center mx-auto my-5" >
-                    <form:hidden path="offerId" value="${param.offerId}"/>
-                    <form:hidden path="trade" value="${param.tradeId}"/>
-                    <button type="submit"
-                            class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
-                        <messages:message code="soldTrade"/></button>
-                </form:form>
-            </c:if>
-
-        <c:if test="${!(param.tradeStatus.equals('ACCEPTED')) && !(param.tradeStatus.equals('PENDING'))}">
-            <div class="flex h-2/5 my-5"></div>
-        </c:if>
+    <c:if test="${!(param.tradeStatus.equals('ACCEPTED')) && !(param.tradeStatus.equals('PENDING'))}">
+        <div class="flex h-2/5 my-5"></div>
+    </c:if>
 
 </div>
 

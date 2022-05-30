@@ -107,7 +107,7 @@
             <c:if test="${status.equals('ACCEPTED')}">
                 <div class="flex flex-col mx-auto">
                     <div class="flex flex-row mx-auto mt-10">
-                        <h1 class="text-polard text-xl font-bold text-center mr-5 ">Algunos consejos para comprar P2P en persona</h1>
+                        <h1 class="text-polard text-2xl font-bold text-center mr-5 "><messages:message code="adviceOnP2P"/> </h1>
                     </div>
                     <ul class="mx-20 list-decimal my-3">
                         <li class="mt-5 text-polard text-lg">
@@ -115,7 +115,7 @@
                             </li>
                         <li class="mt-5 text-polard text-lg">
                             <p>
-                                <messages:message code="advice2"
+                                <messages:message code="advice2"/>
                              </p>
                         </li>
                         <li class="mt-5 text-polard text-lg">

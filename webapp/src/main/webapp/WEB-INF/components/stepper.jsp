@@ -6,9 +6,10 @@
   <div class="col-span-12 block">
     <div class="wrapper-progressBar">
       <ul class="progressBar">
-        <li class="${param.active >= 0  ? 'active': 'text-gray-400'}">Enviaste tu oferta</li>
-        <li class="${param.active >= 1  ? 'active': 'text-gray-400'}">Contacta al vendedor para realizar el intercambio.</li>
-        <li class="${param.active == 2  ? 'active': 'text-gray-400'}">Intercambio exitoso!</li>
+        <li class="${param.active >= 0  ? 'active': 'text-gray-400'}"><messages:message code="offerSent"/></li>
+        <li class="${param.active >= 1  ? 'active': 'text-gray-400'}"><messages:message code="offerAccepted"/></li>
+        <li class="${param.active == 2  ? 'active': 'text-gray-400'}">
+          <messages:message code="successfulExchange"/></li>
       </ul>
     </div>
   </div>

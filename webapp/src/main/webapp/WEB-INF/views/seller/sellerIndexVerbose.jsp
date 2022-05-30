@@ -124,7 +124,7 @@
 
                     <div id="<c:out value="${offer.id}" />"
                          class="flex flex-row shadow-xl rounded-lg  w-[800px] bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden">
-                        <c:if test="${offer.associatedTrades.size() == 0}">
+                        <c:if test="${offer.associatedTrades == null}">
                             <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
                         </c:if>
@@ -259,7 +259,7 @@
                         <jsp:include page="../../components/paginator.jsp">
                             <jsp:param name="activePage" value="${activePage}"/>
                             <jsp:param name="pages" value="${pages}"/>
-                            <jsp:param name="baseUrl" value="/mytrades"/>
+                            <jsp:param name="baseUrl" value="/seller/"/>
                         </jsp:include>
                         <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message
                                 code="totalPageAmount"/>: ${pages}</h1>

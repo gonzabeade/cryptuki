@@ -100,16 +100,16 @@
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
                                                                 <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span></b></p>
-                                                                <p><span th:text="#{theTradeWith}">La trade con</span> <span th:text="${buyer}">comprador</span> <span th:text="#{for}">por</span> <span th:text="${quantity}"></span> $ARS <span th:text="#{of}"></span> <span th:text="${coinCode}"></span> <span th:text="#{finished}">ha finalizado.</span></p>
-                                                                <p><span th:text="#{transferToWallet}">Deberás transferir el monto acordado a la wallet</span> <span th:text="${wallet}">wallet</span>.</p>
-                                                                <p><span th:text="#{detailsWithLink}">Puedes ver los detalles del recibo a través de tu cuenta o entrando al siguiente link</span>:</p>
+                                                                <p><span th:text="#{offerReceived}">Has recibido una offer de</span> <span th:text="${buyer}">comprador</span> <span th:text="#{for}">por</span> <span th:text="${quantity}"></span> $ARS <span th:text="#{of}"></span> <span th:text="${coinCode}"></span></p>
+                                                                <p><span th:text="#{canSeeOffer}">Podrás ver la oferta entrando a tu perfil</span>.</p>
+                                                                <p><span th:text="#{canAcceptOrDecline}">Podrás aceptar o rechazar la oferta de compra</span>.</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="esd-block-button es-p35t es-p35b es-p10r es-p10l" style="text-align: center; padding-bottom: 20px;">
                                                                                         <span class="es-button-border" style="border-color: #8ed3d5; background: #8ed3d5;">
-                                                                                            <a th:href="${url}+'/receiptDescription/'+${tradeCode}" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5; padding: 7px; border: 2px solid #8ed3d5;border-radius:0.5rem; text-decoration: none; color: #f4f4f4">
-                                                                                                <span th:text="#{receipt}" style="font-family: sans-serif">Recibo</span>
+                                                                                            <a th:href="${url}+'/trade?tradeId='+${tradeCode}" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5; padding: 7px; border: 2px solid #8ed3d5;border-radius:0.5rem; text-decoration: none; color: #f4f4f4">
+                                                                                                <span th:text="#{offer}" style="font-family: sans-serif">Recibo</span>
                                                                                             </a>
                                                                                         </span>
                                                             </td>

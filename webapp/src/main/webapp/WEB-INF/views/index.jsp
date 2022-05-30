@@ -56,15 +56,15 @@
 
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="location"/></label>
-        <div class="flex flex-row ">
-            <input type="text" id="location" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
+        <div class="flex flex-row mx-auto ">
+            <input type="text" id="location" class="bg-transparent border-b-2 border-[#2E3440] mx-2 p-2" onchange="addQueryParam(this.id)">
         </div>
     </div>
 
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="price" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="wantToBuy"/></label>
         <div class="flex flex-row ">
-            <input type="number" id="price" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
+            <input type="number" id="price" class="bg-transparent border-b-2 border-[#2E3440] mx-2 p-2" onchange="addQueryParam(this.id)">
             <h1 class="font-sans font-semibold my-auto">ARS</h1>
         </div>
     </div>

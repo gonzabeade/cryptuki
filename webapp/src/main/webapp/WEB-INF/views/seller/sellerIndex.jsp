@@ -31,6 +31,7 @@
                 <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
                 <jsp:param name="rating" value="${user.rating}"/>
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+                <jsp:param name="isBuyer" value="${false}"/>
             </jsp:include>
         </div>
         <div class="mx-auto mt-10">

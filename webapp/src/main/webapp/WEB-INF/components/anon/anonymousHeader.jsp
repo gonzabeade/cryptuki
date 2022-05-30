@@ -31,7 +31,7 @@
                     </li>
                     <li class="mt-1">
                         <a href="<c:url value="/register"/>"
-                           class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message
+                           class="py-2 pr-4 pl-3  text-white font-bold rounded-lg bg-polar border-2 border-polar my-auto mx-auto"><messages:message
                                 code="register"/></a>
                     </li>
                 <%--                <li>--%>

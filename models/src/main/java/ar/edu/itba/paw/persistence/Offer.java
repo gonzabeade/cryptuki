@@ -37,6 +37,8 @@ public final class Offer {
     private  float maxQuantity;
     @Column(name="comments",length = 280)
     private  String comments;
+    @Column(name="location", length = 100)
+    private String location;
 
     @OneToMany(mappedBy = "offer",orphanRemoval = true)
     private  Collection<PaymentMethodAtOffer> paymentMethodAtOffers ;
@@ -118,6 +120,11 @@ public final class Offer {
             this.paymentMethods.add(PaymentMethod.getInstance(pam.getPaymentMethod().getName(),pam.getPaymentMethod().getDescription()));
     }
 
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public static class Builder {
 
         private User seller;
@@ -130,6 +137,7 @@ public final class Offer {
         private float minQuantity;
         private float maxQuantity;
 
+        private String location;
         private String comments;
 
         private OfferStatus status;
@@ -147,6 +155,10 @@ public final class Offer {
         public Builder withComments(String comments) { this.comments = comments; return this; }
         public Builder withDate(LocalDateTime date) {
             this.date = date; // Immutable
+            return this;
+        }
+        public Builder withLocation(String location) {
+            this.location = location;
             return this;
         }
         protected Builder withStatus(OfferStatus status) { this.status = status; return this; }
@@ -191,6 +203,10 @@ public final class Offer {
         protected Offer build() {
             return new Offer(this);
         }
+
+        public String getLocation() {
+            return location;
+        }
     }
 
     private Offer(Builder builder) {
@@ -204,6 +220,7 @@ public final class Offer {
         status = builder.status;
         paymentMethods = builder.paymentMethods;
         comments = builder.comments;
+        location = builder.location;
     }
 
     public int getId() {
@@ -226,6 +243,9 @@ public final class Offer {
     }
     public float getMaxQuantity() {
         return maxQuantity;
+    }
+    public String getLocation() {
+        return location;
     }
     public Collection<PaymentMethod> getPaymentMethods() {
 

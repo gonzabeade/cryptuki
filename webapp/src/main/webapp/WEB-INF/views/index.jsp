@@ -42,6 +42,7 @@
             </c:forEach>
         </select>
     </div>
+    <%--
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="pm" class="font-sans text-sm font-semibold  ml-2 text-center"><messages:message code="paymentMethod"/></label>
         <select name="pm" id="pm" class="bg-transparent p-2 mx-2" onchange="addQueryParam(this.id)">
@@ -51,10 +52,19 @@
             </c:forEach>
         </select>
      </div>
+     --%>
+
+    <div class="flex flex-col my-auto justify-center mx-3">
+        <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="location"/></label>
+        <div class="flex flex-row mx-auto ">
+            <input type="text" id="location" class="bg-transparent border-b-2 border-[#2E3440] mx-2 p-2" onchange="addQueryParam(this.id)">
+        </div>
+    </div>
+
     <div class="flex flex-col my-auto justify-center mx-3">
         <label for="price" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message code="wantToBuy"/></label>
         <div class="flex flex-row ">
-            <input type="number" id="price" class="bg-transparent border-1 border-polard mx-2 p-2" onchange="addQueryParam(this.id)">
+            <input type="number" id="price" class="bg-transparent border-b-2 border-[#2E3440] mx-2 p-2" onchange="addQueryParam(this.id)">
             <h1 class="font-sans font-semibold my-auto">ARS</h1>
         </div>
     </div>
@@ -133,6 +143,7 @@
                         <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().toString()}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                         <jsp:param name="rating" value="${offer.seller.rating}"/>
+                        <jsp:param name="location" value="${offer.location}"/>
                     </jsp:include>
                 </li>
             </c:forEach>
@@ -158,24 +169,7 @@
 
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
 <script>
-    window.onload = function (){
-        var searchParams = new URLSearchParams(window.location.search);
-        var orderingDirection = searchParams.get("orderingDirection");
-        if(orderingDirection!= null){
-            if(orderingDirection == 1){
-                document.getElementsByName("asc")[0].classList.remove("hidden");
-                return;
-            }
-        }
-        document.getElementsByName("desc")[0].classList.remove("hidden");
 
-        var orderingCriterion = searchParams.get("orderingCriterion");
-        if(orderingCriterion!=null){
-            document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
-        }
-
-
-    }
 </script>
 
 

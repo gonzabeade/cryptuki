@@ -48,8 +48,12 @@
 
     <div class="flex flex-wrap h-full mr-20 w-3/5">
 
+<%--        <div class="shadow-xl w-full h-1/7 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF]">--%>
+<%--            Hola--%>
+<%--        </div>--%>
+
         <c:forEach var="offer" items="${offerList}">
-            <div class="flex flex-row my-5 mx-5 h-2/5">
+            <div class="flex flex-row my-5 mx-5 h-2/5 ">
 
                     <%--    Tarjeta de anuncio--%>
                 <div class="shadow-xl w-[270px] flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start">
@@ -130,15 +134,15 @@
                                 <div class="flex">
                                     <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
                                         <%--            <h1 class="font-sans font-semibold"><c:out value="${param.buyerMail}"/></h1>--%>
-                                    <h1 class="font-sans font-semibold"><c:out value="??????"/></h1>
+                                    <h1 class="font-sans font-semibold"><c:out value="${trade.user.email}"/></h1>
                                 </div>
                                 <div class="flex">
                                     <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
-                                    <h1 class="font-sans font-semibold"><c:out value="??????"/></h1>
+                                    <h1 class="font-sans font-semibold"><c:out value="${trade.user.phoneNumber}"/></h1>
                                 </div>
                                 <div class="flex">
                                     <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
-                                    <h1 class="font-sans font-semibold"><c:out value="?????"/></h1>
+                                    <h1 class="font-sans font-semibold"><c:out value="${trade.user.rating}"/></h1>
                                 </div>
                             </div>
 
@@ -178,9 +182,9 @@
                     </c:forEach>
                 </div>
 
-                <div class="flex flex-col w-10 -ml-5 h-full" onClick="toggle(<c:out value="${offer.id}" />)">
-                    <div class="my-auto bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7">
-                    </div>
+                <div class="flex flex-col w-10 -ml-5 h-full justify-center" onClick="toggle(<c:out value="${offer.id}" />) ">
+<%--                    <div class="flex rotate-90 whitespace-nowrap">hola mundo</div>--%>
+                    <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>
                 </div>
 
             </div>

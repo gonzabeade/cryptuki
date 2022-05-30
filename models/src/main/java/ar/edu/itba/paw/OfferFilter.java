@@ -16,11 +16,14 @@ public class OfferFilter {
     private Double maxPrice;
 
     private String username;
+    private String location;
 
     private Collection<String> status = new LinkedList<>();
 
     private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
     private OfferOrderDirection orderDirection = OfferOrderDirection.DESC;
+
+    private Collection<String> discardedUsernames = new LinkedList<>();
 
 
     public Collection<String> getPaymentMethods() {
@@ -45,6 +48,12 @@ public class OfferFilter {
     }
     public OfferOrderCriteria getOrderCriteria() {
         return orderCriteria;
+    }
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
+    }
+    public Collection<String> getDiscardedUsernames() {
+        return Collections.unmodifiableCollection(discardedUsernames);
     }
 
     public OfferFilter byStatus(String status) {
@@ -94,6 +103,11 @@ public class OfferFilter {
         return this;
     }
 
+    public OfferFilter byLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
     public OfferFilter withOrderingCriterion(int criterion){
         this.orderCriteria = OfferOrderCriteria.values()[criterion];
         return this;
@@ -101,6 +115,12 @@ public class OfferFilter {
 
     public OfferFilter withOrderingDirection(int direction){
         this.orderDirection = OfferOrderDirection.values()[direction];
+        return this;
+    }
+
+    public OfferFilter whereUsernameNot(String username){
+        if( username != null )
+            discardedUsernames.add(username);
         return this;
     }
 

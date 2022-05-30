@@ -28,10 +28,16 @@ public class UploadOfferForm {
     @NotNull
     private String cryptocurrency;
 
+    //TODO SALVA: mirar que hacer con los payment methods, tanto como sacarlos como que valor pasarle
     @Size(min = 1)
-    private String[] paymentMethods;
+    private String[] paymentMethods = new String[] {"cas"};
+
     @Size(min = 1, max = 140)
     private String message;
+
+    @Size(min = 1, max = 30)
+    private String location;
+
     public String getMessage() {
         return message;
     }
@@ -72,19 +78,32 @@ public class UploadOfferForm {
         this.cryptocurrency = cryptocurrency;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String[] getPaymentMethods() {
         return paymentMethods;
     }
 
+
     public void setPaymentMethods(String[] paymentMethods) {
-        this.paymentMethods = paymentMethods;
+        return;
+        //this.paymentMethods = paymentMethods;
     }
+
 
     public OfferDigest toOfferDigest(int sellerId) {
         OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price)
                 .withMinQuantity(minAmount)
                 .withMaxQuantity(maxAmount)
-                .withComments(message);
+                .withComments(message)
+                .withLocation(location);
+
         for (String pm: paymentMethods)
                 builder.withPaymentMethod(pm);
         return builder.build();

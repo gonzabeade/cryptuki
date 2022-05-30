@@ -29,6 +29,7 @@
                 <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
                 <jsp:param name="rating" value="${user.rating}"/>
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+                <jsp:param name="isBuyer" value="${true}"/>
             </jsp:include>
         </div>
 <%--        <div class="my-5">--%>

@@ -24,7 +24,7 @@ public class ModifyOfferForm extends UploadOfferForm {
     }
 
     public OfferDigest toOfferDigest(int sellerId) {
-        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, getCryptocurrency(), getPrice()).withMinQuantity(getMinAmount()).withMaxQuantity(getMaxAmount()).withComments(getMessage()).withId(offerId);
+        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, getCryptocurrency(), getPrice()).withMinQuantity(getMinAmount()).withMaxQuantity(getMaxAmount()).withComments(getMessage()).withLocation(getLocation()).withId(offerId);
         for (String pm: getPaymentMethods())
                 builder.withPaymentMethod(pm);
         return builder.build();
@@ -37,6 +37,7 @@ public class ModifyOfferForm extends UploadOfferForm {
         setCryptocurrency(offer.getCrypto().getCode());
         setPrice(offer.getAskingPrice());
         setMessage(offer.getComments());
+        setLocation(offer.getLocation());
         setPaymentMethods(
                 offer.getPaymentMethods().stream().map(pm -> pm.getName()).toArray(String[]::new)
         );

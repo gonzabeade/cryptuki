@@ -40,6 +40,7 @@
                         <h3 id="fileName" class="font-sans text-2xl mt-3"><messages:message code="chooseYourPic"/></h3>
                     </div>
                 </form:label>
+                <form:input path="buyer" type="hidden" value="${true}"/>
                 <form:input type="file" path="multipartFile" onchange="getUploadedFileName(this)" cssClass="invisible before:bg-red-400 "/>
             </div>
             <div class="flex justify-around">

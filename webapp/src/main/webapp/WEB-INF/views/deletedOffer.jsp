@@ -17,7 +17,8 @@
 <body class="bg-storml overflow-x-hidden">
 
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/buyer/buyerHeader.jsp"/>
+
+<jsp:include page="../components/seller/sellerHeader.jsp"/>
 <div class="flex flex-row  mt-10">
   <div class="flex flex-col mx-auto">
     <div class="mx-auto">

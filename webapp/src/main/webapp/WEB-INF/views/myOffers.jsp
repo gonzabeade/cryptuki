@@ -55,6 +55,8 @@
                     <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().hour}:${offer.seller.lastLogin.toLocalTime().minute}"/>
                     <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
                     <jsp:param name="rating" value="${offer.seller.rating}"/>
+                    <jsp:param name="location" value="${offer.location}"/>
+
                 </jsp:include>
                 <div id="${offer.id}" style="display: none" class="flex scroll bg-stormd/[0.9]">
                     <div class="flex w-1/2 mt-2 bg-stormd/[0.9]">
@@ -90,6 +92,7 @@
             </li>
         </c:forEach>
     </div>
+
     <c:if test="${noOffers}">
         <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noOffersUploaded"/></h2>
         <a href="<c:url value="/seller/upload"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
@@ -126,6 +129,9 @@
         document.getElementById(id).setAttribute("style","display: none");
         document.getElementById("hide-"+id).setAttribute("style","display: none");
         document.getElementById("show-"+id).setAttribute("style","display");
+    }
+    function updateStatus(newStatusName, tradeId) {
+        document.getElementById('newStatus-'+tradeId).setAttribute('value',newStatusName)
     }
 
 </script>

@@ -40,7 +40,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView landing() {
+     public ModelAndView landing() {
         return new ModelAndView("redirect:/buyer/market");
     }
 

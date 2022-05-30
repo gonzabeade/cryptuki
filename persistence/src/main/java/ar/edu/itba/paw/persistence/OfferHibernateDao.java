@@ -34,7 +34,8 @@ public class OfferHibernateDao implements OfferDao{
                 .setParameter("max", filter.getMaxPrice().isPresent() ? (float)filter.getMaxPrice().getAsDouble() : null)
                 .setParameter("uname", filter.getUsername().orElse(null))
                 .setParameter("status", filter.getStatus().isEmpty() ? null: filter.getStatus())
-                .setParameter("location", filter.getLocation().orElse(null));
+                .setParameter("location", filter.getLocation().orElse(null))
+                .setParameter("discardedUnames", filter.getDiscardedUsernames().isEmpty() ? null : filter.getDiscardedUsernames());
     }
 
 
@@ -114,6 +115,7 @@ public class OfferHibernateDao implements OfferDao{
                 "( COALESCE(:uname, null) IS NULL or offerRow.seller.userAuth.username = :uname) AND "+
                 "( COALESCE(:location, null) IS NULL or offerRow.location = :location) AND "+
                 "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status) ) AND" +
+                "( COALESCE(:discardedUnames, null) IS NULL OR offerRow.seller.userAuth.username NOT IN (:discardedUnames)) AND "+
                 "( offerRow.id IN ( :idsAccepted)  ) "+
                 ")";
 

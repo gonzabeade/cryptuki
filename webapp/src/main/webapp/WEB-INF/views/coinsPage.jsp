@@ -21,7 +21,7 @@
     <jsp:include page="../components/buyer/buyerHeader.jsp"/>
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
-    <jsp:include page="../components/buyer/anonimousHeader.jsp"/>
+    <jsp:include page="../components/anon/anonymousHeader.jsp"/>
 </sec:authorize>
 <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-20 mb-20"><messages:message code="getToKnowMainCryptocurrencies"/></h1>
 <div class="mx-48">

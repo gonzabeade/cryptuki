@@ -38,7 +38,7 @@ public class SellerController {
     private final PaymentMethodService paymentMethodService;
 
     private final UserService userService;
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 6;
 
     @Autowired
     public SellerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
@@ -52,45 +52,43 @@ public class SellerController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView seller(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm,@ModelAttribute("ProfilePicForm") ProfilePicForm form){
-        ModelAndView mav = new ModelAndView("seller/sellerIndex");
+        ModelAndView mav = new ModelAndView("seller/sellerIndexVerbose");
 
         String username = authentication.getName();
         int pageNumber= page.orElse(0);
         User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
+        int offerCount = offerService.countOffersByUsername(authentication.getName());
+        int pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
 
-
-        int tradeCount= tradeService.getSellingTradesByUsernameCount(username, TradeStatus.ACCEPTED);
-        Collection<Trade> tradeList = tradeService.getSellingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, TradeStatus.ACCEPTED);
-
-        int pages = (tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
-
+        mav.addObject("offerList",offers);
+        mav.addObject("noOffers",offers.isEmpty());
         mav.addObject("username",username);
         mav.addObject("user",user);
-        mav.addObject("noSellingTrades", tradeList.isEmpty());
         mav.addObject("tradeStatusList",TradeStatus.values());
-        mav.addObject("tradeList",tradeList);
         mav.addObject("pages",pages);
         mav.addObject("activePage",pageNumber);
         return mav;
     }
 
 
-    @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
-    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
-        ModelAndView mav = new ModelAndView("myOffers");
-        int pageNumber = page.orElse(0);
-        int offerCount = offerService.countOffersByUsername(authentication.getName());
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
-        if(offers.isEmpty())
-            mav.addObject("noOffers",true);
-
-        mav.addObject("offerList",offers);
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-        return mav;
-    }
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, @ModelAttribute("ProfilePicForm") ProfilePicForm form){
+//        ModelAndView mav = new ModelAndView("seller/sellerIndex");
+//        int pageNumber = page.orElse(0);
+//        int offerCount = offerService.countOffersByUsername(authentication.getName());
+//        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+//        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
+//        if(offers.isEmpty())
+//            mav.addObject("noOffers",true);
+//
+//
+//        mav.addObject("offerList",offers);
+//        mav.addObject("pages", pages);
+//        mav.addObject("activePage", pageNumber);
+//        mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+//        return mav;
+//    }
 
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)

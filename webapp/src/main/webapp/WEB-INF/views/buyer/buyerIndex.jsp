@@ -29,6 +29,7 @@
                 <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
                 <jsp:param name="rating" value="${user.rating}"/>
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+                <jsp:param name="isBuyer" value="${true}"/>
             </jsp:include>
         </div>
 <%--        <div class="my-5">--%>
@@ -38,11 +39,15 @@
 
     <!-- Middle Panel: trade -->
     <div class="flex flex-col h-full mr-20 w-3/5">
-        <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="offersCreated"/></h1>
+        <div class="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
+            <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="buyOrdersCreated"/></h1>
+        </div>
 
-        <jsp:include page="../../components/tradeFilter.jsp">
-            <jsp:param name="url" value="/buyer"/>
-        </jsp:include>
+
+<%--        <jsp:include page="../../components/tradeFilter.jsp">--%>
+<%--            <jsp:param name="url" value="/buyer"/>--%>
+<%--        </jsp:include>--%>
+        <jsp:include page="../../components/buyer/buyerTradeFilter.jsp"/>
 
 
     <div  class="flex flex-col justify-center w-full mx-auto mt-10">

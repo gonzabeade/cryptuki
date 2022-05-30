@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link  href="/public/css/stepper.css" rel="stylesheet">
     <title>cryptuki</title>
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
@@ -62,8 +63,33 @@
                     </div>
                 </div>
             </c:if>
-        <div class="flex flex-col">
-            <h1 class="text-3xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
+        <div class="flex flex-col mx-auto my-4">
+            <c:choose>
+                <c:when test="${status.equals('PENDING')}">
+                    <c:set var="step" value="0"/>
+                </c:when>
+                <c:when test="${status.equals('ACCEPTED')}">
+                    <c:set var="step" value="1"/>
+                </c:when>
+                <c:when test="${status.equals('SOLD')}">
+                    <c:set var="step" value="2"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="step" value="3"/>
+                </c:otherwise>
+            </c:choose>
+
+            <c:if test="${step < 3}">
+                <h1 class="text-polard text-3xl font-bold text-center my-4">Proceso de compra</h1>
+                <jsp:include page="../components/stepper.jsp">
+                    <jsp:param name="active" value="${step}"/>
+                </jsp:include>
+            </c:if>
+
+
+        </div>
+      <div class="flex flex-col">
+            <h1 class="text-2xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
             <div class="flex flex-row justify-center">
 
                 <div class="flex flex-col mx-10 order-1" id="left">
@@ -81,7 +107,7 @@
             <c:if test="${status.equals('ACCEPTED')}">
                 <div class="flex flex-col mx-auto">
                     <div class="flex flex-row mx-auto mt-10">
-                        <h1 class="text-polard text-xl font-bold text-center mr-5 ">Algunos consejos para comprar P2P en persona</h1>
+                        <h1 class="text-polard text-2xl font-bold text-center mr-5 "><messages:message code="adviceOnP2P"/> </h1>
                     </div>
                     <ul class="mx-20 list-decimal my-3">
                         <li class="mt-5 text-polard text-lg">
@@ -89,7 +115,8 @@
                             </li>
                         <li class="mt-5 text-polard text-lg">
                             <p>
-                               </p>
+                                <messages:message code="advice2"/>
+                             </p>
                         </li>
                         <li class="mt-5 text-polard text-lg">
                             <p>

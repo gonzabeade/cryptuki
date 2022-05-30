@@ -31,7 +31,12 @@
                 <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
                 <jsp:param name="rating" value="${user.rating}"/>
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+                <jsp:param name="isBuyer" value="${false}"/>
             </jsp:include>
+        </div>
+        <div class="mx-auto mt-10">
+            <a href="<c:url value="/seller/upload"/>"
+               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">Subir anuncio</a>
         </div>
 <%--        <div class="my-5">--%>
 <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
@@ -39,7 +44,21 @@
     </div>
 
     <!-- Middle Panel: trade -->
-    <div class="flex flex-col h-full mr-20 w-3/5">
+
+    <div class="flex flex-wrap h-full mr-20 w-3/5">
+
+        <c:forEach var="offer" items="${offerList}">
+            <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp">
+                <jsp:param name="currency" value="${offer.crypto.code}"/>
+                <jsp:param name="offerId" value="${offer.id}"/>
+                <jsp:param name="askingPrice" value="${offer.askingPrice}"/>
+                <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
+                <jsp:param name="offerDate" value="${offer.date.toLocalDate()}"/>
+                <jsp:param name="offerLocation" value="Caballito"/>
+            </jsp:include>
+        </c:forEach>
+
 
 
         <div  class="flex flex-col justify-center w-full mx-auto mt-10">
@@ -84,7 +103,10 @@
 <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
 <%--    </div>--%>
 
+
+
 </div>
+
 
 
 

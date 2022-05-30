@@ -103,10 +103,10 @@ public class BuyerController {
                 .withOrderingCriterion(orderingCriterion.orElse(0))
                 .withOrderingDirection(orderingDirection.orElse(0));;
 
-        int offerCount = offerService.countOffersBy(filter);
+        int offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
-        mav.addObject("offerList", offerService.getOfferBy(filter));
+        mav.addObject("offerList", offerService.getMarketOffersBy(filter, authentication == null ? null : authentication.getName()));
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());

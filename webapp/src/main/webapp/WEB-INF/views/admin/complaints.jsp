@@ -38,7 +38,7 @@
             <jsp:include page="../../components/admin/cardComplaint.jsp">
               <jsp:param name="date" value="${complain.date}"/>
               <jsp:param name="complainId" value="${complain.complainId}"/>
-              <jsp:param name="complainerUsername" value="${complain.complainer.username.get()}"/>
+              <jsp:param name="complainerUsername" value="${complain.complainer.getUserAuth().getUsername()}"/>
               <jsp:param name="complainerComments" value="${complain.complainerComments.get()}"/>
               <jsp:param name="complainStatus" value="${complain.status}"/>
             </jsp:include>

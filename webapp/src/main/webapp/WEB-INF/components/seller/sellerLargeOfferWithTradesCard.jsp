@@ -48,10 +48,19 @@
 <%--      s--%>
   <div id="1" class="flex flex-row shadow-xl rounded-lg  w-[900px] bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden hidden">
 
-        <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
-        <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
-        <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
-        <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
+      <jsp:include page="../../components/verticalSellingTradeCard.jsp">
+          <jsp:param name="tradeStatus" value="ACCEPTED"/>
+      </jsp:include>
+
+      <jsp:include page="../../components/verticalSellingTradeCard.jsp">
+          <jsp:param name="tradeStatus" value="PENDING"/>
+      </jsp:include>
+      <jsp:include page="../../components/verticalSellingTradeCard.jsp">
+          <jsp:param name="tradeStatus" value="REJECTED"/>
+      </jsp:include>
+      <jsp:include page="../../components/verticalSellingTradeCard.jsp">
+          <jsp:param name="tradeStatus" value="SOLD"/>
+      </jsp:include>
         <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
         <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
   </div>

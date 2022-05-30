@@ -53,3 +53,9 @@
   </div>
 
 </div>
+
+<script>
+  function updateStatus( status, tradeId) {
+    document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
+  }
+</script>

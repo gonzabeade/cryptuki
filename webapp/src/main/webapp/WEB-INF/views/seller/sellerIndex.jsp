@@ -35,7 +35,7 @@
         </div>
         <div class="mx-auto mt-10">
             <a href="<c:url value="/seller/upload"/>"
-               class="py-2 pr-4 pl-3 text-xl text-polar font-bold rounded-lg bg-frost border-2 border-polar my-auto mx-auto">Subir anuncio</a>
+               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">Subir anuncio</a>
         </div>
 <%--        <div class="my-5">--%>
 <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>

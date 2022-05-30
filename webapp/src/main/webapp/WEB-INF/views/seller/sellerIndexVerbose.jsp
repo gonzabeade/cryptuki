@@ -80,7 +80,7 @@
                             <p>Fecha: <c:out value="${offer.date.toLocalDate()}"/></p>
                         </div>
                         <div class="flex flex-col font-sans mt-3">
-                            <p>Ubicación: <c:out value="Caballito"/></p>
+                            <p>Ubicación: <c:out value="${offer.location}"/></p>
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@
                             </div>
 
 <%--                            CASE - PENDING--%>
-                            <c:if test="${trade.status.equals('PENDING')}">
+                            <c:if test="${trade.status == 'PENDING'}">
                                 <c:url value="/seller/changeStatus" var="postUrl"/>
                                 <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex justify-center mx-auto my-3">
                                     <form:hidden path="newStatus"  id="newStatus-${trade.tradeId}" value="${trade.status}"/>
@@ -163,7 +163,7 @@
                             </c:if>
 
                                 <%--                            CASE - ACCEPTED--%>
-                            <c:if test="${trade.status.equals('ACCEPTED')}">
+                            <c:if test="${trade.status == 'ACCEPTED' }">
                                 <c:url value="/closeTrade" var="formUrl"/>
                                 <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex justify-center mx-auto my-3" >
                                     <form:hidden path="offerId" value="${offer.id}"/>
@@ -175,7 +175,7 @@
                             </c:if>
 
                                 <%--                            CASE - REJECTED--%>
-                            <c:if test="${!(trade.status.equals('ACCEPTED')) && !(trade.status.equals('PENDING'))}">
+                            <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">
                                 <div class="flex h-2/5 my-2"></div>
                             </c:if>
                         </div>

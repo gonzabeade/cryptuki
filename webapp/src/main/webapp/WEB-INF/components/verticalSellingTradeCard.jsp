@@ -70,13 +70,11 @@
     </div>
 
 
-
     <c:if test="${param.tradeStatus.equals('PENDING')}">
         <c:url value="/seller/changeStatus" var="postUrl"/>
         <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post" cssClass="flex justify-center mx-auto my-3">
             <form:hidden path="newStatus"  id="newStatus-${param.tradeId}" value="${param.tradeStatus}"/>
             <form:hidden path="tradeId" value="${param.tradeId}"/>
-
             <button onclick="updateStatus('REJECTED', ${param.tradeId})" type="submit"
                     class="bg-red-400 text-white p-3  rounded-md font-sans mr-4"><messages:message
                     code="rejectTrade"/></button>
@@ -85,6 +83,7 @@
                     code="acceptTrade"/></button>
         </form:form>
     </c:if>
+
     <c:if test="${param.tradeStatus.equals('ACCEPTED')}">
         <c:url value="/closeTrade" var="formUrl"/>
         <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post" cssClass="flex justify-center mx-auto my-3" >

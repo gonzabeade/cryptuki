@@ -60,10 +60,10 @@
             <c:forEach var="offer" items="${offerList}">
 
 
-                <div class="flex flex-col w-full">
+                <div class="flex flex-col w-full my-5">
                 <div class="flex flex-row mx-5">
                         <%--    Tarjeta de anuncio--%>
-                    <div class="shadow-xl flex flex-col rounded-lg px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start ">
+                    <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start ">
 
                         <div class="flex flex-col items-center mt-5 mb-2">
                             <h1 class="text-2xl font-bold font-sans"><c:out value="Anuncio #${offer.id}"/></h1>
@@ -81,7 +81,7 @@
                                  alt="<c:out value="${offer.crypto.code}"/>" class="w-5 h-5 mx-2 my-auto"/>
                         </div>
 
-                        <div class="flex flex-col justify-start -ml-5 mb-3">
+                        <div class="flex flex-col justify-start mb-3">
                             <div class="flex flex-col font-sans mt-3">
                                 <p><c:out value="Min: ${offer.minQuantity}"/><c:out value=" ${offer.crypto.code}"/></p>
                             </div>

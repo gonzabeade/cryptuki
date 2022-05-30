@@ -42,7 +42,6 @@
 						<h4 class="text-gray-400 font-sans mr-2"> Min: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.minCoinAmount}"/> ARS</h4>
 						<p class="text-gray-400 font-sans">-</p>
 						<h4 class="text-gray-400 font-sans mx-2"> Máx: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price * param.maxCoinAmount}"/> ARS </h4>
-
 					</div>
 					<!-- <h3 class="text-gray-400"> 20% por encima del mercado </h3> -->
 				</div>

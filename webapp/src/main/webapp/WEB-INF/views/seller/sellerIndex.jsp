@@ -33,13 +33,27 @@
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
             </jsp:include>
         </div>
+        <div class="mx-auto mt-10">
+            <a href="<c:url value="/seller/upload"/>"
+               class="py-2 pr-4 pl-3 text-xl text-polar font-bold rounded-lg bg-frost border-2 border-polar my-auto mx-auto">Subir anuncio</a>
+        </div>
 <%--        <div class="my-5">--%>
 <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
 <%--        </div>--%>
     </div>
 
     <!-- Middle Panel: trade -->
-    <div class="flex flex-col h-full mr-20 w-3/5">
+
+    <div class="flex flex-wrap h-full mr-20 w-3/5">
+
+        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
+        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
+        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
+        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
+        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
+
+
+
 
 
         <div  class="flex flex-col justify-center w-full mx-auto mt-10">
@@ -84,7 +98,10 @@
 <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
 <%--    </div>--%>
 
+
+
 </div>
+
 
 
 

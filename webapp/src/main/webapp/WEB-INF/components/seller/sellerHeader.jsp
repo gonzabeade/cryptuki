@@ -11,13 +11,6 @@
         </div>
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
-                <li class="mx-2">
-                    <a href="<c:url value="/seller/myoffers"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="seeAdvertisements"/></a>
-                </li>
-
-                <li class="mx-2">
-                    <a href="<c:url value="/seller/upload"/>" class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="uploadAdvertisement"/></a>
-                </li>
 
                 <li class="-mt-3 mx-2">
                     <a href="<c:url value="/seller/"/>" class="text-polar font-bold text-xl">
@@ -36,7 +29,7 @@
                 </li>
 
                 <li class="mt-1 mx-2">
-                    <a href="<c:url value="/buyer/"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message code="switchSeller"/></a>
+                    <a href="<c:url value="/buyer/market"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message code="switchSeller"/></a>
                 </li>
 
                 <li class="-mt-3 mx-2">

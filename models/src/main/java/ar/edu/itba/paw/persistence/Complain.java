@@ -9,6 +9,14 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 public final class Complain {
     Complain(){}
 
+    public String getComplainerUsername() {
+        return complainerUsername;
+    }
+
+    public void setComplainerUsername(String complainerUsername) {
+        this.complainerUsername = complainerUsername;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complain_complain_id_seq")
     @SequenceGenerator(sequenceName = "complain_complain_id_seq", name = "complain_complain_id_seq", allocationSize = 1)
@@ -37,6 +45,8 @@ public final class Complain {
     private  String complainerComments;
     @Column(name="moderator_comments",nullable = false)
     private  String moderatorComments;
+
+    private String complainerUsername;
 
     @Entity
     @Table(name="complain")
@@ -139,7 +149,10 @@ public final class Complain {
         }
     }
 
+    private Integer tradeId;
     private Complain(Complain.Builder builder) {
+        this.tradeId= builder.getTradeId();
+        this.complainerUsername = builder.getComplainer();
         this.complainId = builder.complainId;
         this.complainerComments = builder.getComplainerComments();
         this.status = builder.status;
@@ -212,6 +225,6 @@ public final class Complain {
     }
 
     public Optional<Integer> getTradeId(){
-        return Optional.ofNullable(trade.getTradeId());
+            return Optional.ofNullable(tradeId);
     }
 }

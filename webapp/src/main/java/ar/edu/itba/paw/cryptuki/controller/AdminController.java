@@ -120,7 +120,7 @@ public class AdminController {
 
     private ModelAndView setUpComplaintView(String view,int complaintId){
         Complain complain = complainService.getComplainById(complaintId).orElseThrow(()->new NoSuchComplainException(complaintId));
-        User complainer = userService.getUserInformation(complain.getComplainer().getUsername().get()).orElseThrow(()->new NoSuchUserException(complain.getComplainer().getUsername().get()));
+        User complainer = userService.getUserInformation(complain.getComplainerUsername()).orElseThrow(()->new NoSuchUserException(complain.getComplainerUsername()));
         Trade trade;
         if(complain.getTradeId().isPresent()){
             trade = tradeService.getTradeById(complain.getTradeId().get()).orElseThrow(() -> new NoSuchTradeException(complain.getTradeId().get()));

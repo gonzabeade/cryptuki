@@ -46,13 +46,17 @@
 
     <div class="flex flex-wrap h-full mr-20 w-3/5">
 
-        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
-        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
-        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
-        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
-        <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp"/>
-
-
+        <c:forEach var="offer" items="${offerList}">
+            <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp">
+                <jsp:param name="currency" value="${offer.crypto.code}"/>
+                <jsp:param name="offerId" value="${offer.id}"/>
+                <jsp:param name="askingPrice" value="${offer.askingPrice}"/>
+                <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
+                <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
+                <jsp:param name="offerDate" value="${offer.date.toLocalDate()}"/>
+                <jsp:param name="offerLocation" value="Caballito"/>
+            </jsp:include>
+        </c:forEach>
 
 
 

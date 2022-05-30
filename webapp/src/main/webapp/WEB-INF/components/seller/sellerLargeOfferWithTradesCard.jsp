@@ -5,31 +5,31 @@
 <div class="flex flex-row my-5 mx-5 h-2/5">
 
   <%--    Tarjeta de anuncio--%>
-  <div class="shadow-xl w-[250px] flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start">
+  <div class="shadow-xl w-[270px] flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] z-20 justify-center items-center content-start">
 
       <div class="flex flex-col items-center mt-5 mb-5">
-          <h1 class="text-[30px] font-bold font-sans">Anuncio 10</h1>
+          <h1 class="text-[30px] font-bold font-sans"><c:out value="Anuncio #${param.offerId}"/></h1>
       </div>
 
       <div class="flex flex-row items-center">
-          <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${215.00}"/> ARS </h1>
+          <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.askingPrice}"/> ARS </h1>
           <p class="my-auto mx-2"> <messages:message code="for"/> </p>
-          <h1 class="text-xl font-sans font-semibold my-auto"><c:out value="DAI"/></h1>
-          <img src="<c:url value="/public/images/DAI.png"/>" alt="<c:out value="DAI"/>" class="w-5 h-5 mx-2 my-auto"/>
+          <h1 class="text-xl font-sans font-semibold my-auto"><c:out value="${param.currency}"/></h1>
+          <img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2 my-auto"/>
       </div>
 
     <div class="flex flex-col justify-start -ml-5 mb-3">
         <div class="flex flex-col font-sans mt-3">
-            <p>Min: 1000AR$</p>
+            <p><c:out value="Min: ${param.minCoinAmount}"/><c:out value=" ${param.currency}"/></p>
         </div>
         <div class="flex flex-col font-sans mt-3">
-            <p>Max: 2000AR$</p>
+            <p><c:out value="Max: ${param.maxCoinAmount}"/><c:out value=" ${param.currency}"/></p>
         </div>
         <div class="flex flex-col font-sans mt-3">
-            <p>Fecha: 25-05-2022</p>
+            <p>Fecha: <c:out value="${param.offerDate}"/></p>
         </div>
         <div class="flex flex-col font-sans mt-3">
-            <p>Ubicación: 25-05-2022</p>
+            <p>Ubicación: <c:out value="${param.offerLocation}"/></p>
         </div>
     </div>
 

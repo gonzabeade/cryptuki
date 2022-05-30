@@ -98,7 +98,6 @@
     <c:if test="${!(param.tradeStatus.equals('ACCEPTED')) && !(param.tradeStatus.equals('PENDING'))}">
         <div class="flex h-2/5 my-2"></div>
     </c:if>
-
 </div>
 
 

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw;
 
+import ar.edu.itba.paw.persistence.Offer;
+
 import java.util.*;
 
 public class OfferFilter {
@@ -14,8 +16,14 @@ public class OfferFilter {
     private Double maxPrice;
 
     private String username;
+    private String location;
 
     private Collection<String> status = new LinkedList<>();
+
+    private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
+    private OfferOrderDirection orderDirection = OfferOrderDirection.DESC;
+
+    private Collection<String> discardedUsernames = new LinkedList<>();
 
 
     public Collection<String> getPaymentMethods() {
@@ -35,8 +43,18 @@ public class OfferFilter {
     public Collection<String> getStatus() {
         return Collections.unmodifiableCollection(status);
     }
-
-
+    public OfferOrderDirection getOrderDirection() {
+        return orderDirection;
+    }
+    public OfferOrderCriteria getOrderCriteria() {
+        return orderCriteria;
+    }
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
+    }
+    public Collection<String> getDiscardedUsernames() {
+        return Collections.unmodifiableCollection(discardedUsernames);
+    }
 
     public OfferFilter byStatus(String status) {
         if ( status != null)
@@ -84,4 +102,26 @@ public class OfferFilter {
         this.pageSize = page;
         return this;
     }
+
+    public OfferFilter byLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public OfferFilter withOrderingCriterion(int criterion){
+        this.orderCriteria = OfferOrderCriteria.values()[criterion];
+        return this;
+    }
+
+    public OfferFilter withOrderingDirection(int direction){
+        this.orderDirection = OfferOrderDirection.values()[direction];
+        return this;
+    }
+
+    public OfferFilter whereUsernameNot(String username){
+        if( username != null )
+            discardedUsernames.add(username);
+        return this;
+    }
+
 }

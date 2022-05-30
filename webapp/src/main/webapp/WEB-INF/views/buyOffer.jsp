@@ -16,7 +16,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
         <div class="flex">
@@ -29,6 +29,14 @@
                     <h2 class="font-sans mx-2"><b><messages:message code="minimum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.minQuantity}"/> ARS </h2>
                     <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.maxQuantity}"/> ARS </h2>
                 </div>
+                <c:choose>
+                    <c:when test="${offer.location == null}">
+                        <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <messages:message code="unknown"/></h2>
+                    </c:when>
+                    <c:otherwise>
+                        <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <c:out value="${offer.location}"/></h2>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
         <div>

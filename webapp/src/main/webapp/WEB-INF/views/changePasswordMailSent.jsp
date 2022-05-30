@@ -18,7 +18,7 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 
 <h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar"><messages:message code="checkEmail"/></h1>
 

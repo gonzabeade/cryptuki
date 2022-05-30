@@ -1,21 +1,129 @@
 package ar.edu.itba.paw.persistence;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+
+
+
+
+@Entity
+@Table(name="offer")
 public final class Offer {
+    Offer(){}
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_id_seq")
+    @SequenceGenerator(sequenceName = "offer_id_seq", name = "offer_id_seq", allocationSize = 1)
+    private  int id;
+    @OneToOne
+    @JoinColumn(name="seller_id")
+    private  User seller;
+    @Column(name="offer_date",nullable = false)
+    private  LocalDateTime date;
+    @OneToOne
+    @JoinColumn(name="crypto_code")
+    private  Cryptocurrency crypto;
+    @OneToOne
+    @JoinColumn(name="status_code")
+    private  OfferStatus status;
+    @Column(name="asking_price",nullable = false)
+    private  float askingPrice;
+    @Column(name="min_quantity",nullable = false)
+    private  float minQuantity;
+    @Column(name="max_quantity",nullable = false)
+    private  float maxQuantity;
+    @Column(name="comments",length = 280)
+    private  String comments;
+    @Column(name="location", length = 100)
+    private String location;
 
-    private final int id;
-    private final User seller;
-    private final LocalDateTime date;
-    private final Cryptocurrency crypto;
-    private final OfferStatus status;
-    private final float askingPrice;
-    private final float minQuantity;
-    private final float maxQuantity;
-    private final String comments;
+    @OneToMany(mappedBy = "offer",orphanRemoval = true)
+    private  Collection<PaymentMethodAtOffer> paymentMethodAtOffers ;
 
-    private final Collection<PaymentMethod> paymentMethods;
+    @OneToMany(mappedBy = "offer",fetch = FetchType.LAZY)
+    private Collection<Trade> associatedTrades;
+
+    public Collection<Trade> getAssociatedTrades() {
+        return associatedTrades;
+    }
+
+    public void setAssociatedTrades(Collection<Trade> associatedTrades) {
+        this.associatedTrades = associatedTrades;
+    }
+
+    @Transient
+   private  Collection<PaymentMethod> paymentMethods = new ArrayList<>();
+
+    public Collection<PaymentMethodAtOffer> getPaymentMethodAtOffers() {
+        return paymentMethodAtOffers;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setCrypto(Cryptocurrency crypto) {
+        this.crypto = crypto;
+    }
+
+    public void setStatus(OfferStatus status) {
+        this.status = status;
+    }
+
+    public void setAskingPrice(float askingPrice) {
+        this.askingPrice = askingPrice;
+    }
+
+    public void setMinQuantity(float minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public void setMaxQuantity(float maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public boolean acceptPaymentMethodCode(Collection<String> paymentMethodCode){
+        return this.paymentMethodAtOffers.stream()
+                        .map(paymentMethodAtOffer -> PaymentMethod.getInstance(paymentMethodAtOffer.getPaymentMethod().getName(),paymentMethodAtOffer.getPaymentMethod().getDescription()))
+                .collect(Collectors.toCollection(ArrayList::new)).containsAll(paymentMethodCode)
+        ;
+
+    }
+
+    public void addPaymentMethodAtOffers(PaymentMethodAtOffer paymentMethodAtOffer){
+        this.paymentMethodAtOffers.add(paymentMethodAtOffer);
+    }
+
+    public void clearPaymentMethodAtOffers(){
+        this.paymentMethodAtOffers.clear();
+    }
+
+
+    public void setPaymentMethodAtOffers(Collection<PaymentMethodAtOffer> paymentMethodAtOffers) {
+        this.paymentMethodAtOffers = paymentMethodAtOffers;
+        for(PaymentMethodAtOffer pam : paymentMethodAtOffers)
+            this.paymentMethods.add(PaymentMethod.getInstance(pam.getPaymentMethod().getName(),pam.getPaymentMethod().getDescription()));
+    }
+
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public static class Builder {
 
@@ -29,6 +137,7 @@ public final class Offer {
         private float minQuantity;
         private float maxQuantity;
 
+        private String location;
         private String comments;
 
         private OfferStatus status;
@@ -46,6 +155,10 @@ public final class Offer {
         public Builder withComments(String comments) { this.comments = comments; return this; }
         public Builder withDate(LocalDateTime date) {
             this.date = date; // Immutable
+            return this;
+        }
+        public Builder withLocation(String location) {
+            this.location = location;
             return this;
         }
         protected Builder withStatus(OfferStatus status) { this.status = status; return this; }
@@ -90,6 +203,10 @@ public final class Offer {
         protected Offer build() {
             return new Offer(this);
         }
+
+        public String getLocation() {
+            return location;
+        }
     }
 
     private Offer(Builder builder) {
@@ -103,6 +220,7 @@ public final class Offer {
         status = builder.status;
         paymentMethods = builder.paymentMethods;
         comments = builder.comments;
+        location = builder.location;
     }
 
     public int getId() {
@@ -126,7 +244,15 @@ public final class Offer {
     public float getMaxQuantity() {
         return maxQuantity;
     }
+    public String getLocation() {
+        return location;
+    }
     public Collection<PaymentMethod> getPaymentMethods() {
+
+        for(PaymentMethodAtOffer pam : this.paymentMethodAtOffers){
+            PaymentMethod pm = pam.getPaymentMethod();
+            this.paymentMethods.add(PaymentMethod.getInstance(pm.getName(),pm.getDescription()));
+        }
         return Collections.unmodifiableCollection(paymentMethods);
     }
 

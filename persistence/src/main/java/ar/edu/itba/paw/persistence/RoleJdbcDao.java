@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class RoleJdbcDao implements RoleDao{
     private JdbcTemplate jdbcTemplate;
 

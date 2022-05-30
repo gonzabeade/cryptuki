@@ -69,13 +69,12 @@ public class TradeServiceImpl implements TradeService {
 
         trade.withCryptoCurrency(offer.getCrypto())
             .withStartDate(LocalDateTime.now())
-            .withTradeStatus(TradeStatus.OPEN)
+            .withTradeStatus(TradeStatus.PENDING)
             .withSellerUsername(userAuth.getUsername())
             .withSellerUsername(userAuth.getUsername());
 
         int tradeId;
         try {
-           offerService.decrementOfferMaxQuantity(offer, trade.getQuantity());
            tradeId = tradeDao.makeTrade(trade);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -87,7 +86,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
+//    @Secured("ROLE_ADMIN")
     public void updateStatus(int tradeId, TradeStatus status) {
 
         if (tradeId < 0)
@@ -178,11 +177,66 @@ public class TradeServiceImpl implements TradeService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return tradeDao.getSellingTradesByUsernameCount(username);
+            return tradeDao.getBuyingTradesByUsername(username);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
     }
+
+    @Override
+    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        if (page < 0 || pageSize < 0)
+            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
+
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getSellingTradesByUsername(username, page, pageSize,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    public int getSellingTradesByUsernameCount(String username, TradeStatus status) {
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getSellingTradesByUsernameCount(username,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
+    @Override
+    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
+        if (page < 0 || pageSize < 0)
+            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
+
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getBuyingTradesByUsername(username, page, pageSize,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+    }
+
+    }
+    @Override
+    public int getBuyingTradesByUsernameCount(String username, TradeStatus status) {
+        if (username == null)
+            throw new NullPointerException("Username cannot be null");
+
+        try {
+            return tradeDao.getBuyingTradesByUsername(username,status);
+        } catch (PersistenceException pe) {
+            throw new ServiceDataAccessException(pe);
+        }
+    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -235,6 +289,13 @@ public class TradeServiceImpl implements TradeService {
         }catch (PersistenceException pe){
             throw new ServiceDataAccessException(pe);
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteTrade(int tradeId) {
+        //validate authorization
+        tradeDao.deleteTrade(tradeId);
     }
 
 

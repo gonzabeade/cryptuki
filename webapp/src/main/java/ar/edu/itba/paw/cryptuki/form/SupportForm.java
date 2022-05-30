@@ -68,7 +68,7 @@ public class SupportForm {
 
     public Complain.Builder toComplainBuilder(){
         Complain.Builder builder =new Complain.Builder(this.username)
-                .withComplainId(this.complainerId)
+//                .withComplainId(this.complainerId)
                 .withComplainerComments(this.message);
         if(this.tradeId!=null)
             builder.withTradeId(tradeId);

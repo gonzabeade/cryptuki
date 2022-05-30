@@ -39,7 +39,7 @@ public class UserController {
     private final ProfilePicService profilePicService;
     private final TradeService tradeService;
 
-    private static final int PAGE_SIZE = 3 ;
+
 
     @Autowired
     public UserController(UserService userService, ProfilePicService profilePicService, TradeService tradeService) {
@@ -143,7 +143,10 @@ public class UserController {
         }
 
         profilePicService.uploadProfilePicture(authentication.getName(), form.getMultipartFile().getBytes(), form.getMultipartFile().getContentType());
-        return new ModelAndView("redirect:/user");
+        if(form.isBuyer()){
+            return new ModelAndView("redirect:/buyer/");
+        }
+        return new ModelAndView("redirect:/seller/");
     }
 
     @RequestMapping(value="/user")
@@ -156,14 +159,6 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("userProfile");
         mav.addObject("user",user);
-
-        int pageNumber= page.orElse(0);
-        int tradeCount = tradeService.getTradesByUsernameCount(username);
-        int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
-        Collection<Trade> tradeList = tradeService.getTradesByUsername(authentication.getName(),pageNumber,PAGE_SIZE);
-        mav.addObject("tradeList",tradeList);
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
         mav.addObject("updatedPass", updatedPass);
         return mav;
     }
@@ -204,8 +199,8 @@ public class UserController {
 
     private ModelAndView logInProgrammatically(String username ){
         UserAuth user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getDescription())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getDescription())));
         SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/");
     }

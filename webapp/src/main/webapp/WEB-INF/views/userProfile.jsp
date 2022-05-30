@@ -21,7 +21,7 @@
 <body class="bg-storml overflow-x-hidden flex flex-col">
 <sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>
@@ -48,6 +48,7 @@
               </svg>
             </div>
           </form:label>
+          <form:input path="buyer" type="hidden" value="${true}"/>
           <form:input type="file" path="multipartFile" cssClass="invisible before:bg-red-400 w-0" onchange="showSendButton()"/>
         </div>
         <button type="submit" id="sendProfile" class="invisible bg-frostdr text-white  mt-7 p-3 rounded-md font-sans  mx-auto active:cursor-progress"><messages:message code="save"/></button>
@@ -99,35 +100,6 @@
     </div>
   </div>
 </div>
-
-<h2 class="text-center text-3xl font-semibold font-sans text-polar mt-10"><messages:message code="myTransactions"/>: </h2>
-<div  class="flex flex-col justify-center mx-auto mt-10">
-      <c:forEach var="trade" items="${tradeList}">
-        <% request.setCharacterEncoding("utf-8"); %>
-        <jsp:include page="../components/tradeCard.jsp">
-          <jsp:param name="username" value="${username}"/>
-          <jsp:param name="sellerUsername" value="${trade.sellerUsername}"/>
-          <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
-          <jsp:param name="quantity" value="${trade.quantity}"/>
-          <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
-          <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
-          <jsp:param name="tradeId" value="${trade.tradeId}"/>
-        </jsp:include>
-    </c:forEach>
-</div>
-
-
-<div class="flex flex-col mt-3">
-      <% request.setCharacterEncoding("utf-8"); %>
-      <jsp:include page="../components/paginator.jsp">
-        <jsp:param name="activePage" value="${activePage}"/>
-        <jsp:param name="pages" value="${pages}"/>
-        <jsp:param name="baseUrl" value="/user"/>
-      </jsp:include>
-      <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-</div>
-
-
 
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

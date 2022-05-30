@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -43,34 +40,10 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "coin", required = false) final String coin, @RequestParam(value = "pm", required = false) final String paymentMethod, @RequestParam(value = "price", required = false) final Double price, final Authentication authentication) {
-
-        final ModelAndView mav = new ModelAndView("index");
-
-        int pageNumber = page.orElse(0);
-        OfferFilter filter = new OfferFilter()
-            .byCryptoCode(coin)
-                .byPaymentMethod(paymentMethod)
-                .byMinPrice(price)
-                .byMaxPrice(price)
-                .withPageSize(PAGE_SIZE)
-                .fromPage(pageNumber);
-
-        int offerCount = offerService.countOffersBy(filter);
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-
-        mav.addObject("offerList", offerService.getOfferBy(filter));
-        mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
-        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-        mav.addObject("offerCount", offerCount);
-
-        if( null != authentication){
-            mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-        }
-        return mav;
+    public ModelAndView landing() {
+        return new ModelAndView("redirect:/buyer/market");
     }
+
 
     @RequestMapping(value = "/coins", method = RequestMethod.GET)
     public ModelAndView coins(final Authentication authentication) {

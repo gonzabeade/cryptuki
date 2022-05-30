@@ -5,7 +5,7 @@
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
 <div class="flex flex-col">
-    <c:url value="/upload" var="postUrl"/>
+    <c:url value="/seller/upload" var="postUrl"/>
     <%--@elvariable id="uploadOfferForm" type="ar.edu.itba.paw.cryptuki.form.UploadOfferForm"--%>
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
@@ -55,8 +55,16 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="flex flex-col mx-auto mt-6">
+            <form:errors path="location" cssClass="text-red-500 mx-auto"/>
+            <form:label path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="offerLocation"/> *</form:label>
+            <div class="flex flex-row justify-center w-96 mx-auto">
+                <form:input type="text" path="location" cssClass="w-full h-10 justify-center rounded-lg mx-auto p-3"/>
+            </div>
+        </div>
+        <%--
         <div class="flex flex-col mx-auto">
             <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
             <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="paymentMethods"/>*</form:label>
@@ -85,6 +93,7 @@
                 </c:forEach>
             </div>
         </div>
+        --%>
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="message" cssClass="text-red-500 mx-auto"/>
             <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>

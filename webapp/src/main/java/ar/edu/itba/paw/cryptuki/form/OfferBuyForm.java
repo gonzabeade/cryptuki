@@ -25,13 +25,13 @@ public class OfferBuyForm {
     @NotNull
     private Integer offerId;
 
-    @Size(min=1, max= 140)
-    @NotEmpty
-    private String message;
-
-    @NotNull
-    @Size(min=1, max = 140)
-    private String wallet;
+//    @Size(min=1, max= 140)
+//    @NotEmpty
+//    private String message;
+//
+//    @NotNull
+//    @Size(min=1, max = 140)
+//    private String wallet;
 
 
     public void setOfferId(int offerId) {
@@ -40,16 +40,16 @@ public class OfferBuyForm {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setMessage(String message) {
-        this.message = message;
-    }
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
     public void setAmount(Float amount) {
         this.amount = amount;
     }
 
-    public void setWallet(String wallet) {
-        this.wallet = wallet;
-    }
+//    public void setWallet(String wallet) {
+//        this.wallet = wallet;
+//    }
 
 
     public String getEmail() {
@@ -58,20 +58,20 @@ public class OfferBuyForm {
     public Integer getOfferId() {
         return offerId;
     }
-    public String getMessage() {
-        return message;
-    }
+//    public String getMessage() {
+//        return message;
+//    }
     public Float getAmount() {
         return amount;
     }
 
-    public String getWallet() {
-        return wallet;
-    }
+//    public String getWallet() {
+//        return wallet;
+//    }
 
     public Trade.Builder toTradeBuilder(String username) {
         return new Trade.Builder(offerId, username)
-                .withWallet(wallet)
+//                .withWallet(wallet)
                 .withQuantity(amount);
     }
 }

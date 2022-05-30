@@ -2,6 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="message" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -15,73 +16,127 @@
     <title>cryptuki</title>
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
+
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../components/buyer/buyerHeader.jsp"/>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
+            <c:if test="${status.equals('PENDING')}">
+                <div class="flex bg-nyellow p-5 text-center rounded-lg mx-auto border-2 border-[#816327]">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#816327" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-[#816327] text-left text-xl"><b><messages:message code="ProposingPending"/></b></p>
+                        <p><messages:message code="waitForTheSeller"/></p>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${status.equals('REJECTED')}">
+                <div class="flex bg-nred/[0.6] p-5 text-center rounded-lg mx-auto border-2 border-nred">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#BF616A" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-nred text-left text-xl"><b><messages:message code="ProposingRejected"/></b>
+                        </p>
+                        <p><messages:message code="furtherInstructionsRejected"/></p>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${status.equals('ACCEPTED')}">
+                <div class="flex bg-ngreen p-5 text-center rounded-lg mx-auto border-2 border-[#364427]">
+                    <div class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#364427" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col mx-4">
+                        <p class="text-[#364427] text-left text-xl"><b><messages:message code="ProposingAccepted"/></b></p>
+                        <p><messages:message code="furtherInstructions"/></p>
+                    </div>
+                </div>
+            </c:if>
         <div class="flex flex-col">
-            <div class="flex flex-col mx-auto mt-10">
-                <h2 class="font-sans font-semibold text-polard text-2xl text-center"><messages:message code="yourBuying"/></h2>
-                <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>" alt="<c:out value="${offer.crypto.commercialName}"/>" class="w-20 h-20 mx-auto">
-                <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
-                <h2 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="to"/> <c:out value="${offer.askingPrice}"/> ARS </h2>
-                <div class="flex flex-row mt-3 font-sans ">
-                    <h2 class="font-sans mx-2"><b><messages:message code="minimum"/></b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.minQuantity}"/> ARS </h2>
-                    <h2 class="font-sans"> <b><messages:message code="maximum"/></b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.askingPrice * offer.maxQuantity}"/> ARS </h2>
+            <h1 class="text-3xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
+            <div class="flex flex-row justify-center">
+
+                <div class="flex flex-col mx-10 order-1" id="left">
+                        <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
+                        <h1 class="text-center text-2xl font-semibold font-polard">${amount} ARS</h1>
                 </div>
-            </div>
-            <div class="flex flex-row mt-10 mx-auto">
-                <div class="flex flex-col mx-10">
-                    <h1 class="text-center"><messages:message code="youPay"/></h1>
-                    <h1 class="text-center text-3xl font-semibold font-polard">${amount} ARS</h1>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-auto" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-5 order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
-                <div class="flex flex-col mx-10">
-                    <h1 class="text-center"><messages:message code="youReceive"/></h1>
-                    <h1 class="text-center text-3xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
+                <div class="flex flex-col mx-10 order-3" id="right">
+                    <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
+                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
                 </div>
             </div>
-            <c:url value="/trade" var="postUrl"/>
+            <c:if test="${status.equals('ACCEPTED')}">
+                <div class="flex flex-col mx-auto">
+                    <div class="flex flex-row mx-auto mt-10">
+                        <h1 class="text-polard text-xl font-bold text-center mr-5 ">Algunos consejos para comprar P2P en persona</h1>
+                    </div>
+                    <ul class="mx-20 list-decimal my-3">
+                        <li class="mt-5 text-polard text-lg">
+                           <messages:message code="advice1"/>
+                            </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                               </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="advice3"></messages:message>
+                            </p>
+                        </li>
+                        <li class="mt-5 text-polard text-lg">
+                            <p>
+                                <messages:message code="adivce4"></messages:message>
+                            </p>
+                        </li>
+                    </ul>
 
-            <form:form modelAttribute="offerBuyForm" action="${postUrl}" method="post">
-                <form:input type="hidden" path="offerId"/>
-                <form:input type="hidden" path="email"/>
-                <form:input type="hidden" path="amount"/>
-                <form:input type="hidden" path="message"/>
-                <form:input type="hidden" path="wallet"/>
-
-
-
-
-                <div class="mt-10 p-10 rounded-lg bg-stormd/[0.9] flex flex-row justify-center mx-auto border-2 border-polard mx-20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h1 class="mx-2 text-lg my-auto"><messages:message code="depositeToSeller"/></h1>
                 </div>
-                <div class="flex flex-row justify-between">
-                    <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" href="<c:url value="/"/>"><messages:message code="cancelTrade"/></a>
-                    <button class="bg-ngreen text-white text-center mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" type="submit"><messages:message code="iPayed"/></button>
-                </div>
-            </form:form>
+
+            </c:if>
+
+            <div class="flex justify-around mt-5">
+                <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center" href="<c:url value="/buyer/market"/>"><messages:message code="returnHome"/></a>
+
+                <form  method="post"
+                       action="<c:url value="/deleteTrade/${tradeId}"/>" class="flex">
+                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg w-40">
+                        <messages:message code="removeTrade"/>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
 
 
 
         </div>
-    </div>
-    <% request.setCharacterEncoding("UTF-8"); %>
-    <div class="flex flex-row w-2/5">
-        <jsp:include page="../components/sellerInfo.jsp">
-            <jsp:param name="email" value="${offer.seller.email}"/>
-            <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
-            <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-            <jsp:param name="lastLogin" value="${sellerLastLogin.relativeTime}"/>
-            <jsp:param name="message" value="${offer.comments}"/>
-            <jsp:param name="rating" value="${offer.seller.rating}"/>
-        </jsp:include>
+
+    <div class="flex w-2/5 ">
+        <div class="ml-32">
+                <% request.setCharacterEncoding("utf-8"); %>
+                <jsp:include page="../components/sellerInfo.jsp">
+                    <jsp:param name="email" value="${offer.seller.email}"/>
+                    <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
+                    <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
+                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
+                    <jsp:param name="rating" value="${offer.seller.rating}"/>
+                    <jsp:param name="message" value="${offer.comments}"/>
+                </jsp:include>
+        </div>
     </div>
 </div>
 </body>

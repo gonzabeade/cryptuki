@@ -1,43 +1,96 @@
 package ar.edu.itba.paw.persistence;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
+@Entity
+@Table(name="trade")
 public final class Trade {
 
-    private final int tradeId;
-    private final int offerId;
-    private final String sellerUsername;
-    private final String buyerUsername;
-    private final Optional<LocalDateTime> startDate;
-    private final TradeStatus status;
-    private final float quantity;
+    Trade(){}
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trade_trade_id_seq")
+    @SequenceGenerator(sequenceName = "trade_trade_id_seq", name = "trade_trade_id_seq", allocationSize = 1)
+    @Column(name="trade_id")
+    private int tradeId;
 
-    private final Cryptocurrency cryptoCurrency;
+    @ManyToOne
+    @JoinColumn(name="offer_id")
+    private Offer offer;
 
-    private final float askedPrice;
+    @OneToOne
+    @JoinColumn(name="buyer_id")
+    private User user;
+
+    @Column(name="start_date")
+    private LocalDateTime startDate;
+
+    @Column(name="status",length = 10)
+    @Enumerated(EnumType.STRING)
+    private  TradeStatus status;
+
+    @Column(name="quantity")
+    private  float quantity;
+
+
+    @Column(name="rated_buyer")
     private boolean ratedBuyer;
+    @Column(name="rated_seller")
     private boolean ratedSeller;
 
+    public Offer getOffer() {
+        return offer;
+    }
 
+    public User getUser() {
+        return user;
+    }
+
+
+    @Entity
+    @Table(name="trade")
     public static class Builder {
 
-        private final int offerId;
-        private String sellerUsername;
-        private final String buyerUsername;
-
-        private LocalDateTime startDate = null;
-        private TradeStatus status = TradeStatus.OPEN;
-        private float quantity = 0f;
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trade_trade_id_seq")
+        @SequenceGenerator(sequenceName = "trade_trade_id_seq", name = "trade_trade_id_seq", allocationSize = 1)
+        @Column(name="trade_id")
         private Integer tradeId;
 
-        private  Cryptocurrency cryptoCurrency;
-        private String wallet;
+        @Column(name="offer_id")
+        private  int offerId;
 
-        private float askedPrice;
+        @Column(name="buyer_id",nullable = false)
+        private int buyerId;
+
+        @Column(name="start_date")
+        private LocalDateTime startDate = null;
+
+        @Column(name="status",length = 10)
+        @Enumerated(EnumType.STRING)
+        private TradeStatus status = TradeStatus.PENDING;
+        @Column(name="quantity")
+        private float quantity = 0f;
+
+        @Column(name="rated_buyer")
         private boolean ratedBuyer;
+
+        @Column(name="rated_seller")
         private boolean ratedSeller;
+
+        @Transient
+        private String sellerUsername;
+        @Transient
+        private final String buyerUsername;
+
+        @Transient
+        private  Cryptocurrency cryptoCurrency;
+        @Transient
+        private String wallet;
+        @Transient
+        private float askedPrice;
+
 
 
         public Builder(int offerId, String buyerUsername) {
@@ -57,6 +110,10 @@ public final class Trade {
         }
         public Builder withRatedBuyer(boolean rated){
             this.ratedBuyer = rated;
+            return this;
+        }
+        public Builder withBuyerId(Integer buyerId){
+            this.buyerId = buyerId;
             return this;
         }
         public Builder withRatedSeller(boolean rated){
@@ -103,9 +160,9 @@ public final class Trade {
         public String getBuyerUsername() {
             return buyerUsername;
         }
-        public LocalDateTime getStartDate() {
-            return startDate;
-        }
+//        public LocalDateTime getStartDate() {
+//            return startDate;
+//        }
         public TradeStatus getStatus() {
             return status;
         }
@@ -130,6 +187,10 @@ public final class Trade {
             return wallet;
         }
 
+        public int getBuyerId() {
+            return buyerId;
+        }
+
         protected Trade build() {
             return new Trade(this);
         }
@@ -137,15 +198,11 @@ public final class Trade {
     }
 
     protected Trade(Builder builder) {
-        this.buyerUsername = builder.buyerUsername;
-        this.offerId = builder.offerId;
+
         this.quantity = builder.quantity;
         this.tradeId = builder.tradeId;
-        this.startDate = Optional.ofNullable(builder.startDate);
-        this.sellerUsername = builder.sellerUsername;
+        this.startDate = builder.startDate;
         this.status = builder.status;
-        this.askedPrice= builder.getAskedPrice();
-        this.cryptoCurrency =builder.getCryptoCurrency();
         this.ratedBuyer = builder.getRatedBuyer();
         this.ratedSeller = builder.getRatedSeller();
 
@@ -155,17 +212,15 @@ public final class Trade {
         return tradeId;
     }
     public int getOfferId() {
-        return offerId;
+        return offer.getId();
     }
     public String getSellerUsername() {
-        return sellerUsername;
+        return offer.getSeller().getUserAuth().getUsername();
     }
     public String getBuyerUsername() {
-        return buyerUsername;
+        return user.getUserAuth().getUsername();
     }
-    public Optional<String> getStartDate() {
-        return startDate.isPresent()?Optional.ofNullable(startDate.get().format(ISO_LOCAL_DATE)):Optional.empty();
-    }
+
     public TradeStatus getStatus() {
         return status;
     }
@@ -174,11 +229,11 @@ public final class Trade {
     }
 
     public Cryptocurrency getCryptoCurrency() {
-        return cryptoCurrency;
+        return offer.getCrypto();
     }
 
     public float getAskedPrice() {
-        return askedPrice;
+        return offer.getAskingPrice();
     }
 
     public boolean equals(Object object) {
@@ -196,4 +251,40 @@ public final class Trade {
     public boolean getRatedSeller(){
         return ratedSeller;
     }
+
+    public void setTradeId(int tradeId) {
+        this.tradeId = tradeId;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setStatus(TradeStatus status) {
+        this.status = status;
+    }
+
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setRatedBuyer(boolean ratedBuyer) {
+        this.ratedBuyer = ratedBuyer;
+    }
+
+    public void setRatedSeller(boolean ratedSeller) {
+        this.ratedSeller = ratedSeller;
+    }
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public Optional<LocalDateTime> getStartDate() {
+        return Optional.of(startDate);
+    }
+
 }

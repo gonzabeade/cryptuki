@@ -8,6 +8,15 @@ import javax.validation.constraints.NotNull;
 public class ProfilePicForm {
     @NotNull(message = "Seleccione una imagen.")
     private MultipartFile multipartFile;
+    private boolean isBuyer;
+
+    public boolean isBuyer() {
+        return isBuyer;
+    }
+
+    public void setBuyer(boolean buyer) {
+        isBuyer = buyer;
+    }
 
     public MultipartFile getMultipartFile() {
         return multipartFile;

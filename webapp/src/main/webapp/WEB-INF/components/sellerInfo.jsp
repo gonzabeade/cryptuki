@@ -14,8 +14,10 @@
             <h3 class="font-sans my-3"><b><messages:message code="rating"/>: </b><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h3>
         </div>
     </div>
-    <div class="flex  flex-col mx-auto text-center mb-10 w-full">
-        <h1 class="font-sans font-bold text-3xl mt-3"><messages:message code="sellerMessage"/></h1>
-        <div class="font-sans mx-32 text-justify mt-3"><c:out value="${param.message}"/></div>
-    </div>
+    <c:if test="${! empty param.message}">
+        <div class="flex  flex-col mx-auto text-center mb-10 w-full">
+            <h1 class="font-sans font-bold text-3xl mt-3"><messages:message code="sellerMessage"/></h1>
+            <div class="font-sans mx-32 text-justify mt-3"><c:out value="${param.message}"/></div>
+        </div>
+    </c:if>
 </div>

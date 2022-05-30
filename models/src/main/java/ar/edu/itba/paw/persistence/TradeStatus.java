@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 public enum TradeStatus {
-    OPEN,
-    CLOSED
+    PENDING,
+    ACCEPTED,
+    REJECTED,
+    SOLD,
+
 }

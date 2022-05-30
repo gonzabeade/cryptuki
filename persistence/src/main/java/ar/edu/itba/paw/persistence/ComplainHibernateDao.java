@@ -17,9 +17,35 @@ public class ComplainHibernateDao implements ComplainDao{
     @Autowired
     private UserAuthDao userAuthDao;
 
+
+    private static void addParameters(TypedQuery<Complain> query,ComplainFilter filter) {
+        query
+//                        .setParameter("complainer_uname", filter.getComplainerUsername().orElse(null))
+//                .setParameter("from_date", filter.getFrom().orElse(null))
+//                .setParameter("to_date", filter.getTo().orElse(null))
+                .setParameter("complain_status", filter.getComplainStatus().isPresent() ? filter.getComplainStatus().get() : null)
+//                        .setParameter("moderator_uname", filter.getModeratorUsername().orElse(null));
+//                        .setParameter("offer_id", filter.getOfferId().isPresent() ? filter.getOfferId().getAsInt() : null)
+                .setParameter("trade_id", filter.getTradeId().isPresent() ? filter.getTradeId().getAsInt() : null)
+//                        .setParameter("complain_id", filter.getComplainId().isPresent() ? filter.getComplainId().getAsInt() : null)
+        ;
+    }
     @Override
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
-        TypedQuery<Complain> query = entityManager.createQuery("from Complain",Complain.class);
+        String filterQuery="from Complain as c where" +
+                "(COALESCE(:trade_id, null) IS NULL OR (c.trade.tradeId = :trade_id)) AND" +
+                "(COALESCE(:complain_status, null) IS NULL OR c.status =:complain_status) )"+
+//                "(COALESCE(:moderator_uname, null) IS NULL OR c.moderator.userAuth.username = :moderator_uname)  " ;
+//                "(COALESCE(:complainer_uname, null) IS NULL OR c.complainer = :complainer_uname)  "
+//                "(COALESCE(:from_date, null) IS NULL OR  c.date >= :from_date) AND" +
+//                "(COALESCE(:to_date, null) IS NULL OR  c.date <= :to_date)" ;
+                "(COALESCE(:offer_id, null) IS NULL OR  c.trade.offer.id = :offer_id) ";
+//                "(COALESCE(:complain_id, null) IS NULL OR c.complainId = :complain_id) " ;
+
+        TypedQuery<Complain> query = entityManager.createQuery(filterQuery,Complain.class);
+        query.setMaxResults(filter.getPageSize());
+        query.setFirstResult(filter.getPage()*filter.getPageSize());
+        addParameters(query,filter);
         return query.getResultList();
     }
 

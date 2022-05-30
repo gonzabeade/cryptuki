@@ -7,7 +7,6 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 @Entity
 @Table(name="complain")
 public final class Complain {
-
     Complain(){}
 
     @Id
@@ -37,15 +36,6 @@ public final class Complain {
     private  String complainerComments;
     @Column(name="moderator_comments",nullable = false)
     private  String moderatorComments;
-
-
-    public Trade getTrade() {
-        return trade;
-    }
-
-    public void setTrade(Trade trade) {
-        this.trade = trade;
-    }
 
     @Entity
     @Table(name="complain")
@@ -156,96 +146,72 @@ public final class Complain {
         this.date = builder.date;
     }
 
-
     public Integer getComplainId() {
         return complainId;
-    }
-
-    public ComplainStatus getStatus() {
-        return status;
-    }
-
-    public String getComplainer() {
-        return complainer.getUserAuth().getUsername();
-    }
-
-    public Optional<String> getComplainerComments() {
-        return Optional.ofNullable(complainerComments);
-    }
-
-    public Optional<String> getModerator() {
-        return Optional.ofNullable(moderator.getUserAuth().getUsername());
-    }
-
-    public Optional<String> getModeratorComments() {
-        return Optional.ofNullable(moderatorComments);
-    }
-
-    public String getComplainerUsername() {
-        return complainer.getUserAuth().getUsername();
-    }
-
-    public String getDate() {
-        return date.format(ISO_LOCAL_DATE);
-    }
-
-    public Optional<String> getModeratorUsername() {
-        return Optional.ofNullable(moderator.getUserAuth().getUsername());
-    }
-
-    public Optional<Integer> getTradeId() {
-        return Optional.ofNullable(trade.getTradeId());
-    }
-
-//    @Override
-//    public String toString() {
-//        return "Complain{" +
-//                "complainId=" + complainId +
-//                ", status=" + status +
-//                ", complainerUsername='" + complainerUsername + '\'' +
-//                ", complainerComments=" + complainerComments +
-//                ", moderatorUsername=" + moderatorUsername +
-//                ", moderatorComments=" + moderatorComments +
-//                ", tradeId=" + tradeId +
-//                '}';
-//    }
-
-    public boolean equals(Object object) {
-        if (object == this)
-            return true;
-        if (!(object instanceof Complain))
-            return false;
-        Complain testedComplain = (Complain) object;
-        return testedComplain.getComplainId() == this.getComplainId();
-    }
-
-
-    public void setComplainer(User complainer) {
-        this.complainer = complainer;
-    }
-
-    public void setModerator(User moderator) {
-        this.moderator = moderator;
     }
 
     public void setComplainId(Integer complainId) {
         this.complainId = complainId;
     }
 
+    public Trade getTrade() {
+        return trade;
+    }
+
+    public void setTrade(Trade trade) {
+        this.trade = trade;
+    }
+
+    public ComplainStatus getStatus() {
+        return status;
+    }
 
     public void setStatus(ComplainStatus status) {
         this.status = status;
+    }
+
+    public User getComplainer() {
+        return complainer;
+    }
+
+    public void setComplainer(User complainer) {
+        this.complainer = complainer;
+    }
+
+    public User getModerator() {
+        return moderator;
+    }
+
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
+    public String getComplainerComments() {
+        return complainerComments;
+    }
+
     public void setComplainerComments(String complainerComments) {
         this.complainerComments = complainerComments;
     }
 
+    public String getModeratorComments() {
+        return moderatorComments;
+    }
+
     public void setModeratorComments(String moderatorComments) {
         this.moderatorComments = moderatorComments;
+    }
+
+
+    public Optional<Integer> getTradeId(){
+        return Optional.ofNullable(trade.getTradeId());
     }
 }

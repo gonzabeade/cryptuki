@@ -136,9 +136,9 @@ public class ComplainJdbcDaoTest {
 
         complainMap.put("trade_id", complain.getTradeId().get());
         complainMap.put("complainer_id", users.get(complain.getComplainer()));
-        complainMap.put("complainer_comments", complain.getComplainerComments().get());
-        complainMap.put("moderator_comments", complain.getModeratorComments().get());
-        complainMap.put("moderator_id", users.get(complain.getModerator().get()));
+        complainMap.put("complainer_comments", complain.getComplainerComments());
+        complainMap.put("moderator_comments", complain.getModeratorComments());
+        complainMap.put("moderator_id", users.get(complain.getModerator().getId()));
         complainMap.put("status", complain.getStatus().toString());
         complainMap.put("complain_date",complain.getDate());
 

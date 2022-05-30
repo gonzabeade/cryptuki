@@ -115,7 +115,8 @@
                             </li>
                         <li class="mt-5 text-polard text-lg">
                             <p>
-                               </p>
+                                <messages:message code="advice2"
+                             </p>
                         </li>
                         <li class="mt-5 text-polard text-lg">
                             <p>

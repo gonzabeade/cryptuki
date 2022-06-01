@@ -5,9 +5,8 @@ import ar.edu.itba.paw.persistence.Message;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
-public class messageForm {
+public class MessageForm {
     @NotNull
     private Integer userId;
 

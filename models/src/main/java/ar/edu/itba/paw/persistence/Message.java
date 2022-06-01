@@ -7,13 +7,11 @@ import java.time.LocalDateTime;
 @Table(name="messages")
 public class Message implements Serializable {
     @Id
-    @JoinColumn(name="user_id",nullable = false)
-    @ManyToOne
-    private User sender ;
+    @Column(name="user_id",nullable = false)
+    private Integer sender ;
     @Id
-    @ManyToOne
-    @JoinColumn(name="trade_id",nullable = false)
-    private Trade trade ;
+    @Column(name="trade_id",nullable = false)
+    private Integer trade ;
     @Id
     @Column(name="message_content",nullable = false)
     private String message;
@@ -53,19 +51,19 @@ public class Message implements Serializable {
     }
 
 
-    public User getSender() {
+    public Integer getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(Integer sender) {
         this.sender = sender;
     }
 
-    public Trade getTrade() {
+    public Integer getTrade() {
         return trade;
     }
 
-    public void setTrade(Trade trade) {
+    public void setTrade(Integer trade) {
         this.trade = trade;
     }
 

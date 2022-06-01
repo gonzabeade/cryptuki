@@ -40,6 +40,7 @@ public final class Trade {
     private boolean ratedSeller;
 
     @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
+    @OrderBy("message_date")
     private Collection<Message> messageCollection;
 
     public Collection<Message> getMessageCollection() {

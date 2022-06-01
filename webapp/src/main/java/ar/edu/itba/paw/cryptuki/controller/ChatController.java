@@ -36,7 +36,6 @@ public class ChatController {
         mav.addObject("otherUser", otherUser);
         mav.addObject("trade", trade);
         return mav;
-    }
 
 
 }

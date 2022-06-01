@@ -1,2 +1,5 @@
-package ar.edu.itba.paw.service;public interface MessageService {
+package ar.edu.itba.paw.service;
+import ar.edu.itba.paw.persistence.Message;
+public interface MessageService {
+    void sendMessage(Message.Builder builder);
 }

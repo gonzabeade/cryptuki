@@ -21,6 +21,8 @@ public class Message implements Serializable {
 
     private Message(){}
 
+    @Entity
+    @Table(name="messages")
     public static class Builder{
 
         @Id
@@ -30,12 +32,12 @@ public class Message implements Serializable {
         private String message;
         @Column(name="trade_id",nullable = false)
         private Integer tradeId;
-        @Column(name="message_date",nullable = false)
-        private LocalDateTime date;
+//        @Column(name="message_date",nullable = false)
+//        private LocalDateTime date;
 
         public Builder(String message) {
             this.message = message;
-            this.date = LocalDateTime.now();
+//            this.date = LocalDateTime.now();
         }
 
         public Builder withSender(Integer userId ){

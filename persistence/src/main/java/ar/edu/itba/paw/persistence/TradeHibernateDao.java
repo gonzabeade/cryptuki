@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
@@ -41,9 +43,13 @@ public class TradeHibernateDao implements TradeDao{
 
     @Override
     public Optional<Trade> getTradeById(int tradeId) {
-        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.tradeId = :tradeId",Trade.class);
+        TypedQuery<Trade> query = entityManager.createQuery("from Trade as t where t.tradeId = :tradeId", Trade.class);
         query.setParameter("tradeId",tradeId);
-        return Optional.ofNullable(query.getSingleResult());
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException nre) {
+            return Optional.empty();
+        }
     }
 
     @Override

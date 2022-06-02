@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.persistence.Message;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/chat")
@@ -29,31 +33,35 @@ public class ChatController {
     private final MessageService messageService;
 
     @Autowired
-    public ChatController(UserService userService, TradeService tradeService,MessageService messageService) {
+    public ChatController(UserService userService, TradeService tradeService, MessageService messageService) {
         this.userService = userService;
         this.tradeService = tradeService;
         this.messageService = messageService;
     }
 
 
-    @RequestMapping(value = "/buyer", method = RequestMethod.GET)
-    public ModelAndView createComplain(@RequestParam( value = "tradeId", required = true) final Integer tradeId, final Authentication authentication) {
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ModelAndView chatPage(@ModelAttribute("messageForm") MessageForm messageForm, @RequestParam( value = "tradeId", required = true) final Integer tradeId, final Authentication authentication) {
         ModelAndView mav = new ModelAndView("chat/chat");
-        User otherUser = userService.getUserInformation("gonzabeade").get();
-        Trade trade = tradeService.getTradeById(tradeId).get();
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        User otherUser;
+        if (trade.getBuyerUsername().equals(authentication.getName()))
+            otherUser = userService.getUserInformation(trade.getSellerUsername()).get();
+        else otherUser = userService.getUserInformation(trade.getBuyerUsername()).get();
         mav.addObject("otherUser", otherUser);
         mav.addObject("trade", trade);
         return mav;
     }
 
+
+
     @RequestMapping(value="/send",method = RequestMethod.POST)
-    public ModelAndView sendMessage(@ModelAttribute("messageForm")MessageForm messageForm, BindingResult errors){
+    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") MessageForm messageForm, BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
-            //TODO: redirect to the chat form again.
+            return chatPage(messageForm, messageForm.getTradeId(), authentication);
         }
         messageService.sendMessage(messageForm.toBuilder());
-        //TODO: where does the post redirect
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());
     }
 
 }

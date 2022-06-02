@@ -86,10 +86,10 @@ public class OfferHibernateDao implements OfferDao{
                 modelOrderCriterion = "o.date";
         }
 
-        Query pagingQuery = entityManager.createNativeQuery("SELECT ordered_offers.offer_id FROM " +
-                "(SELECT * FROM offer_complete ORDER BY " +
+        Query pagingQuery = entityManager.createNativeQuery("SELECT  ordered_offers.offer_id FROM " +
+                "(SELECT offer_id FROM offer_complete  GROUP BY (offer_id, offer_date,rating, last_login, asking_price) ORDER BY " +
                 orderCriterion + " " + filter.getOrderDirection().toString() +
-                ", offer_id) AS ordered_offers " +
+                ") AS ordered_offers " +
                 "WHERE ordered_offers.offer_id IN (:ids) " +
                 "limit :limit OFFSET :offset");
 

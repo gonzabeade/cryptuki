@@ -4,13 +4,13 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "NewOfferTemplate";
+    private final static String template = "NewOffer";
 
     private String username;
     private String coinCode;
     private double askingPrice;
-    private double minQuantity;
-    private double maxQuantity;
+    private String offerLocation;
+    private String offerDate;
     private int offerId;
 
     private String url;
@@ -20,12 +20,12 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username, String coinCode, double askingPrice, double minQuantity, double maxQuantity, int offerId, String url) {
+    public void setParameters(String username, String coinCode, String offerLocation, String offerDate,  double askingPrice, int offerId, String url) {
         this.username = username;
         this.coinCode = coinCode;
         this.askingPrice = askingPrice;
-        this.minQuantity = minQuantity;
-        this.maxQuantity = maxQuantity;
+        this.offerLocation =  offerLocation;
+        this.offerDate = offerDate;
         this.offerId = offerId;
         this.url = url;
     }
@@ -41,9 +41,9 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);
         context.setVariable("askingPrice", askingPrice);
-        context.setVariable("minQuantity", minQuantity);
-        context.setVariable("maxQuantity", maxQuantity);
         context.setVariable("offerId", offerId);
+        context.setVariable("offerDate", offerDate);
+        context.setVariable("offerLocation", offerLocation);
         context.setVariable("url", url);
 
         return context;

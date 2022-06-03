@@ -87,8 +87,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         newOfferMailMessage.setParameters(
                 username,
                 digest.getCryptoCode(),
-                digest.getAskingPrice(),
-                digest.getMinQuantity(),
+                digest.getLocation(),
+                digest.getDate().toString(),
                 digest.getMaxQuantity(),
                 offerId,
                 getUrl());

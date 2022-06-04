@@ -24,70 +24,22 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../../components/buyer/buyerHeader.jsp"/>
-<div class="flex flex-row h-full w-full mt-7 justify-around">
-    <div class="container w-1/2 h-4/5 bg-[#FAFCFF] border-gray-200">
-        <div class=" border rounded">
-            <div>
-                <div class="w-full">
-                    <div class="relative flex items-center p-3 border-b border-gray-300">
-                        <img class="object-cover w-10 h-10 rounded-full"
-                             src="<c:url value="/profilepic/${otherUser.username.get()}"/>" alt="username" />
-                        <span class="block ml-2 font-bold text-gray-600"><c:out value="${otherUser.username.get()}"/></span>
-    <%--                    Online green button, checkLastLogin--%>
-                        <c:if test="${true}">
-                            <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
-                        </c:if>
-                        <h1 class="w-full text-right text-l font-sans font-bold left-">Órden de compra #<c:out value="${trade.tradeId}"></c:out></h1>
-                    </div>
-                    <div class="relative w-full p-6 overflow-y-auto h-[40rem]">
-
-                        <ul class="space-y-2">
-                            <c:forEach items="${trade.messageCollection}" var="message">
-                                <c:choose>
-                                    <c:when test="${message.sender == otherUser.id}">
-                                        <jsp:include page="../../components/chat/leftMessage.jsp">
-                                            <jsp:param name="msg" value="${message.message}"/>
-                                        </jsp:include>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <jsp:include page="../../components/chat/rightMessage.jsp">
-                                            <jsp:param name="msg" value="${message.message}"/>
-                                        </jsp:include>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </ul>
-
-                    </div>
-
-                    <div class="flex items-center justify-between w-full p-3 border-t border-gray-300">
-
-                        <c:url value="/chat/send" var="postUrl"/>
-                        <form:form modelAttribute="messageForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
-                            <input type="text" placeholder="Message"
-                                   class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                                   name="message" required />
-                            <form:input path="tradeId" type="hidden" value="${trade.tradeId}"/>
-                            <form:input path="userId" type="hidden" value="${24}"/>
+<div class="flex flex-row mt-7">
+    <c:set value="${trade.messageCollection}" var="messageCollection" scope="request"/>
+    <c:url var="url" value="/chat/send"/>
+    <jsp:include page="../../components/chat/chatSnippet.jsp">
+        <jsp:param name="otherUsername" value="${otherUser.username.get()}"/>
+        <jsp:param name="tradeId" value="${trade.tradeId}"/>
+        <jsp:param name="otherUserId" value="${otherUser.id}"/>
+        <jsp:param name="senderId" value="${trade.offer.seller.id}"/>
+        <jsp:param name="url" value="${url}"/>
+    </jsp:include>
 
 
-                            <button type="submit">
-                                <svg class="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 20 20" fill="currentColor">
-                                    <path
-                                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                </svg>
-                            </button>
-                        </form:form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 <%--    Tarjeta con informacion del trade --%>
-    <div class="w-1/3">
-        <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-3">
+    <div class="flex flex-col justify-center px-10">
+        <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3">
             Información sobre la órden de compra
         </div>
         <div class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-12 ">
@@ -183,27 +135,26 @@
 <%--            <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">--%>
 <%--                <div class="flex h-2/5 my-2"></div>--%>
 <%--            </c:if>--%>
-        </div>
-
-        <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-5">
-            Otras órdenes de compra de este comprador
-        </div>
-        <div class="flex flex-wrap justify-center">
-            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">
-                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>
-            </div>
-            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">
-                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>
-            </div>
-            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">
-                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>
-            </div>
-            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">
-                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>
-            </div>
-            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">
-                Ejemplo <div class="bg-nred w-full text-white text-center p-2"><messages:message code="rejected"/></div>
-            </div>
+<%--        <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-5">--%>
+<%--            Otras órdenes de compra de este comprador--%>
+<%--        </div>--%>
+<%--        <div class="flex flex-wrap justify-center">--%>
+<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
+<%--                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>--%>
+<%--            </div>--%>
+<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">--%>
+<%--                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>--%>
+<%--            </div>--%>
+<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">--%>
+<%--                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>--%>
+<%--            </div>--%>
+<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
+<%--                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>--%>
+<%--            </div>--%>
+<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
+<%--                Ejemplo <div class="bg-nred w-full text-white text-center p-2"><messages:message code="rejected"/></div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
         </div>
     </div>
 

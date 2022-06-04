@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.RatingForm;
-import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
-import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
+import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
@@ -59,7 +56,7 @@ public class TradeFluxController {
 
 
     @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, Integer tradeId , Authentication authentication){
+    public ModelAndView executeTrade(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, @ModelAttribute("messageForm") MessageForm messageForm, Integer tradeId , Authentication authentication){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
 
         Offer offer = trade.getOffer();
@@ -73,10 +70,7 @@ public class TradeFluxController {
 
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);
-        mav.addObject("tradeId",trade.getTradeId());
         mav.addObject("trade",trade);
-        mav.addObject("offer", offer);
-        mav.addObject("amount", trade.getQuantity());
         mav.addObject("otherLastLogin",buying? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()):LastConnectionUtils.toRelativeTime(trade.getUser().getLastLogin()));
         mav.addObject("status",trade.getStatus().toString());
 
@@ -191,7 +185,7 @@ public class TradeFluxController {
     @RequestMapping(value = "/closeTrade",method = RequestMethod.POST)
     public ModelAndView closeTransaction(final @Valid @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
         if(errors.hasErrors())
-            return executeTrade(soldTradeForm,new StatusTradeForm(),statusTradeForm.getTradeId(),authentication);
+            return executeTrade(soldTradeForm,new StatusTradeForm(), new MessageForm(), statusTradeForm.getTradeId(),authentication);
         Trade trade = tradeService.getTradeById(soldTradeForm.getTrade()).orElseThrow(()->new NoSuchTradeException(soldTradeForm.getTrade()));
         Offer offer = trade.getOffer();
         offerService.soldOffer(offer, trade.getQuantity(),trade.getTradeId());

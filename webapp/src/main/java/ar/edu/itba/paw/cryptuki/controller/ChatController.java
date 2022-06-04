@@ -63,5 +63,13 @@ public class ChatController {
         messageService.sendMessage(messageForm.toBuilder());
         return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());
     }
+    @RequestMapping(value="/sendBuyer",method = RequestMethod.POST)
+    public ModelAndView sendMessageBuyer(@Valid @ModelAttribute("messageForm") MessageForm messageForm, BindingResult errors, final Authentication authentication){
+        if(errors.hasErrors()){
+            return new ModelAndView("redirect:/trade?trade="+ messageForm.getTradeId());
+        }
+        messageService.sendMessage(messageForm.toBuilder());
+        return new ModelAndView("redirect:/trade?tradeId="+messageForm.getTradeId());
+    }
 
 }

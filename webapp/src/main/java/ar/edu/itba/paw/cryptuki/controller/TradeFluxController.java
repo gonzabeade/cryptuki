@@ -150,21 +150,16 @@ public class TradeFluxController {
         if((!role.get().equals("buying")&&!role.get().equals("selling")))
             throw new IllegalArgumentException();
 
-        TradeStatus askedStatus;
-        if(!status.isPresent()){
-            askedStatus = TradeStatus.PENDING;
-        }else
-            askedStatus = TradeStatus.valueOf(status.get());
-
         int tradeCount;
         Collection<Trade> tradeList;
+
         if(role.get().equals("buying")){
-            tradeCount= tradeService.getBuyingTradesByUsernameCount(username,askedStatus);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE,askedStatus);
+            tradeCount= tradeService.getBuyingTradesByUsernameCount(username);
+            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE);
         }
         else{
-            tradeCount = tradeService.getSellingTradesByUsernameCount(username,askedStatus);
-            tradeList = tradeService.getSellingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE,askedStatus);
+            tradeCount = tradeService.getSellingTradesByUsernameCount(username);
+            tradeList = tradeService.getSellingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE);
         }
 
         int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;

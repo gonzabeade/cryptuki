@@ -113,11 +113,10 @@ public class OfferHibernateDao implements OfferDao{
                 "( COALESCE(:min,null) IS NULL OR :min >= offerRow.askingPrice*offerRow.minQuantity) AND "+
                 "( COALESCE(:max,null) IS NULL OR :max <= offerRow.askingPrice*offerRow.maxQuantity) AND "+
                 "( COALESCE(:uname, null) IS NULL or offerRow.seller.userAuth.username = :uname) AND "+
-                "( COALESCE(:location, null) IS NULL or offerRow.location = :location) AND "+
+                "( COALESCE(:location, null) IS NULL or offerRow.location IN(:location) )AND "+
                 "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status) ) AND" +
                 "( COALESCE(:discardedUnames, null) IS NULL OR offerRow.seller.userAuth.username NOT IN (:discardedUnames)) AND "+
-                "( offerRow.id IN ( :idsAccepted)  ) "+
-                ")";
+                "( offerRow.id IN ( :idsAccepted)  ) ";
 
         TypedQuery<Offer> query = entityManager.createQuery(queryDescriptor,Offer.class);
         addParameters(filter,query);

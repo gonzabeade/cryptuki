@@ -23,7 +23,6 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../../components/seller/sellerHeader.jsp"/>
-
 <div class="flex h-full w-full px-20 my-10">
     <!-- Left Panel: chat and seller stats -->
     <div class="flex flex-col h-full mx-20 w-1/5">
@@ -209,6 +208,7 @@
                                     <%--                            CASE - ACCEPTED--%>
                                 <c:if test="${trade.status == 'ACCEPTED' }">
                                     <c:url value="/closeTrade" var="formUrl"/>
+
                                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
                                                cssClass="flex justify-center mx-auto my-3">
                                         <form:hidden path="offerId" value="${offer.id}"/>
@@ -216,7 +216,15 @@
                                         <button type="submit"
                                                 class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
                                             <messages:message code="soldTrade"/></button>
+
                                     </form:form>
+
+                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 shadow rounded-full p-3">
+                                        <span><messages:message code="chatWithBuyer"/> </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                    </a>
                                 </c:if>
 
                                     <%--                            CASE - REJECTED--%>

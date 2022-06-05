@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Optional;
 
 @Entity
@@ -33,11 +34,22 @@ public final class Trade {
     @Column(name="quantity")
     private  float quantity;
 
-
     @Column(name="rated_buyer")
     private boolean ratedBuyer;
     @Column(name="rated_seller")
     private boolean ratedSeller;
+
+    @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
+    @OrderBy("message_date")
+    private Collection<Message> messageCollection;
+
+    public Collection<Message> getMessageCollection() {
+        return messageCollection;
+    }
+
+    public void setMessageCollection(Collection<Message> messageCollection) {
+        this.messageCollection = messageCollection;
+    }
 
     public Offer getOffer() {
         return offer;

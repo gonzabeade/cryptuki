@@ -94,14 +94,14 @@
 
                 <div class="flex flex-col mx-10 order-1" id="left">
                         <h1 class="text-center text-xl"><messages:message code="youPay"/></h1>
-                        <h1 class="text-center text-2xl font-semibold font-polard">${amount} ARS</h1>
+                        <h1 class="text-center text-2xl font-semibold font-polard">${trade.quantity} ARS</h1>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 my-5 order-2 mx-10" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
                 <div class="flex flex-col mx-10 order-3" id="right">
                     <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
-                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${amount / offer.askingPrice }"/> ${offer.crypto.code}</h1>
+                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${trade.quantity / trade.offer.askingPrice }"/> ${trade.offer.crypto.code}</h1>
                 </div>
             </div>
             <c:if test="${status.equals('ACCEPTED')}">
@@ -138,7 +138,7 @@
                 <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center" href="<c:url value="/buyer/market"/>"><messages:message code="returnHome"/></a>
 
                 <form  method="post"
-                       action="<c:url value="/deleteTrade/${tradeId}"/>" class="flex">
+                       action="<c:url value="/deleteTrade/${trade.tradeId}"/>" class="flex">
                     <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg w-40">
                         <messages:message code="removeTrade"/>
                     </button>
@@ -153,16 +153,26 @@
         </div>
 
     <div class="flex w-2/5 ">
-        <div class="ml-32">
-                <% request.setCharacterEncoding("utf-8"); %>
-                <jsp:include page="../components/sellerInfo.jsp">
-                    <jsp:param name="email" value="${offer.seller.email}"/>
-                    <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
-                    <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
-                    <jsp:param name="rating" value="${offer.seller.rating}"/>
-                    <jsp:param name="message" value="${offer.comments}"/>
-                </jsp:include>
+        <div class="w-full">
+            <c:set var="messageCollection" value="${trade.messageCollection}" scope="request"/>
+            <c:url var="url" value="/chat/sendBuyer"/>
+            <jsp:include page="../components/chat/chatSnippet.jsp">
+                <jsp:param name="otherUsername" value="${trade.sellerUsername}"/>
+                <jsp:param name="tradeId" value="${trade.tradeId}"/>
+                <jsp:param name="otherUserId" value="${trade.offer.seller.id}"/>
+                <jsp:param name="senderId" value="${trade.user.id}"/>
+                <jsp:param name="url" value="${url}"/>
+                <jsp:param name="otherLastLogin" value="${otherLastLogin}"/>
+            </jsp:include>
+<%--                <% request.setCharacterEncoding("utf-8"); %>--%>
+<%--                <jsp:include page="../components/sellerInfo.jsp">--%>
+<%--                    <jsp:param name="email" value="${offer.seller.email}"/>--%>
+<%--                    <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>--%>
+<%--                    <jsp:param name="trades" value="${offer.seller.ratingCount}"/>--%>
+<%--                    <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>--%>
+<%--                    <jsp:param name="rating" value="${offer.seller.rating}"/>--%>
+<%--                    <jsp:param name="message" value="${offer.comments}"/>--%>
+<%--                </jsp:include>--%>
         </div>
     </div>
 </div>

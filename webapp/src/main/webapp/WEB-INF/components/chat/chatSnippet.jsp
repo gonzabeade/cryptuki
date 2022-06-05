@@ -2,21 +2,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <div class="flex flex-row h-full w-full justify-around">
-  <div class="container mx-10 h-4/5 bg-[#FAFCFF] border-gray-200">
-    <div class=" border rounded">
+  <div class="container mx-10 h-4/5 F border-gray-200">
+    <div class=" border rounded bg-[#FAFCFF]">
       <div>
         <div class=" flex  flex-col w-full">
           <div class="relative flex items-center p-3 border-b border-gray-300">
             <img class="object-cover w-10 h-10 rounded-full"
                  src="<c:url value="/profilepic/${param.otherUsername}"/>" alt="username" />
-            <span class="block ml-2 font-bold text-gray-600"><c:out value="${param.otherUsername}"/></span>
+            <div class="flex flex-col">
+              <span class="block ml-2 font-bold text-gray-600 "><c:out value="${param.otherUsername}"/></span>
+              <c:if test="${param.otherLastLogin != 'online'}">
+                <span class="font-sans text-gray-400 ml-2 text-sm "><messages:message code="lastLogin"/></span>
+                <span class="text-left text-sm ml-2"><messages:message code="${param.otherLastLogin}"/></span>
+              </c:if>
+            </div>
             <%--                    Online green button, checkLastLogin--%>
-            <c:if test="${true}">
+
+            <c:if test="${param.otherLastLogin == 'online'}">
               <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
             </c:if>
             <h1 class="w-full text-right text-l font-sans font-bold left-"><messages:message code="buyOrder"/> #<c:out value="${param.tradeId}"/></h1>
           </div>
-          <div class="relative w-full p-6 overflow-y-auto h-[30rem]">
+          <div class="relative w-full p-6 overflow-y-auto h-[25rem]">
 
             <ul class="space-y-2">
               <c:forEach items="${messageCollection}" var="message">
@@ -37,7 +44,7 @@
 
           </div>
 
-          <div class="flex justify-end w-full p-3 border-t border-gray-300">
+          <div class="flex justify-end w-full p-3  border-gray-300">
 
             <form:form modelAttribute="messageForm" action="${param.url}" method="post" class="flex flex-row w-full ">
               <input type="text" placeholder="Message"

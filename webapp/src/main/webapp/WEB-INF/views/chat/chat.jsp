@@ -23,7 +23,7 @@
 
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../../components/buyer/buyerHeader.jsp"/>
+<jsp:include page="../../components/seller/sellerHeader.jsp"/>
 <div class="flex flex-row mt-7">
     <c:set value="${trade.messageCollection}" var="messageCollection" scope="request"/>
     <c:url var="url" value="/chat/send"/>
@@ -33,6 +33,7 @@
         <jsp:param name="otherUserId" value="${otherUser.id}"/>
         <jsp:param name="senderId" value="${trade.offer.seller.id}"/>
         <jsp:param name="url" value="${url}"/>
+        <jsp:param name="otherLastLogin" value="${otherLastLogin}"/>
     </jsp:include>
 
 
@@ -40,9 +41,9 @@
 <%--    Tarjeta con informacion del trade --%>
     <div class="flex flex-col justify-center px-10">
         <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3">
-            Información sobre la órden de compra
+            <messages:message code="offerInformation"/>
         </div>
-        <div class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-12 ">
+        <div class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12 ">
             <div class="flex font-sans h-fit w-full mt-5">
                 <c:if test="${trade.status == 'PENDING' }">
                     <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message

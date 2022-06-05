@@ -162,6 +162,7 @@
                 <jsp:param name="otherUserId" value="${trade.offer.seller.id}"/>
                 <jsp:param name="senderId" value="${trade.user.id}"/>
                 <jsp:param name="url" value="${url}"/>
+                <jsp:param name="otherLastLogin" value="${otherLastLogin}"/>
             </jsp:include>
 <%--                <% request.setCharacterEncoding("utf-8"); %>--%>
 <%--                <jsp:include page="../components/sellerInfo.jsp">--%>

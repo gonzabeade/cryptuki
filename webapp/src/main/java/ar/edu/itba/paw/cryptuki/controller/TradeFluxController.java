@@ -71,7 +71,7 @@ public class TradeFluxController {
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);
         mav.addObject("trade",trade);
-        mav.addObject("otherLastLogin",buying? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()):LastConnectionUtils.toRelativeTime(trade.getUser().getLastLogin()));
+        mav.addObject("otherLastLogin",LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()).getRelativeTime());
         mav.addObject("status",trade.getStatus().toString());
 
         return mav;

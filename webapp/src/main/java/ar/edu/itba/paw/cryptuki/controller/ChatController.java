@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.persistence.Message;
 import ar.edu.itba.paw.persistence.Trade;
@@ -49,6 +50,7 @@ public class ChatController {
             otherUser = userService.getUserInformation(trade.getSellerUsername()).get();
         else otherUser = userService.getUserInformation(trade.getBuyerUsername()).get();
         mav.addObject("otherUser", otherUser);
+        mav.addObject("otherLastLogin", LastConnectionUtils.toRelativeTime(otherUser.getLastLogin()).getRelativeTime());
         mav.addObject("trade", trade);
         return mav;
     }

@@ -13,7 +13,13 @@
 				<div class="flex-row basis-1/4 ">
 					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
-					<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
+					<c:if test="${param.trades > 0 }">
+						<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
+					</c:if>
+					<c:if test="${param.trades == 0 }">
+						<h4 class="text-gray-400 font-sans"><messages:message code="newUser"/></h4>
+					</c:if>
+
 					<div class="flex flex-row">
 						<c:choose>
 							<c:when test="${param.minutesSinceLastLogin <= 5}">

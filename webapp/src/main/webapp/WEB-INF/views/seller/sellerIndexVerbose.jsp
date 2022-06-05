@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="flex flex-row ">
-                            <h1 class="text-lg font-bold font-sans text-center"><fmt:formatNumber type="number"
+                            <h1 class="text-lg font-bold font-sans text-center"><messages:message code="price"/> <fmt:formatNumber type="number"
                                                                                       maxFractionDigits="2"
                                                                                       value="${offer.askingPrice}"/>
                                 ARS </h1>

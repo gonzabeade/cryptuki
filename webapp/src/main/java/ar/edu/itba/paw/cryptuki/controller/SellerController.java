@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
-import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
-import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.KycInformation;
+import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.Offer;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -131,6 +130,23 @@ public class SellerController {
 
         return new ModelAndView("redirect:/seller/");
     }
+
+    @RequestMapping(value ="/kyc", method = {RequestMethod.GET})
+    private ModelAndView kyc(@ModelAttribute("kycForm") final KycForm form) {
+        return new ModelAndView("kyc/kyc");
+    }
+
+    @RequestMapping(value ="/kyc", method = {RequestMethod.POST})
+    private ModelAndView kycPost(@Valid @ModelAttribute("kycForm") final KycForm form, final BindingResult errors) throws IOException {
+        if (errors.hasErrors())
+            return new ModelAndView("kyc/kyc");
+
+        KycInformation.KycInformationBuilder x = form.toBuilder();
+        System.out.println(x);
+
+        return new ModelAndView("redirect:/seller/");
+    }
+
 
 
 }

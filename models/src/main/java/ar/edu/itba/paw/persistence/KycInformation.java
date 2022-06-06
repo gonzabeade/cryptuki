@@ -1,43 +1,68 @@
-package ar.edu.itba.paw;
+package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.KycStatus;
 
+import javax.persistence.*;
 import java.util.Arrays;
 
-public class KycInformation {
+@Entity
+@Table(name="kyc")
+public final class KycInformation {
 
-    private final String username;
+    @Id
+    @Column(name="uname", nullable = false)
+    private String username;
 
-    private final String givenNames;
+    @Column(name="given_names", nullable = false)
+    private String givenNames;
 
-    private final String surnames;
+    @Column(name="surnames", nullable = false)
+    private String surnames;
 
-    private final String nationality;
+    @Column(name="nationality", nullable = false)
+    private String nationality;
 
-    private final String idCode;
+    @Column(name="id_code", nullable = false)
+    private String idCode;
 
-    private final String idType;
+    @Column(name="id_type", nullable = false)
+    private String idType;
 
-    private final byte[] idPhoto;
+    @Column(name="id_photo", nullable = false)
+    private byte[] idPhoto;
 
-    private final byte[] validationPhoto;
+    @Column(name="validation_photo", nullable = false)
+    private byte[] validationPhoto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="status", nullable = false)
+    private KycStatus status = KycStatus.PEN;
+    @Entity
+    @Table(name="kyc")
     public static class KycInformationBuilder {
 
+        @Id
+        @Column(name="uname", nullable = false)
         private final String username;
 
+        @Column(name="given_names", nullable = false)
         private final String givenNames;
-
+        @Column(name="surnames", nullable = false)
         private final String surnames;
 
+        @Column(name="nationality", nullable = false)
         private String nationality;
-
+        @Column(name="id_code", nullable = false)
         private String idCode;
-
+        @Column(name="id_type", nullable = false)
         private String idType;
 
+        @Column(name="id_photo", nullable = false)
+        @Basic(optional = false, fetch = FetchType.LAZY)
         private byte[] idPhoto;
 
+        @Column(name="validation_photo", nullable = false)
+        @Basic(optional = false, fetch = FetchType.LAZY)
         private byte[] validationPhoto;
 
         public KycInformationBuilder(String username, String givenNames, String surnames) {
@@ -51,7 +76,7 @@ public class KycInformation {
             return this;
         }
 
-        public KycInformationBuilder withIdCode(String isCode) {
+        public KycInformationBuilder withIdCode(String idCode) {
             this.idCode = idCode;
             return this;
         }
@@ -101,6 +126,10 @@ public class KycInformation {
         this.validationPhoto = builder.validationPhoto;
     }
 
+    public KycInformation() {
+
+    }
+
     public String getUsername() {
         return username;
     }
@@ -131,5 +160,9 @@ public class KycInformation {
 
     public byte[] getValidationPhoto() {
         return validationPhoto;
+    }
+
+    public void setStatus(KycStatus status) {
+        this.status = status;
     }
 }

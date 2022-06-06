@@ -96,6 +96,11 @@ public class AdminController {
         return new ModelAndView("redirect:/admin/solve/"+complaintId);
     }
 
+    @RequestMapping(value = "/idcheck", method = RequestMethod.GET)
+    public ModelAndView idcheck(final Authentication authentication) {
+        return new ModelAndView("admin/idcheck");
+    }
+
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView solveSuccess() {

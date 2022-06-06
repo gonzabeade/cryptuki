@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.KycInformation;
+import ar.edu.itba.paw.persistence.KycInformation;
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;

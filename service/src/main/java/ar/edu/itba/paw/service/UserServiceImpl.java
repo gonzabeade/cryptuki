@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.KycStatus;
+import ar.edu.itba.paw.persistence.KycInformation;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.service.mailing.ChangePasswordThymeleafMailMessage;
-import ar.edu.itba.paw.service.mailing.MailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,24 +14,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private  UserDao userDao;
-    private  UserAuthDao userAuthDao;
-    private  PasswordEncoder passwordEncoder;
-    private  MessageSenderFacade messageSenderFacade;
+    private final UserDao userDao;
+    private final UserAuthDao userAuthDao;
+    private final PasswordEncoder passwordEncoder;
+    private final MessageSenderFacade messageSenderFacade;
+    private final KycDao kycDao;
 
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, MessageSenderFacade messageSender) {
+    public UserServiceImpl(final KycDao kycDao, final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, MessageSenderFacade messageSender) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;
         this.messageSenderFacade = messageSender;
+        this.kycDao = kycDao;
     }
 
 
@@ -188,6 +189,24 @@ public class UserServiceImpl implements UserService {
         UserAuth user = maybeUser.get();
         messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
     }
+
+    @Override
+    @Transactional
+    public void newKycRequest(KycInformation.KycInformationBuilder builder) {
+        kycDao.newKycRequest(builder);
+    }
+
+    @Override
+    @Transactional
+    public Optional<KycInformation> getKycRequestFromUsername(String username) {
+        return kycDao.getKycRequest(username);
+    }
+
+    @Override
+    public void validateIdentity(String username) {
+        kycDao.setKycRequestStatus(KycStatus.APR, username);
+    }
+
 
     @Override
     public boolean userExists(String username, String email) {

@@ -53,13 +53,13 @@
     <div class="flex w-full justify-center my-10 z-10">
       <div class="flex flex-col p-3 w-1/2">
         <h2 class=" text-lg font-sans font-bold">DNI Frente</h2>
-        <div class="w-1/2 my-2">
-          <img src="<c:url value="/kyc/idPhoto/${username}"/>">
+        <div class="my-2  border-2 border-gray-400">
+          <img src="<c:url value="/kyc/idPhoto/${username}"/>" class="h-[200px] w-full mx-auto">
         </div>
         <hr>
         <h2 class=" text-lg font-sans font-bold">Foto sosteniendo el DNI</h2>
-        <div class="w-1/2" >
-          <img src="<c:url value="/kyc/validationphoto/${username}"/>">
+        <div class="border-2 border-gray-400" >
+          <img src="<c:url value="/kyc/validationphoto/${username}"/>" class="h-[200px] w-full mx-auto">
         </div>
 
       </div>

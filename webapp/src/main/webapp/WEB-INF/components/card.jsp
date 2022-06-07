@@ -87,8 +87,7 @@
 				</div>
 	--%>
 				<div class="flex basis-1/4 justify-center">
-					<c:choose>
-						<c:when test="${param.userEmail == param.owner || username==param.owner || isAdmin}">
+						<c:if test="${param.userEmail == param.owner || username==param.owner || isAdmin}">
 <%--								<a class=" pb-6 px-5 pt-4 rounded-lg bg-gray-300 max-h-14 m-2 hover:bg-stormdl/[.6] hover:border-2 hover:border-polard w-36 text-center" href="<c:url value="/offer/${param.offerId}"/>"><messages:message code="seeOffer"/></a>--%>
 							<div class="flex flex-row mx-auto my-4">
 								<a class="active:cursor-progress my-auto mx-3" href="<c:url value="/modify/${param.offerId}"/>">
@@ -107,19 +106,20 @@
 									</form:form>
 								</div>
 							</div>
+						</c:if>
+						<c:if test="${param.userEmail == param.owner || username==param.owner}">
 							<button class=" text-center pb-6 px-2 pt-4 rounded-lg bg-stormd max-h-16 text-polard mx-auto my-auto" id="show-${param.offerId}" onclick="show(${param.offerId})">
 								<p class="p-1 mb-1"><messages:message code="show"/></p>
 							</button>
 							<button class="text-center pb-6 px-7 pt-4 rounded-lg bg-stormd max-h-16 text-polard mx-auto my-auto" id="hide-${param.offerId}" onclick="hide(${param.offerId})" style="display: none">
 								<messages:message code="hide"/>
 							</button>
-						</c:when>
-						<c:otherwise>
+						</c:if>
+						<c:if test="${param.userEmail != param.owner && username!=param.owner && !isAdmin}">
 							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/buy/${param.offerId}"/>">
 								<messages:message code="buy"/>
 							</a>
-						</c:otherwise>
-					</c:choose>
+						</c:if>
 				</div>
 		</div>
 		<div id="offerId" style="display: none">

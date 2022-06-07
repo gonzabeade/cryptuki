@@ -23,6 +23,8 @@
 <%--  TODO CHECK PORQUE  el ML ESTA EN 80 ESTO ESTA ASI--%>
 
   <div class="flex flex-col ml-80 p-10">
+
+    <!--Title -->
     <div class="flex flex-row">
       <h1 class="font-sans text-4xl font-bold">Validador de identidad</h1>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 my-auto ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" onclick="toggleInfo('info')">
@@ -49,61 +51,79 @@
         <li>El código manuscrito en la foto personal coincide con el solicitado.</li>
       </div>
     </ol>
-    <!--end Toggle-->
-    <div class="flex w-full  my-10 z-10">
-      <div class="flex flex-col p-3 w-1/2">
-        <details>
-          <summary class=" text-lg font-sans font-bold">DNI Frente</summary>
-          <div class=" border-2 border-gray-400 ">
-            <img src="<c:url value="/kyc/idPhoto/${username}"/>" class=" w-full mx-auto">
-          </div>
-        </details>
 
-        <hr>
-        <details>
-          <summary class=" text-lg font-sans font-bold">Foto sosteniendo el DNI</summary>
-          <div class="border-2 border-gray-400" >
-            <img src="<c:url value="/kyc/validationphoto/${username}"/>" class="w-full mx-auto">
-          </div>
-        </details>
+    <%--Page Body--%>
+    <div class="flex w-full my-10 z-10">
 
+      <%--Left panel--%>
+      <div class="flex flex-col w-3/5">
+        <%-- Picture selectors --%>
+        <div class="flex flex-row w-full h-[60px]">
 
-      </div>
-      <div class="flex justify-center w-1/2">
-        <div class="flex flex-col">
-          <h3 class="font-sans font-bold text-lg mb-10 text-xl">Información del usuario</h3>
-          <div class="flex flex-row">
-            <h4 class="font-sans font-bold mr-2">Nombres: </h4>
-            <h3>Marcos Diego</h3>
+          <div class="w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300" onclick="showIdPhoto()">
+            <h2 id="idphotoText" class="underline underline-offset-2 font-sans text-xl font-bold text-center mt-4">Imagen del documento</h2>
           </div>
-          <div class="flex flex-row ">
-            <h4 class="font-sans font-bold mr-2">Apellidos: </h4>
-            <h3> Dedeu Messi</h3>
+
+          <div class="w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300" onclick="showValidationPhoto()">
+            <h2 id="validationphotoText" class="underline-offset-2 font-sans text-xl font-bold text-center mt-4">Foto validatoria con el documento</h2>
           </div>
-          <div class="flex flex-row ">
-            <h4 class="font-sans font-bold mr-2">País: </h4>
-            <h3> Argentina</h3>
-          </div>
-          <div class="flex flex-row">
-          <h4 class="font-sans font-bold mr-2">Documento: </h4>
-          <h3 class="mr-2"> DNI</h3>
-          <h3> 43568446</h3>
-        </div>
         </div>
 
+          <%-- Picture show --%>
+        <div class="w-full h-4/5 mt-5">
+            <div id="idphoto" class="border-2 border-gray-400 ">
+              <img src="<c:url value="/kyc/idphoto/${kyc.username}"/>" class=" w-full mx-auto">
+            </div>
+            <div id="validationphoto" class="hidden border-2 border-gray-400" >
+              <img src="<c:url value="/kyc/validationphoto/${kyc.username}"/>" class="w-full mx-auto">
+            </div>
+        </div>
+
+
       </div>
 
-    </div>
-    <div class="flex flex-row mx-auto">
-      <c:url value="/admin/idcheck" var="postUrl"/>
-        <form:form method="post" action="${postUrl}" modelAttribute="kycApprovalForm">
-          <form:hidden path="approved" value="true"/>
-          <button class="bg-ngreen rounded-lg text-white p-3 mr-10" type="submit">Aprobar</button>
-        </form:form>
-      <div onclick="toggleInfo('confirmation')">
-        <button class="bg-nred rounded-lg text-white p-3">Rechazar</button>
+
+        <%--Right panel--%>
+      <div class="flex flex-col w-1/3 mx-auto">
+        <div class="flex flex-col shadow-xl rounded-lg py-10 bg-[#FAFCFF] px-5 flex justify-center mx-auto w-3/4">
+          <div class="flex flex-col">
+              <h3 class="font-sans font-bold text-lg mb-10 text-xl">Información provista por el usuario</h3>
+              <div class="flex flex-row">
+                <h4 class="font-sans font-bold mr-2">Nombres: </h4>
+                <h3><c:out value="${kyc.givenNames}"/></h3>
+              </div>
+              <div class="flex flex-row ">
+                <h4 class="font-sans font-bold mr-2">Apellidos: </h4>
+                <h3><c:out value="${kyc.surnames}"/></h3>
+              </div>
+              <div class="flex flex-row ">
+                <h4 class="font-sans font-bold mr-2">País de emisión:</h4>
+                <h3><c:out value="${kyc.emissionCountry}"/></h3>
+              </div>
+              <div class="flex flex-row">
+                <h4 class="font-sans font-bold mr-2">Documento: </h4>
+                <h3><c:out value="${kyc.idCode}"/></h3>
+              </div>
+              <div class="flex flex-row">
+                <h4 class="font-sans font-bold mr-2">Tipo: </h4>
+                <h3 class="mr-2"><messages:message code="IdType.${kyc.idType}"/></h3>
+              </div>
+
+          </div>
+        </div>
+        <div class="flex flex-row mx-auto mt-10">
+          <c:url value="/admin/idcheck" var="postUrl"/>
+          <form:form method="post" action="${postUrl}" modelAttribute="kycApprovalForm">
+            <form:hidden path="approved" value="true"/>
+            <button class="bg-ngreen rounded-lg text-white p-3 mr-10" type="submit">Aprobar</button>
+          </form:form>
+          <div onclick="toggleInfo('confirmation')">
+            <button class="bg-nred rounded-lg text-white p-3">Rechazar</button>
+          </div>
+        </div>
       </div>
     </div>
+
     <!--Confirmation Toggle-->
     <div id="confirmation" class="bg-white shadow-xl p-10 hidden justify-center rounded-lg z-20 mt-52 absolute w-[70%]">
       <div class="flex flex-col justify-center">
@@ -133,6 +153,29 @@
 
 </body>
 <script>
+
+  function showIdPhoto(){
+      var element = document.getElementById("idphoto")
+      element.classList.remove('hidden')
+      element = document.getElementById("idphotoText")
+      element.classList.add('underline')
+      element = document.getElementById("validationphotoText")
+      element.classList.remove('underline')
+      element = document.getElementById("validationphoto")
+      element.classList.add('hidden')
+  }
+
+  function showValidationPhoto(){
+    var element = document.getElementById("idphoto")
+    element.classList.add('hidden')
+    element = document.getElementById("idphotoText")
+    element.classList.remove('underline')
+    element = document.getElementById("validationphotoText")
+    element.classList.add('underline')
+    element = document.getElementById("validationphoto")
+    element.classList.remove('hidden')
+  }
+
   function toggleInfo(id){
     var element = document.getElementById(id)
     if(element.classList.contains('hidden')){
@@ -140,9 +183,11 @@
     }else{
       element.classList.add('hidden')
     }
-   }
-   function hideToggle(id) {
-     var element = document.getElementById(id)
-     element.classList.add('hidden')
-   }
+  }
+
+  function hideToggle(id) {
+    var element = document.getElementById(id)
+    element.classList.add('hidden')
+  }
+
 </script>

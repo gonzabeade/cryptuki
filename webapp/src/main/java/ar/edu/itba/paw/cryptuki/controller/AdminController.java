@@ -5,13 +5,12 @@ import ar.edu.itba.paw.cryptuki.form.KycApprovalForm;
 import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
 import ar.edu.itba.paw.exception.NoSuchComplainException;
+import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Complain;
-import ar.edu.itba.paw.persistence.ComplainStatus;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.ComplainService;
+import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +32,14 @@ public class AdminController {
     private final UserService userService;
     private final TradeService tradeService;
 
+    private final KycService kycService;
+
     @Autowired
-    public AdminController(ComplainService complainService, UserService userService, TradeService tradeService) {
+    public AdminController(KycService kycService, ComplainService complainService, UserService userService, TradeService tradeService) {
         this.complainService = complainService;
         this.userService = userService;
         this.tradeService = tradeService;
+        this.kycService = kycService;
     }
 
 
@@ -98,13 +100,17 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/idcheck/{username}", method = RequestMethod.GET)
-    public ModelAndView idcheck(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
+    public ModelAndView idCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
         ModelAndView modelAndView = new ModelAndView("admin/idcheck");
-        modelAndView.addObject("username", username);
+
+        Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
+        KycInformation kyc = maybeKyc.orElseThrow(()-> new NoSuchKycException(username));
+
+        modelAndView.addObject("kyc", kyc);
         return modelAndView;
     }
     @RequestMapping(value ="/idcheck/{username}", method = RequestMethod.POST)
-    public ModelAndView idCheck(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username, final BindingResult errors){
+    public ModelAndView idCheckPost(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username, final BindingResult errors){
         if(errors.hasErrors()){
             return new ModelAndView("redirect:/admin/idcheck/"+ username);
         }

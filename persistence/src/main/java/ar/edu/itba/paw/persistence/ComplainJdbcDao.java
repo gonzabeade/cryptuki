@@ -25,7 +25,7 @@ public class ComplainJdbcDao implements ComplainDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComplainJdbcDao.class);
 
-    private static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
+    private final static RowMapper<Complain> COMPLAIN_ROW_MAPPER =
             (rs, i) -> {
                 Complain.Builder builder= new Complain.Builder(
                         rs.getString("complainer_uname"))

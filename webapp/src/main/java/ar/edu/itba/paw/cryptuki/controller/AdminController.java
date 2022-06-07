@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.cryptuki.form.KycApprovalForm;
 import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
 import ar.edu.itba.paw.exception.NoSuchComplainException;
@@ -97,8 +98,16 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/idcheck", method = RequestMethod.GET)
-    public ModelAndView idcheck(final Authentication authentication) {
+    public ModelAndView idcheck(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm,  final Authentication authentication) {
         return new ModelAndView("admin/idcheck");
+    }
+    @RequestMapping(value ="/idcheck", method = RequestMethod.POST)
+    public ModelAndView idCheck(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, final BindingResult errors){
+        if(errors.hasErrors()){
+            return new ModelAndView("admin/idcheck");
+        }
+        return new ModelAndView("redirect:/admin");
+
     }
 
 

@@ -77,5 +77,6 @@ public class KycController {
         KycInformation kyc = maybeKyc.orElseThrow(()->new NoSuchUserException(username));
         return ResponseEntity.ok().contentType(MediaType.valueOf(kyc.getIdPhotoType())).body(kyc.getIdPhoto());
     }
+
 }
 

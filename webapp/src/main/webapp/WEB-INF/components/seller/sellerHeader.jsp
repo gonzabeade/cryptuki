@@ -6,7 +6,7 @@
     <div class="container flex flex-wrap mx-auto my-auto px-4 h-full justify-between">
         <div class="flex justify-center center w-[15%] my-auto xl:w-1/4">
             <div class="flex flex-col w-full mt-2">
-                <a class="mx-auto" href="<c:url value="/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
+                <a class="mx-auto" href="<c:url value="/seller/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
             </div>
         </div>
         <div class="flex justify-end">

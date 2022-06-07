@@ -68,8 +68,8 @@
 
             <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                 <h1 class="mx-auto">
-                    <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/>
-                    <c:out value=" ${offer.crypto.code}"/> ⟶ <c:out
+                    <fmt:formatNumber type="number" value="${trade.quantity / trade.offer.askingPrice}"/>
+                    <c:out value=" ${trade.offer.crypto.code}"/> ⟶ <c:out
                         value="${trade.quantity} "/>ARS</h1>
             </div>
 
@@ -99,63 +99,9 @@
                     <messages:message code="help"/>
                 </a>
             </c:if>
-
-<%--            &lt;%&ndash;                            CASE - PENDING&ndash;%&gt;--%>
-<%--            <c:if test="${trade.status == 'PENDING'}">--%>
-<%--                <c:url value="/seller/changeStatus" var="postUrl"/>--%>
-<%--                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"--%>
-<%--                           cssClass="flex justify-center mx-auto my-3">--%>
-<%--                    <form:hidden path="newStatus" id="newStatus-${trade.tradeId}"--%>
-<%--                                 value="${trade.status}"/>--%>
-<%--                    <form:hidden path="tradeId" value="${trade.tradeId}"/>--%>
-
-<%--                    <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"--%>
-<%--                            class="bg-red-400 text-white p-3  rounded-md font-sans mr-4">--%>
-<%--                        <messages:message--%>
-<%--                                code="rejectTrade"/></button>--%>
-<%--                    <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"--%>
-<%--                            class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message--%>
-<%--                            code="acceptTrade"/></button>--%>
-<%--                </form:form>--%>
-<%--            </c:if>--%>
-
-<%--            &lt;%&ndash;                            CASE - ACCEPTED&ndash;%&gt;--%>
-<%--            <c:if test="${trade.status == 'ACCEPTED' }">--%>
-<%--                <c:url value="/closeTrade" var="formUrl"/>--%>
-<%--                <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"--%>
-<%--                           cssClass="flex justify-center mx-auto my-3">--%>
-<%--                    <form:hidden path="offerId" value="${offer.id}"/>--%>
-<%--                    <form:hidden path="trade" value="${trade.tradeId}"/>--%>
-<%--                    <button type="submit"--%>
-<%--                            class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">--%>
-<%--                        <messages:message code="soldTrade"/></button>--%>
-<%--                </form:form>--%>
-<%--            </c:if>--%>
-
-<%--            &lt;%&ndash;                            CASE - REJECTED&ndash;%&gt;--%>
-<%--            <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">--%>
-<%--                <div class="flex h-2/5 my-2"></div>--%>
-<%--            </c:if>--%>
-<%--        <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between mx-auto mb-5">--%>
-<%--            Otras órdenes de compra de este comprador--%>
-<%--        </div>--%>
-<%--        <div class="flex flex-wrap justify-center">--%>
-<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
-<%--                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>--%>
-<%--            </div>--%>
-<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">--%>
-<%--                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>--%>
-<%--            </div>--%>
-<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2 ">--%>
-<%--                Ejemplo <div class="bg-nyellow w-full text-white text-center p-2"><messages:message code="pending"/></div>--%>
-<%--            </div>--%>
-<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
-<%--                Ejemplo <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/></div>--%>
-<%--            </div>--%>
-<%--            <div class="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl rounded-lg p-7 m-2">--%>
-<%--                Ejemplo <div class="bg-nred w-full text-white text-center p-2"><messages:message code="rejected"/></div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+        </div>
+        <div class="mx-auto">
+            <a  href="<c:url value="/seller/"/>" class="bg-frost px-6 py-3  rounded-lg text-white"><messages:message code="goBack"/></a>
         </div>
     </div>
 

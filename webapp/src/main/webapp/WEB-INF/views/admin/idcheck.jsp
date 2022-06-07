@@ -50,17 +50,23 @@
       </div>
     </ol>
     <!--end Toggle-->
-    <div class="flex w-full justify-center my-10 z-10">
+    <div class="flex w-full  my-10 z-10">
       <div class="flex flex-col p-3 w-1/2">
-        <h2 class=" text-lg font-sans font-bold">DNI Frente</h2>
-        <div class="my-2  border-2 border-gray-400">
-          <img src="<c:url value="/kyc/idPhoto/${username}"/>" class="h-[200px] w-full mx-auto">
-        </div>
+        <details>
+          <summary class=" text-lg font-sans font-bold">DNI Frente</summary>
+          <div class=" border-2 border-gray-400 ">
+            <img src="<c:url value="/kyc/idPhoto/${username}"/>" class=" w-full mx-auto">
+          </div>
+        </details>
+
         <hr>
-        <h2 class=" text-lg font-sans font-bold">Foto sosteniendo el DNI</h2>
-        <div class="border-2 border-gray-400" >
-          <img src="<c:url value="/kyc/validationphoto/${username}"/>" class="h-[200px] w-full mx-auto">
-        </div>
+        <details>
+          <summary class=" text-lg font-sans font-bold">Foto sosteniendo el DNI</summary>
+          <div class="border-2 border-gray-400" >
+            <img src="<c:url value="/kyc/validationphoto/${username}"/>" class="w-full mx-auto">
+          </div>
+        </details>
+
 
       </div>
       <div class="flex justify-center w-1/2">
@@ -99,7 +105,7 @@
       </div>
     </div>
     <!--Confirmation Toggle-->
-    <div id="confirmation" class="bg-white shadow-xl p-10 hidden justify-center rounded-lg z-20 absolute w-[70%]">
+    <div id="confirmation" class="bg-white shadow-xl p-10 hidden justify-center rounded-lg z-20 mt-52 absolute w-[70%]">
       <div class="flex flex-col justify-center">
         <h2 class="text-2xl font-sans font-bold">Escribí el motivo del rechazo</h2>
         <form:form method="post" action="${postUrl}" modelAttribute="kycApprovalForm">

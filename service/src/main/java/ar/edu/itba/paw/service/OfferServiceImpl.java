@@ -149,7 +149,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal) OR hasRole('ROLE_ADMIN')")
     public void modifyOffer(OfferDigest digest) {
 
         if (digest == null)
@@ -252,7 +252,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal) OR hasRole('ROLE_ADMIN') ")
     public Optional<Offer> getOfferIfAuthorized(int offerId) {
         return getOfferById(offerId);
     }

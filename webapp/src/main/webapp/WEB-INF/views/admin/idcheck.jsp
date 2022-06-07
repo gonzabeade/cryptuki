@@ -54,12 +54,12 @@
       <div class="flex flex-col p-3 w-1/2">
         <h2 class=" text-lg font-sans font-bold">DNI Frente</h2>
         <div class="w-1/2 my-2">
-          <img src="<c:url value="/kyc/idPhoto/mdedeu3"/>">
+          <img src="<c:url value="/kyc/idPhoto/${username}"/>">
         </div>
         <hr>
         <h2 class=" text-lg font-sans font-bold">Foto sosteniendo el DNI</h2>
         <div class="w-1/2" >
-          <img src="<c:url value="/kyc/validationphoto/mdedeu3"/>">
+          <img src="<c:url value="/kyc/validationphoto/${username}"/>">
         </div>
 
       </div>

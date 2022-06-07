@@ -97,15 +97,18 @@ public class AdminController {
         return new ModelAndView("redirect:/admin/solve/"+complaintId);
     }
 
-    @RequestMapping(value = "/idcheck", method = RequestMethod.GET)
-    public ModelAndView idcheck(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm,  final Authentication authentication) {
-        return new ModelAndView("admin/idcheck");
+    @RequestMapping(value = "/idcheck/{username}", method = RequestMethod.GET)
+    public ModelAndView idcheck(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
+        ModelAndView modelAndView = new ModelAndView("admin/idcheck");
+        modelAndView.addObject("username", username);
+        return modelAndView;
     }
-    @RequestMapping(value ="/idcheck", method = RequestMethod.POST)
-    public ModelAndView idCheck(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, final BindingResult errors){
+    @RequestMapping(value ="/idcheck/{username}", method = RequestMethod.POST)
+    public ModelAndView idCheck(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username, final BindingResult errors){
         if(errors.hasErrors()){
-            return new ModelAndView("admin/idcheck");
+            return new ModelAndView("redirect:/admin/idcheck/"+ username);
         }
+        //change user status
         return new ModelAndView("redirect:/admin");
 
     }

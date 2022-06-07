@@ -5,9 +5,9 @@ import javax.validation.constraints.NotNull;
 
 public class KycApprovalForm {
    @NotNull
-    private Boolean approved;
+   private Boolean approved;
 
-    private String message;
+   private String message;
 
     public Boolean getApproved() {
         return approved;

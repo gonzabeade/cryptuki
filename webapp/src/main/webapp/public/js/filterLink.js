@@ -23,15 +23,6 @@ window.onload = function getFilters() {
         document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
     }
 
-    var orderingDirection = searchParams.get("orderingDirection");
-    if (orderingDirection != null) {
-        if (orderingDirection == 1) {
-            document.getElementsByName("asc")[0].classList.remove("hidden");
-            return;
-        }
-    }
-    document.getElementsByName("desc")[0].classList.remove("hidden");
-
 
 }
 function resetAllFilters(){
@@ -61,9 +52,6 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    console.log(id)
-    if(id!='orderingCriterion')
-        document.getElementById("reset").classList.remove("hidden");
 }
 function resetAllAdminFilters(){
     document.getElementById("reset").classList.add("hidden")
@@ -102,15 +90,21 @@ function sendGet(){
     console.log(document.getElementById("link").href)
     document.getElementById("link").click();
 }
-function addQueryParamOrder(id, value) {
+function addDirection(id) {
+    let selectValue = document.getElementById(id).value;
     var searchParams = new URLSearchParams(window.location.search);
-    if(value === ''){
+    console.log(selectValue)
+    if(selectValue === ''){
         searchParams.delete(id);
+    }else if(selectValue === "2"){
+        searchParams.set('orderingDirection', "1")
     }else{
-        searchParams.set(id,value);
+        searchParams.delete('orderingDirection')
     }
+
     searchParams.delete("page")
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
+
 }

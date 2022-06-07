@@ -92,25 +92,26 @@
 <%--                </svg>--%>
 <%--            </div>--%>
             <p class="my-auto font-sans font-bold"><messages:message code="orderBy"/></p>
-            <select name="orderingCriterion" id="orderingCriterion" class="ml-5 rounded-sm p-2 my-auto " onchange="addQueryParam(this.id);sendGet()">
+            <select name="orderingCriterion" id="orderingCriterion" class="ml-5 rounded-sm p-2 my-auto " onchange="addQueryParam(this.id);addDirection(this.id);sendGet()">
                 <option value="0"><messages:message code="dateOrder"/> </option>
-                <option value="1"><messages:message code="lastLogin"/></option>
-                <option value="2"><messages:message code="rating"/></option>
-                <option value="3"><messages:message code="price"/></option>
+<%--                <option value="1"><messages:message code="lastLogin"/></option>--%>
+                <option value="1"><messages:message code="ratingFilter"/></option>
+                <option value="2"><messages:message code="priceLowToHigh"/></option>
+                <option value="3"><messages:message code="priceHighToLow"/></option>
             </select>
-            <div id="orderingDirection" name="desc" class="mx-2 my-auto hidden"
-                 onclick="hide('desc');addQueryParamOrder(this.id, 1);sendGet();">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                </svg>
-            </div>
-            <div class="mx-2 my-auto hidden" name="asc" id="orderingDirection"
-                 onclick="hide('asc');addQueryParamOrder(this.id, 0);sendGet();">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" />
-                </svg>
-            </div>
+<%--            <div id="orderingDirection" name="desc" class="mx-2 my-auto hidden"--%>
+<%--                 onclick="hide('desc');addQueryParamOrder(this.id, 1);sendGet();">--%>
+<%--                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"--%>
+<%--                     stroke="currentColor" stroke-width="2">--%>
+<%--                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3"/>--%>
+<%--                </svg>--%>
+<%--            </div>--%>
+<%--            <div class="mx-2 my-auto hidden" name="asc" id="orderingDirection"--%>
+<%--                 onclick="hide('asc');addQueryParamOrder(this.id, 0);sendGet();">--%>
+<%--                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">--%>
+<%--                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" />--%>
+<%--                </svg>--%>
+<%--            </div>--%>
 <%--            <select id="orderDirection" name="orderDirection">--%>
 <%--                <option value="0">--%>
 <%--                    DESC--%>

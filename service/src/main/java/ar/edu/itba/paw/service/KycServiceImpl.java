@@ -46,7 +46,8 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
-    public void rejectKycRequest(int kycId) {
+    public void rejectKycRequest(int kycId, String reason) {
+        // TODO: enviar mail con la razon
         kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
     }
 

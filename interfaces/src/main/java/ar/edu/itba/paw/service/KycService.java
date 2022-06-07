@@ -11,7 +11,7 @@ public interface KycService {
 
     boolean canRequestNewKyc(String username);
     void validateKycRequest(int kycId);
-    void rejectKycRequest(int kycId);
+    void rejectKycRequest(int kycId, String reason);
 
     boolean isValidated(String username);
 

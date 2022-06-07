@@ -7,8 +7,12 @@ import java.util.Optional;
 public interface KycService {
 
     void newKycRequest(KycInformation.KycInformationBuilder builder);
-    Optional<KycInformation> getKycRequestFromUsername(String username);
+    Optional<KycInformation> getPendingKycRequest(String username);
 
-    void validateIdentity(String username);
+    boolean canRequestNewKyc(String username);
+    void validateKycRequest(int kycId);
+    void rejectKycRequest(int kycId);
+
+    boolean isValidated(String username);
 
 }

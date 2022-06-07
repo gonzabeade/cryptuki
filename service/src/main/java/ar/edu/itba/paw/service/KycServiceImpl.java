@@ -27,14 +27,32 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
-    public Optional<KycInformation> getKycRequestFromUsername(String username) {
-        return kycDao.getKycRequest(username);
+    public Optional<KycInformation> getPendingKycRequest(String username) {
+        return kycDao.getKycRequestsByStatus(username, KycStatus.PEN).stream().findFirst();
     }
 
     @Override
     @Transactional
-    public void validateIdentity(String username) {
-        kycDao.setKycRequestStatus(KycStatus.APR, username);
+    public boolean canRequestNewKyc(String username) {
+        return kycDao.countKycRequestsByStatus(username, KycStatus.PEN) == 0
+                && kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
+    }
+
+    @Override
+    @Transactional
+    public void validateKycRequest(int kycId) {
+        kycDao.setKycRequestStatus(KycStatus.APR, kycId);
+    }
+
+    @Override
+    @Transactional
+    public void rejectKycRequest(int kycId) {
+        kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+    }
+
+    @Override
+    public boolean isValidated(String username) {
+        return kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
     }
 
 }

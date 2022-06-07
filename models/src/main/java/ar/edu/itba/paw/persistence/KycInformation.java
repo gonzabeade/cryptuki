@@ -4,17 +4,17 @@ import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.KycStatus;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="kyc")
 public final class KycInformation {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kyc_pkey")
-//    @SequenceGenerator(sequenceName = "kyc_pkey", name = "kyc_pkey", allocationSize = 1)
-//    private int kycId;
-
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kyc_kyc_id_seq")
+    @SequenceGenerator(sequenceName = "kyc_kyc_id_seq", name = "kyc_kyc_id_seq", allocationSize = 1)
+    private Integer kycId;
+
     @Column(name="uname", nullable = false)
     private String username;
 
@@ -47,6 +47,9 @@ public final class KycInformation {
 
     @Column(name="validation_photo_type", nullable = false)
     private String validationPhotoType;
+
+    @Column(name = "kyc_date", nullable = false, insertable = false)
+    private LocalDateTime kycDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status", nullable = false)
@@ -132,9 +135,9 @@ public final class KycInformation {
         // Just for Hibernate!
     }
 
-//    public int getKycId() {
-//        return kycId;
-//    }
+    public int getKycId() {
+        return kycId;
+    }
 
     public String getUsername() {
         return username;
@@ -158,6 +161,10 @@ public final class KycInformation {
 
     public IdType getIdType() {
         return idType;
+    }
+
+    public LocalDateTime getKycDate() {
+        return kycDate;
     }
 
     public byte[] getIdPhoto() {

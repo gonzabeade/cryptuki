@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.cryptuki.controller;
-
 import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -38,9 +37,8 @@ public class KycController {
     @RequestMapping(value ="", method = {RequestMethod.GET})
     private ModelAndView kyc(@ModelAttribute("kycForm") final KycForm form, Authentication authentication) {
 
-        if (kycService.getKycRequestFromUsername(authentication.getName()).isPresent())
+        if ( !kycService.canRequestNewKyc(authentication.getName()))
             return new ModelAndView("redirect:/kyc/success");
-
 
         ModelAndView mav = new ModelAndView("kyc/kyc");
         mav.addObject("idTypes", IdType.values());
@@ -66,14 +64,14 @@ public class KycController {
 
     @RequestMapping(value = "/validationphoto/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> validationPhoto(@PathVariable final String username) {
-        Optional<KycInformation> maybeKyc = kycService.getKycRequestFromUsername(username);
+        Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
         KycInformation kyc = maybeKyc.orElseThrow(()->new NoSuchUserException(username));
         return ResponseEntity.ok().contentType(MediaType.valueOf(kyc.getValidationPhotoType())).body(kyc.getValidationPhoto());
     }
 
     @RequestMapping(value = "/idphoto/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> idPhoto(@PathVariable final String username) {
-        Optional<KycInformation> maybeKyc = kycService.getKycRequestFromUsername(username);
+        Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
         KycInformation kyc = maybeKyc.orElseThrow(()->new NoSuchUserException(username));
         return ResponseEntity.ok().contentType(MediaType.valueOf(kyc.getIdPhotoType())).body(kyc.getIdPhoto());
     }

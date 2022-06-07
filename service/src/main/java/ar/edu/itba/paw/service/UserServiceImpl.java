@@ -23,16 +23,14 @@ public class UserServiceImpl implements UserService {
     private final UserAuthDao userAuthDao;
     private final PasswordEncoder passwordEncoder;
     private final MessageSenderFacade messageSenderFacade;
-    private final KycDao kycDao;
 
 
     @Autowired
-    public UserServiceImpl(final KycDao kycDao, final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, MessageSenderFacade messageSender) {
+    public UserServiceImpl(final UserDao userDao, final UserAuthDao userAuthDao, final PasswordEncoder passwordEncoder, MessageSenderFacade messageSender) {
         this.userDao = userDao;
         this.userAuthDao = userAuthDao;
         this.passwordEncoder = passwordEncoder;
         this.messageSenderFacade = messageSender;
-        this.kycDao = kycDao;
     }
 
 
@@ -188,23 +186,6 @@ public class UserServiceImpl implements UserService {
 
         UserAuth user = maybeUser.get();
         messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
-    }
-
-    @Override
-    @Transactional
-    public void newKycRequest(KycInformation.KycInformationBuilder builder) {
-        kycDao.newKycRequest(builder);
-    }
-
-    @Override
-    @Transactional
-    public Optional<KycInformation> getKycRequestFromUsername(String username) {
-        return kycDao.getKycRequest(username);
-    }
-
-    @Override
-    public void validateIdentity(String username) {
-        kycDao.setKycRequestStatus(KycStatus.APR, username);
     }
 
 

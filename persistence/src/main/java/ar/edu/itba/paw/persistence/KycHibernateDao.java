@@ -15,18 +15,19 @@ public class KycHibernateDao implements KycDao {
 
     @Override
     public void newKycRequest(KycInformation.KycInformationBuilder builder) {
-        entityManager.persist(builder);
+        entityManager.persist(builder.build());
     }
 
     @Override
     public void setKycRequestStatus(KycStatus status, String username) {
-        KycInformation kyc = entityManager.find(KycInformation.class, entityManager);
+        KycInformation kyc = entityManager.find(KycInformation.class, username);
         kyc.setStatus(status);
         entityManager.persist(kyc);
     }
 
     @Override
     public Optional<KycInformation> getKycRequest(String username) {
-        return Optional.ofNullable(entityManager.find(KycInformation.class, entityManager));
+        Optional<KycInformation> kyc = Optional.ofNullable(entityManager.find(KycInformation.class, username));
+        return kyc;
     }
 }

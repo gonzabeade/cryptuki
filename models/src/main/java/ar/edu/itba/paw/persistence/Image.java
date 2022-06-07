@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+
+import javax.persistence.Entity;
+
 public final class Image {
 
     private final String username;

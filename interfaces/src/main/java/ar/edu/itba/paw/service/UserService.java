@@ -22,11 +22,5 @@ public interface UserService {
     boolean userExists(String username, String email);
     void changePasswordAnonymously(String email);
 
-    void newKycRequest(KycInformation.KycInformationBuilder builder);
-    Optional<KycInformation> getKycRequestFromUsername(String username);
-
-    void validateIdentity(String username);
-
-
 
 }

@@ -1,13 +1,18 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.KycStatus;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 @Table(name="kyc")
 public final class KycInformation {
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kyc_pkey")
+//    @SequenceGenerator(sequenceName = "kyc_pkey", name = "kyc_pkey", allocationSize = 1)
+//    private int kycId;
 
     @Id
     @Column(name="uname", nullable = false)
@@ -19,51 +24,49 @@ public final class KycInformation {
     @Column(name="surnames", nullable = false)
     private String surnames;
 
-    @Column(name="nationality", nullable = false)
-    private String nationality;
+    @Column(name="emission_country", nullable = false)
+    private String emissionCountry;
 
     @Column(name="id_code", nullable = false)
     private String idCode;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="id_type", nullable = false)
-    private String idType;
+    private IdType idType;
 
     @Column(name="id_photo", nullable = false)
+    @Basic(fetch = FetchType.LAZY)
     private byte[] idPhoto;
 
     @Column(name="validation_photo", nullable = false)
+    @Basic(fetch = FetchType.LAZY)
     private byte[] validationPhoto;
+
+    @Column(name="id_photo_type", nullable = false)
+    private String idPhotoType;
+
+    @Column(name="validation_photo_type", nullable = false)
+    private String validationPhotoType;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status", nullable = false)
     private KycStatus status = KycStatus.PEN;
-    @Entity
-    @Table(name="kyc")
+
     public static class KycInformationBuilder {
 
-        @Id
-        @Column(name="uname", nullable = false)
         private final String username;
-
-        @Column(name="given_names", nullable = false)
         private final String givenNames;
-        @Column(name="surnames", nullable = false)
         private final String surnames;
 
-        @Column(name="nationality", nullable = false)
-        private String nationality;
-        @Column(name="id_code", nullable = false)
+        private String emissionCountry;
         private String idCode;
-        @Column(name="id_type", nullable = false)
-        private String idType;
+        private IdType idType;
 
-        @Column(name="id_photo", nullable = false)
-        @Basic(optional = false, fetch = FetchType.LAZY)
         private byte[] idPhoto;
-
-        @Column(name="validation_photo", nullable = false)
-        @Basic(optional = false, fetch = FetchType.LAZY)
         private byte[] validationPhoto;
+
+        private String idPhotoType;
+        private String validationPhotoType;
 
         public KycInformationBuilder(String username, String givenNames, String surnames) {
             this.username = username;
@@ -71,17 +74,18 @@ public final class KycInformation {
             this.surnames = surnames;
         }
 
-        public KycInformationBuilder withNationality(String nationality) {
-            this.nationality = nationality;
+        public KycInformationBuilder withEmissionCountry(String emissionCountry) {
+            this.emissionCountry = emissionCountry;
             return this;
         }
+
 
         public KycInformationBuilder withIdCode(String idCode) {
             this.idCode = idCode;
             return this;
         }
 
-        public KycInformationBuilder withIdType(String idType) {
+        public KycInformationBuilder withIdType(IdType idType) {
             this.idType = idType;
             return this;
         }
@@ -96,22 +100,18 @@ public final class KycInformation {
             return this;
         }
 
-        public KycInformation build() {
-            return new KycInformation(this);
+        public KycInformationBuilder withIdPhotoType(String idPhotoType) {
+            this.idPhotoType = idPhotoType;
+            return this;
         }
 
-        @Override
-        public String toString() {
-            return "KycInformationBuilder{" +
-                    "username='" + username + '\'' +
-                    ", givenNames='" + givenNames + '\'' +
-                    ", surnames='" + surnames + '\'' +
-                    ", nationality='" + nationality + '\'' +
-                    ", idCode='" + idCode + '\'' +
-                    ", idType='" + idType + '\'' +
-                    ", idPhoto=" + Arrays.toString(idPhoto) +
-                    ", validationPhoto=" + Arrays.toString(validationPhoto) +
-                    '}';
+        public KycInformationBuilder withValidationPhotoType(String validationPhotoType) {
+            this.validationPhotoType = validationPhotoType;
+            return this;
+        }
+
+        protected KycInformation build() {
+            return new KycInformation(this);
         }
     }
 
@@ -119,16 +119,22 @@ public final class KycInformation {
         this.givenNames = builder.givenNames;
         this.idPhoto = builder.idPhoto;
         this.idCode = builder.idCode;
-        this.nationality = builder.nationality;
+        this.emissionCountry = builder.emissionCountry;
         this.surnames = builder.surnames;
         this.username = builder.username;
         this.idType = builder.idType;
         this.validationPhoto = builder.validationPhoto;
+        this.idPhotoType = builder.idPhotoType;
+        this.validationPhotoType = builder.validationPhotoType;
     }
 
     public KycInformation() {
-
+        // Just for Hibernate!
     }
+
+//    public int getKycId() {
+//        return kycId;
+//    }
 
     public String getUsername() {
         return username;
@@ -142,15 +148,15 @@ public final class KycInformation {
         return surnames;
     }
 
-    public String getNationality() {
-        return nationality;
+    public String getEmissionCountry() {
+        return emissionCountry;
     }
 
     public String getIdCode() {
         return idCode;
     }
 
-    public String getIdType() {
+    public IdType getIdType() {
         return idType;
     }
 
@@ -162,7 +168,20 @@ public final class KycInformation {
         return validationPhoto;
     }
 
-    public void setStatus(KycStatus status) {
+    public String getIdPhotoType() {
+        return idPhotoType;
+    }
+
+    public String getValidationPhotoType() {
+        return validationPhotoType;
+    }
+
+    public KycStatus getStatus() {
+        return status;
+    }
+
+    protected void setStatus(KycStatus status) {
         this.status = status;
     }
+
 }

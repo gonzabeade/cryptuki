@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.persistence.KycInformation;
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,15 +26,14 @@ public class KycForm {
 
     @Size(min=1, max=140)
     @NotNull
-    private String nationality;
+    private String emissionCountry;
 
     @Size(min=1, max=140)
     @NotNull
     private String idCode;
 
-    @Size(min=1, max=140)
     @NotNull
-    private String idType;
+    private IdType idType;
 
     @MultipartCheck
     private MultipartFile idPhoto;
@@ -57,12 +57,12 @@ public class KycForm {
         this.surnames = surnames;
     }
 
-    public String getNationality() {
-        return nationality;
+    public String getEmissionCountry() {
+        return emissionCountry;
     }
 
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
+    public void setEmissionCountry(String emissionCountry) {
+        this.emissionCountry = emissionCountry;
     }
 
     public String getIdCode() {
@@ -73,12 +73,12 @@ public class KycForm {
         this.idCode = idCode;
     }
 
-    public String getIdType() {
+    public IdType getIdType() {
         return idType;
     }
 
     public void setIdType(String idType) {
-        this.idType = idType;
+        this.idType = IdType.valueOf(idType); // throws IllegalArgumentException, translated into bad request
     }
 
     public MultipartFile getIdPhoto() {
@@ -105,13 +105,16 @@ public class KycForm {
         this.username = username;
     }
 
+
     public KycInformation.KycInformationBuilder toBuilder() throws IOException {
         return new KycInformation.KycInformationBuilder(username, givenNames, surnames)
                 .withIdCode(idCode)
                 .withIdPhoto(idPhoto.getBytes())
+                .withIdPhotoType(idPhoto.getContentType())
                 .withIdType(idType)
-                .withNationality(nationality)
-                .withValidationPhoto(validationPhoto.getBytes());
+                .withEmissionCountry(emissionCountry)
+                .withValidationPhoto(validationPhoto.getBytes())
+                .withValidationPhotoType(validationPhoto.getContentType());
     }
 
 

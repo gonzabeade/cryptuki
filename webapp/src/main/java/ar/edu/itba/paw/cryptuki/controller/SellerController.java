@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -36,19 +37,20 @@ public class SellerController {
 
     private final PaymentMethodService paymentMethodService;
 
-    private final ProfilePicService profilePicService;
+    private final LocationService locationService;
+
     private final UserService userService;
     private static final int PAGE_SIZE = 6;
 
     @Autowired
-    public SellerController(ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    public SellerController(final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
     {
-        this.profilePicService = profilePicService; // TODO: remove
         this.tradeService = tradeService;
         this.offerService = offerService;
         this.userService = userService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
+        this.locationService = locationService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -119,10 +121,6 @@ public class SellerController {
     }
 
 
-
-
-
-
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
     public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
         if (! errors.hasErrors())
@@ -133,38 +131,7 @@ public class SellerController {
         return new ModelAndView("redirect:/seller/");
     }
 
-    @RequestMapping(value ="/kyc", method = {RequestMethod.GET})
-    private ModelAndView kyc(@ModelAttribute("kycForm") final KycForm form) {
-        return new ModelAndView("kyc/kyc");
-    }
 
-    @RequestMapping(value ="/kyc", method = {RequestMethod.POST})
-    private ModelAndView kycPost(@Valid @ModelAttribute("kycForm") final KycForm form, final BindingResult errors) throws IOException {
-        if (errors.hasErrors())
-            return new ModelAndView("kyc/kyc");
-
-        userService.newKycRequest(form.toBuilder());
-        return new ModelAndView("redirect:/seller/");
-    }
-
-
-    @RequestMapping(value = "/kyc/{username}", method = { RequestMethod.GET})
-    public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {
-
-        userService.validateIdentity("soutjava");
-
-        Optional<Image> maybeImage = profilePicService.getProfilePicture(username);
-        if(!maybeImage.isPresent()){
-            BufferedImage bufferedImage = ImageIO.read(new File(this.getClass().getClassLoader().getResource("default-Profile.png").toURI()));
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage,"png",byteArrayOutputStream);
-            byte [] data=byteArrayOutputStream.toByteArray();
-            return ResponseEntity.ok().contentType(MediaType.valueOf("image/png")).body(data);
-        }else {
-            Image image= maybeImage.get();
-            return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
-        }
-    }
 
 
 }

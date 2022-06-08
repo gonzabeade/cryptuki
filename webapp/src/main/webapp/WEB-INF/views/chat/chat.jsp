@@ -99,7 +99,47 @@
                     <messages:message code="help"/>
                 </a>
             </c:if>
+
+            <%--                            CASE - PENDING--%>
+            <c:if test="${trade.status == 'PENDING'}">
+                <c:url value="/seller/changeStatus" var="postUrl"/>
+                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
+                           cssClass="flex justify-center mx-auto my-3">
+                    <form:hidden path="newStatus" id="newStatus-${trade.tradeId}"
+                                 value="${trade.status}"/>
+                    <form:hidden path="tradeId" value="${trade.tradeId}"/>
+
+                    <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"
+                            class="bg-red-400 text-white p-3  rounded-md font-sans mr-4">
+                        <messages:message
+                                code="rejectTrade"/></button>
+                    <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"
+                            class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
+                            code="acceptTrade"/></button>
+                </form:form>
+            </c:if>
+
+            <%--                            CASE - ACCEPTED--%>
+            <c:if test="${trade.status == 'ACCEPTED' }">
+                <c:url value="/closeTrade" var="formUrl"/>
+
+                <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
+                           cssClass="flex justify-center mx-auto my-3">
+                    <form:hidden path="offerId" value="${trade.offer.id}"/>
+                    <form:hidden path="trade" value="${trade.tradeId}"/>
+                    <button type="submit"
+                            class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
+                        <messages:message code="soldTrade"/></button>
+
+                </form:form>
+            </c:if>
+
+            <%--                            CASE - REJECTED--%>
+            <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">
+                <div class="flex h-2/5 my-2"></div>
+            </c:if>
         </div>
+
         <div class="mx-auto">
             <a  href="<c:url value="/seller/"/>" class="bg-frost px-6 py-3  rounded-lg text-white"><messages:message code="goBack"/></a>
         </div>
@@ -109,5 +149,9 @@
 </div>
 </body>
 
-
+<script>
+    function updateStatus( status, tradeId) {
+        document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
+    }
+</script>
 </html>

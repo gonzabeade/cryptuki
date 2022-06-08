@@ -223,7 +223,7 @@
 
                                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
                                                cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="offerId" value="${offer.id}"/>
+                                        <form:hidden path="offerId" value="${trade.offer.id}"/>
                                         <form:hidden path="trade" value="${trade.tradeId}"/>
                                         <button type="submit"
                                                 class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">

@@ -119,6 +119,9 @@ public class TradeHibernateDao implements TradeDao{
     @Override
     public void deleteTrade(int tradeId) {
         Trade trade = getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        Collection<Message> messages = trade.getMessageCollection();
+        for(Message m : messages)
+            entityManager.remove(m);
         entityManager.remove(trade);
     }
 

@@ -17,11 +17,16 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <sec:authentication property="name" var="username"/>
-<body class="flex bg-storml overflow-x-hidden justify-center">
-<div class="w-1/2 mt-20 mb-10">
+
+<body class="bg-storml overflow-x-hidden justify-center">
+
+<jsp:include page="../../components/seller/sellerHeader.jsp"></jsp:include>
+
+<div class="">
+
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:url value="/kyc" var="kycUrl" />
-    <form:form modelAttribute="kycForm" action="${kycUrl}" method="post"  enctype="multipart/form-data" class=" py-12 px-4 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
+    <form:form modelAttribute="kycForm" action="${kycUrl}" method="post"  enctype="multipart/form-data" class="w-1/2 mt-20 mb-10 py-12 px-4 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
         <h1 class="text-center text-4xl font-semibold font-sans text-polar">Verifica tu identidad</h1>
 
         <h2 class="text-start text-xl font-semibold font-sans text-polar mt-8">Para poder subir anuncios de compra, tu identidad debe estar validada por uno de nuestros administradores. Al completar este formulario, te notifcaremos por mail una vez que hayamos revisado tu solicitud.</h2>

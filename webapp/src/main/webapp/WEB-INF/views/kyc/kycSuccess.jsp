@@ -16,8 +16,9 @@
     <title>cryptuki</title>
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
-<body class="flex bg-storml overflow-x-hidden justify-center">
-<div class="w-1/2 mt-20 mb-10">
+<body class="bg-storml overflow-x-hidden justify-center">
+<jsp:include page="../../components/seller/sellerHeader.jsp"/>
+<div class="flex w-1/2 mt-20 mb-10 mx-auto">
     <div class="py-12 px-4 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
         <h1 class="text-center text-4xl font-semibold font-sans text-polar">Hemos recibido tus datos correctamente.</h1>
         <h2 class="text-center text-xl font-semibold font-sans text-polar mt-8">Te notificaremos por correo cuando el proceso de verificación de identidad haya concluido.</h2>

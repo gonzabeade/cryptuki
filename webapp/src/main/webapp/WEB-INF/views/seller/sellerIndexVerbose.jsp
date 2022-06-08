@@ -80,15 +80,16 @@
         <div class="flex flex-wrap h-full mr-20 w-full">
             <c:forEach var="offer" items="${offerList}">
 
-                <div class="flex flex-row ml-[35%]">
-                    <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-PENDING" onclick="showPending(${offer.id})">Pendientes</div>
 
-                    <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-ACCEPTED" onclick="showAccepted(${offer.id})">Aceptadas</div>
-                    <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.id}-REJECTED" onclick="showRejected(${offer.id})">Rechazadas</div>
-
-                    <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.id}-SOLD" onclick="showSold(${offer.id})">Finalizadas</div>
-                </div>
                 <div class="flex flex-col w-full mb-5">
+                    <div class="flex flex-row ml-[35%] ">
+                        <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-PENDING" onclick="showPending(${offer.id})">Pendientes</div>
+
+                        <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-ACCEPTED" onclick="showAccepted(${offer.id})">Aceptadas</div>
+                        <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.id}-REJECTED" onclick="showRejected(${offer.id})">Rechazadas</div>
+
+                        <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.id}-SOLD" onclick="showSold(${offer.id})">Finalizadas</div>
+                    </div>
                 <div class="flex flex-row mx-5">
                         <%--    Tarjeta de anuncio--%>
                     <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start w-[300px] ">
@@ -223,7 +224,7 @@
                                         <form:hidden path="tradeId" value="${trade.tradeId}"/>
 
                                         <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"
-                                                class="bg-red-400 text-white p-3  rounded-md font-sans mr-4">
+                                                class="bg-red-400 text-white p-3 rounded-md font-sans mr-4">
                                             <messages:message
                                                     code="rejectTrade"/></button>
                                         <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"

@@ -32,8 +32,9 @@ public class KycForm {
     @NotNull
     private String idCode;
 
+    @Size(min=1, max=140)
     @NotNull
-    private IdType idType;
+    private String idType;
 
     @MultipartCheck
     private MultipartFile idPhoto;
@@ -73,12 +74,12 @@ public class KycForm {
         this.idCode = idCode;
     }
 
-    public IdType getIdType() {
+    public String getIdType() {
         return idType;
     }
 
     public void setIdType(String idType) {
-        this.idType = IdType.valueOf(idType); // throws IllegalArgumentException, translated into bad request
+        this.idType = idType; // throws IllegalArgumentException, translated into bad request
     }
 
     public MultipartFile getIdPhoto() {
@@ -111,7 +112,7 @@ public class KycForm {
                 .withIdCode(idCode)
                 .withIdPhoto(idPhoto.getBytes())
                 .withIdPhotoType(idPhoto.getContentType())
-                .withIdType(idType)
+                .withIdType(IdType.valueOf(idType))
                 .withEmissionCountry(emissionCountry)
                 .withValidationPhoto(validationPhoto.getBytes())
                 .withValidationPhotoType(validationPhoto.getContentType());

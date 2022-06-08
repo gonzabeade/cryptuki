@@ -58,7 +58,7 @@ public class KycController {
         }
 
         kycService.newKycRequest(form.toBuilder());
-        return new ModelAndView("redirect:/seller/");
+        return new ModelAndView("redirect:/kyc/success");
     }
 
 

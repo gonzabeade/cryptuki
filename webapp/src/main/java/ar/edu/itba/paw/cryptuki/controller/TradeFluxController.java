@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import javax.xml.ws.Binding;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;

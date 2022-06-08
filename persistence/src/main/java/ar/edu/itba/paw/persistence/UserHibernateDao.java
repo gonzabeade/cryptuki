@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import org.omg.CORBA.NO_IMPLEMENT;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

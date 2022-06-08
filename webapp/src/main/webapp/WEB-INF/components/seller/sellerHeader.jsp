@@ -6,15 +6,17 @@
     <div class="container flex flex-wrap mx-auto my-auto px-4 h-full justify-between">
         <div class="flex justify-center center w-[15%] my-auto xl:w-1/4">
             <div class="flex flex-col w-full mt-2">
-                <a class="mx-auto" href="<c:url value="/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
+                <a class="mx-auto" href="<c:url value="/seller/"/>"><img class='object-contain' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
             </div>
         </div>
         <div class="flex justify-end">
             <ol class="flex justify-between mt-4">
-<%--                <li>--%>
-<%--                    <a href="<c:url value="/contact"/>"--%>
-<%--                       class="py-2 pr-4 pl-3 text-polar font-bold text-xl hover:underline hover:decoration-frostdr hover:underline-offset-8 "><messages:message code="contact"/></a>--%>
-<%--                </li>--%>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <li>
+                        <a href="<c:url value="/admin/"/>"
+                           class="py-2 pr-4 pl-3 text-polar text-xl font-bold hover:underline hover:decoration-frostdr hover:underline-offset-8"><messages:message code="goToAdmin"/></a>
+                    </li>
+                </sec:authorize>
                 <li class="mt-1 mx-2">
                     <a href="<c:url value="/buyer/market"/>" class="py-2 pr-4 pl-3  text-polar font-bold rounded-lg bg-storml border-2 border-polar my-auto mx-auto"><messages:message code="switchBuyer"/></a>
                 </li>

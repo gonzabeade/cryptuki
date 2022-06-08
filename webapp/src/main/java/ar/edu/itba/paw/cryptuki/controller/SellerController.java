@@ -133,7 +133,7 @@ public class SellerController {
 
         Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
 
-        return new ModelAndView("redirect:/seller/");
+        return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
     }
 
 

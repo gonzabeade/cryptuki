@@ -31,7 +31,7 @@ public class MailService implements ContactService<MailMessage> {
             messageHelper.setTo(message.getTo());
             messageHelper.setText(message.getBody(), message.isHtml());
         } catch (MessagingException e) {
-            e.printStackTrace();//TODO: replace with logger.
+            //e.printStackTrace();//TODO: replace with logger.
         }
         mailSender.send(mimeMessage);
     }

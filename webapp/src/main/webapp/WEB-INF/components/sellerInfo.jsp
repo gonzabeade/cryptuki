@@ -17,7 +17,7 @@
     <c:if test="${! empty param.message}">
         <div class="flex  flex-col mx-auto text-center mb-10 w-full">
             <h1 class="font-sans font-bold text-3xl mt-3"><messages:message code="sellerMessage"/></h1>
-            <div class="font-sans mx-32 text-justify mt-3"><c:out value="${param.message}"/></div>
+            <div class="font-sans mx-32 text-justify mt-3 justify-center"><c:out value="${param.message}"/></div>
         </div>
     </c:if>
 </div>

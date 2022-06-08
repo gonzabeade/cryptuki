@@ -69,15 +69,15 @@ public class OfferHibernateDao implements OfferDao{
         String orderCriterion, modelOrderCriterion;
 
         switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
-            case 3:
+            case 2: case 3:
                orderCriterion = "asking_price";
                modelOrderCriterion = "o.askingPrice";
                break;
+//            case 1:
+//                orderCriterion = "last_login";
+//                modelOrderCriterion = "o.seller.lastLogin";
+//                break;
             case 1:
-                orderCriterion = "last_login";
-                modelOrderCriterion = "o.seller.lastLogin";
-                break;
-            case 2:
                 orderCriterion = "rating";
                 modelOrderCriterion = "o.seller.rating";
                 break;
@@ -86,14 +86,12 @@ public class OfferHibernateDao implements OfferDao{
                 modelOrderCriterion = "o.date";
         }
 
-        Query pagingQuery = entityManager.createNativeQuery("SELECT  ordered_offers.offer_id FROM " +
-                "(SELECT offer_id FROM offer_complete  GROUP BY (offer_id, offer_date,rating, last_login, asking_price) ORDER BY " +
-                orderCriterion + " " + filter.getOrderDirection().toString() +
-                ") AS ordered_offers " +
-                "WHERE ordered_offers.offer_id IN (:ids) " +
-                "limit :limit OFFSET :offset");
+        Query pagingQuery = entityManager.createNativeQuery("select tmp.offer_id from (" +
+                "  select distinct offer_id, rating , asking_price, offer_date from offer_complete" +
+                "  where offer_id in (:ids) order by " + orderCriterion + " " + filter.getOrderDirection().toString()+
+                ") as tmp limit :limit offset :offset ");
 
-        pagingQuery.setParameter("limit",filter.getPageSize());
+                pagingQuery.setParameter("limit",filter.getPageSize());
         pagingQuery.setParameter("offset",filter.getPage()*filter.getPageSize());
         pagingQuery.setParameter("ids",otherFilterIds);
         List<Integer> offerPagedIds = (List<Integer>) pagingQuery.getResultList().stream().collect(Collectors.toCollection(ArrayList::new));
@@ -101,9 +99,7 @@ public class OfferHibernateDao implements OfferDao{
         Query query = entityManager.createQuery("from Offer as o where o.id in (:offerPagedIds) order by " +
                 modelOrderCriterion + " " + filter.getOrderDirection().toString(), Offer.class);
         query.setParameter("offerPagedIds", offerPagedIds);
-        List list = query.getResultList();
-        //Collections.sort(list, filter.getOrderCriteria().getCriteria());
-        return list;
+        return query.getResultList();
     }
 
     private Collection<Offer> getOffersByIdList(OfferFilter filter,List<Integer> idsAccepted){

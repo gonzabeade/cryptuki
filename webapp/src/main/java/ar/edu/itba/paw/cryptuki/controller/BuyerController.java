@@ -56,26 +56,33 @@ public class BuyerController {
         ModelAndView mav = new ModelAndView("buyer/buyerIndex");
 
         String username = authentication.getName();
-        int pageNumber= page.orElse(0);
+        int pageNumber = page.orElse(0);
 
-        TradeStatus askedStatus = TradeStatus.valueOf(status.orElse("PENDING"));
 
         int tradeCount;
         Collection<Trade> tradeList;
-        tradeCount= tradeService.getBuyingTradesByUsernameCount(username,askedStatus);
-        tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
-        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        if (status.isPresent()) {
+            TradeStatus askedStatus = TradeStatus.valueOf(status.get());
+            tradeCount = tradeService.getBuyingTradesByUsernameCount(username, askedStatus);
+            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
+        } else {
+            tradeCount = tradeService.getBuyingTradesByUsernameCount(username);
+            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE);
+        }
 
 
-        int pages = (tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        User user = userService.getUserInformation(username).orElseThrow(() -> new NoSuchUserException(username));
 
-        mav.addObject("username",username);
-        mav.addObject("user",user);
+
+        int pages = (tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
+
+        mav.addObject("username", username);
+        mav.addObject("user", user);
         mav.addObject("noBuyingTrades", tradeList.isEmpty());
-        mav.addObject("tradeStatusList",TradeStatus.values());
-        mav.addObject("tradeList",tradeList);
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
+        mav.addObject("tradeStatusList", TradeStatus.values());
+        mav.addObject("tradeList", tradeList);
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
         return mav;
     }
 

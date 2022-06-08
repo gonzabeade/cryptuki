@@ -12,7 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
-    <script src="<c:url value="/public/js/filterLink.js"/>"></script>
+    <script src="<c:url value="/public/js/filterLink.js"/> "></script>
+    <script src="<c:url value="/public/js/sellerDashboard.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -79,16 +80,23 @@
         <div class="flex flex-wrap h-full mr-20 w-full">
             <c:forEach var="offer" items="${offerList}">
 
+                <div class="flex flex-row ml-[35%]">
+                    <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-PENDING" onclick="showPending(${offer.id})">Pendientes</div>
 
-                <div class="flex flex-col w-full my-5">
+                    <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-ACCEPTED" onclick="showAccepted(${offer.id})">Aceptadas</div>
+                    <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.id}-REJECTED" onclick="showRejected(${offer.id})">Rechazadas</div>
+
+                    <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.id}-SOLD" onclick="showSold(${offer.id})">Finalizadas</div>
+                </div>
+                <div class="flex flex-col w-full mb-5">
                 <div class="flex flex-row mx-5">
                         <%--    Tarjeta de anuncio--%>
-                    <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start ">
+                    <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start w-[300px] ">
 
                         <div class="flex flex-col items-center mt-5 mb-2">
-                            <h1 class="text-2xl font-bold font-sans"><c:out value="Anuncio #${offer.id}"/></h1>
+                            <h1 class="text-2xl font-bold font-sans"><messages:message code="offer"/><c:out value="#${offer.id}"/></h1>
                         </div>
-
+                        <span class="text-center"><messages:message code="price"/></span>
                         <div class="flex flex-row ">
                             <h1 class="text-lg font-bold font-sans text-center"><fmt:formatNumber type="number"
                                                                                       maxFractionDigits="2"
@@ -142,14 +150,12 @@
                         </div>
                     </div>
 
-                    <div id="<c:out value="${offer.id}" />"
+                    <div id="offerId-<c:out value="${offer.id}" />"
                          class="flex flex-row shadow-xl rounded-lg bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden w-full">
-                        <c:if test="${empty offer.associatedTrades}">
-                            <h2 class="text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
+                            <h2 id="noResults-${offer.id}" class="hidden text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
-                        </c:if>
                         <c:forEach var="trade" items="${offer.associatedTrades}">
-                            <div class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5">
+                            <div name="trade-${offer.id}-${trade.status}" class="hidden bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5 ">
 
                                 <div class="flex font-sans h-fit w-full mt-5">
                                     <c:if test="${trade.status == 'PENDING' }">
@@ -224,6 +230,12 @@
                                                 class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
                                                 code="acceptTrade"/></button>
                                     </form:form>
+                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full">
+                                            <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                    </a>
                                 </c:if>
 
                                     <%--                            CASE - ACCEPTED--%>
@@ -232,7 +244,7 @@
 
                                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
                                                cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="offerId" value="${offer.id}"/>
+                                        <form:hidden path="offerId" value="${trade.offer.id}"/>
                                         <form:hidden path="trade" value="${trade.tradeId}"/>
                                         <button type="submit"
                                                 class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
@@ -240,8 +252,8 @@
 
                                     </form:form>
 
-                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 shadow rounded-full p-3">
-                                        <span><messages:message code="chatWithBuyer"/> </span>
+                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full">
+<%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                         </svg>
@@ -255,8 +267,7 @@
                             </div>
                         </c:forEach>
                     </div>
-
-                            <div class="flex flex-col w-10 -ml-5 h-full justify-center"
+                    <div class="flex flex-col w-10 -ml-5 h-full justify-center"
                          onClick="toggle(<c:out value="${offer.id}" />) ">
                             <%--                    <div class="flex rotate-90 whitespace-nowrap">hola mundo</div>--%>
                                     <%--                                <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>--%>
@@ -269,9 +280,8 @@
 <%--                                    <div class="flex bg-ngreen shadow-xl rounded-lg h-5/6 my-auto">--%>
 <%--                                    </div>--%>
 <%--                                </c:if>--%>
-                    </div>
-
-
+                            </div>
+                </div>
                 </div>
             </c:forEach>
             <div class="mx-auto">
@@ -281,20 +291,19 @@
                        class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message
                             code="uploadAdvertisement"/></a>
                 </c:if>
-                <c:if test="${!noSellingTrades}">
-                    <div class="flex flex-col mt-3 mx-auto">
-                        <% request.setCharacterEncoding("utf-8"); %>
-                        <jsp:include page="../../components/paginator.jsp">
-                            <jsp:param name="activePage" value="${activePage}"/>
-                            <jsp:param name="pages" value="${pages}"/>
-                            <jsp:param name="baseUrl" value="/seller/"/>
-                        </jsp:include>
-                        <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message
-                                code="totalPageAmount"/>: ${pages}</h1>
-                    </div>
-                </c:if>
             </div>
-            </div>
+                    <c:if test="${!noSellingTrades}">
+                        <div class="flex flex-col mt-3 mx-auto">
+                            <% request.setCharacterEncoding("utf-8"); %>
+                            <jsp:include page="../../components/paginator.jsp">
+                                <jsp:param name="activePage" value="${activePage}"/>
+                                <jsp:param name="pages" value="${pages}"/>
+                                <jsp:param name="baseUrl" value="/seller/"/>
+                            </jsp:include>
+                            <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message
+                                    code="totalPageAmount"/>: ${pages}</h1>
+                        </div>
+                    </c:if>
 
 
             <!-- Right Panel: crypto dashboard -->
@@ -305,11 +314,6 @@
             <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
             <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
             <%--    </div>--%>
-
-
-        </div>
-    </div>
-</div>
 </body>
 
 
@@ -326,5 +330,14 @@
     }
     function updateStatus( status, tradeId) {
         document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
+    }
+    window.onload= function filterPending() {
+
+        let pendingTabs= document.querySelectorAll("[id$=PENDING]")
+        console.log(pendingTabs)
+        pendingTabs.forEach(function (tab) {
+            tab.click();
+        })
+
     }
 </script>

@@ -39,6 +39,13 @@ public final class Trade {
     @Column(name="rated_seller")
     private boolean ratedSeller;
 
+    @Column(name="q_unseen_msg_buyer")
+    private int qUnseenMessagesBuyer;
+
+    @Column(name="q_unseen_msg_seller")
+    private int qUnseenMessagesSeller;
+
+
     @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
     @OrderBy("message_date")
     private Collection<Message> messageCollection;
@@ -299,4 +306,19 @@ public final class Trade {
         return Optional.of(startDate);
     }
 
+    public int getqUnseenMessagesBuyer() {
+        return qUnseenMessagesBuyer;
+    }
+
+    public void setqUnseenMessagesBuyer(int qUnseenMessagesBuyer) {
+        this.qUnseenMessagesBuyer = qUnseenMessagesBuyer;
+    }
+
+    public int getqUnseenMessagesSeller() {
+        return qUnseenMessagesSeller;
+    }
+
+    public void setqUnseenMessagesSeller(int qUnseenMessagesSeller) {
+        this.qUnseenMessagesSeller = qUnseenMessagesSeller;
+    }
 }

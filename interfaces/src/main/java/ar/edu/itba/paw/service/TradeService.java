@@ -36,4 +36,7 @@ public interface TradeService {
 
     void deleteTrade(int tradeId);
 
+    void markBuyerMessagesAsSeen(int tradeId);
+    void markSellerMessagesAsSeen(int tradeId);
+
 }

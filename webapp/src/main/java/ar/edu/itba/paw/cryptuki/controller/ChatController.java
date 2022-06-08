@@ -46,16 +46,19 @@ public class ChatController {
         ModelAndView mav = new ModelAndView("chat/chat");
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         User otherUser;
-        if (trade.getBuyerUsername().equals(authentication.getName()))
+        if (trade.getBuyerUsername().equals(authentication.getName())) {
             otherUser = userService.getUserInformation(trade.getSellerUsername()).get();
-        else otherUser = userService.getUserInformation(trade.getBuyerUsername()).get();
+            tradeService.markBuyerMessagesAsSeen(tradeId);
+        } else {
+            otherUser = userService.getUserInformation(trade.getBuyerUsername()).get();
+            tradeService.markSellerMessagesAsSeen(tradeId);
+        }
+
         mav.addObject("otherUser", otherUser);
         mav.addObject("otherLastLogin", LastConnectionUtils.toRelativeTime(otherUser.getLastLogin()).getRelativeTime());
         mav.addObject("trade", trade);
         return mav;
     }
-
-
 
     @RequestMapping(value="/send",method = RequestMethod.POST)
     public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") MessageForm messageForm, BindingResult errors, final Authentication authentication){
@@ -65,6 +68,7 @@ public class ChatController {
         messageService.sendMessage(messageForm.toBuilder());
         return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());
     }
+
     @RequestMapping(value="/sendBuyer",method = RequestMethod.POST)
     public ModelAndView sendMessageBuyer(@Valid @ModelAttribute("messageForm") MessageForm messageForm, BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){

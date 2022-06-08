@@ -67,6 +67,8 @@ public class TradeFluxController {
             return mav;
         }
 
+        tradeService.markBuyerMessagesAsSeen(tradeId);
+
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);
         mav.addObject("trade",trade);

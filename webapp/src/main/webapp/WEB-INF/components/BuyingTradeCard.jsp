@@ -61,6 +61,13 @@
        </c:if>
     </div>
 
+    <div class=" flex flex-row w-[80px] bg-red-100 align-middle my-auto font-sans rounded-full bg-frost" >
+        <c:if test="${param.unseenMessages !=  '0'}">
+            <img class="my-auto ml-3 mr-4 h-5 w-5" src="<c:url value="/public/images/msg.png"/>"/>
+            <div class="bg-red align-middle"><c:out value="${param.unseenMessages}"/></div>
+        </c:if>
+    </div>
+
 
 
 

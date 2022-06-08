@@ -56,6 +56,7 @@
                 <jsp:include page="../../components/BuyingTradeCard.jsp">
                     <jsp:param name="username" value="${username}"/>
                     <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
+                    <jsp:param name="unseenMessages" value="${trade.qUnseenMessagesBuyer}"/>
                     <jsp:param name="quantity" value="${trade.quantity}"/>
                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
                     <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>

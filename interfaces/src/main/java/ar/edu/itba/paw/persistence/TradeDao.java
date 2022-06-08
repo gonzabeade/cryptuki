@@ -34,5 +34,7 @@ public interface TradeDao {
 
     void deleteTrade(int tradeId);
 
+    void setBuyerUnseenMessageCount(int tradeId, int value);
+    void setSellerUnseenMessageCount(int tradeId, int value);
 
 }

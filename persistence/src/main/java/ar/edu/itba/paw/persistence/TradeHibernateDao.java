@@ -125,6 +125,19 @@ public class TradeHibernateDao implements TradeDao{
         entityManager.remove(trade);
     }
 
+    @Override
+    public void setBuyerUnseenMessageCount(int tradeId, int value) {
+        Trade trade = getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        trade.setqUnseenMessagesBuyer(value);
+        entityManager.persist(trade);
+    }
+
+    @Override
+    public void setSellerUnseenMessageCount(int tradeId, int value) {
+        Trade trade = getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        trade.setqUnseenMessagesSeller(value);
+        entityManager.persist(trade);
+    }
 
 
     private Collection<Trade> getTradeCollection(String username, int page, int pageSize,TradeStatus status,String query){

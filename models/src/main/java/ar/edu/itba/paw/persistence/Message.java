@@ -50,6 +50,17 @@ public class Message implements Serializable {
             return this;
         }
 
+        public Integer getUserId() {
+            return userId;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Integer getTradeId() {
+            return tradeId;
+        }
     }
 
 

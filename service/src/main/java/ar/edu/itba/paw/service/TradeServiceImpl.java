@@ -298,5 +298,17 @@ public class TradeServiceImpl implements TradeService {
         tradeDao.deleteTrade(tradeId);
     }
 
+    @Override
+    @Transactional
+    public void markBuyerMessagesAsSeen(int tradeId) {
+        tradeDao.setBuyerUnseenMessageCount(tradeId, 0);
+    }
+
+    @Override
+    @Transactional
+    public void markSellerMessagesAsSeen(int tradeId) {
+        tradeDao.setSellerUnseenMessageCount(tradeId, 0);
+    }
+
 
 }

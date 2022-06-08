@@ -2,6 +2,8 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
+import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.persistence.Message;
@@ -42,7 +44,10 @@ public class ChatController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView chatPage(@ModelAttribute("messageForm") MessageForm messageForm, @RequestParam( value = "tradeId", required = true) final Integer tradeId, final Authentication authentication) {
+    public ModelAndView chatPage(@ModelAttribute("messageForm") MessageForm messageForm,
+                                 @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,
+                                 @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm,
+                                 @RequestParam( value = "tradeId", required = true) final Integer tradeId, final Authentication authentication) {
         ModelAndView mav = new ModelAndView("chat/chat");
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         User otherUser;
@@ -61,9 +66,13 @@ public class ChatController {
     }
 
     @RequestMapping(value="/send",method = RequestMethod.POST)
-    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") MessageForm messageForm, BindingResult errors, final Authentication authentication){
+    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") MessageForm messageForm,
+                                    BindingResult errors,
+                                    @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,
+                                    @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm,
+                                    final Authentication authentication){
         if(errors.hasErrors()){
-            return chatPage(messageForm, messageForm.getTradeId(), authentication);
+            return chatPage(messageForm, soldTradeForm, statusTradeForm, messageForm.getTradeId(), authentication);
         }
         messageService.sendMessage(messageForm.toBuilder());
         return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());

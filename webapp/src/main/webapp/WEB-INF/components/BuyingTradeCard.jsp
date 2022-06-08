@@ -49,9 +49,9 @@
 
 
     <div class="flex my-auto">
-       <c:if test="${! (param.tradeStatus == 'SOLD')}">
+       <c:if test="${! (param.tradeStatus == 'SOLD' || param.tradeStatus == 'REJECTED')}">
            <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/trade?tradeId=${param.tradeId}"/>">
-               <messages:message code="help"/>
+               <messages:message code="resumeTrade"/>
            </a>
        </c:if>
        <c:if test="${ param.tradeStatus == 'SOLD'}">

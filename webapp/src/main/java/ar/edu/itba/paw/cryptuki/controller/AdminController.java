@@ -1,16 +1,16 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.cryptuki.form.KycApprovalForm;
 import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
 import ar.edu.itba.paw.exception.NoSuchComplainException;
+import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Complain;
-import ar.edu.itba.paw.persistence.ComplainStatus;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.ComplainService;
+import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Optional;
 
 @Controller
@@ -28,15 +29,20 @@ import java.util.Optional;
 public class AdminController {
 
     private static final int PAGE_SIZE = 5;
+
+    private static final int KYC_PAGE_SIZE = 10;
     private final ComplainService complainService;
     private final UserService userService;
     private final TradeService tradeService;
 
+    private final KycService kycService;
+
     @Autowired
-    public AdminController(ComplainService complainService, UserService userService, TradeService tradeService) {
+    public AdminController(KycService kycService, ComplainService complainService, UserService userService, TradeService tradeService) {
         this.complainService = complainService;
         this.userService = userService;
         this.tradeService = tradeService;
+        this.kycService = kycService;
     }
 
 
@@ -94,6 +100,42 @@ public class AdminController {
     public ModelAndView selfAssign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
         complainService.assignComplain(complaintId, authentication.getName());
         return new ModelAndView("redirect:/admin/solve/"+complaintId);
+    }
+
+    @RequestMapping(value = "/kyccheck/{username}", method = RequestMethod.GET)
+    public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
+        ModelAndView modelAndView = new ModelAndView("admin/kycProfile");
+
+        Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
+        KycInformation kyc = maybeKyc.orElseThrow(()-> new NoSuchKycException(username));
+
+        modelAndView.addObject("kyc", kyc);
+        return modelAndView;
+    }
+
+    @RequestMapping(value ="/kyccheck/approve/{kycid}", method = RequestMethod.POST)
+    public ModelAndView kycApprovePost(@PathVariable(value = "kycid") final int kycId){
+        kycService.validateKycRequest(kycId);
+        return new ModelAndView("redirect:/admin/kyccheck?success");
+    }
+
+    @RequestMapping(value ="/kyccheck/reject/{kycid}", method = RequestMethod.POST)
+    public ModelAndView kycRejectPost(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, final BindingResult errors, @PathVariable(value = "kycid") final int kycId){
+        if(errors.hasErrors()){
+            return kycCheckGet(kycApprovalForm, kycApprovalForm.getUsername());
+        }
+        kycService.rejectKycRequest(kycId, kycApprovalForm.getMessage());
+        return new ModelAndView("redirect:/admin/kyccheck?success");
+    }
+
+    @RequestMapping(value = "/kyccheck", method = RequestMethod.GET)
+    public ModelAndView kycCheckHome(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @RequestParam("page") Optional<Integer> page) {
+        ModelAndView mav = new ModelAndView("admin/kycAll");
+
+        Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(page.orElse(0), KYC_PAGE_SIZE);
+        mav.addObject("pendingKycs", pendingKycs);
+
+        return mav;
     }
 
 

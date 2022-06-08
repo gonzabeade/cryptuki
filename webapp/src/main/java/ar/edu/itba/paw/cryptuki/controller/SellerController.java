@@ -1,27 +1,27 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
-import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
-import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.IdType;
+import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeStatus;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -37,17 +37,23 @@ public class SellerController {
 
     private final PaymentMethodService paymentMethodService;
 
+    private final LocationService locationService;
+
+    private final KycService kycService;
+
     private final UserService userService;
     private static final int PAGE_SIZE = 6;
 
     @Autowired
-    public SellerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    public SellerController(final KycService kycService, final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
     {
         this.tradeService = tradeService;
         this.offerService = offerService;
         this.userService = userService;
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
+        this.locationService = locationService;
+        this.kycService = kycService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -61,13 +67,15 @@ public class SellerController {
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
 
-        mav.addObject("offerList",offers);
-        mav.addObject("noOffers",offers.isEmpty());
-        mav.addObject("username",username);
-        mav.addObject("user",user);
-        mav.addObject("tradeStatusList",TradeStatus.values());
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
+        mav.addObject("kyc", kycService.getPendingKycRequest(username));
+        mav.addObject("isKycValidated", kycService.isValidated(username));
+        mav.addObject("offerList", offers);
+        mav.addObject("noOffers", offers.isEmpty());
+        mav.addObject("username", username);
+        mav.addObject("user", user);
+        mav.addObject("tradeStatusList", TradeStatus.values());
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
         return mav;
     }
 
@@ -118,10 +126,6 @@ public class SellerController {
     }
 
 
-
-
-
-
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
     public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
         if (! errors.hasErrors())
@@ -129,8 +133,10 @@ public class SellerController {
 
         Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
 
-        return new ModelAndView("redirect:/seller/");
+        return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
     }
+
+
 
 
 }

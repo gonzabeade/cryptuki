@@ -36,11 +36,32 @@
                 <jsp:param name="ratingCount" value="${user.ratingCount}"/>
             </jsp:include>
         </div>
-        <div class="mx-auto mt-10">
-            <a href="<c:url value="/seller/upload"/>"
-               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
-                    code="uploadAdvertisement"/></a>
-        </div>
+        <c:choose>
+            <c:when test="${isKycValidated}">
+                <div class="mx-auto mt-10">
+                    <a href="<c:url value="/seller/upload"/>"
+                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
+                            code="uploadAdvertisement"/></a>
+                </div>
+            </c:when>
+            <c:when test="${kyc.present}">
+                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
+                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                    <p><messages:message code="validateYourIdentityPending"/></p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
+                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                    <p><messages:message code="validateYourIdentityExplanation"/></p>
+                </div>
+                <div class="mx-auto mt-8">
+                    <a href="<c:url value="/kyc"/>"
+                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="validateYourIdentity"/></a>
+                </div>
+            </c:otherwise>
+        </c:choose>
+
         <%--        <div class="my-5">--%>
         <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
         <%--        </div>--%>
@@ -234,7 +255,7 @@
 
                                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
                                                cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="offerId" value="${offer.id}"/>
+                                        <form:hidden path="offerId" value="${trade.offer.id}"/>
                                         <form:hidden path="trade" value="${trade.tradeId}"/>
                                         <button type="submit"
                                                 class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">

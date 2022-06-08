@@ -25,7 +25,7 @@ public final class Offer {
     private  LocalDateTime date;
     @OneToOne
     @JoinColumn(name="crypto_code")
-    private  Cryptocurrency crypto;
+    private Cryptocurrency crypto;
     @OneToOne
     @JoinColumn(name="status_code")
     private  OfferStatus status;

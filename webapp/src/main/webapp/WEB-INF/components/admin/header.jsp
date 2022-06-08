@@ -33,11 +33,11 @@
             </a>
         </li>
         <li class="flex py-10">
-            <a class="flex flex-col mx-auto" href="<c:url value="/admin/idcheck"/>">
+            <a class="flex flex-col mx-auto" href="<c:url value="/admin/kyccheck"/>">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
-                <h1 class="text-white text-center"><messages:message code="idcheck"/></h1>
+                <h1 class="text-white text-center"><messages:message code="kyccheck"/></h1>
             </a>
         </li>
         <li class="flex py-10">

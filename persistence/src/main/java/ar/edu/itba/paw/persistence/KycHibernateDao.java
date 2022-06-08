@@ -38,6 +38,15 @@ public class KycHibernateDao implements KycDao {
     }
 
     @Override
+    public Collection<KycInformation> getKycRequestsByStatus(KycStatus status, int page, int pageSize) {
+        TypedQuery<KycInformation> tq = entityManager.createQuery("from KycInformation AS kyc WHERE kyc.status = :status ORDER BY kyc.kycDate DESC", KycInformation.class);
+        tq.setParameter("status", status);
+        tq.setFirstResult(page*pageSize);
+        tq.setMaxResults(pageSize);
+        return tq.getResultList();
+    }
+
+    @Override
     public long countKycRequestsByStatus(String username, KycStatus status) {
         TypedQuery<Long> tq = entityManager.createQuery("select count(kyc) from KycInformation AS kyc WHERE kyc.username = :username AND kyc.status = :status", Long.class);
         tq.setParameter("username", username);

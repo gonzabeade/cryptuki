@@ -39,11 +39,13 @@ public class SellerController {
 
     private final LocationService locationService;
 
+    private final KycService kycService;
+
     private final UserService userService;
     private static final int PAGE_SIZE = 6;
 
     @Autowired
-    public SellerController(final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    public SellerController(final KycService kycService, final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
     {
         this.tradeService = tradeService;
         this.offerService = offerService;
@@ -51,6 +53,7 @@ public class SellerController {
         this.cryptocurrencyService = cryptocurrencyService;
         this.paymentMethodService = paymentMethodService;
         this.locationService = locationService;
+        this.kycService = kycService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -64,13 +67,15 @@ public class SellerController {
         int offerCount = offerService.countOffersByUsername(authentication.getName());
         int pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
 
-        mav.addObject("offerList",offers);
-        mav.addObject("noOffers",offers.isEmpty());
-        mav.addObject("username",username);
-        mav.addObject("user",user);
-        mav.addObject("tradeStatusList",TradeStatus.values());
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
+        mav.addObject("kyc", kycService.getPendingKycRequest(username));
+        mav.addObject("isKycValidated", kycService.isValidated(username));
+        mav.addObject("offerList", offers);
+        mav.addObject("noOffers", offers.isEmpty());
+        mav.addObject("username", username);
+        mav.addObject("user", user);
+        mav.addObject("tradeStatusList", TradeStatus.values());
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
         return mav;
     }
 

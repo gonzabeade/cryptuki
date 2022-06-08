@@ -8,7 +8,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
-  <script src="<c:url  value="/public/js/filterLink.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -19,7 +18,7 @@
 
 <body class="bg-storml">
   <jsp:include page="../../components/admin/header.jsp"/>
-  <c:url value="/admin/idcheck" var="idcheckUrl" />
+  <c:url value="/admin/kyccheck" var="kyccheckUrl" />
 <%--  TODO CHECK PORQUE  el ML ESTA EN 80 ESTO ESTA ASI--%>
 
   <div class="flex flex-col ml-80 p-10">
@@ -112,9 +111,8 @@
           </div>
         </div>
         <div class="flex flex-row mx-auto mt-10">
-          <c:url value="/admin/idcheck" var="postUrl"/>
-          <form:form method="post" action="${postUrl}" modelAttribute="kycApprovalForm">
-            <form:hidden path="approved" value="true"/>
+          <c:url value="/admin/kyccheck/approve/${kyc.kycId}" var="approveUrl"/>
+          <form:form method="post" action="${approveUrl}">
             <button class="bg-ngreen rounded-lg text-white p-3 mr-10" type="submit">Aprobar</button>
           </form:form>
           <div onclick="toggleInfo('confirmation')">
@@ -128,19 +126,19 @@
     <div id="confirmation" class="bg-white shadow-xl p-10 hidden justify-center rounded-lg z-20 mt-52 absolute w-[70%]">
       <div class="flex flex-col justify-center">
         <h2 class="text-2xl font-sans font-bold">Escribí el motivo del rechazo</h2>
-        <form:form method="post" action="${postUrl}" modelAttribute="kycApprovalForm">
+        <c:url value="/admin/kyccheck/reject/${kyc.kycId}" var="rejectUrl"/>
+        <form:form method="post" action="${rejectUrl}" modelAttribute="kycApprovalForm">
           <div class="flex flex-col">
-            <form:textarea path="message" cssClass="border-2 border-gray-400 my-10 h-[14rem] p-2"/>
-            <form:hidden path="approved" value="false"/>
-            <div class="flex flex-row mx-auto justify-center">
-              <button class="bg-frostdr rounded-lg text-white p-3 mr-10" type="submit"> Confirmar</button>
-              <p class="bg-gray-400 rounded-lg text-white p-3 cursor-pointer" onclick="hideToggle('confirmation')"> Cancelar</p>
-            </div>
-            </div>
-           </form:form>
+              <form:errors path="message" cssClass=" mx-auto text-red-500"/>
+              <form:hidden path="username" value="${kyc.username}"/>
+              <form:textarea path="message" cssClass="border-2 border-gray-400 my-10 h-[14rem] p-2"/>
+              <div class="flex flex-row mx-auto justify-center">
+                <button class="bg-frostdr rounded-lg text-white p-3 mr-10" type="submit"> Confirmar</button>
+                <p class="bg-gray-400 rounded-lg text-white p-3 cursor-pointer" onclick="hideToggle('confirmation')"> Cancelar</p>
+              </div>
+          </div>
+        </form:form>
       </div>
-
-
     </div>
 
 
@@ -153,6 +151,13 @@
 
 </body>
 <script>
+
+  window.onload = function errorMessage() {
+     if (window.location.href.indexOf("reject") > -1) {
+       toggleInfo("confirmation")
+     }
+  }
+
 
   function showIdPhoto(){
       var element = document.getElementById("idphoto")

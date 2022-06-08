@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +29,8 @@ import java.util.Optional;
 public class AdminController {
 
     private static final int PAGE_SIZE = 5;
+
+    private static final int KYC_PAGE_SIZE = 10;
     private final ComplainService complainService;
     private final UserService userService;
     private final TradeService tradeService;
@@ -99,9 +102,9 @@ public class AdminController {
         return new ModelAndView("redirect:/admin/solve/"+complaintId);
     }
 
-    @RequestMapping(value = "/idcheck/{username}", method = RequestMethod.GET)
-    public ModelAndView idCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
-        ModelAndView modelAndView = new ModelAndView("admin/idcheck");
+    @RequestMapping(value = "/kyccheck/{username}", method = RequestMethod.GET)
+    public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
+        ModelAndView modelAndView = new ModelAndView("admin/kycProfile");
 
         Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
         KycInformation kyc = maybeKyc.orElseThrow(()-> new NoSuchKycException(username));
@@ -109,14 +112,30 @@ public class AdminController {
         modelAndView.addObject("kyc", kyc);
         return modelAndView;
     }
-    @RequestMapping(value ="/idcheck/{username}", method = RequestMethod.POST)
-    public ModelAndView idCheckPost(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username, final BindingResult errors){
-        if(errors.hasErrors()){
-            return new ModelAndView("redirect:/admin/idcheck/"+ username);
-        }
-        //change user status
-        return new ModelAndView("redirect:/admin");
 
+    @RequestMapping(value ="/kyccheck/approve/{kycid}", method = RequestMethod.POST)
+    public ModelAndView kycApprovePost(@PathVariable(value = "kycid") final int kycId){
+        kycService.validateKycRequest(kycId);
+        return new ModelAndView("redirect:/admin/kyccheck?success");
+    }
+
+    @RequestMapping(value ="/kyccheck/reject/{kycid}", method = RequestMethod.POST)
+    public ModelAndView kycRejectPost(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, final BindingResult errors, @PathVariable(value = "kycid") final int kycId){
+        if(errors.hasErrors()){
+            return kycCheckGet(kycApprovalForm, kycApprovalForm.getUsername());
+        }
+        kycService.rejectKycRequest(kycId, kycApprovalForm.getMessage());
+        return new ModelAndView("redirect:/admin/kyccheck?success");
+    }
+
+    @RequestMapping(value = "/kyccheck", method = RequestMethod.GET)
+    public ModelAndView kycCheckHome(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @RequestParam("page") Optional<Integer> page) {
+        ModelAndView mav = new ModelAndView("admin/kycAll");
+
+        Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(page.orElse(0), KYC_PAGE_SIZE);
+        mav.addObject("pendingKycs", pendingKycs);
+
+        return mav;
     }
 
 

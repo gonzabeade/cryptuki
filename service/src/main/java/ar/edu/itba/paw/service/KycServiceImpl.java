@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,12 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
+    public Collection<KycInformation> getPendingKycRequests(int page, int pageSize) {
+        return kycDao.getKycRequestsByStatus(KycStatus.PEN, page, pageSize);
+    }
+
+    @Override
+    @Transactional
     public boolean canRequestNewKyc(String username) {
         return kycDao.countKycRequestsByStatus(username, KycStatus.PEN) == 0
                 && kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
@@ -41,6 +48,7 @@ public class KycServiceImpl implements KycService {
     @Override
     @Transactional
     public void validateKycRequest(int kycId) {
+        // TODO: enviar mail con confirmacion
         kycDao.setKycRequestStatus(KycStatus.APR, kycId);
     }
 
@@ -53,7 +61,7 @@ public class KycServiceImpl implements KycService {
 
     @Override
     public boolean isValidated(String username) {
-        return kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
+        return kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 1;
     }
 
 }

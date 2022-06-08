@@ -10,5 +10,7 @@ public interface KycDao {
     void newKycRequest(KycInformation.KycInformationBuilder builder);
     void setKycRequestStatus(KycStatus status, int kycId);
     Collection<KycInformation> getKycRequestsByStatus(String username, KycStatus status);
+
+    Collection<KycInformation> getKycRequestsByStatus(KycStatus status, int page, int pageSize);
     long countKycRequestsByStatus(String username, KycStatus status);
 }

@@ -1,20 +1,23 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Role;
+import ar.edu.itba.paw.model.UserStatus;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "auth")
 public final class UserAuth  {
 
-    @Column(length = 100,nullable = false)
-    private String password;
-
-    @Column(name="uname",nullable = false,length = 50)
     @Id
+    @Column(name="uname", nullable = false, length = 50)
     private String username;
 
-    @ManyToOne()
-    @JoinColumn(name="role_id")
+    @Column(length = 100, nullable = false)
+    private String password;
+
+    @Column(name = "role_id")
+    @Enumerated(EnumType.ORDINAL)
     private Role role;
 
     @Column(name="code")
@@ -28,7 +31,9 @@ public final class UserAuth  {
     private User user;
 
 
-    UserAuth(){}
+    public UserAuth(){
+
+    }
     @Entity
     @Table(name = "auth")
     public static class Builder {

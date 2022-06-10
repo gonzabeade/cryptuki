@@ -199,8 +199,8 @@ public class UserController {
 
     private ModelAndView logInProgrammatically(String username ){
         UserAuth user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getDescription())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getDescription())));
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
         SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/");
     }

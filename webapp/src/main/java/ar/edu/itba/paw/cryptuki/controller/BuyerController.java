@@ -2,26 +2,23 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
-import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
-import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.PaymentMethod;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,19 +30,16 @@ public class BuyerController {
 
     private final CryptocurrencyService cryptocurrencyService;
 
-    private final PaymentMethodService paymentMethodService;
-
     private final UserService userService;
     private static final int PAGE_SIZE = 5;
 
     @Autowired
-    public BuyerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    public BuyerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService)
     {
         this.tradeService = tradeService;
         this.offerService = offerService;
         this.userService = userService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.paymentMethodService = paymentMethodService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -110,14 +104,18 @@ public class BuyerController {
                 .withOrderingCriterion(orderingCriterion.orElse(0))
                 .withOrderingDirection(orderingDirection.orElse(0));;
 
-        int offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+//        int offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+
+        int offerCount = 20;
         int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
-        mav.addObject("offerList", offerService.getMarketOffersBy(filter, authentication == null ? null : authentication.getName()));
+        Collection<Offer> offer = offerService.getMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+        Offer offer1 = offer.stream().findFirst().get();
+        mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){

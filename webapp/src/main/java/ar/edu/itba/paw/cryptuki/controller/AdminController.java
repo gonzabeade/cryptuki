@@ -8,6 +8,7 @@ import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.KycService;
@@ -48,19 +49,20 @@ public class AdminController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ){
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.PENDING);
+        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE, ComplainStatus.PENDING);
         ComplainFilter filter = builder.build();
         return getComplaintsByFilter(filter,"admin/complaints","/admin", "pendingClaims");
     }
 
 
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public ModelAndView assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.ASSIGNED);
-        ComplainFilter filter = builder
-                .withModeratorUsername(authentication.getName())
-                .build();
-        return getComplaintsByFilter(filter,"admin/complaints","/admin/assigned", "self-assignedClaims");
+    public String assignedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult, final Authentication authentication){
+//        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.ASSIGNED);
+//        ComplainFilter filter = builder
+//                .withModeratorUsername(authentication.getName())
+//                .build();
+//        return getComplaintsByFilter(filter,"admin/complaints","/admin/assigned", "self-assignedClaims");
+        return "what?";
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
     public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult){

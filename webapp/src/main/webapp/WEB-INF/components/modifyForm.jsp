@@ -10,7 +10,7 @@
 
   <c:url value="${param.saveUrl}" var="postUrl"/>
   <form:form modelAttribute="modifyOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
-    <form:hidden path="offerId" value="${offer.id}"/>
+    <form:hidden path="offerId" value="${offer.offerId}"/>
     <div class="flex flex-col justify-center">
       <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>
       <form:label  path="cryptocurrency" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="cryptocurrency"/> *</form:label>

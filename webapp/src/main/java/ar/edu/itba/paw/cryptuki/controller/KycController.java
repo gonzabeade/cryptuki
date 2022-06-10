@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.cryptuki.controller;
-import ar.edu.itba.paw.IdType;
+import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.KycInformation;

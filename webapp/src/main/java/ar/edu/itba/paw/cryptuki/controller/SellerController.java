@@ -1,27 +1,21 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.IdType;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.PaymentMethod;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,8 +29,6 @@ public class SellerController {
 
     private final CryptocurrencyService cryptocurrencyService;
 
-    private final PaymentMethodService paymentMethodService;
-
     private final LocationService locationService;
 
     private final KycService kycService;
@@ -45,13 +37,12 @@ public class SellerController {
     private static final int PAGE_SIZE = 6;
 
     @Autowired
-    public SellerController(final KycService kycService, final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService,PaymentMethodService paymentMethodService)
+    public SellerController(final KycService kycService, final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService)
     {
         this.tradeService = tradeService;
         this.offerService = offerService;
         this.userService = userService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.paymentMethodService = paymentMethodService;
         this.locationService = locationService;
         this.kycService = kycService;
     }
@@ -103,7 +94,7 @@ public class SellerController {
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("uploadPage");
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("paymentMethods", PaymentMethod.values());
         mav.addObject("location", form.getLocation());
 
 
@@ -121,7 +112,7 @@ public class SellerController {
         if (errors.hasErrors())
             return uploadOffer(form, authentication);
         int id = userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        int offerId = offerService.makeOffer(form.toOfferDigest(id));
+        int offerId = offerService.makeOffer(form.toOfferParameterObject(id));
         return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
     }
 

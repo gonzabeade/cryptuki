@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.admin;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.persistence.ComplainStatus;
+import ar.edu.itba.paw.model.ComplainStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;

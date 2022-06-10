@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 
-import ar.edu.itba.paw.persistence.Message;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -39,13 +37,6 @@ public class MessageForm {
 
     public void setTradeId(Integer tradeId) {
         this.tradeId = tradeId;
-    }
-
-
-    public Message.Builder toBuilder(){
-        return new Message.Builder(this.message)
-                .withSender(this.userId)
-                .withTrade(this.tradeId);
     }
 
 }

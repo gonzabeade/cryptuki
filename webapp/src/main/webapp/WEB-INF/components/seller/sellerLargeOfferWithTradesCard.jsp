@@ -12,7 +12,7 @@
       </div>
 
       <div class="flex flex-row items-center">
-          <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.askingPrice}"/> ARS </h1>
+          <h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.unitPrice}"/> ARS </h1>
           <p class="my-auto mx-2"> <messages:message code="for"/> </p>
           <h1 class="text-xl font-sans font-semibold my-auto"><c:out value="${param.currency}"/></h1>
           <img src="<c:url value="/public/images/${param.currency}.png"/>" alt="<c:out value="${param.currency}"/>" class="w-5 h-5 mx-2 my-auto"/>

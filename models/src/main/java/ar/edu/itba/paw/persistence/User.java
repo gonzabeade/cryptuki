@@ -9,31 +9,29 @@ import java.util.Optional;
 @Entity
 @Table(name="users")
 public final class User {
-
-    User(){}
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
     @SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
-    private  int id;
-    @Column(length = 50,unique = true,nullable = false)
+    private Integer id;
+    @Column(length = 50,unique = true, nullable = false)
     private  String email;
+    @Column(name="last_login")
+    private LocalDateTime lastLogin;
+    @Column(name="phone_number", length = 10)
+    private  String phoneNumber;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private UserAuth userAuth;
 
-    @Column(name="rating_sum",nullable = false)
+    @Column(name="rating_sum", nullable = false)
     private  int ratingSum;
-    @Column(name="rating_count",nullable = false)
+    @Column(name="rating_count", nullable = false)
     private  int ratingCount;
-
     @Column(name="rating", nullable = false, insertable = false, updatable = false)
     private float rating;
 
-    @Column(name="last_login")
-    private LocalDateTime lastLogin;
-    @Column(name="phone_number",length = 10)
-    private  String phoneNumber;
-
-    @OneToOne(fetch = FetchType.LAZY , mappedBy = "user")
-    private UserAuth userAuth;
-
+    public User() {
+        // Just for Hibernate!
+    }
 
     public static class Builder {
 

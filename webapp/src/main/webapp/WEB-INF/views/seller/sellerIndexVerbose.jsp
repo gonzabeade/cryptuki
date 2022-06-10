@@ -83,25 +83,34 @@
 
                 <div class="flex flex-col w-full mb-5">
                     <div class="flex flex-row ml-[35%] ">
-                        <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-PENDING" onclick="showPending(${offer.id})">Pendientes</div>
+                        <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.offerId
+                        }-PENDING" onclick="showPending(${offer.offerId
+                        })">Pendientes</div>
 
-                        <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.id}-ACCEPTED" onclick="showAccepted(${offer.id})">Aceptadas</div>
-                        <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.id}-REJECTED" onclick="showRejected(${offer.id})">Rechazadas</div>
+                        <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.offerId
+                        }-ACCEPTED" onclick="showAccepted(${offer.offerId
+                        })">Aceptadas</div>
+                        <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.offerId
+                        }-REJECTED" onclick="showRejected(${offer.offerId
+                        })">Rechazadas</div>
 
-                        <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.id}-SOLD" onclick="showSold(${offer.id})">Finalizadas</div>
+                        <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.offerId
+                        }-SOLD" onclick="showSold(${offer.offerId
+                        })">Finalizadas</div>
                     </div>
                 <div class="flex flex-row mx-5">
                         <%--    Tarjeta de anuncio--%>
                     <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start w-[300px] ">
 
                         <div class="flex flex-col items-center mt-5 mb-2">
-                            <h1 class="text-2xl font-bold font-sans"><messages:message code="offer"/><c:out value="#${offer.id}"/></h1>
+                            <h1 class="text-2xl font-bold font-sans"><messages:message code="offer"/><c:out value="#${offer.offerId
+                            }"/></h1>
                         </div>
                         <span class="text-center"><messages:message code="price"/></span>
                         <div class="flex flex-row ">
                             <h1 class="text-lg font-bold font-sans text-center"><fmt:formatNumber type="number"
                                                                                       maxFractionDigits="2"
-                                                                                      value="${offer.askingPrice}"/>
+                                                                                      value="${offer.unitPrice}"/>
                                 ARS </h1>
                             <p class="my-auto mx-2"><messages:message code="for"/></p>
                             <h1 class="text-xl font-sans font-semibold my-auto"><c:out
@@ -112,10 +121,10 @@
 
                         <div class="flex flex-col justify-start mb-3">
                             <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Min: ${offer.minQuantity}"/><c:out value=" ${offer.crypto.code}"/></p>
+                                <p><c:out value="Min: ${offer.minInCrypto}"/><c:out value=" ${offer.crypto.code}"/></p>
                             </div>
                             <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Max: ${offer.maxQuantity}"/><c:out value=" ${offer.crypto.code}"/></p>
+                                <p><c:out value="Max: ${offer.maxInCrypto}"/><c:out value=" ${offer.crypto.code}"/></p>
                             </div>
                             <div class="flex flex-col font-sans mt-3">
                                 <p><messages:message code="date"/> <c:out value="${offer.date.toLocalDate()}"/></p>
@@ -134,14 +143,16 @@
 
 
                         <div class="flex flex-row mx-auto mt-2 ">
-                            <a href="<c:url value="/modify/${offer.id}"/>"
+                            <a href="<c:url value="/modify/${offer.offerId
+                            }"/>"
                                class="flex mr-5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                 </svg>
                             </a>
 
-                            <form action="<c:url value="/delete/${offer.id}"/>" method="post">
+                            <form action="<c:url value="/delete/${offer.offerId
+                            }"/>" method="post">
                                 <button class="flex">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -151,12 +162,15 @@
                         </div>
                     </div>
 
-                    <div id="offerId-<c:out value="${offer.id}" />"
+                    <div id="offerId-<c:out value="${offer.offerId
+                    }" />"
                          class="flex flex-row shadow-xl rounded-lg bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden w-full">
-                            <h2 id="noResults-${offer.id}" class="hidden text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
+                            <h2 id="noResults-${offer.offerId
+                            }" class="hidden text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
-                        <c:forEach var="trade" items="${offer.associatedTrades}">
-                            <div name="trade-${offer.id}-${trade.status}" class="hidden bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5 ">
+                        <c:forEach var="trade" items="${offer.trades}">
+                            <div name="trade-${offer.offerId
+                            }-${trade.status}" class="hidden bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5 ">
 
                                 <div class="flex font-sans h-fit w-full mt-5">
                                     <c:if test="${trade.status == 'PENDING' }">
@@ -182,7 +196,7 @@
 
                                 <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                                     <h1 class="mx-auto">
-                                        <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/>
+                                        <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/>
                                         <c:out value=" ${offer.crypto.code}"/> ⟶ <c:out
                                             value="${trade.quantity} "/>ARS</h1>
                                 </div>
@@ -256,7 +270,7 @@
 
                                     <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
                                                cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="offerId" value="${trade.offer.id}"/>
+                                        <form:hidden path="offerId" value="${trade.offer.offerId}"/>
                                         <form:hidden path="trade" value="${trade.tradeId}"/>
                                         <button type="submit"
                                                 class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
@@ -288,7 +302,8 @@
                         </c:forEach>
                     </div>
                     <div class="flex flex-col w-10 -ml-5 h-full justify-center"
-                         onClick="toggle(<c:out value="${offer.id}" />) ">
+                         onClick="toggle(<c:out value="${offer.offerId
+                         }" />) ">
                             <%--                    <div class="flex rotate-90 whitespace-nowrap">hola mundo</div>--%>
                                     <%--                                <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>--%>
 

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.persistence.Complain;
-import ar.edu.itba.paw.persistence.ComplainStatus;
+import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 
 import java.util.Collection;

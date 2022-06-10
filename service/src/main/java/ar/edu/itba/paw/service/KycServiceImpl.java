@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.KycStatus;
+import ar.edu.itba.paw.model.KycStatus;
 import ar.edu.itba.paw.persistence.KycDao;
 import ar.edu.itba.paw.persistence.KycInformation;
 import org.springframework.beans.factory.annotation.Autowired;

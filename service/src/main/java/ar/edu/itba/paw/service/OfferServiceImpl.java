@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferStatus;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -21,14 +24,12 @@ public class OfferServiceImpl implements OfferService {
 
     private  OfferDao offerDao;
     private  MessageSenderFacade messageSenderFacade;
-    private OfferStatusDao offerStatusDao;
     private TradeDao tradeDao ;
 
     @Autowired
-    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade, OfferStatusDao offerStatusDao, TradeDao tradeDao) {
+    public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade, TradeDao tradeDao) {
         this.offerDao = offerDao;
         this.messageSenderFacade = messageSenderFacade;
-        this.offerStatusDao = offerStatusDao;
         this.tradeDao = tradeDao;
     }
 
@@ -36,14 +37,15 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     @Secured("ROLE_USER")
     @PreAuthorize("@customPreAuthorizer.isUserAuthorized(#digest.sellerId, authentication.principal)")
-    public int makeOffer(OfferDigest digest) {
+    public int makeOffer(OfferPO offerPO) {
 
-        if (digest == null)
+        if (offerPO == null)
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
-            int offerId = offerDao.makeOffer(digest);
-            messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), digest,  offerId);
+            Offer offer = offerDao.makeOffer(offerPO);
+            int offerId = offer.getOfferId();
+            messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), offer);
             return offerId;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -150,13 +152,13 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal) OR hasRole('ROLE_ADMIN')")
-    public void modifyOffer(OfferDigest digest) {
+    public void modifyOffer(Offer offer) {
 
-        if (digest == null)
+        if (offer == null)
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
-            offerDao.modifyOffer(digest);
+            offerDao.modifyOffer(offer);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -186,7 +188,7 @@ public class OfferServiceImpl implements OfferService {
             throw new IllegalArgumentException("Id can only be non negative");
 
         try {
-            offerDao.pauseOffer(offerId);
+            offerDao.changeOfferStatus(offerId, OfferStatus.PSE);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -202,7 +204,7 @@ public class OfferServiceImpl implements OfferService {
             throw new IllegalArgumentException("Id can only be non negative");
 
         try {
-            offerDao.hardPauseOffer(offerId);
+            offerDao.changeOfferStatus(offerId, OfferStatus.PSU);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -217,7 +219,7 @@ public class OfferServiceImpl implements OfferService {
             throw new IllegalArgumentException("Id can only be non negative");
 
         try {
-            offerDao.resumeOffer(offerId);
+            offerDao.changeOfferStatus(offerId, OfferStatus.APR);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -228,25 +230,25 @@ public class OfferServiceImpl implements OfferService {
     @PreAuthorize("hasRole('ROLE_USER')")
     public void soldOffer(Offer offer, float sold, int tradeId) {
 
-        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
-        float remaining = offer.getMaxQuantity() - (sold/offer.getAskingPrice());
-        try {
-            if (remaining <= offer.getMinQuantity()){
-                Offer mergeOffer = offerDao.getOffersBy(new OfferFilter().byOfferId(offer.getId())).stream().findFirst().orElseThrow(()->new NoSuchOfferException(offer.getId()));
-                OfferStatus offerStatus = this.offerStatusDao.getOfferStatusByCode("PSE").get();
-                mergeOffer.setStatus(offerStatus);
-                mergeOffer.getAssociatedTrades().stream().forEach(trade -> {
-                    if(trade.getStatus().equals(TradeStatus.PENDING))
-                        trade.setStatus(TradeStatus.REJECTED);
-                });
-                mergeOffer.setMinQuantity(0);
-                mergeOffer.setMaxQuantity(remaining);
-            }
-            else
-                offerDao.setMaxQuantity(offer.getId(), remaining);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+//        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
+//        float remaining = offer.getMaxQuantity() - (sold/offer.getunitPrice());
+//        try {
+//            if (remaining <= offer.getMinQuantity()){
+//                Offer mergeOffer = offerDao.getOffersBy(new OfferFilter().byOfferId(offer.getId())).stream().findFirst().orElseThrow(()->new NoSuchOfferException(offer.getId()));
+//                OfferStatus offerStatus = this.offerStatusDao.getOfferStatusByCode("PSE").get();
+//                mergeOffer.setStatus(offerStatus);
+//                mergeOffer.getAssociatedTrades().stream().forEach(trade -> {
+//                    if(trade.getStatus().equals(TradeStatus.PENDING))
+//                        trade.setStatus(TradeStatus.REJECTED);
+//                });
+//                mergeOffer.setMinQuantity(0);
+//                mergeOffer.setMaxQuantity(remaining);
+//            }
+//            else
+//                offerDao.setMaxQuantity(offer.getId(), remaining);
+//        } catch (PersistenceException pe) {
+//            throw new ServiceDataAccessException(pe);
+//        }
 
 
     }

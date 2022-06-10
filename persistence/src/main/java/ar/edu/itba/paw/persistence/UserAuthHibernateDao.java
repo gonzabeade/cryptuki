@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.UserStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

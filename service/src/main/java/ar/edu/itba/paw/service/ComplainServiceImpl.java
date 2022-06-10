@@ -5,7 +5,7 @@ import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
-import ar.edu.itba.paw.persistence.ComplainStatus;
+import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.service.digests.SupportDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -174,15 +174,15 @@ public class ComplainServiceImpl implements ComplainService{
     @Secured("ROLE_ADMIN")
     public void assignComplain(int complainId,String username) {
 
-        if (complainId < 0)
-            throw new IllegalArgumentException("Complain id can only be non negative.");
-
-        try {
-            complainDao.updateComplainStatus(complainId, ComplainStatus.ASSIGNED);
-            complainDao.updateModerator(complainId, username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+//        if (complainId < 0)
+//            throw new IllegalArgumentException("Complain id can only be non negative.");
+//
+//        try {
+//            complainDao.updateComplainStatus(complainId, ComplainStatus.);
+//            complainDao.updateModerator(complainId, username);
+//        } catch (PersistenceException pe) {
+//            throw new ServiceDataAccessException(pe);
+//        }
     }
 
 

@@ -1,16 +1,16 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.model.ComplainStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
-//@Repository
+@Repository
 public class ComplainHibernateDao implements ComplainDao{
 
     @PersistenceContext

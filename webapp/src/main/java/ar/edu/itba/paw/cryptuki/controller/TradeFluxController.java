@@ -5,6 +5,8 @@ import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.RatingService;
@@ -13,14 +15,11 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 

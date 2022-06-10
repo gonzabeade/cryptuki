@@ -8,7 +8,7 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private String coinCode;
-    private double askingPrice;
+    private double unitPrice;
     private String offerLocation;
     private String offerDate;
     private int offerId;
@@ -20,10 +20,10 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username, String coinCode, String offerLocation, String offerDate,  double askingPrice, int offerId, String url) {
+    public void setParameters(String username, String coinCode, String offerLocation, String offerDate,  double unitPrice, int offerId, String url) {
         this.username = username;
         this.coinCode = coinCode;
-        this.askingPrice = askingPrice;
+        this.unitPrice = unitPrice;
         this.offerLocation =  offerLocation;
         this.offerDate = offerDate;
         this.offerId = offerId;
@@ -40,7 +40,7 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);
-        context.setVariable("askingPrice", askingPrice);
+        context.setVariable("unitPrice", unitPrice);
         context.setVariable("offerId", offerId);
         context.setVariable("offerDate", offerDate);
         context.setVariable("offerLocation", offerLocation);

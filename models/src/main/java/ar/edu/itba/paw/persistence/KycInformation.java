@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.IdType;
-import ar.edu.itba.paw.KycStatus;
+import ar.edu.itba.paw.model.IdType;
+import ar.edu.itba.paw.model.KycStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Country;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

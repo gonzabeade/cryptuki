@@ -45,7 +45,7 @@
                 <jsp:include page="../components/card.jsp">
                     <jsp:param name="currency" value="${offer.crypto.code}"/>
                     <jsp:param name="owner" value="${owner}"/>
-                    <jsp:param name="asking_price" value="${offer.askingPrice}"/>
+                    <jsp:param name="asking_price" value="${offer.unitPrice}"/>
                     <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
                     <jsp:param name="offerId" value="${offer.id}"/>
                     <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>

@@ -53,7 +53,7 @@
                         <c:choose>
                             <c:when test="${buying}">
                                 <div class="flex flex-row">
-                                    <h2 class="text-xl font-sans text-polar text-left my-auto"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h2>
+                                    <h2 class="text-xl font-sans text-polar text-left my-auto"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/></h2>
                                     <h1 class="text-xl  font-sans text-polar text-left my-auto ml-2"><c:out value="${offer.crypto.code}"/></h1>
                                 </div>
                             </c:when>
@@ -76,7 +76,7 @@
                         <c:choose>
                             <c:when test="${!buying}">
                                 <div class="flex flex-row">
-                                    <h2 class="text-xl font-sans text-polar text-left my-auto"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/></h2>
+                                    <h2 class="text-xl font-sans text-polar text-left my-auto"><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/></h2>
                                     <h1 class="text-xl  font-sans text-polar text-left my-auto ml-2"><c:out value="${offer.crypto.code}"/></h1>
                                 </div>
                             </c:when>

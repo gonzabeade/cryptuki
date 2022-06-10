@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.validator;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
-import ar.edu.itba.paw.cryptuki.form.OfferBuyForm;
-import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
-import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.service.OfferService;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -47,7 +44,8 @@ public class AmountValidator implements ConstraintValidator<AmountCheck, Object>
         if (!offerOptional.isPresent())
             return false;
         Offer offer = offerOptional.get();
-        float offerPrice = offer.getAskingPrice();
-        return ( amountNumber != null && amountNumber.compareTo(offerPrice * offer.getMinQuantity()) >= 0  && amountNumber.compareTo(offerPrice * offer.getMaxQuantity()) <= 0);
+//        float offerPrice = offer.getUnitPrice();
+//        return ( amountNumber != null && amountNumber.compareTo(valueOf(offerPrice * offer.getMinInCrypto())) >= 0  && amountNumber.compareTo(offerPrice * offer.getMaxQuantity()) <= 0);
+        return true;
     }
 }

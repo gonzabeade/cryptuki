@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.KycStatus;
-import ar.edu.itba.paw.persistence.KycInformation;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

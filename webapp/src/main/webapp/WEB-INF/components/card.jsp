@@ -5,7 +5,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>
+<%--<jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>--%>
 <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 <sec:authentication property="name" var="username"/>
 

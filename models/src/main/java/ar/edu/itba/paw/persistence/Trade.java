@@ -1,5 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Cryptocurrency;
+import ar.edu.itba.paw.model.Message;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.TradeStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -29,7 +34,7 @@ public final class Trade {
 
     @Column(name="status",length = 10)
     @Enumerated(EnumType.STRING)
-    private  TradeStatus status;
+    private TradeStatus status;
 
     @Column(name="quantity")
     private  float quantity;
@@ -104,7 +109,7 @@ public final class Trade {
         private final String buyerUsername;
 
         @Transient
-        private  Cryptocurrency cryptoCurrency;
+        private Cryptocurrency cryptoCurrency;
         @Transient
         private String wallet;
         @Transient
@@ -231,7 +236,7 @@ public final class Trade {
         return tradeId;
     }
     public int getOfferId() {
-        return offer.getId();
+        return offer.getOfferId();
     }
     public String getSellerUsername() {
         return offer.getSeller().getUserAuth().getUsername();
@@ -251,8 +256,8 @@ public final class Trade {
         return offer.getCrypto();
     }
 
-    public float getAskedPrice() {
-        return offer.getAskingPrice();
+    public double getAskedPrice() {
+        return offer.getUnitPrice();
     }
 
     public boolean equals(Object object) {

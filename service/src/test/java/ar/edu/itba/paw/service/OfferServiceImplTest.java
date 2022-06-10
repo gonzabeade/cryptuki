@@ -44,12 +44,12 @@
 ////            }
 ////        };
 ////        doThrow(new UncategorizedPersistenceException(dae)).when(offerDao).pauseOffer(5);
-////        float askingPrice = 15.5f;
+////        float unitPrice = 15.5f;
 ////        int min = 1,max=3;
 ////        UtilsClass.UserPublic user = (UtilsClass.UserPublic)new UtilsClass.UserPublic("shadad@itba.edu.ar").withId(5);
-////        UtilsClass.OfferPublic offer =(UtilsClass.OfferPublic) new UtilsClass.OfferPublic(5,user.build(),null,askingPrice).withMinQuantity(min).withMaxQuantity(max);
+////        UtilsClass.OfferPublic offer =(UtilsClass.OfferPublic) new UtilsClass.OfferPublic(5,user.build(),null,unitPrice).withMinQuantity(min).withMaxQuantity(max);
 ////
-////        offerService.soldOffer(offer.build(), askingPrice*max);
+////        offerService.soldOffer(offer.build(), unitPrice*max);
 ////    }
 //
 ////    @Test(expected = ServiceDataAccessException.class)
@@ -61,13 +61,13 @@
 ////                return super.getMessage();
 ////            }
 ////        };
-////        float askingPrice = 15.5f;
+////        float unitPrice = 15.5f;
 ////        int min = 1,max=3;
 ////        UtilsClass.UserPublic user = (UtilsClass.UserPublic)new UtilsClass.UserPublic("shadad@itba.edu.ar").withId(5);
-////        UtilsClass.OfferPublic offer =(UtilsClass.OfferPublic) new UtilsClass.OfferPublic(5,user.build(),null,askingPrice).withMinQuantity(min).withMaxQuantity(max);
-////        doThrow(new UncategorizedPersistenceException(dae)).when(offerDao).setMaxQuantity(5,offer.getMaxQuantity() - (askingPrice*min/offer.getAskingPrice()));
+////        UtilsClass.OfferPublic offer =(UtilsClass.OfferPublic) new UtilsClass.OfferPublic(5,user.build(),null,unitPrice).withMinQuantity(min).withMaxQuantity(max);
+////        doThrow(new UncategorizedPersistenceException(dae)).when(offerDao).setMaxQuantity(5,offer.getMaxQuantity() - (unitPrice*min/offer.getunitPrice()));
 ////
-////        offerService.decrementOfferMaxQuantity(offer.build(), askingPrice*min);
+////        offerService.decrementOfferMaxQuantity(offer.build(), unitPrice*min);
 ////    }
 //
 //

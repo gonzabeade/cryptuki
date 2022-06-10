@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.NoSuchTradeException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import ar.edu.itba.paw.model.Message;
+import ar.edu.itba.paw.model.TradeStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

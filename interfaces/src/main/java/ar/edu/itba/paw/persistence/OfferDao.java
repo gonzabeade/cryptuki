@@ -1,25 +1,23 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.OfferDigest;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 
 import java.util.Collection;
 import java.util.Optional;
 
 public interface OfferDao {
+
+    // Getters
     int getOfferCount(OfferFilter filter);
     Collection<Offer> getOffersBy(OfferFilter filter);
 
-    int makeOffer(OfferDigest digest);
-
-    void modifyOffer(OfferDigest digest);
+    // Manipulation and creation
+    Offer makeOffer(OfferPO offer);
+    Offer modifyOffer(Offer offer);
     void deleteOffer(int offerId);
+    Optional<Offer> changeOfferStatus(int offerId, OfferStatus offerStatus);
 
-    void hardPauseOffer(int offerId);
-    void pauseOffer(int offerId);
-    void resumeOffer(int offerId);
-
-    Optional<String> getOwner(int offerId);
-
-    void setMaxQuantity(int offerId, float newQuantity);
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Message;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,9 +11,9 @@ public class MessageHibernateDao implements MessageDao{
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
-    public void sendMessage(Message.Builder builder) {
-        entityManager.persist(builder);
+    public void sendMessage(Integer sender, Integer trade, String message) {
+        Message newMessage = new Message(sender, trade, message);
+        entityManager.persist(newMessage);
     }
 }

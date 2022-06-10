@@ -22,7 +22,6 @@ public class HomeController {
     private final UserService us;
     private final OfferService offerService;
     private final CryptocurrencyService cryptocurrencyService;
-    private final PaymentMethodService paymentMethodService;
     private final ComplainService complainService;
     private static final int PAGE_SIZE = 7;
 
@@ -30,12 +29,10 @@ public class HomeController {
     public HomeController(UserService us,
                           OfferService offerService,
                           CryptocurrencyService cryptocurrencyService,
-                          PaymentMethodService paymentMethodService,
                           ComplainService complainService) {
         this.us = us;
         this.offerService = offerService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.paymentMethodService = paymentMethodService;
         this.complainService = complainService;
     }
 

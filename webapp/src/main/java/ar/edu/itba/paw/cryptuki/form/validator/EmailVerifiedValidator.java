@@ -2,7 +2,7 @@ package ar.edu.itba.paw.cryptuki.form.validator;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.EmailVerified;
 import ar.edu.itba.paw.persistence.UserAuth;
-import ar.edu.itba.paw.persistence.UserStatus;
+import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

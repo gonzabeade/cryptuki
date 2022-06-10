@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Country;
+import ar.edu.itba.paw.model.Country;
 
 import java.util.Collection;
 

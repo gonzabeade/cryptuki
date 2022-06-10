@@ -1,17 +1,14 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
-import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Offer;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.TradeStatus;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.PaymentMethod;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,16 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 @Controller
 public class OfferController {
 
     private final CryptocurrencyService cryptocurrencyService;
-    private final PaymentMethodService paymentMethodService;
     private  final OfferService offerService;
 
     private final TradeService tradeService;
@@ -42,13 +34,11 @@ public class OfferController {
 
     @Autowired
     public OfferController(CryptocurrencyService cryptocurrencyService,
-                           PaymentMethodService paymentMethodService,
                            OfferService offerService,
                            TradeService tradeService,
                            UserService us) {
 
         this.cryptocurrencyService = cryptocurrencyService;
-        this.paymentMethodService = paymentMethodService;
         this.offerService = offerService;
         this.tradeService = tradeService;
         this.us = us;
@@ -121,7 +111,7 @@ public class OfferController {
         ModelAndView mav = new ModelAndView("modify");
         mav.addObject("offer", offer);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        mav.addObject("paymentMethods", PaymentMethod.values());
         mav.addObject("selectedCrypto", offer.getCrypto().getCode());
         mav.addObject("selectedPayments", Arrays.asList(form.getPaymentMethods()));
         return mav;
@@ -137,8 +127,8 @@ public class OfferController {
             return modify(offerId, form, authentication);
 
         int id = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        OfferDigest digest = form.toOfferDigest(id);
-        offerService.modifyOffer(digest);
+        OfferPO offerPO = form.toOfferParameterObject(id);
+//        offerService.modifyOffer(offerPO);
         return new ModelAndView("redirect:/offer/"+offerId+"/editsuccess");
     }
 

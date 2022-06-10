@@ -1,6 +1,6 @@
 package ar.edu.itba.paw;
 
-import ar.edu.itba.paw.persistence.ComplainStatus;
+import ar.edu.itba.paw.model.ComplainStatus;
 
 
 import java.time.LocalDate;

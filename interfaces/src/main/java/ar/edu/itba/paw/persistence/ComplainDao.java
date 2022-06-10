@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.ComplainFilter;
+import ar.edu.itba.paw.model.ComplainStatus;
+
 import java.util.Collection;
 
 public interface ComplainDao {

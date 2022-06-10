@@ -50,8 +50,8 @@
         <c:forEach var="offer" items="${offerList}">
             <jsp:include page="../../components/seller/sellerLargeOfferWithTradesCard.jsp">
                 <jsp:param name="currency" value="${offer.crypto.code}"/>
-                <jsp:param name="offerId" value="${offer.id}"/>
-                <jsp:param name="askingPrice" value="${offer.askingPrice}"/>
+                <jsp:param name="offerId" value="${offer.offerId}"/>
+                <jsp:param name="unitPrice" value="${offer.unitPrice}"/>
                 <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                 <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                 <jsp:param name="offerDate" value="${offer.date.toLocalDate()}"/>

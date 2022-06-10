@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.ComplainStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+
 @Entity
 @Table(name="complain")
 public final class Complain {
@@ -29,7 +31,7 @@ public final class Complain {
 
     @Column(name="status",nullable = false)
     @Enumerated(EnumType.STRING)
-    private  ComplainStatus status;
+    private ComplainStatus status;
 
     @OneToOne
     @JoinColumn(name="complainer_id")

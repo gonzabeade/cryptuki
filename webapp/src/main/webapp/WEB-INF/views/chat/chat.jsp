@@ -68,7 +68,7 @@
 
             <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                 <h1 class="mx-auto">
-                    <fmt:formatNumber type="number" value="${trade.quantity / trade.offer.askingPrice}"/>
+                    <fmt:formatNumber type="number" value="${trade.quantity / trade.offer.unitPrice}"/>
                     <c:out value=" ${trade.offer.crypto.code}"/> ⟶ <c:out
                         value="${trade.quantity} "/>ARS</h1>
             </div>

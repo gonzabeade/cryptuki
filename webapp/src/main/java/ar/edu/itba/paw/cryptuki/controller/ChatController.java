@@ -6,7 +6,6 @@ import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
-import ar.edu.itba.paw.persistence.Message;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.MessageService;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 
 @Controller
@@ -74,7 +72,7 @@ public class ChatController {
         if(errors.hasErrors()){
             return chatPage(messageForm, soldTradeForm, statusTradeForm, messageForm.getTradeId(), authentication);
         }
-        messageService.sendMessage(messageForm.toBuilder());
+        messageService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
         return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());
     }
 
@@ -83,7 +81,7 @@ public class ChatController {
         if(errors.hasErrors()){
             return new ModelAndView("redirect:/trade?trade="+ messageForm.getTradeId());
         }
-        messageService.sendMessage(messageForm.toBuilder());
+        messageService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
         return new ModelAndView("redirect:/trade?tradeId="+messageForm.getTradeId());
     }
 

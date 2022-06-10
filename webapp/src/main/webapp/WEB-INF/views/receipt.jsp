@@ -27,7 +27,7 @@
             <h1 class="text-ngreen text-4xl text-center"><messages:message code="done"/>!</h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
-            <messages:message code="sellerWillTransfer"/> <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.askingPrice}"/> <c:out value="${offer.crypto.code}"/></b> <messages:message code="toYourWallet"/>.
+            <messages:message code="sellerWillTransfer"/> <b><fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/> <c:out value="${offer.crypto.code}"/></b> <messages:message code="toYourWallet"/>.
         </div>
         <div class="mt-10 mx-auto flex flex-col">
             <h1 class="text-polard font-extrabold text-2xl font-sans"><messages:message code="offerInformation"/>:</h1>
@@ -37,7 +37,7 @@
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="absolutePriceByCurrency"/></h1>
-                <p class="text-polard font-sans text-center">${offer.askingPrice} ARS</p>
+                <p class="text-polard font-sans text-center">${offer.unitPrice} ARS</p>
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="trasactionDate"/></h1>

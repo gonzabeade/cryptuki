@@ -1,11 +1,12 @@
 package ar.edu.itba.paw.cryptuki.form;
-
-import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
+import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
+
 @MinLessThanMax(
         min="minAmount",
         max="maxAmount"
@@ -96,17 +97,18 @@ public class UploadOfferForm {
         //this.paymentMethods = paymentMethods;
     }
 
-
-    public OfferDigest toOfferDigest(int sellerId) {
-        OfferDigest.Builder builder = new OfferDigest.Builder(sellerId, cryptocurrency, price)
-                .withMinQuantity(minAmount)
-                .withMaxQuantity(maxAmount)
+    public OfferPO toOfferParameterObject(int sellerId) {
+        OfferPO po = new OfferPO()
                 .withComments(message)
-                .withLocation(location);
+                .withLocation(Location.valueOf(location))
+                .withCryptoCode(cryptocurrency)
+                .withSellerId(sellerId)
+                .withMaxInCrypto(maxAmount)
+                .withMinInCrypto(minAmount);
 
         for (String pm: paymentMethods)
-                builder.withPaymentMethod(pm);
-        return builder.build();
+                po.withPaymentMethod(pm);
+        return po;
     }
 
 

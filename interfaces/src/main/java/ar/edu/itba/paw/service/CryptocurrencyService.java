@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Cryptocurrency;
+import ar.edu.itba.paw.model.Cryptocurrency;
 import java.util.Collection;
 import java.util.Optional;
 

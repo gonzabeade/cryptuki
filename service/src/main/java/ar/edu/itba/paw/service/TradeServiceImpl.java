@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.*;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +80,7 @@ public class TradeServiceImpl implements TradeService {
             throw new ServiceDataAccessException(pe);
         }
 
-        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId, offer.getId());
+        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId, offer.getOfferId());
         return tradeId;
     }
 

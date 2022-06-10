@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +37,8 @@ public class CustomPreAuthorizer {
     }
 
     public boolean isUserOwnerOfOffer(int offerId, UserDetails userDetails) {
-        Optional<String> owner = offerDao.getOwner(offerId);
-        return owner.isPresent() && owner.get().equals(userDetails.getUsername());
+        String owner = offerDao.getOffersBy(new OfferFilter().byOfferId(offerId)).stream().findFirst().get().getSeller().getUserAuth().getUsername();
+        return owner != null && owner.equals(userDetails.getUsername());
     }
 
     public boolean isUserPartOfTrade(Integer tradeId, UserDetails userDetails) {

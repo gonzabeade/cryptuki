@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
-import ar.edu.itba.paw.OfferDigest;
-import ar.edu.itba.paw.persistence.Offer;
+import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OfferService {
 
 
-    int makeOffer(OfferDigest digest);
+    int makeOffer(OfferPO offerPO);
     Optional<Offer> getOfferById(int id);
 
 
@@ -23,7 +23,7 @@ public interface OfferService {
     Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
 
 
-    void modifyOffer(OfferDigest digest);
+    void modifyOffer(Offer offer);
     void deleteOffer(int offerId);
 
     void hardPauseOffer(int offerId);

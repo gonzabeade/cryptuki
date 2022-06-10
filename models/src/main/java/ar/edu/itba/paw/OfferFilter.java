@@ -1,7 +1,5 @@
 package ar.edu.itba.paw;
 
-import ar.edu.itba.paw.persistence.Offer;
-
 import java.util.*;
 
 public class OfferFilter {

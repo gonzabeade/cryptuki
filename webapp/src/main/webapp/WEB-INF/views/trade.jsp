@@ -101,7 +101,7 @@
                 </svg>
                 <div class="flex flex-col mx-10 order-3" id="right">
                     <h1 class="text-center text-xl"><messages:message code="youReceive"/></h1>
-                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${trade.quantity / trade.offer.askingPrice }"/> ${trade.offer.crypto.code}</h1>
+                    <h1 class="text-center text-2xl font-semibold font-polard"><fmt:formatNumber type="number" maxFractionDigits="10" value="${trade.quantity / trade.offer.unitPrice }"/> ${trade.offer.crypto.code}</h1>
                 </div>
             </div>
             <c:if test="${status.equals('ACCEPTED')}">

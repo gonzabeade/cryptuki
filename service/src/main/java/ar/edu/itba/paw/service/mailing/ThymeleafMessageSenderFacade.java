@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.service.mailing;
 
-import ar.edu.itba.paw.OfferDigest;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -78,7 +79,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     }
 
     @Override
-    public void sendOfferUploadedMessage(String username, OfferDigest digest, int offerId) {
+    public void sendOfferUploadedMessage(String username, Offer offer) {
         MailMessage message = mailMessageContactService.createMessage(getTo(username));
         NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
@@ -86,11 +87,11 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
         newOfferMailMessage.setParameters(
                 username,
-                digest.getCryptoCode(),
-                digest.getLocation(),
-                digest.getDate().toString(),
-                digest.getMaxQuantity(),
-                offerId,
+                offer.getCrypto().getCode(),
+                offer.getLocation().toString(),
+                offer.getDate().toString(),
+                offer.getMaxInCrypto(),
+                offer.getOfferId(),
                 getUrl());
         mailMessageContactService.sendMessage(newOfferMailMessage);
         LOGGER.info("Uploaded offer mail sent");

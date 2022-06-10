@@ -1,8 +1,6 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 public enum ComplainStatus {
-
     PENDING,
     CLOSED,
-    ASSIGNED
 }

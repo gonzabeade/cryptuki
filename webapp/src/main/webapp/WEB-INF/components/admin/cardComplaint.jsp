@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 
-<div class="flex flex-col bg-white shadow-lg rounded-lg p-4 mx-3">
+<div class="flex flex-col bg-white shadow-lg rounded-lg p-4">
     <div class="flex flex-col">
         <div class="flex flex-col my-auto mx-7">
             <h1 class="font-sans font-polard text-xl font-semibold">

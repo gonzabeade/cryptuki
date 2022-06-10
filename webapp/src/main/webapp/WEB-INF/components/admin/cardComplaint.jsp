@@ -21,7 +21,7 @@
     <div class="flex flex-row my-3 mx-auto">
 
             <c:if test="${param.complainStatus == 'PENDING'}">
-                <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" text-center pb-2 px-3 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto"><messages:message code="see"/></a>
+                <a  href="<c:url value="/admin/complaint/${param.complainId}"/>" class=" text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto"><messages:message code="see"/></a>
             </c:if>
             <c:if test="${param.complainStatus == 'ASSIGNED'}">
                 <c:url value="/admin/unassign/${param.complainId}" var="postUrl"/>

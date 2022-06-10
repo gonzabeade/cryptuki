@@ -21,7 +21,7 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../../components/admin/header.jsp"/>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col  ml-96 mr-20">
+    <div class="flex flex-col  ml-64 mr-20">
         <div class="flex">
             <div class="flex flex-col mt-10">
                 <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-center"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>

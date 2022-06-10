@@ -23,14 +23,10 @@
 
   <% request.setCharacterEncoding("utf-8"); %>
   <jsp:include page="../../components/admin/header.jsp"/>
-  <div class="flex flex-col ml-96 my-10 h-screen w-screen">
+  <div class="flex flex-col ml-80 my-10 h-screen w-screen">
     <h1 class="font-sans text-4xl font-bold"><messages:message code="${title}"/></h1>
-    <div class="flex flex-row mt-10 divide-x h-full">
-      <% request.setCharacterEncoding("utf-8"); %>
-      <jsp:include page="../../components/admin/filters.jsp">
-        <jsp:param name="baseUrl" value="${baseUrl}"/>
-      </jsp:include>
-      <div class="p-10 w-2/3  flex flex-col">
+    <div class="flex flex-col mt-10 divide-x h-full">
+      <div class="p-10 flex flex-wrap">
 
         <c:forEach var="complain" items="${complainList}">
           <li style="list-style-type: none" class="my-3">
@@ -44,14 +40,13 @@
             </jsp:include>
           </li>
         </c:forEach>
-
-        <jsp:include page="../../components/paginator.jsp">
-          <jsp:param name="activePage" value="${activePage}"/>
-          <jsp:param name="pages" value="${pages}"/>
-          <jsp:param name="baseUrl" value="${baseUrl}"/>
-        </jsp:include>
-        <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
       </div>
+      <jsp:include page="../../components/paginator.jsp">
+        <jsp:param name="activePage" value="${activePage}"/>
+        <jsp:param name="pages" value="${pages}"/>
+        <jsp:param name="baseUrl" value="${baseUrl}"/>
+      </jsp:include>
+      <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 
   </div>

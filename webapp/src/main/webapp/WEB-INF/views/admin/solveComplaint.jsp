@@ -20,7 +20,7 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../../components/admin/header.jsp"/>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col ml-96">
+    <div class="flex flex-col ml-64">
         <div class="flex">
             <div class="flex flex-col  mt-10">
                 <h2 class="font-sans font-semibold text-polard text-5xl"><messages:message code="claim"/> #<c:out value="${complain.complainId}"/></h2>

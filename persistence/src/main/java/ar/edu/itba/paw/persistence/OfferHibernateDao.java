@@ -22,42 +22,27 @@ public class OfferHibernateDao implements OfferDao{
     @PersistenceContext
     private EntityManager em;
 
+    private static void testAndSet(Collection<?> collection, Map<String, Object> args, String argName, StringBuilder sqlQueryBuilder, String queryPiece) {
+        if (!collection.isEmpty()) {
+            sqlQueryBuilder.append(queryPiece);
+            args.put(argName, collection);
+        }
+    }
 
     // TODO(anyone): check if this function can be modularized
     // TODO: test
+    /**
+     * Fills a StringBuilder with strings of the form "AND [field] IN [collection] " given an OfferFilter object.
+     * Returns all necessary arguments in a map that is to be passed as a parameter
+     */
     private static void fillQueryBuilderFilter(OfferFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
-        if(!filter.getRestrictedToIds().isEmpty()) {
-            sqlQueryBuilder.append("AND offer_id IN (:ids) ");
-            args.put("ids", filter.getRestrictedToIds());
-        }
-        if(!filter.getExcludedUsernames().isEmpty()) {
-            sqlQueryBuilder.append("AND uname NOT IN (:resUnames) ");
-            args.put("resUnames", filter.getExcludedUsernames());
-        }
-        if(!filter.getRestrictedToUsernames().isEmpty()) {
-            sqlQueryBuilder.append("AND uname IN (:unames) ");
-            args.put("unames", filter.getRestrictedToUsernames());
-        }
-        if(!filter.getRestrictedToUsernames().isEmpty()) {
-            sqlQueryBuilder.append("AND payment_method IN (:pms) ");
-            args.put("pms", filter.getPaymentMethods().stream().map(pm->pm.toString()).collect(Collectors.toList()));
-        }
-        if(!filter.getCryptoCodes().isEmpty()) {
-            sqlQueryBuilder.append("AND crypto_code IN (:cryptoCodes) ");
-            args.put("cryptoCodes", filter.getCryptoCodes());
-        }
-        if(!filter.getRestrictedToIds().isEmpty()) {
-            sqlQueryBuilder.append("AND offer_id IN (:ids) ");
-            args.put("ids", filter.getRestrictedToIds());
-        }
-        if(!filter.getStatus().isEmpty()) {
-            sqlQueryBuilder.append("AND status_code IN (:status) ");
-            args.put("status", filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList())); // Only text lists allowed in native query, not enums
-        }
-        if(!filter.getLocations().isEmpty()) {
-            sqlQueryBuilder.append("AND location IN (:locations) ");
-            args.put("locations", filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList())); // Only text lists allowed in native query, not enums
-        }
+        testAndSet(filter.getRestrictedToIds(), args, "ids", sqlQueryBuilder, "AND offer_id IN (:ids) ");
+        testAndSet(filter.getExcludedUsernames(), args, "resUnames", sqlQueryBuilder, "AND uname NOT IN (:resUnames) ");
+        testAndSet(filter.getRestrictedToUsernames(), args, "unames", sqlQueryBuilder, "AND uname IN (:unames) ");
+        testAndSet(filter.getRestrictedToUsernames(), args, "pms", sqlQueryBuilder, "AND payment_method IN (:pms) ");
+        testAndSet(filter.getCryptoCodes(), args, "cryptoCodes", sqlQueryBuilder, "AND crypto_code IN (:cryptoCodes) ");
+        testAndSet(filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "status", sqlQueryBuilder, "AND status_code IN (:status) ");
+        testAndSet(filter.getLocations().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "locations", sqlQueryBuilder, "AND location IN (:locations) ");
     }
 
     @Override

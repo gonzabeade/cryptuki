@@ -1,125 +1,143 @@
 package ar.edu.itba.paw;
 
+import ar.edu.itba.paw.model.*;
+
 import java.util.*;
 
 public class OfferFilter {
-    private final Collection<String> paymentMethods = new LinkedList<>();
-    private final Collection<String> cryptoCodes = new LinkedList<>();
-    private final Collection<Integer> ids = new LinkedList<>();
 
+    /* Attributes that discriminate offers */
+    private final Collection<String> cryptoCodes = new HashSet<>();
+    private final Collection<Integer> restrictedToIds = new HashSet<>();
+    private final Collection<String> restrictedToUsernames = new HashSet<>();
+    private final Collection<String> excludedUsernames = new HashSet<>();
+    private final Collection<Location> locations = EnumSet.noneOf(Location.class);
+    private final Collection<PaymentMethod> paymentMethods = EnumSet.noneOf(PaymentMethod.class);
+    private Collection<OfferStatus> status = EnumSet.noneOf(OfferStatus.class);
+
+    /* Attributes that determine paging */
     private int page = 0;
     private int pageSize = 1;
 
-    private Double minPrice;
-    private Double maxPrice;
-
-    private String username;
-    private String location;
-
-    private Collection<String> status = new LinkedList<>();
-
+    /* Attributes that order offers*/
     private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;
-    private OfferOrderDirection orderDirection = OfferOrderDirection.DESC;
 
-    private Collection<String> discardedUsernames = new LinkedList<>();
+    /****/
 
-
-    public Collection<String> getPaymentMethods() {
-        return Collections.unmodifiableCollection(paymentMethods);
-    }
-    public Collection<String> getCryptoCodes() {
-        return Collections.unmodifiableCollection(cryptoCodes);
-    }
-    public Collection<Integer> getIds() {
-        return Collections.unmodifiableCollection(ids);
-    }
-    public int getPage() { return page; }
-    public int getPageSize() { return pageSize; }
-    public OptionalDouble getMaxPrice() { return maxPrice == null ? OptionalDouble.empty() : OptionalDouble.of(maxPrice); }
-    public OptionalDouble getMinPrice() { return minPrice == null ? OptionalDouble.empty() : OptionalDouble.of(minPrice); }
-    public Optional<String> getUsername() { return Optional.ofNullable(username); }
-    public Collection<String> getStatus() {
-        return Collections.unmodifiableCollection(status);
-    }
-    public OfferOrderDirection getOrderDirection() {
-        return orderDirection;
-    }
-    public OfferOrderCriteria getOrderCriteria() {
-        return orderCriteria;
-    }
-    public Optional<String> getLocation() {
-        return Optional.ofNullable(location);
-    }
-    public Collection<String> getDiscardedUsernames() {
-        return Collections.unmodifiableCollection(discardedUsernames);
-    }
-
-    public OfferFilter byStatus(String status) {
-        if ( status != null)
-            this.status.add(status);
+    public OfferFilter withPaymentMethod(String paymentMethod) {
+        if (paymentMethod != null)
+            paymentMethods.add(PaymentMethod.valueOf(paymentMethod));
         return this;
     }
 
-    public OfferFilter byCryptoCode(String cryptoCode) {
-        if ( cryptoCode != null)
-            this.cryptoCodes.add(cryptoCode);
+    public OfferFilter withPaymentMethod(PaymentMethod paymentMethod) {
+        if (paymentMethod != null)
+            paymentMethods.add(paymentMethod);
         return this;
     }
 
-    public OfferFilter byPaymentMethod(String paymentMethod) {
-        if ( paymentMethod != null)
-            this.paymentMethods.add(paymentMethod);
-        return this;
-    }
-    public OfferFilter byOfferId(Integer id) {
-        if ( id != null)
-            this.ids.add(id);
+    public OfferFilter withOfferStatus(OfferStatus offerStatus) {
+        if (offerStatus != null)
+            status.add(offerStatus);
         return this;
     }
 
-    public OfferFilter byMinPrice(Double minPrice) {
-        this.minPrice = minPrice;
+    public OfferFilter withOfferStatus(String offerStatus) {
+        if (offerStatus != null)
+            status.add(OfferStatus.valueOf(offerStatus));
         return this;
     }
 
-    public OfferFilter byUsername(String uname) {
-        this.username = uname;
+    public OfferFilter withLocation(String location) {
+        if (location != null)
+            locations.add(Location.valueOf(location));
         return this;
     }
 
-    public OfferFilter byMaxPrice(Double maxPrice) {
-        this.maxPrice = maxPrice;
+    public OfferFilter withLocation(Location location) {
+        if (location != null)
+            locations.add(location);
         return this;
     }
 
-    public OfferFilter fromPage(int page) {
+    public OfferFilter withCryptoCode(String cryptoCode) {
+        if (cryptoCode != null)
+            cryptoCodes.add(cryptoCode);
+        return this;
+    }
+
+    public OfferFilter excludeUsername(String username) {
+        if (username != null)
+            excludedUsernames.add(username);
+        return this;
+    }
+
+    public OfferFilter restrictedToUsername(String username) {
+        if (username != null)
+            restrictedToUsernames.add(username);
+        return this;
+    }
+
+    public OfferFilter restrictedToId(int offerId) {
+        restrictedToIds.add(offerId);
+        return this;
+    }
+
+    public OfferFilter withPage(int page) {
         this.page = page;
         return this;
     }
-    public OfferFilter withPageSize(int page) {
-        this.pageSize = page;
+
+    public OfferFilter withPageSize(int pageSize) {
+        this.pageSize = pageSize;
         return this;
     }
 
-    public OfferFilter byLocation(String location) {
-        this.location = location;
+    public OfferFilter orderingBy(OfferOrderCriteria orderCriteria) {
+        if (orderCriteria != null)
+            this.orderCriteria = orderCriteria;
         return this;
     }
 
-    public OfferFilter withOrderingCriterion(int criterion){
-        this.orderCriteria = OfferOrderCriteria.values()[criterion];
-        return this;
+    /****/
+
+    public Collection<PaymentMethod> getPaymentMethods() {
+        return Collections.unmodifiableCollection(paymentMethods);
     }
 
-    public OfferFilter withOrderingDirection(int direction){
-        this.orderDirection = OfferOrderDirection.values()[direction];
-        return this;
+    public Collection<String> getCryptoCodes() {
+        return Collections.unmodifiableCollection(cryptoCodes);
     }
 
-    public OfferFilter whereUsernameNot(String username){
-        if( username != null )
-            discardedUsernames.add(username);
-        return this;
+    public Collection<Integer> getRestrictedToIds() {
+        return Collections.unmodifiableCollection(restrictedToIds);
     }
 
+    public Collection<String> getRestrictedToUsernames() {
+        return Collections.unmodifiableCollection(restrictedToUsernames);
+    }
+
+    public Collection<String> getExcludedUsernames() {
+        return Collections.unmodifiableCollection(excludedUsernames);
+    }
+
+    public Collection<Location> getLocations() {
+        return Collections.unmodifiableCollection(locations);
+    }
+
+    public Collection<OfferStatus> getStatus() {
+        return Collections.unmodifiableCollection(status);
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public OfferOrderCriteria getOrderCriteria() {
+        return orderCriteria;
+    }
 }

@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: Decide whether it should be an enum
 @Entity
 @Table(name="cryptocurrency")
 public class Cryptocurrency {

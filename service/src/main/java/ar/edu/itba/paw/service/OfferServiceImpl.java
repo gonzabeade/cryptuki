@@ -61,10 +61,10 @@ public class OfferServiceImpl implements OfferService {
 
         try {
             Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter()
-                    .byOfferId(id)
-                    .byStatus("APR")
-                    .byStatus("PSE")
-                    .byStatus("PSU"));
+                    .restrictedToId(id)
+                    .withOfferStatus("APR")
+                    .withOfferStatus("PSE")
+                    .withOfferStatus("PSU"));
             return offer.isEmpty() ? Optional.empty() : Optional.of(offer.iterator().next());
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -79,11 +79,11 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().byUsername(username).withPageSize(pageSize)
-                    .byStatus("APR")
-                    .byStatus("PSE")
-                    .byStatus("PSU")
-                    .fromPage(page)
+            return offerDao.getOffersBy(new OfferFilter().restrictedToUsername(username).withPageSize(pageSize)
+                    .withOfferStatus("APR")
+                    .withOfferStatus("PSE")
+                    .withOfferStatus("PSU")
+                    .withPage(page)
             );
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
@@ -98,7 +98,7 @@ public class OfferServiceImpl implements OfferService {
             throw new NullPointerException("Offer filter cannot be null");
 
         try {
-            return offerDao.getOffersBy(filter.byStatus("APR"));
+            return offerDao.getOffersBy(filter.withOfferStatus("APR"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -106,13 +106,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public int countOffersBy(OfferFilter filter) {
+    public long countOffersBy(OfferFilter filter) {
 
         if (filter == null)
             throw new NullPointerException("Filter object cannot be null");
 
         try {
-            return offerDao.getOfferCount(filter.byStatus("APR"));
+            return offerDao.getOfferCount(filter.withOfferStatus("APR"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -121,29 +121,29 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional(readOnly = true)
     public Collection<Offer> getMarketOffersBy(OfferFilter filter, String buyerUsername){
-        filter.whereUsernameNot(buyerUsername);
+        filter.excludeUsername(buyerUsername);
         return getOfferBy(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int countMarketOffersBy(OfferFilter filter, String buyerUsername){
-        filter.whereUsernameNot(buyerUsername);
+    public long countMarketOffersBy(OfferFilter filter, String buyerUsername){
+        filter.excludeUsername(buyerUsername);
         return countOffersBy(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int countOffersByUsername(String username) {
+    public long countOffersByUsername(String username) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOfferCount(new OfferFilter().byUsername(username)
-                    .byStatus("APR")
-                    .byStatus("PSE")
-                    .byStatus("PSU"));
+            return offerDao.getOfferCount(new OfferFilter().restrictedToUsername(username)
+                    .withOfferStatus("APR")
+                    .withOfferStatus("PSE")
+                    .withOfferStatus("PSU"));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
         authBuilder.withPassword(passwordEncoder.encode(authBuilder.getPassword()));
         authBuilder.withCode((int)(Math.random()*Integer.MAX_VALUE));
         authBuilder.withUserStatus(UserStatus.UNVERIFIED);
-        authBuilder.withRole("ROLE_USER");
 
         try {
             userAuthDao.createUserAuth(authBuilder);

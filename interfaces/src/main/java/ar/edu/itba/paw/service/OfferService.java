@@ -14,12 +14,12 @@ public interface OfferService {
 
 
     Collection<Offer> getOfferBy(OfferFilter filter);
-    int countOffersBy(OfferFilter filter);
+    long countOffersBy(OfferFilter filter);
 
     Collection<Offer> getMarketOffersBy(OfferFilter filter, String buyerUsername);
-    int countMarketOffersBy(OfferFilter filter, String buyerUsername);
+    long countMarketOffersBy(OfferFilter filter, String buyerUsername);
 
-    int countOffersByUsername(String username);
+    long countOffersByUsername(String username);
     Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
 
 

@@ -29,7 +29,7 @@ public class TradeHibernateDao implements TradeDao{
 
     @Override
     public int makeTrade(Trade.Builder builder) {
-        int buyerId =userAuthDao.getUserAuthByUsername(builder.getBuyerUsername()).get().getId();
+        int buyerId = userAuthDao.getUserAuthByUsername(builder.getBuyerUsername()).get().getUserId();
         builder.withBuyerId(buyerId);
         entityManager.persist(builder);
         return builder.getTradeId();

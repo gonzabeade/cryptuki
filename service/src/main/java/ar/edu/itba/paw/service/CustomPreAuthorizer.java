@@ -37,7 +37,7 @@ public class CustomPreAuthorizer {
     }
 
     public boolean isUserOwnerOfOffer(int offerId, UserDetails userDetails) {
-        String owner = offerDao.getOffersBy(new OfferFilter().byOfferId(offerId)).stream().findFirst().get().getSeller().getUserAuth().getUsername();
+        String owner = offerDao.getOffersBy(new OfferFilter().restrictedToId(offerId)).stream().findFirst().get().getSeller().getUserAuth().getUsername();
         return owner != null && owner.equals(userDetails.getUsername());
     }
 

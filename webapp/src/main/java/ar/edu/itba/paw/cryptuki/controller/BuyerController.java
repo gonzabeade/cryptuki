@@ -94,20 +94,14 @@ public class BuyerController {
 
         int pageNumber = page.orElse(0);
         OfferFilter filter = new OfferFilter()
-            .byCryptoCode(coin)
-                .byPaymentMethod(paymentMethod)
-                .byMinPrice(price)
-                .byMaxPrice(price)
+            .withCryptoCode(coin)
+                .withPaymentMethod(paymentMethod)
                 .withPageSize(PAGE_SIZE)
-                .fromPage(pageNumber)
-                .byLocation(location)
-                .withOrderingCriterion(orderingCriterion.orElse(0))
-                .withOrderingDirection(orderingDirection.orElse(0));;
+                .withPage(pageNumber)
+                .withLocation(location);
 
-//        int offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
-
-        int offerCount = 20;
-        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        long offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+        long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         Collection<Offer> offer = offerService.getMarketOffersBy(filter, authentication == null ? null : authentication.getName());
         Offer offer1 = offer.stream().findFirst().get();

@@ -3,7 +3,6 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.OfferFilter;
-import ar.edu.itba.paw.OfferOrderCriteria;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.parameterObject.OfferPO;
 import org.springframework.stereotype.Repository;
@@ -12,122 +11,99 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Repository
 public class OfferHibernateDao implements OfferDao{
+
     @PersistenceContext
     private EntityManager em;
 
 
-    /* TODO: REVISAR DE ACA HASTA ABAJO  VVVV */
-
-    private static void addParameters(OfferFilter filter,TypedQuery<Offer> query) {
-        query
-                .setParameter("crypto_codes", filter.getCryptoCodes().isEmpty() ? null: filter.getCryptoCodes())
-                .setParameter("offer_ids", filter.getIds().isEmpty() ? null : filter.getIds())
-                .setParameter("min", filter.getMinPrice().isPresent() ? (float)filter.getMinPrice().getAsDouble() : null)
-                .setParameter("max", filter.getMaxPrice().isPresent() ? (float)filter.getMaxPrice().getAsDouble() : null)
-                .setParameter("uname", filter.getUsername().orElse(null))
-                .setParameter("status", filter.getStatus().isEmpty() ? null: filter.getStatus())
-                .setParameter("location", filter.getLocation().orElse(null))
-                .setParameter("discardedUnames", filter.getDiscardedUsernames().isEmpty() ? null : filter.getDiscardedUsernames());
-    }
-
-
-    private List<Integer> filterByPaymentMethod(OfferFilter filter){
-//        String paymentCodeQueryDescriptor=" from PaymentMethodAtOffer AS pmao WHERE ( COALESCE(:payment_codes,null) IS NULL OR pmao.paymentCode IN (:payment_codes) ) ";
-//        TypedQuery<PaymentMethodAtOffer> paymentCodeQuery = em.createQuery(paymentCodeQueryDescriptor,PaymentMethodAtOffer.class);
-//        paymentCodeQuery.setParameter("payment_codes",filter.getPaymentMethods().isEmpty()?null:filter.getPaymentMethods());
-//        return paymentCodeQuery.getResultList().stream().map(paymentMethodAtOffer -> paymentMethodAtOffer.getOfferId()).collect(Collectors.toCollection(ArrayList::new));
-        return new LinkedList<>();
-    }
-
-    @Override
-    public int getOfferCount(OfferFilter filter) {
-        List<Integer> paymentMethodAtOffersList = filterByPaymentMethod(filter);
-        if(paymentMethodAtOffersList.isEmpty() ) //no offers with such payment method
-            return 0;
-        return getOffersByIdList(filter,paymentMethodAtOffersList).size();
-    }
-
-    public Collection<Offer> getOffersBy2(OfferFilter filter) {
-        List<Integer> paymentMethodAtOffersList = filterByPaymentMethod(filter);
-        if(paymentMethodAtOffersList.isEmpty() ) //no offers with such payment method
-        {
-            return new ArrayList<>();
+    // TODO(anyone): check if this function can be modularized
+    // TODO: test
+    private static void fillQueryBuilderFilter(OfferFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
+        if(!filter.getRestrictedToIds().isEmpty()) {
+            sqlQueryBuilder.append("AND offer_id IN (:ids) ");
+            args.put("ids", filter.getRestrictedToIds());
         }
-
-        List<Integer> otherFilterIds =  getOffersByIdList(filter,paymentMethodAtOffersList).stream().map((o)->o.getOfferId()).collect(Collectors.toCollection(ArrayList::new));
-        if(otherFilterIds.isEmpty())
-            return new ArrayList<>();
-
-        String orderCriterion, modelOrderCriterion;
-
-        switch (OfferOrderCriteria.valueOf(filter.getOrderCriteria().toString()).ordinal()) {
-            case 2: case 3:
-               orderCriterion = "asking_price";
-               modelOrderCriterion = "o.unitPrice";
-               break;
-//            case 1:
-//                orderCriterion = "last_login";
-//                modelOrderCriterion = "o.seller.lastLogin";
-//                break;
-            case 1:
-                orderCriterion = "rating";
-                modelOrderCriterion = "o.seller.rating";
-                break;
-            default:
-                orderCriterion = "offer_date";
-                modelOrderCriterion = "o.date";
+        if(!filter.getExcludedUsernames().isEmpty()) {
+            sqlQueryBuilder.append("AND uname NOT IN (:resUnames) ");
+            args.put("resUnames", filter.getExcludedUsernames());
         }
-
-        Query pagingQuery = em.createNativeQuery("select tmp.offer_id from (" +
-                "  select distinct offer_id, rating , asking_price, offer_date from offer_complete" +
-                "  where offer_id in (:ids) order by " + orderCriterion + " " + filter.getOrderDirection().toString()+
-                ") as tmp limit :limit offset :offset ");
-
-                pagingQuery.setParameter("limit",filter.getPageSize());
-        pagingQuery.setParameter("offset",filter.getPage()*filter.getPageSize());
-        pagingQuery.setParameter("ids",otherFilterIds);
-        List<Integer> offerPagedIds = (List<Integer>) pagingQuery.getResultList().stream().collect(Collectors.toCollection(ArrayList::new));
-
-        Query query = em.createQuery("from Offer as o where o.id in (:offerPagedIds) order by " +
-                modelOrderCriterion + " " + filter.getOrderDirection().toString(), Offer.class);
-        query.setParameter("offerPagedIds", offerPagedIds);
-        return query.getResultList();
+        if(!filter.getRestrictedToUsernames().isEmpty()) {
+            sqlQueryBuilder.append("AND uname IN (:unames) ");
+            args.put("unames", filter.getRestrictedToUsernames());
+        }
+        if(!filter.getRestrictedToUsernames().isEmpty()) {
+            sqlQueryBuilder.append("AND payment_method IN (:pms) ");
+            args.put("pms", filter.getPaymentMethods().stream().map(pm->pm.toString()).collect(Collectors.toList()));
+        }
+        if(!filter.getCryptoCodes().isEmpty()) {
+            sqlQueryBuilder.append("AND crypto_code IN (:cryptoCodes) ");
+            args.put("cryptoCodes", filter.getCryptoCodes());
+        }
+        if(!filter.getRestrictedToIds().isEmpty()) {
+            sqlQueryBuilder.append("AND offer_id IN (:ids) ");
+            args.put("ids", filter.getRestrictedToIds());
+        }
+        if(!filter.getStatus().isEmpty()) {
+            sqlQueryBuilder.append("AND status_code IN (:status) ");
+            args.put("status", filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList())); // Only text lists allowed in native query, not enums
+        }
+        if(!filter.getLocations().isEmpty()) {
+            sqlQueryBuilder.append("AND location IN (:locations) ");
+            args.put("locations", filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList())); // Only text lists allowed in native query, not enums
+        }
     }
-
-    private Collection<Offer> getOffersByIdList(OfferFilter filter,List<Integer> idsAccepted){
-        String queryDescriptor="from Offer as offerRow" +
-                "   WHERE ( COALESCE(:offer_ids, null) IS NULL OR offerRow.id IN (:offer_ids)) AND " +
-                "( COALESCE(:crypto_codes, null) IS NULL OR offerRow.crypto.code IN (:crypto_codes)) AND "+
-                "( COALESCE(:min,null) IS NULL OR :min >= offerRow.unitPrice*offerRow.minQuantity) AND "+
-                "( COALESCE(:max,null) IS NULL OR :max <= offerRow.unitPrice*offerRow.maxQuantity) AND "+
-                "( COALESCE(:uname, null) IS NULL or offerRow.seller.userAuth.username = :uname) AND "+
-                "( COALESCE(:location, null) IS NULL or offerRow.location IN(:location) )AND "+
-                "( COALESCE(:status, null) IS NULL or offerRow.status.code IN (:status) ) AND" +
-                "( COALESCE(:discardedUnames, null) IS NULL OR offerRow.seller.userAuth.username NOT IN (:discardedUnames)) AND "+
-                "( offerRow.id IN ( :idsAccepted)  ) ";
-
-        TypedQuery<Offer> query = em.createQuery(queryDescriptor,Offer.class);
-        addParameters(filter,query);
-        query.setParameter("idsAccepted", idsAccepted );
-        return query.getResultList();
-    }
-
-    /* TODO: REVISAR DE ACA PARA ARRIBA ^^^^^^ */
 
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
-        Offer offer = em.find(Offer.class, 22);
-        LinkedList<Offer> offers = new LinkedList<>();
-        offers.add(offer);
-        return offers;
+
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder sqlQueryBuilder = new StringBuilder();
+
+        // Filter Criteria
+        sqlQueryBuilder.append("SELECT offer_id FROM (SELECT DISTINCT offer_id FROM offer_complete WHERE TRUE ");
+        fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
+
+        // Paging
+        sqlQueryBuilder.append(") as foo LIMIT :limit OFFSET :offset");
+        map.put("limit", filter.getPageSize());
+        map.put("offset", filter.getPageSize()*filter.getPage());
+
+        // Ordering
+        // TODO!!
+
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
+        for(Map.Entry<String, Object> entry : map.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        Collection<Integer> ids = (Collection<Integer>) query.getResultList();
+
+        TypedQuery<Offer> typedFinalQuery = em.createQuery("from Offer as u where u.id in :ids", Offer.class);
+        typedFinalQuery.setParameter("ids", ids);
+        return typedFinalQuery.getResultList();
     }
 
+    @Override
+    public long getOfferCount(OfferFilter filter) {
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder sqlQueryBuilder = new StringBuilder();
+
+        sqlQueryBuilder.append("SELECT COUNT(DISTINCT offer_id) FROM offer_complete WHERE TRUE ");
+        fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
+
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
+        for(Map.Entry<String, Object> entry : map.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue();
+    }
 
     @Override
     public Offer makeOffer(OfferPO offer) {

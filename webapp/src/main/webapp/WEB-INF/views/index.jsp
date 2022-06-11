@@ -3,7 +3,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="pages" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="pages" scope="request" type="java.lang.Long"/>
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="activePage" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface OfferDao {
 
     // Getters
-    int getOfferCount(OfferFilter filter);
+    long getOfferCount(OfferFilter filter);
     Collection<Offer> getOffersBy(OfferFilter filter);
 
     // Manipulation and creation

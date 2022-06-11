@@ -59,7 +59,7 @@ public class ComplainHibernateDao implements ComplainDao{
 
     @Override
     public void makeComplain(Complain.Builder complain) {
-        complain.withComplainerId(userAuthDao.getUserAuthByUsername(complain.getComplainer()).get().getId());
+        complain.withComplainerId(userAuthDao.getUserAuthByUsername(complain.getComplainer()).get().getUserId());
         entityManager.persist(complain);
     }
 

@@ -55,8 +55,8 @@ public class SellerController {
         int pageNumber= page.orElse(0);
         User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
         Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
-        int offerCount = offerService.countOffersByUsername(authentication.getName());
-        int pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
+        long offerCount = offerService.countOffersByUsername(authentication.getName());
+        long pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
 
         mav.addObject("kyc", kycService.getPendingKycRequest(username));
         mav.addObject("isKycValidated", kycService.isValidated(username));

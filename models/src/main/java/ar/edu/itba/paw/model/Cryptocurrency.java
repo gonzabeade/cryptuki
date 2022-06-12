@@ -1,20 +1,15 @@
 package ar.edu.itba.paw.model;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.HashMap;
-import java.util.Map;
 
-// TODO: Decide whether it should be an enum
 @Entity
 @Table(name="cryptocurrency")
 public class Cryptocurrency {
 
     @Id
-    @Column(name="code",nullable = false)
+    @Column(name="code", nullable = false)
     private String code;
 
     @Column(name="commercial_name",nullable = false,length = 20)

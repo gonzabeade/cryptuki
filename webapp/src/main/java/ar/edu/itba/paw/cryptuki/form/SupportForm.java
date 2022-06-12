@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.persistence.Complain;
-import ar.edu.itba.paw.service.digests.SupportDigest;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
@@ -59,11 +58,6 @@ public class SupportForm {
     }
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public SupportDigest toDigest() {
-        SupportDigest digest = new SupportDigest(getMessage(), getEmail());
-        return digest;
     }
 
     public Complain.Builder toComplainBuilder(){

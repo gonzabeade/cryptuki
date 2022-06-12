@@ -6,7 +6,6 @@ import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.persistence.Complain;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.model.ComplainStatus;
-import ar.edu.itba.paw.service.digests.SupportDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -195,8 +194,8 @@ public class ComplainServiceImpl implements ComplainService{
     }
 
     @Override
-    public void getSupportFor(SupportDigest digest) {
-        messageSenderFacade.sendAnonymousComplaintReceipt(digest.getAuthor(), digest.getAuthor(), digest.getBody());
+    public void getSupportFor(String email, String description) {
+        messageSenderFacade.sendAnonymousComplaintReceipt(email, email, description);
     }
 
 

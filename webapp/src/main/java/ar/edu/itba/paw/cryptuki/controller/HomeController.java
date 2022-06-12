@@ -77,7 +77,7 @@ public class HomeController {
         if(errors.hasErrors())
             return contact(form, authentication);
 
-        complainService.getSupportFor(form.toDigest());
+        complainService.getSupportFor(form.getEmail(), form.getMessage());
         return new ModelAndView("redirect:/contact/success");
     }
 

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferOrderCriteria;
 import ar.edu.itba.paw.model.PaymentMethod;
 import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
@@ -85,8 +86,6 @@ public class BuyerController {
                                 @RequestParam(value = "location", required = false) final String location,
                                 @RequestParam(value = "coin", required = false) final String coin,
                                 @RequestParam(value = "pm", required = false) final String paymentMethod,
-                                @RequestParam(value = "price", required = false) final Double price,
-                                @RequestParam(value = "orderingDirection", required = false) final Optional<Integer> orderingDirection,
                                 @RequestParam(value = "orderingCriterion", required = false) final Optional<Integer> orderingCriterion,
                                 final Authentication authentication) {
 
@@ -98,7 +97,8 @@ public class BuyerController {
                 .withPaymentMethod(paymentMethod)
                 .withPageSize(PAGE_SIZE)
                 .withPage(pageNumber)
-                .withLocation(location);
+                .withLocation(location)
+                .orderingBy(OfferOrderCriteria.values()[orderingCriterion.orElse(0)]);
 
         long offerCount = offerService.countBuyableOffers(filter);
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;

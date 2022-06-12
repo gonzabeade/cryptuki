@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS payment_methods_at_offer (
     offer_id INT,
     payment_code VARCHAR(5),
     PRIMARY KEY(offer_id, payment_code),
-    FOREIGN KEY(offer_id) REFERENCES offer(id) ON DELETE CASCADE,
+    FOREIGN KEY(offer_id) REFERENCES offer(offer_id) ON DELETE CASCADE,
     FOREIGN KEY(payment_code) REFERENCES payment_method(code) ON DELETE CASCADE
     );
 
@@ -91,7 +91,7 @@ CREATE TABLE trade (
                        rated_buyer boolean DEFAULT false NOT NULL,
                        rated_seller boolean DEFAULT false NOT NULL,
 
-                       FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE SET NULL,
+                       FOREIGN KEY (offer_id) REFERENCES offer (offer_id) ON DELETE SET NULL,
                        FOREIGN KEY (seller_id) REFERENCES users (id) ON DELETE SET NULL,
                        FOREIGN KEY (buyer_id) REFERENCES users (id) ON DELETE SET NULL
 );

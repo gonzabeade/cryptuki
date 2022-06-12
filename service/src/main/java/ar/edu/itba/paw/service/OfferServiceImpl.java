@@ -37,16 +37,15 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     @Secured("ROLE_USER")
     @PreAuthorize("@customPreAuthorizer.isUserAuthorized(#digest.sellerId, authentication.principal)")
-    public int makeOffer(OfferPO offerPO) {
+    public Offer makeOffer(OfferPO offerPO) {
 
         if (offerPO == null)
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
             Offer offer = offerDao.makeOffer(offerPO);
-            int offerId = offer.getOfferId();
             messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), offer);
-            return offerId;
+            return offer;
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -90,46 +89,25 @@ public class OfferServiceImpl implements OfferService {
         }
     }
 
+
     @Override
     @Transactional(readOnly = true)
-    public Collection<Offer> getOfferBy(OfferFilter filter) {
+    public Collection<Offer> getBuyableOffers(OfferFilter filter){
 
-        if (filter == null)
-            throw new NullPointerException("Offer filter cannot be null");
-
-        try {
-            return offerDao.getOffersBy(filter.withOfferStatus("APR"));
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (buyerUsername != null)
+            filter.excludeUsername(buyerUsername);
+        return offerDao.getOffersBy(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public long countOffersBy(OfferFilter filter) {
+    public long countBuyableOffers(OfferFilter filter){
 
-        if (filter == null)
-            throw new NullPointerException("Filter object cannot be null");
-
-        try {
-            return offerDao.getOfferCount(filter.withOfferStatus("APR"));
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Collection<Offer> getMarketOffersBy(OfferFilter filter, String buyerUsername){
-        filter.excludeUsername(buyerUsername);
-        return getOfferBy(filter);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public long countMarketOffersBy(OfferFilter filter, String buyerUsername){
-        filter.excludeUsername(buyerUsername);
-        return countOffersBy(filter);
+        String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (buyerUsername != null)
+            filter.excludeUsername(buyerUsername);
+        return offerDao.getOfferCount(filter);
     }
 
     @Override
@@ -152,13 +130,13 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal) OR hasRole('ROLE_ADMIN')")
-    public void modifyOffer(Offer offer) {
+    public Offer modifyOffer(Offer offer) {
 
         if (offer == null)
             throw new NullPointerException("Offer digest cannot be null");
 
         try {
-            offerDao.modifyOffer(offer);
+            return offerDao.modifyOffer(offer);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -182,7 +160,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
-    public void pauseOffer(int offerId) {
+    public void sellerPauseOffer(int offerId) {
 
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
@@ -198,7 +176,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @Secured("ROLE_ADMIN")
-    public void hardPauseOffer(int offerId) {
+    public void adminPauseOffer(int offerId) {
 
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
@@ -228,7 +206,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void soldOffer(Offer offer, float sold, int tradeId) {
+    public void sellQuantityOfOffer(Offer offer, float sold, int tradeId) {
 
 //        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
 //        float remaining = offer.getMaxQuantity() - (sold/offer.getunitPrice());

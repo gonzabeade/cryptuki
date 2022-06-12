@@ -100,10 +100,10 @@ public class BuyerController {
                 .withPage(pageNumber)
                 .withLocation(location);
 
-        long offerCount = offerService.countMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+        long offerCount = offerService.countBuyableOffers(filter);
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
-        Collection<Offer> offer = offerService.getMarketOffersBy(filter, authentication == null ? null : authentication.getName());
+        Collection<Offer> offer = offerService.getBuyableOffers(filter);
         Offer offer1 = offer.stream().findFirst().get();
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);

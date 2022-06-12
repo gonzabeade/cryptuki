@@ -13,7 +13,7 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_id_seq")
     @SequenceGenerator(sequenceName = "offer_id_seq", name = "offer_id_seq", allocationSize = 1)
-    @Column(name="id", nullable = false)
+    @Column(name="offer_id", nullable = false)
     private Integer offerId;
 
     @Column(name="asking_price", nullable = false)

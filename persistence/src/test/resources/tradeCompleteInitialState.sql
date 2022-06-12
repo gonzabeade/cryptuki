@@ -22,9 +22,9 @@ INSERT INTO auth (status, code, role_id, user_id, uname, password) VALUES (0, 43
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('BTC', 22.1, 'Bitcoin');
 INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('ETH', 54.3, 'Ether');
 
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (0,0, '2020-11-01 01:18:33', 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC');
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, '2003-04-27 21:03:02', 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, '2001-06-27 22:05:02', 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (0,0, '2020-11-01 01:18:33', 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, '2003-04-27 21:03:02', 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, '2001-06-27 22:05:02', 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
 
 INSERT INTO trade (trade_id,offer_id, buyer_id, seller_id, start_date, quantity) VALUES (0,0, 1, 0, '2020-11-01 01:18:33', 3.4);
 INSERT INTO trade (trade_id ,offer_id, buyer_id, seller_id, start_date, quantity) VALUES (1,0, 1, 0, '2020-11-01 01:18:33', 5.6);
@@ -45,7 +45,7 @@ SELECT
     rated_buyer,
     rated_seller
 FROM trade
-         JOIN offer ON trade.offer_id = offer.id
+         JOIN offer ON trade.offer_id = offer.offer_id
          JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id
          JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
          JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;

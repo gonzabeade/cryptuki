@@ -112,6 +112,10 @@ public class OfferPO {
     }
 
     public Offer.Builder toBuilder(Cryptocurrency crypto, User seller) {
+
+        if (crypto == null || seller == null || !cryptoCode.equals(crypto.getCode()) || seller.getId() != sellerId)
+            new IllegalArgumentException("Crypocurrency or seller different than the one on the parameter object");
+
         return new Offer.Builder(
                 getUnitPrice().orElseThrow(()->new IllegalArgumentException()),
                 getMinInCrypto().orElseThrow(()->new IllegalArgumentException()),

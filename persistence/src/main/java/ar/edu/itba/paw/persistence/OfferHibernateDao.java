@@ -3,16 +3,27 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.model.OfferOrderCriteria;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.parameterObject.OfferPO;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 
@@ -22,6 +33,16 @@ public class OfferHibernateDao implements OfferDao{
     @PersistenceContext
     private EntityManager em;
 
+    private Map<OfferOrderCriteria, String> orderSqlMap = new EnumMap<>(OfferOrderCriteria.class);
+
+    public OfferHibernateDao() {
+        orderSqlMap.put(OfferOrderCriteria.DATE, "offer_date DESC ");
+        orderSqlMap.put(OfferOrderCriteria.PRICE_LOWER, "asking_price ASC ");
+        orderSqlMap.put(OfferOrderCriteria.PRICE_UPPER, "asking_price DESC ");
+        orderSqlMap.put(OfferOrderCriteria.LAST_LOGIN, "last_login DESC ");
+        orderSqlMap.put(OfferOrderCriteria.RATE, "rating DESC ");
+    }
+
     private static void testAndSet(Collection<?> collection, Map<String, Object> args, String argName, StringBuilder sqlQueryBuilder, String queryPiece) {
         if (!collection.isEmpty()) {
             sqlQueryBuilder.append(queryPiece);
@@ -29,13 +50,12 @@ public class OfferHibernateDao implements OfferDao{
         }
     }
 
-    // TODO(anyone): check if this function can be modularized
-    // TODO: test
     /**
-     * Fills a StringBuilder with strings of the form "AND [field] IN [collection] " given an OfferFilter object.
+     * Fills a StringBuilder with strings of the form "AND [field] (NOT) IN [collection] " given an OfferFilter object.
      * Returns all necessary arguments in a map that is to be passed as a parameter
      */
-    private static void fillQueryBuilderFilter(OfferFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
+    private void fillQueryBuilderFilter(OfferFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
+        sqlQueryBuilder.append("WHERE TRUE ");
         testAndSet(filter.getRestrictedToIds(), args, "ids", sqlQueryBuilder, "AND offer_id IN (:ids) ");
         testAndSet(filter.getExcludedUsernames(), args, "resUnames", sqlQueryBuilder, "AND uname NOT IN (:resUnames) ");
         testAndSet(filter.getRestrictedToUsernames(), args, "unames", sqlQueryBuilder, "AND uname IN (:unames) ");
@@ -45,34 +65,38 @@ public class OfferHibernateDao implements OfferDao{
         testAndSet(filter.getLocations().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "locations", sqlQueryBuilder, "AND location IN (:locations) ");
     }
 
+    /**
+     * Fills a StringBuilder with native SQL syntax for ordering given an OfferFilter object
+     */
+    private void fillQueryBuilderOrder(OfferFilter filter, StringBuilder sqlQueryBuilder) {
+        sqlQueryBuilder.append("ORDER BY ");
+        sqlQueryBuilder.append(orderSqlMap.get(filter.getOrderCriteria()));
+    }
+
     @Override
     public Collection<Offer> getOffersBy(OfferFilter filter) {
 
         Map<String, Object> map = new HashMap<>();
         StringBuilder sqlQueryBuilder = new StringBuilder();
 
-        // Filter Criteria
-        sqlQueryBuilder.append("SELECT offer_id FROM (SELECT DISTINCT offer_id FROM offer_complete WHERE TRUE ");
+        // Filtering
+        sqlQueryBuilder.append("SELECT * FROM offer JOIN users ON offer.seller_id = users.id JOIN auth ON users.id = auth.user_id ");
         fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
 
+        // Ordering
+        fillQueryBuilderOrder(filter, sqlQueryBuilder);
+
         // Paging
-        sqlQueryBuilder.append(") as foo LIMIT :limit OFFSET :offset");
+        sqlQueryBuilder.append("LIMIT :limit OFFSET :offset");
         map.put("limit", filter.getPageSize());
         map.put("offset", filter.getPageSize()*filter.getPage());
 
-        // Ordering
-        // TODO!!
-
-        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString(), Offer.class);
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
 
-        Collection<Integer> ids = (Collection<Integer>) query.getResultList();
-
-        TypedQuery<Offer> typedFinalQuery = em.createQuery("from Offer as u where u.id in :ids", Offer.class);
-        typedFinalQuery.setParameter("ids", ids);
-        return typedFinalQuery.getResultList();
+        return (Collection<Offer>) query.getResultList();
     }
 
     @Override
@@ -80,14 +104,14 @@ public class OfferHibernateDao implements OfferDao{
         Map<String, Object> map = new HashMap<>();
         StringBuilder sqlQueryBuilder = new StringBuilder();
 
-        sqlQueryBuilder.append("SELECT COUNT(DISTINCT offer_id) FROM offer_complete WHERE TRUE ");
+        sqlQueryBuilder.append("SELECT COUNT(offer_id) FROM offer JOIN users ON offer.seller_id = users.id JOIN auth ON users.id = auth.user_id ");
         fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
 
         Query query = em.createNativeQuery(sqlQueryBuilder.toString());
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
-        return ((BigInteger) query.getSingleResult()).longValue();
+        return ((BigInteger) query.getSingleResult()).longValue(); // never returns null
     }
 
     @Override
@@ -113,9 +137,12 @@ public class OfferHibernateDao implements OfferDao{
     @Override
     public Optional<Offer> changeOfferStatus(int offerId, OfferStatus offerStatus) {
         Offer offer = em.find(Offer.class, offerId);
-        offer.setOfferStatus(offerStatus);
-        em.persist(offer);
-        return Optional.ofNullable(offer); // TODO: check offer null?
+        if (offer == null) {
+            offer.setOfferStatus(offerStatus);
+            em.persist(offer);
+            return Optional.of(offer);
+        } else
+            return Optional.empty();
     }
 
 

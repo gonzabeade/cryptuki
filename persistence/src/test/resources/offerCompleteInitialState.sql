@@ -22,9 +22,9 @@ INSERT INTO cryptocurrency (code, market_price, commercial_name) VALUES ('ETH', 
 INSERT INTO payment_method(code,payment_description) VALUES ('mp','mercado pago');
 INSERT INTO payment_method(code,payment_description) VALUES ('bru','brubank');
 
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (0,0, '2020-11-01 01:18:33', 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC');
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, '2003-04-27 21:03:02', 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
-INSERT INTO offer (id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, '2001-06-27 22:05:02', 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (0,0, '2020-11-01 01:18:33', 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, '2003-04-27 21:03:02', 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
+INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, '2001-06-27 22:05:02', 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
 
 INSERT INTO payment_methods_at_offer(offer_id,payment_code) VALUES(0,'mp');
 INSERT INTO payment_methods_at_offer(offer_id,payment_code) VALUES(1,'mp');
@@ -57,6 +57,6 @@ FROM offer
          JOIN users ON offer.seller_id = users.id
          JOIN auth ON users.id = auth.user_id
          JOIN cryptocurrency c on offer.crypto_code = c.code
-         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.id = pmao.offer_id
+         LEFT OUTER JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id
          JOIN status s on s.code = offer.status_code
          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;

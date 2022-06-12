@@ -93,9 +93,9 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter orderingBy(OfferOrderCriteria orderCriteria) {
+    public OfferFilter orderingBy(OfferOrderCriteria orderCriterion) {
         if (orderCriteria != null)
-            this.orderCriteria = orderCriteria;
+            this.orderCriteria = orderCriterion;
         return this;
     }
 

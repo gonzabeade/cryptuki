@@ -183,7 +183,7 @@ public class TradeFluxController {
             return executeTrade(soldTradeForm,new StatusTradeForm(), new MessageForm(), statusTradeForm.getTradeId(),authentication);
         Trade trade = tradeService.getTradeById(soldTradeForm.getTrade()).orElseThrow(()->new NoSuchTradeException(soldTradeForm.getTrade()));
         Offer offer = trade.getOffer();
-        offerService.soldOffer(offer, trade.getQuantity(),trade.getTradeId());
+        offerService.sellQuantityOfOffer(offer, trade.getQuantity(),trade.getTradeId());
         return new ModelAndView("redirect:/receiptDescription/"+trade.getTradeId());
     }
 

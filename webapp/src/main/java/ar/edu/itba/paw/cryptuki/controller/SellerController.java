@@ -71,25 +71,6 @@ public class SellerController {
     }
 
 
-//    @RequestMapping(value = "", method = RequestMethod.GET)
-//    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, @ModelAttribute("ProfilePicForm") ProfilePicForm form){
-//        ModelAndView mav = new ModelAndView("seller/sellerIndex");
-//        int pageNumber = page.orElse(0);
-//        int offerCount = offerService.countOffersByUsername(authentication.getName());
-//        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-//        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
-//        if(offers.isEmpty())
-//            mav.addObject("noOffers",true);
-//
-//
-//        mav.addObject("offerList",offers);
-//        mav.addObject("pages", pages);
-//        mav.addObject("activePage", pageNumber);
-//        mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-//        return mav;
-//    }
-
-
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
         ModelAndView mav = new ModelAndView("uploadPage");
@@ -112,8 +93,8 @@ public class SellerController {
         if (errors.hasErrors())
             return uploadOffer(form, authentication);
         int id = userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        int offerId = offerService.makeOffer(form.toOfferParameterObject(id));
-        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
+        Offer offer = offerService.makeOffer(form.toOfferParameterObject(id));
+        return new ModelAndView("redirect:/offer/"+offer.getOfferId()+"/creationsuccess");
     }
 
 

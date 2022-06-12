@@ -9,7 +9,7 @@
 <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 <sec:authentication property="name" var="username"/>
 
-<div class="shadow-xl flex rounded-lg  m-5 p-7 bg-[#FAFCFF]">
+<div class="shadow-xl flex rounded-lg  m-5 p-5 bg-[#FAFCFF]">
 				<div class="flex-row basis-1/4 ">
 					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>

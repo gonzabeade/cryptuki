@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;

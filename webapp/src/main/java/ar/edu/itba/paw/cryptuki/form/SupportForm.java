@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.parameterObject.ComplainPO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;

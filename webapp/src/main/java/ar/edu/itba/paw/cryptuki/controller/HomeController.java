@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.OfferFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.persistence.User;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 
 @Controller  /* Requests can be dispatched to this class */

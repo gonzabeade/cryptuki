@@ -1,16 +1,20 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.Cryptocurrency;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.parameterObject.ComplainPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class ComplainHibernateDao implements ComplainDao{
@@ -18,17 +22,12 @@ public class ComplainHibernateDao implements ComplainDao{
     @PersistenceContext
     private EntityManager em;
 
-    private final UserAuthDao userAuthDao;
-
-    @Autowired
-    public ComplainHibernateDao(UserAuthDao userAuthDao) {
-        this.userAuthDao = userAuthDao;
-    }
-
     @Override
     public Complain makeComplain(ComplainPO complain) {
         Trade trade = em.getReference(Trade.class, complain.getTradeId());
-        User complainer = em.getReference(User.class, complain.getComplainerUsername());
+        TypedQuery<User> tq = em.createQuery("from User AS u WHERE u.userAuth.username = :username", User.class);
+        tq.setParameter("username", complain.getComplainerUsername());
+        User complainer = tq.getSingleResult();
         Complain newComplain = complain.toBuilder(trade, complainer, null).build();
         em.persist(newComplain);
         return newComplain;
@@ -41,13 +40,77 @@ public class ComplainHibernateDao implements ComplainDao{
     }
 
     @Override
+    public Optional<Complain> closeComplain(int complainId, String moderator, String moderatorComments) {
+        Complain complain = em.find(Complain.class, complainId);
+        if (complain == null)
+            return Optional.empty();
+        TypedQuery<User> tq = em.createQuery("from User AS u WHERE u.userAuth.username = :username", User.class);
+        User moderatorUser = tq.getSingleResult();
+        complain.setModerator(moderatorUser);
+        complain.setModeratorComments(moderatorComments);
+        complain.setStatus(ComplainStatus.CLOSED);
+        em.persist(complain);
+        return Optional.of(complain);
+    }
+
+    @Override
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
-        return Collections.emptyList();
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder sqlQueryBuilder = new StringBuilder();
+
+        sqlQueryBuilder.append("SELECT * FROM complain_complete ");
+
+        // Filtering
+        fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
+
+        // Paging
+        sqlQueryBuilder.append("LIMIT :limit OFFSET :offset");
+        map.put("limit", filter.getPageSize());
+        map.put("offset", filter.getPageSize()*filter.getPage());
+
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString(), Complain.class);
+        for(Map.Entry<String, Object> entry : map.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+
+        return (Collection<Complain>) query.getResultList();
     }
 
     @Override
     public long getComplainCount(ComplainFilter filter) {
-        return 0;
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder sqlQueryBuilder = new StringBuilder();
+
+        sqlQueryBuilder.append("SELECT COUNT(complain_id) FROM complain_complete ");
+        fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
+
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
+        for(Map.Entry<String, Object> entry : map.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return ((BigInteger) query.getSingleResult()).longValue(); // never returns null
+    }
+
+    private static void testAndSet(Collection<?> collection, Map<String, Object> args, String argName, StringBuilder sqlQueryBuilder, String queryPiece) {
+        if (!collection.isEmpty()) {
+            sqlQueryBuilder.append(queryPiece);
+            args.put(argName, collection);
+        }
+    }
+
+    private void fillQueryBuilderFilter(ComplainFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
+        sqlQueryBuilder.append("WHERE TRUE ");
+
+        sqlQueryBuilder.append("AND status IN (:status)");
+        args.put("status", filter.getComplainStatus().toString());
+
+        testAndSet(filter.getRestrictedToComplainerUsernames(), args, "complainerUnames", sqlQueryBuilder, "AND complainer_uname IN (:complainerUnames) ");
+        testAndSet(filter.getRestrictedToModeratorUsernames(), args, "moderatorUnames", sqlQueryBuilder, "AND moderator_uname IN (:moderatorUnames) ");
+        testAndSet(filter.getRestrictedToTradeIds(), args, "tradeIds", sqlQueryBuilder, "AND trade_id IN (:tradeIds) ");
+        testAndSet(filter.getRestrictedToOfferIds(), args, "offerIds", sqlQueryBuilder, "AND offer_id IN (:offerIds) ");
+        testAndSet(filter.getRestrictedToComplainIds(), args, "complainIds", sqlQueryBuilder, "AND complain_id IN (:complainIds) ");
+
     }
 
 

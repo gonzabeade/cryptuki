@@ -118,4 +118,16 @@ public class Complain {
     public Optional<String> getModeratorComments() {
         return Optional.ofNullable(moderatorComments);
     }
+
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
+    }
+
+    public void setModeratorComments(String moderatorComments) {
+        this.moderatorComments = moderatorComments;
+    }
+
+    public void setStatus(ComplainStatus status) {
+        this.status = status;
+    }
 }

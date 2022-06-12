@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.KycApprovalForm;
 import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.admin.ComplainFilterResult;
@@ -9,8 +8,10 @@ import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainStatus;
+import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.ComplainStatus;
+import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.KycInformation;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.TradeService;
@@ -50,8 +51,9 @@ public class AdminController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterResult complainFilterResult, BindingResult result ){
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE, ComplainStatus.PENDING);
-        ComplainFilter filter = builder.build();
+        ComplainFilter filter = complainFilterResult.toComplainFilter()
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE);
         return getComplaintsByFilter(filter,"admin/complaints","/admin", "pendingClaims");
     }
 
@@ -67,9 +69,10 @@ public class AdminController {
     }
     @RequestMapping(value = "/solved", method = RequestMethod.GET)
     public ModelAndView solvedComplains(@RequestParam("page") Optional<Integer> page, ComplainFilterResult complainFilterResult){
-        ComplainFilter.Builder builder = complainFilterResult.toComplainFilterBuilder(page,PAGE_SIZE,ComplainStatus.CLOSED);
-        ComplainFilter filter = builder
-                .build();
+        ComplainFilter filter = complainFilterResult.toComplainFilter()
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE)
+                .withComplainStatus(ComplainStatus.CLOSED);
         return getComplaintsByFilter(filter,"admin/complaints","/admin/solved", "solvedClaims");
     }
 
@@ -84,26 +87,15 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/solve/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId){
+    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
         if(result.hasErrors()){
             return solveComplaint(form,complaintId);
         }
-        complainService.closeComplainWithComment(complaintId, form.getComments());
+        complainService.closeComplain(complaintId, authentication.getName(), form.getComments());
         return new ModelAndView("redirect:/admin/success");
     }
 
 
-    @RequestMapping(value = "/unassign/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView unassign(@PathVariable(value = "complaintId") final int complaintId) {
-        complainService.unassignComplain(complaintId);
-        return new ModelAndView("redirect:/admin/");
-    }
-
-    @RequestMapping(value = "/selfassign/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView selfAssign(@PathVariable(value = "complaintId") final int complaintId, final Authentication authentication) {
-        complainService.assignComplain(complaintId, authentication.getName());
-        return new ModelAndView("redirect:/admin/solve/"+complaintId);
-    }
 
     @RequestMapping(value = "/kyccheck/{username}", method = RequestMethod.GET)
     public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm  kycApprovalForm, @PathVariable(value = "username") final String username) {
@@ -148,7 +140,7 @@ public class AdminController {
     }
 
 
-    private ModelAndView getComplaintsByFilter(ComplainFilter filter,String view,String url,String title){
+    private ModelAndView getComplaintsByFilter(ComplainFilter filter, String view, String url, String title){
         ModelAndView mav = new ModelAndView(view);
         mav.addObject("baseUrl", url);
         mav.addObject("title", title);

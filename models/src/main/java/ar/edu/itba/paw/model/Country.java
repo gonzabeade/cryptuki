@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 @Entity
 @Table(name="country")

@@ -1,6 +1,4 @@
-package ar.edu.itba.paw;
-
-import ar.edu.itba.paw.model.*;
+package ar.edu.itba.paw.model;
 
 import java.util.*;
 
@@ -78,8 +76,9 @@ public class OfferFilter {
         return this;
     }
 
-    public OfferFilter restrictedToId(int offerId) {
-        restrictedToIds.add(offerId);
+    public OfferFilter restrictedToId(Integer offerId) {
+        if  (offerId != null)
+            restrictedToIds.add(offerId);
         return this;
     }
 

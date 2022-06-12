@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Complain;
+import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.UserService;
@@ -41,12 +41,12 @@ public class ComplaintController {
         ModelAndView mav = new ModelAndView("complaintsPage");
 
         int pageNumber= page.orElse(0);
-        long complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
+        long complaintsCount = complainService.countComplainsBy(new ComplainFilter().restrictedToComplainerUsername(authentication.getName()));
         long pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
-        ComplainFilter complainFilter = new ComplainFilter.Builder().withComplainerUsername(authentication.getName())
-                .withPage(pageNumber)
-                .withPageSize(PAGE_SIZE)
-                .build();
+        ComplainFilter complainFilter = new ComplainFilter().restrictedToComplainerUsername(authentication.getName())
+                .withPage(page.orElse(0))
+                .withPageSize(PAGE_SIZE);
+
         Collection<Complain> complaintsList = complainService.getComplainsBy(complainFilter);
         mav.addObject("complaintsList",complaintsList);
         mav.addObject("pages",pages);

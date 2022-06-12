@@ -2,7 +2,7 @@ package ar.edu.itba.paw.parameterObject;
 
 import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.persistence.Trade;
 import ar.edu.itba.paw.persistence.User;
 
 public class ComplainPO {
@@ -52,7 +52,7 @@ public class ComplainPO {
     }
 
     public Complain.Builder toBuilder(Trade trade, User complainer, User moderator) {
-        if (trade == null || complainer == null || trade.getTradeId() != tradeId || !complainer.getUsername().equals(complainerUsername))
+        if (trade == null || complainer == null || trade.getTradeId() != tradeId || !complainer.getUsername().get().equals(complainerUsername))
             throw new IllegalArgumentException("Trade or complainer  different than the one on the parameter object");
 
         return new Complain.Builder(trade, complainer)

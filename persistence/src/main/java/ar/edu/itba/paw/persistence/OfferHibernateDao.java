@@ -2,28 +2,17 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.OfferFilter;
+import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.model.OfferOrderCriteria;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.parameterObject.OfferPO;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 

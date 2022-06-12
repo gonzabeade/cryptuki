@@ -2,9 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.OfferFilter;
-import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.parameterObject.OfferPO;

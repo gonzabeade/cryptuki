@@ -13,7 +13,7 @@ public final class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
     @SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
     private Integer id;
-    @Column(length = 50,unique = true, nullable = false)
+    @Column(length = 50, unique = true, nullable = false)
     private  String email;
     @Column(name="last_login")
     private LocalDateTime lastLogin;

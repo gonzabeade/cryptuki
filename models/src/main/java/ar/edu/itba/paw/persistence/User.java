@@ -176,4 +176,8 @@ public final class User {
         return loggedIn.toMinutes();
     }
 
+    public KycInformation getKyc() {
+        return this.kyc;
+    }
+
 }

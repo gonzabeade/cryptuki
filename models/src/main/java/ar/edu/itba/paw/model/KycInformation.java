@@ -78,7 +78,7 @@ public class KycInformation {
         return kycId;
     }
 
-    public User getUsername() {
+    public User getUser() {
         return user;
     }
 

@@ -37,20 +37,7 @@
             </jsp:include>
         </div>
         <c:choose>
-            <c:when test="${isKycValidated}">
-                <div class="mx-auto mt-10">
-                    <a href="<c:url value="/seller/upload"/>"
-                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
-                            code="uploadAdvertisement"/></a>
-                </div>
-            </c:when>
-            <c:when test="${kyc.present}">
-                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
-                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p><messages:message code="validateYourIdentityPending"/></p>
-                </div>
-            </c:when>
-            <c:otherwise>
+            <c:when test="${user.kyc == null}">
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
                     <p><messages:message code="validateYourIdentityExplanation"/></p>
@@ -58,6 +45,19 @@
                 <div class="mx-auto mt-8">
                     <a href="<c:url value="/kyc"/>"
                        class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="validateYourIdentity"/></a>
+                </div>
+            </c:when>
+            <c:when test="${user.kyc.status != 'APR'}">
+                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
+                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                    <p><messages:message code="validateYourIdentityPending"/></p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="mx-auto mt-10">
+                    <a href="<c:url value="/seller/upload"/>"
+                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
+                            code="uploadAdvertisement"/></a>
                 </div>
             </c:otherwise>
         </c:choose>

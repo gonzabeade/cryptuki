@@ -39,12 +39,6 @@ public class KycServiceImpl implements KycService {
         return kycDao.getKycRequestsByStatus(KycStatus.PEN, page, pageSize);
     }
 
-    @Override
-    @Transactional
-    public boolean canRequestNewKyc(String username) {
-        return kycDao.countKycRequestsByStatus(username, KycStatus.PEN) == 0
-                && kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
-    }
 
     @Override
     @Transactional
@@ -58,11 +52,6 @@ public class KycServiceImpl implements KycService {
     public void rejectKycRequest(int kycId, String reason) {
         // TODO: enviar mail con la razon
         kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
-    }
-
-    @Override
-    public boolean isValidated(String username) {
-        return kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 1;
     }
 
 }

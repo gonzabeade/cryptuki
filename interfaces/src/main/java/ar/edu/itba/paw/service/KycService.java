@@ -21,8 +21,4 @@ public interface KycService {
     Optional<KycInformation> getPendingKycRequest(String username);
     Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
 
-
-    boolean canRequestNewKyc(String username);
-    boolean isValidated(String username);
-
 }

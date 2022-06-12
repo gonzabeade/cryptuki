@@ -20,6 +20,7 @@ public class KycHibernateDao implements KycDao {
     @Override
     public void newKycRequest(KycInformationPO kycInformationPO) {
         TypedQuery<User> tq = entityManager.createQuery("from User AS user WHERE user.userAuth.username = :username", User.class);
+        tq.setParameter("username", kycInformationPO.getUsername());
         User user = tq.getSingleResult();
         KycInformation kycInformation = new KycInformation(kycInformationPO, user);
         entityManager.persist(kycInformation);

@@ -59,8 +59,6 @@ public class SellerController {
         long offerCount = offerService.countOffersByUsername(authentication.getName());
         long pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
 
-        mav.addObject("kyc", kycService.getPendingKycRequest(username));
-        mav.addObject("isKycValidated", kycService.isValidated(username));
         mav.addObject("offerList", offers);
         mav.addObject("noOffers", offers.isEmpty());
         mav.addObject("username", username);

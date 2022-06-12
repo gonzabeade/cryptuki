@@ -42,10 +42,10 @@
         <div class="flex flex-wrap w-full h-full mt-3">
             <c:forEach items="${pendingKycs}" var="kyc">
                 <div class="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold w-1/5 h-1/5 ">
-                    <div class="w-full mt-2 text-xl text-start"><b><messages:message code="user"/>:</b> <c:out value="${kyc.username}"/></div>
+                    <div class="w-full mt-2 text-xl text-start"><b><messages:message code="user"/>:</b> <c:out value="${kyc.user.username.get()}"/></div>
                     <div class="w-full mt-2 text-xl text-start"><b><messages:message code="date"/></b> <c:out value="${kyc.kycDate.toLocalDate()}"/></div>
                     <div class="mx-auto my-auto">
-                        <a href="<c:url value="/admin/kyccheck/${kyc.username}"/>" class="py-2 px-10 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="see"/></a>
+                        <a href="<c:url value="/admin/kyccheck/${kyc.user.username.get()}"/>" class="py-2 px-10 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="see"/></a>
                     </div>
                 </div>
             </c:forEach>

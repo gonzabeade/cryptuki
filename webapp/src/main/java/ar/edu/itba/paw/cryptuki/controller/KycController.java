@@ -37,7 +37,7 @@ public class KycController {
     @RequestMapping(value ="", method = {RequestMethod.GET})
     private ModelAndView kyc(@ModelAttribute("kycForm") final KycForm form, Authentication authentication) {
 
-        if ( !kycService.canRequestNewKyc(authentication.getName()))
+        if ( kycService.getPendingKycRequest(authentication.getName()).isPresent() )
             return new ModelAndView("redirect:/kyc/success");
 
         ModelAndView mav = new ModelAndView("kyc/kyc");

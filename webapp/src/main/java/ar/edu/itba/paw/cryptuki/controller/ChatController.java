@@ -7,7 +7,7 @@ import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.MessageService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -50,10 +50,10 @@ public class ChatController {
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         User otherUser;
         if (trade.getBuyerUsername().equals(authentication.getName())) {
-            otherUser = userService.getUserInformation(trade.getSellerUsername()).get();
+            otherUser = userService.getUserByUsername(trade.getSellerUsername()).get();
             tradeService.markBuyerMessagesAsSeen(tradeId);
         } else {
-            otherUser = userService.getUserInformation(trade.getBuyerUsername()).get();
+            otherUser = userService.getUserByUsername(trade.getBuyerUsername()).get();
             tradeService.markSellerMessagesAsSeen(tradeId);
         }
 

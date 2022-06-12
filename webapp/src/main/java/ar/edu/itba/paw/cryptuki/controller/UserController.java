@@ -3,8 +3,8 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.ProfilePicture;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -57,7 +57,7 @@ public class UserController {
         if(errors.hasErrors()){
             return registerGet(form);
         }
-        userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
+        userService.registerUser(form.getEmail(), form.getUsername(), form.getPassword(), form.getPhoneNumber());
         return new ModelAndView("redirect:/verify?user="+form.getUsername());
     }
 
@@ -153,7 +153,7 @@ public class UserController {
             throw new IllegalArgumentException();
         }
         String username = authentication.getName();
-        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
         ModelAndView mav = new ModelAndView("userProfile");
         mav.addObject("user",user);
@@ -196,9 +196,9 @@ public class UserController {
     }
 
     private ModelAndView logInProgrammatically(String username ){
-        UserAuth user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getUserAuth().getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getUserAuth().getRole().name())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getUserAuth().getRole().name())));
         SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/");
     }

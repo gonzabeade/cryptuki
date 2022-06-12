@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.persistence.*;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;

@@ -16,7 +16,6 @@ public interface KycService {
     void validateKycRequest(int kycId);
     void rejectKycRequest(int kycId, String reason);
 
-
     /** Kyc Request getters */
     Optional<KycInformation> getPendingKycRequest(String username);
     Collection<KycInformation> getPendingKycRequests(int page, int pageSize);

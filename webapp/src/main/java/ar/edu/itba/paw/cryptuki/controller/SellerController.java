@@ -3,11 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.PaymentMethod;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -54,7 +50,7 @@ public class SellerController {
 
         String username = authentication.getName();
         int pageNumber= page.orElse(0);
-        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
         long offerCount = offerService.countOffersByUsername(authentication.getName());
         long pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
@@ -91,7 +87,7 @@ public class SellerController {
     public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
         if (errors.hasErrors())
             return uploadOffer(form, authentication);
-        int id = userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
+        int id = userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
         Offer offer = offerService.makeOffer(form.toOfferParameterObject(id));
         return new ModelAndView("redirect:/offer/"+offer.getOfferId()+"/creationsuccess");
     }

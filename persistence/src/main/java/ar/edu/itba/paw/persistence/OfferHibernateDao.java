@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Cryptocurrency;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.model.OfferOrderCriteria;
-import ar.edu.itba.paw.model.OfferStatus;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.parameterObject.OfferPO;
 import org.springframework.stereotype.Repository;
 

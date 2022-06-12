@@ -19,6 +19,6 @@ public class DuplicateEmailValidator implements ConstraintValidator<DuplicateEma
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return !userService.getUserAuthByEmail(value).isPresent();
+        return !userService.getUserByEmail(value).isPresent();
     }
 }

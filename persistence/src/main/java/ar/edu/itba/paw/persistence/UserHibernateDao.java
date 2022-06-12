@@ -2,9 +2,11 @@ package ar.edu.itba.paw.persistence;
 
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -12,31 +14,38 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserHibernateDao implements UserDao{
+public class UserHibernateDao implements UserDao {
 
     @PersistenceContext
     private EntityManager entityManager;
-    @Override
-    public Optional<User> getUserByEmail(String email) {
-        TypedQuery<User> query = entityManager.createQuery("from User as u where u.email=:email",User.class);
-        query.setParameter("email",email);
-        List<User> list=query.getResultList();
-        return list.isEmpty()?Optional.empty():Optional.of(list.get(0));
-    }
 
     @Override
-    public User createUser(User.Builder userBuilder) {
-        User user = userBuilder.build();
+    public User createUser(String email, String phoneNumber) {
+        User user = new User(email, phoneNumber, 0, 0);
         entityManager.persist(user);
         return user;
     }
 
     @Override
+    public Optional<User> getUserByEmail(String email) {
+        TypedQuery<User> query = entityManager.createQuery("from User as u where u.email = :email", User.class);
+        query.setParameter("email", email);
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException nre) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public Optional<User> getUserByUsername(String username) {
-        TypedQuery<User> query = entityManager.createQuery("from User as u where u.userAuth.username=:username",User.class);
+        TypedQuery<User> query = entityManager.createQuery("from User as u where u.userAuth.username = :username", User.class);
         query.setParameter("username",username);
-        List<User> list=query.getResultList();
-        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException nre) {
+            return Optional.empty();
+        }
     }
 
     @Override

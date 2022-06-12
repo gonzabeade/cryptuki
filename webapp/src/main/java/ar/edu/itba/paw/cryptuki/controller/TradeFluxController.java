@@ -8,7 +8,7 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.RatingService;
 import ar.edu.itba.paw.service.TradeService;
@@ -115,7 +115,7 @@ public class TradeFluxController {
 
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         Offer offer = offerService.getOfferById(trade.getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOfferId()));
-        User user = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
+        User user = us.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
         boolean buying = !offer.getSeller().getUsername().get().equals(authentication.getName());
 
         mav.addObject("user", user);

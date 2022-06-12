@@ -3,7 +3,6 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -62,7 +61,7 @@ public class BuyerController {
         }
 
 
-        User user = userService.getUserInformation(username).orElseThrow(() -> new NoSuchUserException(username));
+        User user = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username));
 
 
         int pages = (tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
@@ -109,7 +108,7 @@ public class BuyerController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+            mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
         }
         return mav;
     }

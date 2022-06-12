@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exception.*;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

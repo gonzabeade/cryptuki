@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form.validator;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.EmailVerified;
-import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class EmailVerifiedValidator implements ConstraintValidator<EmailVerified
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Optional<UserAuth> userAuthOptional = userService.getUserAuthByEmail(value);
-        return userAuthOptional.isPresent() && userAuthOptional.get().getUserStatus().equals(UserStatus.VERIFIED);
+        Optional<User> maybeUser = userService.getUserByEmail(value);
+        return maybeUser.isPresent() && maybeUser.get().getUserAuth().getUserStatus().equals(UserStatus.VERIFIED);
     }
 }

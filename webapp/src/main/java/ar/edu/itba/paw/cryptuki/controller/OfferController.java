@@ -95,7 +95,7 @@ public class OfferController {
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
         mav.addObject("creation", creation);
         mav.addObject("edit", edit);
-        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+        mav.addObject("userEmail", us.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
          return mav;
     }
 
@@ -126,7 +126,7 @@ public class OfferController {
         if(errors.hasErrors())
             return modify(offerId, form, authentication);
 
-        int id = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
+        int id = us.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
         OfferPO offerPO = form.toOfferParameterObject(id);
 //        offerService.modifyOffer(offerPO);
         return new ModelAndView("redirect:/offer/"+offerId+"/editsuccess");

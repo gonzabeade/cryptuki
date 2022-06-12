@@ -19,6 +19,6 @@ public class EmailRegisteredValidator implements ConstraintValidator<EmailRegist
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return userService.getUserAuthByEmail(value).isPresent();
+        return userService.getUserByUsername(value).isPresent();
     }
 }

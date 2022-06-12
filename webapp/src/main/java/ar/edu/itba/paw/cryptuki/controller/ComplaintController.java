@@ -3,8 +3,8 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.Country;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.ComplainFilter;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class ComplaintController {
     public ModelAndView complain(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
         ModelAndView mav =  new ModelAndView("complain");
         String username= authentication.getName();
-        User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        User user = us.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         form.setEmail(user.getEmail());
         mav.addObject("complainerId",user.getId());
         mav.addObject("supportForm", form);

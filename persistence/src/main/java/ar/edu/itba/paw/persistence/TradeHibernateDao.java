@@ -149,7 +149,7 @@ public class TradeHibernateDao implements TradeDao{
         typedQuery.setFirstResult(page*pageSize);
         return typedQuery.getResultList();
     }
-    private Collection<Trade> getTradeCollection(String username, TradeStatus status,String query){
+    private Collection<Trade> getTradeCollection(String username, TradeStatus status, String query){
         TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
         typedQuery.setParameter("username",username);
         typedQuery.setParameter("status",status);
@@ -157,8 +157,8 @@ public class TradeHibernateDao implements TradeDao{
     }
 
     private Collection<Trade> getTradeCollection(String username, String query){
-        TypedQuery<Trade> typedQuery = entityManager.createQuery(query,Trade.class);
-        typedQuery.setParameter("username",username);
+        TypedQuery<Trade> typedQuery = entityManager.createQuery(query, Trade.class);
+        typedQuery.setParameter("username", username);
         return typedQuery.getResultList();
     }
 

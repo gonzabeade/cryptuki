@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.persistence.ProfilePicDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -24,7 +24,7 @@ public class ProfilePicServiceImpl implements ProfilePicService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Image> getProfilePicture(String username) {
+    public Optional<ProfilePicture> getProfilePicture(String username) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
@@ -38,6 +38,7 @@ public class ProfilePicServiceImpl implements ProfilePicService {
 
     @Override
     @Secured("ROLE_USER")
+    @Transactional
     @PreAuthorize("#username == authentication.principal.username")
     public void uploadProfilePicture(String username, byte[] profilePicture, String type) {
 

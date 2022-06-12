@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 
+import ar.edu.itba.paw.model.ProfilePicture;
+
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -21,6 +23,10 @@ public final class User {
     private  String phoneNumber;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserAuth userAuth;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private ProfilePicture profilePicture;
+
 
     @Column(name="rating_sum", nullable = false)
     private  int ratingSum;

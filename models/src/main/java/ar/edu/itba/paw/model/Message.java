@@ -17,9 +17,9 @@ public class Message implements Serializable {
     private Integer sender;
     @Column(name="trade_id",nullable = false)
     private Integer trade ;
-    @Column(name="message_content",nullable = false, insertable=false)
+    @Column(name="message_content",nullable = false)
     private String message;
-    @Column(name="message_date",nullable = false)
+    @Column(name="message_date",nullable = false, insertable = false)
     private LocalDateTime date;
 
     public Message(){
@@ -30,7 +30,7 @@ public class Message implements Serializable {
         this.sender = sender;
         this.trade = trade;
         this.message = message;
-        this.date = date;
+        this.date = LocalDateTime.now();
     }
 
     public Integer getSender() {

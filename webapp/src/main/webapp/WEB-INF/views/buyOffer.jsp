@@ -26,8 +26,8 @@
                 <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                 <h2 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="to"/> <c:out value="${offer.unitPrice}"/> ARS </h2>
                 <div class="flex flex-row mt-3 font-sans ">
-                    <h2 class="font-sans mx-2"><b><messages:message code="minimum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.minQuantity}"/> ARS </h2>
-                    <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.maxQuantity}"/> ARS </h2>
+                    <h2 class="font-sans mx-2"><b><messages:message code="minimum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.minInCrypto}"/> ARS </h2>
+                    <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.maxInCrypto}"/> ARS </h2>
                 </div>
                 <c:choose>
                     <c:when test="${offer.location == null}">
@@ -45,8 +45,8 @@
                 <jsp:param name="offer_id" value="${offer.offerId}"/>
                 <jsp:param name="coin" value="${offer.crypto.code}"/>
                 <jsp:param name="price" value="${offer.unitPrice}"/>
-                <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
-                <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
+                <jsp:param name="minCoinAmount" value="${offer.minInCrypto}"/>
+                <jsp:param name="maxCoinAmount" value="${offer.maxInCrypto}"/>
                 <jsp:param name="userEmail" value="${userEmail}"/>
             </jsp:include>
         </div>

@@ -97,6 +97,7 @@ public class BuyerController {
                 .withPaymentMethod(paymentMethod)
                 .withPageSize(PAGE_SIZE)
                 .withPage(pageNumber)
+                .withOfferStatus("APR")
                 .withLocation(location)
                 .orderingBy(OfferOrderCriteria.values()[orderingCriterion.orElse(0)]);
 

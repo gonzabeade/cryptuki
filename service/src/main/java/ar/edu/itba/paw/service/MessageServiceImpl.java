@@ -26,8 +26,8 @@ public class MessageServiceImpl implements MessageService{
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         messageDao.sendMessage(senderId, tradeId, message);
         if (senderId == trade.getUser().getId())
-            tradeDao.setSellerUnseenMessageCount(tradeId, trade.getqUnseenMessagesSeller()+1);
+            tradeDao.setSellerUnseenMessageCount(tradeId, trade.getqUnseenMessagesSeller()  +1);
         else
-            tradeDao.setBuyerUnseenMessageCount(tradeId, trade.getqUnseenMessagesBuyer()+1);
+            tradeDao.setBuyerUnseenMessageCount(tradeId, trade.getqUnseenMessagesBuyer() +1);
     }
 }

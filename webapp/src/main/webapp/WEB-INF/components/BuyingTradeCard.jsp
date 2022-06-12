@@ -63,12 +63,15 @@
             </c:if>
         </div>
 
-        <div class=" flex flex-row  align-middle my-auto font-sans " >
+        <div class="ml-2 flex flex-row  align-middle my-auto font-sans " >
             <c:if test="${param.unseenMessages !=  '0' && param.unseenMessages!=''}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-                <div class=" text-frost align-middle bg-frost rounded-full w-2 h-2"></div>
+                <a href="<c:url value="/trade?tradeId=${param.tradeId}"/>" class="flex flex-row">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    <div class=" text-frost align-middle bg-frost rounded-full w-2 h-2"></div>
+                </a>
+
             </c:if>
         </div>
     </div>

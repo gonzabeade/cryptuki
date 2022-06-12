@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 
+import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.ProfilePicture;
 
 import javax.persistence.*;
@@ -20,12 +21,15 @@ public final class User {
     @Column(name="last_login")
     private LocalDateTime lastLogin;
     @Column(name="phone_number", length = 10)
-    private  String phoneNumber;
+    private String phoneNumber;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserAuth userAuth;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private ProfilePicture profilePicture;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private KycInformation kyc;
 
 
     @Column(name="rating_sum", nullable = false)

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.parameterObject;
 
 import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.User;
 
 public class ComplainPO {

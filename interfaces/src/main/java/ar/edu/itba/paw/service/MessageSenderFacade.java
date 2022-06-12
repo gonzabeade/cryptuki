@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.parameterObject.OfferPO;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 
 public interface MessageSenderFacade {
     void sendWelcomeMessage(String email, String username, int veryCode);

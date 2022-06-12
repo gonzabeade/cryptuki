@@ -1,9 +1,6 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.Cryptocurrency;
-import ar.edu.itba.paw.model.Message;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.persistence.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,9 +9,7 @@ import java.util.Optional;
 
 @Entity
 @Table(name="trade")
-public final class Trade {
-
-    Trade(){}
+public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trade_trade_id_seq")
     @SequenceGenerator(sequenceName = "trade_trade_id_seq", name = "trade_trade_id_seq", allocationSize = 1)
@@ -50,10 +45,14 @@ public final class Trade {
     @Column(name="q_unseen_msg_seller")
     private int qUnseenMessagesSeller;
 
-
     @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
     @OrderBy("message_date")
     private Collection<Message> messageCollection;
+
+    public Trade(){
+
+    }
+
 
     public Collection<Message> getMessageCollection() {
         return messageCollection;

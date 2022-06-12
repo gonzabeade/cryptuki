@@ -2,12 +2,9 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.TradeDao;
 import ar.edu.itba.paw.persistence.UserAuthDao;
-import ar.edu.itba.paw.service.MessageSenderFacade;
-import ar.edu.itba.paw.service.OfferService;
-import ar.edu.itba.paw.service.TradeServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

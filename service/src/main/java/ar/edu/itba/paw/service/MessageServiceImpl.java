@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.persistence.MessageDao;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.TradeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

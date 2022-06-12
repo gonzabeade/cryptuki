@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferOrderCriteria;
-import ar.edu.itba.paw.model.PaymentMethod;
-import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

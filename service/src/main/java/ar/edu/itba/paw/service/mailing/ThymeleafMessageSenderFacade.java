@@ -2,8 +2,7 @@ package ar.edu.itba.paw.service.mailing;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.parameterObject.OfferPO;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.service.ContactService;

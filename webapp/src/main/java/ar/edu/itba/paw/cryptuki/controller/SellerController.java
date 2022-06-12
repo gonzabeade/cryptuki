@@ -5,6 +5,7 @@ import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.PaymentMethod;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;

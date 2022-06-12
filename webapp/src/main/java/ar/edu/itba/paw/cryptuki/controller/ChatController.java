@@ -6,7 +6,7 @@ import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.MessageService;
 import ar.edu.itba.paw.service.TradeService;

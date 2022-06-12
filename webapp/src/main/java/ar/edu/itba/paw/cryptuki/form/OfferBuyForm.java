@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
-import ar.edu.itba.paw.persistence.Trade;
-import org.hibernate.validator.constraints.NotEmpty;
+import ar.edu.itba.paw.model.Trade;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

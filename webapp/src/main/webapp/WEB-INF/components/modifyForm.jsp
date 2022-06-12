@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
-<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
+<%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
 <jsp:useBean id="selectedCrypto" scope="request" type="java.lang.String"/>
 <jsp:useBean id="selectedPayments" scope="request" type="java.util.List"/>
 <div class="flex flex-col">

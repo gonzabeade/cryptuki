@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.persistence.KycDao;
-import ar.edu.itba.paw.persistence.KycInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,8 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
-    public void newKycRequest(KycInformation.KycInformationBuilder builder) {
-        kycDao.newKycRequest(builder);
+    public void newKycRequest(KycInformationPO kycInformationPO) {
+        kycDao.newKycRequest(kycInformationPO);
     }
 
     @Override

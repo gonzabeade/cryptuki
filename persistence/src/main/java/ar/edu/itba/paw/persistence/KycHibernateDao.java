@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
 import ar.edu.itba.paw.exception.NoSuchKycException;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,8 +18,11 @@ public class KycHibernateDao implements KycDao {
     private EntityManager entityManager;
 
     @Override
-    public void newKycRequest(KycInformation.KycInformationBuilder builder) {
-        entityManager.persist(builder.build());
+    public void newKycRequest(KycInformationPO kycInformationPO) {
+        TypedQuery<User> tq = entityManager.createQuery("from User AS user WHERE user.userAuth.username = :username", User.class);
+        User user = tq.getSingleResult();
+        KycInformation kycInformation = new KycInformation(kycInformationPO, user);
+        entityManager.persist(kycInformation);
     }
 
     @Override
@@ -31,7 +36,7 @@ public class KycHibernateDao implements KycDao {
 
     @Override
     public Collection<KycInformation> getKycRequestsByStatus(String username, KycStatus status) {
-        TypedQuery<KycInformation> tq = entityManager.createQuery("from KycInformation AS kyc WHERE kyc.username = :username AND kyc.status = :status", KycInformation.class);
+        TypedQuery<KycInformation> tq = entityManager.createQuery("from KycInformation AS kyc WHERE kyc.user.userAuth.username = :username AND kyc.status = :status", KycInformation.class);
         tq.setParameter("username", username);
         tq.setParameter("status", status);
         return tq.getResultList();
@@ -39,7 +44,7 @@ public class KycHibernateDao implements KycDao {
 
     @Override
     public Collection<KycInformation> getKycRequestsByStatus(KycStatus status, int page, int pageSize) {
-        TypedQuery<KycInformation> tq = entityManager.createQuery("from KycInformation AS kyc WHERE kyc.status = :status ORDER BY kyc.kycDate DESC", KycInformation.class);
+        TypedQuery<KycInformation> tq = entityManager.createQuery("from KycInformation AS kyc WHERE kyc.status = :status ORDER BY kyc.kycDate ASC", KycInformation.class);
         tq.setParameter("status", status);
         tq.setFirstResult(page*pageSize);
         tq.setMaxResults(pageSize);
@@ -48,9 +53,9 @@ public class KycHibernateDao implements KycDao {
 
     @Override
     public long countKycRequestsByStatus(String username, KycStatus status) {
-        TypedQuery<Long> tq = entityManager.createQuery("select count(kyc) from KycInformation AS kyc WHERE kyc.username = :username AND kyc.status = :status", Long.class);
+        TypedQuery<Long> tq = entityManager.createQuery("select count(kyc) from KycInformation AS kyc WHERE kyc.user.userAuth.username = :username AND kyc.status = :status", Long.class);
         tq.setParameter("username", username);
         tq.setParameter("status", status);
-        return tq.getSingleResult(); // TODO(gonza): Catch exception?
+        return tq.getSingleResult();
     }
 }

@@ -7,7 +7,7 @@
 <jsp:useBean id="offerList" scope="request" type="java.lang.Iterable"/>
 <jsp:useBean id="activePage" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
-<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
+<%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
 <html>
 <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">

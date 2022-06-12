@@ -2,7 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.KycInformation;
+import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class KycController {
             return kyc(form, authentication);
         }
 
-        kycService.newKycRequest(form.toBuilder());
+        kycService.newKycRequest(form.toParameterObject());
         return new ModelAndView("redirect:/kyc/success");
     }
 

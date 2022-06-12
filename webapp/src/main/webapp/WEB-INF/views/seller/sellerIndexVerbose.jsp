@@ -245,19 +245,18 @@
                                                 class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
                                                 code="acceptTrade"/></button>
                                     </form:form>
-                                    <div class="flex flex-row w-full justify-end">
-                                        <div class=" flex flex-row w-[80px] bg-frostl align-middle my-auto font-sans rounded-full bg-frost" >
-                                            <c:if test="${trade.qUnseenMessagesSeller > 0}">
-                                                <img class="my-auto ml-3 mr-4 h-5 w-5" src="<c:url value="/public/images/msg.png"/>"/>
-                                                <div class="align-middle"><c:out value="${trade.qUnseenMessagesSeller}"/></div>
-                                            </c:if>
-                                        </div>
+                                    <div class="flex flex-row mx-auto">
+
                                         <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
                                                 <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                             </svg>
                                         </a>
+                                        <c:if test="${trade.qUnseenMessagesSeller > 0}">
+                                            <div class=" flex flex-row w-2 h-2 bg-frostl font-sans rounded-full bg-frost" >
+                                            </div>
+                                        </c:if>
                                     </div>
 
 
@@ -278,19 +277,17 @@
 
                                     </form:form>
 
-                                    <div class="flex flex-row w-full justify-end">
-                                        <div class=" flex flex-row w-[80px] bg-frostl align-middle my-auto font-sans rounded-full bg-frost" >
-                                            <c:if test="${trade.qUnseenMessagesSeller > 0}">
-                                                <img class="my-auto ml-3 mr-4 h-5 w-5" src="<c:url value="/public/images/msg.png"/>"/>
-                                                <div class="align-middle"><c:out value="${trade.qUnseenMessagesSeller}"/></div>
-                                            </c:if>
-                                        </div>
+                                    <div class="flex flex-row mx-auto ">
                                         <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
                                                 <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                             </svg>
                                         </a>
+                                        <c:if test="${trade.qUnseenMessagesSeller > 0}">
+                                            <div class=" flex flex-row w-2 h-2 bg-frostl font-sans rounded-full bg-frost" >
+                                               </div>
+                                        </c:if>
                                     </div>
                                 </c:if>
 
@@ -368,9 +365,9 @@
     }
     window.onload= function onStart() {
 
-        let offerCollection = document.querySelectorAll("[id^=offerId]");
+        let offerCollection = document.querySelectorAll("[id^=offerId-]");
         offerCollection.forEach((offer)=> {
-
+            console.log(offer)
             let offerId = offer.id.substring(offer.id.lastIndexOf('-')+1)
 
             let pending = offer.querySelectorAll("[name$=PENDING]");

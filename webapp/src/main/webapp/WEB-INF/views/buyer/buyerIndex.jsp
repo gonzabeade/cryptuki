@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="message" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <sec:authentication property="name" var="username"/>
 
 <html>
@@ -15,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
     <title>cryptuki</title>
-    <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>"/>
+    <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 </head>
 <body class="bg-storml overflow-x-hidden">
 <jsp:include page="../../components/buyer/buyerHeader.jsp"/>

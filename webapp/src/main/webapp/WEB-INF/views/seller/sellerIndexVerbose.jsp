@@ -82,7 +82,7 @@
 
 
                 <div class="flex flex-col w-full mb-5">
-                    <div class="flex flex-row ml-[35%] ">
+                    <div class="flex flex-row ml-[32%] ">
                         <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.offerId
                         }-PENDING" onclick="showPending(${offer.offerId
                         })">Pendientes</div>
@@ -366,7 +366,38 @@
     function updateStatus( status, tradeId) {
         document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
     }
-    window.onload= function filterPending() {
+    window.onload= function onStart() {
+
+        let offerCollection = document.querySelectorAll("[id^=offerId]");
+        offerCollection.forEach((offer)=> {
+
+            let offerId = offer.id.substring(offer.id.lastIndexOf('-')+1)
+
+            let pending = offer.querySelectorAll("[name$=PENDING]");
+            let pendingSize = pending.length;
+            let tabPending = document.getElementById("tab-" + offerId + "-PENDING");
+            tabPending.innerText += " (" + pendingSize + ") "
+
+            let accepted = offer.querySelectorAll("[name$=ACCEPTED]");
+            let acceptedSize = accepted.length;
+            let tabAccepted = document.getElementById("tab-" + offerId + "-ACCEPTED");
+            tabAccepted.innerText += " (" + acceptedSize + ") "
+
+
+            let rejected = offer.querySelectorAll("[name$=REJECTED]");
+            let rejectedSize = rejected.length;
+            let tabRejected = document.getElementById("tab-"+ offerId + "-REJECTED");
+            tabRejected.innerText += " (" + rejectedSize + ") "
+
+
+            let sold = offer.querySelectorAll("[name$=SOLD]");
+            let soldSize = sold.length;
+            let tabSold = document.getElementById("tab-"+ offerId + "-SOLD");
+            tabSold.innerText += " (" + soldSize + ") "
+
+
+        })
+
 
         let pendingTabs= document.querySelectorAll("[id$=PENDING]")
         console.log(pendingTabs)

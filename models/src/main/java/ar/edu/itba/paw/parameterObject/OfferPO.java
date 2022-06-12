@@ -9,8 +9,6 @@ import ar.edu.itba.paw.persistence.User;
 import java.util.*;
 
 public class OfferPO {
-
-    private Integer offerId;
     private Integer sellerId;
     private OfferStatus offerStatus = OfferStatus.APR;
     private Double unitPrice;
@@ -20,11 +18,6 @@ public class OfferPO {
     private Location location;
     private String comments;
     private Collection<String> paymentMethods;
-
-    public OfferPO withOfferId(int offerId) {
-        this.offerId = offerId;
-        return this;
-    }
 
     public OfferPO withSellerId(int sellerId) {
         this.sellerId = sellerId;
@@ -71,10 +64,6 @@ public class OfferPO {
         return this;
     }
 
-    public OptionalInt getOfferId() {
-        return offerId != null ? OptionalInt.of(offerId) : OptionalInt.empty();
-    }
-
     public OptionalInt getSellerId() {
         return sellerId != null ? OptionalInt.of(sellerId) : OptionalInt.empty();
     }
@@ -90,7 +79,6 @@ public class OfferPO {
     public OptionalDouble getMaxInCrypto() {
         return maxInCrypto != null ? OptionalDouble.of(maxInCrypto) : OptionalDouble.empty();
     }
-
     public OptionalDouble getMinInCrypto() {
         return minInCrypto != null ? OptionalDouble.of(minInCrypto) : OptionalDouble.empty();
     }
@@ -114,7 +102,7 @@ public class OfferPO {
     public Offer.Builder toBuilder(Cryptocurrency crypto, User seller) {
 
         if (crypto == null || seller == null || !cryptoCode.equals(crypto.getCode()) || seller.getId() != sellerId)
-            new IllegalArgumentException("Crypocurrency or seller different than the one on the parameter object");
+            throw new IllegalArgumentException("Cryptocurrency or seller different than the one on the parameter object");
 
         return new Offer.Builder(
                 getUnitPrice().orElseThrow(()->new IllegalArgumentException()),

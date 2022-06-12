@@ -8,6 +8,7 @@ import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.ComplainService;
@@ -151,9 +152,9 @@ public class AdminController {
         ModelAndView mav = new ModelAndView(view);
         mav.addObject("baseUrl", url);
         mav.addObject("title", title);
-        int complainCount = complainService.countComplainsBy(filter);
+        long complainCount = complainService.countComplainsBy(filter);
         int pageNumber = filter.getPage();
-        int pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        long pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
         mav.addObject("complainList", complainService.getComplainsBy(filter));
@@ -164,10 +165,10 @@ public class AdminController {
 
     private ModelAndView setUpComplaintView(String view,int complaintId){
         Complain complain = complainService.getComplainById(complaintId).orElseThrow(()->new NoSuchComplainException(complaintId));
-        User complainer = userService.getUserInformation(complain.getComplainerUsername()).orElseThrow(()->new NoSuchUserException(complain.getComplainerUsername()));
+        User complainer = userService.getUserInformation(complain.getComplainer().getUsername().get()).orElseThrow(()->new NoSuchUserException(complain.getComplainer().getId()));
         Trade trade;
-        if(complain.getTradeId().isPresent()){
-            trade = tradeService.getTradeById(complain.getTradeId().get()).orElseThrow(() -> new NoSuchTradeException(complain.getTradeId().get()));
+        if(complain.getTrade() != null){
+            trade = tradeService.getTradeById(complain.getTrade().getTradeId()).orElseThrow(() -> new NoSuchTradeException(complain.getTrade().getTradeId()));
         }else
             trade=null;
         ModelAndView mav = new ModelAndView(view);

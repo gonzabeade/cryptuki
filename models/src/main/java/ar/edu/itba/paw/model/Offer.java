@@ -63,6 +63,7 @@ public class Offer {
         private Cryptocurrency crypto;
         private OfferStatus offerStatus;
         private Location location;
+
         private Collection<Trade> trades;
         private String comments;
 
@@ -161,20 +162,5 @@ public class Offer {
         this.offerStatus = offerStatus;
     }
 
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "offerId=" + offerId +
-                ", unitPrice=" + unitPrice +
-                ", minInCrypto=" + minInCrypto +
-                ", maxInCrypto=" + maxInCrypto +
-                ", seller=" + seller +
-                ", date=" + date +
-                ", crypto=" + crypto +
-                ", offerStatus=" + offerStatus +
-                ", location=" + location +
-                ", trades=" + trades +
-                ", comments='" + comments + '\'' +
-                '}';
-    }
+
 }

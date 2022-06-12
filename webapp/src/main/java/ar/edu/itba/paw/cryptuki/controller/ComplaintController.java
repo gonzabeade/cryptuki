@@ -3,7 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.UserService;
@@ -41,8 +41,8 @@ public class ComplaintController {
         ModelAndView mav = new ModelAndView("complaintsPage");
 
         int pageNumber= page.orElse(0);
-        int complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
-        int pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
+        long complaintsCount = complainService.countComplainsBy(new ComplainFilter.Builder().withComplainerUsername(authentication.getName()).build());
+        long pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
         ComplainFilter complainFilter = new ComplainFilter.Builder().withComplainerUsername(authentication.getName())
                 .withPage(pageNumber)
                 .withPageSize(PAGE_SIZE)
@@ -80,7 +80,7 @@ public class ComplaintController {
         if(errors.hasErrors())
             return complain(form, authentication, form.getTradeId());
 
-        complainService.makeComplain(form.toComplainBuilder());
+        complainService.makeComplain(form.toComplainPO(authentication.getName()));
         return new ModelAndView("redirect:/complain/success");
     }
 

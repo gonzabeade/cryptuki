@@ -3,7 +3,8 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.ComplainFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.model.Complain;
+import ar.edu.itba.paw.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.model.ComplainStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-    public int countComplainsBy(ComplainFilter filter) {
+    public long countComplainsBy(ComplainFilter filter) {
 
         if (filter == null)
             throw new NullPointerException("Filter object cannot be null.");
 
         try {
-            return complainDao.countComplainsBy(filter);
+            return complainDao.getComplainCount(filter);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -74,8 +75,8 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    @PreAuthorize("#complain.complainer == authentication.principal.username and @customPreAuthorizer.isUserPartOfTrade(#complain.tradeId, authentication.principal)")
-    public void makeComplain(Complain.Builder complain) {
+    @PreAuthorize("#complain.complainerUsername == authentication.principal.username and @customPreAuthorizer.isUserPartOfTrade(#complain.tradeId, authentication.principal)")
+    public void makeComplain(ComplainPO complain) {
 
         if (complain == null)
             throw new NullPointerException("Complain Builder object cannot be null.");
@@ -86,7 +87,7 @@ public class ComplainServiceImpl implements ComplainService{
             throw new ServiceDataAccessException(pe);
         }
 
-        messageSenderFacade.sendComplaintReceipt(complain.getComplainer(), complain.getComplainerComments());
+//        messageSenderFacade.sendComplaintReceipt(complain.getComplainer(), complain.getComplainerComments());
     }
 
     @Override
@@ -101,7 +102,7 @@ public class ComplainServiceImpl implements ComplainService{
             throw new NullPointerException("Complain status cannot be null.");
 
         try {
-            complainDao.updateComplainStatus(complainId, complainStatus);
+//            complainDao.updateComplainStatus(complainId, complainStatus);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -116,7 +117,7 @@ public class ComplainServiceImpl implements ComplainService{
             throw new IllegalArgumentException("Complain id can only be non negative.");
 
         try {
-            complainDao.updateModerator(complainId, username);
+//            complainDao.updateModerator(complainId, username);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -131,7 +132,7 @@ public class ComplainServiceImpl implements ComplainService{
             throw new IllegalArgumentException("Complain id can only be non negative.");
 
         try {
-            complainDao.updateModeratorComment(complainId, comments);
+//            complainDao.updateModeratorComment(complainId, comments);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -146,8 +147,8 @@ public class ComplainServiceImpl implements ComplainService{
             throw new IllegalArgumentException("Complain id can only be non negative.");
 
         try {
-            complainDao.updateComplainStatus(complainId, ComplainStatus.CLOSED);
-            complainDao.updateModeratorComment(complainId, comments);
+//            complainDao.updateComplainStatus(complainId, ComplainStatus.CLOSED);
+//            complainDao.updateModeratorComment(complainId, comments);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -161,8 +162,8 @@ public class ComplainServiceImpl implements ComplainService{
             throw new IllegalArgumentException("Complain id can only be non negative.");
 
         try {
-            complainDao.updateComplainStatus(complainId, ComplainStatus.PENDING);
-            complainDao.updateModerator(complainId, null);
+//            complainDao.updateComplainStatus(complainId, ComplainStatus.PENDING);
+//            complainDao.updateModerator(complainId, null);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

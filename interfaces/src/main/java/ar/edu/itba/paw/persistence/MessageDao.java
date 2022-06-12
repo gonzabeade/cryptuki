@@ -3,5 +3,5 @@ package ar.edu.itba.paw.persistence;
 import java.time.LocalDateTime;
 
 public interface MessageDao {
-    void sendMessage(Integer sender, Integer trade, String message);
+    void sendMessage(int sender, int trade, String message);
 }

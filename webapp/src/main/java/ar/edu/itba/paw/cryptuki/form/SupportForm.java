@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.model.Complain;
+import ar.edu.itba.paw.parameterObject.ComplainPO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
@@ -60,13 +61,9 @@ public class SupportForm {
         this.message = message;
     }
 
-    public Complain.Builder toComplainBuilder(){
-        Complain.Builder builder =new Complain.Builder(this.username)
-//                .withComplainId(this.complainerId)
-                .withComplainerComments(this.message);
-        if(this.tradeId!=null)
-            builder.withTradeId(tradeId);
-        return builder;
+    public ComplainPO toComplainPO(String username){
+        return new ComplainPO(tradeId, username)
+                .withComplainerComments(message);
     }
 
 

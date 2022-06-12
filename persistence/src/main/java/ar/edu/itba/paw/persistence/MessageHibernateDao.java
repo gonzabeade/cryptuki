@@ -12,7 +12,7 @@ public class MessageHibernateDao implements MessageDao{
     private EntityManager entityManager;
 
     @Override
-    public void sendMessage(Integer sender, Integer trade, String message) {
+    public void sendMessage(int sender, int trade, String message) {
         Message newMessage = new Message(sender, trade, message);
         entityManager.persist(newMessage);
     }

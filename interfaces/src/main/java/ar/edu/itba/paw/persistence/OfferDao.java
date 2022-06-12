@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface OfferDao {
 
-    // Getters
+    /** Offer getter methods */
     long getOfferCount(OfferFilter filter);
     Collection<Offer> getOffersBy(OfferFilter filter);
 
-    // Manipulation and creation
+    /** Offer manipulation and creation */
     Offer makeOffer(OfferPO offer);
     Offer modifyOffer(Offer offer);
     void deleteOffer(int offerId);

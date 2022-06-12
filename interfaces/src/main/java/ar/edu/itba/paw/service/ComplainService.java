@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.ComplainFilter;
-import ar.edu.itba.paw.persistence.Complain;
+import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainStatus;
+import ar.edu.itba.paw.parameterObject.ComplainPO;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -11,8 +12,8 @@ public interface ComplainService {
 
     Collection<Complain> getComplainsBy(ComplainFilter filter);
     Optional<Complain> getComplainById(int id);
-    int countComplainsBy(ComplainFilter filter);
-    void makeComplain(Complain.Builder complain);
+    long countComplainsBy(ComplainFilter filter);
+    void makeComplain(ComplainPO complain);
     void updateComplainStatus(int complainId, ComplainStatus complainStatus);
     void updateModerator(int complainId, String username);
     void updateModeratorComment(int complainId, String comments);

@@ -34,6 +34,7 @@
 </sec:authorize>
 <div class="flex flex-row mt-10 divide-x">
     <div class="flex flex-col mx-10 w-1/5">
+
         <h1 class="text-2xl font-bold font-sans"><messages:message code="filters"/> </h1>
         <div class="flex flex-col mx-3">
             <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
@@ -44,7 +45,7 @@
                 </c:forEach>
             </select>
         </div>
-        <div class="flex flex-col mx-3 mt-10">
+        <div class="flex flex-col mx-3 mt-6">
             <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message
                     code="location"/></label>
             <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
@@ -80,25 +81,22 @@
         </a>
         <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>
         <div class="flex flex-col">
-          <jsp:include page="../components/cryptoCard.jsp">
-              <jsp:param name="code" value="BTC"/>
-              <jsp:param name="commercialName" value="Bitcoin"/>
-          </jsp:include>
-          <jsp:include page="../components/cryptoCard.jsp">
+            <jsp:include page="../components/cryptoCard.jsp">
+                <jsp:param name="code" value="BTC"/>
+                <jsp:param name="commercialName" value="Bitcoin"/>
+            </jsp:include>
+            <jsp:include page="../components/cryptoCard.jsp">
                 <jsp:param name="code" value="ETH"/>
                 <jsp:param name="commercialName" value="Ethereum"/>
-          </jsp:include>
-          <jsp:include page="../components/cryptoCard.jsp">
+            </jsp:include>
+            <jsp:include page="../components/cryptoCard.jsp">
                 <jsp:param name="code" value="USDT"/>
                 <jsp:param name="commercialName" value="Tether"/>
-          </jsp:include>
+            </jsp:include>
             <jsp:include page="../components/cryptoCard.jsp">
                 <jsp:param name="code" value="DAI"/>
                 <jsp:param name="commercialName" value="Dai"/>
             </jsp:include>
-        </div>
-        <div>
-
         </div>
 
     </div>

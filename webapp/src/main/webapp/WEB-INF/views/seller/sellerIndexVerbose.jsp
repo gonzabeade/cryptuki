@@ -122,10 +122,10 @@
 
                         <div class="flex flex-col justify-start mb-3">
                             <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Min: ${offer.minInCrypto}"/><c:out value=" ${offer.crypto.code}"/></p>
+                                <p><c:out value="Min: "/><fmt:formatNumber type="number" maxFractionDigits="18" value="${offer.minInCrypto}"/> <c:out value=" ${offer.crypto.code}"/></p>
                             </div>
                             <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Max: ${offer.maxInCrypto}"/><c:out value=" ${offer.crypto.code}"/></p>
+                                <p><c:out value="Max: "/> <fmt:formatNumber type="number" maxFractionDigits="18" value="${offer.maxInCrypto}"/> <c:out value=" ${offer.crypto.code}"/></p>
                             </div>
                             <div class="flex flex-col font-sans mt-3">
                                 <p><messages:message code="date"/> <c:out value="${offer.date.toLocalDate()}"/></p>

@@ -107,6 +107,7 @@ public class BuyerController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
+        mav.addObject("locations", Arrays.asList(Location.values()));
 
         if( null != authentication){
             mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());

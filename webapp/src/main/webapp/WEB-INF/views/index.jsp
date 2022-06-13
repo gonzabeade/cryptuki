@@ -51,54 +51,10 @@
                     code="location"/></label>
             <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
-                <option value="AGRONOMIA">Agronomía</option>
-                <option value="ALMAGRO">Almagro</option>
-                <option value="BALVANERA">Balvanera</option>
-                <option value="BARRACAS">Barracas</option>
-                <option value="BELGRANO">Belgrano</option>
-                <option value="BOEDO">Boedo</option>
-                <option value="CABALLITO">Caballito</option>
-                <option value="CHACARITA">Chacarita</option>
-                <option value="COGHLAN">Coghlan</option>
-                <option value="COLEGIALES">Colegiales</option>
-                <option value="CONSTITUCION">Constitución</option>
-                <option value="FLORES">Flores</option>
-                <option value="FLORESTA">Floresta</option>
-                <option value="LA_BOCA">La Boca</option>
-                <option value="LA_PATERNAL">La Paternal</option>
-                <option value="LINIERS">Liniers</option>
-                <option value="MATADEROS">Mataderos</option>
-                <option value="MONTE_CASTRO">Monte Castro</option>
-                <option value="MONTSERRAT">Montserrat</option>
-                <option value="NUEVA_POMPEYA">Nueva Pompeya</option>
-                <option value="NUÑEZ">Nuñez</option>
-                <option value="PALERMO">Palermo</option>
-                <option value="PARQUE_AVELLANEDA">Parque Avellaneda</option>
-                <option value="PARQUE_CHACABUCO">Parque Chacabuco</option>
-                <option value="PARQUE_CHAS">Parque Chas</option>
-                <option value="PARQUE_PATRICIOS">Parque Patricios</option>
-                <option value="PUERTO_MADERO">Puerto Madero</option>
-                <option value="RECOLETA">Recoleta</option>
-                <option value="RETIRO">Retiro</option>
-                <option value="SAAVEDRA">Saavedra</option>
-                <option value="SAN_CRISTOBAL">San Cristóbal</option>
-                <option value="SAN_NICOLAS">San Nicolás</option>
-                <option value="SAN_TELMO">San Telmo</option>
-                <option value="VERSALLES">Versalles</option>
-                <option value="VILLA_CRESPO">Villa Crespo</option>
-                <option value="VILLA_DEVOTO">Villa Devoto</option>
-                <option value="VILLA_GENERAL_MITRE">Villa General Mitre</option>
-                <option value="VILLA_LUGANO">Villa Lugano</option>
-                <option value="VILLA_LURO">Villa Luro</option>
-                <option value="VILLA_ORTUZAR">Villa Ortúzar</option>
-                <option value="VILLA_PUEYRREDÓN">Villa Pueyrredón</option>
-                <option value="VILLA_REAL">Villa Real</option>
-                <option value="VILLA_RIACHUELO">Villa Riachuelo</option>
-                <option value="VILLA_SANTA_RITA">Villa Santa Rita</option>
-                <option value="VILLA_SOLDATI">Villa Soldati</option>
-                <option value="VILLA_URQUIZA">Villa Urquiza</option>
-                <option value="VILLA_DEL_PARQUE">Villa Del Parque</option>
-                <option value="VELEZ_SARSFIELD">Vélez Sarsfield</option>
+                <c:forEach items="${locations}" var="location">
+                    <option value=<c:out value="\"${location}\""/>><messages:message code="Location.${location}"/></option>
+                </c:forEach>
+
             </select>
         </div>
         <div class="flex flex-row justify-center mt-3">

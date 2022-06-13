@@ -21,7 +21,7 @@ public enum Location {
     MONTE_CASTRO,
     MONTSERRAT,
     NUEVA_POMPEYA,
-    NUÑEZ,
+    NUNEZ,
     PALERMO,
     PARQUE_AVELLANEDA,
     PARQUE_CHACABUCO,

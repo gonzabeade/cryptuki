@@ -105,7 +105,6 @@ public class BuyerController {
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         Collection<Offer> offer = offerService.getBuyableOffers(filter);
-        Offer offer1 = offer.stream().findFirst().get();
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);

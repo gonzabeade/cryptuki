@@ -57,7 +57,7 @@
             <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
         </div>
         <a href="<c:url value="/buyer/market"/>" id="link" rel="search"
-           class="py-2 px-6  text-white rounded-lg bg-frost  my-auto mx-auto"><messages:message
+           class="py-2 px-6  text-white rounded-lg bg-frost  mx-auto"><messages:message
                 code="filter"/>
         </a>
 

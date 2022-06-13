@@ -52,7 +52,7 @@
         </div>
     </div>
     <% request.setCharacterEncoding("utf-8"); %>
-    <div class="flex flex-row w-2/5">
+    <div class="flex flex-col w-2/5">
         <jsp:include page="../components/sellerInfo.jsp">
             <jsp:param name="email" value="${offer.seller.email}"/>
             <jsp:param name="phone" value="${offer.seller.phoneNumber}"/>
@@ -61,6 +61,20 @@
             <jsp:param name="message" value="${offer.comments}"/>
             <jsp:param name="rating" value="${offer.seller.rating}"/>
         </jsp:include>
+        <c:if test="${!empty offer.location }">
+            <h1 class="font-sans font-bold text-3xl mx-auto"><messages:message code="location"/></h1>
+
+            <iframe
+                    class="mx-auto mb-10"
+                    width="450"
+                    height="250"
+                    frameborder="0" style="border:0"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed/v1/search?key=${apiKey}&q=${offer.location}"
+                    allowfullscreen>
+            </iframe>
+        </c:if>
+
     </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

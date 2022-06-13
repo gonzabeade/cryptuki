@@ -14,6 +14,7 @@ import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -31,14 +32,16 @@ public class TradeFluxController {
     private final TradeService tradeService;
     private final ChatService chatService;
     private final UserService us;
+    private final Environment environment;
     private static final int PAGE_SIZE = 7;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us, ChatService chatService) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us, ChatService chatService, Environment environment) {
         this.offerService = offerService;
         this.tradeService = tradeService;
         this.chatService = chatService;
         this.us = us;
+        this.environment = environment;
     }
 
     @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
@@ -49,6 +52,7 @@ public class TradeFluxController {
         mav.addObject("offer", offer);
         mav.addObject("userEmail", offer.getSeller().getEmail());
         mav.addObject("sellerLastLogin", LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()));
+        mav.addObject("apiKey", environment.getProperty("API_KEY"));
 
         return mav;
     }

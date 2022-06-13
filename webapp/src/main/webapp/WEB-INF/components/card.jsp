@@ -55,13 +55,13 @@
 				<div class="flex flex-row basis-1/4 justify-center">
 					<div class="flex-col">
 						<h1 class="font-sans"><messages:message code="location"/>: </h1>
-						<div class="pt-2 flex flex-row justify-start">
+						<div  class="pt-2 flex flex-row justify-start" >
 							<c:choose>
 								<c:when test="${param.location == ''}">
 									<h1 class="font-sans font-bold pr-3 mt-1"><messages:message code="unknown"/></h1>
 								</c:when>
 								<c:otherwise>
-									<h1 class="font-sans font-bold pr-3 mt-1"><c:out value="${param.location}"/></h1>
+									<a class="font-sans font-bold pr-3 mt-1" href="https://www.google.com/maps/search/?api=1&query=${param.location}" target="_blank"><c:out value="${param.location}"/></a>
 								</c:otherwise>
 							</c:choose>
 							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2" title="location">

@@ -19,9 +19,8 @@ function getFilters() {
         // if (reset !== null) {
         //     reset.classList.remove("hidden");
         // }
-        if(searchParams.get('coin')!= null || searchParams.get('location')!= null) {
+        if(searchParams.get("coin")!= null || searchParams.get("location")!= null) {
             document.getElementById("reset").classList.remove("hidden")
-
         }
 
     }
@@ -61,7 +60,10 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
-    document.getElementById("reset").classList.remove("hidden")
+
+    if(id === "coin" || id === "location") {
+        document.getElementById("reset").classList.remove("hidden")
+    }
 
 }
 function resetAllAdminFilters(){

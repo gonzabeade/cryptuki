@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-     public ModelAndView landing() {
+     public ModelAndView landing(Authentication authentication) {
+        if (authentication != null && authentication.getAuthorities().stream().findFirst().get().getAuthority().equals("ROLE_ADMIN"))
+            return new ModelAndView("redirect:/admin");
         return new ModelAndView("redirect:/buyer/market");
     }
 

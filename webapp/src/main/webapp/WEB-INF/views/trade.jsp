@@ -160,7 +160,7 @@
                 <jsp:param name="otherUsername" value="${trade.sellerUsername}"/>
                 <jsp:param name="tradeId" value="${trade.tradeId}"/>
                 <jsp:param name="otherUserId" value="${trade.offer.seller.id}"/>
-                <jsp:param name="senderId" value="${trade.user.id}"/>
+                <jsp:param name="senderId" value="${trade.buyer.id}"/>
                 <jsp:param name="url" value="${url}"/>
                 <jsp:param name="otherLastLogin" value="${otherLastLogin}"/>
             </jsp:include>

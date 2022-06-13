@@ -80,16 +80,16 @@
                     </div>
                     <div class="flex">
                         <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
-                        <h1 class="font-sans font-semibold"><c:out value="${trade.user.email}"/></h1>
+                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.email}"/></h1>
                     </div>
                     <div class="flex">
                         <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
                         <h1 class="font-sans font-semibold"><c:out
-                                value="${trade.user.phoneNumber}"/></h1>
+                                value="${trade.buyer.phoneNumber}"/></h1>
                     </div>
                     <div class="flex">
                         <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
-                        <h1 class="font-sans font-semibold"><c:out value="${trade.user.rating}"/></h1>
+                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.rating}"/></h1>
                     </div>
                 </div>
             </c:if>

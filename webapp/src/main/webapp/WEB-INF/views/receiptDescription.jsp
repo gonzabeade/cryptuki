@@ -127,11 +127,11 @@
             <c:if test="${!buying}">
                 <% request.setCharacterEncoding("utf-8"); %>
                 <jsp:include page="../components/buyerInfo.jsp">
-                    <jsp:param name="email" value="${trade.user.email}"/>
-                    <jsp:param name="phone" value="${trade.user.phoneNumber}"/>
-                    <jsp:param name="trades" value="${trade.user.ratingCount}"/>
+                    <jsp:param name="email" value="${trade.buyer.email}"/>
+                    <jsp:param name="phone" value="${trade.buyer.phoneNumber}"/>
+                    <jsp:param name="trades" value="${trade.buyer.ratingCount}"/>
                     <jsp:param name="lastLogin" value="${otherLastLogin.relativeTime}"/>
-                    <jsp:param name="rating" value="${trade.user.rating}"/>
+                    <jsp:param name="rating" value="${trade.buyer.rating}"/>
                 </jsp:include>
             </c:if>
 

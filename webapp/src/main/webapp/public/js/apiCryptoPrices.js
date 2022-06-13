@@ -26,4 +26,17 @@ let ethPrice  =   getCryptoPrice('eth');
 let usdtPrice =  getCryptoPrice('usdt');
 let daiPrice  =   getCryptoPrice('dai');
 
+ async function setCryptoPrice() {
+    console.log("entre")
+    document.getElementById("BTC").innerHTML =  await btcPrice + ' ARS';
+
+    document.getElementById("ETH").innerHTML =  await ethPrice + ' ARS';
+
+    document.getElementById("USDT").innerHTML =  await usdtPrice + ' ARS';
+
+    document.getElementById("DAI").innerHTML =  await daiPrice + ' ARS';
+
+
+}
+
 

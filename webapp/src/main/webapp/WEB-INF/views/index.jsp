@@ -14,6 +14,7 @@
 			<script src="https://cdn.tailwindcss.com"></script>
             <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
             <script src="<c:url value="/public/js/filterLink.js"/>" ></script>
+            <script src="<c:url value="/public/js/apiCryptoPrices.js"/>"></script>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -33,7 +34,7 @@
 </sec:authorize>
 <div class="flex flex-row mt-10 divide-x">
     <div class="flex flex-col mx-10 w-1/5">
-        <h1 class="text-2xl font-bold font-sans">Filtrá</h1>
+        <h1 class="text-2xl font-bold font-sans"><messages:message code="filters"/> </h1>
         <div class="flex flex-col mx-3">
             <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
             <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
@@ -46,12 +47,28 @@
         <div class="flex flex-col mx-3 mt-10">
             <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message
                     code="location"/></label>
-            <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
+            <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
-                <option value="ALMAGRO"></option>
-                <c:forEach items="${cryptocurrencies}" var="coin">
-                    <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
-                </c:forEach>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
+                <option value="ALMAGRO">Almagro</option>
             </select>
         </div>
         <div class="flex flex-row justify-center mt-3">
@@ -61,6 +78,28 @@
            class="py-2 px-6  text-white rounded-lg bg-frost  mx-auto"><messages:message
                 code="filter"/>
         </a>
+        <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>
+        <div class="flex flex-col">
+          <jsp:include page="../components/cryptoCard.jsp">
+              <jsp:param name="code" value="BTC"/>
+              <jsp:param name="commercialName" value="Bitcoin"/>
+          </jsp:include>
+          <jsp:include page="../components/cryptoCard.jsp">
+                <jsp:param name="code" value="ETH"/>
+                <jsp:param name="commercialName" value="Ethereum"/>
+          </jsp:include>
+          <jsp:include page="../components/cryptoCard.jsp">
+                <jsp:param name="code" value="USDT"/>
+                <jsp:param name="commercialName" value="Tether"/>
+          </jsp:include>
+            <jsp:include page="../components/cryptoCard.jsp">
+                <jsp:param name="code" value="DAI"/>
+                <jsp:param name="commercialName" value="Dai"/>
+            </jsp:include>
+        </div>
+        <div>
+
+        </div>
 
     </div>
     <div class="flex flex-col w-4/5">

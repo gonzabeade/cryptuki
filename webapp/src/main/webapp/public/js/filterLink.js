@@ -1,4 +1,11 @@
-window.onload = function getFilters() {
+
+window.onload = async function onStart() {
+    await setCryptoPrice();
+    getFilters();
+
+}
+
+function getFilters() {
     if (window.location.search.length > 0) {
         var searchParams = new URLSearchParams(window.location.search);
         let elementToSelect;
@@ -22,7 +29,6 @@ window.onload = function getFilters() {
     if (orderingCriterion != null) {
         document.getElementById("orderingCriterion").options[orderingCriterion].selected = true
     }
-
 
 }
 function resetAllFilters(){

@@ -204,7 +204,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void sellQuantityOfOffer(Offer offer, float sold, int tradeId) {
+    public void sellQuantityOfOffer(Offer offer, double sold, int tradeId) {
 
 //        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
 //        float remaining = offer.getMaxQuantity() - (sold/offer.getunitPrice());

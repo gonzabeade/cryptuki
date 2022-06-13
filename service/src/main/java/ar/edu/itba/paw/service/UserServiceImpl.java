@@ -124,20 +124,10 @@ public class UserServiceImpl implements UserService {
         userDao.updateLastLogin(username);
     }
 
-
     @Override
-    @Transactional
-    public void incrementUserRating(String username, int rating) {
-
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
+    public void updateRatingBy(String username, int rating) {
         userDao.incrementUserRating(username, rating);
     }
-
 
 
 }

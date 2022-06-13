@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Entity
@@ -13,311 +14,99 @@ public class Trade {
     @SequenceGenerator(sequenceName = "trade_trade_id_seq", name = "trade_trade_id_seq", allocationSize = 1)
     @Column(name="trade_id")
     private int tradeId;
-
     @ManyToOne
     @JoinColumn(name="offer_id")
     private Offer offer;
-
     @OneToOne
     @JoinColumn(name="buyer_id")
-    private User user;
-
-    @Column(name="start_date")
+    private User buyer;
+    @Column(name="start_date", insertable = false)
     private LocalDateTime startDate;
-
     @Column(name="status",length = 10)
     @Enumerated(EnumType.STRING)
-    private TradeStatus status;
-
+    private TradeStatus status = TradeStatus.PENDING;
     @Column(name="quantity")
-    private  float quantity;
-
+    private double quantity;
     @Column(name="rated_buyer")
-    private boolean ratedBuyer;
+    private boolean isBuyerRated;
     @Column(name="rated_seller")
-    private boolean ratedSeller;
-
+    private boolean isSellerRated;
     @Column(name="q_unseen_msg_buyer")
     private int qUnseenMessagesBuyer;
-
     @Column(name="q_unseen_msg_seller")
     private int qUnseenMessagesSeller;
-
     @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
     @OrderBy("message_date")
-    private Collection<Message> messageCollection;
+    private Collection<Message> messageCollection = new LinkedList<>();
 
-    public Trade(){
-
+    public Trade() {
+        // Just for Hibernate!
     }
 
-
-    public Collection<Message> getMessageCollection() {
-        return messageCollection;
+    public Trade(Offer offer, User buyer, double quantity) {
+        this.offer = offer;
+        this.buyer = buyer;
+        this.quantity = quantity;
     }
 
-    public void setMessageCollection(Collection<Message> messageCollection) {
-        this.messageCollection = messageCollection;
+    public int getTradeId() {
+        return tradeId;
     }
 
     public Offer getOffer() {
         return offer;
     }
 
-    public User getUser() {
-        return user;
+    public User getBuyer() {
+        return buyer;
     }
 
-
-    @Entity
-    @Table(name="trade")
-    public static class Builder {
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trade_trade_id_seq")
-        @SequenceGenerator(sequenceName = "trade_trade_id_seq", name = "trade_trade_id_seq", allocationSize = 1)
-        @Column(name="trade_id")
-        private Integer tradeId;
-
-        @Column(name="offer_id")
-        private  int offerId;
-
-        @Column(name="buyer_id",nullable = false)
-        private int buyerId;
-
-        @Column(name="start_date")
-        private LocalDateTime startDate = null;
-
-        @Column(name="status",length = 10)
-        @Enumerated(EnumType.STRING)
-        private TradeStatus status = TradeStatus.PENDING;
-        @Column(name="quantity")
-        private float quantity = 0f;
-
-        @Column(name="rated_buyer")
-        private boolean ratedBuyer;
-
-        @Column(name="rated_seller")
-        private boolean ratedSeller;
-
-        @Transient
-        private String sellerUsername;
-        @Transient
-        private final String buyerUsername;
-
-        @Transient
-        private Cryptocurrency cryptoCurrency;
-        @Transient
-        private String wallet;
-        @Transient
-        private float askedPrice;
-
-
-
-        public Builder(int offerId, String buyerUsername) {
-            this.offerId = offerId;
-            this.buyerUsername = buyerUsername;
-            this.ratedBuyer = false;
-            this.ratedSeller = false;
-        }
-
-        public Builder withTradeId(int tradeId) {
-            this.tradeId = tradeId;
-            return this;
-        }
-        public Builder withSellerUsername(String sellerUsername) {
-            this.sellerUsername = sellerUsername;
-            return this;
-        }
-        public Builder withRatedBuyer(boolean rated){
-            this.ratedBuyer = rated;
-            return this;
-        }
-        public Builder withBuyerId(Integer buyerId){
-            this.buyerId = buyerId;
-            return this;
-        }
-        public Builder withRatedSeller(boolean rated){
-            this.ratedSeller = rated;
-            return this;
-        }
-
-        public Builder withStartDate(LocalDateTime startDate) {
-            this.startDate = startDate;
-            return this;
-        }
-        public Builder withTradeStatus(TradeStatus status) {
-            this.status = status;
-            return this;
-        }
-        public Builder withQuantity(float quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        public Builder withWallet(String wallet) {
-            this.wallet = wallet;
-            return this;
-        }
-
-        public Builder withCryptoCurrency(Cryptocurrency cryptoCurrency) {
-            this.cryptoCurrency =cryptoCurrency;
-            return this;
-        }
-        public Builder withAskedPrice(float askedPrice) {
-            this.askedPrice=askedPrice;
-            return this;
-        }
-
-        public int getTradeId() {
-            return tradeId;
-        }
-        public int getOfferId() {
-            return offerId;
-        }
-        public String getSellerUsername() {
-            return sellerUsername;
-        }
-        public String getBuyerUsername() {
-            return buyerUsername;
-        }
-//        public LocalDateTime getStartDate() {
-//            return startDate;
-//        }
-        public TradeStatus getStatus() {
-            return status;
-        }
-        public float getQuantity() {
-            return quantity;
-        }
-
-        public Cryptocurrency getCryptoCurrency() {
-            return cryptoCurrency;
-        }
-
-        public float getAskedPrice() {
-            return askedPrice;
-        }
-        public boolean getRatedBuyer(){
-            return ratedBuyer;
-        }
-        public boolean getRatedSeller(){
-            return ratedSeller;
-        }
-        public String getWallet(){
-            return wallet;
-        }
-
-        public int getBuyerId() {
-            return buyerId;
-        }
-
-        protected Trade build() {
-            return new Trade(this);
-        }
-
-    }
-
-    protected Trade(Builder builder) {
-
-        this.quantity = builder.quantity;
-        this.tradeId = builder.tradeId;
-        this.startDate = builder.startDate;
-        this.status = builder.status;
-        this.ratedBuyer = builder.getRatedBuyer();
-        this.ratedSeller = builder.getRatedSeller();
-
-    }
-
-    public int getTradeId() {
-        return tradeId;
-    }
-    public int getOfferId() {
-        return offer.getOfferId();
-    }
-    public String getSellerUsername() {
-        return offer.getSeller().getUserAuth().getUsername();
-    }
-    public String getBuyerUsername() {
-        return user.getUserAuth().getUsername();
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
     public TradeStatus getStatus() {
         return status;
     }
-    public float getQuantity() {
+
+    public double getQuantity() {
         return quantity;
     }
 
-    public Cryptocurrency getCryptoCurrency() {
-        return offer.getCrypto();
+    public boolean isBuyerRated() {
+        return isBuyerRated;
     }
 
-    public double getAskedPrice() {
-        return offer.getUnitPrice();
-    }
-
-    public boolean equals(Object object) {
-        if (object == this)
-            return true;
-        if (!(object instanceof User))
-            return false;
-        Trade testedTrade = (Trade) object;
-        return testedTrade.getTradeId() == this.getTradeId();
-    }
-
-    public boolean getRatedBuyer(){
-        return ratedBuyer;
-    }
-    public boolean getRatedSeller(){
-        return ratedSeller;
-    }
-
-    public void setTradeId(int tradeId) {
-        this.tradeId = tradeId;
-    }
-
-    public void setOffer(Offer offer) {
-        this.offer = offer;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setStatus(TradeStatus status) {
-        this.status = status;
-    }
-
-    public void setQuantity(float quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setRatedBuyer(boolean ratedBuyer) {
-        this.ratedBuyer = ratedBuyer;
-    }
-
-    public void setRatedSeller(boolean ratedSeller) {
-        this.ratedSeller = ratedSeller;
-    }
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public Optional<LocalDateTime> getStartDate() {
-        return Optional.of(startDate);
+    public boolean isSellerRated() {
+        return isSellerRated;
     }
 
     public int getqUnseenMessagesBuyer() {
         return qUnseenMessagesBuyer;
     }
 
-    public void setqUnseenMessagesBuyer(int qUnseenMessagesBuyer) {
-        this.qUnseenMessagesBuyer = qUnseenMessagesBuyer;
-    }
-
     public int getqUnseenMessagesSeller() {
         return qUnseenMessagesSeller;
+    }
+
+    public Collection<Message> getMessageCollection() {
+        return messageCollection;
+    }
+
+    public void setStatus(TradeStatus status) {
+        this.status = status;
+    }
+
+    public void markBuyerAsRated() {
+        this.isBuyerRated = true;
+    }
+
+    public void markSellerAsRated() {
+        this.isSellerRated = true;
+    }
+
+    public void setqUnseenMessagesBuyer(int qUnseenMessagesBuyer) {
+        this.qUnseenMessagesBuyer = qUnseenMessagesBuyer;
     }
 
     public void setqUnseenMessagesSeller(int qUnseenMessagesSeller) {

@@ -8,5 +8,5 @@ public interface MessageSenderFacade {
     void sendOfferUploadedMessage(String username, Offer offer);
     void sendAnonymousComplaintReceipt(String to, String username, String question);
     void sendComplaintReceipt(String username, String question);
-    void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId,int offerId);
+    void sendNewTradeNotification(String username, Trade trade, int tradeId,int offerId);
 }

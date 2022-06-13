@@ -56,12 +56,13 @@ public class User {
         return ratingCount;
     }
 
-    public float getRating(){
-        return getRatingSum()/getRatingCount();
+    public double getRating(){
+        return getRatingCount() == 0 ? 0 : getRatingSum()/getRatingCount();
     }
 
     public String getPhoneNumber(){return phoneNumber;}
 
+    /* It is optional because of legacy implementation, in the first sprint we did not hace usernames, only emails */
     public Optional<String> getUsername() {
         if (userAuth != null)
             return Optional.ofNullable(userAuth.getUsername());

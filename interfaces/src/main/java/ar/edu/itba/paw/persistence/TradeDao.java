@@ -8,36 +8,27 @@ import java.util.Optional;
 
 public interface TradeDao {
 
-    int makeTrade(int offerId, String buyerUsername, float quantity, TradeStatus status);
+    /** Trade creation */
+    Trade makeTrade(int offerId, int buyerId, float quantity);
 
-    int makeTrade(Trade.Builder builder);
-
-
-    void updateStatus(int tradeId, TradeStatus status);
-
-    Optional<Trade> getTradeById(int tradeId);
-
-    Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize);
-    int getSellingTradesByUsernameCount(String username);
-
-    Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize);
-    int getBuyingTradesByUsername(String username);
-
-    Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
-    int getSellingTradesByUsernameCount(String username,TradeStatus status);
-
-    Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize,TradeStatus status);
-    int getBuyingTradesByUsername(String username,TradeStatus status);
-
-
-    Collection<Trade> getTradesByUsername(String username, int page, int pageSize);
-    int getTradesByUsernameCount(String username);
-    void rateSeller(int tradeId);
-    void rateBuyer(int tradeId);
-
+    /** Trade manipulation */
+    Trade changeTradeStatus(int tradeId, TradeStatus status);
+    Trade modifyTrade(Trade trade);
     void deleteTrade(int tradeId);
 
-    void setBuyerUnseenMessageCount(int tradeId, int value);
-    void setSellerUnseenMessageCount(int tradeId, int value);
+    /** Simple getters */
+    Optional<Trade> getTradeById(int tradeId);
+
+    /** Returns a collection and count of Trades in which the user is the seller */
+    Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status);
+    long getTradesAsSellerCount(String username, TradeStatus status);
+
+    /** Returns a collection and count of Trades in which the user is the buyer */
+    Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status);
+    long getTradesAsBuyerCount(String username, TradeStatus status);
+
+    /** Returns the total count of Trades in a certain status for a username */
+    long getTotalTradesCount(String username, TradeStatus status);
+
 
 }

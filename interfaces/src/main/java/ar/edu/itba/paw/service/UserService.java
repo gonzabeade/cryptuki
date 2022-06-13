@@ -24,6 +24,6 @@ public interface UserService {
 
     /** Update User statistics */
     void updateLastLogin(String username);
-    void incrementUserRating(String username, int rating);
+    void updateRatingBy(String username, int rating);
 
 }

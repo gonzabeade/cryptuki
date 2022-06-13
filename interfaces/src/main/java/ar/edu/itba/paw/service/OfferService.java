@@ -42,5 +42,5 @@ public interface OfferService {
 
 
     /** Sell some amount of an offer. Caller must certify ownership of said offer */
-    void sellQuantityOfOffer(Offer offer, float sold, int tradeId);
+    void sellQuantityOfOffer(Offer offer, double sold, int tradeId);
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "auth")
-public final class UserAuth  {
+public class UserAuth  {
 
     @Id
     @Column(name="user_id")

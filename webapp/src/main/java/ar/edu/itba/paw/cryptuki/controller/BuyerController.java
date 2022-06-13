@@ -49,22 +49,23 @@ public class BuyerController {
         int pageNumber = page.orElse(0);
 
 
-        int tradeCount;
+        // TODO: check!!
+        long tradeCount;
         Collection<Trade> tradeList;
         if (status.isPresent()) {
             TradeStatus askedStatus = TradeStatus.valueOf(status.get());
-            tradeCount = tradeService.getBuyingTradesByUsernameCount(username, askedStatus);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
+            tradeCount = tradeService.getTradesAsBuyerCount(username, askedStatus);
+            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
         } else {
-            tradeCount = tradeService.getBuyingTradesByUsernameCount(username);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE);
+            tradeCount = tradeService.getTradesAsBuyerCount(username, TradeStatus.PENDING);
+            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, TradeStatus.PENDING);
         }
 
 
         User user = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username));
 
 
-        int pages = (tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         mav.addObject("username", username);
         mav.addObject("user", user);

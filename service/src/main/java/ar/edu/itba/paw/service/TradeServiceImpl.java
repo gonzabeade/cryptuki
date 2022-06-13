@@ -19,298 +19,107 @@ import java.util.Optional;
 @Service
 public class TradeServiceImpl implements TradeService {
 
-    private  OfferService offerService;
-    private  TradeDao tradeDao;
-    private  UserAuthDao userAuthDao;
-
-    private  MessageSenderFacade messageSenderFacade;
+    private TradeDao tradeDao;
+    private UserService userService;
+    private MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public TradeServiceImpl(OfferService offerService,
-                            TradeDao tradeDao,
-                            UserAuthDao userAuthDao,
-                            MessageSenderFacade messageSenderFacade) {
-        this.offerService = offerService;
+    public TradeServiceImpl(TradeDao tradeDao, MessageSenderFacade messageSenderFacade, UserService userService) {
         this.tradeDao = tradeDao;
-        this.userAuthDao = userAuthDao;
         this.messageSenderFacade = messageSenderFacade;
+        this.userService = userService;
     }
 
-
     @Override
-    @Transactional
     @Secured("ROLE_USER")
-    @PreAuthorize("#trade.buyerUsername == authentication.principal.username")
-    public int makeTrade(Trade.Builder trade) {
-
-        if (trade == null)
-            throw new NullPointerException("Trade Builder cannot be null");
-
-        Optional<Offer> offerOptional;
-        try {
-            offerOptional =  offerService.getOfferById(trade.getOfferId());
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
-        if (!offerOptional.isPresent())
-            throw new NoSuchOfferException(trade.getOfferId());
-        Offer offer = offerOptional.get();
-
-
-        Optional<UserAuth> userAuthOptional;
-        try {
-            userAuthOptional = userAuthDao.getUserAuthByEmail(offer.getSeller().getEmail());
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
-        if (!userAuthOptional.isPresent())
-            throw new NoSuchUserException(offer.getSeller().getEmail());
-        UserAuth userAuth = userAuthOptional.get();
-
-        trade.withCryptoCurrency(offer.getCrypto())
-            .withStartDate(LocalDateTime.now())
-            .withTradeStatus(TradeStatus.PENDING)
-            .withSellerUsername(userAuth.getUsername())
-            .withSellerUsername(userAuth.getUsername());
-
-        int tradeId;
-        try {
-           tradeId = tradeDao.makeTrade(trade);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
-        messageSenderFacade.sendNewTradeNotification(trade.getSellerUsername(), trade, tradeId, offer.getOfferId());
-        return tradeId;
+    @Transactional
+    public Trade makeTrade(int offerId, int buyerId, float quantity) {
+        Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
+        messageSenderFacade.sendNewTradeNotification(newTrade.getOffer().getSeller().getUserAuth().getUsername(), newTrade, newTrade.getTradeId(), newTrade.getOffer().getOfferId());
+        return newTrade;
     }
 
     @Override
     @Transactional
-//    @Secured("ROLE_ADMIN")
-    public void updateStatus(int tradeId, TradeStatus status) {
+    public Trade rejectTrade(int tradeId) {
+        return tradeDao.changeTradeStatus(tradeId, TradeStatus.REJECTED);
+    }
 
-        if (tradeId < 0)
-            throw new IllegalArgumentException("Id can only be non negative");
+    @Override
+    @Transactional
+    public Trade sellTrade(int tradeId) {
+        return tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
+    }
 
-        if (status == null)
-            throw new NullPointerException("Status cannot be null");
+    @Override
+    @Transactional
+    public Trade acceptTrade(int tradeId) {
+        return tradeDao.changeTradeStatus(tradeId, TradeStatus.ACCEPTED);
+    }
 
-        try {
-            tradeDao.updateStatus(tradeId, status);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    @Override
+    @Transactional
+    public void deleteTrade(int tradeId) {
+        tradeDao.deleteTrade(tradeId);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public Optional<Trade> getTradeById(int tradeId) {
-
-        if (tradeId < 0)
-            throw new IllegalArgumentException("Id can only be non negative");
-
-        try {
-            return tradeDao.getTradeById(tradeId);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        return tradeDao.getTradeById(tradeId);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
-
-        if (page < 0 || pageSize < 0)
-            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getSellingTradesByUsername(username, page, pageSize);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status) {
+        return tradeDao.getTradesAsSeller(username, page, pageSize, status);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public int getSellingTradesByUsernameCount(String username) {
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getSellingTradesByUsernameCount(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public long getTradesAsSellerCount(String username, TradeStatus status) {
+        return tradeDao.getTradesAsSellerCount(username, status);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
-
-        if (page < 0 || pageSize < 0)
-            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getBuyingTradesByUsername(username, page, pageSize);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status) {
+        return tradeDao.getTradesAsBuyer(username, page, pageSize, status);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public int getBuyingTradesByUsernameCount(String username) {
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getBuyingTradesByUsername(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
-        if (page < 0 || pageSize < 0)
-            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getSellingTradesByUsername(username, page, pageSize,status);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    public int getSellingTradesByUsernameCount(String username, TradeStatus status) {
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getSellingTradesByUsernameCount(username,status);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize, TradeStatus status) {
-        if (page < 0 || pageSize < 0)
-            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getBuyingTradesByUsername(username, page, pageSize,status);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-    }
-
-    }
-    @Override
-    public int getBuyingTradesByUsernameCount(String username, TradeStatus status) {
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getBuyingTradesByUsername(username,status);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
-
-        if (page < 0 || pageSize < 0)
-            throw new IllegalArgumentException("Both page and pageSize can only be non negative");
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getTradesByUsername(username,page,pageSize);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public long getTradesAsBuyerCount(String username, TradeStatus status) {
+        return tradeDao.getTradesAsBuyerCount(username, status);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public int getTradesByUsernameCount(String username) {
-
-        if (username == null)
-            throw new NullPointerException("Username cannot be null");
-
-        try {
-            return tradeDao.getTradesByUsernameCount(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public long getTotalTradesCount(String username, TradeStatus status) {
+        return tradeDao.getTotalTradesCount(username, status);
     }
 
     @Override
     @Transactional
-    public void updateRatedSeller(int tradeId) {
-        try{
-            tradeDao.rateSeller(tradeId);
-        }catch (PersistenceException pe){
-            throw new ServiceDataAccessException(pe);
-        }
-    }
+    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
+    public void rateUserRegardingTrade(String username, int rating, int tradeId) {
 
-    @Override
-    @Transactional
-    public void updatedRatedBuyer(int tradeId) {
-        try{
-            tradeDao.rateBuyer(tradeId);
-        }catch (PersistenceException pe){
-            throw new ServiceDataAccessException(pe);
-        }
-    }
+        // TODO: if time allows, send email
+        if (rating < 1 || rating > 10)
+            throw new IllegalArgumentException("Rating is out of bounds.");
 
-    @Override
-    @Transactional
-    public void deleteTrade(int tradeId) {
-        //validate authorization
-        tradeDao.deleteTrade(tradeId);
-    }
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
 
-    @Override
-    @Transactional
-    public void markBuyerMessagesAsSeen(int tradeId) {
-        tradeDao.setBuyerUnseenMessageCount(tradeId, 0);
-    }
+        if (username.equals(trade.getBuyer().getUserAuth().getUsername())) trade.markBuyerAsRated();
+        else  trade.markSellerAsRated();
 
-    @Override
-    @Transactional
-    public void markSellerMessagesAsSeen(int tradeId) {
-        tradeDao.setSellerUnseenMessageCount(tradeId, 0);
+        userService.updateRatingBy(username, rating);
     }
-
 
 }

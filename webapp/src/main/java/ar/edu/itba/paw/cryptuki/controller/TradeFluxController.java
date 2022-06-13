@@ -9,8 +9,8 @@ import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
-import ar.edu.itba.paw.service.RatingService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +29,15 @@ public class TradeFluxController {
 
     private final OfferService offerService;
     private final TradeService tradeService;
-    private final RatingService ratingService;
+    private final ChatService chatService;
     private final UserService us;
     private static final int PAGE_SIZE = 7;
 
     @Autowired
-    public TradeFluxController(OfferService offerService, TradeService tradeService, RatingService ratingService, UserService us) {
+    public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us, ChatService chatService) {
         this.offerService = offerService;
         this.tradeService = tradeService;
-        this.ratingService = ratingService;
+        this.chatService = chatService;
         this.us = us;
     }
 
@@ -67,7 +67,7 @@ public class TradeFluxController {
             return mav;
         }
 
-        tradeService.markBuyerMessagesAsSeen(tradeId);
+        chatService.markBuyerMessagesAsSeen(tradeId);
 
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);
@@ -80,14 +80,15 @@ public class TradeFluxController {
 
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm offerBuyForm, final BindingResult errors, final Authentication authentication){
+    public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors()) {
-            return buyOffer(offerBuyForm.getOfferId(), offerBuyForm, authentication);
+            return buyOffer(form.getOfferId(), form, authentication);
         }
 
-        int tradeId = tradeService.makeTrade(offerBuyForm.toTradeBuilder(authentication.getName()));
-        return new ModelAndView("redirect:/trade"+"?tradeId="+tradeId);
+        User user = us.getUserByUsername(authentication.getName()).get(); // Already know that exists
+        Trade trade = tradeService.makeTrade(form.getOfferId(), user.getId(), form.getAmount());
+        return new ModelAndView("redirect:/trade"+"?tradeId="+trade.getTradeId());
     }
 
     @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
@@ -114,7 +115,7 @@ public class TradeFluxController {
         ModelAndView mav = new ModelAndView(viewName);
 
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
-        Offer offer = offerService.getOfferById(trade.getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOfferId()));
+        Offer offer = offerService.getOfferById(trade.getOffer().getOfferId()).orElseThrow(()->new NoSuchOfferException(trade.getOffer().getOfferId()));
         User user = us.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName()));
         boolean buying = !offer.getSeller().getUsername().get().equals(authentication.getName());
 
@@ -122,9 +123,9 @@ public class TradeFluxController {
         mav.addObject("trade", trade);
         mav.addObject("offer", offer);
         mav.addObject("buying",buying);
-        mav.addObject("otherLastLogin",buying ? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()) : LastConnectionUtils.toRelativeTime(trade.getUser().getLastLogin()));
-        mav.addObject("ratedBySeller", trade.getRatedSeller());
-        mav.addObject("ratedByBuyer", trade.getRatedBuyer());
+        mav.addObject("otherLastLogin",buying ? LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()) : LastConnectionUtils.toRelativeTime(trade.getBuyer().getLastLogin()));
+        mav.addObject("ratedBySeller", trade.isSellerRated());
+        mav.addObject("ratedByBuyer", trade.isBuyerRated());
         return mav;
     }
 
@@ -135,7 +136,7 @@ public class TradeFluxController {
             return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
         }
 
-        ratingService.rate(ratingForm.getTradeId(), authentication.getName(),  ratingForm.getRating());
+        tradeService.rateUserRegardingTrade(authentication.getName(), ratingForm.getRating(), ratingForm.getTradeId());
         return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
 
@@ -151,19 +152,19 @@ public class TradeFluxController {
         if((!role.get().equals("buying")&&!role.get().equals("selling")))
             throw new IllegalArgumentException();
 
-        int tradeCount;
+        long tradeCount;
         Collection<Trade> tradeList;
 
         if(role.get().equals("buying")){
-            tradeCount= tradeService.getBuyingTradesByUsernameCount(username);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE);
+            tradeList = tradeService.getTradesAsBuyer(username, pageNumber, PAGE_SIZE, TradeStatus.valueOf(status.orElse("PENDING")));
+            tradeCount = tradeService.getTradesAsBuyerCount(username, TradeStatus.valueOf(status.orElse("PENDING")));
         }
         else{
-            tradeCount = tradeService.getSellingTradesByUsernameCount(username);
-            tradeList = tradeService.getSellingTradesByUsername(authentication.getName(), pageNumber,PAGE_SIZE);
+            tradeList = tradeService.getTradesAsSeller(username, pageNumber, PAGE_SIZE, TradeStatus.valueOf(status.orElse("PENDING")));
+            tradeCount = tradeService.getTradesAsSellerCount(username, TradeStatus.valueOf(status.orElse("PENDING")));
         }
 
-        int pages=(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
+        int pages= (int)(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
         if(tradeList.isEmpty())
             if(role.get().equals("buying"))
                 mav.addObject("noBuyingTrades",true);
@@ -184,7 +185,7 @@ public class TradeFluxController {
             return executeTrade(soldTradeForm,new StatusTradeForm(), new MessageForm(), statusTradeForm.getTradeId(),authentication);
         Trade trade = tradeService.getTradeById(soldTradeForm.getTrade()).orElseThrow(()->new NoSuchTradeException(soldTradeForm.getTrade()));
         Offer offer = trade.getOffer();
-        offerService.sellQuantityOfOffer(offer, trade.getQuantity(),trade.getTradeId());
+        offerService.sellQuantityOfOffer(offer, trade.getQuantity(), trade.getTradeId());
         return new ModelAndView("redirect:/receiptDescription/"+trade.getTradeId());
     }
 

@@ -8,7 +8,7 @@ import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.MessageService;
+import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +31,13 @@ public class ChatController {
     private final UserService userService;
     private final TradeService tradeService;
 
-    private final MessageService messageService;
+    private final ChatService chatService;
 
     @Autowired
-    public ChatController(UserService userService, TradeService tradeService, MessageService messageService) {
+    public ChatController(UserService userService, TradeService tradeService, ChatService chatService) {
         this.userService = userService;
         this.tradeService = tradeService;
-        this.messageService = messageService;
+        this.chatService = chatService;
     }
 
 
@@ -49,12 +49,12 @@ public class ChatController {
         ModelAndView mav = new ModelAndView("chat/chat");
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         User otherUser;
-        if (trade.getBuyerUsername().equals(authentication.getName())) {
-            otherUser = userService.getUserByUsername(trade.getSellerUsername()).get();
-            tradeService.markBuyerMessagesAsSeen(tradeId);
+        if (trade.getBuyer().getUserAuth().getUsername().equals(authentication.getName())) {
+            otherUser = userService.getUserByUsername(trade.getOffer().getSeller().getUsername().get()).get();
+            chatService.markBuyerMessagesAsSeen(tradeId);
         } else {
-            otherUser = userService.getUserByUsername(trade.getBuyerUsername()).get();
-            tradeService.markSellerMessagesAsSeen(tradeId);
+            otherUser = userService.getUserByUsername(trade.getBuyer().getUsername().get()).get();
+            chatService.markSellerMessagesAsSeen(tradeId);
         }
 
         mav.addObject("otherUser", otherUser);
@@ -72,7 +72,7 @@ public class ChatController {
         if(errors.hasErrors()){
             return chatPage(messageForm, soldTradeForm, statusTradeForm, messageForm.getTradeId(), authentication);
         }
-        messageService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
+        chatService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
         return new ModelAndView("redirect:/chat?tradeId="+messageForm.getTradeId());
     }
 
@@ -81,7 +81,7 @@ public class ChatController {
         if(errors.hasErrors()){
             return new ModelAndView("redirect:/trade?trade="+ messageForm.getTradeId());
         }
-        messageService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
+        chatService.sendMessage(messageForm.getUserId(), messageForm.getTradeId(), messageForm.getMessage());
         return new ModelAndView("redirect:/trade?tradeId="+messageForm.getTradeId());
     }
 

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,7 +17,12 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/buyer/buyerHeader.jsp"/>
+<sec:authorize access="isAuthenticated()">
+    <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+</sec:authorize>
+<sec:authorize access="!isAuthenticated()">
+    <jsp:include page="../components/anon/anonymousHeader.jsp"/>
+</sec:authorize>
 <div class="flex flex-row divide-x-2 divide-polard mt-10">
     <div class="flex flex-col w-3/5">
         <div class="flex">

@@ -33,39 +33,37 @@
 <sec:authorize access="!isAuthenticated()">
     <jsp:include page="../components/anon/anonymousHeader.jsp"/>
 </sec:authorize>
-<div class="flex flex-row mt-10 divide-x">
+<div class="flex flex-row mt-10">
     <div class="flex flex-col mx-10 w-1/5">
 
-        <h1 class="text-2xl font-bold font-sans"><messages:message code="filters"/> </h1>
-        <div class="flex flex-col mx-3">
-            <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
-            <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
-                <option disabled selected><messages:message code="chooseAnOption"/></option>
-                <c:forEach items="${cryptocurrencies}" var="coin">
-                    <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
-                </c:forEach>
-            </select>
+        <div class="rounded-lg bg-[#D8DEE9] border-4 border-[#5E81AC] py-5 w-full">
+            <div class="flex flex-col mx-3">
+                <label for="coin"  class="text-l font-bold font-sans text-start"><messages:message code="cryptocurrency"/></label>
+                <select name="coin" id="coin" class="bg-white p-2 mt-1 rounded-lg" onchange="addQueryParam(this.id)">
+                    <option disabled selected><messages:message code="chooseAnOption"/></option>
+                    <c:forEach items="${cryptocurrencies}" var="coin">
+                        <option value="<c:out value="${coin.code}"/>"><img class="my-auto h-3 w-3" src="<c:url value="/public/images/${coin.code}.png"/>"/><c:out value="${coin.commercialName}"/></option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="flex flex-col mx-3 mt-3">
+                <label for="location" class="text-l font-bold font-sans text-start"><messages:message code="location"/></label>
+                <select name="location" id="location" class="bg-white p-2 mt-1 rounded-lg" onchange="addQueryParam(this.id)">
+                    <option disabled selected><messages:message code="chooseAnOption"/></option>
+                    <c:forEach items="${locations}" var="location">
+                        <option value=<c:out value="${location}"/>><messages:message code="Location.${location}"/></option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="flex flex-row justify-center mt-3">
+                <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
+            </div>
+            <div class="flex flex-row justify-center">
+                <a href="<c:url value="/buyer/market"/>" id="link" rel="search" class="py-2 px-6 text-white rounded-lg bg-frost justify-center"><messages:message code="filter"/></a>
+            </div>
         </div>
-        <div class="flex flex-col mx-3 mt-6">
-            <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message
-                    code="location"/></label>
-            <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
-                <option disabled selected><messages:message code="chooseAnOption"/></option>
-                <c:forEach items="${locations}" var="location">
-                    <option value=<c:out value="\"${location}\""/>><messages:message code="Location.${location}"/></option>
-                </c:forEach>
-
-            </select>
-        </div>
-        <div class="flex flex-row justify-center mt-3">
-            <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
-        </div>
-        <a href="<c:url value="/buyer/market"/>" id="link" rel="search"
-           class="py-2 px-6  text-white rounded-lg bg-frost  mx-auto"><messages:message
-                code="filter"/>
-        </a>
-        <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>
-        <div class="flex flex-col">
+<%--        <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>--%>
+        <div class="flex flex-col mt-4">
             <jsp:include page="../components/cryptoCard.jsp">
                 <jsp:param name="code" value="BTC"/>
                 <jsp:param name="commercialName" value="Bitcoin"/>

@@ -91,12 +91,12 @@
                         <div class="flex flex-row">
                             <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
                             <div class="my-auto ml-2">
-                                <c:forEach begin="0" end="${stars-1}">
-                                    <span class="fa fa-star" style="color: orange"></span>
-                                </c:forEach>
-                                <c:forEach begin="${stars}" end="4">
-                                    <span class="fa fa-star" style="color: gray"></span>
-                                </c:forEach>
+<%--                                <c:forEach begin="0" end="${stars-1}">--%>
+<%--                                    <span class="fa fa-star" style="color: orange"></span>--%>
+<%--                                </c:forEach>--%>
+<%--                                <c:forEach begin="${stars}" end="4">--%>
+<%--                                    <span class="fa fa-star" style="color: gray"></span>--%>
+<%--                                </c:forEach>--%>
                             </div>
                         </div>
                 </div>

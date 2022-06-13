@@ -27,14 +27,15 @@ let usdtPrice =  getCryptoPrice('usdt');
 let daiPrice  =   getCryptoPrice('dai');
 
  async function setCryptoPrice() {
-    console.log("entre")
-    document.getElementById("BTC").innerHTML =  await btcPrice + ' ARS';
+     let numberLocale = Intl.NumberFormat('es-AR');
 
-    document.getElementById("ETH").innerHTML =  await ethPrice + ' ARS';
+    document.getElementById("BTC").innerHTML =  numberLocale.format((await btcPrice).toFixed(2)) + ' ARS';
 
-    document.getElementById("USDT").innerHTML =  await usdtPrice + ' ARS';
+    document.getElementById("ETH").innerHTML =  numberLocale.format((await ethPrice).toFixed(2)) + ' ARS';
 
-    document.getElementById("DAI").innerHTML =  await daiPrice + ' ARS';
+    document.getElementById("USDT").innerHTML =  numberLocale.format((await usdtPrice).toFixed(2)) + ' ARS';
+
+    document.getElementById("DAI").innerHTML =  numberLocale.format((await daiPrice).toFixed(2)) + ' ARS';
 
 
 }

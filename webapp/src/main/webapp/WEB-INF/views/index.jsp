@@ -101,13 +101,13 @@
                 <option value="VELEZ_SARSFIELD">Vélez Sarsfield</option>
             </select>
         </div>
+        <a href="<c:url value="/buyer/market"/>" id="link" rel="search"
+           class="py-2 px-6   mt-5 text-white rounded-lg bg-frost  mx-auto"><messages:message
+                code="filter"/>
+        </a>
         <div class="flex flex-row justify-center mt-3">
             <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
         </div>
-        <a href="<c:url value="/buyer/market"/>" id="link" rel="search"
-           class="py-2 px-6  text-white rounded-lg bg-frost  mx-auto"><messages:message
-                code="filter"/>
-        </a>
         <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>
         <div class="flex flex-col">
             <jsp:include page="../components/cryptoCard.jsp">

@@ -13,6 +13,7 @@ function getFilters() {
             elementToSelect = document.getElementById(key);
             if (elementToSelect != null) {
                 elementToSelect.value = value;
+                document.getElementById("reset").classList.remove("hidden")
             }
         }
         // let reset = document.getElementById("reset");
@@ -34,9 +35,7 @@ function getFilters() {
 function resetAllFilters(){
     document.getElementById("reset").classList.add("hidden")
     document.getElementById("coin").options[0].selected = true
-    document.getElementById("pm").options[0].selected = true
-    document.getElementById("price").value = null;
-
+    document.getElementById("location").options[0].selected = true
     deleteParams();
 }
 function addPageValue(value){
@@ -58,6 +57,8 @@ function addQueryParam(id) {
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     document.getElementById("link").href = newRelativePathQuery;
+    document.getElementById("reset").classList.remove("hidden")
+
 }
 function resetAllAdminFilters(){
     document.getElementById("reset").classList.add("hidden")

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form;
+package ar.edu.itba.paw.cryptuki.form.admin;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

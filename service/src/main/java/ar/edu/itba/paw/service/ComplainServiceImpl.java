@@ -3,11 +3,11 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.Country;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;
-import ar.edu.itba.paw.model.ComplainStatus;
+import ar.edu.itba.paw.persistence.UserAuthDao;
+import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,12 +21,14 @@ import java.util.Optional;
 public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
+    private final UserAuthDao userAuthDao;
     private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade) {
+    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade, UserAuthDao userAuthDao) {
         this.complainDao = complainDao;
         this.messageSenderFacade = messageSenderFacade;
+        this.userAuthDao = userAuthDao;
     }
 
     @Override
@@ -90,10 +92,17 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Secured("ROLE_ADMIN")
     @Transactional
-    public void closeComplain(int complainId, String moderatorUsername, String comment){
-       Optional<Complain> maybeComplain = complainDao.closeComplain(complainId, moderatorUsername, comment);
-       if (!maybeComplain.isPresent())
-           throw new NoSuchComplainException(complainId);
+    public void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId){
+       Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+       userAuthDao.kickoutUser(kickedUserId);
+        // TODO: If time allows, email
+    }
+
+    @Override
+    @Secured("ROLE_ADMIN")
+    @Transactional
+    public void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment){
+        complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));;
     }
 
     @Override

@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class ComplainFilterResult {
+public class ComplainFilterForm {
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

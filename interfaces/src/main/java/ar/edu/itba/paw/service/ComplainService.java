@@ -19,7 +19,8 @@ public interface ComplainService {
     Optional<Complain> getComplainById(int id);
 
     /** Close a complain */
-    void closeComplain(int complainId, String moderatorUsername, String comment);
+    void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId);
+    void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment);
 
     /** Get support for anonymous users*/
     void getSupportFor(String email, String description);

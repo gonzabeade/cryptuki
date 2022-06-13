@@ -13,7 +13,7 @@
         <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Mensaje *</form:label>
         <div class="flex-row justify-center">
-            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="No recibi las criptomonedas, etc" />
+            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="No recibi las criptomonedas, etc [TRADUCIR]" />
         </div>
     </div>
     <div class="flex flex-row p-5">

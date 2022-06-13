@@ -26,8 +26,9 @@ public class UserAuthHibernateDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUserAuthByUsername(String username) {
-        TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.username = :username ", UserAuth.class);
+        TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.username = :username and status <> :status ", UserAuth.class);
         typedQuery.setParameter("username", username);
+        typedQuery.setParameter("status", UserStatus.KICKED);
         try {
             return Optional.of(typedQuery.getSingleResult());
         } catch (NoResultException nre) {
@@ -37,8 +38,9 @@ public class UserAuthHibernateDao implements UserAuthDao{
 
     @Override
     public Optional<UserAuth> getUserAuthByEmail(String email) {
-        TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.user.email = :email", UserAuth.class);
+        TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.user.email = :email  and status <> :status ", UserAuth.class);
         typedQuery.setParameter("email", email);
+        typedQuery.setParameter("status", UserStatus.KICKED);
         try {
             return Optional.of(typedQuery.getSingleResult());
         } catch (NoResultException nre) {
@@ -63,6 +65,13 @@ public class UserAuthHibernateDao implements UserAuthDao{
         userAuth.setPassword(newPassword);
         em.persist(userAuth);
         return true;
+    }
+
+    @Override
+    public void kickoutUser(int userId) {
+        UserAuth auth = em.find(UserAuth.class, userId);
+        auth.setUserStatus(UserStatus.KICKED);
+        em.persist(auth);
     }
 
 }

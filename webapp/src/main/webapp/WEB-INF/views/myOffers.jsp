@@ -47,7 +47,7 @@
                     <jsp:param name="owner" value="${owner}"/>
                     <jsp:param name="asking_price" value="${offer.unitPrice}"/>
                     <jsp:param name="trades" value="${offer.seller.ratingCount}"/>
-                    <jsp:param name="offerId" value="${offer.id}"/>
+                    <jsp:param name="offerId" value="${offer.offerId}"/>
                     <jsp:param name="minCoinAmount" value="${offer.minQuantity}"/>
                     <jsp:param name="maxCoinAmount" value="${offer.maxQuantity}"/>
                     <jsp:param name="userEmail" value="${userEmail}"/>
@@ -58,7 +58,7 @@
                     <jsp:param name="location" value="${offer.location}"/>
 
                 </jsp:include>
-                <div id="${offer.id}" style="display: none" class="flex scroll bg-stormd/[0.9]">
+                <div id="${offer.offerId}" style="display: none" class="flex scroll bg-stormd/[0.9]">
                     <div class="flex w-1/2 mt-2 bg-stormd/[0.9]">
                         <c:if test="${(offer.associatedTrades.size() == 0)}">
                             <h2 class="text-center text-4xl font-semibold font-sans text-polar mt-4"><messages:message code="noAssociatedPendignProposes"/> </h2>

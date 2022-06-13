@@ -3,6 +3,6 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 
 public enum Role {
-    ADMIN,
-    USER
+    ROLE_ADMIN,
+    ROLE_USER
 }

@@ -104,7 +104,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public Optional<Trade> getTradeById(int tradeId) {
 
         if (tradeId < 0)
@@ -119,7 +119,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getSellingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -137,7 +137,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public int getSellingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -152,7 +152,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getBuyingTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -170,7 +170,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public int getBuyingTradesByUsernameCount(String username) {
 
         if (username == null)
@@ -240,7 +240,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public Collection<Trade> getTradesByUsername(String username, int page, int pageSize) {
 
         if (page < 0 || pageSize < 0)
@@ -258,7 +258,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public int getTradesByUsernameCount(String username) {
 
         if (username == null)

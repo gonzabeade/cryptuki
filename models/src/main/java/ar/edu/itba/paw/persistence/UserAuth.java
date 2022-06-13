@@ -20,7 +20,7 @@ public final class UserAuth  {
 
     @Column(name = "role_id")
     @Enumerated(EnumType.ORDINAL)
-    private Role role = Role.USER;
+    private Role role = Role.ROLE_USER;
 
     @Column(name="code")
     private Integer code;

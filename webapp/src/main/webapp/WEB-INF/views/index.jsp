@@ -48,6 +48,7 @@
                     code="location"/></label>
             <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
+                <option value="ALMAGRO"></option>
                 <c:forEach items="${cryptocurrencies}" var="coin">
                     <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
                 </c:forEach>

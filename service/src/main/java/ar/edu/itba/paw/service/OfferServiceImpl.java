@@ -142,7 +142,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
     public void deleteOffer(int offerId) {
 
         if (offerId < 0)
@@ -157,7 +157,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
     public void sellerPauseOffer(int offerId) {
 
         if (offerId < 0)
@@ -188,7 +188,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
     public void resumeOffer(int offerId) {
 
         if (offerId < 0)
@@ -230,7 +230,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal) OR hasRole('ROLE_ADMIN') ")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal) OR hasRole('ADMIN') ")
     public Optional<Offer> getOfferIfAuthorized(int offerId) {
         return getOfferById(offerId);
     }

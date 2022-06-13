@@ -30,7 +30,7 @@
 <c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="../components/modifyForm.jsp">
-    <jsp:param name="saveUrl" value="/modify/${offer.id}"/>
+    <jsp:param name="saveUrl" value="/modify/${offer.offerId}"/>
     <jsp:param name="selectedCrypto" value="${selectedCrypto}"/>
 
 </jsp:include>

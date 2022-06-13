@@ -44,6 +44,7 @@ public class ComplainHibernateDao implements ComplainDao{
         if (complain == null)
             return Optional.empty();
         TypedQuery<User> tq = em.createQuery("from User AS u WHERE u.userAuth.username = :username", User.class);
+        tq.setParameter("username", moderator);
         User moderatorUser = tq.getSingleResult();
         complain.setModerator(moderatorUser);
         complain.setModeratorComments(moderatorComments);

@@ -10,6 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
   <script src="<c:url value="/public/js/pagination.js"/> "></script>
+  <script src="<c:url  value="/public/js/feedback.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -25,6 +26,11 @@
   <jsp:include page="../../components/admin/header.jsp"/>
   <div class="flex flex-col ml-80 my-10 h-screen w-screen">
     <h1 class="font-sans text-4xl font-bold"><messages:message code="pendingClaims"/></h1>
+    <div id="confirmationToggle" class="hidden">
+      <jsp:include page="../../components/confirmationToggle.jsp">
+        <jsp:param name="title" value="Reclamo cerrado con éxito [TRADUCIR]"/>
+      </jsp:include>
+    </div>
     <div class="flex flex-col divide-x h-full">
       <div class="p-10 flex flex-wrap justify-between">
 
@@ -60,3 +66,15 @@
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
 </body>
 </html>
+
+<script>
+  window.onload = function successMessage() {
+    const searchParams = new URLSearchParams(window.location.search);
+    console.log(searchParams)
+    if (searchParams.has("success")) {
+      var element = document.getElementById("confirmationToggle")
+      element.classList.remove('hidden')
+    }
+
+  }
+</script>

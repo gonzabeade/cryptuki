@@ -81,28 +81,33 @@
             <p class="font-sans font-semibold font-polard text-xl"> ¿Qué se debería hacer ante la denuncia de <c:out value="${complainer.username.get()}"/>? </p>
         </div>
         <div class="flex flex-row mx-auto w-full text-center justify-around ">
-            <button id="forgiveButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyForgiveForm()">Desestimar denuncia</button>
+            <button id="dismissButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyDismissForm()">Desestimar denuncia</button>
             <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()">Vetar al denunciado</button>
         </div>
         <div id="kickoutForm" class="hidden w-full flex flex-col mt-5">
-            <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
-            <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
-                <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                <p>Estas a punto de vetar a <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/> de Cryptuki. Recuerda que el veredicto no es reversible, debes estar seguro de la decisión. </p>
-            </div>
-            <textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></textarea>
-            <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" onclick="show">Enviar</button>
+            <c:url value="/admin/complaint/kickout/${complaintId}?user=${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.id : trade.buyer.id}" var="kickoutUrl"/>
+            <form:form method="post" action="${kickoutUrl}" modelAttribute="solveComplainFormKickout">
+                <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+                <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
+                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                    <p>Estas a punto de vetar a <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/> de Cryptuki. Recuerda que el veredicto no es reversible, debes estar seguro de la decisión. </p>
+                </div>
+                <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
+                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" >Enviar</button>
+            </form:form>
         </div>
-        <div id="forgiveForm" class="hidden w-full flex flex-col mt-5">
-            <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
-            <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
-                <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                <p>Estas a punto de desestimar la denuncia de <c:url value="${complainer.username.get()}"/>. Recuerda que el veredicto no es reversible, de estar equivocado deberás esperar a que vuelvan a denunciar al usuario para vetarlo. </p>
-            </div>
-            <textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></textarea>
-            <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" onclick="show">Enviar</button>
+        <div id="dismissForm" class="hidden w-full flex flex-col mt-5">
+            <c:url value="/admin/complaint/dismiss/${complaintId}" var="dismissUrl"/>
+            <form:form method="post" action="${kickoutUrl}" modelAttribute="solveComplainFormKickout">
+                <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+                <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
+                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                    <p>Estas a punto de desestimar la denuncia de <c:url value="${complainer.username.get()}"/>. Recuerda que el veredicto no es reversible, de estar equivocado deberás esperar a que vuelvan a denunciar al usuario para vetarlo. </p>
+                </div>
+                <form:textarea path="comments" class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
+                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3">Enviar</button>
+            </form:form>
         </div>
-
     </div>
 </div>
 <div class="shape-blob"></div>
@@ -119,10 +124,10 @@
     function deleteSemiForms(){
         if (!document.getElementById("kickoutForm").classList.contains("hidden"))
             document.getElementById("kickoutForm").classList.add("hidden");
-        if (!document.getElementById("forgiveForm").classList.contains("hidden"))
-            document.getElementById("forgiveForm").classList.add("hidden");
-        if (document.getElementById("forgiveButton").classList.contains("underline"))
-            document.getElementById("forgiveButton").classList.remove("underline");
+        if (!document.getElementById("dismissForm").classList.contains("hidden"))
+            document.getElementById("dismissForm").classList.add("hidden");
+        if (document.getElementById("dismissButton").classList.contains("underline"))
+            document.getElementById("dismissButton").classList.remove("underline");
         if (document.getElementById("kickoutButton").classList.contains("underline"))
             document.getElementById("kickoutButton").classList.remove("underline");
     }
@@ -130,22 +135,22 @@
     function showOnlyKickoutForm(){
         if (document.getElementById("kickoutForm").classList.contains("hidden"))
             document.getElementById("kickoutForm").classList.remove("hidden");
-        if (!document.getElementById("forgiveForm").classList.contains("hidden"))
-            document.getElementById("forgiveForm").classList.add("hidden");
-        if (document.getElementById("forgiveButton").classList.contains("underline"))
-            document.getElementById("forgiveButton").classList.remove("underline");
+        if (!document.getElementById("dismissForm").classList.contains("hidden"))
+            document.getElementById("dismissForm").classList.add("hidden");
+        if (document.getElementById("dismissButton").classList.contains("underline"))
+            document.getElementById("dismissButton").classList.remove("underline");
         if (!document.getElementById("kickoutButton").classList.contains("underline"))
             document.getElementById("kickoutButton").classList.add("underline");
     }
 
-    function showOnlyForgiveForm(){
-        if (document.getElementById("forgiveForm").classList.contains("hidden"))
-            document.getElementById("forgiveForm").classList.remove("hidden");
+    function showOnlyDismissForm(){
+        if (document.getElementById("dismissForm").classList.contains("hidden"))
+            document.getElementById("dismissForm").classList.remove("hidden");
         if (!document.getElementById("kickoutForm").classList.contains("hidden"))
             document.getElementById("kickoutForm").classList.add("hidden");
         if (document.getElementById("kickoutButton").classList.contains("underline"))
             document.getElementById("kickoutButton").classList.remove("underline");
-        if (!document.getElementById("forgiveButton").classList.contains("underline"))
-            document.getElementById("forgiveButton").classList.add("underline");
+        if (!document.getElementById("dismissButton").classList.contains("underline"))
+            document.getElementById("dismissButton").classList.add("underline");
     }
 </script>

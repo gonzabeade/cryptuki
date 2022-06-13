@@ -19,7 +19,6 @@ public interface UserAuthDao {
     /** Changes the password of a user*/
     boolean changePassword(String username, String newPassword);
 
-
-
-
+    /** Sets the status of a User to USER.KICKED, and disallows it from entering the site in the future */
+    void kickoutUser(int userId);
 }

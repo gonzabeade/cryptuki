@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
@@ -56,7 +55,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.GET)
-    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, @ModelAttribute("solveComplaintForm") SolveComplainForm form){
+    public ModelAndView complaintDetail(@PathVariable(value = "complaintId") final int complaintId, @ModelAttribute("solveComplainFormKickout") SolveComplainForm solveComplainFormKickout, @ModelAttribute("solveComplainFormDismiss") SolveComplainForm solveComplainFormDismiss){
         Complain complain = complainService.getComplainById(complaintId).orElseThrow(()->new NoSuchComplainException(complaintId));
         User complainer = complain.getComplainer();
         Trade trade = complain.getTrade();
@@ -67,32 +66,36 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping(value = "/complaint/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView solveComplaint(@Valid @ModelAttribute("solveComplaintForm") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
-        if(result.hasErrors()){
-            return complaintDetail(complaintId, form);
-        }
-        complainService.closeComplain(complaintId, authentication.getName(), form.getComments());
-        return new ModelAndView("redirect:/admin/success");
+    @RequestMapping(value = "/complaint/kickout/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaintKickout(@Valid @ModelAttribute("solveComplainFormKickout") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, @RequestParam(value = "user") final int kickedUserId, Authentication authentication){
+        if(result.hasErrors())
+            return complaintDetail(complaintId, form, new SolveComplainForm());
+        complainService.closeComplainWithKickout(complaintId, authentication.getName(), form.getComments(), kickedUserId);
+        return new ModelAndView("redirect:/admin?success");
+    }
+
+    @RequestMapping(value = "/complaint/dismiss/{complaintId}", method = RequestMethod.POST)
+    public ModelAndView solveComplaintDismiss(@Valid @ModelAttribute("solveComplaintFormDismiss") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
+        if(result.hasErrors())
+            return complaintDetail(complaintId, new SolveComplainForm(), form);
+
+        complainService.closeComplainWithDismiss(complaintId, authentication.getName(), form.getComments());
+        return new ModelAndView("redirect:/admin?success");
     }
 
     @RequestMapping(value = "/kyccheck", method = RequestMethod.GET)
     public ModelAndView kycCheckHome(@ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @RequestParam("page") Optional<Integer> page) {
         ModelAndView mav = new ModelAndView("admin/kycAll");
-
         Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(page.orElse(0), KYC_PAGE_SIZE);
         mav.addObject("pendingKycs", pendingKycs);
-
         return mav;
     }
 
     @RequestMapping(value = "/kyccheck/{username}", method = RequestMethod.GET)
     public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username) {
         ModelAndView modelAndView = new ModelAndView("admin/kycProfile");
-
         Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
         KycInformation kyc = maybeKyc.orElseThrow(()-> new NoSuchKycException(username));
-
         modelAndView.addObject("kyc", kyc);
         return modelAndView;
     }
@@ -105,9 +108,8 @@ public class AdminController {
 
     @RequestMapping(value ="/kyccheck/reject/{kycid}", method = RequestMethod.POST)
     public ModelAndView kycRejectPost(@Valid @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, final BindingResult errors, @PathVariable(value = "kycid") final int kycId){
-        if(errors.hasErrors()){
+        if(errors.hasErrors())
             return kycCheckGet(kycApprovalForm, kycApprovalForm.getUsername());
-        }
         kycService.rejectKycRequest(kycId, kycApprovalForm.getMessage());
         return new ModelAndView("redirect:/admin/kyccheck?success");
     }

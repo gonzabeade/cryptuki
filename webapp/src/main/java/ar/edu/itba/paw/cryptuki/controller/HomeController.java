@@ -2,7 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -53,7 +53,7 @@ public class HomeController {
 
         if ( null != authentication ) {
             String username= authentication.getName();
-            User user = us.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+            User user = us.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
             form.setEmail(user.getEmail());
         }
 

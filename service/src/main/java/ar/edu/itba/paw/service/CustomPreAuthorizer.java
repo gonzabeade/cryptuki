@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.Trade;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,8 +48,8 @@ public class CustomPreAuthorizer {
         if (tradeId == null) return true;
         Optional<Trade> trade = tradeDao.getTradeById(tradeId);
         return trade.isPresent() && (
-                trade.get().getBuyerUsername().equals(userDetails.getUsername())
-                || trade.get().getSellerUsername().equals(userDetails.getUsername())
+                trade.get().getBuyer().getUserAuth().getUsername().equals(userDetails.getUsername())
+                || trade.get().getOffer().getSeller().getUsername().equals(userDetails.getUsername())
         );
     }
 

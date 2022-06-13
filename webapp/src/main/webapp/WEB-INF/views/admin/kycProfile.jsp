@@ -71,10 +71,10 @@
           <%-- Picture show --%>
         <div class="w-full h-4/5 mt-5">
             <div id="idphoto" class="border-2 border-gray-400 ">
-              <img src="<c:url value="/kyc/idphoto/${kyc.username}"/>" class=" w-full mx-auto">
+              <img src="<c:url value="/kyc/idphoto/${kyc.user.username.get()}"/>" class=" w-full mx-auto">
             </div>
             <div id="validationphoto" class="hidden border-2 border-gray-400" >
-              <img src="<c:url value="/kyc/validationphoto/${kyc.username}"/>" class="w-full mx-auto">
+              <img src="<c:url value="/kyc/validationphoto/${kyc.user.username.get()}"/>" class="w-full mx-auto">
             </div>
         </div>
 
@@ -130,7 +130,7 @@
         <form:form method="post" action="${rejectUrl}" modelAttribute="kycApprovalForm">
           <div class="flex flex-col">
               <form:errors path="message" cssClass=" mx-auto text-red-500"/>
-              <form:hidden path="username" value="${kyc.username}"/>
+              <form:hidden path="username" value="${kyc.user.username.get()}"/>
               <form:textarea path="message" cssClass="border-2 border-gray-400 my-10 h-[14rem] p-2"/>
               <div class="flex flex-row mx-auto justify-center">
                 <button class="bg-frostdr rounded-lg text-white p-3 mr-10" type="submit"> Confirmar</button>

@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Cryptocurrency;
-import ar.edu.itba.paw.model.Message;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.model.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

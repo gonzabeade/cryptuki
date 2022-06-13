@@ -3,10 +3,7 @@ package ar.edu.itba.paw.cryptuki.form;
 import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
 import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateUsername;
 import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
-import ar.edu.itba.paw.cryptuki.form.annotation.PasswordMatch;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
-import org.hibernate.validator.constraints.Email;
+import ar.edu.itba.paw.model.UserAuth;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -69,11 +66,4 @@ public class RegisterForm {
         this.phoneNumber = phoneNumber;
     }
 
-    public User.Builder toUserBuilder() {
-        return new User.Builder(email).withPhoneNumber(phoneNumber);
-    }
-
-    public UserAuth.Builder toUserAuthBuilder() {
-        return new UserAuth.Builder(username, password);
-    }
 }

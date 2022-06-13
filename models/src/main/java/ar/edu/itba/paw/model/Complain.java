@@ -1,8 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;

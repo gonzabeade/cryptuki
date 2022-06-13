@@ -8,7 +8,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private String buyer;
-    private float quantity;
+    private double quantity;
     private String coinCode;
     private int tradeCode;
 
@@ -22,7 +22,7 @@ public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
     }
 
 
-    public void setParameters(String username, String coinCode, float quantity, String buyer, int tradeCode, String url,int offerId) {
+    public void setParameters(String username, String coinCode, double quantity, String buyer, int tradeCode, String url,int offerId) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;

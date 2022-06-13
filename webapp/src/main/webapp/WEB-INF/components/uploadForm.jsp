@@ -3,7 +3,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
-<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>
+<%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
 <div class="flex flex-col">
     <c:url value="/seller/upload" var="postUrl"/>
     <%--@elvariable id="uploadOfferForm" type="ar.edu.itba.paw.cryptuki.form.UploadOfferForm"--%>

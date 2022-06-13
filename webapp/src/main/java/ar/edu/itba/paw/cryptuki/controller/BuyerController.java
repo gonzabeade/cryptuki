@@ -1,13 +1,8 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferOrderCriteria;
-import ar.edu.itba.paw.model.PaymentMethod;
-import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -54,22 +49,23 @@ public class BuyerController {
         int pageNumber = page.orElse(0);
 
 
-        int tradeCount;
+        // TODO: check!!
+        long tradeCount;
         Collection<Trade> tradeList;
         if (status.isPresent()) {
             TradeStatus askedStatus = TradeStatus.valueOf(status.get());
-            tradeCount = tradeService.getBuyingTradesByUsernameCount(username, askedStatus);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
+            tradeCount = tradeService.getTradesAsBuyerCount(username, askedStatus);
+            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
         } else {
-            tradeCount = tradeService.getBuyingTradesByUsernameCount(username);
-            tradeList = tradeService.getBuyingTradesByUsername(authentication.getName(), pageNumber, PAGE_SIZE);
+            tradeCount = tradeService.getTradesAsBuyerCount(username, TradeStatus.PENDING);
+            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, TradeStatus.PENDING);
         }
 
 
-        User user = userService.getUserInformation(username).orElseThrow(() -> new NoSuchUserException(username));
+        User user = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username));
 
 
-        int pages = (tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         mav.addObject("username", username);
         mav.addObject("user", user);
@@ -113,7 +109,7 @@ public class BuyerController {
         mav.addObject("offerCount", offerCount);
 
         if( null != authentication){
-            mav.addObject("userEmail", userService.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
+            mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
         }
         return mav;
     }

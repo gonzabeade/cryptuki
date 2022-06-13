@@ -1,26 +1,29 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.KycInformation;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 
 import java.util.Optional;
 
 public interface UserService {
 
-    void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder);
-    Optional<UserAuth> getUserByUsername(String username);
-    boolean verifyUser(String username , Integer code);
+    /** User creation */
+    void registerUser(String email, String username, String plainPassword, String phoneNumber);
+
+    /** User getters - both email and usernames are unique */
+    Optional<User> getUserByEmail(String email);
+    Optional<User> getUserByUsername(String username);
+
+    /** Password manipulation */
     boolean changePassword(String username, int code, String newPassword);
     boolean changePassword(String username, String newPassword);
-    void updateLastLogin(String username);
-    Optional<User> getUserInformation(String username);
-
-    Optional<UserAuth> getUserAuthByEmail(String email);
-
-    void incrementUserRating(String username, int rating);
-    boolean userExists(String username, String email);
     void changePasswordAnonymously(String email);
 
+    /** User email account verification */
+    boolean verifyUser(String username, Integer code);
+
+    /** Update User statistics */
+    void updateLastLogin(String username);
+    void updateRatingBy(String username, int rating);
 
 }

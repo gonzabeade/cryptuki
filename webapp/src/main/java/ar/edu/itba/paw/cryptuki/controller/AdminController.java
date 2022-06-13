@@ -7,11 +7,7 @@ import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.ComplainStatus;
-import ar.edu.itba.paw.model.Country;
-import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.persistence.KycInformation;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ComplainService;
 import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.TradeService;
@@ -157,7 +153,7 @@ public class AdminController {
 
     private ModelAndView setUpComplaintView(String view,int complaintId){
         Complain complain = complainService.getComplainById(complaintId).orElseThrow(()->new NoSuchComplainException(complaintId));
-        User complainer = userService.getUserInformation(complain.getComplainer().getUsername().get()).orElseThrow(()->new NoSuchUserException(complain.getComplainer().getId()));
+        User complainer = userService.getUserByUsername(complain.getComplainer().getUsername().get()).orElseThrow(()->new NoSuchUserException(complain.getComplainer().getId()));
         Trade trade;
         if(complain.getTrade() != null){
             trade = tradeService.getTradeById(complain.getTrade().getTradeId()).orElseThrow(() -> new NoSuchTradeException(complain.getTrade().getTradeId()));

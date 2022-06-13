@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.model.IdType;
-import ar.edu.itba.paw.persistence.KycInformation;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -107,8 +107,8 @@ public class KycForm {
     }
 
 
-    public KycInformation.KycInformationBuilder toBuilder() throws IOException {
-        return new KycInformation.KycInformationBuilder(username, givenNames, surnames)
+    public KycInformationPO toParameterObject() throws IOException {
+        return new KycInformationPO(username, givenNames, surnames)
                 .withIdCode(idCode)
                 .withIdPhoto(idPhoto.getBytes())
                 .withIdPhotoType(idPhoto.getContentType())

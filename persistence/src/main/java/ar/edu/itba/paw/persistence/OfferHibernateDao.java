@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Cryptocurrency;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.model.OfferOrderCriteria;
-import ar.edu.itba.paw.model.OfferStatus;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.parameterObject.OfferPO;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +48,7 @@ public class OfferHibernateDao implements OfferDao{
         testAndSet(filter.getCryptoCodes(), args, "cryptoCodes", sqlQueryBuilder, "AND crypto_code IN (:cryptoCodes) ");
         testAndSet(filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "status", sqlQueryBuilder, "AND status_code IN (:status) ");
         testAndSet(filter.getLocations().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "locations", sqlQueryBuilder, "AND location IN (:locations) ");
+        // Not using it right now -> testAndSet(filter.getRestrictedToUsernames(), args, "pms", sqlQueryBuilder, "AND payment_method IN (:pms) ");
     }
 
     /**

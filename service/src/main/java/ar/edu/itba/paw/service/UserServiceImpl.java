@@ -4,6 +4,8 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,60 +34,32 @@ public class UserServiceImpl implements UserService {
         this.messageSenderFacade = messageSender;
     }
 
-
     @Override
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-    public void registerUser(UserAuth.Builder authBuilder, User.Builder userBuilder){
+    public void registerUser(String email, String username, String plainPassword, String phoneNumber){
 
-        if (authBuilder == null || userBuilder == null)
+        if (email == null || username == null || plainPassword == null || phoneNumber == null)
             throw new NullPointerException("Neither Auth nor User builder can be null");
 
-        User user;
-        try {
-           user = userDao.createUser(userBuilder);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        User user = userDao.createUser(email, phoneNumber);
+        String hashedPassword = passwordEncoder.encode(plainPassword);
+        int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
+        userAuthDao.createUserAuth(user.getId(), username,  hashedPassword, verifyCode);
 
-
-        authBuilder.withId(user.getId());
-        authBuilder.withPassword(passwordEncoder.encode(authBuilder.getPassword()));
-        authBuilder.withCode((int)(Math.random()*Integer.MAX_VALUE));
-        authBuilder.withUserStatus(UserStatus.UNVERIFIED);
-
-        try {
-            userAuthDao.createUserAuth(authBuilder);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
-        messageSenderFacade.sendWelcomeMessage(userBuilder.getEmail(), authBuilder.getUsername(), authBuilder.getCode());
+        messageSenderFacade.sendWelcomeMessage(email, username, verifyCode);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserAuth> getUserByUsername(String username) {
-        try {
-            return userAuthDao.getUserAuthByUsername(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+    public Optional<User> getUserByUsername(String username) {
+        return userDao.getUserByUsername(username);
     }
 
     @Override
-    @Transactional
-    public boolean verifyUser(String username, Integer code) {
-
-        boolean verified;
-
-        try {
-            verified = userAuthDao.verifyUser(username,code);
-        } catch (PersistenceException pe) {
-            throw new UncategorizedPersistenceException(pe);
-        }
-
-        return verified;
+    @Transactional(readOnly = true)
+    public Optional<User> getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
 
     @Override
@@ -127,55 +101,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal.username")
-    @Transactional
-    public void updateLastLogin(String username) {
-
-        try {
-            userDao.updateLastLogin(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    public Optional<User> getUserInformation(String username) {
-
-        if (username == null) {
-            throw new NullPointerException("Username cannot be null");
-        }
-
-        try {
-            return userDao.getUserByUsername(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
-    public Optional<UserAuth> getUserAuthByEmail(String email) {
-        return userAuthDao.getUserAuthByEmail(email);
-    }
-
-    @Override
-    @Transactional
-    public void incrementUserRating(String username, int rating) {
-
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can only be non negative");
-
-        if (username == null) {
-            throw new NullPointerException("Username cannot be null");
-        }
-
-        try {
-            userDao.incrementUserRating(username, rating);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-    }
-
-    @Override
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
@@ -186,9 +111,23 @@ public class UserServiceImpl implements UserService {
         messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
     }
 
+    @Override
+    @Transactional
+    public boolean verifyUser(String username, Integer code) {
+        return userAuthDao.verifyUser(username,code);
+    }
 
     @Override
-    public boolean userExists(String username, String email) {
-         return userDao.getUserByEmail(email).isPresent() || userDao.getUserByUsername(username).isPresent();
+    @PreAuthorize("#username == authentication.principal.username")
+    @Transactional
+    public void updateLastLogin(String username) {
+        userDao.updateLastLogin(username);
     }
+
+    @Override
+    public void updateRatingBy(String username, int rating) {
+        userDao.incrementUserRating(username, rating);
+    }
+
+
 }

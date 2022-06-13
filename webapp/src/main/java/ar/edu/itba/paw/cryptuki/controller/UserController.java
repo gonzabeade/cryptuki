@@ -2,10 +2,9 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.*;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserAuth;
+import ar.edu.itba.paw.model.ProfilePicture;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -29,7 +28,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -59,7 +57,7 @@ public class UserController {
         if(errors.hasErrors()){
             return registerGet(form);
         }
-        userService.registerUser(form.toUserAuthBuilder(), form.toUserBuilder());
+        userService.registerUser(form.getEmail(), form.getUsername(), form.getPassword(), form.getPhoneNumber());
         return new ModelAndView("redirect:/verify?user="+form.getUsername());
     }
 
@@ -114,7 +112,7 @@ public class UserController {
 
     @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {
-        Optional<Image> maybeImage = profilePicService.getProfilePicture(username);
+        Optional<ProfilePicture> maybeImage = profilePicService.getProfilePicture(username);
         if(!maybeImage.isPresent()){
             BufferedImage bufferedImage = ImageIO.read(new File(this.getClass().getClassLoader().getResource("default-Profile.png").toURI()));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -122,7 +120,7 @@ public class UserController {
             byte [] data=byteArrayOutputStream.toByteArray();
             return ResponseEntity.ok().contentType(MediaType.valueOf("image/png")).body(data);
         }else {
-            Image image= maybeImage.get();
+            ProfilePicture image= maybeImage.get();
             return ResponseEntity.ok().contentType(MediaType.valueOf(image.getImageType())).body(image.getBytes());
         }
     }
@@ -155,7 +153,7 @@ public class UserController {
             throw new IllegalArgumentException();
         }
         String username = authentication.getName();
-        User user = userService.getUserInformation(username).orElseThrow(()->new NoSuchUserException(username));
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
         ModelAndView mav = new ModelAndView("userProfile");
         mav.addObject("user",user);
@@ -198,9 +196,9 @@ public class UserController {
     }
 
     private ModelAndView logInProgrammatically(String username ){
-        UserAuth user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
-        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+        org.springframework.security.core.userdetails.User current = new org.springframework.security.core.userdetails.User(username, user.getUserAuth().getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getUserAuth().getRole().name())));
+        Authentication auth = new UsernamePasswordAuthenticationToken(current,null, Collections.singletonList(new SimpleGrantedAuthority(user.getUserAuth().getRole().name())));
         SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/");
     }

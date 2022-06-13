@@ -1,22 +1,23 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.KycInformation;
+import ar.edu.itba.paw.model.KycInformation;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 
 import java.util.Collection;
 import java.util.Optional;
 
+
 public interface KycService {
 
-    void newKycRequest(KycInformation.KycInformationBuilder builder);
-    Optional<KycInformation> getPendingKycRequest(String username);
+    /** Kyc Request creation */
+    void newKycRequest(KycInformationPO kycInformationPO);
 
-    Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
-
-
-    boolean canRequestNewKyc(String username);
+    /** Kyc Request manipulation */
     void validateKycRequest(int kycId);
     void rejectKycRequest(int kycId, String reason);
 
-    boolean isValidated(String username);
+    /** Kyc Request getters */
+    Optional<KycInformation> getPendingKycRequest(String username);
+    Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
 
 }

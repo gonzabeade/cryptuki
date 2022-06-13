@@ -70,8 +70,8 @@
                                     <jsp:param name="username" value="${username}"/>
                                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
                                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
-                                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
-                                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+                                    <jsp:param name="askedPrice" value="${trade.offer.unitPrice}"/>
+                                    <jsp:param name="cryptoCurrencyCode" value="${trade.offer.crypto.code}"/>
                                     <jsp:param name="quantity" value="${trade.quantity}"/>
                                     <jsp:param name="offerId" value="${trade.offer.offerid}"/>
                                     <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>

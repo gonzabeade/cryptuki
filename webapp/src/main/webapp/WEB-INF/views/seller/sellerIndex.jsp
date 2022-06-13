@@ -65,10 +65,10 @@
                 <% request.setCharacterEncoding("utf-8"); %>
                 <jsp:include page="../../components/horizontalSellingTradeCard.jsp">
                     <jsp:param name="username" value="${username}"/>
-                    <jsp:param name="askedPrice" value="${trade.askedPrice}"/>
+                    <jsp:param name="askedPrice" value="${trade.offer.unitPrice}"/>
                     <jsp:param name="quantity" value="${trade.quantity}"/>
                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
-                    <jsp:param name="cryptoCurrencyCode" value="${trade.cryptoCurrency.code}"/>
+                    <jsp:param name="cryptoCurrencyCode" value="${trade.offer.crypto.code}"/>
                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
                     <jsp:param name="offerId" value="${trade.offerId}"/>
                 </jsp:include>

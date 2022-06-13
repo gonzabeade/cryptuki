@@ -2,9 +2,8 @@ package ar.edu.itba.paw.service.mailing;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.parameterObject.OfferPO;
-import ar.edu.itba.paw.persistence.Trade;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Trade;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.MessageSenderFacade;
@@ -122,7 +121,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     }
 
     @Override
-    public void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId,int offerId){
+    public void sendNewTradeNotification(String username, Trade trade, int tradeId,int offerId){
         MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
         TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();
@@ -130,9 +129,9 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         tradeClosedMailMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, locale));
         tradeClosedMailMessage.setParameters(
                 username,
-                trade.getCryptoCurrency().getCode(),
+                trade.getOffer().getCrypto().getCode(),
                 trade.getQuantity(),
-                trade.getBuyerUsername(),
+                trade.getBuyer().getUsername().get(),
                 tradeId,
                 getUrl(),
                 offerId);

@@ -1,14 +1,13 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 
-import ar.edu.itba.paw.model.IdType;
-import ar.edu.itba.paw.model.KycStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="kyc")
-public final class KycInformation {
+public class KycInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kyc_kyc_id_seq")
@@ -16,8 +15,9 @@ public final class KycInformation {
     @Column(name="kyc_id", nullable = false)
     private Integer kycId;
 
-    @Column(name="uname", nullable = false)
-    private String username;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(name="given_names", nullable = false)
     private String givenNames;
@@ -56,80 +56,17 @@ public final class KycInformation {
     @Column(name="status", nullable = false)
     private KycStatus status = KycStatus.PEN;
 
-    public static class KycInformationBuilder {
-
-        private final String username;
-        private final String givenNames;
-        private final String surnames;
-
-        private String emissionCountry;
-        private String idCode;
-        private IdType idType;
-
-        private byte[] idPhoto;
-        private byte[] validationPhoto;
-
-        private String idPhotoType;
-        private String validationPhotoType;
-
-        public KycInformationBuilder(String username, String givenNames, String surnames) {
-            this.username = username;
-            this.givenNames = givenNames;
-            this.surnames = surnames;
-        }
-
-        public KycInformationBuilder withEmissionCountry(String emissionCountry) {
-            this.emissionCountry = emissionCountry;
-            return this;
-        }
-
-
-        public KycInformationBuilder withIdCode(String idCode) {
-            this.idCode = idCode;
-            return this;
-        }
-
-        public KycInformationBuilder withIdType(IdType idType) {
-            this.idType = idType;
-            return this;
-        }
-
-        public KycInformationBuilder withIdPhoto(byte[] idPhoto) {
-            this.idPhoto = idPhoto;
-            return this;
-        }
-
-        public KycInformationBuilder withValidationPhoto(byte[] validationPhoto) {
-            this.validationPhoto = validationPhoto;
-            return this;
-        }
-
-        public KycInformationBuilder withIdPhotoType(String idPhotoType) {
-            this.idPhotoType = idPhotoType;
-            return this;
-        }
-
-        public KycInformationBuilder withValidationPhotoType(String validationPhotoType) {
-            this.validationPhotoType = validationPhotoType;
-            return this;
-        }
-
-        protected KycInformation build() {
-            return new KycInformation(this);
-        }
-    }
-
-    private KycInformation(KycInformationBuilder builder) {
-        this.givenNames = builder.givenNames;
-        this.idPhoto = builder.idPhoto;
-        this.idCode = builder.idCode;
-        this.emissionCountry = builder.emissionCountry;
-        this.surnames = builder.surnames;
-        this.username = builder.username;
-        this.idType = builder.idType;
-        this.validationPhoto = builder.validationPhoto;
-        this.idPhotoType = builder.idPhotoType;
-        this.validationPhotoType = builder.validationPhotoType;
+    public KycInformation(KycInformationPO parameterObject, User user) {
+        this.givenNames = parameterObject.getGivenNames();
+        this.idPhoto = parameterObject.getIdPhoto();
+        this.idCode = parameterObject.getIdCode();
+        this.user = user;
+        this.emissionCountry = parameterObject.getEmissionCountry();
+        this.surnames = parameterObject.getSurnames();
+        this.idType = parameterObject.getIdType();
+        this.validationPhoto = parameterObject.getValidationPhoto();
+        this.idPhotoType = parameterObject.getIdPhotoType();
+        this.validationPhotoType = parameterObject.getValidationPhotoType();
     }
 
     public KycInformation() {
@@ -140,8 +77,8 @@ public final class KycInformation {
         return kycId;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     public String getGivenNames() {
@@ -188,7 +125,7 @@ public final class KycInformation {
         return status;
     }
 
-    protected void setStatus(KycStatus status) {
+    public void setStatus(KycStatus status) {
         this.status = status;
     }
 

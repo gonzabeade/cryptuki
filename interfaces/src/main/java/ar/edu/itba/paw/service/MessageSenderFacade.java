@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.parameterObject.OfferPO;
-import ar.edu.itba.paw.persistence.Trade;
+import ar.edu.itba.paw.model.Trade;
 
 public interface MessageSenderFacade {
     void sendWelcomeMessage(String email, String username, int veryCode);
@@ -9,8 +8,5 @@ public interface MessageSenderFacade {
     void sendOfferUploadedMessage(String username, Offer offer);
     void sendAnonymousComplaintReceipt(String to, String username, String question);
     void sendComplaintReceipt(String username, String question);
-
-    void sendNewTradeNotification(String username, Trade.Builder trade, int tradeId,int offerId);
-
-
+    void sendNewTradeNotification(String username, Trade trade, int tradeId,int offerId);
 }

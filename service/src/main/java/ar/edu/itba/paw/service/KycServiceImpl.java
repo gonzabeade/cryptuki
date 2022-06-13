@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
+import ar.edu.itba.paw.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.persistence.KycDao;
-import ar.edu.itba.paw.persistence.KycInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,8 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
-    public void newKycRequest(KycInformation.KycInformationBuilder builder) {
-        kycDao.newKycRequest(builder);
+    public void newKycRequest(KycInformationPO kycInformationPO) {
+        kycDao.newKycRequest(kycInformationPO);
     }
 
     @Override
@@ -38,12 +39,6 @@ public class KycServiceImpl implements KycService {
         return kycDao.getKycRequestsByStatus(KycStatus.PEN, page, pageSize);
     }
 
-    @Override
-    @Transactional
-    public boolean canRequestNewKyc(String username) {
-        return kycDao.countKycRequestsByStatus(username, KycStatus.PEN) == 0
-                && kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 0;
-    }
 
     @Override
     @Transactional
@@ -57,11 +52,6 @@ public class KycServiceImpl implements KycService {
     public void rejectKycRequest(int kycId, String reason) {
         // TODO: enviar mail con la razon
         kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
-    }
-
-    @Override
-    public boolean isValidated(String username) {
-        return kycDao.countKycRequestsByStatus(username, KycStatus.APR) == 1;
     }
 
 }

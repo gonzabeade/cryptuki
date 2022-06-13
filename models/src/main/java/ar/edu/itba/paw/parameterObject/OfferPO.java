@@ -4,7 +4,7 @@ import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.Cryptocurrency;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.User;
 
 import java.util.*;
 

@@ -140,6 +140,14 @@
 
                 <c:if test="${(trade.buyer.username.get() == username && trade.buyerRated == false) || (trade.offer.seller.username.get() == username && trade.sellerRated == false)}">
                     <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.offer.seller.username.get() == username ? trade.buyer.username.get(): trade.offer.seller.username.get()}</h1>
+<%--            WIP RATING STARS
+            <div class="flex flex-row">--%>
+<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
+<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
+<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
+<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
+<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
+<%--                    </div>--%>
                     <c:url value="/rate" var="postUrl"/>
                     <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
 

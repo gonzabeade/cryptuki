@@ -6,7 +6,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <sec:authentication property="name" var="username"/>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +14,7 @@
     <script src="<c:url value="/public/js/sellerDashboard.js"/>"></script>
 
     <script src="<c:url value="/public/js/pagination.js"/> "></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -170,6 +170,7 @@
                             }" class="hidden text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
                                     code="noSellingProposalReceived"/></h2>
                         <c:forEach var="trade" items="${offer.trades}">
+                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${trade.buyer.rating /2 }" var="stars"/>
                             <div name="trade-${offer.offerId
                             }-${trade.status}" class="hidden bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5 ">
 
@@ -218,8 +219,17 @@
                                                     value="${trade.buyer.phoneNumber}"/></h1>
                                         </div>
                                         <div class="flex">
-                                            <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
-                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.rating}"/></h1>
+                                            <div class="flex flex-row">
+                                                <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
+                                                <div class="my-auto ml-2">
+                                                    <c:forEach begin="0" end="${stars-1}">
+                                                        <span class="fa fa-star" style="color: orange"></span>
+                                                    </c:forEach>
+                                                    <c:forEach begin="${stars}" end="4">
+                                                        <span class="fa fa-star" style="color: gray"></span>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:if>

@@ -19,64 +19,91 @@
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../../components/admin/header.jsp"/>
-<div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col  ml-72 mr-20">
-        <div class="flex">
-            <div class="flex flex-col mt-10">
-                <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>
-                <h2 class="font-sans font-medium text-polard text-2xl"><messages:message code="carriedOutOn"/> <c:url value="${complain.date}"/></h2>
+<div class="flex flex-col  ml-72 mr-20">
+    <div class="flex">
+        <div class="flex flex-col mt-10">
+            <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>
+            <h2 class="font-sans font-medium text-polard text-2xl"><messages:message code="carriedOutOn"/> <c:url value="${complain.date.toLocalDate()}"/></h2>
+        </div>
+    </div>
+</div>
+<div class="ml-72 flex flex-row mt-10">
+    <div class="w-1/4">
+        <div class="flex flex-col">
+            <div class="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
+                <h1 class="font-sans font-semibold font-polard text-2xl text-start "><messages:message code="tradeDetails"/></h1>
+                <h1 class="w-full font-sans font-medium text-polard text-xl text-start "><messages:message code="trade"/> #
+                    <c:out value="${trade.tradeId}"/></h1>
+                <h1 class="w-full font-sans font-medium text-polard text-xl text-start "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
+                <div class="w-full  flex flex-col mx-auto mt-5">
+                    <h2 class="font-sans font-polard font-semibold text-xl mb-3 text-start"><messages:message code="participants"/></h2>
+                    <li class="font-sans font-polard"><b><messages:message code="buyer"/></b> <c:out value="${trade.buyer.userAuth.username}"/></li>
+                    <li class="font-sans font-polard"><b><messages:message code="seller"/></b> <c:out value="${trade.offer.seller.userAuth.username}"/></li>
+                </div>
+                <div class="w-full flex flex-row mx-auto mt-3">
+                    <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="offeredAmount"/>:</h2>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.quantity}"/> ARS</h3>
+                </div>
+                <div class="w-full  flex flex-row mx-auto mt-3">
+                    <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="tradeState"/>:</h2>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><messages:message code="${trade.status}"/></h3>
+                </div>
             </div>
         </div>
-        <div class="flex flex-col mt-10">
-            <h1 class="font-sans font-medium text-polard text-2xl r"><messages:message code="claimDescription"/>:</h1>
-            <p class="rounded-lg"><c:url value="${complain.complainerComments.get()}"/></p>
+        <div class="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard mt-5">
+            <h1 class="font-sans font-semibold font-polard text-2xl text-start "><messages:message code="claimDescription"/></h1>
+            <p class="font-sans text-start mt-2 italic"><c:url value="${complain.complainerComments.get()}"/></p>
         </div>
-        <div class="flex flex-col mt-6">
-            <h1 class="font-sans font-medium text-polard text-2xl"><messages:message code="claimUser"/>:</h1>
+        <div class="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard mt-5">
+            <h1 class="font-sans font-semibold font-polard text-2xl text-start "><messages:message code="claimUser"/></h1>
             <c:choose>
                 <c:when test="${complain.complainer.username.get() != null}">
-                    <p class="rounded-lg text-xl"><c:url value="${complain.complainer.username.get()}"/></p>
+                    <h1 class="font-sans font-medium text-polard text-xl text-start"><c:url value="${complain.complainer.username.get()}"/></h1>
                     <p class="rounded-lg text-gray-400"><messages:message code="lastTimeActive"/>: <c:url value="${complainer.lastLogin.toLocalDate()}"/></p>
                 </c:when>
                 <c:otherwise>
                     <p class="rounded-lg text-lg"><c:url value="${complainer.email}"/></p>
                 </c:otherwise>
             </c:choose>
-
         </div>
-        <div class="flex flex-row mx-auto">
-                <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"> <messages:message code="backToPendingClaims"/></a>
-<%--                <div class="flex flex-row  mx-auto mt-10">--%>
-<%--                    <c:url value="/admin/selfassign/${complain.complainId}" var="postUrl"/>--%>
-<%--                    <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">--%>
-<%--                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans"><messages:message code="assignMe"/></button>--%>
-<%--                    </form:form>--%>
-<%--                </div>--%>
+    </div>
+    <div class="w-1/3 h-full">
+        <c:set value="${trade.messageCollection}" var="messageCollection" scope="request"/>
+        <jsp:include page="../../components/chat/immutableChatSnippet.jsp">
+            <jsp:param name="otherUsername" value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/>
+            <jsp:param name="complainerUsername" value="${complainer.username.get()}"/>
+            <jsp:param name="otherUserId" value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.id : trade.buyer.id}"/>
+            <jsp:param name="senderId" value="${complainer.id}"/>
+        </jsp:include>
+    </div>
+    <div class="flex flex-col w-1/3 h-full justify-center ">
+        <div class="w-full rounded-lg bg-[#FAFCFF] mx-auto py-3 mb-5 text-center border-2 border-polard">
+            <p class="font-sans font-semibold font-polard text-xl"> ¿Qué se debería hacer ante la denuncia de <c:out value="${complainer.username.get()}"/>? </p>
+        </div>
+        <div class="flex flex-row mx-auto w-full text-center justify-around ">
+            <button id="forgiveButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyForgiveForm()">Desestimar denuncia</button>
+            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()">Vetar al denunciado</button>
+        </div>
+        <div id="kickoutForm" class="hidden w-full flex flex-col mt-5">
+            <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+            <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
+                <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                <p>Estas a punto de vetar a <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/> de Cryptuki. Recuerda que el veredicto no es reversible, debes estar seguro de la decisión. </p>
+            </div>
+            <textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></textarea>
+            <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" onclick="show">Enviar</button>
+        </div>
+        <div id="forgiveForm" class="hidden w-full flex flex-col mt-5">
+            <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+            <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
+                <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                <p>Estas a punto de desestimar la denuncia de <c:url value="${complainer.username.get()}"/>. Recuerda que el veredicto no es reversible, de estar equivocado deberás esperar a que vuelvan a denunciar al usuario para vetarlo. </p>
+            </div>
+            <textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></textarea>
+            <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" onclick="show">Enviar</button>
         </div>
 
     </div>
-    <c:if test="${trade!=null}">
-    <div class="flex flex-col mt-6">
-        <h1 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="tradeDetails"/></h1>
-        <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
-            <h1 class="font-sans font-medium text-polard text-xl text-center "><messages:message code="trade"/> #
-            <c:out value="${trade.tradeId}"/></h1>
-            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
-            <div class="flex flex-col mx-auto mt-5">
-                <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center"><messages:message code="participants"/></h2>
-                <p class="font-sans font-polard"><b><messages:message code="buyer"/></b> <c:out value="${trade.buyer.userAuth.username}"/></p>
-                <p class="font-sans font-polard"><b><messages:message code="seller"/></b> <c:out value="${trade.offer.seller.userAuth.username}"/></p>
-            </div>
-            <div class="flex flex-col mx-auto mt-3">
-                <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="offeredAmount"/></h2>
-                <h3 class="text-xl font-sans font-polard text-center"><c:out value="${trade.quantity}"/> ARS</h3>
-            </div>
-            <div class="flex flex-col mx-auto mt-3">
-                <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="tradeState"/></h2>
-                <h3 class="text-xl font-sans font-polard text-center"><messages:message code="${trade.status}"/></h3>
-            </div>
-        </div>
-    </c:if>
 </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
@@ -87,3 +114,38 @@
 
 </body>
 </html>
+
+<script>
+    function deleteSemiForms(){
+        if (!document.getElementById("kickoutForm").classList.contains("hidden"))
+            document.getElementById("kickoutForm").classList.add("hidden");
+        if (!document.getElementById("forgiveForm").classList.contains("hidden"))
+            document.getElementById("forgiveForm").classList.add("hidden");
+        if (document.getElementById("forgiveButton").classList.contains("underline"))
+            document.getElementById("forgiveButton").classList.remove("underline");
+        if (document.getElementById("kickoutButton").classList.contains("underline"))
+            document.getElementById("kickoutButton").classList.remove("underline");
+    }
+
+    function showOnlyKickoutForm(){
+        if (document.getElementById("kickoutForm").classList.contains("hidden"))
+            document.getElementById("kickoutForm").classList.remove("hidden");
+        if (!document.getElementById("forgiveForm").classList.contains("hidden"))
+            document.getElementById("forgiveForm").classList.add("hidden");
+        if (document.getElementById("forgiveButton").classList.contains("underline"))
+            document.getElementById("forgiveButton").classList.remove("underline");
+        if (!document.getElementById("kickoutButton").classList.contains("underline"))
+            document.getElementById("kickoutButton").classList.add("underline");
+    }
+
+    function showOnlyForgiveForm(){
+        if (document.getElementById("forgiveForm").classList.contains("hidden"))
+            document.getElementById("forgiveForm").classList.remove("hidden");
+        if (!document.getElementById("kickoutForm").classList.contains("hidden"))
+            document.getElementById("kickoutForm").classList.add("hidden");
+        if (document.getElementById("kickoutButton").classList.contains("underline"))
+            document.getElementById("kickoutButton").classList.remove("underline");
+        if (!document.getElementById("forgiveButton").classList.contains("underline"))
+            document.getElementById("forgiveButton").classList.add("underline");
+    }
+</script>

@@ -24,7 +24,7 @@
   <% request.setCharacterEncoding("utf-8"); %>
   <jsp:include page="../../components/admin/header.jsp"/>
   <div class="flex flex-col ml-80 my-10 h-screen w-screen">
-    <h1 class="font-sans text-4xl font-bold"><messages:message code="${title}"/></h1>
+    <h1 class="font-sans text-4xl font-bold"><messages:message code="pendingClaims"/></h1>
     <div class="flex flex-col divide-x h-full">
       <div class="p-10 flex flex-wrap justify-between">
 

@@ -116,7 +116,7 @@
 							</button>
 						</c:if>
 						<c:if test="${param.userEmail != param.owner && username!=param.owner && !isAdmin}">
-							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/buy/${param.offerId}"/>">
+							<a class=" pb-6 px-7 pt-4 rounded-lg bg-frostdr max-h-14 m-2 hover:bg-frostdr/[.6] hover:border-2 hover:border-frostdr text-white w-36 text-center" href="<c:url value="/seeOffer/${param.offerId}"/>">
 								<messages:message code="buy"/>
 							</a>
 						</c:if>

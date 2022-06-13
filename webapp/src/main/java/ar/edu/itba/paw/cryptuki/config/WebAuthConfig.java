@@ -57,14 +57,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                //.invalidSessionUrl("/")
                 .and().authorizeRequests()
-               // .antMatchers("/", "/buy/**","/support","/login","/register","/verify","/verifyManual","/passwordRecovery").anonymous()
-                //.antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login", "/register", "/verify**", "/passwordRecovery", "/recoverPassword**").anonymous()
-                .antMatchers("/","/buyer/market", "/contact/**","/coins", "/403", "/400", "/404", "/500").permitAll()
+                .antMatchers("/seller**", "/kyc**", "/chat**", "/upload", "/modify", "/buyer**", "/seeoffer**", "/buy/**").hasRole("USER")
                 .antMatchers("/admin**").hasRole("ADMIN")
-                .antMatchers("/**").authenticated()
+                .antMatchers("/login", "/register", "/verify**", "/passwordRecovery", "/seeoffer**", "/recoverPassword**", "/contact**").anonymous()
+                .antMatchers("/", "/buyer/market", "/403", "/400", "/404", "/500").permitAll()
                 .and().formLogin()
                 .failureHandler(failureHandler())
                 .usernameParameter("j_username")
@@ -79,8 +76,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
-//                .and().exceptionHandling()
-//                .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
 

@@ -2,6 +2,8 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2 }" var="stars"/>
 
 <head>
 <%--    <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>--%>
@@ -55,14 +57,26 @@
         </div>
     </div>
     <div class="flex justify-center items-center gap-2 my-3">
-        <div class="font-semibold text-center mx-4">
+        <div class="font-semibold text-center ">
             <p class="text-black">${param.ratingCount}</p>
             <span class="text-gray-400"><messages:message code="tradeQuantity"/></span>
         </div>
-        <div class="font-semibold text-center mx-4">
-            <p class="text-black">${param.rating}</p>
-            <span class="text-gray-400"><messages:message code="rating"/></span>
-        </div>
+        <c:if test="${param.ratingCount > 0 }">
+            <div class="flex flex-col">
+                <div class="my-auto mx-2">
+                    <c:forEach begin="0" end="${stars-1}">
+                        <span class="fa fa-star" style="color: orange"></span>
+                    </c:forEach>
+                    <c:forEach begin="${stars}" end="4">
+                        <span class="fa fa-star" style="color: gray"></span>
+                    </c:forEach>
+                </div>
+                <h4 class=" font-semibold text-gray-400 font-sans text-center">
+                    <messages:message code="rating"/></h4>
+            </div>
+
+
+        </c:if>
 <%--        <div class="font-semibold text-center mx-4">--%>
 <%--            <p class="text-black">1800 AR$</p>--%>
 <%--            <span class="text-gray-400">Ganado</span>--%>

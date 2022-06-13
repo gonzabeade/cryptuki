@@ -8,14 +8,26 @@
 <%--<jsp:useBean id="accepted_payments" scope="request" type="java.util.Collection"/>--%>
 <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
 <sec:authentication property="name" var="username"/>
+<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2 }" var="stars"/>
 
 <div class="shadow-xl flex rounded-lg  m-5 p-5 bg-[#FAFCFF]">
-				<div class="flex-row basis-1/4 ">
+				<div class="flex-row basis-2/5 ">
 					<h1 class="font-sans"><messages:message code="seller"/>: </h1>
 					<h3 class="font-bold font-sans"><c:out value="${param.owner}"/></h3>
-					<c:if test="${param.trades > 0 }">
-						<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> | <messages:message code="rating"/>: <fmt:formatNumber type="number" maxFractionDigits="2" value="${param.rating}"/> </h4>
-					</c:if>
+<%--					<c:if test="${param.trades > 0 }">--%>
+<%--						<div class="flex flex-row">--%>
+<%--							<h4 class="text-gray-400 font-sans"> <c:out value="${param.trades}"/> <messages:message code="trades"/> |--%>
+<%--								<messages:message code="rating"/>: </h4>--%>
+<%--							<div class="my-auto ml-2">--%>
+<%--							<c:forEach begin="0" end="${stars-1}">--%>
+<%--								<span class="fa fa-star" style="color: orange"></span>--%>
+<%--							</c:forEach>--%>
+<%--							<c:forEach begin="${stars}" end="4">--%>
+<%--									<span class="fa fa-star" style="color: gray"></span>--%>
+<%--							</c:forEach>--%>
+<%--							</div>--%>
+<%--						</div>--%>
+<%--					</c:if>--%>
 					<c:if test="${param.trades == 0 }">
 						<h4 class="text-gray-400 font-sans"><messages:message code="newUser"/></h4>
 					</c:if>
@@ -36,7 +48,7 @@
 					</div>
 				</div>
 
-				<div class="flex flex-col basis-1/4 font-sans">
+				<div class="flex flex-col basis-2/5 font-sans">
 					<h1 class="font-sans"><messages:message code="price"/>: </h1>
 					<div class="flex flex-row">
 						<h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>
@@ -53,7 +65,7 @@
 				</div>
 
 				<div class="flex flex-row basis-1/4 justify-center">
-					<div class="flex-col">
+					<div class="flex-col w-full">
 						<h1 class="font-sans"><messages:message code="location"/>: </h1>
 						<div  class="pt-2 flex flex-row justify-start" >
 							<c:choose>
@@ -61,7 +73,7 @@
 									<h1 class="font-sans font-bold pr-3 mt-1"><messages:message code="unknown"/></h1>
 								</c:when>
 								<c:otherwise>
-									<a class="font-sans font-bold pr-3 mt-1" href="https://www.google.com/maps/search/?api=1&query=${param.location}" target="_blank"><c:out value="${param.location}"/></a>
+									<a class="font-sans font-bold pr-3 mt-1" href="https://www.google.com/maps/search/?api=1&query=${param.location}" target="_blank"><messages:message code="Location.${param.location}"/></a>
 								</c:otherwise>
 							</c:choose>
 							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2" title="location">

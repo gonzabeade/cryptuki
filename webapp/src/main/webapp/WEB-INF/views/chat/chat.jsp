@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <sec:authentication property="name" var="username"/>
-
+<fmt:formatNumber type="number" maxFractionDigits="0" value="${trade.buyer.rating /2 }" var="stars"/>
 
 
 <html>
@@ -15,6 +15,7 @@
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
     <title>cryptuki</title>
@@ -87,10 +88,17 @@
                         <h1 class="font-sans font-semibold"><c:out
                                 value="${trade.buyer.phoneNumber}"/></h1>
                     </div>
-                    <div class="flex">
-                        <h1 class="font-sans mr-2"><messages:message code="rating"/>:</h1>
-                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.rating}"/></h1>
-                    </div>
+                        <div class="flex flex-row">
+                            <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
+                            <div class="my-auto ml-2">
+                                <c:forEach begin="0" end="${stars-1}">
+                                    <span class="fa fa-star" style="color: orange"></span>
+                                </c:forEach>
+                                <c:forEach begin="${stars}" end="4">
+                                    <span class="fa fa-star" style="color: gray"></span>
+                                </c:forEach>
+                            </div>
+                        </div>
                 </div>
             </c:if>
             <c:if test="${(trade.status =='SOLD')}">

@@ -16,11 +16,11 @@ public class User {
     private Integer id;
     @Column(length = 50, unique = true, nullable = false)
     private String email;
-    @Column(name="last_login")
+    @Column(name="last_login", insertable = false)
     private LocalDateTime lastLogin;
     @Column(name="phone_number", length = 10)
     private String phoneNumber;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private UserAuth userAuth;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
@@ -36,7 +36,7 @@ public class User {
         // Just for Hibernate!
     }
 
-    public User (String phoneNumber, String email, int ratingCount, int ratingSum) {
+    public User (String email, String phoneNumber, int ratingCount, int ratingSum) {
         this.email = email;
         this.ratingCount = ratingCount;
         this.ratingSum = ratingSum;
@@ -58,6 +58,10 @@ public class User {
 
     public double getRating(){
         return getRatingCount() == 0 ? 0 : getRatingSum()/getRatingCount();
+    }
+
+    public int getNearestWholeRating(){
+        return (int) getRating();
     }
 
     public String getPhoneNumber(){return phoneNumber;}

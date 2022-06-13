@@ -28,7 +28,7 @@ public class UserAuthHibernateDao implements UserAuthDao{
     public Optional<UserAuth> getUserAuthByUsername(String username) {
         TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.username = :username and status <> :status ", UserAuth.class);
         typedQuery.setParameter("username", username);
-        typedQuery.setParameter("status", UserStatus.KICKED);
+        typedQuery.setParameter("status", UserStatus.KICKED.ordinal());
         try {
             return Optional.of(typedQuery.getSingleResult());
         } catch (NoResultException nre) {

@@ -39,7 +39,7 @@
         <div class="rounded-lg bg-[#D8DEE9] border-4 border-[#5E81AC] py-5 w-full">
             <div class="flex flex-col mx-3">
                 <label for="coin"  class="text-l font-bold font-sans text-start"><messages:message code="cryptocurrency"/></label>
-                <select name="coin" id="coin" class="bg-white p-2 mt-1 rounded-lg" onchange="addQueryParam(this.id)">
+                <select name="coin" id="coin" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">
                     <option disabled selected><messages:message code="chooseAnOption"/></option>
                     <c:forEach items="${cryptocurrencies}" var="coin">
                         <option value="<c:out value="${coin.code}"/>"><img class="my-auto h-3 w-3" src="<c:url value="/public/images/${coin.code}.png"/>"/><c:out value="${coin.commercialName}"/></option>
@@ -48,7 +48,7 @@
             </div>
             <div class="flex flex-col mx-3 mt-3">
                 <label for="location" class="text-l font-bold font-sans text-start"><messages:message code="location"/></label>
-                <select name="location" id="location" class="bg-white p-2 mt-1 rounded-lg" onchange="addQueryParam(this.id)">
+                <select name="location" id="location" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">
                     <option disabled selected><messages:message code="chooseAnOption"/></option>
                     <c:forEach items="${locations}" var="location">
                         <option value=<c:out value="${location}"/>><messages:message code="Location.${location}"/></option>

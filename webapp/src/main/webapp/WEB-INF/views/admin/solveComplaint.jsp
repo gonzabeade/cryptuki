@@ -59,8 +59,8 @@
             <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
             <div class="flex flex-col mx-auto mt-5">
                 <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center"><messages:message code="participants"/></h2>
-                <p class="font-sans font-polard"><b><messages:message code="buyer"/>:</b> <c:out value="${trade.buyerUsername}"/></p>
-                <p class="font-sans font-polard"><b><messages:message code="seller"/>:</b> <c:out value="${trade.sellerUsername}"/></p>
+                <p class="font-sans font-polard"><b><messages:message code="buyer"/>:</b> <c:out value="${trade.buyer.username.get()}"/></p>
+                <p class="font-sans font-polard"><b><messages:message code="seller"/>:</b> <c:out value="${trade.offer.seller.username.get()}"/></p>
             </div>
             <div class="flex flex-col mx-auto mt-3">
                 <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="offeredAmount"/></h2>

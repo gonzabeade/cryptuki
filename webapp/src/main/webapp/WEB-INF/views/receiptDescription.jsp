@@ -20,7 +20,7 @@
 <sec:authentication property="name" var="username"/>
 <% request.setCharacterEncoding("utf-8"); %>
 <c:choose>
-    <c:when test="${username == trade.buyerUsername}">
+    <c:when test="${username == trade.buyer.username.get()}">
         <jsp:include page="../components/buyer/buyerHeader.jsp"/>
     </c:when>
 <c:otherwise>
@@ -92,7 +92,7 @@
                 <div class="flex flex-col my-10 px-30">
                     <h4 class="text-lg font-polard font-bold mx-auto"><messages:message code="trasactionDate"/></h4>
                     <h2 class="text-xl font-sans text-polar text-center my-auto ">
-                        <fmt:parseDate value="${ trade.startDate.get() }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:parseDate value="${ trade.startDate }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                         <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${ parsedDateTime }" />
                     </h2>
                 </div>
@@ -102,7 +102,7 @@
 
 
         <div class="flex flex-row mt-10">
-            <c:set var="urlBack" value="${trade.buyerUsername == username ? '/buyer':'/seller'}"/>
+            <c:set var="urlBack" value="${trade.buyer.username.get() == username ? '/buyer':'/seller'}"/>
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="${urlBack}"/>"><messages:message code="goBack"/></a>
             <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
         </div>
@@ -137,8 +137,8 @@
 
             <div class="flex flex-col mx-auto mt-10">
 
-                <c:if test="${(trade.buyerUsername == username && trade.ratedBuyer == false) || (trade.sellerUsername == username && trade.ratedSeller == false)}">
-                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.sellerUsername == username ? trade.buyerUsername: trade.sellerUsername}</h1>
+                <c:if test="${(trade.buyer.username.get() == username && trade.buyerRated == false) || (trade.offer.seller.username.get() == username && trade.sellerRated == false)}">
+                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.offer.seller.username.get() == username ? trade.buyer.username.get(): trade.offer.seller.username.get()}</h1>
                     <c:url value="/rate" var="postUrl"/>
                     <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
 

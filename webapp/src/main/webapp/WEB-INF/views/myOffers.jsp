@@ -76,7 +76,7 @@
                                     <jsp:param name="cryptoCurrencyCode" value="${trade.offer.crypto.code}"/>
                                     <jsp:param name="quantity" value="${trade.quantity}"/>
                                     <jsp:param name="offerId" value="${trade.offer.offerid}"/>
-                                    <jsp:param name="buyerUsername" value="${trade.buyerUsername}"/>
+                                    <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"/>
                                     <jsp:param name="buyerMail" value="${trade.user.email}"/>
                                     <jsp:param name="buyerPhone" value="${trade.user.phoneNumber}"/>
                                     <jsp:param name="buyerRating" value="${trade.user.rating}"/>

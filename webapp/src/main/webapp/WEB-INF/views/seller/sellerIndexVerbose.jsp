@@ -206,7 +206,7 @@
                                     <div class="flex flex-col">
                                         <div class="flex">
                                             <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
-                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyerUsername}"/></h1>
+                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.username.get()}"/></h1>
                                         </div>
                                         <div class="flex">
                                             <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>

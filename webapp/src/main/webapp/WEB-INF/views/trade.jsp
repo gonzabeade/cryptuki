@@ -157,7 +157,7 @@
             <c:set var="messageCollection" value="${trade.messageCollection}" scope="request"/>
             <c:url var="url" value="/chat/sendBuyer"/>
             <jsp:include page="../components/chat/chatSnippet.jsp">
-                <jsp:param name="otherUsername" value="${trade.sellerUsername}"/>
+                <jsp:param name="otherUsername" value="${trade.offer.seller.username.get()}"/>
                 <jsp:param name="tradeId" value="${trade.tradeId}"/>
                 <jsp:param name="otherUserId" value="${trade.offer.seller.id}"/>
                 <jsp:param name="senderId" value="${trade.buyer.id}"/>

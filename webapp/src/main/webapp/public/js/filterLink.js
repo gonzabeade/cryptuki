@@ -13,13 +13,17 @@ function getFilters() {
             elementToSelect = document.getElementById(key);
             if (elementToSelect != null) {
                 elementToSelect.value = value;
-                document.getElementById("reset").classList.remove("hidden")
             }
         }
         // let reset = document.getElementById("reset");
         // if (reset !== null) {
         //     reset.classList.remove("hidden");
         // }
+        if(searchParams.get('coin')!= null || searchParams.get('location')!= null) {
+            document.getElementById("reset").classList.remove("hidden")
+
+        }
+
     }
     if(searchParams==null){
         document.getElementsByName("desc")[0].classList.remove("hidden");

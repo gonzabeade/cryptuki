@@ -49,7 +49,7 @@ public class CustomPreAuthorizer {
         Optional<Trade> trade = tradeDao.getTradeById(tradeId);
         return trade.isPresent() && (
                 trade.get().getBuyer().getUserAuth().getUsername().equals(userDetails.getUsername())
-                || trade.get().getOffer().getSeller().getUsername().equals(userDetails.getUsername())
+                || trade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername())
         );
     }
 

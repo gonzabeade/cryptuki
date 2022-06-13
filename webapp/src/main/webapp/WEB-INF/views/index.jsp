@@ -39,7 +39,7 @@
         <h1 class="text-2xl font-bold font-sans"><messages:message code="filters"/> </h1>
         <div class="flex flex-col mx-3">
             <label for="coin"  class="font-sans text-sm font-semibold text-center"><messages:message code="cryptocurrency"/></label>
-            <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
+            <select name="coin" id="coin" class="bg-white p-2 mx-2 mt-2 " onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
                 <c:forEach items="${cryptocurrencies}" var="coin">
                     <option value="<c:out value="${coin.code}"/>"><c:out value="${coin.commercialName}"/></option>
@@ -49,7 +49,7 @@
         <div class="flex flex-col mx-3 mt-6">
             <label for="location" class="font-sans text-sm font-semibold ml-2 text-center"><messages:message
                     code="location"/></label>
-            <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 rounded-lg" onchange="addQueryParam(this.id)">
+            <select name="location" id="location" class="bg-white p-2 mx-2 mt-2 " onchange="addQueryParam(this.id)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
                 <option value="AGRONOMIA">Agronomía</option>
                 <option value="ALMAGRO">Almagro</option>

@@ -36,7 +36,7 @@
 					</div>
 				</div>
 
-				<div class="flex flex-col basis-1/4 font-sans">
+				<div class="flex flex-col basis-2/5 font-sans">
 					<h1 class="font-sans"><messages:message code="price"/>: </h1>
 					<div class="flex flex-row">
 						<h1 class="text-xl font-bold font-sans"><fmt:formatNumber type="number" maxFractionDigits="2" value="${param.asking_price}"/> ARS </h1>

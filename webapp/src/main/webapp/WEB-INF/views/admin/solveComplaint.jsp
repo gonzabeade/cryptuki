@@ -56,7 +56,7 @@
         <h1 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="tradeDetails"/></h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
             <h1 class="font-sans font-medium text-polard text-xl text-center "><messages:message code="trade"/> #<c:out value="${trade.tradeId}"/></h1>
-            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offerId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
             <div class="flex flex-col mx-auto mt-5">
                 <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center"><messages:message code="participants"/></h2>
                 <p class="font-sans font-polard"><b><messages:message code="buyer"/>:</b> <c:out value="${trade.buyerUsername}"/></p>

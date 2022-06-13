@@ -70,7 +70,7 @@
                     <jsp:param name="tradeStatus" value="${trade.status.toString()}"/>
                     <jsp:param name="cryptoCurrencyCode" value="${trade.offer.crypto.code}"/>
                     <jsp:param name="tradeId" value="${trade.tradeId}"/>
-                    <jsp:param name="offerId" value="${trade.offerId}"/>
+                    <jsp:param name="offerId" value="${trade.offer.offerId}"/>
                 </jsp:include>
             </c:forEach>
         </div>

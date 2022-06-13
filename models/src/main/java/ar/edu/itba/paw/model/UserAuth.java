@@ -15,7 +15,7 @@ public class UserAuth  {
     private String password;
     @Column(name = "role_id")
     @Enumerated(EnumType.ORDINAL)
-    private Role role = Role.USER;
+    private Role role = Role.ROLE_USER;
     @Column(name="code")
     private Integer code;
     @Column(name = "status")

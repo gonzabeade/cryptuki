@@ -23,7 +23,7 @@
     <div class="flex flex-col  ml-72 mr-20">
         <div class="flex">
             <div class="flex flex-col mt-10">
-                <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-center"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>
+                <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>
                 <h2 class="font-sans font-medium text-polard text-2xl"><messages:message code="carriedOutOn"/> <c:url value="${complain.date}"/></h2>
             </div>
         </div>
@@ -59,12 +59,13 @@
     <div class="flex flex-col mt-6">
         <h1 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="tradeDetails"/></h1>
         <div class="py-12 px-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center mx-auto border-2 border-polard mt-3 mx-20">
-            <h1 class="font-sans font-medium text-polard text-xl text-center "><messages:message code="trade"/> #<c:out value="${trade.tradeId}"/></h1>
-            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offerId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-xl text-center "><messages:message code="trade"/> #
+            <c:out value="${trade.tradeId}"/></h1>
+            <h1 class="font-sans font-medium text-polard text-m text-center "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
             <div class="flex flex-col mx-auto mt-5">
                 <h2 class="font-sans font-polard font-semibold text-2xl mb-3 text-center"><messages:message code="participants"/></h2>
-                <p class="font-sans font-polard"><b><messages:message code="buyer"/></b> <c:out value="${trade.buyerUsername}"/></p>
-                <p class="font-sans font-polard"><b><messages:message code="seller"/></b> <c:out value="${trade.sellerUsername}"/></p>
+                <p class="font-sans font-polard"><b><messages:message code="buyer"/></b> <c:out value="${trade.buyer.userAuth.username}"/></p>
+                <p class="font-sans font-polard"><b><messages:message code="seller"/></b> <c:out value="${trade.offer.seller.userAuth.username}"/></p>
             </div>
             <div class="flex flex-col mx-auto mt-3">
                 <h2 class="font-sans font-semibold font-polard text-2xl text-center "><messages:message code="offeredAmount"/></h2>

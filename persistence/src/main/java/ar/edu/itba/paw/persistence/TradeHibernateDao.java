@@ -6,7 +6,7 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
+import ar.edu.itba.paw.model.Trade;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Optional;

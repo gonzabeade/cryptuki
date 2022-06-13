@@ -21,7 +21,7 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../../components/admin/header.jsp"/>
 <div class="flex flex-row divide-x divide-polard">
-    <div class="flex flex-col  ml-64 mr-20">
+    <div class="flex flex-col  ml-72 mr-20">
         <div class="flex">
             <div class="flex flex-col mt-10">
                 <h2 class="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-center"><messages:message code="claim"/> # <c:url value="${complain.complainId}"/> </h2>
@@ -47,12 +47,12 @@
         </div>
         <div class="flex flex-row mx-auto">
                 <a href="<c:url value="/admin"/>" class="bg-frost text-white p-3 font-sans rounded-lg mx-auto mt-10"> <messages:message code="backToPendingClaims"/></a>
-                <div class="flex flex-row  mx-auto mt-10">
-                    <c:url value="/admin/selfassign/${complain.complainId}" var="postUrl"/>
-                    <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">
-                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans"><messages:message code="assignMe"/></button>
-                    </form:form>
-                </div>
+<%--                <div class="flex flex-row  mx-auto mt-10">--%>
+<%--                    <c:url value="/admin/selfassign/${complain.complainId}" var="postUrl"/>--%>
+<%--                    <form:form method="post" action="${postUrl}" cssClass="flex my-auto mx-3">--%>
+<%--                        <button type="submit" class="bg-frostdr text-white mx-auto p-3 rounded-md font-sans"><messages:message code="assignMe"/></button>--%>
+<%--                    </form:form>--%>
+<%--                </div>--%>
         </div>
 
     </div>

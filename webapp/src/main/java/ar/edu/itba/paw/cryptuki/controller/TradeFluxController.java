@@ -41,8 +41,8 @@ public class TradeFluxController {
         this.us = us;
     }
 
-    @RequestMapping(value = "/buy/{offerId}", method = RequestMethod.GET)
-    public ModelAndView buyOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
+    @RequestMapping(value = "/seeOffer/{offerId}", method = RequestMethod.GET)
+    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, @ModelAttribute("offerBuyForm") final OfferBuyForm form, final Authentication authentication) {
 
         ModelAndView mav = new ModelAndView("buyOffer");
         Offer offer =  offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
@@ -83,7 +83,7 @@ public class TradeFluxController {
     public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors()) {
-            return buyOffer(form.getOfferId(), form, authentication);
+            return seeOffer(form.getOfferId(), form, authentication);
         }
 
         User user = us.getUserByUsername(authentication.getName()).get(); // Already know that exists

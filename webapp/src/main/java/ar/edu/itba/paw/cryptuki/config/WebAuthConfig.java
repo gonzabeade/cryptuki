@@ -58,9 +58,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .and().authorizeRequests()
-                .antMatchers("/seller**", "/kyc**", "/chat**", "/upload", "/modify", "/buyer**", "/buy/**").hasRole("USER")
+                .antMatchers("/seller**", "/kyc**", "/chat**", "/upload", "/modify", "/buyer**", "/seeoffer**", "/buy/**").hasRole("USER")
                 .antMatchers("/admin**").hasRole("ADMIN")
-                .antMatchers("/login", "/register", "/verify**", "/passwordRecovery", "/recoverPassword**", "/contact**").anonymous()
+                .antMatchers("/login", "/register", "/verify**", "/passwordRecovery", "/seeoffer**", "/recoverPassword**", "/contact**").anonymous()
                 .antMatchers("/", "/buyer/market", "/403", "/400", "/404", "/500").permitAll()
                 .and().formLogin()
                 .failureHandler(failureHandler())

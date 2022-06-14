@@ -15,10 +15,10 @@
         </div>
     </div>
     <c:forEach items="${locations}" var="location" end="5">
-        <a href="<c:url value="/buyer/market?location=${location}"/> "><messages:message code="Location.${location}"/></a>
+        <a href="<c:url value="/buyer/market?location=${location}"/> " class="text-gray-600"><messages:message code="Location.${location}"/></a>
     </c:forEach>
     <c:forEach items="${locations}" var="location" begin="5">
-        <a href="<c:url value="/buyer/market?location=${location}"/>" class="hidden" id="hood-${location}"><messages:message code="Location.${location}"/></a>
+        <a href="<c:url value="/buyer/market?location=${location}"/>" class="hidden text-gray-600" id="hood-${location}"><messages:message code="Location.${location}"/></a>
     </c:forEach>
     <span  class="text-blue-400 underline cursor-pointer" onclick="showAllLocations()" id="seeMore">Ver más</span>
 

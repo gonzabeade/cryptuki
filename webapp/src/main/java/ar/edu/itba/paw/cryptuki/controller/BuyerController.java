@@ -80,16 +80,12 @@ public class BuyerController {
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
     public ModelAndView landing(@ModelAttribute("landingForm") LandingForm form,
-                                @RequestParam(value = "page") final Optional<Integer> page,
                                 @RequestParam(value = "location", required = false) final String location,
-                                @RequestParam(value = "coin", required = false) final String coin,
-                                @RequestParam(value = "pm", required = false) final String paymentMethod,
-                                @RequestParam(value = "orderingCriterion", required = false) final Optional<Integer> orderingCriterion,
                                 final Authentication authentication) {
 
         final ModelAndView mav = new ModelAndView("index");
 
-        int pageNumber = page.orElse(0);
+        int pageNumber = form.getPage()!= null ? form.getPage() :  0;
         OfferFilter filter = new OfferFilter()
                 .withPageSize(PAGE_SIZE)
                 .withPage(form.getPage()!= null ? form.getPage() :  0)

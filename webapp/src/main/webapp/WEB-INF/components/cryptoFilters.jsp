@@ -18,7 +18,7 @@
             </c:forEach>
         </ul>
         <div class="flex">
-            <button type="submit" class="mx-auto p-3">Aplicar Filtros</button>
+            <button type="submit" class="mx-auto p-3" id="link">Aplicar Filtros</button>
         </div>
           </div>
 </div>

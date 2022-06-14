@@ -1,17 +1,19 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import java.util.List;
+
 public class LandingForm {
     private String[] coins;
     private Integer page = 0;
     private Integer orderCriteria = 0;
 
-    private String[] location;
+    private List<String> location;
 
-    public String[] getLocation() {
+    public List<String> getLocation() {
         return location;
     }
 
-    public void setLocation(String[] locations) {
+    public void setLocation(List<String> locations) {
         this.location = locations;
     }
 

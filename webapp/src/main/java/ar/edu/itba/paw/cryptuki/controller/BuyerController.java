@@ -83,6 +83,8 @@ public class BuyerController {
                                 final Authentication authentication) {
 
 
+        final ModelAndView mav = new ModelAndView("index");
+
         int pageNumber = form.getPage()!= null ? form.getPage() :  0;
         OfferFilter filter = new OfferFilter()
                 .withPageSize(PAGE_SIZE)
@@ -91,6 +93,8 @@ public class BuyerController {
                 .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()]);
 
         if(form.getCoins() != null){
+
+            mav.addObject("selectedCoins", Arrays.asList(form.getCoins()));
             for (String coinCode: form.getCoins() ) {
                 filter.withCryptoCode(coinCode);
             }
@@ -107,8 +111,6 @@ public class BuyerController {
 
         Collection<Offer> offer = offerService.getBuyableOffers(filter);
 
-        final ModelAndView mav = new ModelAndView("index");
-
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
@@ -120,6 +122,7 @@ public class BuyerController {
         mav.addObject("location" , form.getLocation());
         mav.addObject("coins" , form.getCoins());
         mav.addObject("page" , form.getPage());
+
 
 
 

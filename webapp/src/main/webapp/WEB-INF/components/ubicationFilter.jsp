@@ -15,24 +15,8 @@
 
         </div>
     </div>
-<%--    <c:forEach items="${locations}" var="location" end="5">--%>
-<%--&lt;%&ndash;        <a href="<c:url value="/buyer/market?location=${location}"/>" class="text-gray-600"><messages:message code="Location.${location}"/>&ndash;%&gt;--%>
-<%--        <div class="flex flex-row">--%>
-<%--            <form:label path="location"><messages:message code="Location.${location}"/></form:label>--%>
-<%--            --%>
-<%--            <input type="checkbox" id="location" name="location" value="${location}" />--%>
-<%--        </div>--%>
-
-<%--    </c:forEach>--%>
-<%--    <c:forEach items="${locations}" var="location" begin="5">--%>
-<%--        <div class="hidden flex flex-row" id="hood-${location}">--%>
-<%--            <form:label path="location"><messages:message code="Location.${location}"/></form:label>--%>
-<%--            <form:checkbox  path="location" value="${location}" />--%>
-<%--        </div>--%>
-
-<%--     </c:forEach>--%>
     <div class="flex flex-col">
-        <form:checkboxes path="location" items="${locations}"></form:checkboxes>
+        <form:checkboxes path="location" items="${locations}" cssClass="mr-3"></form:checkboxes>
     </div>
     <span  class="text-blue-400 underline cursor-pointer" onclick="showAllLocations()" id="seeMore">Ver más</span>
 

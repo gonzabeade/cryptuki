@@ -108,10 +108,17 @@
 <script>
 window.onload = async function onStart() {
         await setCryptoPrice();
-        // getFilters();
-
+        analyze(${selectedCoins});
 }
+function analyze(selectedCoins, coins){
+   if(selectedCoins !=  null){
+       selectedCoins.forEach((coin)=>{
+           coin[1].click()
+       })
+   }else{
 
+   }
+}
 </script>
 
 

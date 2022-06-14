@@ -93,7 +93,7 @@
                     <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/><messages:message code="irreversibleAction"/>  </p>
                 </div>
                 <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
-                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" >Enviar</button>
+                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" ><messages:message code="send"/></button>
             </form:form>
         </div>
         <div id="dismissForm" class="hidden w-full flex flex-col mt-5">

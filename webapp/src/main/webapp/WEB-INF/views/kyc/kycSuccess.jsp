@@ -20,11 +20,11 @@
 <jsp:include page="../../components/seller/sellerHeader.jsp"/>
 <div class="flex w-1/2 mt-20 mb-10 mx-auto">
     <div class="py-12 px-4 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
-        <h1 class="text-center text-4xl font-semibold font-sans text-polar">Hemos recibido tus datos correctamente.</h1>
-        <h2 class="text-center text-xl font-semibold font-sans text-polar mt-8">Te notificaremos por correo cuando el proceso de verificación de identidad haya concluido.</h2>
+        <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="weReceivedYourInformation"/> </h1>
+        <h2 class="text-center text-xl font-semibold font-sans text-polar mt-8"><messages:message code="notifyYou"/> </h2>
         <a class="flex justify-center mt-5" href="<c:url value="/seller"/>">
             <div class="w-1/5 rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
-                Volver
+                <messages:message code="goBack"/>
             </div>
         </a>
 

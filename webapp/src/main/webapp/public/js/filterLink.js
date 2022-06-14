@@ -98,9 +98,6 @@ function hide(name){
     document.getElementsByName(name)[0].classList.add("hidden");
 }
 function sendGet(){
-    var searchParams = new URLSearchParams(window.location.search);
-    document.getElementById("link").href = window.location.pathname + '?' + searchParams.toString();
-    console.log(document.getElementById("link").href)
     document.getElementById("link").click();
 }
 

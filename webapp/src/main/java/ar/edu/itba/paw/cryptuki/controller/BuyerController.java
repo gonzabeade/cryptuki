@@ -80,22 +80,25 @@ public class BuyerController {
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
     public ModelAndView landing(@ModelAttribute("landingForm") LandingForm form,
-                                @RequestParam(value = "location", required = false) final String location,
                                 final Authentication authentication) {
 
-        final ModelAndView mav = new ModelAndView("index");
 
         int pageNumber = form.getPage()!= null ? form.getPage() :  0;
         OfferFilter filter = new OfferFilter()
                 .withPageSize(PAGE_SIZE)
                 .withPage(form.getPage()!= null ? form.getPage() :  0)
                 .withOfferStatus("APR")
-                .withLocation(location)
                 .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()]);
-        if(form.getCoins() != null){
 
+        if(form.getCoins() != null){
             for (String coinCode: form.getCoins() ) {
                 filter.withCryptoCode(coinCode);
+            }
+        }
+
+        if(form.getLocation() != null){
+            for (String location: form.getLocation() ) {
+                filter.withLocation(location);
             }
         }
 
@@ -103,6 +106,9 @@ public class BuyerController {
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         Collection<Offer> offer = offerService.getBuyableOffers(filter);
+
+        final ModelAndView mav = new ModelAndView("index");
+
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
@@ -110,7 +116,11 @@ public class BuyerController {
         mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
         mav.addObject("locations", Arrays.asList(Location.values()));
-        mav.addObject("selectedCoins", form.getCoins()!= null ? Arrays.asList(form.getCoins()): null);
+
+        mav.addObject("location" , form.getLocation());
+        mav.addObject("coins" , form.getCoins());
+        mav.addObject("page" , form.getPage());
+
 
 
         if( null != authentication){

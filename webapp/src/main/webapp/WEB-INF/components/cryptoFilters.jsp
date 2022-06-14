@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.util.Collection"/>
@@ -16,6 +17,7 @@
                     <jsp:param name="code" value="${coin.code}"/>
                 </jsp:include>
             </c:forEach>
+
         </ul>
         <div class="flex">
             <button type="submit" class="mx-auto p-3" id="link">Aplicar Filtros</button>

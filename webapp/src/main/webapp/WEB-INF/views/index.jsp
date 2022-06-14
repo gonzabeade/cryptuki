@@ -45,6 +45,7 @@
     <jsp:include page="../components/cryptoFilters.jsp"/>
     <jsp:include page="../components/ubicationFilter.jsp"/>
     </div>
+
     <div class="flex flex-col w-4/5 mt-10">
         <div class="flex flex-row justify-between">
             <div class="flex flex-row mx-5">
@@ -95,6 +96,7 @@
             </div>
         </div>
     </ol>
+    </div>
         </form:form>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>
@@ -107,24 +109,9 @@
 window.onload = async function onStart() {
         await setCryptoPrice();
         // getFilters();
-        analyze(${selectedCoins})
-        var searchParams = new URLSearchParams(window.location.search);
-        if(searchParams.has("location")){
-        document.getElementById("location-selected").classList.remove("hidden");
-        document.getElementById("hood-selected").innerText= searchParams.get("location");
-    }
 
 }
-function analyze(selectedCoins){
-    if(selectedCoins!= null){
-        selectedCoins.forEach((coin)=>{
-            let code = coin.id;
-            document.querySelectorAll("[value="+ code +"][id=coins]")[0].click()
-        })
-    }else{
-        document.getElementsByName("coins").forEach((coin)=> coin.click())
-    }
-}
+
 </script>
 
 

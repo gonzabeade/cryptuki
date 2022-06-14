@@ -46,6 +46,7 @@ function addPageValue(value){
 }
 function addPageValueForm(value){
     document.getElementById("page").value = value;
+    sendGet();
 }
 function addQueryParam(id) {
     var searchParams = new URLSearchParams(window.location.search)

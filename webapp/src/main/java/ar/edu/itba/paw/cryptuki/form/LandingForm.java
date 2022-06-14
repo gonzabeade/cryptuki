@@ -4,6 +4,17 @@ public class LandingForm {
     private String[] coins;
     private Integer page = 0;
     private Integer orderCriteria = 0;
+
+    private String[] location;
+
+    public String[] getLocation() {
+        return location;
+    }
+
+    public void setLocation(String[] locations) {
+        this.location = locations;
+    }
+
     public String[] getCoins() {
         return coins;
     }

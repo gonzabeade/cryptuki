@@ -25,22 +25,16 @@ public class OfferController {
 
     private final CryptocurrencyService cryptocurrencyService;
     private  final OfferService offerService;
-
-    private final TradeService tradeService;
     private final UserService us;
     private static final int PAGE_SIZE= 10;
 
 
 
     @Autowired
-    public OfferController(CryptocurrencyService cryptocurrencyService,
-                           OfferService offerService,
-                           TradeService tradeService,
-                           UserService us) {
+    public OfferController(CryptocurrencyService cryptocurrencyService, OfferService offerService, UserService us) {
 
         this.cryptocurrencyService = cryptocurrencyService;
         this.offerService = offerService;
-        this.tradeService = tradeService;
         this.us = us;
     }
 

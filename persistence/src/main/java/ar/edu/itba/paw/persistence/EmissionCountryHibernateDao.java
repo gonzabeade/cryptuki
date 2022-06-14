@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import java.util.Collection;
 
 @Repository
-public class LocationHibernateDao implements LocationDao {
+public class EmissionCountryHibernateDao implements EmissionCountryDao {
 
     @PersistenceContext
     private EntityManager entityManager;

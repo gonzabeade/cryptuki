@@ -4,7 +4,6 @@ import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.service.KycService;
-import ar.edu.itba.paw.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +25,9 @@ import java.util.Optional;
 public class KycController {
 
     private final KycService kycService;
-    private final LocationService locationService;
-
     @Autowired
-    public KycController(final KycService kycService, final LocationService locationService) {
+    public KycController(final KycService kycService) {
         this.kycService = kycService;
-        this.locationService = locationService;
     }
 
     @RequestMapping(value ="", method = {RequestMethod.GET})
@@ -42,7 +38,7 @@ public class KycController {
 
         ModelAndView mav = new ModelAndView("kyc/kyc");
         mav.addObject("idTypes", IdType.values());
-        mav.addObject("countries", locationService.getAllCountries());
+        mav.addObject("countries", kycService.getAllCountries());
         return mav;
     }
 
@@ -60,7 +56,6 @@ public class KycController {
         kycService.newKycRequest(form.toParameterObject());
         return new ModelAndView("redirect:/kyc/success");
     }
-
 
     @RequestMapping(value = "/validationphoto/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> validationPhoto(@PathVariable final String username) {

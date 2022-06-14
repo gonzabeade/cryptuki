@@ -22,7 +22,6 @@ public class User {
     private String phoneNumber;
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private UserAuth userAuth;
-
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private ProfilePicture profilePicture;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
@@ -110,4 +109,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public Optional<ProfilePicture> getProfilePicture() {
+        return Optional.ofNullable(profilePicture);
+    }
 }

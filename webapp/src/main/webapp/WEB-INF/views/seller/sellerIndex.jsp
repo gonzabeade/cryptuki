@@ -24,7 +24,7 @@
     <!-- Left Panel: chat and seller stats -->
     <div class="flex flex-col h-full mx-20 w-1/5">
         <div>
-            <jsp:include page="../../components/seller/sellerStatsCard.jsp">
+            <jsp:include page="../../components/profile/userStatsCard.jsp">
                 <jsp:param name="username" value="${username}"/>
                 <jsp:param name="email" value="${user.email}"/>
                 <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>

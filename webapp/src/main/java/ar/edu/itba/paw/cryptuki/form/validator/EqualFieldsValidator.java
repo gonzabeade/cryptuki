@@ -12,11 +12,13 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
     private String field1;
     private String field2;
 
+    @Override
     public void initialize(EqualFields constraintAnnotation) {
         this.field1 = constraintAnnotation.field1();
         this.field2 = constraintAnnotation.field2();
     }
 
+    @Override
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
 
         Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field1);

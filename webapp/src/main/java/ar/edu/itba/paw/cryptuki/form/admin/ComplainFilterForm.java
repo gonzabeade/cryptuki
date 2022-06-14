@@ -10,61 +10,49 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public class ComplainFilterForm {
-
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    LocalDate fromDate;
-
+    private LocalDate fromDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    LocalDate toDate;
-
+    private LocalDate toDate;
     @Min(0)
-    Integer offerId;
-
+    private Integer offerId;
     @Min(0)
-    Integer tradeId;
-
-    String complainer;
+    private Integer tradeId;
+    private String complainer;
 
     public Optional<LocalDate> getFromDate() {
         return Optional.ofNullable(fromDate);
     }
-
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
+    public Optional<String> getComplainer() {
+        return Optional.ofNullable(complainer);
     }
-
     public Optional<LocalDate> getToDate() {
         return Optional.ofNullable(toDate);
     }
-
-    public void setToDate(LocalDate toDate) {
-        this.toDate = toDate;
-    }
-
     public Optional<Integer> getOfferId() {
         return Optional.ofNullable(offerId);
     }
-
-    public void setOfferId(Integer offerId) {
-        this.offerId = offerId;
-    }
-
     public Optional<Integer> getTradeId() {
         return Optional.ofNullable(tradeId);
     }
 
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
+    public void setOfferId(Integer offerId) {
+        this.offerId = offerId;
+    }
     public void setTradeId(Integer tradeId) {
         this.tradeId = tradeId;
     }
-
-    public Optional<String> getComplainer() {
-        return Optional.ofNullable(complainer);
-    }
-
     public void setComplainer(String complainer) {
         this.complainer= complainer;
     }
+
 
     public ComplainFilter toComplainFilter() {
         return new ComplainFilter()

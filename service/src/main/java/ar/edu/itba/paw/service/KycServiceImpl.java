@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
 import ar.edu.itba.paw.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.persistence.KycDao;
+import ar.edu.itba.paw.persistence.EmissionCountryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +17,12 @@ import java.util.Optional;
 public class KycServiceImpl implements KycService {
 
     private final KycDao kycDao;
+    private final EmissionCountryDao emissionCountryDao;
 
     @Autowired
-    public KycServiceImpl(KycDao kycDao) {
+    public KycServiceImpl(KycDao kycDao, EmissionCountryDao emissionCountryDao) {
         this.kycDao = kycDao;
+        this.emissionCountryDao = emissionCountryDao;
     }
 
     @Override
@@ -39,7 +43,6 @@ public class KycServiceImpl implements KycService {
         return kycDao.getKycRequestsByStatus(KycStatus.PEN, page, pageSize);
     }
 
-
     @Override
     @Transactional
     public void validateKycRequest(int kycId) {
@@ -52,6 +55,12 @@ public class KycServiceImpl implements KycService {
     public void rejectKycRequest(int kycId, String reason) {
         // TODO: enviar mail con la razon
         kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Country> getAllCountries() {
+        return emissionCountryDao.getAllCountries();
     }
 
 }

@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/feedback.js"/>"></script>
+    <script src="<c:url value="/public/js/successMessageShow.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -18,14 +19,20 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:include page="../components/buyer/buyerHeader.jsp"/>
+
+<sec:authorize access="isAuthenticated()">
+    <jsp:include page="../components/buyer/buyerHeader.jsp"/>
+</sec:authorize>
+<sec:authorize access="!isAuthenticated()">
+    <jsp:include page="../components/anon/anonymousHeader.jsp"/>
+</sec:authorize>
 <div class=" flex  flex-col justify-center mx-10">
     <% request.setCharacterEncoding("UTF-8"); %>
-    <c:if test="${completed == true}">
+    <div id="confirmationToggle" class="hidden">
         <jsp:include page="../components/confirmationToggle.jsp">
             <jsp:param name="title" value="${claimSent}."/>
         </jsp:include>
-    </c:if>
+    </div>
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/contactText.jsp"/>
 </div>

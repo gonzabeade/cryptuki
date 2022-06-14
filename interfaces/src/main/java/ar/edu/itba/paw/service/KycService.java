@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.parameterObject.KycInformationPO;
 
@@ -19,5 +20,8 @@ public interface KycService {
     /** Kyc Request getters */
     Optional<KycInformation> getPendingKycRequest(String username);
     Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
+
+    /** Get all emission countries that are supported by the KYC service*/
+    Collection<Country> getAllCountries();
 
 }

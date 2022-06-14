@@ -38,7 +38,14 @@ public class ProfilePicHibernateDao implements ProfilePicDao {
         } catch (NoResultException nre) {
             throw new NoSuchUserException(username);
         }
-        ProfilePicture pp = new ProfilePicture(user, profilePicture, type);
+        Optional<ProfilePicture> maybeOldProfilePicture  = user.getProfilePicture();
+        ProfilePicture pp;
+        if (!maybeOldProfilePicture.isPresent()) {
+            pp = new ProfilePicture(user, profilePicture, type);
+        } else {
+            pp = maybeOldProfilePicture.get();
+            pp.setImage(profilePicture, type);
+        }
         em.persist(pp);
     }
 }

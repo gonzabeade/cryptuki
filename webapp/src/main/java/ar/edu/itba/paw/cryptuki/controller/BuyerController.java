@@ -42,7 +42,7 @@ public class BuyerController {
     public ModelAndView buyer(Authentication authentication,
                               @RequestParam(value = "page") final Optional<Integer> page,
                               @RequestParam(value = "status", required = false) final Optional<String> status,
-                              @ModelAttribute("ProfilePicForm") ProfilePicForm form){
+                              @ModelAttribute("profilePicForm") ProfilePicForm form){
         ModelAndView mav = new ModelAndView("buyer/buyerIndex");
 
         String username = authentication.getName();

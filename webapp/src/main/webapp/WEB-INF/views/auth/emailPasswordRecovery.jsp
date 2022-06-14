@@ -18,13 +18,13 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:include page="../components/anon/anonymousHeader.jsp"/>
-<div>
+<jsp:include page="../../components/anon/anonymousHeader.jsp"/>
+<div class="w-1/3 mx-auto mt-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center border-2 border-polard">
     <h1 class="text-center text-4xl font-semibold font-sans text-polar mt-10"><messages:message code="weSentLinkToRecoverPassword"/></h1>
-    <c:url value="/passwordRecovery" var="postPath"/>
+    <c:url value="/emailPasswordRecovery" var="postPath"/>
     <%--@elvariable id="EmailForm" type="ar.edu.itba.paw.cryptuki.form"--%>
-    <form:form modelAttribute="EmailForm" action="${postPath}" method="post">
-        <div class="flex flex-col items-center justify-center mt-20">
+    <form:form modelAttribute="emailForm" action="${postPath}" method="post">
+        <div class="flex flex-col items-center justify-center mt-5">
             <div class="flex flex-col mb-10 items-center justify-center">
                 <form:errors path="email" cssClass="formError mx-auto text-red-500" element="p"/>
                 <div class="mb-5">

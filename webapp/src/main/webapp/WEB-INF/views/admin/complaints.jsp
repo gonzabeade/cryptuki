@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
+  <script src="<c:url  value="/public/js/successMessageShow.js"/>"></script>
   <script src="<c:url value="/public/js/pagination.js"/> "></script>
   <script src="<c:url  value="/public/js/feedback.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,15 +67,3 @@
 <div class="shape-blob" style="left: 5%; top: 80%"></div>
 </body>
 </html>
-
-<script>
-  window.onload = function successMessage() {
-    const searchParams = new URLSearchParams(window.location.search);
-    console.log(searchParams)
-    if (searchParams.has("success")) {
-      var element = document.getElementById("confirmationToggle")
-      element.classList.remove('hidden')
-    }
-
-  }
-</script>

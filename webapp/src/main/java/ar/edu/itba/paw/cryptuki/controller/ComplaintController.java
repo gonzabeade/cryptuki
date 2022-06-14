@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.SupportForm;
+import ar.edu.itba.paw.cryptuki.form.support.TradeComplainSupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainFilter;
@@ -56,7 +56,7 @@ public class ComplaintController {
     }
 
     @RequestMapping(value = "/complain", method = RequestMethod.GET)
-    public ModelAndView complain(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
+    public ModelAndView complain(@ModelAttribute("supportForm") final TradeComplainSupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){
         ModelAndView mav =  new ModelAndView("complain");
         String username= authentication.getName();
         User user = us.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
@@ -68,14 +68,14 @@ public class ComplaintController {
     }
 
     @RequestMapping(value = "/complain/success", method = RequestMethod.GET)
-    public ModelAndView complainSuccess(@ModelAttribute("supportForm") final SupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId) {
-        ModelAndView mav = complain(new SupportForm(), authentication, tradeId);
+    public ModelAndView complainSuccess(@ModelAttribute("supportForm") final TradeComplainSupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId) {
+        ModelAndView mav = complain(new TradeComplainSupportForm(), authentication, tradeId);
         mav.addObject("completed", true);
         return mav;
     }
 
     @RequestMapping(value = "/complain", method = RequestMethod.POST)
-    public ModelAndView createComplain(@Valid @ModelAttribute("supportForm") final SupportForm form, final BindingResult errors, final Authentication authentication){
+    public ModelAndView createComplain(@Valid @ModelAttribute("supportForm") final TradeComplainSupportForm form, final BindingResult errors, final Authentication authentication){
 
         if(errors.hasErrors())
             return complain(form, authentication, form.getTradeId());

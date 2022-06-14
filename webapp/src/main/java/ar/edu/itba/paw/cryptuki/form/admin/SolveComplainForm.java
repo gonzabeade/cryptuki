@@ -5,7 +5,6 @@ import javax.validation.constraints.Size;
 public class SolveComplainForm {
     @Size(min=1)
     private String comments;
-
     public String getComments() {
         return comments;
     }

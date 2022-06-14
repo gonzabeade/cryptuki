@@ -19,9 +19,9 @@ function getFilters() {
         // if (reset !== null) {
         //     reset.classList.remove("hidden");
         // }
-        if(searchParams.get("coin")!= null || searchParams.get("location")!= null) {
-            document.getElementById("reset").classList.remove("hidden")
-        }
+        // if(searchParams.get("coin")!= null || searchParams.get("location")!= null) {
+        //     document.getElementById("reset").classList.remove("hidden")
+        // }
 
     }
     if(searchParams==null){

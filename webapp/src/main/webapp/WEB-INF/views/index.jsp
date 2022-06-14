@@ -20,11 +20,13 @@
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
+            <link rel="stylesheet" href="<c:url value="/public/css/slider.css"/>">
             <title>cryptuki</title>
             <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 
 </head>
 <body class="bg-storml overflow-x-hidden">
+
 <% request.setCharacterEncoding("UTF-8"); %>
 
 <sec:authorize access="isAuthenticated()">
@@ -33,57 +35,93 @@
 <sec:authorize access="!isAuthenticated()">
     <jsp:include page="../components/anon/anonymousHeader.jsp"/>
 </sec:authorize>
-<div class="flex flex-row mt-10">
-    <div class="flex flex-col mx-10 w-1/5">
+<div class="flex flex-row divide-x">
+    <div class="flex flex-col w-1/5 ">
 
-        <div class="rounded-lg bg-[#D8DEE9] border-4 border-[#5E81AC] py-5 w-full">
-            <div class="flex flex-col mx-3">
-                <label for="coin"  class="text-l font-bold font-sans text-start"><messages:message code="cryptocurrency"/></label>
-                <select name="coin" id="coin" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">
-                    <option disabled selected><messages:message code="chooseAnOption"/></option>
-                    <c:forEach items="${cryptocurrencies}" var="coin">
-                        <option value="<c:out value="${coin.code}"/>"><img class="my-auto h-3 w-3" src="<c:url value="/public/images/${coin.code}.png"/>"/><c:out value="${coin.commercialName}"/></option>
-                    </c:forEach>
-                </select>
-            </div>
-            <div class="flex flex-col mx-3 mt-3">
-                <label for="location" class="text-l font-bold font-sans text-start"><messages:message code="location"/></label>
-                <select name="location" id="location" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">
-                    <option disabled selected><messages:message code="chooseAnOption"/></option>
-                    <c:forEach items="${locations}" var="location">
-                        <option value=<c:out value="${location}"/>><messages:message code="Location.${location}"/></option>
-                    </c:forEach>
-                </select>
-            </div>
-            <div class="flex flex-row justify-center mt-3">
-                <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>
-            </div>
-            <div class="flex flex-row justify-center">
-                <a href="<c:url value="/buyer/market"/>" id="link" rel="search" class="py-2 px-6 text-white rounded-lg bg-frost justify-center"><messages:message code="filter"/></a>
-            </div>
-        </div>
+<%--        <div class="rounded-lg bg-[#D8DEE9] border-4 border-[#5E81AC] py-5 w-full">--%>
+<%--            <div class="flex flex-col mx-3">--%>
+<%--                <label for="coin"  class="text-l font-bold font-sans text-start"><messages:message code="cryptocurrency"/></label>--%>
+<%--                <select name="coin" id="coin" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">--%>
+<%--                    <option disabled selected><messages:message code="chooseAnOption"/></option>--%>
+<%--                    <c:forEach items="${cryptocurrencies}" var="coin">--%>
+<%--                        <option value="<c:out value="${coin.code}"/>"><img class="my-auto h-3 w-3" src="<c:url value="/public/images/${coin.code}.png"/>"/><c:out value="${coin.commercialName}"/></option>--%>
+<%--                    </c:forEach>--%>
+<%--                </select>--%>
+<%--            </div>--%>
+<%--            <div class="flex flex-col mx-3 mt-3">--%>
+<%--                <label for="location" class="text-l font-bold font-sans text-start"><messages:message code="location"/></label>--%>
+<%--                <select name="location" id="location" class="bg-white p-2 mt-1" onchange="addQueryParam(this.id)">--%>
+<%--                    <option disabled selected><messages:message code="chooseAnOption"/></option>--%>
+<%--                    <c:forEach items="${locations}" var="location">--%>
+<%--                        <option value=<c:out value="${location}"/>><messages:message code="Location.${location}"/></option>--%>
+<%--                    </c:forEach>--%>
+<%--                </select>--%>
+<%--            </div>--%>
+<%--            <div class="flex flex-row justify-center mt-3">--%>
+<%--                <button onclick="resetAllFilters()" class="justify-start text-polard font-regular hidden" id="reset"><messages:message code="cleanFilters"/></button>--%>
+<%--            </div>--%>
+<%--            <div class="flex flex-row justify-center">--%>
+<%--                <a href="<c:url value="/buyer/market"/>" id="link" rel="search" class="py-2 px-6 text-white rounded-lg bg-frost justify-center"><messages:message code="filter"/></a>--%>
+<%--            </div>--%>
+<%--        </div>--%>
 <%--        <h1 class="text-2xl font-bold font-sans mt-5"><messages:message code="marketPrice"/> </h1>--%>
-        <div class="flex flex-col mt-4">
-            <jsp:include page="../components/cryptoCard.jsp">
-                <jsp:param name="code" value="BTC"/>
-                <jsp:param name="commercialName" value="Bitcoin"/>
-            </jsp:include>
-            <jsp:include page="../components/cryptoCard.jsp">
-                <jsp:param name="code" value="ETH"/>
-                <jsp:param name="commercialName" value="Ethereum"/>
-            </jsp:include>
-            <jsp:include page="../components/cryptoCard.jsp">
-                <jsp:param name="code" value="USDT"/>
-                <jsp:param name="commercialName" value="Tether"/>
-            </jsp:include>
-            <jsp:include page="../components/cryptoCard.jsp">
-                <jsp:param name="code" value="DAI"/>
-                <jsp:param name="commercialName" value="Dai"/>
-            </jsp:include>
-        </div>
+<%--    <div class="mx-auto  mt-10 bg-[#FAFCFF] shadow-xl rounded-lg p-5 flex flex-col w-[80%]">--%>
+<%--        <h1 class="font-sans text-polard text-lg font-bold mx-auto">Criptomonedas</h1>--%>
+<%--        <div class="flex flex-row mx-auto mt-5 ">--%>
+<%--            <jsp:include page="../components/cryptoCard.jsp">--%>
+<%--                <jsp:param name="code" value="USDT"/>--%>
+<%--                <jsp:param name="commercialName" value="Tether"/>--%>
+<%--            </jsp:include>--%>
+<%--            <label class="switch">--%>
+<%--                <input type="checkbox">--%>
+<%--                <span class="slider round"></span>--%>
+<%--            </label>--%>
 
+<%--        </div>--%>
+<%--        <div class="flex flex-row mx-auto mt-5 ">--%>
+<%--            <label class="switch">--%>
+<%--                <input type="checkbox">--%>
+<%--                <span class="slider round"></span>--%>
+<%--            </label>--%>
+<%--            <h1 class="my-auto ml-5">Bitcoin</h1>--%>
+<%--        </div>--%>
+<%--        <div class="flex flex-row mx-auto mt-5 ">--%>
+<%--            <label class="switch">--%>
+<%--                <input type="checkbox">--%>
+<%--                <span class="slider round"></span>--%>
+<%--            </label>--%>
+<%--            <h1 class="my-auto ml-5">Bitcoin</h1>--%>
+<%--        </div>--%>
+<%--        <div class="flex flex-row mx-auto mt-5 ">--%>
+
+<%--            <label class="switch">--%>
+<%--                <input type="checkbox">--%>
+<%--                <span class="slider round"></span>--%>
+<%--            </label>--%>
+<%--            <h1 class="my-auto ml-5">Bitcoin</h1>--%>
+<%--        </div>--%>
+<%--        <div class="flex flex-row mx-auto mt-5 ">--%>
+<%--            <label class="switch">--%>
+<%--                <input type="checkbox">--%>
+<%--                <span class="slider round"></span>--%>
+<%--            </label>--%>
+<%--            <h1 class="my-auto ml-5">Bitcoin</h1>--%>
+<%--        </div>--%>
+
+<%--        &lt;%&ndash;        <div class="flex flex-row mx-auto mt-5 ">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            <label class="switch">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                <input type="checkbox">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                <span class="slider round"></span>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            </label>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            <h1 class="my-auto ml-5">Ether</h1>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;        </div>&ndash;%&gt;--%>
+<%--    </div>--%>
+    <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
+    <c:set var="locations" value="${locations}" scope="request"/>
+    <jsp:include page="../components/cryptoFilters.jsp"/>
+    <jsp:include page="../components/ubicationFilter.jsp"/>
     </div>
-    <div class="flex flex-col w-4/5">
+    <div class="flex flex-col w-4/5 mt-10">
         <div class="flex flex-row justify-between">
             <div class="flex flex-row mx-5">
                 <%--            <div class="my-auto mr-5" onclick="sendGet()">--%>

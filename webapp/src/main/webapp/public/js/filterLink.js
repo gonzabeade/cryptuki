@@ -1,9 +1,5 @@
 
-window.onload = async function onStart() {
-    await setCryptoPrice();
-    getFilters();
 
-}
 
 function getFilters() {
     if (window.location.search.length > 0) {
@@ -26,9 +22,9 @@ function getFilters() {
 
     }
 
-    if (searchParams.has("orderingCriterion")) {
-        document.getElementById("orderingCriterion").options[searchParams.get("orderingCriterion")].selected = true
-    }
+    // if (searchParams.has("orderingCriterion")) {
+    //     document.getElementById("orderingCriterion").options[searchParams.get("orderingCriterion")].selected = true
+    // }
     if(searchParams.has("location")){
         document.getElementById("location-selected").classList.remove("hidden");
         document.getElementById("hood-selected").innerText= searchParams.get("location");
@@ -47,6 +43,9 @@ function addPageValue(value){
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
     window.location.href = newRelativePathQuery;
+}
+function addPageValueForm(value){
+    document.getElementById("page").value = value;
 }
 function addQueryParam(id) {
     var searchParams = new URLSearchParams(window.location.search)
@@ -103,29 +102,12 @@ function sendGet(){
     console.log(document.getElementById("link").href)
     document.getElementById("link").click();
 }
-function addDirection(id) {
-    let selectValue = document.getElementById(id).value;
-    var searchParams = new URLSearchParams(window.location.search);
-    console.log(selectValue)
-    if(selectValue === ''){
-        searchParams.delete(id);
-    }else if(selectValue === "2"){
-        searchParams.set('orderingDirection', "1")
-    }else{
-        searchParams.delete('orderingDirection')
-    }
 
-    searchParams.delete("page")
-    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-    history.pushState(null, '', newRelativePathQuery);
-    document.getElementById("link").href = newRelativePathQuery;
-
-}
 function removeLocationParam() {
     document.getElementById("location-selected").classList.add("hidden");
     var searchParams = new URLSearchParams(window.location.search);
     searchParams.delete("location")
     var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
     history.pushState(null, '', newRelativePathQuery);
-    location.reload()
+    sendGet();
 }

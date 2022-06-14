@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.form.LandingForm;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.cryptuki.form.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -78,7 +79,8 @@ public class BuyerController {
     }
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
-    public ModelAndView landing(@RequestParam(value = "page") final Optional<Integer> page,
+    public ModelAndView landing(@ModelAttribute("landingForm") LandingForm form,
+                                @RequestParam(value = "page") final Optional<Integer> page,
                                 @RequestParam(value = "location", required = false) final String location,
                                 @RequestParam(value = "coin", required = false) final String coin,
                                 @RequestParam(value = "pm", required = false) final String paymentMethod,
@@ -89,13 +91,17 @@ public class BuyerController {
 
         int pageNumber = page.orElse(0);
         OfferFilter filter = new OfferFilter()
-            .withCryptoCode(coin)
-                .withPaymentMethod(paymentMethod)
                 .withPageSize(PAGE_SIZE)
-                .withPage(pageNumber)
+                .withPage(form.getPage()!= null ? form.getPage() :  0)
                 .withOfferStatus("APR")
                 .withLocation(location)
-                .orderingBy(OfferOrderCriteria.values()[orderingCriterion.orElse(0)]);
+                .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()]);
+        if(form.getCoins() != null){
+
+            for (String coinCode: form.getCoins() ) {
+                filter.withCryptoCode(coinCode);
+            }
+        }
 
         long offerCount = offerService.countBuyableOffers(filter);
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
@@ -108,6 +114,8 @@ public class BuyerController {
         mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
         mav.addObject("locations", Arrays.asList(Location.values()));
+        mav.addObject("selectedCoins", form.getCoins()!= null ? Arrays.asList(form.getCoins()): null);
+
 
         if( null != authentication){
             mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());

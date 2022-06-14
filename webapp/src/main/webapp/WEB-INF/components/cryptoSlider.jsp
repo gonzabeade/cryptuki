@@ -17,7 +17,7 @@
         <div class="inline-flex items-center text-base font-semibold text-gray-900 ">
             <div class="flex flex-row mx-auto my-auto ">
                 <label class="switch">
-                    <input type="checkbox" onchange="sendGet()">
+                    <input type="checkbox" id="coins" name="coins" value="${param.code}">
                     <span class="slider round"></span>
                 </label>
             </div>

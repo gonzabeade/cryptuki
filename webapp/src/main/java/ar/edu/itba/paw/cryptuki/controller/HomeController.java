@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.form.LandingForm;
 import ar.edu.itba.paw.cryptuki.form.SupportForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Role;
@@ -36,7 +37,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-     public ModelAndView landing(Authentication authentication) {
+     public ModelAndView landing(@ModelAttribute("landingForm") LandingForm form, Authentication authentication) {
         if (authentication != null && authentication.getAuthorities().stream().findFirst().get().getAuthority().equals("ROLE_ADMIN"))
             return new ModelAndView("redirect:/admin");
         return new ModelAndView("redirect:/buyer/market");

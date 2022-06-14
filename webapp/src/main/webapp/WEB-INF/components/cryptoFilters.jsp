@@ -9,14 +9,16 @@
     </div>
     <div class="flow-root">
         <ul role="list" class="divide-y divide-gray-200 ">
+
             <c:forEach var="coin" items="${cryptocurrencies}">
                 <jsp:include page="cryptoSlider.jsp">
                     <jsp:param name="commercialName" value="${coin.commercialName}"/>
                     <jsp:param name="code" value="${coin.code}"/>
                 </jsp:include>
             </c:forEach>
-
-
         </ul>
-    </div>
+        <div class="flex">
+            <button type="submit" class="mx-auto p-3">Aplicar Filtros</button>
+        </div>
+          </div>
 </div>

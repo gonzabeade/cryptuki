@@ -78,11 +78,11 @@
     </div>
     <div class="flex flex-col w-1/3 h-full justify-center ">
         <div class="w-full rounded-lg bg-[#FAFCFF] mx-auto py-3 mb-5 text-center border-2 border-polard">
-            <p class="font-sans font-semibold font-polard text-xl"> ¿Qué se debería hacer ante la denuncia de <c:out value="${complainer.username.get()}"/>? </p>
+            <p class="font-sans font-semibold font-polard text-xl"> <messages:message code="whatShouldWeDo"/> <c:out value="${complainer.username.get()}"/>? </p>
         </div>
         <div class="flex flex-row mx-auto w-full text-center justify-around ">
-            <button id="dismissButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyDismissForm()">Desestimar denuncia</button>
-            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()">Vetar al denunciado</button>
+            <button id="dismissButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyDismissForm()"><messages:message code="dismissClaim"/></button>
+            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()"><messages:message code="banUser"></button>
         </div>
         <div id="kickoutForm" class="hidden w-full flex flex-col mt-5">
             <c:url value="/admin/complaint/kickout/${complaintId}?user=${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.id : trade.buyer.id}" var="kickoutUrl"/>
@@ -90,7 +90,7 @@
                 <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p>Estas a punto de vetar a <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/> de Cryptuki. Recuerda que el veredicto no es reversible, debes estar seguro de la decisión. </p>
+                    <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/><messages:message code="irreversibleAction"/>  </p>
                 </div>
                 <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
                 <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" >Enviar</button>
@@ -102,10 +102,10 @@
                 <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p>Estas a punto de desestimar la denuncia de <c:url value="${complainer.username.get()}"/>. Recuerda que el veredicto no es reversible, de estar equivocado deberás esperar a que vuelvan a denunciar al usuario para vetarlo. </p>
+                    <p> <messages:message code="youAreAboutToDismiss"/> <c:url value="${complainer.username.get()}"/><messages:message code="irreversibleAction"/> </p>
                 </div>
                 <form:textarea path="comments" class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
-                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3">Enviar</button>
+                <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3"><messages:message code="send"/></button>
             </form:form>
         </div>
     </div>

@@ -73,10 +73,16 @@
 									<h1 class="font-sans font-bold pr-3 mt-1"><messages:message code="unknown"/></h1>
 								</c:when>
 								<c:otherwise>
-									<a class="font-sans font-bold pr-3 mt-1" href="https://www.google.com/maps/search/?api=1&query=${param.location}" target="_blank"><messages:message code="Location.${param.location}"/></a>
+									<a class="font-sans font-bold pr-3 mt-1 justify-center flex flex-row" href="https://www.google.com/maps/search/?api=1&query=${param.location}" target="_blank">
+										<h1 class="font-sans font-bold mt-1"><messages:message code="Location.${param.location}"/></h1>
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+											<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+										</svg>
+									</a>
 								</c:otherwise>
 							</c:choose>
-							<img src="<c:url value = "/public/images/blue_location.png"/>" class="max-w-[28px] max-h-[28px] mr-2" title="location">
+
 							<%--
 							<c:forEach  var="payment_method" items="${accepted_payments}">
 								<img src="<c:url value = "/public/images/${payment_method.name}.png"/>" class="max-w-[32px] max-h-[32px] mr-2 " title="${payment_method.description}">

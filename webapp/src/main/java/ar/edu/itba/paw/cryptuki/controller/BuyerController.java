@@ -93,7 +93,6 @@ public class BuyerController {
                 .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()]);
 
         if(form.getCoins() != null){
-
             mav.addObject("selectedCoins", Arrays.asList(form.getCoins()));
             for (String coinCode: form.getCoins() ) {
                 filter.withCryptoCode(coinCode);

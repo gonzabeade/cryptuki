@@ -27,7 +27,7 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <c:url value="/kyc" var="kycUrl" />
     <form:form modelAttribute="kycForm" action="${kycUrl}" method="post"  enctype="multipart/form-data" class="w-1/2 mt-20 mb-10 py-12 px-4 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
-        <h1 class="text-center text-4xl font-semibold font-sans text-polar">Verifica tu identidad</h1>
+        <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="verifyYourIdentity"/> </h1>
 
         <h2 class="text-start text-xl font-semibold font-sans text-polar mt-8">Para poder subir anuncios de compra, tu identidad debe estar validada por uno de nuestros administradores. Al completar este formulario, te notifcaremos por mail una vez que hayamos revisado tu solicitud.</h2>
 

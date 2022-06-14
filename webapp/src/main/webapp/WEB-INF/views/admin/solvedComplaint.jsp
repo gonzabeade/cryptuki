@@ -24,7 +24,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-60 w-60 ml-14" fill="none" viewBox="0 0 24 24" stroke="#A3BE8C" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <h1 class="text-ngreen text-4xl text-center">Listo!</h1>
+            <h1 class="text-ngreen text-4xl text-center"><messages:message code="done"/> </h1>
         </div>
         <div class="mx-auto  text-polard text-2xl mt-10">
             <messages:message code="successfulClaim"/>

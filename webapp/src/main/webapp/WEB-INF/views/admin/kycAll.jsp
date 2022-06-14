@@ -29,7 +29,7 @@
 
 
         <c:if test="${pendingKycs.isEmpty()}">
-            <h1 class="mt-10 font-sans text-2xl font-bold">No hay solicitudes de verificación pendientes.</h1>
+            <h1 class="mt-10 font-sans text-2xl font-bold"><messages:message code="noKycPending"/> </h1>
         </c:if>
 
         <div id="confirmationToggle" class="hidden">

@@ -26,6 +26,11 @@ let ethPrice  =   getCryptoPrice('eth');
 let usdtPrice =  getCryptoPrice('usdt');
 let daiPrice  =   getCryptoPrice('dai');
 
+baseUrl = 'https://criptoya.com/api/satoshitango/';
+
+let cardanoPrice = getCryptoPrice('ada');
+let dogePrice = getCryptoPrice('doge');
+
  async function setCryptoPrice() {
      let numberLocale = Intl.NumberFormat('es-AR');
 
@@ -37,7 +42,13 @@ let daiPrice  =   getCryptoPrice('dai');
 
     document.getElementById("DAI").innerHTML =  numberLocale.format((await daiPrice).toFixed(2)) + ' ARS';
 
+     document.getElementById("DOGE").innerHTML =  numberLocale.format((await dogePrice).toFixed(2)) + ' ARS';
 
-}
+     document.getElementById("ADA").innerHTML =  numberLocale.format((await cardanoPrice).toFixed(2)) + ' ARS';
+
+
+
+
+ }
 
 

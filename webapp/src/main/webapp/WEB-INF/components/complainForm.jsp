@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:url value="/complain" var="postUrl"/>
 <%--@elvariable id="supportForm" type=""--%>
@@ -13,7 +14,8 @@
         <form:errors path="message" cssClass="text-red-500"/>
         <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center">Mensaje *</form:label>
         <div class="flex-row justify-center">
-            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="No recibi las criptomonedas, etc [TRADUCIR]" />
+            <c:set var="placeholder"> <messages:message code="placeholder.message"/></c:set>
+            <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5"  path="message" placeholder="${placeholder}" />
         </div>
     </div>
     <div class="flex flex-row p-5">

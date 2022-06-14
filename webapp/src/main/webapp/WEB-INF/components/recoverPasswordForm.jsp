@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
-
+<c:set var="placeholder"><messages:message code="placeholder.myPass"/> </c:set>
 
 <c:url value="/recoverPassword" var="postPath"/>
 <%--@elvariable id="recoverPasswordForm" type="ar.edu.itba.paw.cryptuki.form.RecoverPasswordForm"--%>
@@ -14,7 +14,7 @@
         <form:label path="password" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="password"/></form:label>
         <form:errors path="password" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
-            <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="e.g micontraseña" onchange="passwordMatch()"/>
+            <form:input type="password" path="password" cssClass="rounded-lg p-3 w-full" placeholder="${placeholder}" onchange="passwordMatch()"/>
             <p class="text-red-400 hidden" id="passError"><messages:message code="passwordsDontMatch"/></p>
         </div>
     </div>

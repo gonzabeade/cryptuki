@@ -92,7 +92,8 @@
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
                     <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/><messages:message code="irreversibleAction"/>  </p>
                 </div>
-                <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
+                <c:set var="placeholder"><messages:message code="kickoutMotif"/> </c:set>
+                <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="${placeholder}"></form:textarea>
                 <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" ><messages:message code="send"/></button>
             </form:form>
         </div>
@@ -104,7 +105,8 @@
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
                     <p> <messages:message code="youAreAboutToDismiss"/> <c:url value="${complainer.username.get()}"/><messages:message code="irreversibleAction"/> </p>
                 </div>
-                <form:textarea path="comments" class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="Escribe un motivo [TRADUCIR]"></form:textarea>
+                <c:set var="placeholder"><messages:message code="kickoutMotif"/></c:set>
+                <form:textarea path="comments" class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="${placeholder}"></form:textarea>
                 <button class="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3"><messages:message code="send"/></button>
             </form:form>
         </div>

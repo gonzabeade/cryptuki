@@ -27,8 +27,9 @@
   <div class="flex flex-col ml-80 my-10 h-screen w-screen">
     <h1 class="font-sans text-4xl font-bold"><messages:message code="pendingClaims"/></h1>
     <div id="confirmationToggle" class="hidden">
+      <c:set var="placeholder"><messages:message code="closedComplaint"/></c:set>
       <jsp:include page="../../components/confirmationToggle.jsp">
-        <jsp:param name="title" value="Reclamo cerrado con éxito [TRADUCIR]"/>
+        <jsp:param name="title" value="${placeholder}"/>
       </jsp:include>
     </div>
     <div class="flex flex-col divide-x h-full">

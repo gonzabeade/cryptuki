@@ -33,8 +33,9 @@
         </c:if>
 
         <div id="confirmationToggle" class="hidden">
+            <c:set var="placeholder"><messages:message code="kycSubmission"/> </c:set>
             <jsp:include page="../../components/confirmationToggle.jsp">
-                <jsp:param name="title" value="Solicitud de verificación procesada con éxito [TRADUCIR]"/>
+                <jsp:param name="title" value="${placeholder}"/>
             </jsp:include>
         </div>
 

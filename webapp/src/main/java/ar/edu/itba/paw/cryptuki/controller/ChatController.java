@@ -30,7 +30,6 @@ public class ChatController {
 
     private final UserService userService;
     private final TradeService tradeService;
-
     private final ChatService chatService;
 
     @Autowired

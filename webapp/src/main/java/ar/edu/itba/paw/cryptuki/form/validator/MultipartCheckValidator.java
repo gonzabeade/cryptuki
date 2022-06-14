@@ -8,8 +8,6 @@ import javax.validation.ConstraintValidatorContext;
 
 public class MultipartCheckValidator implements ConstraintValidator<MultipartCheck, MultipartFile> {
 
-
-
     @Override
     public void initialize(MultipartCheck multipartCheck) {
     }

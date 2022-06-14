@@ -5,7 +5,7 @@
 
 
 <c:url value="/register" var="postPath"/>
-<%--@elvariable id="registerForm" type="ar.edu.itba.paw.cryptuki.form.RegisterForm"--%>
+<%--@elvariable id="registerForm" type="ar.edu.itba.paw.cryptuki.form.auth.RegisterForm"--%>
 <c:set var="passwordPlaceholder"><messages:message code="placeholder.password"/></c:set>
 <c:set var="usernamePlaceholder"><messages:message code="placeholder.username"/></c:set>
 <c:set var="emailPlaceholder"><messages:message code="placeholder.email"/></c:set>

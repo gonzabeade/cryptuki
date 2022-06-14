@@ -28,7 +28,7 @@
     </div>
     <div class="flex flex-col">
         <c:url value="/profilePicSelector" var="postUrl"/>
-        <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
+        <form:form modelAttribute="profilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
             <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>
             <div>
                 <form:label path="multipartFile">

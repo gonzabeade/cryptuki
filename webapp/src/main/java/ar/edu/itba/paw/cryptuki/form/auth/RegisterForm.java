@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form;
+package ar.edu.itba.paw.cryptuki.form.auth;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
 import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateUsername;

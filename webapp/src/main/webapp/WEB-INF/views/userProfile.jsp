@@ -11,6 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
   <script src="<c:url value="/public/js/feedback.js"/>"></script>
+  <script src="<c:url value="/public/js/successMessageShow.js"/>"></script>
   <script src="<c:url value="/public/js/profilePic.js"/>"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,9 +28,11 @@
 <% request.setCharacterEncoding("utf-8"); %>
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>
-  <jsp:include page="../components/confirmationToggle.jsp">
-    <jsp:param name="title" value="${updatedPass}"/>
-  </jsp:include>
+  <div id="confirmationToggle" class="hidden">
+    <jsp:include page="../components/confirmationToggle.jsp">
+      <jsp:param name="title" value="Contraseña cambiada con exito [TRADUCIR]"/>
+    </jsp:include>
+  </div>
 </c:if>
 <div class="flex">
   <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="myProfile"/></h1>
@@ -38,7 +41,7 @@
   <div class="flex flex-col height-auto mx-auto my-auto">
     <div class="flex flex-col">
       <c:url value="/profilePicSelector" var="postUrl"/>
-      <form:form modelAttribute="ProfilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
+      <form:form modelAttribute="profilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
         <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>
         <div class="group flex flex-col">
           <form:label path="multipartFile">

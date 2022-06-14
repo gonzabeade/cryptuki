@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.form.RegisterForm;
+import ar.edu.itba.paw.cryptuki.form.auth.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.annotation.PasswordMatch;
 import org.springframework.stereotype.Component;
 

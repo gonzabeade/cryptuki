@@ -25,27 +25,19 @@ public class SellerController {
     private final OfferService offerService;
 
     private final CryptocurrencyService cryptocurrencyService;
-
-    private final LocationService locationService;
-
-    private final KycService kycService;
-
     private final UserService userService;
     private static final int PAGE_SIZE = 6;
 
     @Autowired
-    public SellerController(final KycService kycService, final LocationService locationService, ProfilePicService profilePicService, TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService)
-    {
+    public SellerController(TradeService tradeService, OfferService offerService, UserService userService, CryptocurrencyService cryptocurrencyService) {
         this.tradeService = tradeService;
         this.offerService = offerService;
         this.userService = userService;
         this.cryptocurrencyService = cryptocurrencyService;
-        this.locationService = locationService;
-        this.kycService = kycService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView seller(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm,@ModelAttribute("ProfilePicForm") ProfilePicForm form){
+    public ModelAndView seller(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm,@ModelAttribute("profilePicForm") ProfilePicForm form){
         ModelAndView mav = new ModelAndView("seller/sellerIndexVerbose");
 
         String username = authentication.getName();
@@ -73,7 +65,6 @@ public class SellerController {
         mav.addObject("paymentMethods", PaymentMethod.values());
         mav.addObject("location", form.getLocation());
 
-
         if (form.getPaymentMethods() != null){
             List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
             mav.addObject("selectedPayments", paymentCodesAlreadySelected);
@@ -92,6 +83,8 @@ public class SellerController {
         return new ModelAndView("redirect:/offer/"+offer.getOfferId()+"/creationsuccess");
     }
 
+
+    // TODO(gonza): Change offer status correctly !!!!
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
     public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
 
@@ -103,8 +96,7 @@ public class SellerController {
         else if (statusTradeForm.getNewStatus().equals(TradeStatus.SOLD.toString()))
             tradeService.sellTrade(trade.getTradeId());
 
-
-            return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
+        return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
     }
 
     @RequestMapping(value="/acceptOffer", method= RequestMethod.POST)
@@ -112,8 +104,5 @@ public class SellerController {
         tradeService.acceptTrade(tradeId);
         return new ModelAndView("redirect:/chat?tradeId="+tradeId);
     }
-
-
-
 
 }

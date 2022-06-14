@@ -40,7 +40,7 @@ public class UserAuthHibernateDao implements UserAuthDao{
     public Optional<UserAuth> getUserAuthByEmail(String email) {
         TypedQuery<UserAuth> typedQuery = em.createQuery("from UserAuth as ua where ua.user.email = :email  and status <> :status ", UserAuth.class);
         typedQuery.setParameter("email", email);
-        typedQuery.setParameter("status", UserStatus.KICKED);
+        typedQuery.setParameter("status", UserStatus.KICKED.ordinal());
         try {
             return Optional.of(typedQuery.getSingleResult());
         } catch (NoResultException nre) {

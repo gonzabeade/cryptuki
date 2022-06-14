@@ -22,8 +22,7 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private static final int PAGE_SIZE = 5;
-
+    private static final int COMPLAIN_PAGE_SIZE = 5;
     private static final int KYC_PAGE_SIZE = 10;
     private final ComplainService complainService;
     private final KycService kycService;
@@ -35,17 +34,17 @@ public class AdminController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterForm complainFilterForm, BindingResult result ){
+    public ModelAndView adminHome(@RequestParam("page") Optional<Integer> page, @Valid ComplainFilterForm complainFilterForm){
 
         ModelAndView mav = new ModelAndView("admin/complaints");
         ComplainFilter filter = complainFilterForm.toComplainFilter()
                 .withPage(page.orElse(0))
-                .withPageSize(PAGE_SIZE);
+                .withPageSize(COMPLAIN_PAGE_SIZE);
 
         long complainCount = complainService.countComplainsBy(filter);
         Collection<Complain> complainCollection = complainService.getComplainsBy(filter);
         int pageNumber = filter.getPage();
-        long pages =  (complainCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        long pages =  (complainCount + COMPLAIN_PAGE_SIZE - 1) / COMPLAIN_PAGE_SIZE;
 
         mav.addObject("baseUrl", "/admin");
         mav.addObject("pages", pages);
@@ -78,13 +77,12 @@ public class AdminController {
     public ModelAndView solveComplaintDismiss(@Valid @ModelAttribute("solveComplaintFormDismiss") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
         if(result.hasErrors())
             return complaintDetail(complaintId, new SolveComplainForm(), form);
-
         complainService.closeComplainWithDismiss(complaintId, authentication.getName(), form.getComments());
         return new ModelAndView("redirect:/admin?success");
     }
 
     @RequestMapping(value = "/kyccheck", method = RequestMethod.GET)
-    public ModelAndView kycCheckHome(@ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @RequestParam("page") Optional<Integer> page) {
+    public ModelAndView kycCheckHome(@RequestParam("page") Optional<Integer> page, @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm) {
         ModelAndView mav = new ModelAndView("admin/kycAll");
         Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(page.orElse(0), KYC_PAGE_SIZE);
         mav.addObject("pendingKycs", pendingKycs);
@@ -92,7 +90,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/kyccheck/{username}", method = RequestMethod.GET)
-    public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") final String username) {
+    public ModelAndView kycCheckGet(@ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm, @PathVariable(value = "username") String username) {
         ModelAndView modelAndView = new ModelAndView("admin/kycProfile");
         Optional<KycInformation> maybeKyc = kycService.getPendingKycRequest(username);
         KycInformation kyc = maybeKyc.orElseThrow(()-> new NoSuchKycException(username));

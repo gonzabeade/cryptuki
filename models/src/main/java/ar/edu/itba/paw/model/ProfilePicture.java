@@ -30,8 +30,7 @@ public class ProfilePicture {
 
     public ProfilePicture(User user, byte[] bytes, String imageType) {
         this.user = user;
-        this.bytes = bytes;
-        this.imageType = imageType;
+        setImage(bytes, imageType);
     }
 
     public Integer getPicId() {
@@ -49,4 +48,11 @@ public class ProfilePicture {
     public String getImageType() {
         return imageType;
     }
+
+    public void setImage(byte[] bytes, String imageType) {
+        this.bytes = bytes;
+        this.imageType = imageType;
+    }
+
+
 }

@@ -67,6 +67,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     @Override
     public void sendChangePasswordMessage(String username, int code) {
+        // TODO: DO NOT PUT THE CODE IN THE MAIL TEXT, ONLY AS QUERY PARAM
         MailMessage message = mailMessageContactService.createMessage(getTo(username));
         ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
         Locale locale = LocaleContextHolder.getLocale();

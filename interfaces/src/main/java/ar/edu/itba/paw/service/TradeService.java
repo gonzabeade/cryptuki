@@ -32,6 +32,6 @@ public interface TradeService {
     /** Returns the total count of Trades in a certain status for a username */
     long getTotalTradesCount(String username, TradeStatus status);
 
-    void rateUserRegardingTrade(String username, int rating, int tradeId);
+    void rateCounterPartUserRegardingTrade(String username, int rating, int tradeId);
 
 }

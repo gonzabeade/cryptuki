@@ -106,10 +106,16 @@ public class TradeServiceImpl implements TradeService {
         return tradeDao.getTotalTradesCount(username, status);
     }
 
+
+    /**
+     * @param username Caller username. This is the person that is rating the counterpart
+     * @param rating
+     * @param tradeId Trade affected
+     */
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
-    public void rateUserRegardingTrade(String username, int rating, int tradeId) {
+    public void rateCounterPartUserRegardingTrade(String username, int rating, int tradeId) {
 
         // TODO: if time allows, send email
         if (rating < 1 || rating > 10)
@@ -117,10 +123,20 @@ public class TradeServiceImpl implements TradeService {
 
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
 
-        if (username.equals(trade.getBuyer().getUserAuth().getUsername())) trade.markSellerAsRated();
-        else  trade.markBuyerAsRated();
+        String buyerUsername = trade.getBuyer().getUserAuth().getUsername();
 
-        userService.updateRatingBy(username, rating);
+        if (username.equals(buyerUsername)){
+
+            userService.updateRatingBy(trade.getOffer().getSeller().getUserAuth().getUsername(), rating);
+            trade.markSellerAsRated();
+
+        } else {
+
+            userService.updateRatingBy(buyerUsername, rating);
+            trade.markBuyerAsRated();
+
+        }
+
     }
 
 }

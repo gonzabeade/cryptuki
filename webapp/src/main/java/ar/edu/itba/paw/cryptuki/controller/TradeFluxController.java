@@ -140,7 +140,7 @@ public class TradeFluxController {
             return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
         }
 
-        tradeService.rateUserRegardingTrade(authentication.getName(), ratingForm.getRating(), ratingForm.getTradeId());
+        tradeService.rateCounterPartUserRegardingTrade(authentication.getName(), ratingForm.getRating(), ratingForm.getTradeId());
         return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
 

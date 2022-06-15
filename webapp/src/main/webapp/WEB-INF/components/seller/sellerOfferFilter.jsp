@@ -6,22 +6,22 @@
     <div class="container mx-auto my-auto px-20 h-full">
     <ol class="flex justify-center mt-4">
         <li class="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
-            <a href="<c:url value="/buyer/?status=PENDING"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}">Activas</p>
+            <a href="<c:url value="/seller/paused"/>">
+                <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}">Pausadas</p>
             </a>
         </li>
         <li class="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
-            <a href="<c:url value="/buyer/?status=ACCEPTED"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}">Pausadas</p>
+            <a href="<c:url value="/seller/active"/>">
+                <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}">Activas</p>
             </a>
         </li>
         <li class="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
-            <a href="<c:url value="/buyer/?status=REJECTED"/>">
+            <a href="<c:url value="/seller/deleted"/>">
                 <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}">Eliminadas</p>
             </a>
         </li>
         <li class="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
-            <a href="<c:url value="/buyer/?status=SOLD"/>">
+            <a href="<c:url value="/seller/sold"/>">
                 <p class="py-2 pr-4 pl-3 font-bold text-polar ${param.status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}">Agotadas</p>
             </a>
         </li>

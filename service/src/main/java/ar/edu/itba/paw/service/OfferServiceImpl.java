@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class OfferServiceImpl implements OfferService {
@@ -70,18 +71,16 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Offer> getOffersByUsername(String username, int page, int pageSize) {
+    public Collection<Offer> getOffersByUsername(String username, int page, int pageSize, Set<OfferStatus> status) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOffersBy(new OfferFilter().restrictedToUsername(username).withPageSize(pageSize)
-                    .withOfferStatus("APR")
-                    .withOfferStatus("PSE")
-                    .withOfferStatus("PSU")
-                    .withPage(page)
-            );
+            OfferFilter filter = new OfferFilter().restrictedToUsername(username).withPageSize(pageSize).withPage(page);
+            for (OfferStatus s: status)
+                filter.withOfferStatus(s);
+            return offerDao.getOffersBy(filter);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
@@ -110,16 +109,16 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countOffersByUsername(String username) {
+    public long countOffersByUsername(String username, Set<OfferStatus> status) {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
         try {
-            return offerDao.getOfferCount(new OfferFilter().restrictedToUsername(username)
-                    .withOfferStatus("APR")
-                    .withOfferStatus("PSE")
-                    .withOfferStatus("PSU"));
+            OfferFilter filter = new OfferFilter().restrictedToUsername(username);
+            for (OfferStatus s: status)
+                    filter.withOfferStatus(s);
+            return offerDao.getOfferCount(filter);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

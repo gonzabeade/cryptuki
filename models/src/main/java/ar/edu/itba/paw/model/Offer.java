@@ -48,7 +48,6 @@ public class Offer {
     @Column(name="comments", length = 280)
     private String comments;
 
-    private int totalUnseenMessages = 0;
     public Offer(){
         // Just for Hibernate
     }
@@ -155,13 +154,6 @@ public class Offer {
 
     public String getComments() {
         return comments;
-    }
-
-    public int getTotalUnseenMessages() {
-        return totalUnseenMessages;
-    }
-    public void setTotalUnseenMessages(int totalUnseenMessages) {
-        this.totalUnseenMessages = totalUnseenMessages;
     }
 
     public void setOfferStatus(OfferStatus offerStatus) {

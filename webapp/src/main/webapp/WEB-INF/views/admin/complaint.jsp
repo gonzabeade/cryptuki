@@ -67,7 +67,8 @@
             </c:choose>
         </div>
     </div>
-    <div class="w-1/3 h-full">
+    <div class=" flex flex-col w-1/3 h-full">
+        <h1 class="font-sans font-bold text-polard text-center mb-3"><messages:message code="chatHistory"/></h1>
         <c:set value="${trade.messageCollection}" var="messageCollection" scope="request"/>
         <jsp:include page="../../components/chat/immutableChatSnippet.jsp">
             <jsp:param name="otherUsername" value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/>
@@ -82,7 +83,7 @@
         </div>
         <div class="flex flex-row mx-auto w-full text-center justify-around ">
             <button id="dismissButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyDismissForm()"><messages:message code="dismissClaim"/></button>
-            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()"><messages:message code="banUser"></button>
+            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()"><messages:message code="banUser"/></button>
         </div>
         <div id="kickoutForm" class="hidden w-full flex flex-col mt-5">
             <c:url value="/admin/complaint/kickout/${complaintId}?user=${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.id : trade.buyer.id}" var="kickoutUrl"/>

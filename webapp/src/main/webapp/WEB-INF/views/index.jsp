@@ -57,9 +57,9 @@
             <div class="flex flex-row mx-5">
                 <p class="my-auto font-sans font-bold"><messages:message code="orderBy"/></p>
                 <form:select path="orderCriteria" class="ml-5 rounded-sm p-2 my-auto " onchange="sendGet()">
+                    <form:option value="2"><messages:message code="priceLowToHigh"/></form:option>
                     <form:option value="0"><messages:message code="dateOrder"/> </form:option>
                     <form:option value="1"><messages:message code="ratingFilter"/></form:option>
-                    <form:option value="2"><messages:message code="priceLowToHigh"/></form:option>
                     <form:option value="3"><messages:message code="priceHighToLow"/></form:option>
                 </form:select>
             </div>

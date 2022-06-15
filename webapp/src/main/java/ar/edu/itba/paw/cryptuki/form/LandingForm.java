@@ -1,11 +1,16 @@
 package ar.edu.itba.paw.cryptuki.form;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 public class LandingForm {
     private String[] coins;
+    @Min(0)
     private Integer page = 0;
-    private Integer orderCriteria = 0;
+    @Min(0)
+    @Max(3)
+    private Integer orderCriteria = 2;
 
     private List<String> location;
 

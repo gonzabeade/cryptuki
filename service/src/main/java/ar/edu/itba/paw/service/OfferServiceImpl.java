@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.UnmodifiableOfferException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.OfferFilter;
@@ -127,13 +129,20 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offer.offerId, authentication.principal) OR hasRole('ROLE_ADMIN')")
-    public Offer modifyOffer(OfferPO offer) {
+    public Offer modifyOffer(OfferPO offerPO) {
 
-        if (offer == null)
+        if (offerPO == null)
             throw new NullPointerException("Offer digest cannot be null");
+        //trade DAO chequear que no tenga trades asociados a la oferta , de lo contrario explotar
+
+        Integer offerId = offerPO.getOfferId().orElseThrow(IllegalArgumentException::new);
+        if(tradeDao.getCountAssociatedTrades(SecurityContextHolder.getContext().getAuthentication().getName(), offerId) > 0){
+            throw new UnmodifiableOfferException(offerId);
+        }
 
         try {
-            return offerDao.modifyOffer(offer);
+            Offer offer = getOfferIfAuthorized(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
+            return offerDao.modifyOffer(OfferPO.mergeParameterObject(offer, offerPO));
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }

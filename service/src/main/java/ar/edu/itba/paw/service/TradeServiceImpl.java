@@ -9,6 +9,7 @@ import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,6 +105,11 @@ public class TradeServiceImpl implements TradeService {
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public long getTotalTradesCount(String username, TradeStatus status) {
         return tradeDao.getTotalTradesCount(username, status);
+    }
+
+    @Override
+    public long getTradesFromOfferCount(String username, int offerId) {
+        return tradeDao.getCountAssociatedTrades(SecurityContextHolder.getContext().getAuthentication().getName(), offerId);
     }
 
 

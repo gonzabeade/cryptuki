@@ -21,7 +21,9 @@ public interface TradeDao {
 
     /** Returns a collection and count of Trades in which the user is the seller */
     Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status);
+
     long getTradesAsSellerCount(String username, TradeStatus status);
+    long getCountAssociatedTrades(String username, int offerId);
 
     /** Returns a collection and count of Trades in which the user is the buyer */
     Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status);

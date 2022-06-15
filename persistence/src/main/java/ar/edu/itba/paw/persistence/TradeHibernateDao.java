@@ -73,6 +73,13 @@ public class TradeHibernateDao implements TradeDao {
         query.setParameter("username", username);
         return (Long)query.getSingleResult();
     }
+    @Override
+    public long getCountAssociatedTrades(String username, int offerId){
+        Query query = em.createQuery("select count(*) from Trade t where t.offer.seller.userAuth.username = :username AND t.offer.offerId = :offerId");
+        query.setParameter("offerId", offerId);
+        query.setParameter("username", username);
+        return (Long)query.getSingleResult();
+    }
 
     @Override
     public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status) {

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping("/offer")
@@ -31,13 +30,16 @@ public class OfferController {
     private final UserService userService;
     private final UserService us;
 
+    private final TradeService  tradeService;
+
 
     @Autowired
-    public OfferController(CryptocurrencyService cryptocurrencyService, OfferService offerService, UserService userService, UserService us) {
+    public OfferController(CryptocurrencyService cryptocurrencyService, OfferService offerService, UserService userService, UserService us, TradeService tradeService) {
         this.cryptocurrencyService = cryptocurrencyService;
         this.offerService = offerService;
         this.userService = userService;
         this.us = us;
+        this.tradeService = tradeService;
     }
 
     @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
@@ -74,6 +76,10 @@ public class OfferController {
     public ModelAndView modify(@PathVariable("offerId") final int offerId,
                                @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final Authentication authentication){
+
+        if(tradeService.getTradesFromOfferCount(authentication.getName(), offerId) > 0){
+           return new ModelAndView("unmodifiableOffer");
+        }
 
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         form.fillFromOffer(offer);

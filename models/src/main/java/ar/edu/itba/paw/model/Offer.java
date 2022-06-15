@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -159,6 +161,4 @@ public class Offer {
     public void setOfferStatus(OfferStatus offerStatus) {
         this.offerStatus = offerStatus;
     }
-
-
 }

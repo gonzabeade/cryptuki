@@ -105,7 +105,7 @@ public class OfferPO {
         return Collections.unmodifiableCollection(paymentMethods);
     }
 
-    public Integer getOfferId() { return offerId; }
+    public Optional<Integer> getOfferId() { return Optional.ofNullable(offerId); }
 
     public Offer.Builder toBuilder(Cryptocurrency crypto, User seller) {
 
@@ -122,5 +122,12 @@ public class OfferPO {
                     .withCrypto(crypto)
                     .withLocation(getLocation().orElseThrow(()->new IllegalArgumentException()))
                     .withSeller(seller);
+    }
+
+    /** Updates an offer model with the values of the ParameterObject  **/
+    public static Offer mergeParameterObject(Offer offer, OfferPO offerPO){
+
+        //hacer todos los setters de offer en el modelo de los campos cambiables en form
+
     }
 }

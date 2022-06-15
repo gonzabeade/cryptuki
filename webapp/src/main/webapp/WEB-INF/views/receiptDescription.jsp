@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/feedback.js"/>"></script>
+    <script src="<c:url value="/public/js/starRating.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -30,14 +31,6 @@
 </c:choose>
 <div class="flex flex-row divide-x-2 divide-polard mt-5">
     <div class="flex flex-col w-3/5 h-screen">
-        <c:if test="${rated == true }">
-            <div class="mb-5 mt-5">
-                <c:set var="ratingSent"><messages:message code="ratingSent"/></c:set>
-                <jsp:include page="../components/confirmationToggle.jsp">
-                    <jsp:param name="title" value="${ratingSent}"/>
-                </jsp:include>
-            </div>
-        </c:if>
         <div class="flex flex-col mx-auto">
             <svg xmlns="http://www.w3.org/2000/svg" class=" mx-auto h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="#A3BE8C" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -137,17 +130,10 @@
             </c:if>
 
             <div class="flex flex-col mx-auto mt-10">
-
-                <c:if test="${(trade.buyer.username.get() == username && trade.buyerRated == false) || (trade.offer.seller.username.get() == username && trade.sellerRated == false)}">
+                <c:if test="${(trade.buyer.username.get() == username && trade.sellerRated == false) || (trade.offer.seller.username.get() == username && trade.buyerRated == false)}">
                     <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.offer.seller.username.get() == username ? trade.buyer.username.get(): trade.offer.seller.username.get()}</h1>
-<%--            WIP RATING STARS
-            <div class="flex flex-row">--%>
-<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
-<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
-<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
-<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
-<%--                            <span class="fa fa-star hover:text-nyellow"></span>--%>
-<%--                    </div>--%>
+<%--            WIP RATING STARS --%>
+
                     <c:url value="/rate" var="postUrl"/>
                     <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
 
@@ -155,25 +141,29 @@
                         <div class="flex flex-col">
                             <form:errors path="rating" cssClass="mx-auto text-red-400"/>
                             <form:label path="rating" cssClass="mx-auto"><messages:message code="ratingConditions"/></form:label>
+                            <div class="flex flex-row mx-auto mt-3">
+                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star1" onclick="setRatingAndSend(1)" onmouseleave="leaveHoverOnRating(1)" onmouseover="hoverOnRating(1)"></span>
+                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star2" onclick="setRatingAndSend(2)" onmouseleave="leaveHoverOnRating(2)" onmouseover="hoverOnRating(2)"></span>
+                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star3" onclick="setRatingAndSend(3)" onmouseleave="leaveHoverOnRating(3)" onmouseover="hoverOnRating(3)"></span>
+                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star4" onclick="setRatingAndSend(4)" onmouseleave="leaveHoverOnRating(4)" onmouseover="hoverOnRating(4)"></span>
+                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star5" onclick="setRatingAndSend(5)" onmouseleave="leaveHoverOnRating(5)" onmouseover="hoverOnRating(5)"></span>
+
+                            </div>
                             <div class="flex flex-row">
-                                <form:select path="rating"  type="number" cssClass="p-3 w-20 rounded-lg mx-auto mt-5 none">
-                                    <form:option value="1"/>
-                                    <form:option value="2"/>
-                                    <form:option value="3"/>
-                                    <form:option value="4"/>
-                                    <form:option value="5"/>
-                                    <form:option value="6"/>
-                                    <form:option value="7"/>
-                                    <form:option value="8"/>
-                                    <form:option value="9"/>
-                                    <form:option value="10"/>
-                                </form:select>
-                                
-                                <button type="submit" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress"><messages:message code="send"/> </button>
+                                <form:hidden path="rating" value="0"/>
+                                <button type="submit" id="sendRating" class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress hidden"><messages:message code="send"/> </button>
                             </div>
                            </div>
 
                     </form:form>
+                </c:if>
+                <c:if test="${rated == true }">
+                    <div class="mb-5 mt-5">
+                        <c:set var="ratingSent"><messages:message code="ratingSent"/></c:set>
+                        <jsp:include page="../components/confirmationToggle.jsp">
+                            <jsp:param name="title" value="${ratingSent}"/>
+                        </jsp:include>
+                    </div>
                 </c:if>
             </div>
 

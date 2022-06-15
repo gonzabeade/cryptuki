@@ -13,7 +13,7 @@
             <h3 class="font-sans my-3"><b><messages:message code="tradeQuantity"/>: </b><c:out value="${param.trades}"/></h3>
             <h3 class="font-sans my-3"><b><messages:message code="lastLogin"/>: </b><messages:message code="${param.lastLogin}"/></h3>
             <c:if test="${param.trades > 0 }">
-                <div class="flex flex-row mx-10 p-3">
+                <div class="flex flex-row p-3">
                     <h4 class="text-gray-400 font-sans"><c:out value="${param.trades}"/> <messages:message code="trades"/> |
                         <messages:message code="rating"/>: </h4>
                     <div class="my-auto ml-2">

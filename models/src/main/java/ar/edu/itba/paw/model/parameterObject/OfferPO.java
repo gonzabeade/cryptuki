@@ -127,7 +127,17 @@ public class OfferPO {
     /** Updates an offer model with the values of the ParameterObject  **/
     public static Offer mergeParameterObject(Offer offer, OfferPO offerPO){
 
-        //hacer todos los setters de offer en el modelo de los campos cambiables en form
+        offer.setUnitPrice(offerPO.getUnitPrice().orElse(offer.getUnitPrice()));
+        offer.setMaxInCrypto(offerPO.getMaxInCrypto().orElse(offer.getUnitPrice()));
+        offer.setMinInCrypto(offerPO.getMinInCrypto().orElse(offer.getUnitPrice()));
+        offer.setComments(offerPO.getFirstChat().orElse(offer.getComments()));
+        offer.setLocation(offerPO.getLocation().orElse(offer.getLocation()));
+
+        return offer;
+
+
+
+
 
     }
 }

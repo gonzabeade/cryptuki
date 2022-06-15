@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="flex flex-col">
-        <form:checkboxes path="location" items="${locations}" cssClass="mr-3"></form:checkboxes>
+        <form:checkboxes path="location" items="${locations}" cssClass="mr-3"/>
     </div>
     <span  class="text-blue-400 underline cursor-pointer" onclick="showAllLocations()" id="seeMore">Ver más</span>
 

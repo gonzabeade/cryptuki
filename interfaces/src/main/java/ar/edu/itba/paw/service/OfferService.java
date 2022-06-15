@@ -14,7 +14,7 @@ public interface OfferService {
      * Offer modification and creation. Output is not optional, throws exception on error.
      */
     Offer makeOffer(OfferPO offerPO);
-    Offer modifyOffer(Offer offer);
+    Offer modifyOffer(OfferPO offer);
 
     /**
      * Returns collection and count of offers that can be effectively bought by a user

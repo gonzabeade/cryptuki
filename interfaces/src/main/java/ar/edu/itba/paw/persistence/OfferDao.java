@@ -12,7 +12,7 @@ public interface OfferDao {
 
     /** Offer manipulation and creation */
     Offer makeOffer(OfferPO offer);
-    Offer modifyOffer(Offer offer);
+    Offer modifyOffer(OfferPO offer);
     void deleteOffer(int offerId);
     Optional<Offer> changeOfferStatus(int offerId, OfferStatus offerStatus);
 

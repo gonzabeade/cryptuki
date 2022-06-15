@@ -10,10 +10,10 @@
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 
         <div class="flex flex-col justify-center">
-            <form:errors path="cryptocurrency" cssClass=" mx-auto text-red-500"/>
-            <form:label  path="cryptocurrency" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="cryptocurrency"/>*</form:label>
+            <form:errors path="cryptoCode" cssClass=" mx-auto text-red-500"/>
+            <form:label  path="cryptoCode" class="text-xl font-sans text-polard font-semibold mb-3 text-center"><messages:message code="cryptocurrency"/>*</form:label>
             <div class="flex flex-row justify-center mx-auto">
-            <form:select path="cryptocurrency" class="rounded-lg p-3" onchange="updateVars(this.value)">
+            <form:select path="cryptoCode" class="rounded-lg p-3" onchange="updateVars(this.value)">
                 <option disabled selected><messages:message code="chooseAnOption"/></option>
                 <c:forEach var="coin" items="${cryptocurrencies}">
                     <form:option value="${coin.code}">
@@ -24,23 +24,23 @@
             </div>
         </div>
         <div class="flex flex-col mt-6">
-                <form:errors path="price" cssClass="text-red-500 mx-auto"/>
-                <form:label path="price" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="priceByCurrency"/> ARS*</form:label>
+                <form:errors path="unitPrice" cssClass="text-red-500 mx-auto"/>
+                <form:label path="unitPrice" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="priceByCurrency"/> ARS*</form:label>
                 <div class="flex flex-col justify-center mx-96">
-                    <form:input type="number" path="price" class="h-10 justify-center rounded-lg p-3 mx-auto " step=".01"/>
+                    <form:input type="number" path="unitPrice" class="h-10 justify-center rounded-lg p-3 mx-auto " step=".01"/>
                     <!-- <h1 class="my-auto mx-auto" id="price">~0.00000 ARS</h1> -->
                 </div>
         </div>
         <div class="flex flex-col justify-center mt-6">
             <h2 class="text-xl font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="limits"/>*</h2>
-            <form:errors path="minAmount" cssClass=" mx-auto text-red-500"/>
-            <form:errors path="maxAmount" cssClass=" mx-auto text-red-500"/>
+            <form:errors path="minInCrypto" cssClass=" mx-auto text-red-500"/>
+            <form:errors path="maxInCrypto" cssClass=" mx-auto text-red-500"/>
             <form:errors cssClass="text-red-500 mx-auto"/>
             <div class="flex flex-row justify-center">
                 <div>
-                    <form:label  path="minAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/> <p id="minCoin" class="mx-2">BTC</p></form:label>
+                    <form:label  path="minInCrypto" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center "><messages:message code="minIn"/> <p id="minCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
-                        <form:input type="number" path="minAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
+                        <form:input type="number" path="minInCrypto" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001"/>
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                     </div>
                 </div>
@@ -48,9 +48,9 @@
                     -
                 </div>
                 <div>
-                    <form:label  path="maxAmount" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center"><messages:message code="maxIn"/><p id="maxCoin" class="mx-2">BTC</p></form:label>
+                    <form:label  path="maxInCrypto" class="text-lg font-sans text-polard font-semibold mb-3 text-center flex flex-row justify-center"><messages:message code="maxIn"/><p id="maxCoin" class="mx-2">BTC</p></form:label>
                     <div class="flex flex-row justify-center mx-auto">
-                        <form:input type="number" path="maxAmount" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" />
+                        <form:input type="number" path="maxInCrypto" class="h-10 justify-center rounded-lg p-3 mx-5" step=".00000001" />
                         <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                     </div>
                 </div>
@@ -61,44 +61,18 @@
             <form:errors path="location" cssClass="text-red-500 mx-auto"/>
             <form:label path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="offerLocation"/> *</form:label>
             <div class="flex flex-row justify-center w-96 mx-auto">
-                <form:input type="text" path="location" cssClass="w-full h-10 justify-center rounded-lg mx-auto p-3"/>
+                <form:select path="location"  cssClass="text-xl font-sans text-polard font-semibold mb-3 text-center rounded-lg p-2">
+                    <c:forEach items="${location}" var="hood">
+                        <form:option value="${hood}" ><messages:message code="Location.${hood}"/></form:option>
+                    </c:forEach>
+                </form:select>
             </div>
         </div>
-        <%--
-        <div class="flex flex-col mx-auto">
-            <form:errors path="paymentMethods" cssClass="text-red-500 mx-auto"/>
-            <form:label path="paymentMethods" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="paymentMethods"/>*</form:label>
-            <div class="flex flex-row justify-center mx-auto">
-                <c:forEach items="${paymentMethods}" var="paymentMethod">
-                    <c:choose>
-                        <c:when test="${selectedPayments.contains(paymentMethod.name)}">
-                            <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="checked border-2 border-frostdr mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[25%] hover:cursor-pointer  " onclick="changeBorderColor(this)">
-                                <div class="flex flex-row">
-                                    <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
-                                    <c:out value="${paymentMethod.description}"/>
-                                </div>
-                            </form:label>
-                        </c:when>
-                        <c:otherwise>
-                            <form:label path="paymentMethods" for="${paymentMethod.name}" cssClass="mr-4 ml-2 p-3 my-auto bg-[#FAFCFF] font-sans rounded-lg text-center text-polard font-medium min-w-[25%] hover:cursor-pointer border-2 border-[#FAFCFF]" onclick="changeBorderColor(this)">
-                                <div class="flex flex-row">
-                                    <img src="<c:url value="/public/images/${paymentMethod.name}.png"/>" class="w-5 h-5 mr-2 my-auto"/>
-                                    <c:out value="${paymentMethod.description}"/>
-                                </div>
-                            </form:label>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <form:checkbox path="paymentMethods" id="${paymentMethod.name}" value="${paymentMethod.name}" cssClass="hidden"/>
-                </c:forEach>
-            </div>
-        </div>
-        --%>
         <div class="flex flex-col mx-auto mt-6">
-            <form:errors path="message" cssClass="text-red-500 mx-auto"/>
-            <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>
+            <form:errors path="firstChat" cssClass="text-red-500 mx-auto"/>
+            <form:label path="firstChat" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>
             <div class="flex flex-row justify-center w-96 mx-auto">
-                <form:textarea path="message" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>
+                <form:textarea path="firstChat" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>
             </div>
         </div>
 

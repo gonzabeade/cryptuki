@@ -110,7 +110,7 @@ public class OfferHibernateDao implements OfferDao{
     }
 
     @Override
-    public Offer modifyOffer(Offer offer) {
+    public Offer modifyOffer(OfferPO offer) {
         em.persist(offer);
         return offer;
     }

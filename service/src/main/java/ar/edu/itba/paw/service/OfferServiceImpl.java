@@ -126,8 +126,8 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#digest.id, authentication.principal) OR hasRole('ROLE_ADMIN')")
-    public Offer modifyOffer(Offer offer) {
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offer.offerId, authentication.principal) OR hasRole('ROLE_ADMIN')")
+    public Offer modifyOffer(OfferPO offer) {
 
         if (offer == null)
             throw new NullPointerException("Offer digest cannot be null");

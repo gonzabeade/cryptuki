@@ -5,6 +5,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <sec:authentication property="name" var="username"/>
 <html>
 <head>
@@ -25,113 +26,91 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
     <jsp:include page="../../components/seller/sellerHeader.jsp"/>
-    <div class="flex h-full w-full px-20 my-10">
+    <div class="flex flex-row h-full w-full px-20 my-10">
 
         <!-- Left Panel: chat and seller stats  -->
-        <div class="flex flex-col h-3/5  w-1/4 ">
-            <div class="flex flex-col w-full my-auto py-3 mb-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]"><h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Órdenes de compra</h1></div>
-            <div class="flex flex-col w-full h-full rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
-                <div class="my-2 bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
+        <div class="flex flex-col h-3/5 w-1/5 pr-2">
+            <div class="flex flex-col w-full py-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
+                <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Órdenes recibidas</h1>
+            </div>
+            <div class="flex flex-col mt-4 rounded-lg px-5 py-4 rounded-lg bg-[#FAFCFF]"">
+                <label class="my-auto" for="offerId">Buscar por código de oferta</label>
+                <div class="flex flex-row">
+                    <input id="offerId" placeholder="Id" type="number" class="border-2 border-gray-700 p-1 w-3/5 rounded-lg" onchange="addQueryParam('offerId')" path="filterByOfferId"/>
+<%--                        <a class="mx-auto" href="<c:url value="/seller/trade/${status.toString()}"/>"><img class='object-contain w-2 h-2 rounded-lg' src="<c:url value="/public/images/lupa.png"/>" alt="logo"></a>--%>
+                </div>
+            </div>
+
+            <c:if test="${focusOffer != null}">
+                <div class="flex flex-col w-full py-3 mt-10 py-20 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF] border-frostl border-2 ">
+                    <c:set var = "url" value = "${fn:toLowerCase(status.toString())}"/>
+                    <c:url value="/seller/trade/${url}" var="getUrl"/>
+                    <form:form action="${getUrl}" method="get" modelAttribute="tradeFilterForm">
+                        <form:input class="hidden" path="page" value="${page}"></form:input>
+                        <button type="submit" class="font-sans w-full mx-auto text-end text-l font-bold">ˣ</button>
+                    </form:form>
+                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Informacion sobre oferta</h1>
+                </div>
+            </c:if>
+
+        </div>
+
+<%--        Filters--%>
+            <div class="flex flex-col w-1/5 rounded-lg px-5 rounded-lg mx-auto">
+                <div class="mb-2 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/pending"/>">
                         <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Pendientes</p>
                     </a>
                 </div>
-                <div class="my-2 bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
+                <div class="my-2 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/accepted"/>">
                         <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">En curso</p>
                     </a>
                 </div>
-                <div class="my-2 bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
+                <div class="my-2 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/rejected"/>">
                         <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Rechazadas por ti</p>
                     </a>
                 </div>
-                <div class="my-2 bg-gray-200 rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
+                <div class="my-2 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/completed"/>">
                         <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Cerradas</p>
                     </a>
                 </div>
-                <div class="my-2 bg-blue-400 rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
+                <div class="my-2 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/deletedByUser"/>">
                         <p class="py-2  px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Eliminadas por el usuario</p>
                     </a>
                 </div>
-                <div class="flex flex-row mt-7 p-1">
-                    <label class="my-auto" for="offerId">Buscar por código de oferta</label>
-                    <input id="offerId" placeholder="Id" type="number" class="border-2 border-gray-700 p-1 w-[50px] h-[50px] rounded-lg" onchange="addQueryParam('offerId')" path="filterByOfferId"></input>
-                    <a class="mx-auto" href="<c:url value="/seller/trade/${status.toString()}"/>"><img class='object-contain w-[50px] h-[50px] rounded-lg' src="<c:url value="/public/images/lupa.png"/>" alt="logo"></a>
-                </div>
             </div>
-        </div>
+
 
         <!-- Middle panel -->
-        <div class="flex flex-wrap h-3/5 w-3/5">
-            <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
-            <c:forEach var="trade" items="${trades}">
-                <c:choose>
-                    <c:when test="${status == 'PENDING'}">
-                        <jsp:include page="../../components/seller/tradeCards/plainTradeCard.jsp">
-                            <jsp:param name="quantityInCrypto" value="${trade.quantity / trade.offer.unitPrice}"></jsp:param>
-                            <jsp:param name="crypto" value="${trade.offer.crypto.code}"></jsp:param>
-                            <jsp:param name="quantityInArs" value="${trade.quantity}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.email}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.phoneNumber}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.rating}"></jsp:param>
-                            <jsp:param name="page" value="${page}"></jsp:param>
-                            <jsp:param name="offerId" value="${trade.offer.offerId}"></jsp:param>
-                            <jsp:param name="tradeId" value="${trade.tradeId}"></jsp:param>
-
-                        </jsp:include>
-                    </c:when>
-                    <c:when test="${status == 'ACCEPTED'}">
-                        ${trade.offer.offerId}
-                        <jsp:include page="../../components/seller/tradeCards/plainTradeCard.jsp">
-                            <jsp:param name="quantityInCrypto" value="${trade.quantity / trade.offer.unitPrice}"></jsp:param>
-                            <jsp:param name="crypto" value="${trade.offer.crypto.code}"></jsp:param>
-                            <jsp:param name="quantityInArs" value="${trade.quantity}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.email}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.phoneNumber}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.rating}"></jsp:param>
-                            <jsp:param name="page" value="${page}"></jsp:param>
-                            <jsp:param name="offerId" value="${trade.offer.offerId}"></jsp:param>
-                            <jsp:param name="tradeId" value="${trade.tradeId}"></jsp:param>
-                        </jsp:include>
-                    </c:when>
-                    <c:when test="${status == 'SOLD' || status == 'DELETED' || status == 'REJECTED'}">
-                        <jsp:include page="../../components/seller/tradeCards/plainTradeCard.jsp">
-                            <jsp:param name="quantityInCrypto" value="${trade.quantity / trade.offer.unitPrice}"></jsp:param>
-                            <jsp:param name="crypto" value="${trade.offer.crypto.code}"></jsp:param>
-                            <jsp:param name="quantityInArs" value="${trade.quantity}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.email}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.phoneNumber}"></jsp:param>
-                            <jsp:param name="buyerEmail" value="${trade.buyer.rating}"></jsp:param>
-                            <jsp:param name="page" value="${page}"></jsp:param>
-                            <jsp:param name="offerId" value="${trade.offer.offerId}"></jsp:param>
-                            <jsp:param name="tradeId" value="${trade.tradeId}"></jsp:param>
-
-                        </jsp:include>
-                    </c:when>
-                </c:choose>
-            </c:forEach>
-
-        </div>
-        <div class="flex flex-col h-full w-1/5">
-            <c:if test="${focusOffer != null}">
-                <div class="flex flex-col w-full py-3 mb-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
-                    <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Oferta asociada ${focusOffer}</h1>
-                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
-                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
-                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
-                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
+        <div class="flex flex-col h-5/6 w-5/6">
+                <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
+                <div class="flex flex-wrap h-3/5 w-full pl-3">
+                        <c:forEach var="trade" items="${trades}">
+                            <fmt:formatNumber var="quantityInCrypto" value="${trade.quantity / trade.offer.unitPrice}" maxFractionDigits="4" />
+                            <jsp:include page="../../components/seller/tradeCards/plainTradeCard.jsp">
+                                <jsp:param name="status" value="${status}"></jsp:param>
+                                <jsp:param name="focusOfferId" value="${focusOffer.offerId}"></jsp:param>
+                                <jsp:param name="quantityInCrypto" value="${quantityInCrypto}"></jsp:param>
+                                <jsp:param name="crypto" value="${trade.offer.crypto.code}"></jsp:param>
+                                <jsp:param name="quantityInArs" value="${trade.quantity}"></jsp:param>
+                                <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
+                                <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>
+                                <jsp:param name="buyerEmail" value="${trade.buyer.email}"></jsp:param>
+                                <jsp:param name="buyerPhoneNumber" value="${trade.buyer.phoneNumber}"></jsp:param>
+                                <jsp:param name="buyerRating" value="${trade.buyer.rating}"></jsp:param>
+                                <jsp:param name="page" value="${page}"></jsp:param>
+                                <jsp:param name="offerId" value="${trade.offer.offerId}"></jsp:param>
+                                <jsp:param name="tradeId" value="${trade.tradeId}"></jsp:param>
+                            </jsp:include>
+                    </c:forEach>
                 </div>
-            </c:if>
-        </div>
+
+            </div>
+
     </body>
 </html>
 

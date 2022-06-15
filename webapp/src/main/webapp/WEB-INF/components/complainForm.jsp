@@ -6,7 +6,6 @@
 <%--@elvariable id="supportForm" type=""--%>
 <form:form modelAttribute="supportForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
     <form:input path="tradeId" type="hidden" value="${param.tradeId}"/>
-    <form:input path="complainerId" type="hidden" value="${param.complainerId}"/>
     <form:input path="username" type="hidden" value="${param.username}"/>
     <form:input type="hidden" path="email" class=" min-w-full h-10 justify-center rounded-lg p-3" placeholder="roman@gmail.com"/>
 

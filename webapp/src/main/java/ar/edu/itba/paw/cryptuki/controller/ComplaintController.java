@@ -61,7 +61,6 @@ public class ComplaintController {
         String username= authentication.getName();
         User user = us.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         form.setEmail(user.getEmail());
-        mav.addObject("complainerId",user.getId());
         mav.addObject("supportForm", form);
         mav.addObject("tradeId", tradeId);
         return mav;

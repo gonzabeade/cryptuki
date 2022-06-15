@@ -142,11 +142,11 @@
                             <form:errors path="rating" cssClass="mx-auto text-red-400"/>
                             <form:label path="rating" cssClass="mx-auto"><messages:message code="ratingConditions"/></form:label>
                             <div class="flex flex-row mx-auto mt-3">
-                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star1" onclick="setRatingAndSend(1)" onmouseleave="leaveHoverOnRating(1)" onmouseover="hoverOnRating(1)"></span>
-                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star2" onclick="setRatingAndSend(2)" onmouseleave="leaveHoverOnRating(2)" onmouseover="hoverOnRating(2)"></span>
-                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star3" onclick="setRatingAndSend(3)" onmouseleave="leaveHoverOnRating(3)" onmouseover="hoverOnRating(3)"></span>
-                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star4" onclick="setRatingAndSend(4)" onmouseleave="leaveHoverOnRating(4)" onmouseover="hoverOnRating(4)"></span>
-                                <span class="fa fa-star-o text-orange-400 text-3xl" id="star5" onclick="setRatingAndSend(5)" onmouseleave="leaveHoverOnRating(5)" onmouseover="hoverOnRating(5)"></span>
+                                <span class=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star1" onclick="setRatingAndSend(1)" onmouseleave="leaveHoverOnRating(1)" onmouseover="hoverOnRating(1)"></span>
+                                <span class=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star2" onclick="setRatingAndSend(2)" onmouseleave="leaveHoverOnRating(2)" onmouseover="hoverOnRating(2)"></span>
+                                <span class=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star3" onclick="setRatingAndSend(3)" onmouseleave="leaveHoverOnRating(3)" onmouseover="hoverOnRating(3)"></span>
+                                <span class=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star4" onclick="setRatingAndSend(4)" onmouseleave="leaveHoverOnRating(4)" onmouseover="hoverOnRating(4)"></span>
+                                <span class=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star5" onclick="setRatingAndSend(5)" onmouseleave="leaveHoverOnRating(5)" onmouseover="hoverOnRating(5)"></span>
 
                             </div>
                             <div class="flex flex-row">

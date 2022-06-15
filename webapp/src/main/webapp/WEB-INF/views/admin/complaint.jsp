@@ -91,7 +91,7 @@
                 <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/><messages:message code="irreversibleAction"/>  </p>
+                    <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/>. <messages:message code="irreversibleAction"/>  </p>
                 </div>
                 <c:set var="placeholder"><messages:message code="kickoutMotif"/> </c:set>
                 <form:textarea class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" path="comments" placeholder="${placeholder}"></form:textarea>

@@ -124,7 +124,7 @@
         <div class="flex flex-col h-full w-1/5">
             <c:if test="${focusOffer != null}">
                 <div class="flex flex-col w-full py-3 mb-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
-                    <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Oferta asociada ${focusOffer.get().offerId}</h1>
+                    <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Oferta asociada ${focusOffer}</h1>
                     <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
                     <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>
                     <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Datos</h1>

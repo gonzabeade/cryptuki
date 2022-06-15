@@ -42,8 +42,8 @@
   </div>
 
   <div class="shadow-xl flex flex-row rounded-lg w-full p-3 bg-gray-100 -ml-2 -z-10 justify-center overflow-x-scroll">
-      <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
-      <jsp:include page="../../components/verticalSellingTradeCard.jsp"/>
+      <jsp:include page="sellerVerticalTradeCard.jsp"/>
+      <jsp:include page="sellerVerticalTradeCard.jsp"/>
 
 
 <%--    <jsp:include page="../../components/seller/sellerTradeSummaryCard.jsp"/>--%>

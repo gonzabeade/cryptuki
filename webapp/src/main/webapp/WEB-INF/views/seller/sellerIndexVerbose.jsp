@@ -60,7 +60,7 @@
                         <div class="py-4 bg-[#FAFCFF] rounded-lg shadow-md">
                             <div class="flex justify-between items-center mb-2 px-4 pt-2">
                                 <h5 class="text-xl font-bold leading-none text-polar">Última actividad</h5>
-                                <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                <a href="<c:url value="/seller/trade/"/>" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
                                     Ver toda
                                 </a>
                             </div>

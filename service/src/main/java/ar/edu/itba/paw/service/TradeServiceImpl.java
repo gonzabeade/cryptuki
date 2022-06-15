@@ -117,8 +117,8 @@ public class TradeServiceImpl implements TradeService {
 
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
 
-        if (username.equals(trade.getBuyer().getUserAuth().getUsername())) trade.markBuyerAsRated();
-        else  trade.markSellerAsRated();
+        if (username.equals(trade.getBuyer().getUserAuth().getUsername())) trade.markSellerAsRated();
+        else  trade.markBuyerAsRated();
 
         userService.updateRatingBy(username, rating);
     }

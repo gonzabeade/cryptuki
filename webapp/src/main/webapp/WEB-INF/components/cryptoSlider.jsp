@@ -6,7 +6,8 @@
         <div class="flex-shrink-0">
             <img class="w-8 h-8 rounded-full" src="<c:url value="/public/images/${param.code}.png"/>" alt="<c:out value="${param.commercialName}"/>">
         </div>
-        <div class="flex-1 min-w-0">
+        <c:set var="referencePrice"><messages:message code="referencePrice"/></c:set>
+        <div class="flex-1 min-w-0" title="${referencePrice}">
             <p class="text-sm font-medium text-gray-900 truncate ">
                 <c:out value="${param.commercialName}"/>
             </p>

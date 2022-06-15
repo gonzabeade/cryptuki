@@ -43,8 +43,13 @@
     <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
     <c:set var="locations" value="${locations}" scope="request"/>
     <c:set var="selectedCoins" value="${selectedCoins}" scope="request"/>
+     <h1 class="text-2xl font-polard mt-10 font-bold mx-auto">Filtrar</h1>
     <jsp:include page="../components/cryptoFilters.jsp"/>
     <jsp:include page="../components/ubicationFilter.jsp"/>
+    <jsp:include page="../components/priceFilter.jsp"/>
+    <div class="flex">
+            <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" id="link">Aplicar Filtros</button>
+    </div>
     </div>
 
     <div class="flex flex-col w-4/5 mt-10">

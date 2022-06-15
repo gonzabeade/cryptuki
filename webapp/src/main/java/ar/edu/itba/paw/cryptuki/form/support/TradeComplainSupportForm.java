@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.support;
 
-import ar.edu.itba.paw.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 
 import javax.validation.constraints.NotNull;
 

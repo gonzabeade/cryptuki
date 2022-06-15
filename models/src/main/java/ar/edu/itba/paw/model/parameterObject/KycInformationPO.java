@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.parameterObject;
+package ar.edu.itba.paw.model.parameterObject;
 
 import ar.edu.itba.paw.model.IdType;
-import ar.edu.itba.paw.model.KycInformation;
 
 public class KycInformationPO {
 

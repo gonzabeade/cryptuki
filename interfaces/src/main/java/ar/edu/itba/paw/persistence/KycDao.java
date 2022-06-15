@@ -2,7 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 
 import java.util.Collection;
 

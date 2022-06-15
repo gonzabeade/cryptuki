@@ -3,7 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.persistence.KycDao;
 import ar.edu.itba.paw.persistence.EmissionCountryDao;
 import org.springframework.beans.factory.annotation.Autowired;

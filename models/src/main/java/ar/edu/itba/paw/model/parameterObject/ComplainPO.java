@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.parameterObject;
+package ar.edu.itba.paw.model.parameterObject;
 
 import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.model.Complain;

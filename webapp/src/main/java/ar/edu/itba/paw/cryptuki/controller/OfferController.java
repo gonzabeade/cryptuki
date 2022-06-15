@@ -1,14 +1,16 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
+import ar.edu.itba.paw.cryptuki.form.seller.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
+import ar.edu.itba.paw.cryptuki.form.seller.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.PaymentMethod;
-import ar.edu.itba.paw.parameterObject.OfferPO;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,62 +23,36 @@ import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
+@RequestMapping("/offer")
 public class OfferController {
 
     private final CryptocurrencyService cryptocurrencyService;
     private  final OfferService offerService;
+    private final UserService userService;
     private final UserService us;
-    private static final int PAGE_SIZE= 10;
-
 
 
     @Autowired
-    public OfferController(CryptocurrencyService cryptocurrencyService, OfferService offerService, UserService us) {
-
+    public OfferController(CryptocurrencyService cryptocurrencyService, OfferService offerService, UserService userService, UserService us) {
         this.cryptocurrencyService = cryptocurrencyService;
         this.offerService = offerService;
+        this.userService = userService;
         this.us = us;
     }
 
-//    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-//    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") final UploadOfferForm form, final Authentication authentication){
-//        ModelAndView mav = new ModelAndView("uploadPage");
-//        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
-//        mav.addObject("paymentMethods", paymentMethodService.getAllPaymentMethods());
-//
-//
-//        if (form.getPaymentMethods() != null){
-//            List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
-//            mav.addObject("selectedPayments", paymentCodesAlreadySelected);
-//        }
-//
-//        return mav;
-//    }
-
-//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-//    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication){
-//
-//        if (errors.hasErrors())
-//            return uploadOffer(form, authentication);
-//
-//        int id = us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-//        int offerId = offerService.makeOffer(form.toOfferDigest(id));
-//        return new ModelAndView("redirect:/offer/"+offerId+"/creationsuccess");
-//    }
-
-    @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
     public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, false);
     }
 
-    @RequestMapping(value = "/offer/{offerId}/creationsuccess", method = RequestMethod.GET)
+    @RequestMapping(value = "/{offerId}/creationsuccess", method = RequestMethod.GET)
     public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, true, false);
     }
 
-    @RequestMapping(value = "/offer/{offerId}/editsuccess", method = RequestMethod.GET)
+    @RequestMapping(value = "/{offerId}/editsuccess", method = RequestMethod.GET)
     public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, true);
@@ -121,7 +97,7 @@ public class OfferController {
             return modify(offerId, form, authentication);
 
         int id = us.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        OfferPO offerPO = form.toOfferParameterObject(id);
+        OfferPO offerPO = form.toOfferParameterObject();
 //        offerService.modifyOffer(offerPO);
         return new ModelAndView("redirect:/offer/"+offerId+"/editsuccess");
     }
@@ -152,6 +128,33 @@ public class OfferController {
 //        return mav;
 //    }
 
+
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") UploadOfferForm form, Authentication authentication){
+        ModelAndView mav = new ModelAndView("uploadPage");
+        int id = userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
+        form.setSellerId(id);
+
+        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("paymentMethods", PaymentMethod.values());
+        mav.addObject("location", Location.values());
+
+        // TODO: Decide whether we will give support for payment methods
+        // if (form.getPaymentMethods() != null){
+        //    List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
+        //    mav.addObject("selectedPayments", paymentCodesAlreadySelected);
+        // }
+        return mav;
+    }
+
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication ){
+        if (errors.hasErrors())
+            return uploadOffer(form, authentication);
+        Offer offer = offerService.makeOffer(form.toOfferParameterObject());
+        return new ModelAndView("redirect:/offer/"+offer.getOfferId()+"/creationsuccess");
+    }
 
 
 

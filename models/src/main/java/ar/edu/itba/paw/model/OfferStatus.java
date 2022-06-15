@@ -10,7 +10,7 @@ import java.util.Map;
 
 public enum OfferStatus {
     APR,
-    PEN,
+    SOL,
     PSE,
     PSU,
     DEL

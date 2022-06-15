@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.parameterObject.OfferPO;
+import ar.edu.itba.paw.model.OfferStatus;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface OfferService {
 
@@ -13,7 +15,6 @@ public interface OfferService {
      */
     Offer makeOffer(OfferPO offerPO);
     Offer modifyOffer(Offer offer);
-
 
     /**
      * Returns collection and count of offers that can be effectively bought by a user
@@ -30,8 +31,8 @@ public interface OfferService {
 
 
     /** Get offers and count by username. */
-    long countOffersByUsername(String username);
-    Collection<Offer> getOffersByUsername(String username, int page, int pageSize);
+    long countOffersByUsername(String username, Set<OfferStatus> offerStatus);
+    Collection<Offer> getOffersByUsername(String username, int page, int pageSize, Set<OfferStatus> offerStatus);
 
 
     /** Modify an offer's state. Must have the appropriate role for calling these methods.*/

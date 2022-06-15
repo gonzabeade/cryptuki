@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.model.KycInformation;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 
 import java.util.Collection;
 import java.util.Optional;

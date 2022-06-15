@@ -24,392 +24,131 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>"/>
 </head>
 <body class="bg-storml overflow-x-hidden">
-<jsp:include page="../../components/seller/sellerHeader.jsp"/>
-<div class="flex h-full w-full px-20 my-10">
-    <!-- Left Panel: chat and seller stats -->
-    <div class="flex flex-col h-full mx-20 w-1/5">
-        <div>
-            <jsp:include page="../../components/profile/userStatsCard.jsp">
-                <jsp:param name="username" value="${username}"/>
-                <jsp:param name="email" value="${user.email}"/>
-                <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
-                <jsp:param name="rating" value="${user.rating}"/>
-                <jsp:param name="ratingCount" value="${user.ratingCount}"/>
-            </jsp:include>
-        </div>
-        <c:choose>
-            <c:when test="${user.kyc == null}">
-                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
-                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p><messages:message code="validateYourIdentityExplanation"/></p>
-                </div>
-                <div class="mx-auto mt-8">
-                    <a href="<c:url value="/kyc"/>"
-                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="validateYourIdentity"/></a>
-                </div>
-            </c:when>
-            <c:when test="${user.kyc.status != 'APR'}">
-                <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
-                    <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p><messages:message code="validateYourIdentityPending"/></p>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="mx-auto mt-10">
-                    <a href="<c:url value="/seller/upload"/>"
-                       class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
-                            code="uploadAdvertisement"/></a>
-                </div>
-            </c:otherwise>
-        </c:choose>
+    <jsp:include page="../../components/seller/sellerHeader.jsp"/>
+    <div class="flex h-full w-full px-20 my-10">
 
-        <%--        <div class="my-5">--%>
-        <%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
-        <%--        </div>--%>
-    </div>
-
-    <!-- Middle Panel: trade -->
-
-    <div class="flex flex-col h-full mr-20 w-3/5">
-
-        <div class="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
-            <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message
-                    code="offersCreated"/></h1>
-        </div>
-
-
-        <div class="flex flex-wrap h-full mr-20 w-full">
-            <c:forEach var="offer" items="${offerList}">
-
-
-                <div class="flex flex-col w-full mb-5">
-                    <div class="flex flex-row ml-[32%] ">
-                        <div class="bg-nyellow mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.offerId
-                        }-PENDING" onclick="showPending(${offer.offerId
-                        })">Pendientes</div>
-
-                        <div class="bg-ngreen/[0.6]  text-gray-500 mr-2 p-2 rounded-t-xl shadow" id="tab-${offer.offerId
-                        }-ACCEPTED" onclick="showAccepted(${offer.offerId
-                        })">Aceptadas</div>
-                        <div class="bg-nred/[0.6]  text-gray-500 mr-2  p-2 rounded-t-xl shadow" id="tab-${offer.offerId
-                        }-REJECTED" onclick="showRejected(${offer.offerId
-                        })">Rechazadas</div>
-
-                        <div class="bg-gray-500/[0.6]  text-gray-500 p-2 mr-2 rounded-t-xl shadow" id="tab-${offer.offerId
-                        }-SOLD" onclick="showSold(${offer.offerId
-                        })">Finalizadas</div>
+        <!-- Left Panel: chat and seller stats -->
+        <div class="flex flex-col h-full mx-20 w-1/5">
+            <div>
+                <jsp:include page="../../components/profile/userStatsCard.jsp">
+                    <jsp:param name="username" value="${user.username.get()}"/>
+                    <jsp:param name="email" value="${user.email}"/>
+                    <jsp:param name="phoneNumber" value="${user.phoneNumber}"/>
+                    <jsp:param name="rating" value="${user.rating}"/>
+                    <jsp:param name="ratingCount" value="${user.ratingCount}"/>
+                </jsp:include>
+            </div>
+            <c:choose>
+                <c:when test="${user.kyc == null}">
+                    <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
+                        <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                        <p><messages:message code="validateYourIdentityExplanation"/></p>
                     </div>
-                <div class="flex flex-row mx-5">
-                        <%--    Tarjeta de anuncio--%>
-                    <div class="shadow-xl flex flex-col rounded-lg px-7 bg-[#FAFCFF] z-20 justify-center items-center content-start w-[300px] ">
-
-                        <div class="flex flex-col items-center mt-5 mb-2">
-                            <h1 class="text-2xl font-bold font-sans"><messages:message code="offer"/><c:out value="#${offer.offerId
-                            }"/></h1>
-                        </div>
-                        <span class="text-center"><messages:message code="price"/></span>
-                        <div class="flex flex-row ">
-                            <h1 class="text-lg font-bold font-sans text-center"><fmt:formatNumber type="number"
-                                                                                      maxFractionDigits="2"
-                                                                                      value="${offer.unitPrice}"/>
-                                ARS </h1>
-                            <p class="my-auto mx-2"><messages:message code="for"/></p>
-                            <h1 class="text-xl font-sans font-semibold my-auto"><c:out
-                                    value="${offer.crypto.code}"/></h1>
-                            <img src="<c:url value="/public/images/${offer.crypto.code}.png"/>"
-                                 alt="<c:out value="${offer.crypto.code}"/>" class="w-5 h-5 mx-2 my-auto"/>
-                        </div>
-
-                        <div class="flex flex-col justify-start mb-3">
-                            <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Min: "/><fmt:formatNumber type="number" maxFractionDigits="18" value="${offer.minInCrypto}"/> <c:out value=" ${offer.crypto.code}"/></p>
-                            </div>
-                            <div class="flex flex-col font-sans mt-3">
-                                <p><c:out value="Max: "/> <fmt:formatNumber type="number" maxFractionDigits="18" value="${offer.maxInCrypto}"/> <c:out value=" ${offer.crypto.code}"/></p>
-                            </div>
-                            <div class="flex flex-col font-sans mt-3">
-                                <p><messages:message code="date"/> <c:out value="${offer.date.toLocalDate()}"/></p>
-                            </div>
-                            <div class="flex flex-col font-sans mt-3">
-                                <p><messages:message code="offerLocation"/>:
-                                    <c:if test="${empty offer.location}">
-                                        <messages:message code="unknown"/>
-                                    </c:if>
-                                    <c:if test="${!(empty offer.location)}">
-                                        <c:out value="${offer.location}"/>
-                                    </c:if>
-                                </p>
-                            </div>
-                        </div>
-
-
-                        <div class="flex flex-row mx-auto mt-2 ">
-                            <a href="<c:url value="/modify/${offer.offerId
-                            }"/>"
-                               class="flex mr-5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                            </a>
-
-                            <form action="<c:url value="/delete/${offer.offerId
-                            }"/>" method="post">
-                                <button class="flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
+                    <div class="mx-auto mt-8">
+                        <a href="<c:url value="/kyc"/>"
+                           class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message code="validateYourIdentity"/></a>
                     </div>
-
-                    <div id="offerId-<c:out value="${offer.offerId
-                    }" />"
-                         class="flex flex-row shadow-xl rounded-lg bg-gray-100 -ml-2 z-10 p-5 overflow-x-scroll overflow-y-hidden w-full">
-                            <h2 id="noResults-${offer.offerId
-                            }" class="hidden text-center text-3xl font-semibold font-sans text-polar my-auto mx-auto"><messages:message
-                                    code="noSellingProposalReceived"/></h2>
-                        <c:forEach var="trade" items="${offer.trades}">
-                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${trade.buyer.rating /2 }" var="stars"/>
-                            <div name="trade-${offer.offerId}-${trade.status}" class="hidden bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mx-5 ">
-
-                                <div class="flex font-sans h-fit w-full mt-5">
-                                    <c:if test="${trade.status == 'PENDING' }">
-                                        <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message
-                                                code="pending"/></div>
-                                    </c:if>
-
-                                    <c:if test="${trade.status == 'REJECTED' }">
-                                        <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message
-                                                code="rejected"/></div>
-                                    </c:if>
-
-                                    <c:if test="${trade.status == 'ACCEPTED' }">
-                                        <div class="bg-ngreen w-full text-white text-center p-2"><messages:message
-                                                code="accepted"/></div>
-                                    </c:if>
-
-                                    <c:if test="${trade.status == 'SOLD' }">
-                                        <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message
-                                                code="sold"/></div>
-                                    </c:if>
-                                </div>
-
-                                <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
-                                    <h1 class="mx-auto">
-                                        <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/>
-                                        <c:out value=" ${offer.crypto.code}"/> ⟶ <c:out
-                                            value="${trade.quantity} "/>ARS</h1>
-                                </div>
-
-                                <c:if test="${!(trade.status =='SOLD')}">
-                                    <div class="flex flex-col">
-                                        <div class="flex">
-                                            <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
-                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.username.get()}"/></h1>
-                                        </div>
-                                        <div class="flex">
-                                            <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
-                                            <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.email}"/></h1>
-                                        </div>
-                                        <div class="flex">
-                                            <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
-                                            <h1 class="font-sans font-semibold"><c:out
-                                                    value="${trade.buyer.phoneNumber}"/></h1>
-                                        </div>
-                                        <div class="flex">
-                                            <div class="flex flex-row">
-                                                <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
-                                                <div class="my-auto ml-2">
-<%--                                                    <c:forEach begin="0" end="${stars-1}">--%>
-<%--                                                        <span class="fa fa-star" style="color: orange"></span>--%>
-<%--                                                    </c:forEach>--%>
-<%--                                                    <c:forEach begin="${stars}" end="4">--%>
-<%--                                                        <span class="fa fa-star" style="color: gray"></span>--%>
-<%--                                                    </c:forEach>--%>
+                </c:when>
+                <c:when test="${user.kyc.status != 'APR'}">
+                    <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
+                        <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
+                        <p><messages:message code="validateYourIdentityPending"/></p>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="mt-5">
+                        <div class="py-4 bg-[#FAFCFF] rounded-lg shadow-md">
+                            <div class="flex justify-between items-center mb-2 px-4 pt-2">
+                                <h5 class="text-xl font-bold leading-none text-polar">Última actividad</h5>
+                                <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                    Ver toda
+                                </a>
+                            </div>
+                            <div class="px-4">
+                                <ul role="list" class="divide-y divide-gray-200">
+                                    <c:forEach items="${offerList}">
+                                        <li class="py-2">
+                                            <div class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer">
+                                                <div class="flex-shrink-0">
+                                                    <img class="w-8 h-8 rounded-full" src="https://picsum.photos/700/800" alt="Neil image">
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-medium text-polar-600truncate"> gonzabeade </p>
+                                                    <p class="text-sm text-gray-500 truncate">Ha hecho una orden de compra</p>
                                                 </div>
                                             </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx-auto mt-5">
+                        <a href="<c:url value="/offer/upload"/>"
+                           class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
+                                code="uploadAdvertisement"/></a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- Middle panel -->
+        <div class="flex flex-col h-full mr-20 w-3/5">
+            <div class="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
+                <h1 class="text-center text-4xl font-semibold font-sans text-polar">Anuncios subidos</h1>
+            </div>
+            <div class="flex flex-row w-full h-3/5 mt-5">
+                <div class="w-2/5 h-full">
+                    <jsp:include page="../../components/seller/sellerOfferFilter.jsp">
+                        <jsp:param name="status" value="${status}"/>
+                    </jsp:include>
+                </div>
+                <div class="flex flex-col h-3/5 w-full mx-auto">
+                        <c:forEach var="offer" items="${offerList}">
+                            <%--    Tarjeta de anuncio--%>
+                            <div class="h-3/5 w-4/5 mx-auto shadow-xl mb-5 flex flex-col rounded-lg mx-5 py-3 px-2 bg-[#FAFCFF] hover:bg-gray-100 cursor-pointer">
+                                    <div class="flex flex-row w-full justify-between">
+                                        <div class="font-bold font-sans text-2xl my-auto">Anuncio 4</div>
+                                        <div class="flex flex-row my-auto justify-end align-end">
+                                            <img class="w-6 h-6" src="<c:url value = "/public/images/ETH.png"/>">
+                                            <div class="font-bold font-sans text-l">1 ETH ➡ 540 ARS</div>
                                         </div>
                                     </div>
-                                </c:if>
-                                <c:if test="${(trade.status =='SOLD')}">
-                                    <a class="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${trade.tradeId}"/>">
-                                        <messages:message code="help"/>
-                                    </a>
-                                </c:if>
-
-                            <%--                            CASE - PENDING--%>
-                                <c:if test="${trade.status == 'PENDING'}">
-                                    <c:url value="/seller/changeStatus" var="postUrl"/>
-                                    <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
-                                               cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="newStatus" id="newStatus-${trade.tradeId}"
-                                                     value="${trade.status}"/>
-                                        <form:hidden path="tradeId" value="${trade.tradeId}"/>
-
-                                        <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"
-                                                class="bg-red-400 text-white p-3 rounded-md font-sans mr-4">
-                                            <messages:message
-                                                    code="rejectTrade"/></button>
-                                        <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"
-                                                class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
-                                                code="acceptTrade"/></button>
-                                    </form:form>
-                                    <div class="flex flex-row mx-auto">
-
-                                        <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
-                                                <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                            </svg>
-                                        </a>
-                                        <c:if test="${trade.qUnseenMessagesSeller > 0}">
-                                            <div class="-ml-4 w-6 h-5 bg-frostl border-2 font-sans rounded-full flex justify-center items-center">
-                                                <p class="text-xs"><c:out value="${trade.qUnseenMessagesSeller}"/></p>
-                                            </div>
-                                        </c:if>
+                                    <div class="flex flex-row my-auto h-full my-auto">
+                                        <div class="flex flex-row">
+                                            <div class="font-sans font-gray-100 text-s my-auto italic">Aceptas entre 2 ETH y 4 ETH.</div>
+                                        </div>
+                                        <div class="flex rounded-lg bg-storml h-6 w-6 hover:bg-stormd ml-3 my-auto">
+                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/edit.png"/>"/>
+                                        </div>
+                                        <div class="flex rounded-lg bg-storml h-6 w-6 my-auto hover:bg-stormd ml-1 my-auto">
+                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/pause.png"/>"/>
+                                        </div>
+                                        <div class="flex rounded-lg bg-storml h-6 w-6 hover:bg-stormd ml-1 my-auto">
+                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/delete.png"/>"/>
+                                        </div>
                                     </div>
-
-
-
-                                </c:if>
-
-                                    <%--                            CASE - ACCEPTED--%>
-                                <c:if test="${trade.status == 'ACCEPTED' }">
-                                    <c:url value="/closeTrade" var="formUrl"/>
-
-                                    <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
-                                               cssClass="flex justify-center mx-auto my-3">
-                                        <form:hidden path="offerId" value="${trade.offer.offerId}"/>
-                                        <form:hidden path="trade" value="${trade.tradeId}"/>
-                                        <button type="submit"
-                                                class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
-                                            <messages:message code="soldTrade"/></button>
-
-                                    </form:form>
-
-                                    <div class="flex flex-row mx-auto ">
-                                        <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
-                                                <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                            </svg>
-                                        </a>
-                                        <c:if test="${trade.qUnseenMessagesSeller > 0}">
-                                            <div class=" flex flex-row w-2 h-2 bg-frostl font-sans rounded-full bg-frost" >
-                                               </div>
-                                        </c:if>
-                                    </div>
-                                </c:if>
-
-                                    <%--                            CASE - REJECTED--%>
-                                <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">
-                                    <div class="flex h-2/5 my-2"></div>
-                                </c:if>
                             </div>
+
                         </c:forEach>
+                    <div class="mx-auto mt-40">
+                        <jsp:include page="../../components/paginator.jsp">
+                            <jsp:param name="activePage" value="${activePage}"/>
+                            <jsp:param name="pages" value="${pages}"/>
+                            <jsp:param name="baseUrl" value="/buyer/"/>
+                        </jsp:include>
                     </div>
-                    <div class="flex flex-col w-10 -ml-5 h-full justify-center" onClick="toggle(<c:out value="${offer.offerId}" />) ">
-                            <%--                    <div class="flex rotate-90 whitespace-nowrap">hola mundo</div>--%>
-                                    <%--                                <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 hover:bg-gray-300 hover:-mr-7 my-auto"></div>--%>
-
-<%--                                <c:if test="${offer.status.toString() == 'PSE'}">--%>
-                                    <div class="flex bg-gray-400 shadow-xl rounded-lg h-5/6 my-auto">
-                                    </div>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${offer.status.toString() == 'APR'}">--%>
-<%--                                    <div class="flex bg-ngreen shadow-xl rounded-lg h-5/6 my-auto">--%>
-<%--                                    </div>--%>
-<%--                                </c:if>--%>
-                            </div>
                 </div>
-                </div>
-            </c:forEach>
-            <div class="mx-auto">
 
-                <c:if test="${noSellingTrades}">
-                    <a href="<c:url value="/seller/upload"/>"
-                       class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message
-                            code="uploadAdvertisement"/></a>
-                </c:if>
+
             </div>
-                    <c:if test="${!noSellingTrades}">
-                        <div class="flex flex-col mt-3 mx-auto">
-                            <% request.setCharacterEncoding("utf-8"); %>
-                            <jsp:include page="../../components/paginator.jsp">
-                                <jsp:param name="activePage" value="${activePage}"/>
-                                <jsp:param name="pages" value="${pages}"/>
-                                <jsp:param name="baseUrl" value="/seller/"/>
-                            </jsp:include>
-                            <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message
-                                    code="totalPageAmount"/>: ${pages}</h1>
-                        </div>
-                    </c:if>
 
 
-            <!-- Right Panel: crypto dashboard -->
-
-            <%--    <div class="flex flex-col h-full mr-10 w-1/5">--%>
-            <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
-            <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
-            <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
-            <%--        <jsp:include page="../../components/seller/sellerCryptoMetric.jsp"/>--%>
-            <%--    </div>--%>
+        </div>
+    </div>
 </body>
 
 
 </html>
 
 
-<script>
-    function toggle(id){
-        // if (document.getElementById(id).classList.contains("hidden")) {
-        //     document.getElementById(id).classList.remove("hidden");
-        // } else {
-        //     document.getElementById(id).classList.add("hidden");
-        // }
-    }
-    function updateStatus( status, tradeId) {
-        document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
-    }
-    window.onload= function onStart() {
-
-        let offerCollection = document.querySelectorAll("[id^=offerId-]");
-        offerCollection.forEach((offer)=> {
-            console.log(offer)
-            let offerId = offer.id.substring(offer.id.lastIndexOf('-')+1)
-
-            let pending = offer.querySelectorAll("[name$=PENDING]");
-            let pendingSize = pending.length;
-            let tabPending = document.getElementById("tab-" + offerId + "-PENDING");
-            tabPending.innerText += " (" + pendingSize + ") "
-
-            let accepted = offer.querySelectorAll("[name$=ACCEPTED]");
-            let acceptedSize = accepted.length;
-            let tabAccepted = document.getElementById("tab-" + offerId + "-ACCEPTED");
-            tabAccepted.innerText += " (" + acceptedSize + ") "
-
-
-            let rejected = offer.querySelectorAll("[name$=REJECTED]");
-            let rejectedSize = rejected.length;
-            let tabRejected = document.getElementById("tab-"+ offerId + "-REJECTED");
-            tabRejected.innerText += " (" + rejectedSize + ") "
-
-
-            let sold = offer.querySelectorAll("[name$=SOLD]");
-            let soldSize = sold.length;
-            let tabSold = document.getElementById("tab-"+ offerId + "-SOLD");
-            tabSold.innerText += " (" + soldSize + ") "
-
-
-        })
-
-
-        let pendingTabs= document.querySelectorAll("[id$=PENDING]")
-        console.log(pendingTabs)
-        pendingTabs.forEach(function (tab) {
-            tab.click();
-        })
-
-    }
-</script>

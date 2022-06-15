@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.parameterObject;
+package ar.edu.itba.paw.model.parameterObject;
 
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
@@ -10,14 +10,20 @@ import java.util.*;
 
 public class OfferPO {
     private Integer sellerId;
+    private Integer offerId;
     private OfferStatus offerStatus = OfferStatus.APR;
     private Double unitPrice;
     private Double maxInCrypto;
     private Double minInCrypto;
     private String cryptoCode;
     private Location location;
-    private String comments;
+    private String firstChat;
     private Collection<String> paymentMethods;
+
+    public OfferPO withOfferId(int offerId) {
+        this.offerId = offerId;
+        return this;
+    }
 
     public OfferPO withSellerId(int sellerId) {
         this.sellerId = sellerId;
@@ -54,8 +60,8 @@ public class OfferPO {
         return this;
     }
 
-    public OfferPO withComments(String comments) {
-        this.comments = comments;
+    public OfferPO withFirstChat(String firstChat) {
+        this.firstChat = firstChat;
         return this;
     }
 
@@ -91,13 +97,15 @@ public class OfferPO {
         return Optional.ofNullable(location);
     }
 
-    public Optional<String> getComments() {
-        return Optional.ofNullable(comments);
+    public Optional<String> getFirstChat() {
+        return Optional.ofNullable(firstChat);
     }
 
     public Collection<String> getPaymentMethods() {
         return Collections.unmodifiableCollection(paymentMethods);
     }
+
+    public Integer getOfferId() { return offerId; }
 
     public Offer.Builder toBuilder(Cryptocurrency crypto, User seller) {
 
@@ -110,7 +118,7 @@ public class OfferPO {
                 getMaxInCrypto().orElseThrow(()->new IllegalArgumentException())
         )
                     .withOfferStatus(getOfferStatus())
-                    .withComments(getComments().orElse(""))
+                    .withComments(getFirstChat().orElse(""))
                     .withCrypto(crypto)
                     .withLocation(getLocation().orElseThrow(()->new IllegalArgumentException()))
                     .withSeller(seller);

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

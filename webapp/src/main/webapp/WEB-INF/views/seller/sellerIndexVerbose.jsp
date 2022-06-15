@@ -97,13 +97,16 @@
             <div class="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
                 <h1 class="text-center text-4xl font-semibold font-sans text-polar">Anuncios subidos</h1>
             </div>
-            <jsp:include page="../../components/seller/sellerOfferFilter.jsp"></jsp:include>
             <div class="flex flex-row w-full h-3/5 mt-5">
-                <div class="flex flex-col h-3/5 w-full">
-                    <div class="h-4/5 w-full flex flex-wrap justify-around">
+                <div class="w-2/5 h-full">
+                    <jsp:include page="../../components/seller/sellerOfferFilter.jsp">
+                        <jsp:param name="status" value="${status}"/>
+                    </jsp:include>
+                </div>
+                <div class="flex flex-col h-3/5 w-full mx-auto">
                         <c:forEach var="offer" items="${offerList}">
                             <%--    Tarjeta de anuncio--%>
-                            <div class="h-2/5 w-2/5 mx-3 shadow-xl mb-5 flex flex-col rounded-lg mx-5 py-3 px-2 bg-[#FAFCFF] hover:bg-gray-100 cursor-pointer">
+                            <div class="h-3/5 w-4/5 mx-auto shadow-xl mb-5 flex flex-col rounded-lg mx-5 py-3 px-2 bg-[#FAFCFF] hover:bg-gray-100 cursor-pointer">
                                     <div class="flex flex-row w-full justify-between">
                                         <div class="font-bold font-sans text-2xl my-auto">Anuncio 4</div>
                                         <div class="flex flex-row my-auto justify-end align-end">
@@ -128,7 +131,6 @@
                             </div>
 
                         </c:forEach>
-                    </div>
                     <div class="mx-auto mt-40">
                         <jsp:include page="../../components/paginator.jsp">
                             <jsp:param name="activePage" value="${activePage}"/>

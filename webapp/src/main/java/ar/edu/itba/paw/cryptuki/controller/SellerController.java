@@ -56,22 +56,30 @@ public class SellerController {
 
     @RequestMapping(value = "/active", method = RequestMethod.GET)
     public ModelAndView active(Authentication authentication, @RequestParam(value = "page") Optional<Integer> page, @ModelAttribute("profilePicForm") ProfilePicForm form){
-        return baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.APR));
+        ModelAndView mav =  baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.APR));
+        mav.addObject("status", OfferStatus.APR);
+        return mav;
     }
 
     @RequestMapping(value = "/paused", method = RequestMethod.GET)
     public ModelAndView paused(Authentication authentication, @RequestParam(value = "page") Optional<Integer> page, @ModelAttribute("profilePicForm") ProfilePicForm form){
-        return baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.PSE));
+        ModelAndView mav =  baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.PSE));
+        mav.addObject("status", OfferStatus.PSE);
+        return mav;
     }
 
     @RequestMapping(value = "/deleted", method = RequestMethod.GET)
     public ModelAndView deleted(Authentication authentication, @RequestParam(value = "page") Optional<Integer> page, @ModelAttribute("profilePicForm") ProfilePicForm form){
-        return baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.DEL));
+        ModelAndView mav =  baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.DEL));
+        mav.addObject("status", OfferStatus.DEL);
+        return mav;
     }
 
     @RequestMapping(value = "/sold", method = RequestMethod.GET)
     public ModelAndView sold(Authentication authentication, @RequestParam(value = "page") Optional<Integer> page, @ModelAttribute("profilePicForm") ProfilePicForm form){
-        return baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.SOL));
+        ModelAndView mav =  baseSellerDashboard(authentication, page, form, EnumSet.of(OfferStatus.SOL));
+        mav.addObject("status", OfferStatus.SOL);
+        return mav;
     }
 
 }

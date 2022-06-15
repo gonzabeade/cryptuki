@@ -4,7 +4,7 @@ import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

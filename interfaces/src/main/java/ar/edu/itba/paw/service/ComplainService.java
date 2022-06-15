@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Complain;
-import ar.edu.itba.paw.model.ComplainFilter;import ar.edu.itba.paw.model.ComplainStatus;
-import ar.edu.itba.paw.model.Country;
-import ar.edu.itba.paw.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.ComplainFilter;
+import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 
 import java.util.Collection;
 import java.util.Optional;

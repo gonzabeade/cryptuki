@@ -3,7 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.parameterObject.OfferPO;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import java.util.Collection;
 import java.util.Optional;

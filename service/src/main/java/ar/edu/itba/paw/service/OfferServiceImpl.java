@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.parameterObject.OfferPO;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

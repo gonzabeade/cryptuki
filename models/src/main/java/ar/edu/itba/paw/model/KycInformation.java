@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.model;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 
 
 import javax.persistence.*;

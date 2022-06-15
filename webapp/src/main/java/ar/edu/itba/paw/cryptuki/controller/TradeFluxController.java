@@ -201,4 +201,27 @@ public class TradeFluxController {
     }
 
 
+
+    // TODO(gonza): Change offer status correctly !!!!
+    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
+    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
+
+        Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
+        if (statusTradeForm.getNewStatus().equals(TradeStatus.ACCEPTED.toString()))
+            tradeService.acceptTrade(statusTradeForm.getTradeId());
+        else if (statusTradeForm.getNewStatus().equals(TradeStatus.REJECTED.toString()))
+            tradeService.rejectTrade(statusTradeForm.getTradeId());
+        else if (statusTradeForm.getNewStatus().equals(TradeStatus.SOLD.toString()))
+            tradeService.sellTrade(trade.getTradeId());
+
+        return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
+    }
+
+    @RequestMapping(value="/acceptOffer", method= RequestMethod.POST)
+    public ModelAndView acceptOffer(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
+        tradeService.acceptTrade(tradeId);
+        return new ModelAndView("redirect:/chat?tradeId="+tradeId);
+    }
+
+
 }

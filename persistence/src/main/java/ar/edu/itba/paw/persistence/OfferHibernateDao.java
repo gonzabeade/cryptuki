@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.parameterObject.OfferPO;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

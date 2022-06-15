@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.model.IdType;
-import ar.edu.itba.paw.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
 import org.springframework.web.multipart.MultipartFile;
 

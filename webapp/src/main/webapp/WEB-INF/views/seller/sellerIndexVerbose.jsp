@@ -103,33 +103,10 @@
                         <jsp:param name="status" value="${status}"/>
                     </jsp:include>
                 </div>
-                <div class="flex flex-col h-3/5 w-full mx-auto">
+                <div class="flex flex-wrap w-full mx-auto justify-between">
                         <c:forEach var="offer" items="${offerList}">
                             <%--    Tarjeta de anuncio--%>
-                            <div class="h-3/5 w-4/5 mx-auto shadow-xl mb-5 flex flex-col rounded-lg mx-5 py-3 px-2 bg-[#FAFCFF] hover:bg-gray-100 cursor-pointer">
-                                    <div class="flex flex-row w-full justify-between">
-                                        <div class="font-bold font-sans text-2xl my-auto">Anuncio 4</div>
-                                        <div class="flex flex-row my-auto justify-end align-end">
-                                            <img class="w-6 h-6" src="<c:url value = "/public/images/ETH.png"/>">
-                                            <div class="font-bold font-sans text-l">1 ETH ➡ 540 ARS</div>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-row my-auto h-full my-auto">
-                                        <div class="flex flex-row">
-                                            <div class="font-sans font-gray-100 text-s my-auto italic">Aceptas entre 2 ETH y 4 ETH.</div>
-                                        </div>
-                                        <div class="flex rounded-lg bg-storml h-6 w-6 hover:bg-stormd ml-3 my-auto">
-                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/edit.png"/>"/>
-                                        </div>
-                                        <div class="flex rounded-lg bg-storml h-6 w-6 my-auto hover:bg-stormd ml-1 my-auto">
-                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/pause.png"/>"/>
-                                        </div>
-                                        <div class="flex rounded-lg bg-storml h-6 w-6 hover:bg-stormd ml-1 my-auto">
-                                            <img class="m-auto h-4 w-4" src="<c:url value="/public/images/delete.png"/>"/>
-                                        </div>
-                                    </div>
-                            </div>
-
+                         <jsp:include page="../../components/offer.jsp"/>
                         </c:forEach>
                     <div class="mx-auto mt-40">
                         <jsp:include page="../../components/paginator.jsp">

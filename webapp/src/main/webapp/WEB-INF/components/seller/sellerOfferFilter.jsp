@@ -6,22 +6,22 @@
     <ol class="flex rounded-lg px-4 flex-col justify-center">
         <li class="my-2 bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
             <a href="<c:url value="/seller/active"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='APR'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Activas</p>
+                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='APR'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Activos</p>
             </a>
         </li>
         <li class="my-2 bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
             <a href="<c:url value="/seller/paused"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='PSE'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Pausadas</p>
+                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='PSE'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Pausados</p>
             </a>
         </li>
         <li class="my-2 bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
             <a href="<c:url value="/seller/deleted"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='DEL'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Eliminadas</p>
+                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='DEL'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Eliminados</p>
             </a>
         </li>
         <li class="my-2 bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200">
             <a href="<c:url value="/seller/sold"/>">
-                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='SOL'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Agotadas</p>
+                <p class="py-2 pr-4 pl-3 font-bold text-polar <c:out value="${param.status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Finalizados</p>
             </a>
         </li>
     </ol>

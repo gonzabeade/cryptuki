@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2 }" var="stars"/>
+<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2  == 0 ? 1: param.rating/2}" var="stars"/>
 
 <div class="flex flex-col">
     <div class="flex  flex-col mx-auto text-center mb-10 w-full">

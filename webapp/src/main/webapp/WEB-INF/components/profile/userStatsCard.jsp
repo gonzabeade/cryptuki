@@ -3,7 +3,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2 }" var="stars"/>
+<fmt:formatNumber type="number" maxFractionDigits="0" value="${param.rating /2 == 0 ? 1 : param.rating/2 }" var="stars"/>
 
 <head>
 <%--    <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>--%>

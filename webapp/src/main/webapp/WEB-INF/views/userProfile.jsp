@@ -4,7 +4,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<fmt:formatNumber type="number" var="stars" value="${user.rating/2}"/>
+<fmt:formatNumber type="number" var="stars" value="${user.rating/2 == 0 ? 1: user.rating/2}"/>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,19 +79,22 @@
         <h2 class="text-xl font-semibold font-sans text-polar my-auto ml-2"><c:out value="${user.phoneNumber}"/></h2>
       </div>
     </div>
-    <div class="flex flex-col rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
-      <div class="flex flex-col divide-x">
-        <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
-        <div class="my-auto ml-2">
-          <c:forEach begin="0" end="${stars-1}">
-            <span class="fa fa-star" style="color: orange"></span>
-          </c:forEach>
-          <c:forEach begin="${stars}" end="4">
-            <span class="fa fa-star" style="color: gray"></span>
-          </c:forEach>
+    <c:if test="${user.ratingCount >0}">
+      <div class="flex flex-col rounded-lg h-12 mb-5 mt-5 mr-5 mx-10">
+        <div class="flex flex-col divide-x">
+          <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
+          <div class="my-auto ml-2">
+            <c:forEach begin="0" end="${stars-1}">
+              <span class="fa fa-star" style="color: orange"></span>
+            </c:forEach>
+            <c:forEach begin="${stars}" end="4">
+              <span class="fa fa-star" style="color: gray"></span>
+            </c:forEach>
+          </div>
         </div>
       </div>
-    </div>
+    </c:if>
+
     <div class="flex  rounded-lg h-12 mb-5  mt-5 mr-5 ">
       <div class="flex">
         <h2 class="text-2xl font-semibold font-sans text-polar text-left my-auto"><messages:message code="tradeQuantity"/>:</h2>

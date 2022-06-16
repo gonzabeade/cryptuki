@@ -123,7 +123,7 @@ public class OfferHibernateDao implements OfferDao{
     @Override
     public Optional<Offer> changeOfferStatus(int offerId, OfferStatus offerStatus) {
         Offer offer = em.find(Offer.class, offerId);
-        if (offer == null) {
+        if (offer != null) {
             offer.setOfferStatus(offerStatus);
             em.persist(offer);
             return Optional.of(offer);

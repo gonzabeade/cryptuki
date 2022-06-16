@@ -11,7 +11,7 @@
     </div>
     <div class="flex flex-row" id="price">
         <div class="mx-auto flex flex-row">
-            <input  type="number" id="max" class="bg-transparent border-b-2 border-gray-400 focus:outline-0 w-full m-4 h-10 mx-auto">
+            <form:input path="arsAmount"  type="number"  class="bg-transparent border-b-2 border-gray-400 focus:outline-0 w-full m-4 h-10 mx-auto"/>
             <p class="my-auto mx-auto">   ARS</p>
 
         </div>

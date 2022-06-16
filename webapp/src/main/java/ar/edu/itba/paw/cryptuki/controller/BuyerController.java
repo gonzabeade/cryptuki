@@ -126,6 +126,7 @@ public class BuyerController {
         mav.addObject("coins" , form.getCoins());
         mav.addObject("page" , form.getPage());
         mav.addObject("orderCriteria", form.getOrderCriteria());
+        mav.addObject("arsAmount", form.getArsAmount());
 
 
 

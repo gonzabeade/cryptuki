@@ -5,8 +5,10 @@
 
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.util.Collection"/>
 <div class="p-5 max-w-md  bg-[#FAFCFF] rounded-lg border shadow-md mx-5 mt-5">
-    <div class="flex justify-between items-center">
-        <h5 class="text-xl  text-polard font-bold leading-none my-auto" ><messages:message code="maximum"/> <messages:message code="price"/> </h5>
+    <div class="flex  flex-col justify-between items-center">
+        <h5 class="text-xl  text-polard font-bold leading-none my-auto" ><messages:message code="offeredAmount"/></h5>
+        <p class="text-gray-400 text-center"><messages:message code="amountFilter"/> </p>
+    </div>
     </div>
     <div class="flex flex-row" id="price">
         <div class="mx-auto flex flex-row">

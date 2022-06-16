@@ -14,6 +14,16 @@ public class LandingForm {
 
     private List<String> location;
 
+    private double arsAmount;
+
+    public double getArsAmount() {
+        return arsAmount;
+    }
+
+    public void setArsAmount(double arsAmount) {
+        this.arsAmount = arsAmount;
+    }
+
     public List<String> getLocation() {
         return location;
     }

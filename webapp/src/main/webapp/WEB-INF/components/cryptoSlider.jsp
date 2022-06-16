@@ -18,10 +18,16 @@
         <div class="inline-flex items-center text-base font-semibold text-gray-900 ">
             <div class="flex flex-row mx-auto my-auto ">
                 <label class="switch">
-                    <input type="checkbox" id="${param.code}" name="coins" value="${param.code}">
+                    <input type="checkbox" id="${param.code}" name="coins" value="${param.code}" onchange="changeSelectorGeneral()">
                     <span class="slider round"></span>
                 </label>
             </div>
         </div>
     </div>
 </li>
+<script>
+    function changeSelectorGeneral(){
+        document.getElementById("deselectAll").classList.remove("hidden")
+        document.getElementById("selectAll").classList.add("hidden")
+    }
+</script>

@@ -49,7 +49,7 @@
                         <form:input class="hidden" path="page" value="${page}"></form:input>
                         <button type="submit" class="font-sans w-full mx-auto text-end text-l font-bold">ˣ</button>
                     </form:form>
-                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold">Informacion sobre oferta</h1>
+                    <h1 class="font-sans w-full mx-auto text-center text-l font-bold"><messages:message code="advertismentInformation"/></h1>
                 </div>
             </c:if>
 
@@ -59,27 +59,27 @@
             <div class="flex flex-col w-1/5 rounded-lg px-5 rounded-lg mx-auto">
                 <div class="mb-2 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/pending"/>">
-                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Pendientes</p>
+                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="pendingTrades"/> </p>
                     </a>
                 </div>
                 <div class="my-2 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/accepted"/>">
-                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">En curso</p>
+                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="acceptedTrades"/> </p>
                     </a>
                 </div>
                 <div class="my-2 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/rejected"/>">
-                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Rechazadas por ti</p>
+                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="rejectedTrades"/></p>
                     </a>
                 </div>
                 <div class="my-2 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/completed"/>">
-                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Cerradas</p>
+                        <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="soldTrades"/></p>
                     </a>
                 </div>
                 <div class="my-2 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/trade/deletedByUser"/>">
-                        <p class="py-2  px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Eliminadas por el usuario</p>
+                        <p class="py-2  px-4 font-bold text-polar <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="deletedByUserTrades"/> </p>
                     </a>
                 </div>
             </div>

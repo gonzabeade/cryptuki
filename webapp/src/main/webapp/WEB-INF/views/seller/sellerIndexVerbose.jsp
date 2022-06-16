@@ -61,7 +61,7 @@
                             <div class="flex justify-between items-center mb-2 px-4 pt-2">
                                 <h5 class="text-xl font-bold leading-none text-polar">Última actividad</h5>
                                 <a href="<c:url value="/seller/trade/"/>" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-                                    Ver toda
+                                    Ver más
                                 </a>
                             </div>
                             <div class="px-4">
@@ -106,13 +106,14 @@
                 <div class="flex flex-wrap w-full mx-auto justify-between">
                         <c:forEach var="offer" items="${offerList}">
                             <%--    Tarjeta de anuncio--%>
+                            <c:set var="offer" value="${offer}" scope="request"/>
                          <jsp:include page="../../components/offer.jsp"/>
                         </c:forEach>
-                    <div class="mx-auto mt-40">
+                    <div class="mx-auto">
                         <jsp:include page="../../components/paginator.jsp">
                             <jsp:param name="activePage" value="${activePage}"/>
                             <jsp:param name="pages" value="${pages}"/>
-                            <jsp:param name="baseUrl" value="/buyer/"/>
+                            <jsp:param name="baseUrl" value="/seller/"/>
                         </jsp:include>
                     </div>
                 </div>

@@ -58,10 +58,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .and().authorizeRequests()
-                .antMatchers("/seller**", "/kyc**", "/chat**", "/upload", "/modify", "/buyer**", "/seeoffer**", "/buy/**", "/contact").hasRole("USER")
-                .antMatchers("/admin**").hasRole("ADMIN")
                 .antMatchers("/login", "/register", "/verify**", "/emailPasswordRecovery", "/seeoffer**", "/recoverPassword**", "/contact").anonymous()
                 .antMatchers("/", "/buyer/market", "/403", "/400", "/404", "/500").permitAll()
+                .antMatchers("/admin**").hasRole("ADMIN")
+                .antMatchers("/seller/**", "/kyc**", "/chat**", "/offer/**", "/buyer/**", "/seeoffer**", "/buy/**", "/contact", "/admin**").authenticated()
+
                 .and().formLogin()
                 .failureHandler(failureHandler())
                 .usernameParameter("j_username")
@@ -75,7 +76,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/403")
                 .and().csrf().disable();
     }
 

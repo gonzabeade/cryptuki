@@ -5,7 +5,7 @@
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
 <div class="flex flex-col">
-    <c:url value="/seller/upload" var="postUrl"/>
+    <c:url value="/offer/upload" var="postUrl"/>
     <%--@elvariable id="uploadOfferForm" type="ar.edu.itba.paw.cryptuki.form.seller.UploadOfferForm"--%>
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
 

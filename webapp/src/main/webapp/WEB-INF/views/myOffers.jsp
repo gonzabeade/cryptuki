@@ -96,7 +96,7 @@
 
     <c:if test="${noOffers}">
         <h2 class="text-center text-3xl font-semibold font-sans text-polar mt-4"><messages:message code="noOffersUploaded"/></h2>
-        <a href="<c:url value="/seller/upload"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
+        <a href="<c:url value="/upload"/>" class="h-12 bg-frost text-white p-3 font-sans rounded-lg w-fit mx-auto mt-10"><messages:message code="startSelling"/></a>
     </c:if>
 
     <c:if test="${!noOffers}">

@@ -9,7 +9,6 @@
         <h5 class="text-xl  text-polard font-bold leading-none my-auto" ><messages:message code="offeredAmount"/></h5>
         <p class="text-gray-400 text-center"><messages:message code="amountFilter"/> </p>
     </div>
-    </div>
     <div class="flex flex-row" id="price">
         <div class="mx-auto flex flex-row">
             <input  type="number" id="max" class="bg-transparent border-b-2 border-gray-400 focus:outline-0 w-full m-4 h-10 mx-auto">

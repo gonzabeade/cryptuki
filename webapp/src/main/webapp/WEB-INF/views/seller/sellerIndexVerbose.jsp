@@ -95,7 +95,7 @@
         <!-- Middle panel -->
         <div class="flex flex-col h-full mr-20 w-3/5">
             <div class="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
-                <h1 class="text-center text-4xl font-semibold font-sans text-polar">Anuncios subidos</h1>
+                <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="uploadedAdvertisements"/> </h1>
             </div>
             <div class="flex flex-row w-full h-3/5 mt-5">
                 <div class="w-2/5 h-full">

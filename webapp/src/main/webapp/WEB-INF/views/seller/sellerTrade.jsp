@@ -31,10 +31,10 @@
         <!-- Left Panel: chat and seller stats  -->
         <div class="flex flex-col h-3/5 w-1/5 pr-2">
             <div class="flex flex-col w-full py-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
-                <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold">Órdenes recibidas</h1>
+                <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold"><messages:message code="offersReceived"/> </h1>
             </div>
-            <div class="flex flex-col mt-4 rounded-lg px-5 py-4 rounded-lg bg-[#FAFCFF]"">
-                <label class="my-auto" for="offerId">Buscar por código de oferta</label>
+            <div class="flex flex-col mt-4 rounded-lg px-5 py-4 rounded-lg bg-[#FAFCFF]">
+                <label class="my-auto" for="offerId"><messages:message code="searchByOfferId"/> </label>
                 <div class="flex flex-row">
                     <input id="offerId" placeholder="Id" type="number" class="border-2 border-gray-700 p-1 w-3/5 rounded-lg" onchange="addQueryParam('offerId')" path="filterByOfferId"/>
 <%--                        <a class="mx-auto" href="<c:url value="/seller/trade/${status.toString()}"/>"><img class='object-contain w-2 h-2 rounded-lg' src="<c:url value="/public/images/lupa.png"/>" alt="logo"></a>--%>

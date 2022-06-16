@@ -21,11 +21,11 @@
 
 <div class="w-1/3 mx-auto mt-20 rounded-lg bg-stormd/[0.9] flex flex-col justify-center border-2 border-polard">
     <h1 class="mt-10 text-center text-4xl font-semibold font-sans text-polar"><messages:message code="checkEmail"/></h1>
-    <h2 class="mt-10 text-center text-xl font-sans text-polar">Te enviamos un mail con instrucciones para poder cambiar tu contraseña.</h2>
+    <h2 class="mt-10 text-center text-xl font-sans text-polar"><messages:message code="emailToResetPass"/> </h2>
 
     <a class="flex w-full justify-center mt-5 mb-10" href="<c:url value="/"/>">
         <div class="w-1/7 rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
-            Volver
+            <messages:message code="goBack"/>
         </div>
     </a>
 </div>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-5">
+<a  href="<c:url value="/"/>" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-5">
     <h1 class="text-center text-3xl font-semibold font-polard font-sans"><messages:message code="offer"/>#<c:out value="${offer.offerId}"/></h1>
 
     <div class="flex flex-col mx-auto mt-5">
@@ -27,10 +27,10 @@
                 <button type="submit" class=" text-white"><messages:message code="edit"/></button>
             </form>
             <c:url value="/offer/delete/${offer.offerId}" var="postUrl"/>
-            <form method="post" action="${postUrl}" class="rounded-xl text-center bg-storm w-1/2 p-2 mx-2">
+            <form method="post" action="${postUrl}" class="rounded-xl text-center bg-storm w-1/2 p-2 mx-2 z-30">
                 <button type="submit" class=" "><messages:message code="delete"/></button>
             </form>
         </div>
     </c:if>
 
-</div>
+</a>

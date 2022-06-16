@@ -39,7 +39,7 @@
             <h3 class="mx-auto text-polard text-center text-xl text-gray-500"> <messages:message code="thankForUsingCryptuki"/></h3>
         </div>
         <div class="flex flex-col">
-            <h1 class="mx-auto text-polard font-bold text-2xl mt-10 mb-5">Datos del intercambio</h1>
+            <h1 class="mx-auto text-polard font-bold text-2xl mt-10 mb-5"><messages:message code="exchangeData"/></h1>
             <div class="py-5 px-14 mx-auto rounded-lg bg-stormd/[0.9] flex  border-2 border-polard flex-col">
                 <div class="flex flex-row px-30">
                     <div class="flex flex-col">

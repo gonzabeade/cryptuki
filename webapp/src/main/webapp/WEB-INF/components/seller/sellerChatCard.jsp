@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
+
 <head>
   <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
 </head>
@@ -6,9 +8,9 @@
 <body>
   <div class="p-4 max-w-md bg-[#FAFCFF] rounded-lg shadow-md sm:p-8">
     <div class="flex justify-between items-center mb-4">
-      <h5 class="text-xl font-bold leading-none text-polar">Última actividad</h5>
+      <h5 class="text-xl font-bold leading-none text-polar"><messages:message code="lastTransactions"/></h5>
       <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-        Ver toda
+       <messages:message code="seeMore"/>
       </a>
     </div>
     <div class="flow-root">
@@ -23,7 +25,7 @@
                truncate">
                 gonzabeade
               </p>
-              <p class="text-sm text-gray-500 truncate">Ha hecho una orden de compra</p>
+              <p class="text-sm text-gray-500 truncate"><messages:message code="madeYouAnOffer"/> </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-polar">
               ×
@@ -37,7 +39,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-polar-600 truncate"> salteno </p>
-              <p class="text-sm text-gray-500 truncate"> Ha hecho una orden de compra</p>
+              <p class="text-sm text-gray-500 truncate"><messages:message code="madeYouAnOffer"/></p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-polar">×</div>
           </div>
@@ -50,7 +52,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-polar-600 truncate"> soutjava </p>
-              <p class="text-sm text-gray-500 truncate"> Ha hecho una orden de compra </p>
+              <p class="text-sm text-gray-500 truncate"> <messages:message code="madeYouAnOffer"/></p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-polar"> × </div>
           </div>
@@ -63,7 +65,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-polar-600 truncate"> leomessi </p>
-              <p class="text-sm text-gray-500 truncate"> Ha hecho una orden de compra </p>
+              <p class="text-sm text-gray-500 truncate"> <messages:message code="madeYouAnOffer"/> </p>
             </div>
             <div class="inline-flex items-center text-base font-semibold text-polar">
               ×

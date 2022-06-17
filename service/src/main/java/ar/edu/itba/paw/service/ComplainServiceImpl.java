@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -105,8 +106,8 @@ public class ComplainServiceImpl implements ComplainService{
     }
 
     @Override
-    public void getSupportFor(String email, String description) {
-        messageSenderFacade.sendAnonymousComplaintReceipt(email, description);
+    public void getSupportFor(String email, String description, Locale locale) {
+        messageSenderFacade.sendAnonymousComplaintReceipt(email, description, locale);
     }
 
 

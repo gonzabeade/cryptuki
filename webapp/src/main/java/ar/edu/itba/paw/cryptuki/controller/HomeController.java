@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -50,10 +51,10 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.POST)
-    public ModelAndView contactPost(@Valid  @ModelAttribute("supportForm") GeneralSupportForm form, BindingResult errors, Authentication authentication){
+    public ModelAndView contactPost(@Valid  @ModelAttribute("supportForm") GeneralSupportForm form, BindingResult errors, Authentication authentication, HttpServletRequest request){
         if(errors.hasErrors())
             return contact(form, authentication);
-        complainService.getSupportFor(form.getEmail(), form.getMessage());
+        complainService.getSupportFor(form.getEmail(), form.getMessage(), request.getLocale());
         return new ModelAndView("redirect:/contact?success");
     }
 }

@@ -2,12 +2,9 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.UnmodifiableOfferException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +22,9 @@ import java.util.Set;
 @Service
 public class OfferServiceImpl implements OfferService {
 
-    private  OfferDao offerDao;
-    private  MessageSenderFacade messageSenderFacade;
-    private TradeDao tradeDao ;
+    private final OfferDao offerDao;
+    private final MessageSenderFacade messageSenderFacade;
+    private final TradeDao tradeDao ;
 
     @Autowired
     public OfferServiceImpl(OfferDao offerDao, MessageSenderFacade messageSenderFacade, TradeDao tradeDao) {
@@ -45,13 +42,15 @@ public class OfferServiceImpl implements OfferService {
         if (offerPO == null)
             throw new NullPointerException("Offer digest cannot be null");
 
+        Offer offer;
         try {
-            Offer offer = offerDao.makeOffer(offerPO);
-            //messageSenderFacade.sendOfferUploadedMessage(SecurityContextHolder.getContext().getAuthentication().getName(), offer); TODO MAILS
-            return offer;
+            offer = offerDao.makeOffer(offerPO);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+
+        messageSenderFacade.sendOfferUploadedMessage(offer);
+        return offer;
     }
 
     @Override

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface ComplainService {
@@ -22,5 +23,5 @@ public interface ComplainService {
     void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment);
 
     /** Get support for anonymous users*/
-    void getSupportFor(String email, String description);
+    void getSupportFor(String email, String description, Locale locale);
 }

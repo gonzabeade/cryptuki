@@ -30,13 +30,6 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     private MessageSource messageSource;
     private static final Logger LOGGER = LoggerFactory.getLogger(ThymeleafMessageSenderFacade.class);
 
-    private String getTo(String username) {
-        Optional<User> userOptional =  userDao.getUserByUsername(username);
-        if (!userOptional.isPresent())
-            throw new NoSuchUserException(username);
-        return userOptional.get().getEmail();
-    }
-
     private String getUrl() {
        return environment.getProperty("webappBaseUrl");
     }
@@ -64,22 +57,57 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     @Override
     public void sendForgotPasswordMessage(User user, int code) {
-
+        MailMessage message = mailMessageContactService.createMessage(user.getEmail());
+        ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
+        Locale locale = user.getLocale();
+        changePasswordMailMessage.setLocale(locale);
+        changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
+        changePasswordMailMessage.setParameters(user.getUsername().get(), code, getUrl());
+        mailMessageContactService.sendMessage(changePasswordMailMessage);
+        LOGGER.info("Change password mail sent");
     }
 
     @Override
-    public void sendOfferUploadedMessage(User user, Offer offer) {
-
+    public void sendOfferUploadedMessage(Offer offer) {
+        User user = offer.getSeller();
+        MailMessage message = mailMessageContactService.createMessage(user.getEmail());
+        NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
+        Locale locale = user.getLocale();
+        newOfferMailMessage.setLocale(locale);
+        newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
+        newOfferMailMessage.setParameters(
+                user.getUsername().get(),
+                offer.getCrypto().getCode(),
+                offer.getLocation().toString(),
+                offer.getDate().toString(),
+                offer.getMaxInCrypto(),
+                offer.getOfferId(),
+                getUrl());
+        mailMessageContactService.sendMessage(newOfferMailMessage);
+        LOGGER.info("Uploaded offer mail sent");
     }
 
     @Override
-    public void sendAnonymousComplaintReceipt(String to, String question) {
-
+    public void sendAnonymousComplaintReceipt(String to, String question, Locale locale) {
+        MailMessage mailMessage = mailMessageContactService.createMessage(to);
+        QuestionThymeleafMailMessage questionMailMessage= new QuestionThymeleafMailMessage(mailMessage, templateEngine);
+        questionMailMessage.setLocale(locale);
+        questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, locale));
+        questionMailMessage.setParameters(to, question, getUrl());
+        mailMessageContactService.sendMessage(questionMailMessage);
+        LOGGER.info("Complaint receipt sent to Anonymous");
     }
 
     @Override
     public void sendComplaintReceipt(User user, Trade trade, String complaint) {
-
+        MailMessage mailMessage = mailMessageContactService.createMessage(user.getEmail());
+        ComplaintThymeleafMailMessage questionMailMessage= new ComplaintThymeleafMailMessage(mailMessage, templateEngine);
+        Locale locale = user.getLocale();
+        questionMailMessage.setLocale(locale);
+        questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
+        questionMailMessage.setParameters(user.getUsername().get(), complaint, getUrl());
+        mailMessageContactService.sendMessage(questionMailMessage);
+        LOGGER.info("Complaint receipt sent to user");
     }
 
     @Override
@@ -99,6 +127,23 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     @Override
     public void sendNewTradeNotification(Trade trade) {
+        User seller = trade.getOffer().getSeller();
+        MailMessage mailMessage = mailMessageContactService.createMessage(seller.getEmail());
+        TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
+        Locale locale = seller.getLocale();
+        tradeClosedMailMessage.setLocale(locale);
+        tradeClosedMailMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, locale));
+        tradeClosedMailMessage.setParameters(
+                seller.getUsername().get(),
+                trade.getOffer().getCrypto().getCode(),
+                trade.getQuantity(),
+                trade.getBuyer().getUsername().get(),
+                trade.getTradeId(),
+                getUrl(),
+                trade.getOffer().getOfferId()
+        );
+        mailMessageContactService.sendMessage(tradeClosedMailMessage);
+        LOGGER.info("Received Trade notification sent");
 
     }
 
@@ -107,80 +152,13 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     }
 
+    @Override
+    public void sendIdentityVerified(User user) {
 
-//
-//    @Override
-//    public void sendChangePasswordMessage(String username, int code) {
-//        // TODO: DO NOT PUT THE CODE IN THE MAIL TEXT, ONLY AS QUERY PARAM
-//        MailMessage message = mailMessageContactService.createMessage(getTo(username));
-//        ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
-//        Locale locale = LocaleContextHolder.getLocale();
-//        changePasswordMailMessage.setLocale(locale);
-//        changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
-//        changePasswordMailMessage.setParameters(username, code, getUrl());
-//        mailMessageContactService.sendMessage(changePasswordMailMessage);
-//        LOGGER.info("Change password mail sent");
-//    }
-//
-//    @Override
-//    public void sendOfferUploadedMessage(String username, Offer offer) {
-//        MailMessage message = mailMessageContactService.createMessage(getTo(username));
-//        NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
-//        Locale locale = LocaleContextHolder.getLocale();
-//        newOfferMailMessage.setLocale(locale);
-//        newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
-//        newOfferMailMessage.setParameters(
-//                username,
-//                offer.getCrypto().getCode(),
-//                offer.getLocation().toString(),
-//                offer.getDate().toString(),
-//                offer.getMaxInCrypto(),
-//                offer.getOfferId(),
-//                getUrl());
-//        mailMessageContactService.sendMessage(newOfferMailMessage);
-//        LOGGER.info("Uploaded offer mail sent");
-//    }
-//
-//    @Override
-//    public void sendAnonymousComplaintReceipt(String to, String username, String question) {
-//        MailMessage mailMessage = mailMessageContactService.createMessage(to);
-//        QuestionThymeleafMailMessage questionMailMessage= new QuestionThymeleafMailMessage(mailMessage, templateEngine);
-//        Locale locale = LocaleContextHolder.getLocale();
-//        questionMailMessage.setLocale(locale);
-//        questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, locale));
-//        questionMailMessage.setParameters(username, question, getUrl());
-//        mailMessageContactService.sendMessage(questionMailMessage);
-//        LOGGER.info("Complaint receipt sent to Anonymous");
-//    }
-//
-//    @Override
-//    public void sendComplaintReceipt(String username, String question) {
-//        MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
-//        ComplaintThymeleafMailMessage questionMailMessage= new ComplaintThymeleafMailMessage(mailMessage, templateEngine);
-//        Locale locale = LocaleContextHolder.getLocale();
-//        questionMailMessage.setLocale(locale);
-//        questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
-//        questionMailMessage.setParameters(username, question, getUrl());
-//        mailMessageContactService.sendMessage(questionMailMessage);
-//        LOGGER.info("Complaint receipt sent to user");
-//    }
-//
-//    @Override
-//    public void sendNewTradeNotification(String username, Trade trade, int tradeId,int offerId){
-//        MailMessage mailMessage = mailMessageContactService.createMessage(getTo(username));
-//        TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
-//        Locale locale = LocaleContextHolder.getLocale();
-//        tradeClosedMailMessage.setLocale(locale);
-//        tradeClosedMailMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, locale));
-//        tradeClosedMailMessage.setParameters(
-//                username,
-//                trade.getOffer().getCrypto().getCode(),
-//                trade.getQuantity(),
-//                trade.getBuyer().getUsername().get(),
-//                tradeId,
-//                getUrl(),
-//                offerId);
-//        mailMessageContactService.sendMessage(tradeClosedMailMessage);
-//        LOGGER.info("Received Trade notification sent");
-//    }
+    }
+
+    @Override
+    public void sendIdentityRequestRejected(User user, String reason) {
+
+    }
 }

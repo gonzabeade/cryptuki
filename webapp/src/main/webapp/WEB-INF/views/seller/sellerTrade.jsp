@@ -187,21 +187,23 @@
 
                                 <%--                            CASE - PENDING--%>
                             <c:if test="${trade.status == 'PENDING'}">
-                                <c:url value="/changeStatus" var="postUrl"/>
-                                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
-                                           cssClass="flex justify-center mx-auto my-3">
-                                    <form:hidden path="newStatus" id="newStatus-${trade.tradeId}"
-                                                 value="${trade.status}"/>
-                                    <form:hidden path="tradeId" value="${trade.tradeId}"/>
-
-                                    <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"
-                                            class="bg-red-400 text-white p-3 rounded-md font-sans mr-4">
-                                        <messages:message
-                                                code="rejectTrade"/></button>
-                                    <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"
-                                            class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
-                                            code="acceptTrade"/></button>
-                                </form:form>
+                                <div class="flex flex-row">
+                                    <c:url value="/rejectOffer?tradeId=${trade.tradeId}" var="postUrl"/>
+                                    <form:form  action="${postUrl}" method="post"
+                                                cssClass="flex justify-center mx-auto my-3">
+                                        <button type="submit"
+                                                class="bg-red-400 text-white p-3 rounded-md font-sans mr-4">
+                                            <messages:message
+                                                    code="rejectTrade"/></button>
+                                    </form:form>
+                                    <c:url value="/acceptOffer?tradeId=${trade.tradeId}" var="postUrl"/>
+                                    <form:form  action="${postUrl}" method="post"
+                                                cssClass="flex justify-center mx-auto my-3">
+                                        <button type="submit"
+                                                class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
+                                                code="acceptTrade"/></button>
+                                    </form:form>
+                                </div>
                                 <div class="flex flex-row mx-auto">
 
                                     <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
@@ -223,12 +225,10 @@
 
                                 <%--                            CASE - ACCEPTED--%>
                             <c:if test="${trade.status == 'ACCEPTED' }">
-                                <c:url value="/closeTrade" var="formUrl"/>
+                                <c:url value="/markAsSold?tradeId=${trade.tradeId}" var="formUrl"/>
 
-                                <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
+                                <form:form action="${formUrl}" method="post"
                                            cssClass="flex justify-center mx-auto my-3">
-                                    <form:hidden path="offerId" value="${trade.offer.offerId}"/>
-                                    <form:hidden path="trade" value="${trade.tradeId}"/>
                                     <button type="submit"
                                             class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
                                         <messages:message code="soldTrade"/></button>
@@ -260,5 +260,11 @@
             </div>
 
     </body>
+
+<script>
+    function updateStatus( status, tradeId) {
+        document.getElementById('newStatus-'+tradeId).setAttribute('value',status)
+    }
+</script>
 </html>
 

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.seller.ModifyOfferForm;
-import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
-import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.seller.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
@@ -43,19 +41,19 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
-    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
+    public ModelAndView seeOffer(@PathVariable("offerId") final int offerId, final Authentication authentication){
         Offer offer = offerService.getOfferById(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, false);
     }
 
     @RequestMapping(value = "/{offerId}/creationsuccess", method = RequestMethod.GET)
-    public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
+    public ModelAndView seeOfferCreateSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, true, false);
     }
 
     @RequestMapping(value = "/{offerId}/editsuccess", method = RequestMethod.GET)
-    public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication,final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
+    public ModelAndView seeOfferEditSuccess(@PathVariable("offerId") final int offerId, final Authentication authentication){
         Offer offer = offerService.getOfferIfAuthorized(offerId).orElseThrow(()->new NoSuchOfferException(offerId));
         return seeOffer(offer, authentication, false, true);
     }

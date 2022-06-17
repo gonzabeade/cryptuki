@@ -59,7 +59,7 @@ public class TradeFluxController {
 
 
     @RequestMapping(value="/trade", method = RequestMethod.GET)
-    public ModelAndView executeTrade(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") StatusTradeForm statusTradeForm, @ModelAttribute("messageForm") MessageForm messageForm, Integer tradeId , Authentication authentication){
+    public ModelAndView executeTrade(@ModelAttribute("messageForm") MessageForm messageForm, Integer tradeId , Authentication authentication){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
 
         Offer offer = trade.getOffer();
@@ -182,41 +182,10 @@ public class TradeFluxController {
         return mav;
     }
 
-
-    @RequestMapping(value = "/closeTrade",method = RequestMethod.POST)
-    public ModelAndView closeTransaction(final @Valid @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
-        if(errors.hasErrors())
-            return executeTrade(soldTradeForm,new StatusTradeForm(), new MessageForm(), statusTradeForm.getTradeId(),authentication);
-        Trade trade = tradeService.getTradeById(soldTradeForm.getTrade()).orElseThrow(()->new NoSuchTradeException(soldTradeForm.getTrade()));
-        Offer offer = trade.getOffer();
-        offerService.sellQuantityOfOffer(offer, trade.getQuantity(), trade.getTradeId());
-        return new ModelAndView("redirect:/receiptDescription/"+trade.getTradeId());
-    }
-
-
     @RequestMapping(value = "/deleteTrade/{tradeId}", method = RequestMethod.POST)
     public ModelAndView deleteTrade(@PathVariable("tradeId") final int tradeId){
         tradeService.deleteTrade(tradeId);
         return new ModelAndView("redirect:/buyer/");
-    }
-
-
-
-    // TODO(gonza): Change offer status correctly !!!!
-    @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
-    public ModelAndView updateStatus(@Valid @ModelAttribute("soldTradeForm") final SoldTradeForm soldTradeForm,final BindingResult errorsSold, @Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
-        if(errors.hasErrors() || errorsSold.hasErrors()){
-            return new ModelAndView("redirect:/400");
-        }
-        Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
-        if (statusTradeForm.getNewStatus().equals(TradeStatus.ACCEPTED.toString()))
-            tradeService.acceptTrade(statusTradeForm.getTradeId());
-        else if (statusTradeForm.getNewStatus().equals(TradeStatus.REJECTED.toString()))
-            tradeService.rejectTrade(statusTradeForm.getTradeId());
-        else if (statusTradeForm.getNewStatus().equals(TradeStatus.SOLD.toString()))
-            tradeService.sellTrade(trade.getTradeId());
-
-        return new ModelAndView("redirect:/chat?tradeId="+trade.getTradeId());
     }
 
     @RequestMapping(value="/acceptOffer", method= RequestMethod.POST)
@@ -224,6 +193,17 @@ public class TradeFluxController {
         tradeService.acceptTrade(tradeId);
         return new ModelAndView("redirect:/chat?tradeId="+tradeId);
     }
+    @RequestMapping(value="/rejectOffer", method= RequestMethod.POST)
+    public ModelAndView rejectOffer(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
+       Trade trade = tradeService.rejectTrade(tradeId);
+        return new ModelAndView("redirect:/seller/associatedTrades/rejected/"+trade.getOffer().getOfferId());
+    }
+    @RequestMapping(value="/markAsSold", method= RequestMethod.POST)
+    public ModelAndView markAsSold(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
+        Trade trade = tradeService.sellTrade(tradeId);
+        return new ModelAndView("redirect:/seller/associatedTrades/completed/"+ trade.getOffer().getOfferId());
+    }
+
 
 
 }

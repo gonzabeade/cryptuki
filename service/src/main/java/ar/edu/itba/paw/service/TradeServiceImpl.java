@@ -1,19 +1,15 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.*;
-import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -21,15 +17,17 @@ import java.util.Set;
 @Service
 public class TradeServiceImpl implements TradeService {
 
-    private TradeDao tradeDao;
-    private UserService userService;
-    private MessageSenderFacade messageSenderFacade;
+    private final TradeDao tradeDao;
+    private final UserService userService;
+    private final MessageSenderFacade messageSenderFacade;
+    private final ChatService chatService;
 
     @Autowired
-    public TradeServiceImpl(TradeDao tradeDao, MessageSenderFacade messageSenderFacade, UserService userService) {
+    public TradeServiceImpl(TradeDao tradeDao, MessageSenderFacade messageSenderFacade, UserService userService, ChatService chatService) {
         this.tradeDao = tradeDao;
         this.messageSenderFacade = messageSenderFacade;
         this.userService = userService;
+        this.chatService = chatService;
     }
 
     @Override
@@ -38,6 +36,9 @@ public class TradeServiceImpl implements TradeService {
     public Trade makeTrade(int offerId, int buyerId, float quantity) {
         Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
         messageSenderFacade.sendNewTradeNotification(newTrade.getOffer().getSeller().getUserAuth().getUsername(), newTrade, newTrade.getTradeId(), newTrade.getOffer().getOfferId());
+        String firstChat = newTrade.getOffer().getComments();
+        if (firstChat != null && !firstChat.equals(""))
+            chatService.sendMessage(newTrade.getOffer().getSeller().getId(), newTrade.getTradeId(), firstChat);
         return newTrade;
     }
 

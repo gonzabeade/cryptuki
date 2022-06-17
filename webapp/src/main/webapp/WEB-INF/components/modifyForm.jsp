@@ -112,7 +112,7 @@
     --%>
     <div class="flex flex-col mx-auto">
       <form:errors path="message" cssClass="text-red-500 mx-auto"/>
-      <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="transferInformation"/> *</form:label>
+      <form:label path="message" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="firstChat"/> *</form:label>
       <div class="flex flex-row justify-center w-96">
         <form:textarea path="message" cssClass="min-w-full h-36 rounded-lg mx-auto p-5"/>
       </div>

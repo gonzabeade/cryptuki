@@ -35,7 +35,7 @@ public class UploadOfferForm {
     @Size(min = 1)
     private String[] paymentMethods = new String[] {"cas"};
 
-    @Size(min = 1, max = 140)
+    @Size(max = 140)
     private String firstChat;
 
     @Size(min = 1, max = 30)

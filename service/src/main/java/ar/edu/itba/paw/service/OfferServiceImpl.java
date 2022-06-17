@@ -93,10 +93,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional(readOnly = true)
     public Collection<Offer> getBuyableOffers(OfferFilter filter){
-
-        offerDao.getOfferCountByLocation();
-
-
+        filter.withOfferStatus(OfferStatus.APR);
         String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         if (buyerUsername != null)
             filter.excludeUsername(buyerUsername);

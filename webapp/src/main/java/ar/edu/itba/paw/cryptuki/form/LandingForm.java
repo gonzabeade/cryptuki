@@ -2,29 +2,31 @@ package ar.edu.itba.paw.cryptuki.form;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class LandingForm {
-    private String[] coins;
+    private Collection<String> coins;
     @Min(0)
     private Integer page = 0;
     @Min(0)
     @Max(3)
     private Integer orderCriteria = 2;
 
-    private List<String> location;
+    private Collection<String> location;
 
-    private double arsAmount;
+    private Double arsAmount;
 
-    public double getArsAmount() {
+    public Double getArsAmount() {
         return arsAmount;
     }
 
-    public void setArsAmount(double arsAmount) {
+    public void setArsAmount(Double arsAmount) {
         this.arsAmount = arsAmount;
     }
 
-    public List<String> getLocation() {
+    public Collection<String> getLocation() {
         return location;
     }
 
@@ -32,12 +34,12 @@ public class LandingForm {
         this.location = locations;
     }
 
-    public String[] getCoins() {
+    public Collection<String> getCoins() {
         return coins;
     }
 
     public void setCoins(String[] coins) {
-        this.coins = coins;
+        this.coins = Arrays.asList(coins);
     }
 
     public Integer getPage() {

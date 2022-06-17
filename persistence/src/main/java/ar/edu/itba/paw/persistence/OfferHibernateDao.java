@@ -46,11 +46,14 @@ public class OfferHibernateDao implements OfferDao{
         testAndSet(filter.getRestrictedToIds(), args, "ids", sqlQueryBuilder, "AND offer_id IN (:ids) ");
         testAndSet(filter.getExcludedUsernames(), args, "resUnames", sqlQueryBuilder, "AND uname NOT IN (:resUnames) ");
         testAndSet(filter.getRestrictedToUsernames(), args, "unames", sqlQueryBuilder, "AND uname IN (:unames) ");
-        //testAndSet(filter.getRestrictedToUsernames(), args, "pms", sqlQueryBuilder, "AND payment_method IN (:pms) ");
         testAndSet(filter.getCryptoCodes(), args, "cryptoCodes", sqlQueryBuilder, "AND crypto_code IN (:cryptoCodes) ");
         testAndSet(filter.getStatus().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "status", sqlQueryBuilder, "AND status_code IN (:status) ");
         testAndSet(filter.getLocations().stream().map(s -> s.toString()).collect(Collectors.toList()), args, "locations", sqlQueryBuilder, "AND location IN (:locations) ");
         // Not using it right now -> testAndSet(filter.getRestrictedToUsernames(), args, "pms", sqlQueryBuilder, "AND payment_method IN (:pms) ");
+        if (filter.getIsQuantityInRange().isPresent()) {
+            sqlQueryBuilder.append("AND :inrange BETWEEN min_quantity*asking_price AND max_quantity*asking_price ");
+            args.put("inrange", filter.getIsQuantityInRange().getAsDouble());
+        }
     }
 
     /**

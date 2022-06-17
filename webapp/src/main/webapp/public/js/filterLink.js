@@ -37,13 +37,6 @@ function resetAllFilters(){
     document.getElementById("location").options[0].selected = true
     deleteParams();
 }
-function addPageValue(value){
-    var searchParams = new URLSearchParams(window.location.search)
-    searchParams.set("page",value);
-    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-    history.pushState(null, '', newRelativePathQuery);
-    window.location.href = newRelativePathQuery;
-}
 function addPageValueForm(value){
     document.getElementById("page").value = value;
     sendGet();

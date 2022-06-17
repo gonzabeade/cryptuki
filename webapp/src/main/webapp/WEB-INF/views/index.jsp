@@ -92,7 +92,7 @@
             </c:forEach>
             <div class="flex flex-col">
                 <% request.setCharacterEncoding("UTF-8"); %>
-                <jsp:include page="../components/paginator.jsp">
+                <jsp:include page="../components/paginatorHome.jsp">
                     <jsp:param name="activePage" value="${activePage}"/>
                     <jsp:param name="pages" value="${pages}"/>
                     <jsp:param name="baseUrl" value="/buyer/market"/>

@@ -1,17 +1,13 @@
 package ar.edu.itba.paw.service.mailing;
 
+import ar.edu.itba.paw.model.Trade;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 public class NewTradeNotificationThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "NewTradeNotificationTemplate";
 
-    private String username;
-    private double quantity;
-    private String coinCode;
-    private String buyer;
-    private String buyerMessage;
-    private String buyerMail;
+    private Trade trade;
     private String url;
 
     public NewTradeNotificationThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
@@ -19,30 +15,20 @@ public class NewTradeNotificationThymeleafMailMessage extends ThymeleafMailMessa
     }
 
 
-    public void setParameters(String username, String coinCode, double quantity, String buyer, String buyerMail, String url) {
-        this.username = username;
-        this.coinCode = coinCode;
-        this.quantity = quantity;
-        this.buyer = buyer;
-        this.buyerMessage = buyerMessage;
-        this.buyerMail = buyerMail;
+    public void setParameters(Trade trade, String url) {
         this.url = url;
+        this.trade = trade;
     }
 
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || buyer == null || buyerMessage == null || buyerMail == null)
+        if (trade == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context(getLocale());
 
-        context.setVariable("username", username);
-        context.setVariable("coinCode", coinCode);
-        context.setVariable("quantity", quantity);
-        context.setVariable("buyer", buyer);
-        context.setVariable("buyerMessage", buyerMessage);
-        context.setVariable("buyerMail", buyerMail);
+        context.setVariable("trade", trade);
         context.setVariable("url", url);
 
         return context;

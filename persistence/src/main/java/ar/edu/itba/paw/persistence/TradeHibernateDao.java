@@ -61,11 +61,12 @@ public class TradeHibernateDao implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
-        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in (:status) and t.offer.seller.userAuth.username = :username order by t.lastModified", Trade.class);
+        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in (:status) and t.offer.seller.userAuth.username = :username and t.offer.offerId = :offerId order by t.lastModified DESC", Trade.class);
         typedQuery.setFirstResult(page*pageSize);
         typedQuery.setMaxResults(pageSize);
         typedQuery.setParameter("status", status);
         typedQuery.setParameter("username", username);
+        typedQuery.setParameter("offerId", offerId);
         return typedQuery.getResultList();
     }
 

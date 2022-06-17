@@ -2,7 +2,6 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
 import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
-import ar.edu.itba.paw.cryptuki.form.seller.TradeFilterForm;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;

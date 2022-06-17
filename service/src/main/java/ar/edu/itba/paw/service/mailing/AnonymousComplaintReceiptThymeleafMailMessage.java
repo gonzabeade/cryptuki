@@ -7,7 +7,6 @@ public class AnonymousComplaintReceiptThymeleafMailMessage extends ThymeleafMail
     private final static String template = "AnonymousComplaintReceiptTemplate";
 
     private String question;
-
     private String url;
 
     public AnonymousComplaintReceiptThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {

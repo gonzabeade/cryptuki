@@ -7,6 +7,7 @@ import org.thymeleaf.context.Context;
 public class OfferUploadedThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "OfferUploadedMessageTemplate";
 
+    private  String username;
     private Offer offer;
 
     private String url;

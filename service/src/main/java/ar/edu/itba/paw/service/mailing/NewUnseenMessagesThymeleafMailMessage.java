@@ -3,51 +3,47 @@ package ar.edu.itba.paw.service.mailing;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-public class TradeClosedThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "TradeClosed";
+public class NewUnseenMessagesThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "NewUnseenMessagesTemplate";
 
     private String username;
-    private String buyer;
     private double quantity;
     private String coinCode;
-    private int tradeCode;
-
-    private int offerId;
-
+    private String buyer;
+    private String buyerMessage;
+    private String buyerMail;
     private String url;
 
-
-    public TradeClosedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine helper) {
-        super(mailMessage, template, helper);
+    public NewUnseenMessagesThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+        super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String coinCode, double quantity, String buyer, int tradeCode, String url,int offerId) {
+    public void setParameters(String username, String coinCode, double quantity, String buyer, String buyerMail, String url) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;
         this.buyer = buyer;
-        this.tradeCode = tradeCode;
+        this.buyerMessage = buyerMessage;
+        this.buyerMail = buyerMail;
         this.url = url;
-        this.offerId=offerId;
     }
 
     @Override
     protected Context getContext() {
 
-        if ( username == null || coinCode == null || buyer == null)
+        if ( username == null || coinCode == null || buyer == null || buyerMessage == null || buyerMail == null)
             throw new IllegalStateException("Cannot send email with missing parameters");
 
         Context context = new Context(getLocale());
-
 
         context.setVariable("username", username);
         context.setVariable("coinCode", coinCode);
         context.setVariable("quantity", quantity);
         context.setVariable("buyer", buyer);
-        context.setVariable("tradeCode", tradeCode);
+        context.setVariable("buyerMessage", buyerMessage);
+        context.setVariable("buyerMail", buyerMail);
         context.setVariable("url", url);
-        context.setVariable("offerId",offerId);
 
         return context;
     }

@@ -3,8 +3,8 @@ package ar.edu.itba.paw.service.mailing;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "NewOffer";
+public class YouWereKickedOutBecauseThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "YouWereKickedOutBecauseTemplate";
 
     private String username;
     private String coinCode;
@@ -15,7 +15,7 @@ public class NewOfferThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String url;
 
-    public NewOfferThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+    public YouWereKickedOutBecauseThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 

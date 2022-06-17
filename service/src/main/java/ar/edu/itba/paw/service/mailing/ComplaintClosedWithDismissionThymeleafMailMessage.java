@@ -3,15 +3,15 @@ package ar.edu.itba.paw.service.mailing;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-public class ComplaintThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "ComplaintTemplate";
+public class ComplaintClosedWithDismissionThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "ComplaintClosedWithDismissionTemplate";
 
     private String username;
     private String complaint;
     private String url;
 
 
-    public ComplaintThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+    public ComplaintClosedWithDismissionThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 

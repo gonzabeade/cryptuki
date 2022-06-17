@@ -3,23 +3,23 @@ package ar.edu.itba.paw.service.mailing;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-public class TradeOpenedThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "TradeOpened";
+public class NewTradeNotificationThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "NewTradeNotificationTemplate";
 
     private String username;
-    private float quantity;
+    private double quantity;
     private String coinCode;
     private String buyer;
     private String buyerMessage;
     private String buyerMail;
     private String url;
 
-    public TradeOpenedThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+    public NewTradeNotificationThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 
 
-    public void setParameters(String username, String coinCode, float quantity, String buyer, String buyerMessage, String buyerMail, String url) {
+    public void setParameters(String username, String coinCode, double quantity, String buyer, String buyerMail, String url) {
         this.username = username;
         this.coinCode = coinCode;
         this.quantity = quantity;

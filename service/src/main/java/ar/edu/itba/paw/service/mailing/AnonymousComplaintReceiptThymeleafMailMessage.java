@@ -1,22 +1,17 @@
 package ar.edu.itba.paw.service.mailing;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.Locale;
-
-public class QuestionThymeleafMailMessage extends ThymeleafMailMessage{
-    private final static String template = "QuestionTemplate";
+public class AnonymousComplaintReceiptThymeleafMailMessage extends ThymeleafMailMessage{
+    private final static String template = "AnonymousComplaintReceiptTemplate";
 
     private String username;
     private String question;
 
     private String url;
 
-    public QuestionThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
+    public AnonymousComplaintReceiptThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
         super(mailMessage, template, templateEngine);
     }
 

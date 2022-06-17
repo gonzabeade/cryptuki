@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service.mailing;
 
-import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.User;
@@ -12,13 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
@@ -58,7 +55,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     @Override
     public void sendForgotPasswordMessage(User user, int code) {
         MailMessage message = mailMessageContactService.createMessage(user.getEmail());
-        ChangePasswordThymeleafMailMessage changePasswordMailMessage= new ChangePasswordThymeleafMailMessage(message, templateEngine);
+        ForgotPasswordThymeleafMailMessage changePasswordMailMessage= new ForgotPasswordThymeleafMailMessage(message, templateEngine);
         Locale locale = user.getLocale();
         changePasswordMailMessage.setLocale(locale);
         changePasswordMailMessage.setSubject(messageSource.getMessage("changePasswordSubject", null, locale));
@@ -71,7 +68,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     public void sendOfferUploadedMessage(Offer offer) {
         User user = offer.getSeller();
         MailMessage message = mailMessageContactService.createMessage(user.getEmail());
-        NewOfferThymeleafMailMessage newOfferMailMessage= new NewOfferThymeleafMailMessage(message, templateEngine);
+        OfferUploadedThymeleafMailMessage newOfferMailMessage= new OfferUploadedThymeleafMailMessage(message, templateEngine);
         Locale locale = user.getLocale();
         newOfferMailMessage.setLocale(locale);
         newOfferMailMessage.setSubject(messageSource.getMessage("offerCreated", null, locale));
@@ -89,8 +86,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
 
     @Override
     public void sendAnonymousComplaintReceipt(String to, String question, Locale locale) {
-        MailMessage mailMessage = mailMessageContactService.createMessage(to);
-        QuestionThymeleafMailMessage questionMailMessage= new QuestionThymeleafMailMessage(mailMessage, templateEngine);
+        MailMessage mailMessageAnonymousComplaintReceiptThymeleafMailMessage = mailMessageContactService.createMessage(to);
+        AnonymousComplaintReceiptThymeleafMailMessage questionMailMessage= new AnonymousComplaintReceiptThymeleafMailMessage(mailMessageAnonymousComplaintReceiptThymeleafMailMessage, templateEngine);
         questionMailMessage.setLocale(locale);
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceived", null, locale));
         questionMailMessage.setParameters(to, question, getUrl());
@@ -101,7 +98,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     @Override
     public void sendComplaintReceipt(User user, Trade trade, String complaint) {
         MailMessage mailMessage = mailMessageContactService.createMessage(user.getEmail());
-        ComplaintThymeleafMailMessage questionMailMessage= new ComplaintThymeleafMailMessage(mailMessage, templateEngine);
+        ComplaintReceiptThymeleafMailMessage questionMailMessage= new ComplaintReceiptThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = user.getLocale();
         questionMailMessage.setLocale(locale);
         questionMailMessage.setSubject(messageSource.getMessage("complaintReceivedSubject", null, locale));
@@ -129,7 +126,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     public void sendNewTradeNotification(Trade trade) {
         User seller = trade.getOffer().getSeller();
         MailMessage mailMessage = mailMessageContactService.createMessage(seller.getEmail());
-        TradeClosedThymeleafMailMessage tradeClosedMailMessage= new TradeClosedThymeleafMailMessage(mailMessage, templateEngine);
+        NewTradeNotificationThymeleafMailMessage tradeClosedMailMessage= new NewTradeNotificationThymeleafMailMessage(mailMessage, templateEngine);
         Locale locale = seller.getLocale();
         tradeClosedMailMessage.setLocale(locale);
         tradeClosedMailMessage.setSubject(messageSource.getMessage("tradeOpenedSubject", null, locale));
@@ -138,9 +135,8 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
                 trade.getOffer().getCrypto().getCode(),
                 trade.getQuantity(),
                 trade.getBuyer().getUsername().get(),
-                trade.getTradeId(),
-                getUrl(),
-                trade.getOffer().getOfferId()
+                trade.getBuyer().getEmail(),
+                getUrl()
         );
         mailMessageContactService.sendMessage(tradeClosedMailMessage);
         LOGGER.info("Received Trade notification sent");

@@ -61,8 +61,8 @@ public class Offer {
     private Cryptocurrency crypto;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="status_code", nullable = false, insertable = false)
-    private OfferStatus offerStatus;
+    @Column(name="status_code", nullable = false)
+    private OfferStatus offerStatus = OfferStatus.APR;
 
     @Column(name="location", length = 100)
     @Enumerated(EnumType.STRING)

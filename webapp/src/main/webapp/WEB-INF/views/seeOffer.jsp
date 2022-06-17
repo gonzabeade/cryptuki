@@ -15,6 +15,7 @@
     <script src="<c:url value="/public/js/feedback.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<c:url value="/public/css/blobs.css"/>">
     <title>cryptuki</title>
@@ -70,8 +71,8 @@
                     <h1 class="text-center text-4xl font-bold"><c:out value="${offer.crypto.commercialName}"/></h1>
                     <h2 class="font-sans font-medium text-polard text-2xl text-center"><messages:message code="to"/>  <c:out value="${offer.unitPrice}"/> ARS </h2>
                     <div class="flex flex-row mt-3 font-sans ">
-                        <h2 class="font-sans mx-2"><b><messages:message code="minimum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.minQuantity}"/> ARS </h2>
-                        <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.maxQuantity}"/> ARS </h2>
+                        <h2 class="font-sans mx-2"><b><messages:message code="minimum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.minInCrypto}"/> ARS </h2>
+                        <h2 class="font-sans"> <b><messages:message code="maximum"/>:</b> <fmt:formatNumber type="number" maxFractionDigits="2" value="${offer.unitPrice * offer.maxInCrypto}"/> ARS </h2>
                     </div>
                     <c:choose>
                         <c:when test="${offer.location == null}">

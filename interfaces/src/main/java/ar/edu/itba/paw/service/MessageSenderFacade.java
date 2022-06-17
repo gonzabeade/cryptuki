@@ -11,7 +11,7 @@ public interface MessageSenderFacade {
     void sendAnonymousComplaintReceipt(String to, String question);
     void sendComplaintReceipt(User user, Trade trade, String complaint); // Call to action - maybe if My Complaints
     void sendComplainClosedWithKickout(User user, String reason);
-    void sendComplainClosedWithDisesteem(User user, String reason);
+    void sendComplainClosedWithDismission(User user, String reason);
     void sendYouWereKickedOutBecause(User user, String reason);
     void sendNewTradeNotification(Trade trade); // Call to action - Chat/tradeId
     void sendNewUnseenMessages(Trade trade, User user); // Call to action - Chat/tradeId

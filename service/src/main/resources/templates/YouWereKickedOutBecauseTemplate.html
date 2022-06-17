@@ -7,7 +7,6 @@
             font-family: sans-serif;
         }
     </style>
-
     <meta charset="UTF-8">
 </head>
 
@@ -66,7 +65,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="#{tradeOpened.advertisement}">¡Anuncio!</span> <span th:text="${offerId}"></span> <span th:text="#{tradeOpened.title}">¡Trade Abierto!</span> </h1>
+                                                                <h1><span th:text="#{complaintTemplate.title}">¡Consulta Recibida!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -99,20 +98,9 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
-                                                                <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span></b></p>
-                                                                <p><span th:text="#{offerReceived}">Has recibido una offer de</span> <span th:text="${buyer}">comprador</span> <span th:text="#{for}">por</span> <span th:text="${quantity}"></span> $ARS <span th:text="#{of}"></span> <span th:text="${coinCode}"></span></p>
-                                                                <p><span th:text="#{canSeeOffer}">Podrás ver la oferta entrando a tu perfil</span>.</p>
-                                                                <p><span th:text="#{canAcceptOrDecline}">Podrás aceptar o rechazar la oferta de compra</span>.</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="esd-block-button es-p35t es-p35b es-p10r es-p10l" style="text-align: center; padding-bottom: 20px;">
-                                                                                        <span class="es-button-border" style="border-color: #8ed3d5; background: #8ed3d5;">
-                                                                                            <a th:href="${url}+'/seller'" class="es-button es-button-1650637516164" target="_blank" style="border-width: 15px 30px; background: #8ed3d5; border-color: #8ed3d5; padding: 7px; border: 2px solid #8ed3d5;border-radius:0.5rem; text-decoration: none; color: #f4f4f4">
-                                                                                                <span th:text="#{offer}" style="font-family: sans-serif">Recibo</span>
-                                                                                            </a>
-                                                                                        </span>
-                                                            </td>
+                                                                <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
+                                                                <p><span th:text="#{complaintReceivedSubject}">Hemos recibido tu consulta.</span></p>
+                                                                <p><b><span th:text="#{yourComplaint}">Tu consulta</span></b>: <span th:text="${complaint}">Tu consulta</span></p>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -185,8 +173,8 @@
                                                         <tr>
                                                             <td class="esd-block-text es-p30t es-p25b es-p30r es-p30l"  esd-links-color="#111111" style="padding-bottom: 15px;">
                                                                 <a class="esd-anchor" name="contact" style="color: #111111;"></a>
-                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
-                                                                <a th:href="${url}+'/contact'" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escríbenos</span></a>
+                                                                <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{seePanel}">¿Necesitas más ayuda?</span></h3>
+                                                                <a th:href="${url}+'/complaints'" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{checkYourPanel}">Escribinos</span></a>
                                                             </td>
                                                         </tr>
                                                         </tbody>

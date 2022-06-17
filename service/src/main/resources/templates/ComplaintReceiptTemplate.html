@@ -65,7 +65,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p35t es-p5b es-p30r es-p30l" style="text-align: center;">
-                                                                <h1><span th:text="#{tradeOpened.title}">¡Trade Abierta!</span></h1>
+                                                                <h1><span th:text="#{questionTemplate.title}">¡Consulta Recibida!</span></h1>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -99,10 +99,9 @@
                                                         <tr>
                                                             <td class="esd-block-text es-m-txt-l es-p20t es-p40b es-p30r es-p30l">
                                                                 <p><b><span th:text="#{hello}">Hola</span> <span th:text="${username}">usuario</span>,</b></p>
-                                                                <p><span th:text="#{congratulations}">Felicitaciones</span>, <span th:text="#{theUser}">el usuario</span> <span th:text="${buyer}">comprador</span> <span th:text="#{hasOpenedTradeFor}">ha abierto un trade por</span> <span th:text="${quantity}">quantity</span> <span th:text="${coinCode}">coinCode</span></p>
-                                                                <p><span th:text="${buyer}">comprador</span> <span th:text="#{hasLeftMessage}">te ha dejado el siguiente mensaje</span>:</p>
-                                                                <p><span th:text="${buyerMessage}"></span></p>
-                                                                <p><span th:text="#{contactByMail}">Te podrás contactar con este a través de su mail</span> <span th:text="${buyerMail}"></span></p>
+                                                                <p><span th:text="#{questionReceived}">Hemos recibido tu consulta.</span></p>
+                                                                <p><span th:text="#{willBeAnswered}">Esta será contestada a la brevedad por nuestro equipo en esta misma cadena de mail.</span></p>
+                                                                <p><b><span th:text="#{yourQuestion}">Tu consulta</span></b>: <span th:text="${question}">Tu consulta</span></p>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -174,7 +173,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="esd-block-text es-p30t es-p25b es-p30r es-p30l"  esd-links-color="#111111" style="padding-bottom: 15px;">
-                                                                <a class="esd-anchor" name="http://locahost:8080/webapp/contact" style="color: #111111;"></a>
+                                                                <a class="esd-anchor" name="contact" style="color: #111111;"></a>
                                                                 <h3 style="color: #111111; margin-bottom: 0"><span th:text="#{needMoreHelp}">¿Necesitas más ayuda?</span></h3>
                                                                 <a th:href="${url}+'/contact'" style="text-align: center; color: #000000; margin-top: 0;"><span th:text="#{writeUs}">Escribinos</span></a>
                                                             </td>

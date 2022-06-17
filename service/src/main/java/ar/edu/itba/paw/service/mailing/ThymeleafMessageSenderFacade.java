@@ -88,7 +88,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
     }
 
     @Override
-    public void sendComplainClosedWithDisesteem(User user, String reason) {
+    public void sendComplainClosedWithDismission(User user, String reason) {
 
     }
 

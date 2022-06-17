@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import org.springframework.stereotype.Repository;
@@ -102,8 +103,8 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Offer makeOffer(OfferPO offer) {
-        Cryptocurrency crypto = em.getReference(Cryptocurrency.class, offer.getCryptoCode());
-        User seller = em.getReference(User.class, offer.getSellerId());
+        Cryptocurrency crypto = em.getReference(Cryptocurrency.class, offer.getCryptoCode().orElseThrow(()->new NoSuchElementException("Crypto code not existent.")));
+        User seller = em.getReference(User.class, offer.getSellerId().orElseThrow(()->new NoSuchUserException("User not found")));
         Offer newOffer = offer.toBuilder(crypto, seller).build();
         em.persist(newOffer);
         return newOffer;

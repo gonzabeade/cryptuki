@@ -139,17 +139,12 @@ public class OfferController {
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") UploadOfferForm form, Authentication authentication){
         ModelAndView mav = new ModelAndView("uploadPage");
         int id = userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
-        form.setSellerId(id);
 
+        mav.addObject("sellerId", id);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", PaymentMethod.values());
         mav.addObject("location", Location.values());
 
-        // TODO: Decide whether we will give support for payment methods
-        // if (form.getPaymentMethods() != null){
-        //    List<String> paymentCodesAlreadySelected = Arrays.asList(form.getPaymentMethods());
-        //    mav.addObject("selectedPayments", paymentCodesAlreadySelected);
-        // }
         return mav;
     }
 

@@ -25,17 +25,17 @@ public class MinLessThanMaxValidator implements ConstraintValidator<MinLessThanM
 
     @Override
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
-        Float min;
-        Float max;
+        Double min;
+        Double max;
         try {
-            min = (Float) new BeanWrapperImpl(value).getPropertyValue(this.min);
+            min = (Double) new BeanWrapperImpl(value).getPropertyValue(this.min);
         } catch (ClassCastException classCastException) {
-            throw new IllegalArgumentException("min must be a Float.", classCastException);
+            throw new IllegalArgumentException("min must be a Double.", classCastException);
         }
         try {
-            max = (Float) new BeanWrapperImpl(value).getPropertyValue(this.max);
+            max = (Double) new BeanWrapperImpl(value).getPropertyValue(this.max);
         } catch (ClassCastException classCastException) {
-            throw new IllegalArgumentException("max must be a Float.", classCastException);
+            throw new IllegalArgumentException("max must be a Double.", classCastException);
         }
 
         return min != null && max != null && min < max;

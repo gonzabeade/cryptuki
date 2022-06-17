@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.annotation;
 
 import ar.edu.itba.paw.cryptuki.form.validator.CodeCorrectValidator;
-import ar.edu.itba.paw.cryptuki.form.validator.MinLessThanMaxValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

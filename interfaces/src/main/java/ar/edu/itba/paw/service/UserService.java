@@ -3,12 +3,13 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
 
     /** User creation */
-    void registerUser(String email, String username, String plainPassword, String phoneNumber);
+    void registerUser(String email, String username, String plainPassword, String phoneNumber, Locale locale);
 
     /** User getters - both email and usernames are unique */
     Optional<User> getUserByEmail(String email);
@@ -23,7 +24,7 @@ public interface UserService {
     boolean verifyUser(String username, Integer code);
 
     /** Update User statistics */
-    void updateLastLogin(String username);
+    void updateUserConfigurationOnLogin(String username, Locale locale);
     void updateRatingBy(String username, int rating);
 
 }

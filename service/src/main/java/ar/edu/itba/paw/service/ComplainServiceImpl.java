@@ -106,7 +106,7 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     public void getSupportFor(String email, String description) {
-        messageSenderFacade.sendAnonymousComplaintReceipt(email, email, description);
+        messageSenderFacade.sendAnonymousComplaintReceipt(email, description);
     }
 
 

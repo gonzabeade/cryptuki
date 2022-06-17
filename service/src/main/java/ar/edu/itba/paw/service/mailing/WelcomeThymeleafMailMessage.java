@@ -8,7 +8,6 @@ public class WelcomeThymeleafMailMessage extends ThymeleafMailMessage{
 
     private String username;
     private int verifyCode;
-
     private String url;
 
     public WelcomeThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {

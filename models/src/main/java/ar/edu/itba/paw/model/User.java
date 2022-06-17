@@ -4,6 +4,7 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Entity
@@ -31,15 +32,19 @@ public class User {
     @Column(name="rating_count", nullable = false)
     private int ratingCount;
 
+    @Column(name="locale")
+    private Locale locale;
+
     public User() {
         // Just for Hibernate!
     }
 
-    public User (String email, String phoneNumber, int ratingCount, int ratingSum) {
+    public User (String email, String phoneNumber, int ratingCount, int ratingSum, Locale locale) {
         this.email = email;
         this.ratingCount = ratingCount;
         this.ratingSum = ratingSum;
         this.phoneNumber= phoneNumber;
+        this.locale = locale;
     }
 
     public int getId() {
@@ -76,6 +81,10 @@ public class User {
         return lastLogin;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
     public UserAuth getUserAuth() {
         return userAuth;
     }
@@ -84,36 +93,37 @@ public class User {
         Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
         return loggedIn.toMinutes();
     }
-
     public KycInformation getKyc() {
         return this.kyc;
     }
+    public Optional<ProfilePicture> getProfilePicture() {
+        return Optional.ofNullable(profilePicture);
+    }
+
 
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setRatingSum(int ratingSum) {
         this.ratingSum = ratingSum;
     }
-
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
     }
-
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
     public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
     }
 
-    public Optional<ProfilePicture> getProfilePicture() {
-        return Optional.ofNullable(profilePicture);
+    public void setUserAuth(UserAuth userAuth) {
+        this.userAuth = userAuth;
     }
 }

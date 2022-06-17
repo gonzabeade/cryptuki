@@ -35,10 +35,10 @@ public class TradeServiceImpl implements TradeService {
     @Transactional
     public Trade makeTrade(int offerId, int buyerId, float quantity) {
         Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
-        messageSenderFacade.sendNewTradeNotification(newTrade.getOffer().getSeller().getUserAuth().getUsername(), newTrade, newTrade.getTradeId(), newTrade.getOffer().getOfferId());
         String firstChat = newTrade.getOffer().getComments();
         if (firstChat != null && !firstChat.equals(""))
             chatService.sendMessage(newTrade.getOffer().getSeller().getId(), newTrade.getTradeId(), firstChat);
+        messageSenderFacade.sendNewTradeNotification(newTrade);
         return newTrade;
     }
 

@@ -33,19 +33,15 @@ public abstract class ThymeleafMailMessage extends MailMessage {
         return this.template;
     }
     protected abstract Context getContext();
-
     public String getBody() {
         return templateEngine.process(getTemplate(), getContext());
     }
-
     public Locale getLocale() {
         return locale;
     }
-
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
-
 
 }
 

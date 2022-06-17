@@ -9,12 +9,14 @@ import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -37,17 +39,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-    public void registerUser(String email, String username, String plainPassword, String phoneNumber){
+    public void registerUser(String email, String username, String plainPassword, String phoneNumber, Locale locale){
 
         if (email == null || username == null || plainPassword == null || phoneNumber == null)
             throw new NullPointerException("Neither Auth nor User builder can be null");
 
-        User user = userDao.createUser(email, phoneNumber);
+        User user = userDao.createUser(email, phoneNumber, locale);
         String hashedPassword = passwordEncoder.encode(plainPassword);
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
-        userAuthDao.createUserAuth(user.getId(), username,  hashedPassword, verifyCode);
-
-        messageSenderFacade.sendWelcomeMessage(email, username, verifyCode);
+        userAuthDao.createUserAuth(user, username,  hashedPassword, verifyCode);
+        messageSenderFacade.sendWelcomeMessage(user, verifyCode);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
             throw new NoSuchUserException(email);
 
         UserAuth user = maybeUser.get();
-        messageSenderFacade.sendChangePasswordMessage(user.getUsername(), user.getCode());
+        messageSenderFacade.sendForgotPasswordMessage(user.getUser(), user.getCode());
     }
 
     @Override
@@ -120,8 +121,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("#username == authentication.principal.username")
     @Transactional
-    public void updateLastLogin(String username) {
-        userDao.updateLastLogin(username);
+    public void updateUserConfigurationOnLogin(String username, Locale locale) {
+        LocaleContextHolder.setLocale(locale);
+        userDao.updateUserConfigurationOnLogin(username, locale);
     }
 
     @Override
@@ -131,3 +133,4 @@ public class UserServiceImpl implements UserService {
 
 
 }
+

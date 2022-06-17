@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
 import org.springframework.stereotype.Repository;
@@ -18,9 +19,11 @@ public class UserAuthHibernateDao implements UserAuthDao{
     private EntityManager em;
 
     @Override
-    public UserAuth createUserAuth(int userId, String username, String password, int verificationCode) {
-        UserAuth userAuth = new UserAuth(userId, username, password, verificationCode);
+    public UserAuth createUserAuth(User user, String username, String password, int verificationCode) {
+        UserAuth userAuth = new UserAuth(user.getId(), username, password, verificationCode);
         em.persist(userAuth);
+        user.setUserAuth(userAuth);
+        em.merge(user);
         return userAuth;
     }
 

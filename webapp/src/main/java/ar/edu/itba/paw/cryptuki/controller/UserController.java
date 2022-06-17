@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -46,11 +48,11 @@ public class UserController {
     }
 
     @RequestMapping(value="/register" , method={RequestMethod.POST})
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form, BindingResult errors){
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") RegisterForm form, BindingResult errors, HttpServletRequest request){
         if (errors.hasErrors()) {
             return registerGet(form);
         }
-        userService.registerUser(form.getEmail(), form.getUsername(), form.getPassword(), form.getPhoneNumber());
+        userService.registerUser(form.getEmail(), form.getUsername(), form.getPassword(), form.getPhoneNumber(), request.getLocale());
         return new ModelAndView("redirect:/verify?user="+form.getUsername());
     }
 

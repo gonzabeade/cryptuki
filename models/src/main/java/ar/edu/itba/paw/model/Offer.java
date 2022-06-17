@@ -19,30 +19,6 @@ public class Offer {
     @Column(name="asking_price", nullable = false)
     private double unitPrice;
 
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public void setMinInCrypto(double minInCrypto) {
-        this.minInCrypto = minInCrypto;
-    }
-
-    public void setMaxInCrypto(double maxInCrypto) {
-        this.maxInCrypto = maxInCrypto;
-    }
-
-    public void setCrypto(Cryptocurrency crypto) {
-        this.crypto = crypto;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
     @Column(name="min_quantity", nullable = false)
     private double minInCrypto;
 
@@ -184,5 +160,29 @@ public class Offer {
 
     public void setOfferStatus(OfferStatus offerStatus) {
         this.offerStatus = offerStatus;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setMinInCrypto(double minInCrypto) {
+        this.minInCrypto = minInCrypto;
+    }
+
+    public void setMaxInCrypto(double maxInCrypto) {
+        this.maxInCrypto = maxInCrypto;
+    }
+
+    public void setCrypto(Cryptocurrency crypto) {
+        this.crypto = crypto;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

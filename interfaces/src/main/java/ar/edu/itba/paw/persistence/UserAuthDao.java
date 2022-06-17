@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 
 import java.util.Optional;
@@ -7,7 +8,7 @@ import java.util.Optional;
 public interface UserAuthDao {
 
     /** User auth creation */
-    UserAuth createUserAuth(int userId, String username, String password, int verificationCode);
+    UserAuth createUserAuth(User user, String username, String password, int verificationCode);
 
     /** User auth getters. Both username and email are unique, so the result is deterministic. */
     Optional<UserAuth> getUserAuthByUsername(String username);

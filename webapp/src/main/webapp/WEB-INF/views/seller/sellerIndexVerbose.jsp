@@ -57,26 +57,23 @@
                 </c:when>
                 <c:otherwise>
                     <div class="mt-5">
-                        <div class="py-4 bg-[#FAFCFF] rounded-lg shadow-md">
+                        <div class="py-4 bg-white rounded-lg shadow-md">
                             <div class="flex justify-between items-center mb-2 px-4 pt-2">
-                                <h5 class="text-xl font-bold leading-none text-polar">Última actividad</h5>
-                                <a href="<c:url value="/seller/trade/"/>" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-                                    Ver más
-                                </a>
+                                <h5 class="text-xl font-bold leading-none text-polar"><messages:message code="lastTransactions"/> </h5>
                             </div>
                             <div class="px-4">
                                 <ul role="list" class="divide-y divide-gray-200">
-                                    <c:forEach items="${offerList}">
+                                    <c:forEach items="${tradeList}" var="trade">
                                         <li class="py-2">
-                                            <div class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer">
+                                            <a class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer" href="<c:url value="/seller/associatedTrades/${trade.offer.offerId}"/> ">
                                                 <div class="flex-shrink-0">
-                                                    <img class="w-8 h-8 rounded-full" src="https://picsum.photos/700/800" alt="Neil image">
+                                                    <img class="w-8 h-8 rounded-full" src="<c:url value="/profilepic/${trade.buyer.username.get()}"/>" alt="Profile pic">
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-polar-600truncate"> gonzabeade </p>
-                                                    <p class="text-sm text-gray-500 truncate">Ha hecho una orden de compra</p>
+                                                    <p class="text-sm font-medium text-polar-600truncate"> ${trade.buyer.username.get()} </p>
+                                                    <p class="text-sm text-gray-500 truncate"><messages:message code="madeYouAnOffer"/> </p>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </li>
                                     </c:forEach>
                                 </ul>

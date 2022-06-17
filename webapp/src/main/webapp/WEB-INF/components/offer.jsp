@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<a  href="<c:url value="/"/>" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-5">
+<a  href="<c:url value="/seller/associatedTrades/${offer.offerId}"/>" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-5  hover:-translate-y-1 hover:scale-110 duration-200">
     <h1 class="text-center text-3xl font-semibold font-polard font-sans"><messages:message code="offer"/>#<c:out value="${offer.offerId}"/></h1>
 
     <div class="flex flex-col mx-auto mt-5">

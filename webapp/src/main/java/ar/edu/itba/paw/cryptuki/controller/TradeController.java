@@ -9,16 +9,14 @@ import ar.edu.itba.paw.service.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/seller/trade")
+@RequestMapping("/seller/associatedTrades/")
 public class TradeController {
 
     private static final int PAGE_SIZE = 6;
@@ -30,48 +28,67 @@ public class TradeController {
         this.tradeService = tradeService;
         this.offerService = offerService;
     }
+    public ModelAndView baseTradesDashboard(Authentication authentication,
+                                            Optional<Integer> page,
+                                            final int offerId,
+                                            TradeStatus status) {
 
-    public ModelAndView baseTradesDashboard(Authentication authentication, Optional<Integer> page, Optional<Integer> focusOnOfferId, TradeStatus status) {
         ModelAndView mav = new ModelAndView("seller/sellerTrade");
-        Collection<Trade> trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status);
 
-        if (focusOnOfferId.isPresent())
-            mav.addObject("focusOffer", offerService.getOfferById(focusOnOfferId.get()).orElseThrow(()-> new NoSuchOfferException(focusOnOfferId.get())));
+        Collection<Trade> trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status);
+        long tradeCount = tradeService.getTradesFromOfferCount(authentication.getName(), offerId);
+        int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pageNumber = page.orElse(0);
+
+        mav.addObject("offer", offerService.getOfferById(offerId).orElseThrow(()-> new NoSuchOfferException(offerId)));
         mav.addObject("trades", trades);
         mav.addObject("page", page.orElse(0));
         mav.addObject("status", status);
+
+        mav.addObject("pages", pages);
+        mav.addObject("activePage", pageNumber);
         return mav;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView tradeRedirect(){
-        return new ModelAndView("redirect:/seller/trade/pending");
+    @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
+    public ModelAndView tradeRedirect(@PathVariable("offerId") final int offerId){
+        return new ModelAndView("redirect:/seller/associatedTrades/pending/" + offerId);
     }
 
-    @RequestMapping(value = "/accepted", method = RequestMethod.GET)
-    public ModelAndView trades(Authentication authentication, @ModelAttribute("tradeFilterForm")TradeFilterForm tradeFilterForm){
-        return baseTradesDashboard(authentication, tradeFilterForm.getPageOptional(), tradeFilterForm.getFocusOnOfferIdOptional(), TradeStatus.ACCEPTED);
+    @RequestMapping(value = "/accepted/{offerId}", method = RequestMethod.GET)
+    public ModelAndView trades(@PathVariable("offerId") final int offerId,
+                               Authentication authentication,
+                               @RequestParam("page") Optional<Integer> page){
+        return baseTradesDashboard(authentication, page, offerId, TradeStatus.ACCEPTED);
     }
 
-    @RequestMapping(value = "/pending", method = RequestMethod.GET)
-    public ModelAndView pendingTrades(Authentication authentication, @ModelAttribute("tradeFilterForm")TradeFilterForm tradeFilterForm){
-        return baseTradesDashboard(authentication, tradeFilterForm.getPageOptional(), tradeFilterForm.getFocusOnOfferIdOptional(), TradeStatus.PENDING);
+    @RequestMapping(value = "/pending/{offerId}", method = RequestMethod.GET)
+    public ModelAndView pendingTrades(@PathVariable("offerId") final int offerId,
+                                      Authentication authentication,
+                                      @RequestParam("page") Optional<Integer> page){
+        return baseTradesDashboard(authentication, page, offerId, TradeStatus.PENDING);
     }
 
-    @RequestMapping(value = "/deletedByUser", method = RequestMethod.GET)
-    public ModelAndView deletedByUserTrades(Authentication authentication, @ModelAttribute("tradeFilterForm")TradeFilterForm tradeFilterForm){
-        return baseTradesDashboard(authentication, tradeFilterForm.getPageOptional(), tradeFilterForm.getFocusOnOfferIdOptional(), TradeStatus.DELETED);
+    @RequestMapping(value = "/deletedByUser/{offerId}", method = RequestMethod.GET)
+    public ModelAndView deletedByUserTrades(@PathVariable("offerId") final int offerId,
+                                            Authentication authentication,
+                                            @RequestParam("page") Optional<Integer> page){
+        return baseTradesDashboard(authentication, page, offerId, TradeStatus.DELETED);
     }
 
-    @RequestMapping(value = "/rejected", method = RequestMethod.GET)
-    public ModelAndView rejectedTrades(Authentication authentication, @ModelAttribute("tradeFilterForm")TradeFilterForm tradeFilterForm){
-        return baseTradesDashboard(authentication, tradeFilterForm.getPageOptional(), tradeFilterForm.getFocusOnOfferIdOptional(), TradeStatus.REJECTED);
+    @RequestMapping(value = "/rejected/{offerId}", method = RequestMethod.GET)
+    public ModelAndView rejectedTrades(@PathVariable("offerId") final int offerId,
+                                       Authentication authentication,
+                                       @RequestParam("page") Optional<Integer> page){
+        return baseTradesDashboard(authentication, page, offerId, TradeStatus.REJECTED);
     }
 
 
-    @RequestMapping(value = "/completed", method = RequestMethod.GET)
-    public ModelAndView completedTrades(Authentication authentication, @ModelAttribute("tradeFilterForm")TradeFilterForm tradeFilterForm){
-        return baseTradesDashboard(authentication, tradeFilterForm.getPageOptional(), tradeFilterForm.getFocusOnOfferIdOptional(), TradeStatus.SOLD);
+    @RequestMapping(value = "/completed/{offerId}", method = RequestMethod.GET)
+    public ModelAndView completedTrades(@PathVariable("offerId") final int offerId,
+                                        Authentication authentication,
+                                        @RequestParam("page") Optional<Integer> page){
+        return baseTradesDashboard(authentication, page, offerId, TradeStatus.SOLD);
     }
 
 

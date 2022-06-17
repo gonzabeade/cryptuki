@@ -48,5 +48,6 @@ public enum Location {
     VILLA_SOLDATI,
     VILLA_URQUIZA,
     VILLA_DEL_PARQUE,
-    VELEZ_SARSFIELD
+    VELEZ_SARSFIELD,
+    UNKNOWN
 }

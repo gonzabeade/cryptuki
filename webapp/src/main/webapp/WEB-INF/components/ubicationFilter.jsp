@@ -21,9 +21,27 @@
 <%--        </div>--%>
     </div>
     <div class="flex flex-col hidden" id="allPossibleLocations">
-        <form:checkboxes path="location" items="${locations}" cssClass="mr-3" />
+        <div id="locType0" class="w-full flex flex-col justify-start">
+            <c:forEach var="locationWrapper" items="${locationsWithOffers}">
+                <div class="flex flex-row">
+                    <form:checkbox cssClass="mr-1 my-auto" class="hidden" path="location" value="${locationWrapper.location}" />
+                    <form:label path="location" cssClass="my-auto"><messages:message code="Location.${locationWrapper.location}"/><c:out value=" (${locationWrapper.locationCount})"/></form:label>
+                </div>
+            </c:forEach>
+            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2">Ver más</a>
+        </div>
+        <div id="locType1" class="w-full flex flex-col justify-start hidden">
+            <c:forEach var="location" items="${locations}">
+                <div class="flex flex-row">
+                    <form:checkbox cssClass="mr-1 my-auto" class="hidden" path="location" value="${location}" />
+                    <form:label path="location" cssClass="my-auto"><messages:message code="Location.${location}"/></form:label>
+                </div>
+            </c:forEach>
+            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2">Ver menos</a>
+        </div>
     </div>
 </div>
+
 <script>
     function showAllFilter(id){
         let element = document.getElementById(id);
@@ -32,5 +50,12 @@
         }else{
             document.getElementById(id).classList.add("hidden")
         }
+    }
+
+    let locType = 0;
+    function changeLocType(){
+        document.getElementById('locType'+locType).classList.add("hidden")
+        locType = (locType+1)%2;
+        document.getElementById('locType'+locType).classList.remove("hidden")
     }
 </script>

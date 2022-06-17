@@ -42,6 +42,7 @@
     <div class="flex flex-col w-1/5 ">
     <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
     <c:set var="locations" value="${locations}" scope="request"/>
+    <c:set var="locationsWithOffers" value="${locationsWithOffers}" scope="request"/>
     <c:set var="selectedCoins" value="${selectedCoins}" scope="request"/>
      <h1 class="text-2xl font-polard mt-10 font-bold mx-auto"><messages:message code="filter"/></h1>
     <jsp:include page="../components/cryptoFilters.jsp"/>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -132,5 +133,10 @@ public class OfferHibernateDao implements OfferDao{
             return Optional.empty();
     }
 
+    @Override
+    public Collection<LocationCountWrapper> getOfferCountByLocation() {
+        TypedQuery<LocationCountWrapper> query = em.createQuery("select new ar.edu.itba.paw.model.LocationCountWrapper(location, count(location)) from Offer group by location order by count(location) desc", LocationCountWrapper.class);
+        return query.getResultList();
+    }
 
 }

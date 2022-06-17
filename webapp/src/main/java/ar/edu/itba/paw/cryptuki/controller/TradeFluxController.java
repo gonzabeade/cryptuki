@@ -204,8 +204,10 @@ public class TradeFluxController {
 
     // TODO(gonza): Change offer status correctly !!!!
     @RequestMapping(value="/changeStatus",method = RequestMethod.POST)
-    public ModelAndView updateStatus(final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,@Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
-
+    public ModelAndView updateStatus(@Valid @ModelAttribute("soldTradeForm") final SoldTradeForm soldTradeForm,final BindingResult errorsSold, @Valid @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm, final BindingResult errors ,final Authentication authentication){
+        if(errors.hasErrors() || errorsSold.hasErrors()){
+            return new ModelAndView("redirect:/400");
+        }
         Trade trade = tradeService.getTradeById(statusTradeForm.getTradeId()).orElseThrow(()->new NoSuchTradeException(statusTradeForm.getTradeId()));
         if (statusTradeForm.getNewStatus().equals(TradeStatus.ACCEPTED.toString()))
             tradeService.acceptTrade(statusTradeForm.getTradeId());

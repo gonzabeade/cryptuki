@@ -151,7 +151,7 @@
         </div>
 
         <div class="mx-auto">
-            <a  href="<c:url value="/seller/"/>" class="bg-frost px-6 py-3  rounded-lg text-white"><messages:message code="goBack"/></a>
+            <a  href="<c:url value="/seller/associatedTrades/${trade.offer.offerId}"/>" class="bg-frost px-6 py-3  rounded-lg text-white"><messages:message code="goBack"/></a>
         </div>
     </div>
 

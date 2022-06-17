@@ -13,8 +13,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/sellerDashboard.js"/>"></script>
-
     <script src="<c:url value="/public/js/pagination.js"/> "></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -32,13 +33,6 @@
             <div class="flex flex-col w-full py-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
                 <h1 class="font-sans w-full mx-auto text-center text-2xl font-bold"><messages:message code="offersReceived"/> </h1>
             </div>
-<%--            <div class="flex flex-col mt-4 rounded-lg px-5 py-4 rounded-lg bg-[#FAFCFF]">--%>
-<%--                <label class="my-auto" for="offerId"><messages:message code="searchByOfferId"/> </label>--%>
-<%--                <div class="flex flex-row">--%>
-<%--                    <input id="offerId" placeholder="Id" type="number" class="border-2 border-gray-700 p-1 w-3/5 rounded-lg" onchange="addQueryParam('offerId')" path="filterByOfferId"/>--%>
-<%--&lt;%&ndash;                        <a class="mx-auto" href="<c:url value="/seller/trade/${status.toString()}"/>"><img class='object-contain w-2 h-2 rounded-lg' src="<c:url value="/public/images/lupa.png"/>" alt="logo"></a>&ndash;%&gt;--%>
-<%--                </div>--%>
-<%--            </div>--%>
                 <c:set var="offer" value="${offer}"/>
             <c:if test="${offer.offerStatus == 'DEL'}">
                 <c:url var="url" value="#"/>
@@ -117,26 +111,144 @@
         <div class="flex flex-col h-5/6 w-5/6">
                 <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
                 <div class="flex flex-wrap h-3/5 w-full pl-3">
-                        <c:forEach var="trade" items="${trades}">
-<%--                            <fmt:formatNumber var="quantityInCrypto" value="${trade.quantity / trade.offer.unitPrice}" maxFractionDigits="4" />--%>
-<%--                            <jsp:include page="../../components/seller/tradeCards/plainTradeCard.jsp">--%>
-<%--                                <jsp:param name="status" value="${status}"></jsp:param>--%>
-<%--                                <jsp:param name="focusOfferId" value="${focusOffer.offerId}"></jsp:param>--%>
-<%--                                <jsp:param name="quantityInCrypto" value="${quantityInCrypto}"></jsp:param>--%>
-<%--                                <jsp:param name="crypto" value="${trade.offer.crypto.code}"></jsp:param>--%>
-<%--                                <jsp:param name="quantityInArs" value="${trade.quantity}"></jsp:param>--%>
-<%--                                <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>--%>
-<%--                                <jsp:param name="buyerUsername" value="${trade.buyer.username.get()}"></jsp:param>--%>
-<%--                                <jsp:param name="buyerEmail" value="${trade.buyer.email}"></jsp:param>--%>
-<%--                                <jsp:param name="buyerPhoneNumber" value="${trade.buyer.phoneNumber}"></jsp:param>--%>
-<%--                                <jsp:param name="buyerRating" value="${trade.buyer.rating}"></jsp:param>--%>
-<%--                                <jsp:param name="page" value="${page}"></jsp:param>--%>
-<%--                                <jsp:param name="offerId" value="${trade.offer.offerId}"></jsp:param>--%>
-<%--                                <jsp:param name="tradeId" value="${trade.tradeId}"></jsp:param>--%>
-<%--                            </jsp:include>--%>
-                            <div>
-                                Trade component
+                    <c:forEach var="trade" items="${trades}">
+                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${trade.buyer.rating /2 == 0? 1: trade.buyer.rating/2 }" var="stars"/>
+                        <div name="trade-${offer.offerId}-${trade.status}" class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between m-5 ">
+
+                            <div class="flex font-sans h-fit w-full mt-5">
+                                <c:if test="${trade.status == 'PENDING' }">
+                                    <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message
+                                            code="pending"/></div>
+                                </c:if>
+
+                                <c:if test="${trade.status == 'REJECTED' }">
+                                    <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message
+                                            code="rejected"/></div>
+                                </c:if>
+
+                                <c:if test="${trade.status == 'ACCEPTED' }">
+                                    <div class="bg-ngreen w-full text-white text-center p-2"><messages:message
+                                            code="accepted"/></div>
+                                </c:if>
+
+                                <c:if test="${trade.status == 'SOLD' }">
+                                    <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message
+                                            code="sold"/></div>
+                                </c:if>
                             </div>
+
+                            <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">
+                                <h1 class="mx-auto">
+                                    <fmt:formatNumber type="number" maxFractionDigits="6" value="${trade.quantity/offer.unitPrice}"/>
+                                    <c:out value=" ${offer.crypto.code}"/> ⟶ <c:out
+                                        value="${trade.quantity} "/>ARS</h1>
+                            </div>
+
+                            <c:if test="${!(trade.status =='SOLD')}">
+                                <div class="flex flex-col">
+                                    <div class="flex">
+                                        <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
+                                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.username.get()}"/></h1>
+                                    </div>
+                                    <div class="flex">
+                                        <h1 class="font-sans mr-2"><messages:message code="email"/>:</h1>
+                                        <h1 class="font-sans font-semibold"><c:out value="${trade.buyer.email}"/></h1>
+                                    </div>
+                                    <div class="flex">
+                                        <h1 class="font-sans mr-2"><messages:message code="phoneNumber"/>:</h1>
+                                        <h1 class="font-sans font-semibold"><c:out
+                                                value="${trade.buyer.phoneNumber}"/></h1>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="flex flex-row">
+                                            <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
+                                            <div class="my-auto ml-2">
+                                                <c:forEach begin="0" end="${stars-1}">
+                                                    <span class="fa fa-star" style="color: orange"></span>
+                                                </c:forEach>
+                                                <c:forEach begin="${stars}" end="4">
+                                                    <span class="fa fa-star" style="color: gray"></span>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${(trade.status =='SOLD')}">
+                                <a class="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${trade.tradeId}"/>">
+                                    <messages:message code="help"/>
+                                </a>
+                            </c:if>
+
+                                <%--                            CASE - PENDING--%>
+                            <c:if test="${trade.status == 'PENDING'}">
+                                <c:url value="/changeStatus" var="postUrl"/>
+                                <form:form modelAttribute="statusTradeForm" action="${postUrl}" method="post"
+                                           cssClass="flex justify-center mx-auto my-3">
+                                    <form:hidden path="newStatus" id="newStatus-${trade.tradeId}"
+                                                 value="${trade.status}"/>
+                                    <form:hidden path="tradeId" value="${trade.tradeId}"/>
+
+                                    <button onclick="updateStatus('REJECTED', ${trade.tradeId})" type="submit"
+                                            class="bg-red-400 text-white p-3 rounded-md font-sans mr-4">
+                                        <messages:message
+                                                code="rejectTrade"/></button>
+                                    <button onclick="updateStatus('ACCEPTED', ${trade.tradeId})" type="submit"
+                                            class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message
+                                            code="acceptTrade"/></button>
+                                </form:form>
+                                <div class="flex flex-row mx-auto">
+
+                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
+                                            <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                    </a>
+                                    <c:if test="${trade.qUnseenMessagesSeller > 0}">
+                                        <div class="-ml-4 w-6 h-5 bg-frostl border-2 font-sans rounded-full flex justify-center items-center">
+                                            <p class="text-xs"><c:out value="${trade.qUnseenMessagesSeller}"/></p>
+                                        </div>
+                                    </c:if>
+                                </div>
+
+
+
+                            </c:if>
+
+                                <%--                            CASE - ACCEPTED--%>
+                            <c:if test="${trade.status == 'ACCEPTED' }">
+                                <c:url value="/closeTrade" var="formUrl"/>
+
+                                <form:form modelAttribute="soldTradeForm" action="${formUrl}" method="post"
+                                           cssClass="flex justify-center mx-auto my-3">
+                                    <form:hidden path="offerId" value="${trade.offer.offerId}"/>
+                                    <form:hidden path="trade" value="${trade.tradeId}"/>
+                                    <button type="submit"
+                                            class="w-fit bg-frostdr text-white p-3 rounded-md font-sans mx-auto">
+                                        <messages:message code="soldTrade"/></button>
+
+                                </form:form>
+
+                                <div class="flex flex-row mx-auto ">
+                                    <a  href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>" class="mx-2 rounded-full my-auto">
+                                            <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                    </a>
+                                    <c:if test="${trade.qUnseenMessagesSeller > 0}">
+                                        <div class=" flex flex-row w-2 h-2 bg-frostl font-sans rounded-full bg-frost" >
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </c:if>
+
+                                <%--                            CASE - REJECTED--%>
+                            <c:if test="${!(trade.status =='ACCEPTED') && !(trade.status == 'PENDING')}">
+                                <div class="flex h-2/5 my-2"></div>
+                            </c:if>
+                        </div>
                     </c:forEach>
                 </div>
 

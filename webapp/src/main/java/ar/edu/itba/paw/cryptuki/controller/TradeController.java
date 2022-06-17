@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.form.SoldTradeForm;
+import ar.edu.itba.paw.cryptuki.form.StatusTradeForm;
 import ar.edu.itba.paw.cryptuki.form.seller.TradeFilterForm;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.model.Trade;
@@ -28,7 +30,9 @@ public class TradeController {
         this.tradeService = tradeService;
         this.offerService = offerService;
     }
-    public ModelAndView baseTradesDashboard(Authentication authentication,
+    public ModelAndView baseTradesDashboard(@ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                            @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm,
+                                            Authentication authentication,
                                             Optional<Integer> page,
                                             final int offerId,
                                             TradeStatus status) {
@@ -58,37 +62,48 @@ public class TradeController {
     @RequestMapping(value = "/accepted/{offerId}", method = RequestMethod.GET)
     public ModelAndView trades(@PathVariable("offerId") final int offerId,
                                Authentication authentication,
-                               @RequestParam("page") Optional<Integer> page){
-        return baseTradesDashboard(authentication, page, offerId, TradeStatus.ACCEPTED);
+                               @RequestParam("page") Optional<Integer> page,
+                               @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                               @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm
+                               ){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, TradeStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/pending/{offerId}", method = RequestMethod.GET)
     public ModelAndView pendingTrades(@PathVariable("offerId") final int offerId,
                                       Authentication authentication,
-                                      @RequestParam("page") Optional<Integer> page){
-        return baseTradesDashboard(authentication, page, offerId, TradeStatus.PENDING);
+                                      @RequestParam("page") Optional<Integer> page,
+                                      @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                      @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, TradeStatus.PENDING);
     }
 
     @RequestMapping(value = "/deletedByUser/{offerId}", method = RequestMethod.GET)
     public ModelAndView deletedByUserTrades(@PathVariable("offerId") final int offerId,
                                             Authentication authentication,
-                                            @RequestParam("page") Optional<Integer> page){
-        return baseTradesDashboard(authentication, page, offerId, TradeStatus.DELETED);
+                                            @RequestParam("page") Optional<Integer> page,
+                                            @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                            @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, TradeStatus.DELETED);
     }
 
     @RequestMapping(value = "/rejected/{offerId}", method = RequestMethod.GET)
     public ModelAndView rejectedTrades(@PathVariable("offerId") final int offerId,
                                        Authentication authentication,
-                                       @RequestParam("page") Optional<Integer> page){
-        return baseTradesDashboard(authentication, page, offerId, TradeStatus.REJECTED);
+                                       @RequestParam("page") Optional<Integer> page,
+                                       @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                       @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, TradeStatus.REJECTED);
     }
 
 
     @RequestMapping(value = "/completed/{offerId}", method = RequestMethod.GET)
     public ModelAndView completedTrades(@PathVariable("offerId") final int offerId,
                                         Authentication authentication,
-                                        @RequestParam("page") Optional<Integer> page){
-        return baseTradesDashboard(authentication, page, offerId, TradeStatus.SOLD);
+                                        @RequestParam("page") Optional<Integer> page,
+                                        @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                        @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, TradeStatus.SOLD);
     }
 
 

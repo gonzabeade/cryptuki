@@ -79,6 +79,11 @@
 
 <%--        Filters--%>
             <div class="flex flex-col w-1/5 rounded-lg px-5 rounded-lg mx-auto">
+                <div class="mb-2 bg-white rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
+                    <a href="<c:url value="/seller/associatedTrades/${offer.offerId}"/>">
+                        <p class="py-2 px-4 font-bold text-polar <c:out value="${empty status ?'decoration-frostdr underline underline-offset-8':'text-l '}" />">Todos </p>
+                    </a>
+                </div>
                 <div class="mb-2 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200">
                     <a href="<c:url value="/seller/associatedTrades/pending/${offer.offerId}"/>">
                         <p class="py-2 px-4 font-bold text-polar <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />"><messages:message code="pendingTrades"/> </p>

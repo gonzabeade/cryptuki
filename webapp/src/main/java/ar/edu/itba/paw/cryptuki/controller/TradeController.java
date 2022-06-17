@@ -38,7 +38,13 @@ public class TradeController {
 
         ModelAndView mav = new ModelAndView("seller/sellerTrade");
 
-        Collection<Trade> trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status);
+        Collection<Trade> trades;
+        if(status!= null) {
+            trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status);
+        } else{
+            //trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE);
+            trades = null;
+        }
         long tradeCount = tradeService.getTradesFromOfferCount(authentication.getName(), offerId);
         int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
         int pageNumber = page.orElse(0);
@@ -54,8 +60,13 @@ public class TradeController {
     }
 
     @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
-    public ModelAndView tradeRedirect(@PathVariable("offerId") final int offerId){
-        return new ModelAndView("redirect:/seller/associatedTrades/pending/" + offerId);
+    public ModelAndView tradeRedirect(@PathVariable("offerId") final int offerId,
+                                      Authentication authentication,
+                                      @RequestParam("page") Optional<Integer> page,
+                                      @ModelAttribute("statusTradeForm") StatusTradeForm tradeForm,
+                                      @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm
+    ){
+        return baseTradesDashboard(tradeForm, soldTradeForm, authentication, page, offerId, null);
     }
 
     @RequestMapping(value = "/accepted/{offerId}", method = RequestMethod.GET)

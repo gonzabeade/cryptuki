@@ -17,7 +17,7 @@
     <div class="flow-root" id="allPossibleCripto">
         <ul role="list" class="divide-y divide-gray-200 ">
             <div class="flex flex-row justify-end my-3">
-                <h1 id="selectAll" onclick="selectAllCrypto()" class=" cursor-pointer text-frostdr font-semibold text-sm">Seleccionar todas</h1>
+                <h1 id="selectAll" onclick="selectAllCrypto()" class=" cursor-pointer text-frostdr font-semibold text-sm"><messages:message code="selectAll"/></h1>
                 <h1 id="deselectAll" onclick="desSelectAllCrypto()" class="hidden cursor-pointer text-frostdr font-semibold text-sm">Deseleccionar todas</h1>
             </div>
             <c:forEach var="coin" items="${cryptocurrencies}">

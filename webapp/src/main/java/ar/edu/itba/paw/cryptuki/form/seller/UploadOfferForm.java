@@ -8,8 +8,8 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
 
 @MinLessThanMax(
-        min="minAmount",
-        max="maxAmount"
+        min="minInCrypto",
+        max="maxInCrypto"
 )
 public class UploadOfferForm {
 

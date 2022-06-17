@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TradeServiceImpl implements TradeService {
@@ -72,17 +73,23 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
+        return tradeDao.getMostRecentTradesAsSeller(username, quantity);
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status) {
-        return tradeDao.getTradesAsSeller(username, page, pageSize, status);
+    public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
+        return tradeDao.getTradesAsSeller(username, page, pageSize, status, offerId);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public long getTradesAsSellerCount(String username, TradeStatus status) {
-        return tradeDao.getTradesAsSellerCount(username, status);
+    public long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId) {
+        return tradeDao.getTradesAsSellerCount(username, status, offerId);
     }
 
     @Override
@@ -94,30 +101,11 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public long getTradesAsBuyerCount(String username, TradeStatus status) {
         return tradeDao.getTradesAsBuyerCount(username, status);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public long getTotalTradesCount(String username, TradeStatus status) {
-        return tradeDao.getTotalTradesCount(username, status);
-    }
-
-    @Override
-    public long getTradesFromOfferCount(String username, int offerId) {
-        return tradeDao.getCountAssociatedTrades(SecurityContextHolder.getContext().getAuthentication().getName(), offerId);
-    }
-
-
-    /**
-     * @param username Caller username. This is the person that is rating the counterpart
-     * @param rating
-     * @param tradeId Trade affected
-     */
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")

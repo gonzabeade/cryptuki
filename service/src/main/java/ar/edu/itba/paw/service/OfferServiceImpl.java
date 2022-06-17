@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.exception.PersistenceException;
 import ar.edu.itba.paw.exception.ServiceDataAccessException;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -136,7 +138,7 @@ public class OfferServiceImpl implements OfferService {
         //trade DAO chequear que no tenga trades asociados a la oferta , de lo contrario explotar
 
         Integer offerId = offerPO.getOfferId().orElseThrow(IllegalArgumentException::new);
-        if(tradeDao.getCountAssociatedTrades(SecurityContextHolder.getContext().getAuthentication().getName(), offerId) > 0){
+        if(tradeDao.getTradesAsSellerCount(SecurityContextHolder.getContext().getAuthentication().getName(), EnumSet.allOf(TradeStatus.class), offerId) > 0){
             throw new UnmodifiableOfferException(offerId);
         }
 

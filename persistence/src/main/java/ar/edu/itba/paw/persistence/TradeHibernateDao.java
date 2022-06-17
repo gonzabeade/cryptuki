@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.model.Trade;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class TradeHibernateDao implements TradeDao {
@@ -36,6 +38,7 @@ public class TradeHibernateDao implements TradeDao {
         if (trade == null)
             throw new NoSuchTradeException(tradeId);
         trade.setStatus(status);
+        trade.setLastModified(LocalDateTime.now());
         em.persist(trade);
         return trade;
     }
@@ -57,8 +60,8 @@ public class TradeHibernateDao implements TradeDao {
     }
 
     @Override
-    public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status) {
-        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status = :status and t.offer.seller.userAuth.username = :username", Trade.class);
+    public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
+        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in (:status) and t.offer.seller.userAuth.username = :username order by t.lastModified", Trade.class);
         typedQuery.setFirstResult(page*pageSize);
         typedQuery.setMaxResults(pageSize);
         typedQuery.setParameter("status", status);
@@ -67,18 +70,19 @@ public class TradeHibernateDao implements TradeDao {
     }
 
     @Override
-    public long getTradesAsSellerCount(String username, TradeStatus status) {
-        Query query = em.createQuery("select count(*) from Trade t where status = :status and t.offer.seller.userAuth.username = :username");
+    public long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId) {
+        Query query = em.createQuery("select count(*) from Trade t where status in (:status) and t.offer.seller.userAuth.username = :username");
         query.setParameter("status", status);
         query.setParameter("username", username);
         return (Long)query.getSingleResult();
     }
+
     @Override
-    public long getCountAssociatedTrades(String username, int offerId){
-        Query query = em.createQuery("select count(*) from Trade t where t.offer.seller.userAuth.username = :username AND t.offer.offerId = :offerId");
-        query.setParameter("offerId", offerId);
-        query.setParameter("username", username);
-        return (Long)query.getSingleResult();
+    public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
+        TypedQuery<Trade> query = em.createQuery("from Trade t order by t.lastModified DESC", Trade.class);
+        query.setFirstResult(0);
+        query.setMaxResults(quantity);
+        return query.getResultList();
     }
 
     @Override
@@ -98,11 +102,4 @@ public class TradeHibernateDao implements TradeDao {
         query.setParameter("username", username);
         return (Long)query.getSingleResult();
     }
-
-    @Override
-    public long getTotalTradesCount(String username, TradeStatus status) {
-        Query query = em.createQuery("select count(*) from Trade t where t.offer.seller.userAuth.username = :username");
-        query.setParameter("username", username);
-        return (Long)query.getSingleResult();    }
-
 }

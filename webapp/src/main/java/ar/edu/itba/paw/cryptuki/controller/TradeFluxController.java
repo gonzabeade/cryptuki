@@ -144,44 +144,6 @@ public class TradeFluxController {
         return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
 
-    @RequestMapping(value = "/mytrades", method = RequestMethod.GET)
-    public ModelAndView getMyTrades(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "role", required = false) Optional<String> role, @RequestParam(value = "status", required = false) final Optional<String> status){
-        ModelAndView mav = new ModelAndView("tradePage");
-        String username = authentication.getName();
-        int pageNumber= page.orElse(0);
-
-        if(!role.isPresent()){
-            role = Optional.of("buying");
-        }
-        if((!role.get().equals("buying")&&!role.get().equals("selling")))
-            throw new IllegalArgumentException();
-
-        long tradeCount;
-        Collection<Trade> tradeList;
-
-        if(role.get().equals("buying")){
-            tradeList = tradeService.getTradesAsBuyer(username, pageNumber, PAGE_SIZE, TradeStatus.valueOf(status.orElse("PENDING")));
-            tradeCount = tradeService.getTradesAsBuyerCount(username, TradeStatus.valueOf(status.orElse("PENDING")));
-        }
-        else{
-            tradeList = tradeService.getTradesAsSeller(username, pageNumber, PAGE_SIZE, TradeStatus.valueOf(status.orElse("PENDING")));
-            tradeCount = tradeService.getTradesAsSellerCount(username, TradeStatus.valueOf(status.orElse("PENDING")));
-        }
-
-        int pages= (int)(tradeCount+PAGE_SIZE-1)/PAGE_SIZE;
-        if(tradeList.isEmpty())
-            if(role.get().equals("buying"))
-                mav.addObject("noBuyingTrades",true);
-            else
-                mav.addObject("noSellingTrades",true);
-
-        mav.addObject("tradeStatusList",TradeStatus.values());
-        mav.addObject("tradeList",tradeList);
-        mav.addObject("pages",pages);
-        mav.addObject("activePage",pageNumber);
-        return mav;
-    }
-
     @RequestMapping(value = "/deleteTrade/{tradeId}", method = RequestMethod.POST)
     public ModelAndView deleteTrade(@PathVariable("tradeId") final int tradeId){
         tradeService.deleteTrade(tradeId);

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.TradeStatus;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface TradeDao {
 
@@ -20,17 +21,14 @@ public interface TradeDao {
     Optional<Trade> getTradeById(int tradeId);
 
     /** Returns a collection and count of Trades in which the user is the seller */
-    Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, TradeStatus status);
-
-    long getTradesAsSellerCount(String username, TradeStatus status);
-    long getCountAssociatedTrades(String username, int offerId);
+    Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId);
+    long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId);
+    Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity);
 
     /** Returns a collection and count of Trades in which the user is the buyer */
     Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status);
     long getTradesAsBuyerCount(String username, TradeStatus status);
 
-    /** Returns the total count of Trades in a certain status for a username */
-    long getTotalTradesCount(String username, TradeStatus status);
 
 
 }

@@ -20,8 +20,8 @@ public class Trade {
     @OneToOne
     @JoinColumn(name="buyer_id")
     private User buyer;
-    @Column(name="start_date", insertable = false)
-    private LocalDateTime startDate;
+    @Column(name="last_modified", insertable = false)
+    private LocalDateTime lastModified;
     @Column(name="status",length = 10)
     @Enumerated(EnumType.STRING)
     private TradeStatus status = TradeStatus.PENDING;
@@ -59,10 +59,6 @@ public class Trade {
 
     public User getBuyer() {
         return buyer;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
     }
 
     public TradeStatus getStatus() {
@@ -111,5 +107,9 @@ public class Trade {
 
     public void setqUnseenMessagesSeller(int qUnseenMessagesSeller) {
         this.qUnseenMessagesSeller = qUnseenMessagesSeller;
+    }
+
+    public void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
     }
 }

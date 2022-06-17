@@ -19,6 +19,7 @@ public class SellerController {
     private final UserService userService;
     private final TradeService tradeService;
     private static final int PAGE_SIZE = 6;
+    private static final int Q_MOST_RECENT_TRADES = 5;
 
     @Autowired
     public SellerController(OfferService offerService, UserService userService, CryptocurrencyService cryptocurrencyService, TradeService tradeService) {
@@ -36,7 +37,7 @@ public class SellerController {
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName(), pageNumber, PAGE_SIZE, status);
 
-        Collection<Trade> trades = tradeService.getTradesAsSeller(authentication.getName(), 0, 5, TradeStatus.PENDING);
+        Collection<Trade> trades = tradeService.getMostRecentTradesAsSeller(authentication.getName(), Q_MOST_RECENT_TRADES);
 
         long offerCount = offerService.countOffersByUsername(authentication.getName(), status);
         long pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;

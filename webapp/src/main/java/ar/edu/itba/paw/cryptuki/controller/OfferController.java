@@ -8,6 +8,7 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.PaymentMethod;
+import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.EnumSet;
 
 @Controller
 @RequestMapping("/offer")
@@ -75,7 +77,7 @@ public class OfferController {
                                @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final Authentication authentication){
 
-        if(tradeService.getTradesFromOfferCount(authentication.getName(), offerId) > 0){
+        if(tradeService.getTradesAsSellerCount(authentication.getName(), EnumSet.allOf(TradeStatus.class), offerId) > 0){
            return new ModelAndView("unmodifiableOffer");
         }
 

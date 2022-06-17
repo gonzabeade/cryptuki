@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Optional;
 
 @Controller
@@ -34,14 +35,9 @@ public class TradeController {
 
         ModelAndView mav = new ModelAndView("seller/sellerTrade");
 
-        Collection<Trade> trades;
-        if(status!= null) {
-            trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status);
-        } else{
-            //trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE);
-            trades = null;
-        }
-        long tradeCount = tradeService.getTradesFromOfferCount(authentication.getName(), offerId);
+        Collection<Trade> trades = tradeService.getTradesAsSeller(authentication.getName(), page.orElse(0), PAGE_SIZE, status == null ? EnumSet.allOf(TradeStatus.class) : EnumSet.of(status), offerId);
+
+        long tradeCount = tradeService.getTradesAsSellerCount(authentication.getName(), status == null ? EnumSet.allOf(TradeStatus.class) : EnumSet.of(status), offerId);
         int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
         int pageNumber = page.orElse(0);
 

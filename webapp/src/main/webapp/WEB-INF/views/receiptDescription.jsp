@@ -96,7 +96,13 @@
 
 
         <div class="flex flex-row mt-10">
-            <c:set var="urlBack" value="${trade.buyer.username.get() == username ? '/buyer':'/seller'}"/>
+            <c:if test="${trade.buyer.username.get() == username}">
+                <c:set var="urlBack" value="/buyer"/>
+            </c:if>
+            <c:if test="${trade.buyer.username.get() != username}">
+                <c:set var="urlBack" value="/seller/associatedTrades/${trade.offer.offerId}"/>
+            </c:if>
+
             <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center" href="<c:url  value="${urlBack}"/>"><messages:message code="goBack"/></a>
             <a class="bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
         </div>

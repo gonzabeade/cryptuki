@@ -39,7 +39,7 @@
                 </jsp:include>
             </div>
             <c:choose>
-                <c:when test="${user.kyc == null}">
+                <c:when test="${user.kyc == null }">
                     <div class="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
                         <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
                         <p><messages:message code="validateYourIdentityExplanation"/></p>

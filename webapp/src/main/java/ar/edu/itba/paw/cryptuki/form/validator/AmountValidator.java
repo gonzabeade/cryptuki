@@ -28,24 +28,24 @@ public class AmountValidator implements ConstraintValidator<AmountCheck, Object>
     @Override
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
         Integer offerIdInt;
-        Float amountNumber;
+        Double amountNumber;
         try {
             offerIdInt = (Integer) new BeanWrapperImpl(value).getPropertyValue(offerId);
         } catch (ClassCastException classCastException) {
             throw new IllegalArgumentException("offerId must be an Integer.", classCastException);
         }
         try {
-            amountNumber = (Float) new BeanWrapperImpl(value).getPropertyValue(amount);
+            amountNumber = (Double) new BeanWrapperImpl(value).getPropertyValue(amount);
         } catch (ClassCastException classCastException) {
-            throw new IllegalArgumentException("amount must be a Float.", classCastException);
+            throw new IllegalArgumentException("amount must be a Double.", classCastException);
         }
 
         Optional<Offer> offerOptional = offerService.getOfferById(offerIdInt);
+
         if (!offerOptional.isPresent())
             return false;
         Offer offer = offerOptional.get();
-//        float offerPrice = offer.getUnitPrice();
-//        return ( amountNumber != null && amountNumber.compareTo(valueOf(offerPrice * offer.getMinInCrypto())) >= 0  && amountNumber.compareTo(offerPrice * offer.getMaxQuantity()) <= 0);
-        return true;
+        double offerPrice = offer.getUnitPrice();
+        return amountNumber != null && amountNumber.compareTo(offerPrice * offer.getMinInCrypto()) >= 0  && amountNumber.compareTo(offerPrice * offer.getMaxInCrypto()) <= 0;
     }
 }

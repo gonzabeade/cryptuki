@@ -19,19 +19,10 @@ public class OfferBuyForm {
 
     @Min(1)
     @NotNull
-    private Float amount;
+    private Double amount;
 
     @NotNull
     private Integer offerId;
-
-//    @Size(min=1, max= 140)
-//    @NotEmpty
-//    private String message;
-//
-//    @NotNull
-//    @Size(min=1, max = 140)
-//    private String wallet;
-
 
     public void setOfferId(int offerId) {
         this.offerId = offerId;
@@ -39,16 +30,9 @@ public class OfferBuyForm {
     public void setEmail(String email) {
         this.email = email;
     }
-//    public void setMessage(String message) {
-//        this.message = message;
-//    }
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
-
-//    public void setWallet(String wallet) {
-//        this.wallet = wallet;
-//    }
 
 
     public String getEmail() {
@@ -57,12 +41,7 @@ public class OfferBuyForm {
     public Integer getOfferId() {
         return offerId;
     }
-//    public String getMessage() {
-//        return message;
-//    }
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
-
-
 }

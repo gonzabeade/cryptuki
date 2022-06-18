@@ -79,7 +79,7 @@
                             <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <messages:message code="unknown"/></h2>
                         </c:when>
                         <c:otherwise>
-                            <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b> <c:out value="${offer.location}"/></h2>
+                            <h2 class="pt-2 font-sans text-center"><b><messages:message code="location"/>:</b>  <messages:message code="Location.${offer.location}"/></h2>
                         </c:otherwise>
                     </c:choose>
                 </div>

@@ -61,13 +61,13 @@
 
             </div>
             <div class="flex flex-col mx-auto w-96 ">
-                <form:errors path="location" cssClass="text-red-500 mx-auto"/>
                 <form:label path="location"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">2.<messages:message
                         code="offerLocation"/></form:label>
                 <div class="flex flex-col justify-center px-5">
                     <h1 class="text-justify"><messages:message code="hoodDetail"/></h1>
                     <h2 class="text-lg font-sans text-polard text-center flex flex-row justify-center mt-3"><messages:message code="hood"/>*</h2>
+                    <form:errors path="location" cssClass="text-red-500 mx-auto"/>
                     <form:select path="location" cssClass="font-sans text-polard mb-3 text-center rounded-lg p-2 ">
                         <option disabled selected><messages:message code="chooseAnOption"/></option>
                         <c:forEach items="${location}" var="hood">
@@ -96,3 +96,9 @@
         </div>
     </form:form>
 </div>
+<script>
+    function updateVars(value) {
+        document.getElementById("minCoin").innerText = value;
+        document.getElementById("maxCoin").innerText = value;
+    }
+</script>

@@ -144,6 +144,7 @@ public class OfferController {
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
         mav.addObject("paymentMethods", PaymentMethod.values());
         mav.addObject("location", Location.values());
+        mav.addObject("selectedCrypto", form.getCryptoCode());
 
         return mav;
     }

@@ -26,7 +26,6 @@
             <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="uploadYourAdvertisement"/></h1>
         </div>
         <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
-        <c:set var="selectedPayments" value="${selectedPayments}" scope="request"/>
         <% request.setCharacterEncoding("UTF-8"); %>
         <jsp:include page="../components/uploadForm.jsp"/>
     </div>
@@ -49,6 +48,9 @@
 </body>
 <script>
     window.onload = function wrapper() {
+        let selectedCode = <c:out value="${selectedCrypto}"/>;
+        if(selectedCode)
+            updateVars(selectedCode.id);
         setCryptoPrice();
     }
 </script>

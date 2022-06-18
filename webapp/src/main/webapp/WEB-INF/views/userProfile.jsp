@@ -29,8 +29,9 @@
 <c:if test="${updatedPass == true}">
   <c:set var="updatedPass"><messages:message code="updatedPass"/></c:set>
   <div id="confirmationToggle" class="hidden">
+    <c:set var="changedPass"> <messages:message code="passwordChangedSuccesfully"/></c:set>
     <jsp:include page="../components/confirmationToggle.jsp">
-      <jsp:param name="title" value="Contraseña cambiada con exito [TRADUCIR]"/>
+      <jsp:param name="title" value="${changedPass}"/>
     </jsp:include>
   </div>
 </c:if>

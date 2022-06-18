@@ -80,11 +80,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mx-auto mt-5">
-                        <a href="<c:url value="/offer/upload"/>"
-                           class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
-                                code="uploadAdvertisement"/></a>
-                    </div>
+<%--                    <div class="mx-auto mt-5">--%>
+<%--                        <a href="<c:url value="/offer/upload"/>"--%>
+<%--                           class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message--%>
+<%--                                code="uploadAdvertisement"/></a>--%>
+<%--                    </div>--%>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -94,13 +94,13 @@
             <div class="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
                 <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="uploadedAdvertisements"/> </h1>
             </div>
-            <div class="flex flex-row w-full h-3/5 mt-5">
-                <div class="w-2/5 h-full">
+            <div class="flex flex-col w-full  mt-5">
+                <div class="flex w-full ">
                     <jsp:include page="../../components/seller/sellerOfferFilter.jsp">
                         <jsp:param name="status" value="${status}"/>
                     </jsp:include>
                 </div>
-                <div class="flex flex-wrap w-full mx-auto justify-between">
+                <div class="flex flex-wrap w-full mx-auto justify-center mt-2">
                         <c:forEach var="offer" items="${offerList}">
                             <%--    Tarjeta de anuncio--%>
                             <c:set var="offer" value="${offer}" scope="request"/>

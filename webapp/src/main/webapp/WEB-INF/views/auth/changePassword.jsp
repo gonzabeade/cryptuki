@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,8 +19,9 @@
 
 <% request.setCharacterEncoding("utf-8"); %>
 <div id="confirmationToggle" class="hidden">
+    <c:set var="changedPass"> <messages:message code="passwordChangedSuccesfully"/></c:set>
     <jsp:include page="../../components/confirmationToggle.jsp">
-        <jsp:param name="title" value="Contraseña cambiada con exito [TRADUCIR]"/>
+        <jsp:param name="title" value="${changedPass}"/>
     </jsp:include>
 </div>
 <div class="flex mt-10 mb-10">

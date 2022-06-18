@@ -115,10 +115,10 @@
         <!-- Middle panel -->
         <div class="flex flex-col h-5/6 w-5/6">
                 <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
-                <div class="flex flex-wrap h-3/5 w-full pl-3">
+                <div class="flex flex-wrap h-3/5  pl-3">
                     <c:forEach var="trade" items="${trades}">
                         <fmt:formatNumber type="number" maxFractionDigits="0" value="${trade.buyer.rating /2 == 0? 1: trade.buyer.rating/2 }" var="stars"/>
-                        <div name="trade-${offer.offerId}-${trade.status}" class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between m-5 ">
+                        <div name="trade-${offer.offerId}-${trade.status}" class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between m-5 w-80">
 
                             <div class="flex font-sans h-fit w-full mt-5">
                                 <c:if test="${trade.status == 'PENDING' }">

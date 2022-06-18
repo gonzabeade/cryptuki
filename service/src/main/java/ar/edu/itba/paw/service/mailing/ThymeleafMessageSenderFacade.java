@@ -145,7 +145,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = user.getLocale();
         youWereKickedOutBecauseThymeleafMailMessage.setLocale(locale);
         youWereKickedOutBecauseThymeleafMailMessage.setSubject(messageSource.getMessage("kickedOut", null, locale));
-        youWereKickedOutBecauseThymeleafMailMessage.setParameters(getUrl());
+        youWereKickedOutBecauseThymeleafMailMessage.setParameters(getUrl(),reason);
 
         mailMessageContactService.sendMessage(youWereKickedOutBecauseThymeleafMailMessage);
         LOGGER.info("Kickout notification sent to banned user");

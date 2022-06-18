@@ -71,7 +71,7 @@
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-sm font-medium text-polar-600truncate"> ${trade.buyer.username.get()} </p>
-                                                    <p class="text-sm text-gray-500 truncate"><messages:message code="madeYouAnOffer"/> </p>
+                                                    <p class="text-sm text-gray-500 truncate"><messages:message code="${trade.status}.madeYouAnOffer"/> </p>
                                                 </div>
                                             </a>
                                         </li>

@@ -27,7 +27,25 @@
 </li>
 <script>
     function changeSelectorGeneral(){
-        document.getElementById("deselectAll").classList.remove("hidden")
-        document.getElementById("selectAll").classList.add("hidden")
+        let cryptoCodes = ['BTC', 'ETH','DAI','USDT','DOGE','ADA'];
+        let select = document.getElementById("selectAll");
+        let desSelect = document.getElementById("deselectAll");
+        let allUnchecked = true;
+        cryptoCodes.forEach((coinCode)=>{
+            if(document.querySelectorAll("input[id="+coinCode+"]")[0].checked) {
+                allUnchecked = false;
+                return;
+            }
+        });
+        if(allUnchecked){
+            select.classList.remove("hidden");
+            desSelect.classList.add("hidden");
+        }else{
+            select.classList.add("hidden");
+            desSelect.classList.remove("hidden");
+        }
+
+
+
     }
 </script>

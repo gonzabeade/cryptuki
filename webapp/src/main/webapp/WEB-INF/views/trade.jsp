@@ -90,7 +90,10 @@
 
         </div>
       <div class="flex flex-col">
-            <h1 class="text-2xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
+          <h1 class="text-2xl font-sans font-semibold mx-auto text-center"><messages:message code="location"/></h1>
+          <p class="mx-auto text-center "> <messages:message code="Location.${trade.offer.location.toString()}"/> </p>
+
+          <h1 class="text-2xl font-sans font-semibold mx-auto text-center my-10"><messages:message code="aboutTheOffer"/> <c:if test="${!buying}"><messages:message code="received"/> </c:if></h1>
             <div class="flex flex-row justify-center">
 
                 <div class="flex flex-col mx-10 order-1" id="left">

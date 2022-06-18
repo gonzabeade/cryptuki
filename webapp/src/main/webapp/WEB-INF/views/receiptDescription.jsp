@@ -86,7 +86,7 @@
                 <div class="flex flex-col my-10 px-30">
                     <h4 class="text-lg font-polard font-bold mx-auto"><messages:message code="trasactionDate"/></h4>
                     <h2 class="text-xl font-sans text-polar text-center my-auto ">
-                        <fmt:parseDate value="${ trade.startDate }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:parseDate value="${ trade.lastModified }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                         <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${ parsedDateTime }" />
                     </h2>
                 </div>

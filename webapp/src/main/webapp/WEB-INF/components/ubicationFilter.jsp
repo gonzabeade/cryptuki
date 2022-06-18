@@ -20,7 +20,7 @@
 <%--            </div>--%>
 <%--        </div>--%>
     </div>
-    <div class="flex flex-col hidden" id="allPossibleLocations">
+    <div class="flex flex-col" id="allPossibleLocations">
         <div id="locType0" class="w-full flex flex-col justify-start">
             <c:forEach var="locationWrapper" items="${locationsWithOffers}">
                 <div class="flex flex-row">

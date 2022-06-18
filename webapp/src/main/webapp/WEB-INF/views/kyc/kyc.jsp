@@ -102,7 +102,8 @@
             </div>
         </div>
         <div class="flex flex-row w-full justify-center mt-10">
-            <input type="submit" value="Enviar" class="w-1/5 rounded-lg bg-frostl py-3 px-5 text-white cursor-pointer shadow-lg"/>
+            <c:set var="send"><messages:message code="send"/></c:set>
+            <input type="submit" value="${send}" class="w-1/5 rounded-lg bg-frostl py-3 px-5 text-white cursor-pointer shadow-lg"/>
         </div>
     </form:form>
 </div>

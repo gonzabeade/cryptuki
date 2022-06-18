@@ -8,7 +8,7 @@
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
         <div class="flex flex-row divide-x">
             <div class="flex flex-col mx-5">
-                <h1 class="font-sans font-polard font-extrabold text-2xl text-center">1. Price Settings</h1>
+                <h1 class="font-sans font-polard font-extrabold text-2xl text-center">1. <messages:message code="priceSettings"/> </h1>
                 <c:url value="/offer/upload" var="postUrl"/>
                 <form:input type="hidden" path="sellerId" value="${sellerId}"/>
                 <div class="flex flex-col justify-center">
@@ -66,8 +66,8 @@
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">2.<messages:message
                         code="offerLocation"/></form:label>
                 <div class="flex flex-col justify-center px-5">
-                    <h1 class="text-justify">You as the seller must select your preferred neigborhood to make the exchange in person. Remember to always meet in a public space.</h1>
-                    <h2 class="text-lg font-sans text-polard text-center flex flex-row justify-center mt-3">Hood*</h2>
+                    <h1 class="text-justify"><messages:message code="hoodDetail"/></h1>
+                    <h2 class="text-lg font-sans text-polard text-center flex flex-row justify-center mt-3"><messages:message code="hood"/>*</h2>
                     <form:select path="location" cssClass="font-sans text-polard mb-3 text-center rounded-lg p-2 ">
                         <option disabled selected><messages:message code="chooseAnOption"/></option>
                         <c:forEach items="${location}" var="hood">
@@ -79,8 +79,8 @@
             <div class="flex flex-col px-10">
                 <form:label path="firstChat"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">3.<messages:message
-                        code="firstChat"/> *</form:label>
-                <h2 class="text-justify">You can set an automatic response every time someone makes you an offer.</h2>
+                        code="firstChat"/></form:label>
+                <h2 class="text-justify"><messages:message code="automaticResponseDetail"/> </h2>
                 <form:errors path="firstChat" cssClass="text-red-500 mx-auto mt-2"/>
                 <div class="flex flex-row justify-center w-80 mx-auto mt-2">
                     <form:textarea path="firstChat" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>

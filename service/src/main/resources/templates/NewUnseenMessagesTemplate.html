@@ -980,12 +980,12 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10b es-m-txt-c">
-                                                                                        <h1 style="font-size: 46px; line-height: 100%; color: #2e3440; font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;">You have unseen messages</h1>
+                                                                                        <h1 style="font-size: 46px; line-height: 100%; color: #2e3440; font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;" th:text="#{newUnseenMessages}">You have unseen messages</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p5t es-p5b es-p40r es-p40l es-m-p0r es-m-p0l">
-                                                                                        <p>You’ve received this message because your email address has been registered with our site. Please click the button below to verify your email address&nbsp; or input the code below and confirm that you are the owner of this account.</p>
+                                                                                        <span th:text="#{tradeId}">Trade #</span><span th:text="${tradeId}">1</span><p th:text="#{recommendation}"> has new messages. These should help you make a decision or coordinate with the counterpart. Please do not give any private information.</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1005,7 +1005,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif;">Open chat</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif;" th:text="#{openChat}">Open chat</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

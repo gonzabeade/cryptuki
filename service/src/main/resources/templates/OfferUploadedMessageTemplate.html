@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -974,7 +974,7 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10b es-m-txt-c">
-                                                                                        <h1 style="font-size: 46px; line-height: 100%;"><strong>Adevertisment uploaded&nbsp;</strong></h1>
+                                                                                        <h1 style="font-size: 46px; line-height: 100%;"><strong th:text="#{advertismentUploaded}">Adevertisment uploaded&nbsp;</strong></h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1008,12 +1008,14 @@ body {
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-m-txt-c">
                                                                                         <h2 style="font-size: 19px;"><a target="_blank" style="font-size: 19px;">
-                                                                                                <font color="#333333">Advertisment&nbsp;</font>#65000500
-                                                                                            </a>&nbsp;has been created</h2>
+                                                                                            <span th:text="#{offerCreated}"></span>
+                                                                                                (<font color="#333333" th:text="#{advertisment}">Advertisment&nbsp;</font>#<span th:text="${ offer.offerId }">65000500</span>
+                                                                                        )</a>
+                                                                                      </h2>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;">See Advertisment</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;" th:text="#{seeOffer}">See Advertisment</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -1033,12 +1035,12 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 20px;"><strong>Offer Information</strong></p>
+                                                                                        <p style="font-size: 20px;"><strong th:text="#{offerInformation}">Offer Information</strong></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p><strong><span style="font-size:16px;">Coin:&nbsp;</span></strong><br>BTC<br><strong><span style="font-size:16px;">Unit Price:</span></strong><br>1.000.000 ARS<br><strong>Range:<br></strong>10 BTC- 14 BTC<br><span style="font-size: 16px;"><b>Location:<br></b></span>Recoleta</p>
+                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br><span th:text="${offer.crypto.code}">BTC<span></span><br><strong><span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br><span th:text="${offer.unitPrice}">1.000.000</span> ARS<br><strong><span th:text="#{range}">Range:</span><br></strong><span th:text="${offer.minInCrypto}">10</span><span th:text="${offer.crypto.code}">BTC<span>- <span th:text="${offer.maxInCrypto}">12</span> <span th:text="${offer.crypto.code}">BTC<span><br><span style="font-size: 16px;"><b th:text="#{location}">Location:<br></b></span><span th:text="${offer.location.toString()}">Recoleta</span></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1059,7 +1061,7 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10t es-p10b">
-                                                                                        <p>Got a question?&nbsp;Email us at p2pcryptuki@</p>
+                                                                                        <p></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

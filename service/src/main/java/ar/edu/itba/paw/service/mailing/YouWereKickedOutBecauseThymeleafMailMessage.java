@@ -6,7 +6,7 @@ import org.thymeleaf.context.Context;
 public class YouWereKickedOutBecauseThymeleafMailMessage extends ThymeleafMailMessage{
     private final static String template = "YouWereKickedOutBecauseTemplate";
 
-
+    private String reason;
     private String url;
 
     public YouWereKickedOutBecauseThymeleafMailMessage(MailMessage mailMessage, TemplateEngine templateEngine) {
@@ -14,8 +14,8 @@ public class YouWereKickedOutBecauseThymeleafMailMessage extends ThymeleafMailMe
     }
 
 
-    public void setParameters(String url) {
-
+    public void setParameters(String url, String reason) {
+        this.reason = reason;
         this.url = url;
     }
 
@@ -24,6 +24,7 @@ public class YouWereKickedOutBecauseThymeleafMailMessage extends ThymeleafMailMe
 
         Context context = new Context(getLocale());
         context.setVariable("url", url);
+        context.setVariable("reason", reason);
 
         return context;
     }

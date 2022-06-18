@@ -91,8 +91,8 @@ public class TradeHibernateDao implements TradeDao {
     }
 
     @Override
-    public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status) {
-        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status = :status and t.buyer.userAuth.username = :username", Trade.class);
+    public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
+        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in :status and t.buyer.userAuth.username = :username", Trade.class);
         typedQuery.setFirstResult(page*pageSize);
         typedQuery.setMaxResults(pageSize);
         typedQuery.setParameter("status", status);
@@ -101,8 +101,8 @@ public class TradeHibernateDao implements TradeDao {
     }
 
     @Override
-    public long getTradesAsBuyerCount(String username, TradeStatus status) {
-        Query query = em.createQuery("select count(*) from Trade t where status = :status and t.buyer.userAuth.username = :username");
+    public long getTradesAsBuyerCount(String username, Set<TradeStatus> status) {
+        Query query = em.createQuery("select count(*) from Trade t where status in :status and t.buyer.userAuth.username = :username");
         query.setParameter("status", status);
         query.setParameter("username", username);
         return (Long)query.getSingleResult();

@@ -44,6 +44,11 @@ public class KycServiceImpl implements KycService {
     }
 
     @Override
+    public long getPendingKycRequestsCount() {
+        return kycDao.countKycRequestsByStatus(KycStatus.PEN);
+    }
+
+    @Override
     @Transactional
     public void validateKycRequest(int kycId) {
         // TODO: enviar mail con confirmacion

@@ -96,14 +96,14 @@ public class TradeServiceImpl implements TradeService {
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status) {
+    public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyer(username, page, pageSize, status);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public long getTradesAsBuyerCount(String username, TradeStatus status) {
+    public long getTradesAsBuyerCount(String username, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyerCount(username, status);
     }
 

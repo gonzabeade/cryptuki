@@ -10,7 +10,7 @@ import java.util.Set;
 public interface TradeDao {
 
     /** Trade creation */
-    Trade makeTrade(int offerId, int buyerId, float quantity);
+    Trade makeTrade(int offerId, int buyerId, double quantity);
 
     /** Trade manipulation */
     Trade changeTradeStatus(int tradeId, TradeStatus status);

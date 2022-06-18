@@ -24,8 +24,7 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
         Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field1);
         Object fieldMatchValue = new BeanWrapperImpl(value).getPropertyValue(field2);
 
-        boolean isValid = Objects.equals(fieldValue, fieldMatchValue);
-        return isValid;
+        return Objects.equals(fieldValue, fieldMatchValue);
     }
 
 }

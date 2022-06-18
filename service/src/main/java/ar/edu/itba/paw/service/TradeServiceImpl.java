@@ -33,7 +33,7 @@ public class TradeServiceImpl implements TradeService {
     @Override
     @Secured("ROLE_USER")
     @Transactional
-    public Trade makeTrade(int offerId, int buyerId, float quantity) {
+    public Trade makeTrade(int offerId, int buyerId, double quantity) {
         Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
         String firstChat = newTrade.getOffer().getComments();
         if (firstChat != null && !firstChat.equals(""))

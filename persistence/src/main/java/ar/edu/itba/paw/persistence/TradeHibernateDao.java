@@ -20,7 +20,7 @@ public class TradeHibernateDao implements TradeDao {
     private EntityManager em;
 
     @Override
-    public Trade makeTrade(int offerId, int buyerId, float quantity) {
+    public Trade makeTrade(int offerId, int buyerId, double quantity) {
         Offer offer = em.getReference(Offer.class, offerId);
         if (offer == null)
             throw new NoSuchOfferException(offerId);
@@ -80,7 +80,8 @@ public class TradeHibernateDao implements TradeDao {
 
     @Override
     public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
-        TypedQuery<Trade> query = em.createQuery("from Trade t order by t.lastModified DESC", Trade.class);
+        TypedQuery<Trade> query = em.createQuery("from Trade t WHERE t.offer.seller.userAuth.username = :username order by t.lastModified DESC", Trade.class);
+        query.setParameter("username", username);
         query.setFirstResult(0);
         query.setMaxResults(quantity);
         return query.getResultList();

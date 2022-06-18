@@ -69,7 +69,7 @@
         </div>
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="firstChat" cssClass="text-red-500 mx-auto"/>
-            <form:label path="firstChat" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="firstChat"/> *</form:label>
+            <form:label path="firstChat" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="firstChat"/></form:label>
             <div class="flex flex-row justify-center w-96 mx-auto">
                 <form:textarea path="firstChat" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>
             </div>

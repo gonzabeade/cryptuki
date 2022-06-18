@@ -10,7 +10,7 @@ import java.util.Set;
 public interface TradeService {
 
     /** Trade creation */
-    Trade makeTrade(int offerId, int buyerId, float quantity);
+    Trade makeTrade(int offerId, int buyerId, double quantity);
 
     /** Trade state manipulation */
     Trade rejectTrade(int tradeId);

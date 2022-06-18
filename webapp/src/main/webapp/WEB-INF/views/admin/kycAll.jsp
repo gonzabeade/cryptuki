@@ -49,6 +49,11 @@
                     </div>
                 </div>
             </c:forEach>
+            <jsp:include page="../../components/paginator.jsp">
+                    <jsp:param name="activePage" value="${activePage}"/>
+                    <jsp:param name="pages" value="${pages}"/>
+                    <jsp:param name="baseUrl" value="/admin/kyccheck/"/>
+            </jsp:include>
         </div>
 
 

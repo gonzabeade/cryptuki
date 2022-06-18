@@ -60,7 +60,8 @@
             <form:errors path="location" cssClass="text-red-500 mx-auto"/>
             <form:label path="location" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="offerLocation"/> *</form:label>
             <div class="flex flex-row justify-center w-96 mx-auto">
-                <form:select path="location"  cssClass="text-xl font-sans text-polard font-semibold mb-3 text-center rounded-lg p-2">
+                <form:select path="location"  cssClass="font-sans text-polard mb-3 text-center rounded-lg p-2">
+                    <option disabled selected><messages:message code="chooseAnOption"/></option>
                     <c:forEach items="${location}" var="hood">
                         <form:option value="${hood}" ><messages:message code="Location.${hood}"/></form:option>
                     </c:forEach>
@@ -69,7 +70,7 @@
         </div>
         <div class="flex flex-col mx-auto mt-6">
             <form:errors path="firstChat" cssClass="text-red-500 mx-auto"/>
-            <form:label path="firstChat" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="firstChat"/></form:label>
+            <form:label path="firstChat" class="text-xl font-sans text-polard font-semibold mb-3 text-center "><messages:message code="firstChat"/> *</form:label>
             <div class="flex flex-row justify-center w-96 mx-auto">
                 <form:textarea path="firstChat" cssClass="w-full h-36 rounded-lg mx-auto p-5"/>
             </div>

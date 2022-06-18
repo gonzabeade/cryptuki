@@ -39,6 +39,7 @@ public class UploadOfferForm {
     private String firstChat;
 
     @Size(min = 1, max = 30)
+    @NotNull
     private String location;
 
     public Double getMinInCrypto() {

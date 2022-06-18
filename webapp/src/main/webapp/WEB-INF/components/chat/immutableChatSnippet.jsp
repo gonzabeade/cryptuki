@@ -19,6 +19,9 @@
           <div class="relative w-full p-6 overflow-y-auto h-[25rem]">
 
             <ul class="space-y-2">
+              <c:if test="${empty messageCollection}">
+                <h1 class="font-sans font-semibold font-polard text-xl text-start"><messages:message code="noMessages"/> </h1>
+              </c:if>
               <c:forEach items="${messageCollection}" var="message">
                 <c:choose>
                   <c:when test="${message.sender == param.otherUserId}">

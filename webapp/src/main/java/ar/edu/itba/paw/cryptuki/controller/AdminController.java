@@ -74,7 +74,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/complaint/dismiss/{complaintId}", method = RequestMethod.POST)
-    public ModelAndView solveComplaintDismiss(@Valid @ModelAttribute("solveComplaintFormDismiss") SolveComplainForm form, BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
+    public ModelAndView solveComplaintDismiss(@Valid @ModelAttribute("solveComplaintFormDismiss") SolveComplainForm form, final BindingResult result, @PathVariable(value = "complaintId") final int complaintId, Authentication authentication){
         if(result.hasErrors())
             return complaintDetail(complaintId, new SolveComplainForm(), form);
         complainService.closeComplainWithDismiss(complaintId, authentication.getName(), form.getComments());

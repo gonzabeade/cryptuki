@@ -35,6 +35,14 @@
                 <h1 class="w-full font-sans font-medium text-polard text-xl text-start "><messages:message code="trade"/> #
                     <c:out value="${trade.tradeId}"/></h1>
                 <h1 class="w-full font-sans font-medium text-polard text-xl text-start "><messages:message code="carriedOutOverOffer"/> #<c:out value="${trade.offer.offerId}"/></h1>
+                <div class="w-full flex flex-row mx-auto mt-3">
+                    <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="cryptocurrency"/>:</h2>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.offer.crypto.code}"/></h3>
+                </div>
+                <div class="w-full flex flex-row mx-auto mt-3">
+                    <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="location"/>:</h2>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><messages:message code="Location.${trade.offer.location}"/></h3>
+                </div>
                 <div class="w-full  flex flex-col mx-auto mt-5">
                     <h2 class="font-sans font-polard font-semibold text-xl mb-3 text-start"><messages:message code="participants"/></h2>
                     <li class="font-sans font-polard"><b><messages:message code="buyer"/></b> <c:out value="${trade.buyer.userAuth.username}"/></li>
@@ -42,7 +50,7 @@
                 </div>
                 <div class="w-full flex flex-row mx-auto mt-3">
                     <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="offeredAmount"/>:</h2>
-                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.quantity}"/> ARS</h3>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.quantity}"/> ARS (<messages:message code="of"/> <c:out value="${trade.offer.unitPrice}"/>) </h3>
                 </div>
                 <div class="w-full  flex flex-row mx-auto mt-3">
                     <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="tradeState"/>:</h2>
@@ -83,12 +91,12 @@
         </div>
         <div class="flex flex-row mx-auto w-full text-center justify-around ">
             <button id="dismissButton" class="bg-ngreen rounded-lg text-white p-3" onclick="showOnlyDismissForm()"><messages:message code="dismissClaim"/></button>
-            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()"><messages:message code="banUser"/></button>
+            <button id="kickoutButton" class="bg-nred rounded-lg text-white p-3" onclick="showOnlyKickoutForm()"><messages:message code="banUser"/> <c:out value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/> </button>
         </div>
         <div id="kickoutForm" class="hidden w-full flex flex-col mt-5">
             <c:url value="/admin/complaint/kickout/${complaintId}?user=${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.id : trade.buyer.id}" var="kickoutUrl"/>
             <form:form method="post" action="${kickoutUrl}" modelAttribute="solveComplainFormKickout">
-                <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+                <div class="w-full flex justify-end py-2 cursor-pointer"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end " src="<c:url value = "/public/images/cross.png"/>"></div>
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
                     <p><messages:message code="youAreAboutToBan"/> <c:url value="${trade.buyer.username.get() == complainer.username.get() ? trade.offer.seller.username.get() : trade.buyer.username.get()}"/>. <messages:message code="irreversibleAction"/>  </p>
@@ -100,11 +108,11 @@
         </div>
         <div id="dismissForm" class="hidden w-full flex flex-col mt-5">
             <c:url value="/admin/complaint/dismiss/${complaintId}" var="dismissUrl"/>
-            <form:form method="post" action="${kickoutUrl}" modelAttribute="solveComplainFormKickout">
-                <div class="w-full flex justify-end py-2"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end" src="<c:url value = "/public/images/cross.png"/>"></div>
+            <form:form method="post" action="${dismissUrl}" modelAttribute="solveComplainFormKickout">
+                <div class="w-full flex justify-end py-2 cursor-pointer"><img onclick="deleteSemiForms()" class="w-5 h-5 my-auto align-end " src="<c:url value = "/public/images/cross.png"/>"></div>
                 <div class="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <img class="w-5 h-5 mr-4 my-auto " src="<c:url value = "/public/images/attention.png"/>">
-                    <p> <messages:message code="youAreAboutToDismiss"/> <c:url value="${complainer.username.get()}"/><messages:message code="irreversibleAction"/> </p>
+                    <p> <messages:message code="youAreAboutToDismiss"/> <c:url value="${complainer.username.get()}"/>. <messages:message code="irreversibleAction"/> </p>
                 </div>
                 <c:set var="placeholder"><messages:message code="kickoutMotif"/></c:set>
                 <form:textarea path="comments" class="min-w-full h-32 rounded-lg mx-auto p-5 mt-5" placeholder="${placeholder}"></form:textarea>

@@ -107,6 +107,7 @@ public class OfferServiceImpl implements OfferService {
         String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         if (buyerUsername != null)
             filter.excludeUsername(buyerUsername);
+        filter.withOfferStatus(OfferStatus.APR);
         return offerDao.getOfferCount(filter);
     }
 

@@ -58,7 +58,7 @@
                 <h1 class="font-bold text-lg"><messages:message code="unitPrice"/></h1>
                 <p class="text-center"><c:out value="${offer.unitPrice}"/>ARS</p>
             </div>
-            <div class="flex flex-col mx-auto mb-10">
+            <div class="flex flex-col mx-auto mb-5">
                 <h1 class="font-bold text-lg"><messages:message code="location"/></h1>
                 <p class="text-center"><messages:message code="Location.${offer.location}"/></p>
             </div>

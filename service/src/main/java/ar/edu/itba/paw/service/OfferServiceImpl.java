@@ -130,7 +130,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offer.offerId, authentication.principal) OR hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offer.offerId, authentication.principal) OR hasRole('ROLE_ADMIN')")
     public Offer modifyOffer(OfferPO offerPO) {
 
         if (offerPO == null)

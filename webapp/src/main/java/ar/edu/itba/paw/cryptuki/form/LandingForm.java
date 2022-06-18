@@ -16,7 +16,7 @@ public class LandingForm {
     @Min(0)
     private Integer page = 0;
     @Min(0)
-    @Max(3)
+    @Max(4)
     @NotNull
     private Integer orderCriteria = 2;
     private Double arsAmount;

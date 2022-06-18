@@ -123,7 +123,6 @@
                     </form:form>
                     <c:url value="/acceptOffer?tradeId=${trade.tradeId}" var="postUrl"/>
                     <form:form action="${postUrl}" method="post"
-                    <form:form action="${postUrl}" method="post"
                                cssClass="flex justify-center mx-auto my-3">
                         <button type="submit"
                                 class="bg-ngreen text-white p-3 rounded-md font-sans "><messages:message

@@ -62,6 +62,7 @@
                     <form:option value="0"><messages:message code="dateOrder"/> </form:option>
                     <form:option value="1"><messages:message code="ratingFilter"/></form:option>
                     <form:option value="3"><messages:message code="priceHighToLow"/></form:option>
+                    <form:option value="4"><messages:message code="loginOrder"/> </form:option>
                 </form:select>
             </div>
             <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>

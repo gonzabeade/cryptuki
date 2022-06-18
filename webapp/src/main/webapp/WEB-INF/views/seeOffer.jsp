@@ -48,13 +48,13 @@
                         <h2 class="font-sans font-semibold text-polard text-4xl text-center my-auto"><messages:message code="offer"/> # <c:out value="${offer.offerId}"/></h2>
                         <c:if test="${isAdmin || offer.seller.email == userEmail}">
                             <div class="flex flex-row mx-auto my-4">
-                                <a class="active:cursor-progress my-auto mx-3" href="<c:url value="/modify/${offer.offerId}"/>">
+                                <a class="active:cursor-progress my-auto mx-3" href="<c:url value="/offer/modify/${offer.offerId}"/>">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                     </svg>
                                 </a>
                                 <div class="my-auto">
-                                    <c:url value="/delete/${offer.offerId}" var="deleteUrl"/>
+                                    <c:url value="/offer/delete/${offer.offerId}" var="deleteUrl"/>
                                     <form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
                                         <button type="submit">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">

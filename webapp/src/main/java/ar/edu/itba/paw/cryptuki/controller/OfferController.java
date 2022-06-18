@@ -77,7 +77,7 @@ public class OfferController {
                                @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final Authentication authentication){
 
-        if(tradeService.getTradesAsSellerCount(authentication.getName(), EnumSet.allOf(TradeStatus.class), offerId) > 0){
+        if (tradeService.getTradesAsSellerCount(authentication.getName(), EnumSet.allOf(TradeStatus.class), offerId) > 0){
            return new ModelAndView("unmodifiableOffer");
         }
 

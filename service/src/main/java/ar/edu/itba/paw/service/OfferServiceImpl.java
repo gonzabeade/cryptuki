@@ -93,7 +93,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional(readOnly = true)
     public Collection<Offer> getBuyableOffers(OfferFilter filter){
-
+        filter.withOfferStatus(OfferStatus.APR);
         String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         if (buyerUsername != null)
             filter.excludeUsername(buyerUsername);
@@ -193,6 +193,11 @@ public class OfferServiceImpl implements OfferService {
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
+    }
+
+    @Override
+    public Collection<LocationCountWrapper> getOfferCountByLocation() {
+        return offerDao.getOfferCountByLocation();
     }
 
     @Override

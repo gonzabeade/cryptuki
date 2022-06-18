@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OfferFilter {
 
@@ -12,6 +13,8 @@ public class OfferFilter {
     private final Collection<Location> locations = EnumSet.noneOf(Location.class);
     private final Collection<PaymentMethod> paymentMethods = EnumSet.noneOf(PaymentMethod.class);
     private Collection<OfferStatus> status = EnumSet.noneOf(OfferStatus.class);
+
+    private Double isQuantityInRange;
 
     /* Attributes that determine paging */
     private int page = 0;
@@ -52,6 +55,12 @@ public class OfferFilter {
         return this;
     }
 
+    public OfferFilter withLocations(Collection<String> locations) {
+        if (locations != null)
+            this.locations.addAll(locations.stream().map(l->Location.valueOf(l)).collect(Collectors.toList()));
+        return this;
+    }
+
     public OfferFilter withLocation(Location location) {
         if (location != null)
             locations.add(location);
@@ -61,6 +70,12 @@ public class OfferFilter {
     public OfferFilter withCryptoCode(String cryptoCode) {
         if (cryptoCode != null)
             cryptoCodes.add(cryptoCode);
+        return this;
+    }
+
+    public OfferFilter withCryptoCodes(Collection<String> cryptoCodes) {
+        if (cryptoCodes != null)
+            this.cryptoCodes.addAll(cryptoCodes);
         return this;
     }
 
@@ -79,6 +94,12 @@ public class OfferFilter {
     public OfferFilter restrictedToId(Integer offerId) {
         if  (offerId != null)
             restrictedToIds.add(offerId);
+        return this;
+    }
+
+    public OfferFilter withIsQuantityInRange(Double quantity) {
+        if  (quantity != null)
+            this.isQuantityInRange = quantity;
         return this;
     }
 
@@ -126,6 +147,10 @@ public class OfferFilter {
 
     public Collection<OfferStatus> getStatus() {
         return Collections.unmodifiableCollection(status);
+    }
+
+    public OptionalDouble getIsQuantityInRange() {
+        return isQuantityInRange == null ? OptionalDouble.empty() : OptionalDouble.of(isQuantityInRange);
     }
 
     public int getPage() {

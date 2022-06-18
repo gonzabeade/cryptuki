@@ -69,7 +69,7 @@
 						<h1 class="font-sans"><messages:message code="location"/>: </h1>
 						<div  class="pt-2 flex flex-row justify-start" >
 							<c:choose>
-								<c:when test="${param.location == ''}">
+								<c:when test="${param.location == 'UNKNOWN'}">
 									<h1 class="font-sans font-bold pr-3 mt-1"><messages:message code="unknown"/></h1>
 								</c:when>
 								<c:otherwise>

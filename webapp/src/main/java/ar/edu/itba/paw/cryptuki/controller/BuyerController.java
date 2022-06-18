@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/buyer")
@@ -81,54 +82,46 @@ public class BuyerController {
     }
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
-    public ModelAndView landing(@Valid @ModelAttribute("landingForm") LandingForm form, final BindingResult errors,
-                                final Authentication authentication) {
+    public ModelAndView landing(@Valid @ModelAttribute("landingForm") LandingForm form, final BindingResult errors, final Authentication authentication) {
 
-        if(errors.hasErrors()){
-            return new ModelAndView("forward:/400");
-        }
+        if (errors.hasErrors())
+            throw new IllegalArgumentException();
+
         final ModelAndView mav = new ModelAndView("index");
 
         int pageNumber = form.getPage()!= null ? form.getPage() :  0;
         OfferFilter filter = new OfferFilter()
                 .withPageSize(PAGE_SIZE)
                 .withPage(form.getPage()!= null ? form.getPage() :  0)
-                .withOfferStatus("APR")
-                .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()]);
-
-        if(form.getCoins() != null){
-            mav.addObject("selectedCoins", Arrays.asList(form.getCoins()));
-            for (String coinCode: form.getCoins() ) {
-                filter.withCryptoCode(coinCode);
-            }
-        }
-
-        if(form.getLocation() != null){
-            for (String location: form.getLocation() ) {
-                filter.withLocation(location);
-            }
-        }
+                .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()])
+                .withCryptoCodes(form.getCoins())
+                .withLocations(form.getLocation())
+                .withIsQuantityInRange(form.getArsAmount());
 
         long offerCount = offerService.countBuyableOffers(filter);
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         Collection<Offer> offer = offerService.getBuyableOffers(filter);
+        Collection<Cryptocurrency> cryptocurrencies = cryptocurrencyService.getAllCryptocurrencies();
+        Collection<LocationCountWrapper> locationCountWrappers = offerService.getOfferCountByLocation();
+
+        mav.addObject("selectedCoins", Arrays.asList(form.getCoins()));
 
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", pageNumber);
-        mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
+        mav.addObject("cryptocurrencies", cryptocurrencies);
         mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
         mav.addObject("locations", Arrays.asList(Location.values()));
+        mav.addObject("locationsWithOffers", locationCountWrappers);
+
 
         mav.addObject("location" , form.getLocation());
         mav.addObject("coins" , form.getCoins());
         mav.addObject("page" , form.getPage());
         mav.addObject("orderCriteria", form.getOrderCriteria());
         mav.addObject("arsAmount", form.getArsAmount());
-
-
 
 
         if( null != authentication){

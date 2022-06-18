@@ -135,9 +135,12 @@
             </div>
         </div>
             <%--Middle Pannel --%>
-        <div class="flex flex-col  w-5/6">
+        <div class="flex flex-col">
             <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
-            <div class="flex flex-wrap pl-3">
+            <div class="flex flex-wrap pl-3 my-10">
+                <c:if test="${empty trades}" >
+                    <p class="text-center my-auto mx-auto font-polard font-sans text-3xl font-bold"><messages:message code="noResults"/></p>
+                </c:if>
                 <c:forEach var="trade" items="${trades}">
                     <fmt:formatNumber type="number" maxFractionDigits="0"
                                       value="${trade.buyer.rating /2 == 0? 1: trade.buyer.rating/2 }" var="stars"/>

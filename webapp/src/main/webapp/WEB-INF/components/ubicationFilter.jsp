@@ -28,7 +28,7 @@
                     <form:label path="location" cssClass="my-auto"><messages:message code="Location.${locationWrapper.location}"/><c:out value=" (${locationWrapper.locationCount})"/></form:label>
                 </div>
             </c:forEach>
-            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2">Ver más</a>
+            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2"><messages:message code="seeMore"/></a>
         </div>
         <div id="locType1" class="w-full flex flex-col justify-start hidden">
             <c:forEach var="location" items="${locations}">
@@ -37,7 +37,7 @@
                     <form:label path="location" cssClass="my-auto"><messages:message code="Location.${location}"/></form:label>
                 </div>
             </c:forEach>
-            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2">Ver menos</a>
+            <a onclick="changeLocType()" class="text-frostl underline cursor-pointer mt-2"><messages:message code="seeLess"/> </a>
         </div>
     </div>
 </div>

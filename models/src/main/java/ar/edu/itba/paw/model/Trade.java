@@ -53,6 +53,10 @@ public class Trade {
         return tradeId;
     }
 
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
     public Offer getOffer() {
         return offer;
     }

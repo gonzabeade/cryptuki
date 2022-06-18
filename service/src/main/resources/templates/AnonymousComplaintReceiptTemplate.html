@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -907,7 +907,7 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-infoblock">
-                                                                                        <p><a target="_blank">View online version</a></p>
+                                                                                        <p><a target="_blank"></a></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -939,7 +939,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" href="http://pawserver.it.itba.edu.ar/paw-2022a-01/"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
+                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" th:href="${url}"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -974,7 +974,7 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10b es-m-txt-c">
-                                                                                        <h1 style="font-size: 46px; line-height: 100%;">Contact Received</h1>
+                                                                                        <h1 style="font-size: 46px; line-height: 100%;" th:text="#{questionReceived}">Question Received</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1007,7 +1007,7 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-m-txt-c">
-                                                                                        <h2 style="font-size: 14px;">Thank you for reaching to us! We'll contact you within business hours.&nbsp;</h2>
+                                                                                        <h2 style="font-size: 14px;" th:text="#{ thankYouForGettingInTouch}">Thank you for reaching to us! We'll contact you within business hours.&nbsp;</h2>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1024,16 +1024,16 @@ body {
                                                             <tbody>
                                                                 <tr>
                                                                     <td width="560" class="esd-container-frame" align="center" valign="top">
-                                                                        <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #333333;border-right:1px solid #333333;border-top:1px solid #333333;border-bottom:1px solid #333333;border-radius: 12px; border-collapse: separate;">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 20px;"><strong>Contact&nbsp;Information</strong></p>
+                                                                                        <p style="font-size: 20px;"><strong th:text="#{questionInformation}">Question Information</strong></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 16px;"><b>Message:<br></b><span style="font-size:14px;">Holaaaaa, me re estafaron, perdí acceso a la cuenta y quiero que messi gane el mundial por favor</span></p>
+                                                                                        <p style="font-size: 16px;"><span style="font-size:14px;" th:text="${question}">Holaaaa este es mi mensaje</span></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

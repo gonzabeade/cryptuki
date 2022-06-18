@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -907,7 +907,7 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-infoblock">
-                                                                                        <p><a target="_blank">View online version</a></p>
+                                                                                        <p><a target="_blank"></a></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -974,7 +974,7 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10b es-m-txt-c">
-                                                                                        <h1 style="font-size: 46px; line-height: 100%;"><strong>Buy Order received</strong></h1>
+                                                                                        <h1 style="font-size: 46px; line-height: 100%;"><strong th:text="#{buyOrderReceived}">Buy order received</strong></h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1008,12 +1008,12 @@ body {
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-m-txt-c">
                                                                                         <h2 style="font-size: 19px;"><a target="_blank" style="font-size: 19px;">
-                                                                                                <font color="#333333">Advertisment&nbsp;</font>#65000500
-                                                                                            </a>&nbsp;has a pending&nbsp; offer!&nbsp;</h2>
+                                                                                                <font color="#333333" th:text="#{advertisment}">Advertisment&nbsp;</font>#<span th:text="${trade.tradeId}"/>
+                                                                                        </a>&nbsp;<span th:text="#{hasAPendingOffer}"></span></h2>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;">Approve or Reject Offer</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a th:href="${url}" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;" th:text="#{acceptOrReject}">Approve or Reject Offer</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -1033,12 +1033,13 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 20px;"><strong>Offer Information</strong></p>
+                                                                                        <p style="font-size: 20px;"><strong th:text="#{offerInformation}">Offer Information</strong></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p><strong><span style="font-size:16px;">Coin:&nbsp;</span></strong><br>BTC<br><strong><span style="font-size:16px;">Unit Price:</span></strong><br>1.000.000 ARS<br><strong><span style="font-size:16px;">You would receive:</span></strong><br>1.000.000 ARS<br><strong><span style="font-size:16px;">You would pay:&nbsp;</span></strong><br>1 BTC</p>
+                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br><span th:text="${trade.offer.crypto.code}">BTC</span><br><strong><span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br>1.000.000 ARS<br><strong><span style="font-size:16px;" th:text="#{youWouldReceive}">You would receive:</span></strong><br><span
+                                                                                                th:text="${trade.offer.unitPrice}">1.000.000</span> ARS<br><strong><span style="font-size:16px;" th:text="#{youWouldPay}">You would pay:&nbsp;</span></strong><br><span th:text="${trade.quantity}">1 </span> <span th:text="${trade.offer.crypto.code}">BTC</span> </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1059,15 +1060,16 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 21px;"><strong>Buyer information</strong></p>
+                                                                                        <p style="font-size: 21px;"><strong th:text="#{buyerInformation}">Buyer information</strong></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p>Customer: <strong>sarah_powell@domain.com</strong></p>
-                                                                                        <p>Order number:&nbsp;<strong>#65000500</strong></p>
-                                                                                        <p>Invoice date:&nbsp;<strong>Apr 17, 2021</strong></p>
-                                                                                        <p>Reputation:&nbsp; 5 stars<br>Amount of trades made: 12</p>
+                                                                                        <p><span th:text="#{username}">Username:</span> <strong th:text="${trade.buyer.username.get()}">sarah_powell@domain.com</strong></p>
+                                                                                        <p><span th:text="#{tradeId}">TradeID:</span>#<strong th:text="${trade.tradeId}">65000500</strong></p>
+                                                                                        <p th:text="#{date}">Invoice date:&nbsp;<strong th:text="${trade.getLastModified()}">Apr 17, 2021</strong></p>
+                                                                                        <p><span th:text="#{rating}">Reputation:</span> <span th:text="${trade.buyer.rating/2}">5</span> <br>
+                                                                                            <span th:text="#{tradesMade}">Amount of trades made:</span> <span th:text="${trade.buyer.ratingCount}">12</span></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1088,7 +1090,7 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10t es-p10b">
-                                                                                        <p>Got a question?&nbsp;Email us at p2pcryptuki@</p>
+                                                                                        <p></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

@@ -85,19 +85,11 @@ public class BuyerController {
     public ModelAndView landing(@Valid @ModelAttribute("landingForm") LandingForm form, final BindingResult errors, final Authentication authentication) {
 
         if (errors.hasErrors())
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(); // TODO: No!!
 
         final ModelAndView mav = new ModelAndView("index");
 
-        int pageNumber = form.getPage()!= null ? form.getPage() :  0;
-        OfferFilter filter = new OfferFilter()
-                .withPageSize(PAGE_SIZE)
-                .withPage(form.getPage()!= null ? form.getPage() :  0)
-                .orderingBy(OfferOrderCriteria.values()[form.getOrderCriteria()])
-                .withCryptoCodes(form.getCoins())
-                .withLocations(form.getLocation())
-                .withIsQuantityInRange(form.getArsAmount());
-
+        OfferFilter filter = form.toOfferFilter().withPageSize(PAGE_SIZE);
         long offerCount = offerService.countBuyableOffers(filter);
         long pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
@@ -105,17 +97,16 @@ public class BuyerController {
         Collection<Cryptocurrency> cryptocurrencies = cryptocurrencyService.getAllCryptocurrencies();
         Collection<LocationCountWrapper> locationCountWrappers = offerService.getOfferCountByLocation();
 
-        mav.addObject("selectedCoins", Arrays.asList(form.getCoins()));
+        mav.addObject("selectedCoins", form.getCoins());
 
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
-        mav.addObject("activePage", pageNumber);
+        mav.addObject("activePage", form.getPage());
         mav.addObject("cryptocurrencies", cryptocurrencies);
         mav.addObject("paymentMethods", Arrays.asList(PaymentMethod.values()));
         mav.addObject("offerCount", offerCount);
         mav.addObject("locations", Arrays.asList(Location.values()));
         mav.addObject("locationsWithOffers", locationCountWrappers);
-
 
         mav.addObject("location" , form.getLocation());
         mav.addObject("coins" , form.getCoins());
@@ -123,10 +114,10 @@ public class BuyerController {
         mav.addObject("orderCriteria", form.getOrderCriteria());
         mav.addObject("arsAmount", form.getArsAmount());
 
-
         if( null != authentication){
             mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
         }
+
         return mav;
     }
 

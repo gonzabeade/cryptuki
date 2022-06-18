@@ -26,9 +26,9 @@ INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, ask
 INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, '2003-04-27 21:03:02', 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
 INSERT INTO offer (offer_id,seller_id, offer_date, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, '2001-06-27 22:05:02', 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
 
-INSERT INTO trade (trade_id,offer_id, buyer_id, seller_id, start_date, quantity) VALUES (0,0, 1, 0, '2020-11-01 01:18:33', 3.4);
-INSERT INTO trade (trade_id ,offer_id, buyer_id, seller_id, start_date, quantity) VALUES (1,0, 1, 0, '2020-11-01 01:18:33', 5.6);
-INSERT INTO trade (trade_id,offer_id, buyer_id, seller_id, start_date, quantity) VALUES (2,0, 0, 1, '2020-11-01 01:18:33', 3.4);
+INSERT INTO trade (trade_id,offer_id, buyer_id, seller_id, last_modified, quantity) VALUES (0,0, 1, 0, '2020-11-01 01:18:33', 3.4);
+INSERT INTO trade (trade_id ,offer_id, buyer_id, seller_id, last_modified, quantity) VALUES (1,0, 1, 0, '2020-11-01 01:18:33', 5.6);
+INSERT INTO trade (trade_id,offer_id, buyer_id, seller_id, last_modified, quantity) VALUES (2,0, 0, 1, '2020-11-01 01:18:33', 3.4);
 
 CREATE view  trade_complete AS
 SELECT
@@ -36,7 +36,7 @@ SELECT
     offer_id,
     buyer_auth.uname as buyer_uname,
     seller_auth.uname as seller_uname,
-    start_date,
+    last_modified,
     trade.status,
     quantity,
     asking_price,

@@ -34,7 +34,7 @@
       </jsp:include>
     </div>
     <div class="flex flex-col divide-x h-full">
-      <div class="p-10 flex flex-wrap justify-between">
+      <div class="p-10 flex flex-wrap ">
 
         <c:forEach var="complain" items="${complainList}">
           <li style="list-style-type: none" class="my-3">
@@ -54,7 +54,7 @@
         <jsp:param name="pages" value="${pages}"/>
         <jsp:param name="baseUrl" value="${baseUrl}"/>
       </jsp:include>
-      <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+      <h1 class="mx-auto text-gray-400"><messages:message code="totalPageAmount"/>: ${pages}</h1>
     </div>
 
   </div>

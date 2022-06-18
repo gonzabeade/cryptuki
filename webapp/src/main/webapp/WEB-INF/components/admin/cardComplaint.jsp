@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 
-<div class="flex flex-col bg-white shadow-lg rounded-lg p-4">
+<div class="flex flex-col bg-white shadow-lg rounded-lg p-4 w-80 h-52 mx-3 my-3">
     <div class="flex flex-col">
         <div class="flex flex-col my-auto mx-7">
             <h1 class="font-sans font-polard text-xl font-semibold">
@@ -14,7 +14,7 @@
             <h1 class="font-sans font-polard text-lg font-semibold">
                 <messages:message code="user"/>:  <b><c:out value="${param.complainerUsername}"/></b>
             </h1>
-            <h3 class="text-gray-600 w-60 overflow-y-hidden" ><messages:message code="comment"/>: <c:out value="${param.complainerComments}"/></h3>
+            <h3 class="text-gray-600 w-60 overflow-y-hidden truncate" ><messages:message code="comment"/>: <c:out value="${param.complainerComments}"/></h3>
         </div>
     </div>
     <c:if test="${param.complainStatus != 'CLOSED'}">

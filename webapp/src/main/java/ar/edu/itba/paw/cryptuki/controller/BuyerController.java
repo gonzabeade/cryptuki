@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,18 +53,18 @@ public class BuyerController {
         String username = authentication.getName();
         int pageNumber = page.orElse(0);
 
-
-        // TODO: check!!
         long tradeCount;
         Collection<Trade> tradeList;
+        EnumSet<TradeStatus> set;
         if (status.isPresent()) {
             TradeStatus askedStatus = TradeStatus.valueOf(status.get());
-            tradeCount = tradeService.getTradesAsBuyerCount(username, askedStatus);
-            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, askedStatus);
+            set = EnumSet.of(askedStatus);
         } else {
-            tradeCount = tradeService.getTradesAsBuyerCount(username, TradeStatus.PENDING);
-            tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, TradeStatus.PENDING);
+            set= EnumSet.allOf(TradeStatus.class);
         }
+        tradeCount = tradeService.getTradesAsBuyerCount(username, set);
+        tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, set);
+
 
 
         User user = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username));

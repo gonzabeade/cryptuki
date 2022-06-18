@@ -115,7 +115,7 @@
 									</svg>
 								</a>
 								<div class="my-auto">
-									<c:url value="/delete/${param.offerId}" var="deleteUrl"/>
+									<c:url value="/offer/delete/${param.offerId}" var="deleteUrl"/>
 									<form:form method="post" action="${deleteUrl}" cssClass="flex my-auto mx-3">
 										<button type="submit">
 											<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#2E3440" stroke-width="2">

@@ -16,5 +16,5 @@ public interface KycDao {
     /** Kyc Request and count getters */
     Collection<KycInformation> getKycRequestsByStatus(String username, KycStatus status);
     Collection<KycInformation> getKycRequestsByStatus(KycStatus status, int page, int pageSize);
-    long countKycRequestsByStatus(String username, KycStatus status);
+    long countKycRequestsByStatus(KycStatus status);
 }

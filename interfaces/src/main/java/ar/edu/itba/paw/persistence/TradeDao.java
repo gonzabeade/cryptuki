@@ -26,8 +26,8 @@ public interface TradeDao {
     Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity);
 
     /** Returns a collection and count of Trades in which the user is the buyer */
-    Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status);
-    long getTradesAsBuyerCount(String username, TradeStatus status);
+    Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status);
+    long getTradesAsBuyerCount(String username, Set<TradeStatus> status);
 
 
 

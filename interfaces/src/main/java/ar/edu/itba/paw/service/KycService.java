@@ -20,6 +20,7 @@ public interface KycService {
     /** Kyc Request getters */
     Optional<KycInformation> getPendingKycRequest(String username);
     Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
+    long getPendingKycRequestsCount();
 
     /** Get all emission countries that are supported by the KYC service*/
     Collection<Country> getAllCountries();

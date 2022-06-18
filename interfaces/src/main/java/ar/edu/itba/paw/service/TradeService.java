@@ -27,8 +27,8 @@ public interface TradeService {
     long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId);
 
     /** Returns a collection and count of Trades in which the user is the buyer */
-    Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, TradeStatus status);
-    long getTradesAsBuyerCount(String username, TradeStatus status);
+    Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status);
+    long getTradesAsBuyerCount(String username, Set<TradeStatus> status);
 
     /** Given a user , it rates the counterPart of a trade **/
     void rateCounterPartUserRegardingTrade(String username, int rating, int tradeId);

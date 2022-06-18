@@ -5,6 +5,5 @@ public enum OfferOrderCriteria {
     RATE,
     PRICE_LOWER,
     PRICE_UPPER,
-    LAST_LOGIN,
-
+    LAST_LOGIN
 }

@@ -76,6 +76,7 @@ public class UserController {
     public ModelAndView verify(@Valid @ModelAttribute("codeForm") CodeForm form, BindingResult errors){
         if (errors.hasErrors())
             return verify(form, form.getUsername());
+        userService.verifyUser(form.getUsername(), form.getCode());
         return logInProgrammatically(form.getUsername());
     }
 

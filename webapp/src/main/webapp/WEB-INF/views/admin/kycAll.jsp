@@ -24,7 +24,7 @@
 
     <% request.setCharacterEncoding("utf-8"); %>
     <jsp:include page="../../components/admin/header.jsp"/>
-    <div class="flex flex-col ml-64 my-10 h-screen w-screen">
+    <div class="flex flex-col ml-80 my-10 h-screen w-screen">
         <h1 class="font-sans text-4xl font-bold"><messages:message code="kyccheck"/></h1>
 
 
@@ -55,4 +55,11 @@
     </div>
 
 </div>
+<div class="shape-blob"></div>
+<div class="shape-blob one"></div>
+<div class="shape-blob two"></div>
+<div class="shape-blob" style="left: 50%"></div>
 
+<div class="shape-blob" style="left: 5%; top: 80%"></div>
+</body>
+</html>

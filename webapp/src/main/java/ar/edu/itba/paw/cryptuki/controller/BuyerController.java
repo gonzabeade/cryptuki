@@ -109,7 +109,6 @@ public class BuyerController {
         mav.addObject("locations", Arrays.asList(Location.values()));
         mav.addObject("locationsWithOffers", locationCountWrappers);
 
-        mav.addObject("location" , form.getLocation());
         mav.addObject("coins" , form.getCoins());
         mav.addObject("page" , form.getPage());
         mav.addObject("orderCriteria", form.getOrderCriteria());

@@ -50,7 +50,7 @@
                 </div>
                 <div class="w-full flex flex-row mx-auto mt-3">
                     <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="offeredAmount"/>:</h2>
-                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.quantity}"/> ARS (<messages:message code="of"/> <c:out value="${trade.offer.unitPrice}"/>) </h3>
+                    <h3 class="font-sans font-medium text-polard text-xl text-start "><c:out value="${trade.quantity}"/> ARS (<messages:message code="of"/> <c:out value="${trade.offer.unitPrice}"/> ARS) </h3>
                 </div>
                 <div class="w-full  flex flex-row mx-auto mt-3">
                     <h2 class="font-sans font-semibold font-polard text-xl text-start mr-3"><messages:message code="tradeState"/>:</h2>

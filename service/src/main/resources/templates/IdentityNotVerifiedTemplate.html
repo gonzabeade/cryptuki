@@ -946,7 +946,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" href="http://pawserver.it.itba.edu.ar/paw-2022a-01/"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_cbc23aad27f402c144a3dae5c639eae8/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
+                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" th:href="${url}"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_cbc23aad27f402c144a3dae5c639eae8/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -992,7 +992,7 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p>" <em th:text="${complaint}">ID was not complete in photo</em>"</p>
+                                                                                        <p>" <em th:text="${reason}">ID was not complete in photo</em>"</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1012,7 +1012,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a th:href="${url}" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto,helvetica neue , helvetica, arial, sans-serif;" th:text="#{tryAgain}">Try again</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a th:href="${url} + '/kyc'" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto,helvetica neue , helvetica, arial, sans-serif;" th:text="#{tryAgain}">Try again</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

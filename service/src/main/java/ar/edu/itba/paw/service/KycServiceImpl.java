@@ -18,11 +18,13 @@ public class KycServiceImpl implements KycService {
 
     private final KycDao kycDao;
     private final EmissionCountryDao emissionCountryDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public KycServiceImpl(KycDao kycDao, EmissionCountryDao emissionCountryDao) {
+    public KycServiceImpl(KycDao kycDao, EmissionCountryDao emissionCountryDao, MessageSenderFacade messageSenderFacade) {
         this.kycDao = kycDao;
         this.emissionCountryDao = emissionCountryDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
@@ -51,15 +53,15 @@ public class KycServiceImpl implements KycService {
     @Override
     @Transactional
     public void validateKycRequest(int kycId) {
-        // TODO: enviar mail con confirmacion
-        kycDao.setKycRequestStatus(KycStatus.APR, kycId);
+        KycInformation kycInformation = kycDao.setKycRequestStatus(KycStatus.APR, kycId);
+        messageSenderFacade.sendIdentityVerified(kycInformation.getUser());
     }
 
     @Override
     @Transactional
     public void rejectKycRequest(int kycId, String reason) {
-        // TODO: enviar mail con la razon
-        kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+        KycInformation kycInformation = kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+        messageSenderFacade.sendIdentityRequestRejected(kycInformation.getUser(),reason);
     }
 
     @Override

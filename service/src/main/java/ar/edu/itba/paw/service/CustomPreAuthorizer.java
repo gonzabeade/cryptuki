@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserAuth;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,48 +14,47 @@ import java.util.Optional;
 public class CustomPreAuthorizer {
 
     private final UserDao userDao;
-    private final UserAuthDao userAuthDao;
-
     private final OfferDao offerDao;
     private final TradeDao tradeDao;
-
+    private final KycDao kycDao;
 
     @Autowired
-    public CustomPreAuthorizer(UserDao userDao, UserAuthDao userAuthDao, OfferDao offerDao, TradeDao tradeDao) {
+    public CustomPreAuthorizer(UserDao userDao, OfferDao offerDao, TradeDao tradeDao, KycDao kycDao) {
         this.userDao = userDao;
-        this.userAuthDao = userAuthDao;
         this.offerDao = offerDao;
         this.tradeDao = tradeDao;
+        this.kycDao = kycDao;
     }
 
-    public boolean isUserAuthorized(int userId, UserDetails userDetails) {
-        Optional<User> user = userDao.getUserByUsername(userDetails.getUsername());
-        return user.isPresent() && user.get().getId() == userId;
+    public boolean canUserUploadOffer(UserDetails userDetails) {
+        Optional<User> maybeUser = userDao.getUserByUsername(userDetails.getUsername());
+        if (!maybeUser.isPresent())
+            return false;
+        User user = maybeUser.get();
+        return user.getUserAuth().getUserStatus().equals(UserStatus.VERIFIED)
+                && user.getKyc() != null
+                && user.getKyc().getStatus().equals(KycStatus.APR);
     }
 
-    public boolean isUserAuthorized(String username, UserDetails userDetails) {
-        boolean v = username.equals(userDetails.getUsername());
-        return v;
+    public boolean canUserAlterOffer(UserDetails userDetails, int offerId) {
+        Optional<Offer> maybeOffer = offerDao.getOffersBy(new OfferFilter().restrictedToId(offerId)).stream().findFirst();
+        if (!maybeOffer.isPresent())
+            throw new NoSuchOfferException(offerId);
+        return maybeOffer.get().getSeller().getUsername().get().equals(userDetails.getUsername()) && maybeOffer.get().getSeller().getKyc().getStatus().equals(KycStatus.APR);
     }
 
-    public boolean isUserOwnerOfOffer(int offerId, UserDetails userDetails) {
-        String owner = offerDao.getOffersBy(new OfferFilter().restrictedToId(offerId)).stream().findFirst().get().getSeller().getUserAuth().getUsername();
-        return owner != null && owner.equals(userDetails.getUsername());
+    public boolean isUserOwnerOfTrade(UserDetails userDetails, int tradeId) {
+        Optional<Trade> maybeTrade = tradeDao.getTradeById(tradeId);
+        if (!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+        return maybeTrade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername());
     }
 
-    public boolean isUserPartOfTrade(Integer tradeId, UserDetails userDetails) {
-        if (tradeId == null) return true;
-        Optional<Trade> trade = tradeDao.getTradeById(tradeId);
-        return trade.isPresent() && (
-                trade.get().getBuyer().getUserAuth().getUsername().equals(userDetails.getUsername())
-                || trade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername())
-        );
+    public boolean isUserPartOfTrade(UserDetails userDetails, int tradeId) {
+        Optional<Trade> maybeTrade = tradeDao.getTradeById(tradeId);
+        if (!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+        return maybeTrade.get().getBuyer().getUsername().get().equals(userDetails.getUsername())
+            || maybeTrade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername());
     }
-
-    public boolean doesUserHaveCode(String username, int code) {
-        Optional<UserAuth> user = userAuthDao.getUserAuthByUsername(username);
-        boolean v = user.isPresent() && user.get().getCode() == code;
-        return v;
-    }
-
 }

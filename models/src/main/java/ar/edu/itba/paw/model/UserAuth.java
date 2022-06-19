@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class UserAuth  {
 
     @Id
-    @Column(name="user_id")
-    private Integer userId;
+    @Column(name="user_id", nullable = false)
+    private int userId;
     @Column(name="uname", nullable = false, length = 50, unique = true)
     private String username;
     @Column(length = 100, nullable = false)
@@ -16,8 +16,8 @@ public class UserAuth  {
     @Column(name = "role_id")
     @Enumerated(EnumType.ORDINAL)
     private Role role = Role.ROLE_USER;
-    @Column(name="code")
-    private Integer code;
+    @Column(name="code", nullable = false)
+    private int code;
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     private UserStatus userStatus = UserStatus.UNVERIFIED;

@@ -11,8 +11,8 @@ public class Complain {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complain_complain_id_seq")
     @SequenceGenerator(sequenceName = "complain_complain_id_seq", name = "complain_complain_id_seq", allocationSize = 1)
-    @Column(name="complain_id")
-    private Integer complainId;
+    @Column(name="complain_id", nullable = false)
+    private int complainId;
     @OneToOne
     @JoinColumn(name="trade_id")
     private Trade trade;

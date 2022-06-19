@@ -13,7 +13,7 @@ public class KycInformation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kyc_kyc_id_seq")
     @SequenceGenerator(sequenceName = "kyc_kyc_id_seq", name = "kyc_kyc_id_seq", allocationSize = 1)
     @Column(name="kyc_id", nullable = false)
-    private Integer kycId;
+    private int kycId;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

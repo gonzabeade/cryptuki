@@ -104,31 +104,31 @@
                         <messages:message code="allTrades"/> </p>
                 </a>
             </div>
-            <div class="mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
+            <div class=" flex mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/pending/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="pendingTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
+            <div class=" flex mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/accepted/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="acceptedTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
+            <div class=" flex mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/rejected/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="rejectedTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
+            <div class=" flex mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/completed/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="soldTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16" >
+            <div class=" flex mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16" >
                 <a href="<c:url value="/seller/associatedTrades/deletedByUser/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2  px-4 font-bold text-polar text-center <c:out value="${status=='DELETED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="deletedByUserTrades"/></p>
@@ -138,7 +138,7 @@
             <%--Middle Pannel --%>
         <div class="flex flex-col">
             <%--                    ELIJAN UNA CARD DISTINTA POR CADA CASO NO HAGAN CIFS!!!--%>
-            <div class="flex flex-wrap pl-3 my-10">
+            <div class="flex flex-wrap pl-3 mt-10">
                 <c:if test="${empty trades}" >
                     <p class="text-center my-auto mx-auto font-polard font-sans text-3xl font-bold"><messages:message code="noResults"/></p>
                 </c:if>
@@ -146,7 +146,7 @@
                     <fmt:formatNumber type="number" maxFractionDigits="0"
                                       value="${trade.buyer.rating /2 == 0? 1: trade.buyer.rating/2 }" var="stars"/>
                     <div name="trade-${offer.offerId}-${trade.status}"
-                         class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between m-5 w-80">
+                         class="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mr-5 mb-5 w-80">
 
                         <div class="flex font-sans h-fit w-full mt-5">
                             <c:if test="${trade.status == 'PENDING' }">
@@ -310,6 +310,14 @@
                     </div>
                 </c:forEach>
             </div>
+            <h1 class="mx-auto text-center">
+                <jsp:include page="../../components/paginator.jsp">
+                    <jsp:param name="activePage" value="${activePage}"/>
+                    <jsp:param name="pages" value="${pages}"/>
+                    <jsp:param name="baseUrl" value="/seller/associatedTrades/${offer.offerId}"/>
+                </jsp:include>
+                <h1 class="text-gray-400 mx-auto mb-10"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+            </h1>
 
         </div>
 

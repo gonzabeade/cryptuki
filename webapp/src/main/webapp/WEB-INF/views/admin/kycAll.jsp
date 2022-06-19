@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url  value="/public/js/feedback.js"/>"></script>
+    <script src="<c:url  value="/public/js/pagination.js"/>"></script>
     <script src="<c:url value="/public/js/successMessageShow.js"/>"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,12 +50,16 @@
                     </div>
                 </div>
             </c:forEach>
-            <jsp:include page="../../components/paginator.jsp">
-                    <jsp:param name="activePage" value="${activePage}"/>
-                    <jsp:param name="pages" value="${pages}"/>
-                    <jsp:param name="baseUrl" value="/admin/kyccheck/"/>
-            </jsp:include>
         </div>
+        <div class="flex flex-col">
+            <jsp:include page="../../components/paginator.jsp">
+                <jsp:param name="activePage" value="${activePage}"/>
+                <jsp:param name="pages" value="${pages}"/>
+                <jsp:param name="baseUrl" value="/admin/kyccheck/"/>
+            </jsp:include>
+            <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+        </div>
+
 
 
     </div>

@@ -84,8 +84,14 @@ public class AdminController {
     @RequestMapping(value = "/kyccheck", method = RequestMethod.GET)
     public ModelAndView kycCheckHome(@RequestParam("page") Optional<Integer> page, @ModelAttribute("kycApprovalForm") KycApprovalForm kycApprovalForm) {
         ModelAndView mav = new ModelAndView("admin/kycAll");
-        Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(page.orElse(0), KYC_PAGE_SIZE);
+
+        long kycRequestsCount = kycService.getPendingKycRequestsCount();
+        long pages =  (kycRequestsCount + KYC_PAGE_SIZE - 1) / KYC_PAGE_SIZE;
+        int pageNumber = page.orElse(0);
+        Collection<KycInformation> pendingKycs = kycService.getPendingKycRequests(pageNumber, KYC_PAGE_SIZE);
         mav.addObject("pendingKycs", pendingKycs);
+        mav.addObject("activePage", pageNumber);
+        mav.addObject("pages", pages);
         return mav;
     }
 

@@ -30,14 +30,22 @@
     <% request.setCharacterEncoding("UTF-8"); %>
     <jsp:include page="../components/contactText.jsp"/>
 </div>
-<div class="flex justify-center">
-    <% request.setCharacterEncoding("utf-8"); %>
-    <jsp:include page="../components/complainForm.jsp">
-        <jsp:param name="url" value="support"/>
-        <jsp:param name="tradeId" value="${tradeId}"/>
-        <jsp:param name="username" value="${username}"/>
-    </jsp:include>
-</div>
+<c:if test="${!completed}">
+    <div class="flex justify-center">
+        <% request.setCharacterEncoding("utf-8"); %>
+        <jsp:include page="../components/complainForm.jsp">
+            <jsp:param name="url" value="support"/>
+            <jsp:param name="tradeId" value="${tradeId}"/>
+            <jsp:param name="username" value="${username}"/>
+        </jsp:include>
+    </div>
+</c:if>
+<c:if test="${completed}">
+    <div class="flex justify-center">
+        <a class="bg-frost text-white p-3 font-sans rounded-lg mx-auto" href="<c:url  value="/"/>"><messages:message code="returnHome"/></a>
+    </div>
+</c:if>
+
 
 
 </body>

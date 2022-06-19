@@ -48,9 +48,9 @@
 </body>
 <script>
     window.onload = function wrapper() {
-        let selectedCode = <c:out value="${selectedCrypto}"/>;
-        if(selectedCode)
-            updateVars(selectedCode.id);
+        let selectedCode = '<c:out value="${selectedCrypto}"/>';
+        if(selectedCode !== ' ')
+            updateVars(selectedCode);
         setCryptoPrice();
     }
 </script>

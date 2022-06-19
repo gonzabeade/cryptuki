@@ -193,19 +193,22 @@
                                 <h1 class="font-sans font-semibold"><c:out
                                         value="${trade.buyer.phoneNumber}"/></h1>
                             </div>
-                            <div class="flex">
-                                <div class="flex flex-row">
-                                    <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
-                                    <div class="my-auto ml-2">
-                                        <c:forEach begin="0" end="${stars-1}">
-                                            <span class="fa fa-star" style="color: orange"></span>
-                                        </c:forEach>
-                                        <c:forEach begin="${stars}" end="4">
-                                            <span class="fa fa-star" style="color: gray"></span>
-                                        </c:forEach>
+                            <c:if test="${trade.buyer.ratingCount > 0}">
+                                <div class="flex">
+                                    <div class="flex flex-row">
+                                        <h4 class="text-gray-400 font-sans"><messages:message code="rating"/>: </h4>
+                                        <div class="my-auto ml-2">
+                                            <c:forEach begin="0" end="${stars-1}">
+                                                <span class="fa fa-star" style="color: orange"></span>
+                                            </c:forEach>
+                                            <c:forEach begin="${stars}" end="4">
+                                                <span class="fa fa-star" style="color: gray"></span>
+                                            </c:forEach>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:if>
+
                         </div>
                         <c:if test="${(trade.status =='SOLD')}">
                             <a class="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40 mt-5"

@@ -68,16 +68,16 @@
             <c:if test="${offer.offerStatus!= 'DEL'}">
                 <div class="flex flex-row justify-between">
                     <c:url value="/offer/modify/${offer.offerId}" var="getUrl"/>
-                    <form method="get" action="${getUrl}" class="rounded-xl text-center bg-frostdr w-1/2 p-2 mr-2 hover:bg-frostdr/[0.7]">
+                    <form method="get" action="${getUrl}" class="rounded-lg text-center bg-frostdr w-1/2 p-2 mr-2 hover:bg-frostdr/[0.7]">
                         <button type="submit" class=" text-white"><messages:message code="edit"/></button>
                     </form>
                     <c:url value="/offer/delete/${offer.offerId}" var="postUrl"/>
-                    <form method="post" action="${postUrl}" class="rounded-xl text-center bg-nred w-1/2 p-2 ml-2 z-30 ">
+                    <form method="post" action="${postUrl}" class="rounded-lg text-center bg-nred w-1/2 p-2 ml-2 z-30 ">
                         <button type="submit" class=" text-white"><messages:message code="delete"/></button>
                     </form>
                 </div>
             </c:if>
-            <form class="rounded-xl bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/pause/${offer.offerId}">
+            <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/pause/${offer.offerId}" method="post">
                 <button type="submit" >
                     <messages:message code="pauseOffer"/>
                 </button>

@@ -32,12 +32,13 @@ public class KycHibernateDao implements KycDao {
     }
 
     @Override
-    public void setKycRequestStatus(KycStatus status, int kycId) {
+    public KycInformation setKycRequestStatus(KycStatus status, int kycId) {
         KycInformation kyc = em.find(KycInformation.class, kycId);
         if ( kyc == null )
             throw new NoSuchKycException(kycId);
         kyc.setStatus(status);
         em.merge(kyc);
+        return kyc;
     }
 
     @Override

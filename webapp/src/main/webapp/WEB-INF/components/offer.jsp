@@ -25,20 +25,28 @@
         <p class="text-center"><messages:message code="Location.${offer.location}"/></p>
     </div>
 
-    <c:if test="${offer.offerStatus!= 'DEL'}">
+    <c:if test="${offer.offerStatus!= 'DEL' && offer.offerStatus!= 'PSE'}">
         <div class="flex flex-row justify-between">
             <c:url value="/offer/modify/${offer.offerId}" var="getUrl"/>
-            <form method="get" action="${getUrl}" class="rounded-xl text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">
+            <form method="post" action="${getUrl}" class="rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">
                 <button type="submit" class=" text-white"><messages:message code="edit"/></button>
             </form>
             <c:url value="/offer/delete/${offer.offerId}" var="postUrl"/>
-            <form method="post" action="${postUrl}" class="rounded-xl text-center bg-nred hover:bg-nred/[0.7] text-white w-1/2 p-2 ml-2 z-30 text-white">
+            <form method="post" action="${postUrl}" class="rounded-lg text-center bg-nred hover:bg-nred/[0.7] text-white w-1/2 p-2 ml-2 z-30 text-white">
                 <button type="submit" class=" "><messages:message code="delete"/></button>
             </form>
         </div>
-        <form class="rounded-xl bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/pause/${offer.offerId}">
+        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/pause/${offer.offerId}" method="post">
             <button type="submit" >
                 <messages:message code="pauseOffer"/>
+            </button>
+        </form>
+    </c:if>
+
+    <c:if test="${offer.offerStatus== 'PSE'}">
+        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/resume/${offer.offerId}" method="post">
+            <button type="submit" >
+                <messages:message code="resumeOffer"/>
             </button>
         </form>
     </c:if>

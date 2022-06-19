@@ -13,11 +13,13 @@ public class ChatServiceImpl implements ChatService {
 
     private final MessageDao messageDao;
     private final TradeDao tradeDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public ChatServiceImpl(MessageDao messageDao, TradeDao tradeDao) {
+    public ChatServiceImpl(MessageDao messageDao, TradeDao tradeDao, MessageSenderFacade messageSenderFacade) {
         this.messageDao = messageDao;
         this.tradeDao = tradeDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
@@ -25,8 +27,9 @@ public class ChatServiceImpl implements ChatService {
     public void sendMessage(Integer senderId, Integer tradeId, String message) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         messageDao.sendMessage(senderId, tradeId, message);
+       //send mail to the counterpart
+        messageSenderFacade.sendNewUnseenMessages(trade, trade.getBuyer().getId() == senderId ? trade.getOffer().getSeller(): trade.getBuyer() );
 
-        // TODO: if time allows, send email notifying about new messages
         if (senderId == trade.getBuyer().getId())
             trade.setqUnseenMessagesSeller(trade.getqUnseenMessagesSeller()+1);
         else

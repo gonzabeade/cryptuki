@@ -11,7 +11,7 @@ public interface KycDao {
 
     /** Kyc Request creation and manipulation */
     void newKycRequest(KycInformationPO kycInformationPO);
-    void setKycRequestStatus(KycStatus status, int kycId);
+    KycInformation setKycRequestStatus(KycStatus status, int kycId);
 
     /** Kyc Request and count getters */
     Collection<KycInformation> getKycRequestsByStatus(String username, KycStatus status);

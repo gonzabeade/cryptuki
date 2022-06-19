@@ -12,7 +12,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="<c:url  value="/public/js/tailwind.config.js"/>"></script>
     <script src="<c:url value="/public/js/sellerDashboard.js"/>"></script>
-
     <script src="<c:url value="/public/js/pagination.js"/> "></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,13 +105,13 @@
                             <c:set var="offer" value="${offer}" scope="request"/>
                          <jsp:include page="../../components/offer.jsp"/>
                         </c:forEach>
-                    <div class="mx-auto">
-                        <jsp:include page="../../components/paginator.jsp">
-                            <jsp:param name="activePage" value="${activePage}"/>
-                            <jsp:param name="pages" value="${pages}"/>
-                            <jsp:param name="baseUrl" value="/seller/"/>
-                        </jsp:include>
-                    </div>
+                </div>
+                <div class="mx-auto">
+                    <jsp:include page="../../components/paginator.jsp">
+                        <jsp:param name="activePage" value="${activePage}"/>
+                        <jsp:param name="pages" value="${pages}"/>
+                        <jsp:param name="baseUrl" value="/seller/"/>
+                    </jsp:include>
                 </div>
 
 

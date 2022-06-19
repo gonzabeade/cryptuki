@@ -108,32 +108,23 @@ public class OfferController {
         return new ModelAndView("redirect:/offer/"+offerId+"/editsuccess");
     }
 
+    @RequestMapping(value = "/pause/{offerId}", method = RequestMethod.POST)
+    public ModelAndView pause(@PathVariable("offerId") final int offerId){
+        offerService.sellerPauseOffer(offerId);
+        return new ModelAndView("redirect:/seller/");
+    }
+
+    @RequestMapping(value = "/resume/{offerId}", method = RequestMethod.POST)
+    public ModelAndView reesume(@PathVariable("offerId") final int offerId){
+        offerService.resumeOffer(offerId);
+        return new ModelAndView("redirect:/seller/");
+    }
+
     @RequestMapping(value = "/delete/{offerId}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("offerId") final int offerId){
         offerService.deleteOffer(offerId);
-        ModelAndView mav = new ModelAndView("deletedOffer");
-        return mav;
+        return new ModelAndView("deletedOffer");
     }
-
-
-//    @RequestMapping(value = "/myoffers", method = RequestMethod.GET)
-//    public ModelAndView myOffers(@RequestParam("page")final Optional<Integer> page, final Authentication authentication, final @ModelAttribute("soldTradeForm") SoldTradeForm soldTradeForm, @ModelAttribute("statusTradeForm") final StatusTradeForm statusTradeForm){
-//        ModelAndView mav = new ModelAndView("myOffers");
-//        int pageNumber = page.orElse(0);
-//        int offerCount = offerService.countOffersByUsername(authentication.getName());
-//        int pages =  (offerCount + PAGE_SIZE - 1) / PAGE_SIZE;
-//        Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName() , pageNumber, PAGE_SIZE);
-//        if(offers.isEmpty())
-//            mav.addObject("noOffers",true);
-//
-//        mav.addObject("offerList",offers);
-//        mav.addObject("pages", pages);
-//        mav.addObject("activePage", pageNumber);
-//        mav.addObject("userEmail", us.getUserInformation(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-//
-//        return mav;
-//    }
-
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") UploadOfferForm form, Authentication authentication){

@@ -65,7 +65,7 @@
                                 <ul role="list" class="divide-y divide-gray-200">
                                     <c:forEach items="${tradeList}" var="trade">
                                         <li class="py-2">
-                                            <a class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer" href="<c:url value="/seller/associatedTrades/${trade.offer.offerId}"/> ">
+                                            <a class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer" href="<c:url value="/chat?tradeId=${trade.tradeId}"/> ">
                                                 <div class="flex-shrink-0">
                                                     <img class="w-8 h-8 rounded-full" src="<c:url value="/profilepic/${trade.buyer.username.get()}"/>" alt="Profile pic">
                                                 </div>

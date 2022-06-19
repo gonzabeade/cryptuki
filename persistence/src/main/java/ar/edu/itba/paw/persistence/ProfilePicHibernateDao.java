@@ -42,10 +42,11 @@ public class ProfilePicHibernateDao implements ProfilePicDao {
         ProfilePicture pp;
         if (!maybeOldProfilePicture.isPresent()) {
             pp = new ProfilePicture(user, profilePicture, type);
+            em.persist(pp);
         } else {
             pp = maybeOldProfilePicture.get();
             pp.setImage(profilePicture, type);
+            em.merge(pp);
         }
-        em.persist(pp);
     }
 }

@@ -128,7 +128,7 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Offer modifyOffer(Offer offer) {
-        em.persist(offer);
+        em.merge(offer);
         return offer;
     }
 
@@ -142,7 +142,7 @@ public class OfferHibernateDao implements OfferDao{
         Offer offer = em.find(Offer.class, offerId);
         if (offer != null) {
             offer.setOfferStatus(offerStatus);
-            em.persist(offer);
+            em.merge(offer);
             return Optional.of(offer);
         } else
             return Optional.empty();

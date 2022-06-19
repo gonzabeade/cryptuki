@@ -62,7 +62,7 @@ public class UserHibernateDao implements UserDao {
         User user = getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         user.setLocale(locale);
         user.setLastLogin(LocalDateTime.now());
-        em.persist(user);
+        em.merge(user);
     }
 
     @Override
@@ -70,6 +70,6 @@ public class UserHibernateDao implements UserDao {
         User user = getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         user.setRatingSum(user.getRatingSum()+rating);
         user.setRatingCount(user.getRatingCount()+1);
-        em.persist(user);
+        em.merge(user);
     }
 }

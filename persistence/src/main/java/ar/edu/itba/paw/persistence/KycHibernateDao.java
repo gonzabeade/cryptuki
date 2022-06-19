@@ -37,7 +37,7 @@ public class KycHibernateDao implements KycDao {
         if ( kyc == null )
             throw new NoSuchKycException(kycId);
         kyc.setStatus(status);
-        em.persist(kyc);
+        em.merge(kyc);
     }
 
     @Override

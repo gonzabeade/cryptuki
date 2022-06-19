@@ -39,14 +39,14 @@ public class TradeHibernateDao implements TradeDao {
             throw new NoSuchTradeException(tradeId);
         trade.setStatus(status);
         trade.setLastModified(LocalDateTime.now());
-        em.persist(trade);
+        em.merge(trade);
         return trade;
     }
 
     @Override
     public Trade modifyTrade(Trade trade) {
         trade.setLastModified(LocalDateTime.now());
-        em.persist(trade);
+        em.merge(trade);
         return trade;
     }
 

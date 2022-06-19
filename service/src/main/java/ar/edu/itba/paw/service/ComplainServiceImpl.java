@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.UserAuthDao;
+import com.sun.media.jfxmedia.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,14 +40,14 @@ public class ComplainServiceImpl implements ComplainService{
 
         if (complain == null)
             throw new NullPointerException("Complain Builder object cannot be null.");
-
+        Complain createdComplain;
         try {
-            complainDao.makeComplain(complain);
+            createdComplain = complainDao.makeComplain(complain);
         } catch (PersistenceException pe) {
             throw new ServiceDataAccessException(pe);
         }
 
-//        messageSenderFacade.sendComplaintReceipt(complain.getComplainer(), complain.getComplainerComments());
+        messageSenderFacade.sendComplaintReceipt(createdComplain.getComplainer(), createdComplain.getTrade(), createdComplain.getComplainerComments().orElse("No comments"));
     }
 
     @Override
@@ -95,14 +96,15 @@ public class ComplainServiceImpl implements ComplainService{
     public void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId){
        Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
        userAuthDao.kickoutUser(kickedUserId);
-        // TODO: If time allows, email
+       messageSenderFacade.sendComplainClosedWithKickout(complain.getComplainer(), comment);
     }
 
     @Override
     @Secured("ROLE_ADMIN")
     @Transactional
     public void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment){
-        complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));;
+        Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+        messageSenderFacade.sendComplainClosedWithDismission(complain.getComplainer(), comment);
     }
 
     @Override

@@ -34,7 +34,6 @@ public class TradeHibernateDao implements TradeDao {
     @Override
     public Trade changeTradeStatus(int tradeId, TradeStatus status) {
         Trade trade = em.find(Trade.class, tradeId);
-        trade.setLastModified(LocalDateTime.now());
         if (trade == null)
             throw new NoSuchTradeException(tradeId);
         trade.setStatus(status);

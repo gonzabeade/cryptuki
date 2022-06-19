@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.cryptuki.config;
-
 import ar.edu.itba.paw.service.ContactService;
 import ar.edu.itba.paw.service.mailing.MailMessage;
 import ar.edu.itba.paw.service.mailing.MailService;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;

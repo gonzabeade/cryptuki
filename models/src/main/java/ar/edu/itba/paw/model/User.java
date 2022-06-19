@@ -14,7 +14,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
     @SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
-    private Integer id;
+    @Column(nullable = false)
+    private int id;
     @Column(length = 50, unique = true, nullable = false)
     private String email;
     @Column(name="last_login", insertable = false)
@@ -31,6 +32,9 @@ public class User {
     private int ratingSum;
     @Column(name="rating_count", nullable = false)
     private int ratingCount;
+
+    @Column(name="rating", nullable=false, updatable = false, insertable = false)
+    private double rating;
 
     @Column(name="locale")
     private Locale locale;
@@ -61,7 +65,7 @@ public class User {
     }
 
     public double getRating(){
-        return getRatingCount() == 0 ? 0 : getRatingSum()/getRatingCount();
+        return rating;
     }
 
     public int getNearestWholeRating(){

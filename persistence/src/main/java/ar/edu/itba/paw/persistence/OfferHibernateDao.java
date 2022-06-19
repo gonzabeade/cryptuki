@@ -21,13 +21,20 @@ public class OfferHibernateDao implements OfferDao{
     private EntityManager em;
 
     private Map<OfferOrderCriteria, String> orderSqlMap = new EnumMap<>(OfferOrderCriteria.class);
+    private Map<OfferOrderCriteria, String> orderHqlMap = new EnumMap<>(OfferOrderCriteria.class);
+
 
     public OfferHibernateDao() {
         orderSqlMap.put(OfferOrderCriteria.DATE, "offer_date DESC ");
+        orderHqlMap.put(OfferOrderCriteria.DATE, "o.date DESC ");
         orderSqlMap.put(OfferOrderCriteria.PRICE_LOWER, "asking_price ASC ");
+        orderHqlMap.put(OfferOrderCriteria.PRICE_LOWER, "o.unitPrice ASC ");
         orderSqlMap.put(OfferOrderCriteria.PRICE_UPPER, "asking_price DESC ");
+        orderHqlMap.put(OfferOrderCriteria.PRICE_UPPER, "o.unitPrice DESC ");
         orderSqlMap.put(OfferOrderCriteria.LAST_LOGIN, "last_login DESC ");
+        orderHqlMap.put(OfferOrderCriteria.LAST_LOGIN, "o.seller.lastLogin DESC ");
         orderSqlMap.put(OfferOrderCriteria.RATE, "rating DESC ");
+        orderHqlMap.put(OfferOrderCriteria.RATE, "o.seller.rating  DESC ");
     }
 
     private static void testAndSet(Collection<?> collection, Map<String, Object> args, String argName, StringBuilder sqlQueryBuilder, String queryPiece) {
@@ -71,7 +78,7 @@ public class OfferHibernateDao implements OfferDao{
         StringBuilder sqlQueryBuilder = new StringBuilder();
 
         // Filtering
-        sqlQueryBuilder.append("SELECT * FROM offer JOIN users ON offer.seller_id = users.id JOIN auth ON users.id = auth.user_id ");
+        sqlQueryBuilder.append("SELECT offer_id FROM offer JOIN users ON offer.seller_id = users.id JOIN auth ON users.id = auth.user_id ");
         fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
 
         // Ordering
@@ -82,12 +89,17 @@ public class OfferHibernateDao implements OfferDao{
         map.put("limit", filter.getPageSize());
         map.put("offset", filter.getPageSize()*filter.getPage());
 
-        Query query = em.createNativeQuery(sqlQueryBuilder.toString(), Offer.class);
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
 
-        return (Collection<Offer>) query.getResultList();
+        List<Integer> ids = query.getResultList();
+        if (ids.isEmpty())
+            return Collections.emptyList();
+        TypedQuery<Offer> tq = em.createQuery("from Offer o where o.offerId in :ids order by "+orderHqlMap.get(filter.getOrderCriteria()), Offer.class);
+        tq.setParameter("ids", ids);
+        return tq.getResultList();
     }
 
     @Override
@@ -102,7 +114,7 @@ public class OfferHibernateDao implements OfferDao{
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
-        return ((BigInteger) query.getSingleResult()).longValue(); // never returns null
+        return ((Number) query.getSingleResult()).longValue(); // never returns null
     }
 
     @Override

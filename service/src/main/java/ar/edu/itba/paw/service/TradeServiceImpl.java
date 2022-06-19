@@ -44,24 +44,28 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade rejectTrade(int tradeId) {
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.REJECTED);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade sellTrade(int tradeId) {
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade acceptTrade(int tradeId) {
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.ACCEPTED);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public void deleteTrade(int tradeId) {
         tradeDao.deleteTrade(tradeId);
     }

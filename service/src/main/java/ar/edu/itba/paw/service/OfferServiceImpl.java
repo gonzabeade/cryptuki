@@ -36,7 +36,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    //@PreAuthorize("@customPreAuthorizer.isUserAuthorized(#offerPO.sellerId, authentication.principal)") TODO GONZA: Falla esto
+    @PreAuthorize("@customPreAuthorizer.canUserUploadOffer(authentication.principal)")
     public Offer makeOffer(OfferPO offerPO) {
 
         if (offerPO == null)
@@ -130,7 +130,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-//    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offer.offerId, authentication.principal) OR hasRole('ROLE_ADMIN')")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerPO.offerId.get())")
     public Offer modifyOffer(OfferPO offerPO) {
 
         if (offerPO == null)
@@ -152,7 +152,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public void deleteOffer(int offerId) {
 
         if (offerId < 0)
@@ -167,7 +167,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public void sellerPauseOffer(int offerId) {
 
         if (offerId < 0)
@@ -203,7 +203,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public void resumeOffer(int offerId) {
 
         if (offerId < 0)
@@ -218,7 +218,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @Secured("ROLE_USER")
     public void sellQuantityOfOffer(Offer offer, double sold, int tradeId) {
 
 //        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
@@ -240,15 +240,12 @@ public class OfferServiceImpl implements OfferService {
 //        } catch (PersistenceException pe) {
 //            throw new ServiceDataAccessException(pe);
 //        }
-
-
     }
 
     @Override
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfOffer(#offerId, authentication.principal) OR hasRole('ADMIN') ")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public Optional<Offer> getOfferIfAuthorized(int offerId) {
         return getOfferById(offerId);
     }
-
 
 }

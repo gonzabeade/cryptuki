@@ -24,10 +24,10 @@
 </head>
 <body class="bg-storml overflow-x-hidden">
     <jsp:include page="../../components/seller/sellerHeader.jsp"/>
-    <div class="flex h-full w-full px-20 my-10">
+    <div class="flex h-full w-full px-10 my-10">
 
         <!-- Left Panel: chat and seller stats -->
-        <div class="flex flex-col h-full mx-20 w-1/5">
+        <div class="flex flex-col h-full mx-10 w-1/3">
             <div>
                 <jsp:include page="../../components/profile/userStatsCard.jsp">
                     <jsp:param name="username" value="${user.username.get()}"/>
@@ -67,10 +67,13 @@
                                             <a class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer" href="<c:url value="/chat?tradeId=${trade.tradeId}"/> ">
                                                 <div class="flex-shrink-0">
                                                     <img class="w-8 h-8 rounded-full" src="<c:url value="/profilepic/${trade.buyer.username.get()}"/>" alt="Profile pic">
-                                                    <h1>rechazado</h1>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-polar-600truncate"> ${trade.buyer.username.get()} </p>
+                                                    <div class="flex flex-row justify-between">
+                                                        <p class="text-sm font-medium text-polar-600 truncate"> <c:out value="${trade.buyer.username.get()}"/> </p>
+                                                        <h1 class="text-sm  text-polar truncate"><messages:message code="${trade.status}"/> <messages:message code="for"/> <fmt:formatNumber type="number" maxFractionDigits="10" value="${trade.quantity / trade.offer.unitPrice}"/> <c:out value="${trade.offer.crypto.code}"/> </h1>
+                                                    </div>
+
                                                     <p class="text-sm text-gray-500 truncate"><messages:message code="${trade.status}.madeYouAnOffer"/> </p>
                                                 </div>
                                             </a>
@@ -90,7 +93,7 @@
         </div>
 
         <!-- Middle panel -->
-        <div class="flex flex-col h-full mr-20 w-3/5">
+        <div class="flex flex-col h-full mr-20 w-4/5">
             <div class="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
                 <h1 class="text-center text-4xl font-semibold font-sans text-polar"><messages:message code="uploadedAdvertisements"/> </h1>
             </div>

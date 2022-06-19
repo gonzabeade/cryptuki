@@ -32,6 +32,9 @@ public class User {
     @Column(name="rating_count", nullable = false)
     private int ratingCount;
 
+    @Column(name="rating", nullable=false)
+    private double rating;
+
     @Column(name="locale")
     private Locale locale;
 
@@ -61,7 +64,7 @@ public class User {
     }
 
     public double getRating(){
-        return getRatingCount() == 0 ? 0 : getRatingSum()/getRatingCount();
+        return rating;
     }
 
     public int getNearestWholeRating(){

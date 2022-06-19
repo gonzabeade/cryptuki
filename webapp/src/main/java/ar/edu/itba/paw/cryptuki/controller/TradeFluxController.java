@@ -95,11 +95,6 @@ public class TradeFluxController {
         return new ModelAndView("redirect:/trade"+"?tradeId="+trade.getTradeId());
     }
 
-    @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication) {
-        return receiptView("receipt", tradeId, authentication);
-    }
-
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
     public ModelAndView receiptDescription(@ModelAttribute("ratingForm") RatingForm ratingForm, @PathVariable("tradeId") final int tradeId, final Authentication authentication){
         ModelAndView mav = receiptView("receiptDescription", tradeId, authentication);

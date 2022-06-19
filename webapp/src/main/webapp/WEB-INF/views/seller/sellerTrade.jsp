@@ -104,31 +104,31 @@
                         <messages:message code="allTrades"/> </p>
                 </a>
             </div>
-            <div class="mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12">
+            <div class="mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/pending/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='PENDING'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="pendingTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12">
+            <div class="mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/accepted/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='ACCEPTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="acceptedTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12">
+            <div class="mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/rejected/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='REJECTED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="rejectedTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12">
+            <div class="mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/completed/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2 px-4 font-bold text-polar  text-center <c:out value="${status=='SOLD'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="soldTrades"/></p>
                 </a>
             </div>
-            <div class="mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12" >
+            <div class="mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16" >
                 <a href="<c:url value="/seller/associatedTrades/deletedByUser/${offer.offerId}"/>" class="my-auto mx-auto">
                     <p class="py-2  px-4 font-bold text-polar text-center <c:out value="${status=='DELETED'?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="deletedByUserTrades"/></p>
@@ -212,6 +212,23 @@
                                href="<c:url value="/receiptDescription/${trade.tradeId}"/>">
                                 <messages:message code="help"/>
                             </a>
+                            <div class="flex flex-row mx-auto">
+
+                                <a href="<c:url value="${'/chat?tradeId='.concat(trade.tradeId)}"/>"
+                                   class="mx-2 rounded-full my-auto">
+                                        <%--                                        <span><messages:message code="chatWithBuyer"/> </span>--%>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                </a>
+                                <c:if test="${trade.qUnseenMessagesSeller > 0}">
+                                    <div class="-ml-4 w-6 h-5 bg-frostl border-2 font-sans rounded-full flex justify-center items-center">
+                                        <p class="text-xs"><c:out value="${trade.qUnseenMessagesSeller}"/></p>
+                                    </div>
+                                </c:if>
+                            </div>
                         </c:if>
 
                             <%--                            CASE - PENDING--%>

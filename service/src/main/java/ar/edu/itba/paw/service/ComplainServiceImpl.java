@@ -96,6 +96,16 @@ public class ComplainServiceImpl implements ComplainService{
     public void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId){
        Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
        userAuthDao.kickoutUser(kickedUserId);
+
+       User  kickedOutUser;
+       Trade trade = complain.getTrade();
+
+       if(complain.getComplainer().getId() == trade.getBuyer().getId()){
+           kickedOutUser = trade.getOffer().getSeller();
+       }else{
+           kickedOutUser = trade.getBuyer();
+       }
+       messageSenderFacade.sendYouWereKickedOutBecause(kickedOutUser, comment);
        messageSenderFacade.sendComplainClosedWithKickout(complain.getComplainer(), comment);
     }
 

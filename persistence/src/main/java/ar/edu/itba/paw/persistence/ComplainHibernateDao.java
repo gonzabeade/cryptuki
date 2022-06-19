@@ -10,10 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ComplainHibernateDao implements ComplainDao{
@@ -58,7 +55,7 @@ public class ComplainHibernateDao implements ComplainDao{
         Map<String, Object> map = new HashMap<>();
         StringBuilder sqlQueryBuilder = new StringBuilder();
 
-        sqlQueryBuilder.append("SELECT * FROM complain_complete ");
+        sqlQueryBuilder.append("SELECT complain_id FROM complain_complete ");
 
         // Filtering
         fillQueryBuilderFilter(filter, map, sqlQueryBuilder);
@@ -68,13 +65,17 @@ public class ComplainHibernateDao implements ComplainDao{
         map.put("limit", filter.getPageSize());
         map.put("offset", filter.getPageSize()*filter.getPage());
 
-        Query query = em.createNativeQuery(sqlQueryBuilder.toString(), Complain.class);
+        Query query = em.createNativeQuery(sqlQueryBuilder.toString());
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
+        List<Integer> ids = query.getResultList();
+        if (ids.isEmpty())
+            return Collections.emptyList();
 
-
-        return (Collection<Complain>) query.getResultList();
+        TypedQuery<Complain> tq = em.createQuery("from Complain c where c.complainId in :ids order by c.date asc", Complain.class);
+        tq.setParameter("ids", ids);
+        return tq.getResultList();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class ComplainHibernateDao implements ComplainDao{
         for(Map.Entry<String, Object> entry : map.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
-        return ((BigInteger) query.getSingleResult()).longValue(); // never returns null
+        return ((Number) query.getSingleResult()).longValue(); // never returns null
     }
 
     private static void testAndSet(Collection<?> collection, Map<String, Object> args, String argName, StringBuilder sqlQueryBuilder, String queryPiece) {

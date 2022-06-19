@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -56,6 +57,9 @@ public class KycHibernateDao implements KycDao {
         query.setParameter("limit", pageSize);
         query.setParameter("offset", pageSize*page);
         List<Integer> ids = (List<Integer>) query.getResultList();
+
+        if (ids.isEmpty())
+            return Collections.emptyList();
 
         TypedQuery<KycInformation> tq = em.createQuery("from KycInformation AS kyc WHERE kyc.kycId in :ids ORDER BY kyc.kycDate ASC", KycInformation.class);
         tq.setParameter("ids", ids);

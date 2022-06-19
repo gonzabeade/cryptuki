@@ -72,7 +72,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.isUserPartOfTrade(authentication.principal, #tradeId)")
     public Optional<Trade> getTradeById(int tradeId) {
         return tradeDao.getTradeById(tradeId);
     }

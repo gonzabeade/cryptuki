@@ -40,15 +40,19 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     public void markBuyerMessagesAsSeen(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
-        trade.setqUnseenMessagesBuyer(0);
-        tradeDao.modifyTrade(trade);
+        if (trade.getqUnseenMessagesBuyer() > 0) {
+            trade.setqUnseenMessagesBuyer(0);
+            tradeDao.modifyTrade(trade);
+        }
     }
 
     @Override
     @Transactional
     public void markSellerMessagesAsSeen(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
-        trade.setqUnseenMessagesSeller(0);
-        tradeDao.modifyTrade(trade);
+        if (trade.getqUnseenMessagesSeller() > 0) {
+            trade.setqUnseenMessagesSeller(0);
+            tradeDao.modifyTrade(trade);
+        }
     }
 }

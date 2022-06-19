@@ -98,7 +98,7 @@
         <%--        Filters--%>
 
         <div class="flex flex-row  rounded-lg px-5 rounded-lg  justify-between">
-            <div class="flex mr-5 bg-white rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-12">
+            <div class="flex mr-5 bg-white rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                 <a href="<c:url value="/seller/associatedTrades/${offer.offerId}"/>" class="my-auto mx-auto w-full ">
                     <p class=" py-2 px-4 font-bold text-polar text-center <c:out value="${empty status ?'decoration-frostdr underline underline-offset-8':'text-l '}" />">
                         <messages:message code="allTrades"/> </p>

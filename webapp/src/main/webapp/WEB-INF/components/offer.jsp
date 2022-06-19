@@ -9,7 +9,7 @@
     <c:url  var="url" value="/seller/associatedTrades/${offer.offerId}"/>
 </c:if>
 
-<a  href="${url}" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-5 ${offer.offerStatus!= 'DEL' ? 'hover:-translate-y-1 hover:scale-110 duration-200': 'cursor-not-allowed' }">
+<a  href="${url}" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mr-3 ${offer.offerStatus!= 'DEL' ? 'hover:-translate-y-1 hover:scale-105 duration-200': 'cursor-not-allowed' }">
     <h1 class="text-center text-3xl font-semibold font-polard font-sans"><messages:message code="offer"/>#<c:out value="${offer.offerId}"/></h1>
 
     <div class="flex flex-col mx-auto mt-5">

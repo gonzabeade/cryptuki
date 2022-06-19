@@ -67,6 +67,7 @@
                                             <a class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer" href="<c:url value="/chat?tradeId=${trade.tradeId}"/> ">
                                                 <div class="flex-shrink-0">
                                                     <img class="w-8 h-8 rounded-full" src="<c:url value="/profilepic/${trade.buyer.username.get()}"/>" alt="Profile pic">
+                                                    <h1>rechazado</h1>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-sm font-medium text-polar-600truncate"> ${trade.buyer.username.get()} </p>

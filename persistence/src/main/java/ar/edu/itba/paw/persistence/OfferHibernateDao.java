@@ -95,6 +95,8 @@ public class OfferHibernateDao implements OfferDao{
         }
 
         List<Integer> ids = query.getResultList();
+        if (ids.isEmpty())
+            return Collections.emptyList();
         TypedQuery<Offer> tq = em.createQuery("from Offer o where o.offerId in :ids order by "+orderHqlMap.get(filter.getOrderCriteria()), Offer.class);
         tq.setParameter("ids", ids);
         return tq.getResultList();

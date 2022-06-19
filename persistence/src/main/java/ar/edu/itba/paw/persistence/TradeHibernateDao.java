@@ -9,9 +9,8 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.model.Trade;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class TradeHibernateDao implements TradeDao {
@@ -63,13 +62,9 @@ public class TradeHibernateDao implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
-        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in (:status) and t.offer.seller.userAuth.username = :username and t.offer.offerId = :offerId order by t.lastModified DESC", Trade.class);
-        typedQuery.setFirstResult(page*pageSize);
-        typedQuery.setMaxResults(pageSize);
-        typedQuery.setParameter("status", status);
-        typedQuery.setParameter("username", username);
-        typedQuery.setParameter("offerId", offerId);
-        return typedQuery.getResultList();
+
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND seller_uname = :uname ORDER BY start_date LIMIT :limit OFFSET :offset");
+        return getTrades(username, page, pageSize, status, nativeQuery);
     }
 
     @Override
@@ -83,20 +78,38 @@ public class TradeHibernateDao implements TradeDao {
 
     @Override
     public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
-        TypedQuery<Trade> query = em.createQuery("from Trade t WHERE t.offer.seller.userAuth.username = :username order by t.lastModified DESC", Trade.class);
-        query.setParameter("username", username);
-        query.setFirstResult(0);
-        query.setMaxResults(quantity);
-        return query.getResultList();
+
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE seller_uname = :uname ORDER BY start_date LIMIT :limit OFFSET 0");
+        nativeQuery.setParameter("uname", username);
+        nativeQuery.setParameter("limit", quantity);
+
+        List<Integer> ids = nativeQuery.getResultList();
+        if (ids.isEmpty())
+            return Collections.emptyList();
+
+        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where t.tradeId in (:ids) ORDER BY t.lastModified DESC", Trade.class);
+        typedQuery.setParameter("ids", ids);
+        return typedQuery.getResultList();
     }
 
     @Override
     public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
-        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where status in :status and t.buyer.userAuth.username = :username", Trade.class);
-        typedQuery.setFirstResult(page*pageSize);
-        typedQuery.setMaxResults(pageSize);
-        typedQuery.setParameter("status", status);
-        typedQuery.setParameter("username", username);
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND buyer_uname = :uname ORDER BY start_date LIMIT :limit OFFSET :offset");
+        return getTrades(username, page, pageSize, status, nativeQuery);
+    }
+
+    private Collection<Trade> getTrades(String username, int page, int pageSize, Set<TradeStatus> status, Query nativeQuery) {
+        nativeQuery.setParameter("status", status.stream().map(s->s.toString()).collect(Collectors.toList()));
+        nativeQuery.setParameter("uname", username);
+        nativeQuery.setParameter("limit", pageSize);
+        nativeQuery.setParameter("offset", page*pageSize);
+
+        List<Integer> ids = (List<Integer>) nativeQuery.getResultList();
+        if (ids.isEmpty())
+            return Collections.emptyList();
+
+        TypedQuery<Trade> typedQuery = em.createQuery("from Trade t where t.tradeId in (:ids) order by t.lastModified DESC", Trade.class);
+        typedQuery.setParameter("ids", ids);
         return typedQuery.getResultList();
     }
 

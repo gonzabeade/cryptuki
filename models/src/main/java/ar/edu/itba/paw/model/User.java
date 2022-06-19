@@ -32,7 +32,7 @@ public class User {
     @Column(name="rating_count", nullable = false)
     private int ratingCount;
 
-    @Column(name="rating", nullable=false)
+    @Column(name="rating", nullable=false, updatable = false, insertable = false)
     private double rating;
 
     @Column(name="locale")

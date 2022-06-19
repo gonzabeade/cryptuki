@@ -79,11 +79,11 @@
                             </div>
                         </div>
                     </div>
-<%--                    <div class="mx-auto mt-5">--%>
-<%--                        <a href="<c:url value="/offer/upload"/>"--%>
-<%--                           class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message--%>
-<%--                                code="uploadAdvertisement"/></a>--%>
-<%--                    </div>--%>
+                    <div class="mx-auto mt-5">
+                                            <a href="<c:url value="/offer/upload"/>"
+                                               class="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto"><messages:message
+                                                    code="uploadAdvertisement"/></a>
+                                        </div>
                 </c:otherwise>
             </c:choose>
         </div>

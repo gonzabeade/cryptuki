@@ -77,7 +77,8 @@
                     </form>
                 </div>
             </c:if>
-            <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/pause/${offer.offerId}" method="post">
+            <c:url var="postUrlPause" value="/offer/pause/${offer.offerId}"/>
+            <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="${postUrlPause}" method="post">
                 <button type="submit" >
                     <messages:message code="pauseOffer"/>
                 </button>

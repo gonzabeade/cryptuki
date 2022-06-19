@@ -23,7 +23,7 @@
     <div class="flex flex-col" id="allPossibleLocations">
         <div id="locType0" class="w-full flex flex-col justify-start">
             <c:forEach var="locationWrapper" items="${locationsWithOffers}">
-                <div class="flex flex-row">
+                <div class="flex flex-row <c:out value="${locationWrapper.location}"/>" onclick="clickGralLocation('<c:out value="${locationWrapper.location}"/>')">
                     <form:checkbox cssClass="mr-1 my-auto" class="hidden" path="location" value="${locationWrapper.location}" />
                     <form:label path="location" cssClass="my-auto"><messages:message code="Location.${locationWrapper.location}"/><c:out value=" (${locationWrapper.locationCount})"/></form:label>
                 </div>
@@ -32,7 +32,7 @@
         </div>
         <div id="locType1" class="w-full flex flex-col justify-start hidden">
             <c:forEach var="location" items="${locations}">
-                <div class="flex flex-row">
+                <div class="flex flex-row <c:out value="${location}"/>"  onclick="clickWrapperLocation('<c:out value="${location}"/>')">
                     <form:checkbox cssClass="mr-1 my-auto" class="hidden" path="location" value="${location}" />
                     <form:label path="location" cssClass="my-auto"><messages:message code="Location.${location}"/></form:label>
                 </div>
@@ -57,5 +57,13 @@
         document.getElementById('locType'+locType).classList.add("hidden")
         locType = (locType+1)%2;
         document.getElementById('locType'+locType).classList.remove("hidden")
+    }
+    function clickWrapperLocation(id){
+      let element = document.getElementsByClassName(id)[0];
+      element.querySelector("input").checked = ! element.querySelector("input").checked
+    }
+    function clickGralLocation(id){
+        let element = document.getElementsByClassName(id)[1] ;
+        element.querySelector("input").checked = ! element.querySelector("input").checked
     }
 </script>

@@ -65,7 +65,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId)")
     public void deleteTrade(int tradeId) {
         tradeDao.deleteTrade(tradeId);
     }

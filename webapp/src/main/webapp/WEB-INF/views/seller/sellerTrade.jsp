@@ -168,6 +168,10 @@
                                 <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message
                                         code="sold"/></div>
                             </c:if>
+                            <c:if test="${trade.status == 'DELETED' }">
+                                <div class="bg-blue-400 w-full text-polar text-center p-2"><messages:message
+                                        code="takenBack"/></div>
+                            </c:if>
                         </div>
 
                         <div class="flex flex font-sans my-3  w-56 mx-auto text-semibold">

@@ -18,6 +18,9 @@
         </div>
     </div>
     <div class="flex flex-row p-5">
-        <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">Enviar</button>
+        <div onclick="history.back()" class="border-3 border-[#000000] bg-stormd text-polar  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto cursor-pointer text-center">
+            <messages:message code="goBack"/>
+        </div>
+        <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto cursor-pointer"><messages:message code="send"/></button>
     </div>
 </form:form>

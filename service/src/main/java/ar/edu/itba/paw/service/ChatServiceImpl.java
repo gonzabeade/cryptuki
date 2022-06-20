@@ -27,9 +27,8 @@ public class ChatServiceImpl implements ChatService {
     public void sendMessage(Integer senderId, Integer tradeId, String message) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         messageDao.sendMessage(senderId, tradeId, message);
-       //send mail to the counterpart
+        // send mail to the counterpart
         messageSenderFacade.sendNewUnseenMessages(trade, trade.getBuyer().getId() == senderId ? trade.getOffer().getSeller(): trade.getBuyer() );
-
         if (senderId == trade.getBuyer().getId())
             trade.setqUnseenMessagesSeller(trade.getqUnseenMessagesSeller()+1);
         else

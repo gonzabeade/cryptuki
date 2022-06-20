@@ -87,7 +87,7 @@
         </a>
 
 
-        <a href="/seller/" class="rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
+        <a href="<c:url value="/seller/"/>" class="rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
             <messages:message code="goBack"/>
         </a>
 

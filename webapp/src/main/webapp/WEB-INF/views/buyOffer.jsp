@@ -68,7 +68,7 @@
             <jsp:param name="message" value="${offer.comments}"/>
             <jsp:param name="rating" value="${offer.seller.rating}"/>
         </jsp:include>
-        <c:if test="${!empty offer.location }">
+        <c:if test="${!empty offer.location && offer.location!= 'UNKNOWN' }">
             <h1 class="font-sans font-bold text-3xl mx-auto"><messages:message code="location"/></h1>
 
             <iframe
@@ -81,7 +81,6 @@
                     allowfullscreen>
             </iframe>
         </c:if>
-
     </div>
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

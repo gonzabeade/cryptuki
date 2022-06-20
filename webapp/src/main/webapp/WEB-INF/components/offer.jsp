@@ -36,7 +36,7 @@
                 <button type="submit" class=" "><messages:message code="delete"/></button>
             </form>
         </div>
-        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/pause/${offer.offerId}" method="post">
+        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="<c:url value="/offer/pause/${offer.offerId}"/>" method="post">
             <button type="submit" >
                 <messages:message code="pauseOffer"/>
             </button>
@@ -44,7 +44,7 @@
     </c:if>
 
     <c:if test="${offer.offerStatus== 'PSE'}">
-        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="/offer/resume/${offer.offerId}" method="post">
+        <form class="rounded-lg bg-storm  hover:bg-stormd py-3 px-5 text-l font-sans text-center cursor-pointer" action="<c:url value="/offer/resume/${offer.offerId}"/>" method="post">
             <button type="submit" >
                 <messages:message code="resumeOffer"/>
             </button>

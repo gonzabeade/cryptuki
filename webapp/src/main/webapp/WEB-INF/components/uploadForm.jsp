@@ -7,7 +7,7 @@
 <div class="flex flex-row">
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
         <div class="flex flex-row divide-x">
-            <div class="flex flex-col mx-5">
+            <div class="flex flex-col mx-5 w-1/3">
                 <h1 class="font-sans font-polard font-extrabold text-2xl text-center">1. <messages:message code="priceSettings"/> </h1>
                 <c:url value="/offer/upload" var="postUrl"/>
                 <form:input type="hidden" path="sellerId" value="${sellerId}"/>
@@ -60,7 +60,7 @@
                 </div>
 
             </div>
-            <div class="flex flex-col mx-auto w-96 ">
+            <div class="flex flex-col mx-auto w-1/3 ">
                 <form:label path="location"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">2.<messages:message
                         code="offerLocation"/></form:label>
@@ -76,7 +76,7 @@
                     </form:select>
                 </div>
             </div>
-            <div class="flex flex-col px-10">
+            <div class="flex flex-col px-10 w-1/3">
                 <form:label path="firstChat"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">3.<messages:message
                         code="firstChat"/></form:label>

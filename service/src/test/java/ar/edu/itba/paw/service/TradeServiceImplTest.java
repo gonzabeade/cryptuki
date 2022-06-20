@@ -75,7 +75,15 @@ public class TradeServiceImplTest {
         Assert.assertTrue(trade.isBuyerRated());
     }
 
-    //TODO:SALVA tests viejos de salta supongo
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidRateCounterpart(){
+        buyer.setUserAuth(buyerAuth);
+        seller.setUserAuth(sellerAuth);
+
+        tradeService.rateCounterPartUserRegardingTrade(sellerAuth.getUsername(), 12, 0);
+    }
+
+//    //TODO:SALVA tests viejos de salta supongo
 //    @Test(expected = NoSuchOfferException.class)
 //    public void makeTradeWithInvalidOffer(){
 ////        Trade.Builder trade = new Trade.Builder(0,"shadad");

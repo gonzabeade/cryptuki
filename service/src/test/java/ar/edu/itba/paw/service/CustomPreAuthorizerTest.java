@@ -88,18 +88,17 @@ public class CustomPreAuthorizerTest {
         Assert.assertFalse(uploaded);
     }
 
-    //TODO:SALVA hay que ver como pasarle un argumento a offerDao.getOffersBy() que tenga en cuenta al argumento real
+//    //TODO:SALVA hay que ver como pasarle un argumento a offerDao.getOffersBy() que tenga en cuenta al argumento real
 //    @Test
 //    public void testValidUserAlterOffer(){
 //        kyc.setStatus(KycStatus.APR);
-//
-//        Optional<Offer> offerOptional = Optional.of(offer);
 //        ArrayList<Offer> singleOfferArray = new ArrayList<>();
 //        singleOfferArray.add(offer);
+//        user.setKyc(kyc);
+//        user.setUserAuth(userAuth);
+//
 //        when(offerDao.getOffersBy()).thenReturn(singleOfferArray);
 //        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-//        when(offer.getSeller()).thenReturn(user);
-//        when(user.getKyc()).thenReturn(kyc);
 //
 //        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
 //
@@ -108,20 +107,10 @@ public class CustomPreAuthorizerTest {
 //
 //    @Test
 //    public void testNonSellerUserAlterOffer(){
-//        Optional<User> userOptional = Optional.of(user);
-//        when(userDao.getUserByUsername(anyString())).thenReturn(userOptional);
-//        when(user.getKyc()).thenReturn(kyc);
-//        when(user.getUserAuth()).thenReturn(userAuth);
-//        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 //    }
 //
 //    @Test
 //    public void testNonApprovedUserAlterOffer(){
-//        Optional<User> userOptional = Optional.of(user);
-//        when(userDao.getUserByUsername(anyString())).thenReturn(userOptional);
-//        when(user.getKyc()).thenReturn(kyc);
-//        when(user.getUserAuth()).thenReturn(userAuth);
-//        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 //    }
 
     @Test

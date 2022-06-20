@@ -23,13 +23,13 @@
 <div class=" flex flex-row bg-black text-center justify-between px-5">
     <c:forEach var="coin" items="${cryptocurrencies}" varStatus="i">
         <c:if test="${i.index % 2 == 0}">
-            <div class="text-green-400 p-3 font-['Turret_Road']">
+            <div class="text-green-400 p-3 font-['Turret_Road']" title="TiendaCrypto">
                 <p><c:out value="${coin.commercialName}"/>(<c:out value="${coin.code}"/>) </p>
                 <p id="<c:out value="${coin.code}"/>">No data available</p>
             </div>
         </c:if>
         <c:if test="${i.index % 2 != 0}">
-            <div class="text-red-400 p-3 font-['Turret_Road']">
+            <div class="text-red-400 p-3 font-['Turret_Road']" title="TiendaCrypto">
                 <p><c:out value="${coin.commercialName}"/>(<c:out value="${coin.code}"/>) </p>
                 <p id="<c:out value="${coin.code}"/>">No data available</p>
             </div>

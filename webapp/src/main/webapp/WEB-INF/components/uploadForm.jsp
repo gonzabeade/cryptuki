@@ -13,7 +13,7 @@
                 <form:input type="hidden" path="sellerId" value="${sellerId}"/>
                 <div class="flex flex-col justify-center">
                     <form:errors path="cryptoCode" cssClass=" mx-auto text-red-500"/>
-                    <form:label  path="cryptoCode" class="text-lg font-sans text-polard  mb-3 text-center"><messages:message code="cryptocurrency"/>*</form:label>
+                    <form:label  path="cryptoCode" class="text-lg font-sans text-polard  mb-3 mt-2 text-center"><messages:message code="cryptocurrency"/>*</form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:select path="cryptoCode" class="rounded-lg p-3" onchange="updateVars(this.value)">
                             <option disabled selected><messages:message code="chooseAnOption"/></option>
@@ -46,7 +46,7 @@
                                 <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                             </div>
                         </div>
-                        <div class="my-12">
+                        <div class="my-5">
                             -
                         </div>
                         <div>

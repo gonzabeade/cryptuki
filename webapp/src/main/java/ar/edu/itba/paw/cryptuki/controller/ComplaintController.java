@@ -27,33 +27,12 @@ public class ComplaintController {
 
     private final UserService us;
     private final ComplainService complainService;
-    private static final int PAGE_SIZE = 7;
 
     @Autowired
     public ComplaintController(UserService us, ComplainService complainService) {
         this.us = us;
         this.complainService = complainService;
     }
-
-//    @RequestMapping(value="/complaints", method = {RequestMethod.GET})
-//    public ModelAndView complaints(@RequestParam(value = "page") final Optional<Integer> page,Authentication authentication){
-//
-//        ModelAndView mav = new ModelAndView("complaintsPage");
-//
-//        int pageNumber= page.orElse(0);
-//        long complaintsCount = complainService.countComplainsBy(new ComplainFilter().restrictedToComplainerUsername(authentication.getName()));
-//        long pages=(complaintsCount+PAGE_SIZE-1)/PAGE_SIZE;
-//        ComplainFilter complainFilter = new ComplainFilter().restrictedToComplainerUsername(authentication.getName())
-//                .withPage(page.orElse(0))
-//                .withPageSize(PAGE_SIZE);
-//
-//        Collection<Complain> complaintsList = complainService.getComplainsBy(complainFilter);
-//        mav.addObject("complaintsList",complaintsList);
-//        mav.addObject("pages",pages);
-//        mav.addObject("activePage",pageNumber);
-//
-//        return mav;
-//    }
 
     @RequestMapping(value = "/complain", method = RequestMethod.GET)
     public ModelAndView complain(@ModelAttribute("supportForm") final TradeComplainSupportForm form, final Authentication authentication, @RequestParam( value = "tradeId", required = false) final Integer tradeId){

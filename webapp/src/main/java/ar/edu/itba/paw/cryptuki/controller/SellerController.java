@@ -36,12 +36,10 @@ public class SellerController {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         Collection<Offer> offers = offerService.getOffersByUsername(authentication.getName(), pageNumber, PAGE_SIZE, status);
-
         Collection<Trade> trades = tradeService.getMostRecentTradesAsSeller(authentication.getName(), Q_MOST_RECENT_TRADES);
 
         long offerCount = offerService.countOffersByUsername(authentication.getName(), status);
         long pages = (offerCount+PAGE_SIZE-1)/PAGE_SIZE;
-
 
         mav.addObject("offerList", offers);
         mav.addObject("tradeList", trades);

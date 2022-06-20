@@ -62,7 +62,8 @@ public class TradeHibernateDao implements TradeDao {
     @Override
     public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
 
-        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND seller_uname = :uname ORDER BY start_date LIMIT :limit OFFSET :offset");
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND seller_uname = :uname AND offer_id = :offerId ORDER BY start_date LIMIT :limit OFFSET :offset");
+        nativeQuery.setParameter("offerId", offerId);
         return getTrades(username, page, pageSize, status, nativeQuery);
     }
 

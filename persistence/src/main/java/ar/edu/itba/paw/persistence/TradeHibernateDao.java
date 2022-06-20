@@ -79,7 +79,7 @@ public class TradeHibernateDao implements TradeDao {
     @Override
     public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
 
-        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE seller_uname = :uname ORDER BY start_date LIMIT :limit OFFSET 0");
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE seller_uname = :uname ORDER BY start_date DESC LIMIT :limit OFFSET 0");
         nativeQuery.setParameter("uname", username);
         nativeQuery.setParameter("limit", quantity);
 

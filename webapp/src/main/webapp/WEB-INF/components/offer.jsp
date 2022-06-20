@@ -2,10 +2,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:if test="${offer.offerStatus == 'DEL'}">
+<c:if test="${offer.offerStatus == 'DEL' || offer.offerStatus == 'SOL' }">
     <c:url var="url" value="#"/>
 </c:if>
-<c:if test="${offer.offerStatus != 'DEL'}">
+<c:if test="${offer.offerStatus != 'DEL' && offer.offerStatus == 'SOL'}">
     <c:url  var="url" value="/seller/associatedTrades/${offer.offerId}"/>
 </c:if>
 

@@ -17,6 +17,7 @@ import javax.swing.text.html.Option;
 import java.util.Locale;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -25,10 +26,6 @@ public class UserServiceImplTest {
 
     @Mock
     private UserAuthDao userAuthDao;
-    @Mock
-    private UserDao userdao;
-    @Mock
-    private MessageSenderFacade messageSenderFacade;
     @Mock
     private PasswordEncoder passwordEncoder;
 
@@ -39,11 +36,13 @@ public class UserServiceImplTest {
     private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);
 
 
+    //TODO:SALVA por algun motivo no devuelve true userAuthDao.changePassword
     @Test
     public void testSuccessCodeChangePasswordTest()  {
         user.setUserAuth(userAuth);
         when(userAuthDao.getUserAuthByUsername(anyString())).thenReturn(Optional.of(userAuth));
         when(userAuthDao.changePassword(anyString(), anyString())).thenReturn(true);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         boolean changed = userService.changePassword(userAuth.getUsername(), userAuth.getCode(), "newPassword");
 
@@ -54,7 +53,6 @@ public class UserServiceImplTest {
     public void testErroneousCodeChangePasswordTest()  {
         user.setUserAuth(userAuth);
         when(userAuthDao.getUserAuthByUsername(anyString())).thenReturn(Optional.of(userAuth));
-        when(userAuthDao.changePassword(anyString(), anyString())).thenReturn(true);
 
         boolean changed = userService.changePassword(userAuth.getUsername(), userAuth.getCode()+1, "newPassword");
 
@@ -64,7 +62,7 @@ public class UserServiceImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidCodeChangePassword()  {
 
-        boolean changed = userService.changePassword(userAuth.getUsername(), -1, "newPassword");
+        userService.changePassword(userAuth.getUsername(), -1, "newPassword");
 
     }
 

@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS status (
 CREATE TABLE IF NOT EXISTS offer (
     offer_id INT IDENTITY PRIMARY KEY,
     seller_id INT NOT NULL,
-    location VARCHAR(100),
     offer_date timestamp default now() NOT NULL,
     crypto_code VARCHAR(5) NOT NULL,
     status_code VARCHAR(3) NOT NULL,
@@ -50,6 +49,7 @@ CREATE TABLE IF NOT EXISTS offer (
     max_quantity numeric NOT NULL,
     min_quantity numeric DEFAULT 0,
     comments varchar(280) DEFAULT 'No comments.',
+    location VARCHAR(100),
     FOREIGN KEY (crypto_code) REFERENCES cryptocurrency(code) ON DELETE CASCADE,
     FOREIGN KEY (status_code) REFERENCES status(code) ON DELETE CASCADE,
     FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE

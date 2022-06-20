@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.PaymentMethod;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,39 +18,34 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = TestConfig.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class PaymentMethodJdbcDaoTest {
-//    private static final String PAYMENT_METHOD_TABLE= "payment_method";
-//    private static final int TESTED_INDEX = 1;
-//    private static final int ROW_COUNT = 3;
-//
-//    private ArrayList<PaymentMethod> paymentMethods;
-//
-//    @Autowired
-//    private DataSource ds;
-//
-//    private PaymentMethodJdbcDao paymentMethodJdbcDao;
-//    private SimpleJdbcInsert jdbcInsert;
-//    private JdbcTemplate jdbcTemplate;
-//
-//    @Before
-//    public void setUp(){
-//        jdbcTemplate = new JdbcTemplate(ds);
-//        jdbcInsert = new SimpleJdbcInsert(ds)
-//                .withTableName(PAYMENT_METHOD_TABLE);
-//        paymentMethodJdbcDao = new PaymentMethodJdbcDao(ds);
-//        JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
-//
-//        paymentMethods= new ArrayList<>();
-//        paymentMethods.add(PaymentMethod.getInstance("Cash", "Paper"));
-//        paymentMethods.add(PaymentMethod.getInstance("Lemon", "Crypto"));
-//        paymentMethods.add(PaymentMethod.getInstance("Cred", "Bank"));
-//    }
-//
-//    @Test
-//    public void TestGetCryptocurrency(){
-//        //Setup
+    private static final String PAYMENT_METHOD_TABLE= "payment_method";
+    private static final int TESTED_INDEX = 1;
+    private static final int ROW_COUNT = 3;
+
+    private ArrayList<PaymentMethod> paymentMethods;
+
+    @Autowired
+    private DataSource ds;
+
+    private SimpleJdbcInsert jdbcInsert;
+    private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void setUp(){
+        jdbcTemplate = new JdbcTemplate(ds);
+        jdbcInsert = new SimpleJdbcInsert(ds)
+                .withTableName(PAYMENT_METHOD_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
+
+        paymentMethods= new ArrayList<>();
+    }
+
+    @Test
+    public void TestGetCryptocurrency(){
+        //Setup
 //        JdbcTestUtils.deleteFromTables(jdbcTemplate, PAYMENT_METHOD_TABLE);
 //        insertPaymentMethod(paymentMethods.get(TESTED_INDEX));
 //
@@ -60,7 +56,7 @@ public class PaymentMethodJdbcDaoTest {
 //        Assert.assertTrue(testedPaymentMethod.isPresent());
 //        Assert.assertEquals(paymentMethods.get(TESTED_INDEX).getName(), testedPaymentMethod.get().getName());
 //        Assert.assertEquals(paymentMethods.get(TESTED_INDEX).getDescription(), testedPaymentMethod.get().getDescription());
-//    }
+    }
 //
 //    @Test
 //    public void TestGetAllPaymentMethods(){

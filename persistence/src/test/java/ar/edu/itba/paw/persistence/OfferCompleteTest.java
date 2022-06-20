@@ -5,9 +5,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@Sql(scripts = {"classpath:offerCompleteInitialState.sql"})
-@ContextConfiguration(classes = TestConfig.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@Sql(scripts = {"classpath:offerCompleteInitialState.sql"})
+//@ContextConfiguration(classes = TestConfig.class)
 public class OfferCompleteTest {
 //
 //    private static final String OFFER_VIEW = "offer_complete";

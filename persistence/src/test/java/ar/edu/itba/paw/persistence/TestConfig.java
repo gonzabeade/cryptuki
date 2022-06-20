@@ -13,11 +13,13 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @ComponentScan({"ar.edu.itba.paw.persistence"})
+@EnableTransactionManagement
 @Configuration
 public class TestConfig {
 
@@ -57,7 +59,7 @@ public class TestConfig {
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

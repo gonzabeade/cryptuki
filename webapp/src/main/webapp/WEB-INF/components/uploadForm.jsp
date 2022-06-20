@@ -24,6 +24,10 @@
                             </c:forEach>
                         </form:select>
                     </div>
+                    <h1 class="flex flex-row mx-auto mt-4">
+                        <p class="text-sm text-gray-400 mr-2">*<messages:message code="suggestedPrice"/> </p>
+                        <p class="text-sm text-gray-400" id="priceCrypto"><messages:message code="selectACoin"/> </p>
+                    </h1>
                 </div>
                 <div class="flex flex-col mt-4">
                     <form:errors path="unitPrice" cssClass="text-red-500 mx-auto"/>
@@ -97,8 +101,35 @@
     </form:form>
 </div>
 <script>
-    function updateVars(value) {
+    async function updateVars(value) {
         document.getElementById("minCoin").innerText = value;
         document.getElementById("maxCoin").innerText = value;
+        let numberLocale = Intl.NumberFormat('es-AR');
+        let suggestedPrice = document.getElementById("priceCrypto");
+        if(suggestedPrice.classList.contains("hidden")){
+            suggestedPrice.classList.remove("hidden")
+        }
+        switch (value) {
+            case "BTC":
+                suggestedPrice.innerText = numberLocale.format((await btcPrice).toFixed(2)) + ' ARS';
+                break;
+            case "ETH":
+                suggestedPrice.innerText = numberLocale.format((await ethPrice).toFixed(2)) + ' ARS';
+                break;
+            case "USDT":
+                suggestedPrice.innerText = numberLocale.format((await usdtPrice).toFixed(2)) + ' ARS';
+                break;
+            case "DAI":
+                suggestedPrice.innerText = numberLocale.format((await daiPrice).toFixed(2)) + ' ARS';
+                break;
+            case "DOGE":
+                suggestedPrice.innerText = numberLocale.format((await dogePrice).toFixed(2)) + ' ARS';
+                break;
+            case "ADA":
+                suggestedPrice.innerText = numberLocale.format((await cardanoPrice).toFixed(2)) + ' ARS';
+                break;
+
+
+        }
     }
 </script>

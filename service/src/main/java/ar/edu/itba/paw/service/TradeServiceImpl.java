@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.*;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.model.TradeStatus;
 import ar.edu.itba.paw.persistence.*;
@@ -18,13 +20,15 @@ import java.util.Set;
 public class TradeServiceImpl implements TradeService {
 
     private final TradeDao tradeDao;
+    private final OfferDao offerDao;
     private final UserService userService;
     private final MessageSenderFacade messageSenderFacade;
     private final ChatService chatService;
 
     @Autowired
-    public TradeServiceImpl(TradeDao tradeDao, MessageSenderFacade messageSenderFacade, UserService userService, ChatService chatService) {
+    public TradeServiceImpl(TradeDao tradeDao, OfferDao offerDao, MessageSenderFacade messageSenderFacade, UserService userService, ChatService chatService) {
         this.tradeDao = tradeDao;
+        this.offerDao = offerDao;
         this.messageSenderFacade = messageSenderFacade;
         this.userService = userService;
         this.chatService = chatService;
@@ -53,7 +57,18 @@ public class TradeServiceImpl implements TradeService {
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade sellTrade(int tradeId) {
-        return tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        Offer offer = trade.getOffer();
+        double newMaxInCrypto = offer.getMaxInCrypto() - trade.getQuantity() / offer.getUnitPrice();
+        if (newMaxInCrypto < offer.getMinInCrypto()) {
+            offer.setMaxInCrypto(0);
+            offer.setMinInCrypto(0);
+            offer.setOfferStatus(OfferStatus.SOL);
+        } else {
+            offer.setMaxInCrypto(newMaxInCrypto);
+        }
+        offerDao.modifyOffer(offer);
+        return trade;
     }
 
     @Override
@@ -116,7 +131,6 @@ public class TradeServiceImpl implements TradeService {
     @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
     public void rateCounterPartUserRegardingTrade(String username, int rating, int tradeId) {
 
-        // TODO: if time allows, send email
         if (rating < 1 || rating > 10)
             throw new IllegalArgumentException("Rating is out of bounds.");
 

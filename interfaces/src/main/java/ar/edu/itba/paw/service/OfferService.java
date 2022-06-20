@@ -44,7 +44,4 @@ public interface OfferService {
 
     /** Get an ordered collection of [Location, Integer] pairs with the quantity of offers per location */
     Collection<LocationCountWrapper> getOfferCountByLocation();
-
-    /** Sell some amount of an offer. Caller must certify ownership of said offer */
-    void sellQuantityOfOffer(Offer offer, double sold, int tradeId);
 }

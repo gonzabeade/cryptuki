@@ -217,32 +217,6 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @Transactional
-    @Secured("ROLE_USER")
-    public void sellQuantityOfOffer(Offer offer, double sold, int tradeId) {
-
-//        tradeDao.updateStatus(tradeId, TradeStatus.SOLD);
-//        float remaining = offer.getMaxQuantity() - (sold/offer.getunitPrice());
-//        try {
-//            if (remaining <= offer.getMinQuantity()){
-//                Offer mergeOffer = offerDao.getOffersBy(new OfferFilter().byOfferId(offer.getId())).stream().findFirst().orElseThrow(()->new NoSuchOfferException(offer.getId()));
-//                OfferStatus offerStatus = this.offerStatusDao.getOfferStatusByCode("PSE").get();
-//                mergeOffer.setStatus(offerStatus);
-//                mergeOffer.getAssociatedTrades().stream().forEach(trade -> {
-//                    if(trade.getStatus().equals(TradeStatus.PENDING))
-//                        trade.setStatus(TradeStatus.REJECTED);
-//                });
-//                mergeOffer.setMinQuantity(0);
-//                mergeOffer.setMaxQuantity(remaining);
-//            }
-//            else
-//                offerDao.setMaxQuantity(offer.getId(), remaining);
-//        } catch (PersistenceException pe) {
-//            throw new ServiceDataAccessException(pe);
-//        }
-    }
-
-    @Override
     @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public Optional<Offer> getOfferIfAuthorized(int offerId) {
         return getOfferById(offerId);

@@ -7,7 +7,7 @@
 
 <div class="flex flex-col">
     <c:url value="/buy" var="getUrl"/>
-    <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.OfferBuyForm"--%>
+    <%--@elvariable id="offerBuyForm" type="ar.edu.itba.paw.cryptuki.form.buyer.OfferBuyForm"--%>
     <form:form modelAttribute="offerBuyForm" action="${getUrl}" method="post" class="flex flex-col">
 
         <input type="hidden" name="email"  id="email" value="${param.userEmail}">

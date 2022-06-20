@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form;
+package ar.edu.itba.paw.cryptuki.form.seller;
 
+import ar.edu.itba.paw.cryptuki.form.annotation.MultipartSizeCheck;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
@@ -37,9 +38,11 @@ public class KycForm {
     private String idType;
 
     @MultipartCheck
+    @MultipartSizeCheck(maxSize = (1<<21))
     private MultipartFile idPhoto;
 
     @MultipartCheck
+    @MultipartSizeCheck(maxSize = (1<<21))
     private MultipartFile validationPhoto;
 
     public String getGivenNames() {

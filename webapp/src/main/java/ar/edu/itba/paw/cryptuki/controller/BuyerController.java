@@ -44,10 +44,7 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView buyer(Authentication authentication,
-                              @RequestParam(value = "page") final Optional<Integer> page,
-                              @RequestParam(value = "status", required = false) final Optional<String> status,
-                              @ModelAttribute("profilePicForm") ProfilePicForm form){
+    public ModelAndView buyer(Authentication authentication, @RequestParam(value = "page") final Optional<Integer> page, @RequestParam(value = "status", required = false) final Optional<String> status, @ModelAttribute("profilePicForm") ProfilePicForm form){
         ModelAndView mav = new ModelAndView("buyer/buyerIndex");
 
         String username = authentication.getName();
@@ -64,12 +61,7 @@ public class BuyerController {
         }
         tradeCount = tradeService.getTradesAsBuyerCount(username, set);
         tradeList = tradeService.getTradesAsBuyer(authentication.getName(), pageNumber, PAGE_SIZE, set);
-
-
-
         User user = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username));
-
-
         int pages = (int)(tradeCount + PAGE_SIZE - 1) / PAGE_SIZE;
 
         mav.addObject("username", username);
@@ -83,10 +75,10 @@ public class BuyerController {
     }
 
     @RequestMapping(value = {"/market"}, method = RequestMethod.GET)
-    public ModelAndView landing(@Valid @ModelAttribute("landingForm") LandingForm form, final BindingResult errors, final Authentication authentication) {
+    public ModelAndView landing(@Valid @ModelAttribute("landingForm") LandingForm form, final BindingResult errors) {
 
         if (errors.hasErrors())
-            throw new IllegalArgumentException(); // TODO: No!!
+            return new ModelAndView("redirect:/buyer/market?error");
 
         final ModelAndView mav = new ModelAndView("index");
 
@@ -99,7 +91,6 @@ public class BuyerController {
         Collection<LocationCountWrapper> locationCountWrappers = offerService.getOfferCountByLocation();
 
         mav.addObject("selectedCoins", form.getCoins());
-
         mav.addObject("offerList", offer);
         mav.addObject("pages", pages);
         mav.addObject("activePage", form.getPage());
@@ -108,19 +99,11 @@ public class BuyerController {
         mav.addObject("offerCount", offerCount);
         mav.addObject("locations", Arrays.asList(Location.values()));
         mav.addObject("locationsWithOffers", locationCountWrappers);
-
         mav.addObject("coins" , form.getCoins());
         mav.addObject("page" , form.getPage());
         mav.addObject("orderCriteria", form.getOrderCriteria());
         mav.addObject("arsAmount", form.getArsAmount());
-
-        if( null != authentication){
-            mav.addObject("userEmail", userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getEmail());
-        }
-
         return mav;
     }
-
-
 
 }

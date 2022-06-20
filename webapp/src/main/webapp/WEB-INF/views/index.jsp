@@ -45,6 +45,7 @@
     <c:set var="locationsWithOffers" value="${locationsWithOffers}" scope="request"/>
     <c:set var="selectedCoins" value="${selectedCoins}" scope="request"/>
      <h1 class="text-2xl font-polard mt-10 font-bold mx-auto"><messages:message code="filter"/></h1>
+        <h1 id="error" class="hidden text-lg text-red-400 mt-3 text-center mx-2"><messages:message code="somethingWentWrong"/></h1>
     <jsp:include page="../components/cryptoFilters.jsp"/>
     <jsp:include page="../components/ubicationFilter.jsp"/>
     <jsp:include page="../components/priceFilter.jsp"/>
@@ -84,7 +85,7 @@
                         <jsp:param name="offerId" value="${offer.offerId}"/>
                         <jsp:param name="minCoinAmount" value="${offer.minInCrypto}"/>
                         <jsp:param name="maxCoinAmount" value="${offer.maxInCrypto}"/>
-                        <jsp:param name="userEmail" value="${userEmail}"/>
+                        <jsp:param name="userEmail" value="${offer.seller.email}"/>
                         <jsp:param name="lastLogin" value="${offer.seller.lastLogin.toLocalDate()}"/>
                         <jsp:param name="lastLoginTime" value="${offer.seller.lastLogin.toLocalTime().toString()}"/>
                         <jsp:param name="minutesSinceLastLogin" value="${offer.seller.minutesSinceLastLogin}"/>
@@ -117,6 +118,12 @@
 window.onload = async function onStart() {
         await setCryptoPrice();
         analyze(${selectedCoins});
+        var searchParams = new URLSearchParams(window.location.search)
+        if (searchParams.has("error")) {
+            document.getElementById("error").classList.remove("hidden")
+        }
+
+
 }
 function analyze(selectedCoins){
    if(selectedCoins !=  null){

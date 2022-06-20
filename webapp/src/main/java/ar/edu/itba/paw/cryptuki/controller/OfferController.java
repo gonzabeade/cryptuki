@@ -73,8 +73,7 @@ public class OfferController {
 
 
     @RequestMapping(value = "/modify/{offerId}", method = RequestMethod.GET)
-    public ModelAndView modify(@PathVariable("offerId") final int offerId,
-                               @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
+    public ModelAndView modify(@PathVariable("offerId") final int offerId, @ModelAttribute("modifyOfferForm") final ModifyOfferForm form,
                                final Authentication authentication){
 
         if (tradeService.getTradesAsSellerCount(authentication.getName(), EnumSet.allOf(TradeStatus.class), offerId) > 0){

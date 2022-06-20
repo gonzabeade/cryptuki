@@ -28,7 +28,7 @@
     <c:if test="${offer.offerStatus!= 'DEL' && offer.offerStatus!= 'PSE'}">
         <div class="flex flex-row justify-between">
             <c:url value="/offer/modify/${offer.offerId}" var="getUrl"/>
-            <form method="post" action="${getUrl}" class="rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">
+            <form method="get" action="${getUrl}" class="rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">
                 <button type="submit" class=" text-white"><messages:message code="edit"/></button>
             </form>
             <c:url value="/offer/delete/${offer.offerId}" var="postUrl"/>

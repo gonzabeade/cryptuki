@@ -41,14 +41,16 @@
 
 </div>
 
-<div class="flex flex-row divide-x">
-    <div class="flex flex-col">
+<div class="flex flex-row divide-x w-full">
+    <div class="flex flex-col w-full">
         <div class="flex">
             <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="uploadYourAdvertisement"/></h1>
         </div>
         <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
         <% request.setCharacterEncoding("UTF-8"); %>
-        <jsp:include page="../components/uploadForm.jsp"/>
+        <div class="flex mx-auto">
+            <jsp:include page="../components/uploadForm.jsp"/>
+        </div>
     </div>
 <%--    <div class="flex flex-col w-full">--%>
 

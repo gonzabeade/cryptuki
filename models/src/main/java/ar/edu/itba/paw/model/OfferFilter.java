@@ -49,6 +49,11 @@ public class OfferFilter {
         return this;
     }
 
+    public OfferFilter withOfferStatus(Collection<OfferStatus> offerStatus) {
+        status.addAll(offerStatus);
+        return this;
+    }
+
     public OfferFilter withLocation(String location) {
         if (location != null)
             locations.add(Location.valueOf(location));

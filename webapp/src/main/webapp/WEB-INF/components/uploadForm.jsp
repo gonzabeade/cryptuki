@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
-<div class="flex flex-row">
+<div class="flex flex-row w-full mx-auto">
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
         <div class="flex flex-row divide-x">
             <div class="flex flex-col mx-5 w-1/3">

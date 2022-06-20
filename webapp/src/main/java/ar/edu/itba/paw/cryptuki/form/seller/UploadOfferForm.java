@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.seller;
 import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import javax.validation.constraints.NotNull;
@@ -100,6 +101,15 @@ public class UploadOfferForm {
                .withMinInCrypto(minInCrypto)
                .withFirstChat(firstChat)
                .withUnitPrice(unitPrice);
+    }
+
+    public void fillFromOffer(Offer offer) {
+        setMinInCrypto(offer.getMinInCrypto());
+        setMaxInCrypto(offer.getMaxInCrypto());
+        setCryptoCode(offer.getCrypto().getCode());
+        setUnitPrice((offer.getUnitPrice()));
+        setFirstChat(offer.getComments());
+        setLocation(offer.getLocation().toString());
     }
 }
 

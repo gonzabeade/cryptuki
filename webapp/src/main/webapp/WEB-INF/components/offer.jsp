@@ -5,7 +5,7 @@
 <c:if test="${offer.offerStatus == 'DEL' || offer.offerStatus == 'SOL' }">
     <c:url var="url" value="#"/>
 </c:if>
-<c:if test="${offer.offerStatus != 'DEL' && offer.offerStatus == 'SOL'}">
+<c:if test="${offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL'}">
     <c:url  var="url" value="/seller/associatedTrades/${offer.offerId}"/>
 </c:if>
 

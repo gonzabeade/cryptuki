@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.EnumSet;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/offer")
@@ -114,7 +115,7 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/resume/{offerId}", method = RequestMethod.POST)
-    public ModelAndView reesume(@PathVariable("offerId") final int offerId){
+    public ModelAndView resume(@PathVariable("offerId") final int offerId){
         offerService.resumeOffer(offerId);
         return new ModelAndView("redirect:/seller/");
     }
@@ -126,9 +127,14 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") UploadOfferForm form, Authentication authentication){
+    public ModelAndView uploadOffer(@ModelAttribute("uploadOfferForm") UploadOfferForm form, Authentication authentication, @RequestParam(value = "like", required = false) Optional<Integer> likeId){
         ModelAndView mav = new ModelAndView("uploadPage");
         int id = userService.getUserByUsername(authentication.getName()).orElseThrow(()->new NoSuchUserException(authentication.getName())).getId();
+
+        if (likeId.isPresent()) {
+            Offer offer = offerService.getOfferById(likeId.get()).orElseThrow(()->new NoSuchOfferException(likeId.get()));
+            form.fillFromOffer(offer);
+        }
 
         mav.addObject("sellerId", id);
         mav.addObject("cryptocurrencies", cryptocurrencyService.getAllCryptocurrencies());
@@ -143,7 +149,7 @@ public class OfferController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ModelAndView uploadOffer(@Valid @ModelAttribute("uploadOfferForm") final UploadOfferForm form, final BindingResult errors, final Authentication authentication ){
         if (errors.hasErrors())
-            return uploadOffer(form, authentication);
+            return uploadOffer(form, authentication, Optional.empty());
         Offer offer = offerService.makeOffer(form.toOfferParameterObject());
         return new ModelAndView("redirect:/offer/"+offer.getOfferId()+"/creationsuccess");
     }

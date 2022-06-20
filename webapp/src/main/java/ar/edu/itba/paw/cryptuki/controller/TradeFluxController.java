@@ -5,10 +5,7 @@ import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
@@ -158,7 +155,12 @@ public class TradeFluxController {
     @RequestMapping(value="/markAsSold", method= RequestMethod.POST)
     public ModelAndView markAsSold(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
         Trade trade = tradeService.sellTrade(tradeId);
-        return new ModelAndView("redirect:/seller/associatedTrades/completed/"+ trade.getOffer().getOfferId());
+        if (!trade.getOffer().getOfferStatus().equals(OfferStatus.SOL))
+            return new ModelAndView("redirect:/seller/associatedTrades/completed/"+ trade.getOffer().getOfferId());
+
+        ModelAndView mav = new ModelAndView("offerSold");
+        mav.addObject("offerId", trade.getOffer().getOfferId());
+        return mav;
     }
 
 

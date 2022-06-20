@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchComplainException;
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;

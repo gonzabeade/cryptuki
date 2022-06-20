@@ -144,17 +144,12 @@ public class TradeServiceImpl implements TradeService {
         String buyerUsername = trade.getBuyer().getUserAuth().getUsername();
 
         if (username.equals(buyerUsername)){
-
             userService.updateRatingBy(trade.getOffer().getSeller().getUserAuth().getUsername(), rating);
             trade.markSellerAsRated();
-
         } else {
-
             userService.updateRatingBy(buyerUsername, rating);
             trade.markBuyerAsRated();
-
         }
-
     }
 
 }

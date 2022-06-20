@@ -3,8 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.UnmodifiableOfferException;
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +40,7 @@ public class OfferServiceImpl implements OfferService {
         if (offerPO == null)
             throw new NullPointerException("Offer digest cannot be null");
 
-        Offer offer;
-        try {
-            offer = offerDao.makeOffer(offerPO);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
+        Offer offer = offerDao.makeOffer(offerPO);
         messageSenderFacade.sendOfferUploadedMessage(offer);
         return offer;
     }
@@ -60,29 +52,18 @@ public class OfferServiceImpl implements OfferService {
         if (id < 0)
             throw new IllegalArgumentException("Offer id can only be non negative");
 
-        try {
-            Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter().restrictedToId(id).withOfferStatus(EnumSet.allOf(OfferStatus.class)));
-            return offer.isEmpty() ? Optional.empty() : Optional.of(offer.iterator().next());
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        Collection<Offer> offer = offerDao.getOffersBy(new OfferFilter().restrictedToId(id).withOfferStatus(EnumSet.allOf(OfferStatus.class)));
+        return offer.stream().findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Collection<Offer> getOffersByUsername(String username, int page, int pageSize, Set<OfferStatus> status) {
-
         if (username == null)
             throw new NullPointerException("Username cannot be null");
-
-        try {
-            OfferFilter filter = new OfferFilter().restrictedToUsername(username).withPageSize(pageSize).withPage(page);
-            for (OfferStatus s: status)
-                filter.withOfferStatus(s);
-            return offerDao.getOffersBy(filter);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        OfferFilter filter = new OfferFilter().restrictedToUsername(username).withPageSize(pageSize).withPage(page);
+        filter.withOfferStatus(status);
+        return offerDao.getOffersBy(filter);
     }
 
 
@@ -99,7 +80,6 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional(readOnly = true)
     public long countBuyableOffers(OfferFilter filter){
-
         String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         if (buyerUsername != null)
             filter.excludeUsername(buyerUsername);
@@ -114,14 +94,9 @@ public class OfferServiceImpl implements OfferService {
         if (username == null)
             throw new NullPointerException("Username cannot be null");
 
-        try {
-            OfferFilter filter = new OfferFilter().restrictedToUsername(username);
-            for (OfferStatus s: status)
-                    filter.withOfferStatus(s);
-            return offerDao.getOfferCount(filter);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        OfferFilter filter = new OfferFilter().restrictedToUsername(username);
+        filter.withOfferStatus(status);
+        return offerDao.getOfferCount(filter);
     }
 
     @Override
@@ -138,58 +113,35 @@ public class OfferServiceImpl implements OfferService {
             throw new UnmodifiableOfferException(offerId);
         }
 
-        try {
-            Offer offer = getOfferIfAuthorized(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
-            return offerDao.modifyOffer(OfferPO.mergeParameterObject(offer, offerPO));
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        Offer offer = getOfferIfAuthorized(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
+        return offerDao.modifyOffer(OfferPO.mergeParameterObject(offer, offerPO));
     }
 
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public void deleteOffer(int offerId) {
-
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
-
-        try {
-            offerDao.deleteOffer(offerId);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        offerDao.deleteOffer(offerId);
     }
 
     @Override
     @Transactional
     @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerId) OR hasRole('ADMIN')\n")
     public void sellerPauseOffer(int offerId) {
-
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
-
-        try {
-            offerDao.changeOfferStatus(offerId, OfferStatus.PSE);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
+        offerDao.changeOfferStatus(offerId, OfferStatus.PSE);
     }
 
     @Override
     @Transactional
     @Secured("ROLE_ADMIN")
     public void adminPauseOffer(int offerId) {
-
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
-
-        try {
-            offerDao.changeOfferStatus(offerId, OfferStatus.PSU);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        offerDao.changeOfferStatus(offerId, OfferStatus.PSU);
     }
 
     @Override
@@ -205,11 +157,7 @@ public class OfferServiceImpl implements OfferService {
         if (offerId < 0)
             throw new IllegalArgumentException("Id can only be non negative");
 
-        try {
-            offerDao.changeOfferStatus(offerId, OfferStatus.APR);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        offerDao.changeOfferStatus(offerId, OfferStatus.APR);
     }
 
     @Override

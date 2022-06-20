@@ -26,8 +26,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TradeServiceImplTest {
 
-    private User user = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
-    private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);
 
     @Mock
     private  OfferService offerService;
@@ -39,10 +37,15 @@ public class TradeServiceImplTest {
     private  MessageSenderFacade messageSenderFacade;
     @Mock
     private UserService userService;
-    @Mock
-    private Offer offer = new Offer.Builder(10, 50,100).build();
-    @Mock
-    private Trade trade = new Trade(offer, user, 20);
+
+    private User buyer = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
+    private UserAuth buyerAuth = new UserAuth(0, "salvaCasta", "castaSalva", 0);
+
+    private User seller = new User("ahadad@gmail.com", "87654321", 8, 60, Locale.forLanguageTag("en-US"));
+    private UserAuth sellerAuth = new UserAuth(1, "shadad", "hadads", 1);
+
+    private Offer offer = new Offer.Builder(10, 50,100).withSeller(seller).build();
+    private Trade trade = new Trade(offer, buyer, 20);
 
 
     @InjectMocks
@@ -50,17 +53,26 @@ public class TradeServiceImplTest {
 
     @Test
     public void testRateCounterpartAsBuyer(){
-        user.setUserAuth(userAuth);
+        buyer.setUserAuth(buyerAuth);
+        seller.setUserAuth(sellerAuth);
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
-        when(offer.getSeller()).thenReturn(user);
-        when(trade.getBuyer()).thenReturn(user);
-        when(trade.getOffer()).thenReturn(offer);
-        when(trade.markSellerAsRated()).
         doNothing().when(userService).updateRatingBy(anyString(), anyInt());
 
-        tradeService.rateCounterPartUserRegardingTrade(userAuth.getUsername(), 8, 0);
+        tradeService.rateCounterPartUserRegardingTrade(buyerAuth.getUsername(), 8, 0);
 
         Assert.assertTrue(trade.isSellerRated());
+    }
+
+    @Test
+    public void testRateCounterpartAsSeller(){
+        buyer.setUserAuth(buyerAuth);
+        seller.setUserAuth(sellerAuth);
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
+        doNothing().when(userService).updateRatingBy(anyString(), anyInt());
+
+        tradeService.rateCounterPartUserRegardingTrade(sellerAuth.getUsername(), 8, 0);
+
+        Assert.assertTrue(trade.isBuyerRated());
     }
 
     //TODO:SALVA tests viejos de salta supongo

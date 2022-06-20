@@ -27,7 +27,6 @@ public class ChatServiceImplTest {
     private MessageDao messageDao;
     @Mock
     private TradeDao tradeDao;
-
     @InjectMocks
     private ChatServiceImpl chatService;
 

@@ -33,17 +33,15 @@ public class CustomPreAuthorizerTest {
     private KycDao kycDao;
     @Mock
     private UserDetails userDetails;
-    @Mock
-    private User user = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
-    @Mock
-    private Offer offer = new Offer.Builder(10, 50,100).build();
-    @Mock
-    private Trade trade = new Trade(offer, user, 20);
 
     @InjectMocks
     CustomPreAuthorizer customPreAuthorizer;
 
+    private User user = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
+    private Offer offer = new Offer.Builder(10, 50,100).withSeller(user).build();
+    private Trade trade = new Trade(offer, user, 20);
     private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);
+    private UserAuth otherAuth = new UserAuth(user.getId()+1, "gbeade", "beadeg", 1);
     private KycInformationPO kycPO = new KycInformationPO("salvaCasta", "Salvador", "Castagnino");
     private KycInformation kyc = new KycInformation(kycPO, user);
     private OfferFilter restrictedToIdFilter = new OfferFilter().restrictedToId(0);
@@ -52,10 +50,9 @@ public class CustomPreAuthorizerTest {
     public void testValidUserUploadOffer(){
         userAuth.setUserStatus(UserStatus.VERIFIED);
         kyc.setStatus(KycStatus.APR);
-
+        user.setKyc(kyc);
+        user.setUserAuth(userAuth);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(user.getKyc()).thenReturn(kyc);
-        when(user.getUserAuth()).thenReturn(userAuth);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
         boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
@@ -67,9 +64,9 @@ public class CustomPreAuthorizerTest {
     public void testUnverifiedUserUploadOffer(){
         userAuth.setUserStatus(UserStatus.UNVERIFIED);
         kyc.setStatus(KycStatus.APR);
-
+        user.setKyc(kyc);
+        user.setUserAuth(userAuth);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(user.getUserAuth()).thenReturn(userAuth);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
         boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
@@ -81,10 +78,9 @@ public class CustomPreAuthorizerTest {
     public void testUnapprovedKycUserUploadOffer(){
         userAuth.setUserStatus(UserStatus.VERIFIED);
         kyc.setStatus(KycStatus.PEN);
-
+        user.setKyc(kyc);
+        user.setUserAuth(userAuth);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(user.getKyc()).thenReturn(kyc);
-        when(user.getUserAuth()).thenReturn(userAuth);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
         boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
@@ -130,11 +126,9 @@ public class CustomPreAuthorizerTest {
 
     @Test
     public void testUserIsOwnerOfTrade(){
+        user.setUserAuth(userAuth);
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-        when(offer.getSeller()).thenReturn(user);
-        when(user.getUsername()).thenReturn(Optional.of(userAuth.getUsername()));
-        when(trade.getOffer()).thenReturn(offer);
 
         boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails, 0);
 
@@ -143,11 +137,9 @@ public class CustomPreAuthorizerTest {
 
     @Test
     public void testUserIsNotOwnerOfTrade(){
+        user.setUserAuth(otherAuth);
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-        when(offer.getSeller()).thenReturn(user);
-        when(user.getUsername()).thenReturn(Optional.of("otroUser"));
-        when(trade.getOffer()).thenReturn(offer);
 
         boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails, 0);
 
@@ -158,10 +150,7 @@ public class CustomPreAuthorizerTest {
     public void testUserIsPartOfTrade(){
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-        when(user.getUsername()).thenReturn(Optional.of(userAuth.getUsername()));
-        when(trade.getOffer()).thenReturn(offer);
-        //TODO:SALVA me tira que este when es innecesario pero si lo saco me tira seg fault
-        when(trade.getBuyer()).thenReturn(user);
+        user.setUserAuth(userAuth);
 
         boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails, 0);
 
@@ -172,10 +161,7 @@ public class CustomPreAuthorizerTest {
     public void testUserIsNotPartOfTrade(){
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-        when(offer.getSeller()).thenReturn(user);
-        when(user.getUsername()).thenReturn(Optional.of("otroUsername"));
-        when(trade.getOffer()).thenReturn(offer);
-        when(trade.getBuyer()).thenReturn(user);
+        user.setUserAuth(otherAuth);
 
         boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails, 0);
 

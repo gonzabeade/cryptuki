@@ -185,4 +185,8 @@ public class Offer {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    public void setSeller(User seller){
+        this.seller = seller;
+    }
 }

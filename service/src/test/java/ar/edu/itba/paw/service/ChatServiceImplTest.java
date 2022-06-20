@@ -31,9 +31,9 @@ public class ChatServiceImplTest {
     @InjectMocks
     private ChatServiceImpl chatService;
 
-    Offer auxOffer = new Offer.Builder(10, 50,100).build();
-    User auxUser = new User("auxUser@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
-    Trade trade = new Trade(auxOffer, auxUser, 20);
+    private Offer auxOffer = new Offer.Builder(10, 50,100).build();
+    private User auxUser = new User("auxUser@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
+    private Trade trade = new Trade(auxOffer, auxUser, 20);
 
     @Test
     public void testSendMessageFromBuyer(){

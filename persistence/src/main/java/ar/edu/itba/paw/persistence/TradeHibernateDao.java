@@ -60,6 +60,8 @@ public class TradeHibernateDao implements TradeDao {
         q.setParameter("offerId", offerId);
         List<Integer> ids = (List<Integer>) q.getResultList();
 
+        if (ids.isEmpty())
+            return;
         Query updateQuery = em.createQuery("update Trade t set t.status = 'REJECTED' where t.tradeId in :ids");
         updateQuery.setParameter("ids", ids);
         updateQuery.executeUpdate();

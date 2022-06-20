@@ -10,19 +10,19 @@
     <div class="w-3/4 flex flex-row">
         <div class="flex flex-col font-sans my-auto mr-5">
             <c:if test="${param.tradeStatus == 'PENDING' }">
-                <div class="bg-nyellow  w-full text-white  text-center p-2"><messages:message code="pending"/> </div>
+                <div class="bg-nyellow  w-40 text-white  text-center p-2"><messages:message code="pending"/> </div>
             </c:if>
 
             <c:if test="${param.tradeStatus == 'REJECTED' }">
-                <div class="bg-nred/[0.6] w-full text-white  text-center p-2"><messages:message code="rejected"/> </div>
+                <div class="bg-nred/[0.6] w-40 text-white  text-center p-2"><messages:message code="rejected"/> </div>
             </c:if>
 
             <c:if test="${param.tradeStatus == 'ACCEPTED' }">
-                <div class="bg-ngreen w-full text-white text-center p-2"><messages:message code="accepted"/> </div>
+                <div class="bg-ngreen w-40 text-white text-center p-2"><messages:message code="accepted"/> </div>
             </c:if>
 
             <c:if test="${param.tradeStatus == 'SOLD' }">
-                <div class="bg-gray-400 w-full text-white text-center p-2"><messages:message code="sold"/> </div>
+                <div class="bg-gray-400 w-40 text-white text-center p-2"><messages:message code="sold"/> </div>
             </c:if>
         </div>
 

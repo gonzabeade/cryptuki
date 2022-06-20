@@ -58,6 +58,7 @@ public class TradeServiceImpl implements TradeService {
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade sellTrade(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
         Offer offer = trade.getOffer();
         double newMaxInCrypto = offer.getMaxInCrypto() - trade.getQuantity() / offer.getUnitPrice();
         if (newMaxInCrypto < offer.getMinInCrypto()) {
@@ -68,6 +69,10 @@ public class TradeServiceImpl implements TradeService {
             offer.setMaxInCrypto(newMaxInCrypto);
         }
         offerDao.modifyOffer(offer);
+
+        // If a trade is in a forbidden state after some crypto of the offer was sold, change its status to rejected
+        // automatically
+        tradeDao.rejectAllRemainingTrades(offer.getOfferId());
         return trade;
     }
 

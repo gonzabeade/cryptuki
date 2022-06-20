@@ -55,6 +55,17 @@ public class TradeHibernateDao implements TradeDao {
     }
 
     @Override
+    public void rejectAllRemainingTrades(int offerId) {
+        Query q = em.createNativeQuery("SELECT trade_id FROM trade JOIN offer ON trade.offer_id = offer.offer_id WHERE offer.offer_id = :offerId AND status <> 'SOLD' AND quantity / offer.asking_price > offer.max_quantity");
+        q.setParameter("offerId", offerId);
+        List<Integer> ids = (List<Integer>) q.getResultList();
+
+        Query updateQuery = em.createQuery("update Trade t set t.status = 'REJECTED' where t.tradeId in :ids");
+        updateQuery.setParameter("ids", ids);
+        updateQuery.executeUpdate();
+    }
+
+    @Override
     public Optional<Trade> getTradeById(int tradeId) {
         return Optional.ofNullable(em.find(Trade.class, tradeId));
     }
@@ -94,7 +105,7 @@ public class TradeHibernateDao implements TradeDao {
 
     @Override
     public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
-        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND buyer_uname = :uname ORDER BY start_date LIMIT :limit OFFSET :offset");
+        Query nativeQuery = em.createNativeQuery("SELECT trade_id FROM trade_complete WHERE status IN (:status) AND buyer_uname = :uname ORDER BY start_date desc LIMIT :limit OFFSET :offset");
         return getTrades(username, page, pageSize, status, nativeQuery);
     }
 
@@ -120,4 +131,6 @@ public class TradeHibernateDao implements TradeDao {
         query.setParameter("username", username);
         return (Long)query.getSingleResult();
     }
+
+
 }

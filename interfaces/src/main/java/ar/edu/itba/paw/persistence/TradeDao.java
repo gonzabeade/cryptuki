@@ -17,6 +17,11 @@ public interface TradeDao {
     Trade modifyTrade(Trade trade);
     void deleteTrade(int tradeId);
 
+
+    /** Batch trade manipulation */
+    void rejectAllRemainingTrades(int offerId);
+
+
     /** Simple getters */
     Optional<Trade> getTradeById(int tradeId);
 

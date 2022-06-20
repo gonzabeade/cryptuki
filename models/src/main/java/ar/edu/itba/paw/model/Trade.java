@@ -116,4 +116,6 @@ public class Trade {
     public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
+
+
 }

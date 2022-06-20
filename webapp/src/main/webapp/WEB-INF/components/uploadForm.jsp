@@ -93,7 +93,7 @@
         </div>
         <div class="flex flex-row p-5 mx-auto">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-               href="javascript:history.back()"><messages:message code="cancel"/></a>
+               href="<c:url value="/seller/"/>"><messages:message code="cancel"/></a>
             <button type="submit"
                     class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
                 <messages:message code="send"/></button>

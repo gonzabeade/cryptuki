@@ -141,11 +141,11 @@
             <div class="flex justify-center mt-5">
                 <a class="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center" href="<c:url value="/buyer/market"/>"><messages:message code="returnHome"/></a>
 
-                <a class="bg-gray-200 text-polard mx-5 hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
+                <a class=" bg-nred  text-white mx-5 hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/complain?tradeId=${trade.tradeId}"/> "><messages:message code="iHadAProblema"/></a>
 
                 <form  method="post"
                        action="<c:url value="/deleteTrade/${trade.tradeId}"/>" class="flex">
-                    <button type="submit" class="bg-nred text-white p-3 font-sans rounded-lg w-40">
+                    <button type="submit" class=" bg-gray-200 text-polard p-3 font-sans rounded-lg">
                         <messages:message code="removeTrade"/>
                     </button>
                 </form>

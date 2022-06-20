@@ -50,6 +50,13 @@ public class CustomPreAuthorizer {
         return maybeTrade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername());
     }
 
+    public boolean isUserBuyerOfTrade(UserDetails userDetails, int tradeId) {
+        Optional<Trade> maybeTrade = tradeDao.getTradeById(tradeId);
+        if (!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+        return maybeTrade.get().getBuyer().getUsername().get().equals(userDetails.getUsername());
+    }
+
     public boolean isUserPartOfTrade(UserDetails userDetails, int tradeId) {
         Optional<Trade> maybeTrade = tradeDao.getTradeById(tradeId);
         if (!maybeTrade.isPresent())

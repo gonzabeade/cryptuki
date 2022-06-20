@@ -20,23 +20,23 @@ public class KycServiceImpl implements KycService {
 
     private final KycDao kycDao;
     private final EmissionCountryDao emissionCountryDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public KycServiceImpl(KycDao kycDao, EmissionCountryDao emissionCountryDao) {
+    public KycServiceImpl(KycDao kycDao, EmissionCountryDao emissionCountryDao, MessageSenderFacade messageSenderFacade) {
         this.kycDao = kycDao;
         this.emissionCountryDao = emissionCountryDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
     @Transactional
-    @PreAuthorize("#kycInformationPO.username == authentication.principal.getName()")
     public void newKycRequest(KycInformationPO kycInformationPO) {
         kycDao.newKycRequest(kycInformationPO);
     }
 
     @Override
     @Transactional
-    @PreAuthorize( "hasRole('ROLE_ADMIN') OR #username == authentication.principal.getName()")
     public Optional<KycInformation> getPendingKycRequest(String username) {
         return kycDao.getKycRequestsByStatus(username, KycStatus.PEN).stream().findFirst();
     }
@@ -58,16 +58,16 @@ public class KycServiceImpl implements KycService {
     @Transactional
     @Secured("ROLE_ADMIN")
     public void validateKycRequest(int kycId) {
-        // TODO: enviar mail con confirmacion
-        kycDao.setKycRequestStatus(KycStatus.APR, kycId);
+        KycInformation kycInformation = kycDao.setKycRequestStatus(KycStatus.APR, kycId);
+        messageSenderFacade.sendIdentityVerified(kycInformation.getUser());
     }
 
     @Override
     @Transactional
     @Secured("ROLE_ADMIN")
     public void rejectKycRequest(int kycId, String reason) {
-        // TODO: enviar mail con la razon
-        kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+        KycInformation kycInformation = kycDao.setKycRequestStatus(KycStatus.REJ, kycId);
+        messageSenderFacade.sendIdentityRequestRejected(kycInformation.getUser(),reason);
     }
 
     @Override

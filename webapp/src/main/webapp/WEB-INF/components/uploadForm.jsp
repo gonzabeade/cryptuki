@@ -4,16 +4,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="cryptocurrencies" scope="request" type="java.lang.Iterable"/>
 <%--<jsp:useBean id="paymentMethods" scope="request" type="java.lang.Iterable"/>--%>
-<div class="flex flex-row">
+<div class="flex flex-row w-full mx-auto">
     <form:form modelAttribute="uploadOfferForm" action="${postUrl}" method="post" class="flex flex-col min-w-[50%]">
         <div class="flex flex-row divide-x">
-            <div class="flex flex-col mx-5">
+            <div class="flex flex-col mx-5 w-1/3">
                 <h1 class="font-sans font-polard font-extrabold text-2xl text-center">1. <messages:message code="priceSettings"/> </h1>
                 <c:url value="/offer/upload" var="postUrl"/>
                 <form:input type="hidden" path="sellerId" value="${sellerId}"/>
                 <div class="flex flex-col justify-center">
                     <form:errors path="cryptoCode" cssClass=" mx-auto text-red-500"/>
-                    <form:label  path="cryptoCode" class="text-lg font-sans text-polard  mb-3 text-center"><messages:message code="cryptocurrency"/>*</form:label>
+                    <form:label  path="cryptoCode" class="text-lg font-sans text-polard  mb-3 mt-2 text-center"><messages:message code="cryptocurrency"/>*</form:label>
                     <div class="flex flex-row justify-center mx-auto">
                         <form:select path="cryptoCode" class="rounded-lg p-3" onchange="updateVars(this.value)">
                             <option disabled selected><messages:message code="chooseAnOption"/></option>
@@ -24,6 +24,10 @@
                             </c:forEach>
                         </form:select>
                     </div>
+                    <h1 class="flex flex-row mx-auto mt-4">
+                        <p class="text-sm text-gray-400 mr-2">*<messages:message code="suggestedPrice"/> </p>
+                        <p class="text-sm text-gray-400" id="priceCrypto"><messages:message code="selectACoin"/> </p>
+                    </h1>
                 </div>
                 <div class="flex flex-col mt-4">
                     <form:errors path="unitPrice" cssClass="text-red-500 mx-auto"/>
@@ -46,7 +50,7 @@
                                 <!-- <h1 class="my-auto" id="coinAmount">~0.00000</h1> -->
                             </div>
                         </div>
-                        <div class="my-12">
+                        <div class="my-5">
                             -
                         </div>
                         <div>
@@ -60,7 +64,7 @@
                 </div>
 
             </div>
-            <div class="flex flex-col mx-auto w-96 ">
+            <div class="flex flex-col mx-auto w-1/3 ">
                 <form:label path="location"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">2.<messages:message
                         code="offerLocation"/></form:label>
@@ -76,7 +80,7 @@
                     </form:select>
                 </div>
             </div>
-            <div class="flex flex-col px-10">
+            <div class="flex flex-col px-10 w-1/3">
                 <form:label path="firstChat"
                             class="text-2xl font-sans text-polard font-extrabold mb-3 text-center ">3.<messages:message
                         code="firstChat"/></form:label>
@@ -89,7 +93,7 @@
         </div>
         <div class="flex flex-row p-5 mx-auto">
             <a class="bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-               href="javascript:history.back()"><messages:message code="cancel"/></a>
+               href="<c:url value="/seller/"/>"><messages:message code="cancel"/></a>
             <button type="submit"
                     class="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
                 <messages:message code="send"/></button>
@@ -97,8 +101,35 @@
     </form:form>
 </div>
 <script>
-    function updateVars(value) {
+    async function updateVars(value) {
         document.getElementById("minCoin").innerText = value;
         document.getElementById("maxCoin").innerText = value;
+        let numberLocale = Intl.NumberFormat('es-AR');
+        let suggestedPrice = document.getElementById("priceCrypto");
+        if(suggestedPrice.classList.contains("hidden")){
+            suggestedPrice.classList.remove("hidden")
+        }
+        switch (value) {
+            case "BTC":
+                suggestedPrice.innerText = numberLocale.format((await btcPrice).toFixed(2)) + ' ARS';
+                break;
+            case "ETH":
+                suggestedPrice.innerText = numberLocale.format((await ethPrice).toFixed(2)) + ' ARS';
+                break;
+            case "USDT":
+                suggestedPrice.innerText = numberLocale.format((await usdtPrice).toFixed(2)) + ' ARS';
+                break;
+            case "DAI":
+                suggestedPrice.innerText = numberLocale.format((await daiPrice).toFixed(2)) + ' ARS';
+                break;
+            case "DOGE":
+                suggestedPrice.innerText = numberLocale.format((await dogePrice).toFixed(2)) + ' ARS';
+                break;
+            case "ADA":
+                suggestedPrice.innerText = numberLocale.format((await cardanoPrice).toFixed(2)) + ' ARS';
+                break;
+
+
+        }
     }
 </script>

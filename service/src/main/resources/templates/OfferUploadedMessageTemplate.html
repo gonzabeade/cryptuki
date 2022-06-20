@@ -939,7 +939,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" href="http://pawserver.it.itba.edu.ar/paw-2022a-01/"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
+                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" th:href="${url}"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -1003,19 +1003,19 @@ body {
                                                             <tbody>
                                                                 <tr>
                                                                     <td width="560" class="esd-container-frame" align="center" valign="top">
-                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                        <table cellpadding="10" cellspacing="10" width="100%">
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-m-txt-c">
-                                                                                        <h2 style="font-size: 19px;"><a target="_blank" style="font-size: 19px;">
-                                                                                            <span th:text="#{offerCreated}"></span>
-                                                                                                (<font color="#333333" th:text="#{advertisment}">Advertisment&nbsp;</font>#<span th:text="${ offer.offerId }">65000500</span>
-                                                                                        )</a>
+                                                                                        <h2 style="font-size: 19px;">
+                                                                                            <span th:text="#{offerCreated}" style="font-size: 19px;"></span>
+                                                                                                <span  th:text="#{advertisment}" style="font-size: 19px;"> (Advertisment </span>#<span th:text="${ offer.offerId }" style="font-size: 19px;">65000500</span>)
+
                                                                                       </h2>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;" th:text="#{seeOffer}">See Advertisment</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p25t es-p15b"><span class="es-button-border" style="border-radius: 6px; border-color: #5c68e2; border-width: 2px; background: #5c68e2;"><a th:href="${url} + '/offer/'+${offer.offerId}" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;" th:text="#{seeOffer}">See Advertisment</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -1040,7 +1040,16 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br><span th:text="${offer.crypto.code}">BTC<span></span><br><strong><span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br><span th:text="${offer.unitPrice}">1.000.000</span> ARS<br><strong><span th:text="#{range}">Range:</span><br></strong><span th:text="${offer.minInCrypto}">10</span><span th:text="${offer.crypto.code}">BTC<span>- <span th:text="${offer.maxInCrypto}">12</span> <span th:text="${offer.crypto.code}">BTC<span><br><span style="font-size: 16px;"><b th:text="#{location}">Location:<br></b></span><span th:text="${offer.location.toString()}">Recoleta</span></p>
+                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br>
+                                                                                            <span th:text="${offer.crypto.code}">BTC</span><br><strong>
+                                                                                            <span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br>
+                                                                                            <span th:text="${offer.unitPrice}">1.000.000</span> ARS<br><strong>
+                                                                                            <span th:text="#{range}">Range:</span><br></strong>
+                                                                                            <span th:text="${offer.minInCrypto}">10</span>
+                                                                                            <span th:text="${offer.crypto.code}">BTC</span>- <span th:text="${offer.maxInCrypto}">12</span> <span th:text="${offer.crypto.code}">BTC</span><br>
+                                                                                            <span style="font-size: 16px;"><b th:text="#{location}">Location:</b></span><br>
+                                                                                                <span th:text="${offer.location.toString()}">Recoleta</span>
+                                                                                        </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

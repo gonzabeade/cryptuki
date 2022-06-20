@@ -52,47 +52,33 @@ public class TradeController {
     }
 
     @RequestMapping(value = "/{offerId}", method = RequestMethod.GET)
-    public ModelAndView tradeRedirect(@PathVariable("offerId") final int offerId,
-                                      Authentication authentication,
-                                      @RequestParam("page") Optional<Integer> page
-    ){
+    public ModelAndView tradeRedirect(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page) {
         return baseTradesDashboard(authentication, page, offerId, null);
     }
 
     @RequestMapping(value = "/accepted/{offerId}", method = RequestMethod.GET)
-    public ModelAndView trades(@PathVariable("offerId") final int offerId,
-                               Authentication authentication,
-                               @RequestParam("page") Optional<Integer> page
-                               ){
+    public ModelAndView trades(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page) {
         return baseTradesDashboard( authentication, page, offerId, TradeStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/pending/{offerId}", method = RequestMethod.GET)
-    public ModelAndView pendingTrades(@PathVariable("offerId") final int offerId,
-                                      Authentication authentication,
-                                      @RequestParam("page") Optional<Integer> page){
+    public ModelAndView pendingTrades(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page){
         return baseTradesDashboard( authentication, page, offerId, TradeStatus.PENDING);
     }
 
     @RequestMapping(value = "/deletedByUser/{offerId}", method = RequestMethod.GET)
-    public ModelAndView deletedByUserTrades(@PathVariable("offerId") final int offerId,
-                                            Authentication authentication,
-                                            @RequestParam("page") Optional<Integer> page){
+    public ModelAndView deletedByUserTrades(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page){
         return baseTradesDashboard(authentication, page, offerId, TradeStatus.DELETED);
     }
 
     @RequestMapping(value = "/rejected/{offerId}", method = RequestMethod.GET)
-    public ModelAndView rejectedTrades(@PathVariable("offerId") final int offerId,
-                                       Authentication authentication,
-                                       @RequestParam("page") Optional<Integer> page){
+    public ModelAndView rejectedTrades(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page){
         return baseTradesDashboard(authentication, page, offerId, TradeStatus.REJECTED);
     }
 
 
     @RequestMapping(value = "/completed/{offerId}", method = RequestMethod.GET)
-    public ModelAndView completedTrades(@PathVariable("offerId") final int offerId,
-                                        Authentication authentication,
-                                        @RequestParam("page") Optional<Integer> page){
+    public ModelAndView completedTrades(@PathVariable("offerId") final int offerId, Authentication authentication, @RequestParam("page") Optional<Integer> page){
         return baseTradesDashboard( authentication, page, offerId, TradeStatus.SOLD);
     }
 

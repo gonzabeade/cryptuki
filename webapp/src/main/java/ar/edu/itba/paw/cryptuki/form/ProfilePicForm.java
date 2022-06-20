@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.MultipartSizeCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public class ProfilePicForm {
     @MultipartCheck
+    @MultipartSizeCheck(maxSize = (1<<21))
     private MultipartFile multipartFile;
     private boolean isBuyer;
 

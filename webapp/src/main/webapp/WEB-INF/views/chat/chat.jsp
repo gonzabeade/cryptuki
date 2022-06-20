@@ -73,7 +73,6 @@
                         value="${trade.quantity} "/>ARS</h1>
             </div>
 
-            <c:if test="${!(trade.status =='SOLD')}">
                 <div class="flex flex-col">
                     <div class="flex">
                         <h1 class="font-sans mr-2"><messages:message code="buyerUsername"/>:</h1>
@@ -103,7 +102,6 @@
                     </c:if>
 
                 </div>
-            </c:if>
             <c:if test="${(trade.status =='SOLD')}">
                 <a class="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/receiptDescription/${trade.tradeId}"/>">
                     <messages:message code="help"/>

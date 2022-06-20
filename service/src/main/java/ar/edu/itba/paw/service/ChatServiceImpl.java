@@ -13,11 +13,13 @@ public class ChatServiceImpl implements ChatService {
 
     private final MessageDao messageDao;
     private final TradeDao tradeDao;
+    private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public ChatServiceImpl(MessageDao messageDao, TradeDao tradeDao) {
+    public ChatServiceImpl(MessageDao messageDao, TradeDao tradeDao, MessageSenderFacade messageSenderFacade) {
         this.messageDao = messageDao;
         this.tradeDao = tradeDao;
+        this.messageSenderFacade = messageSenderFacade;
     }
 
     @Override
@@ -26,7 +28,8 @@ public class ChatServiceImpl implements ChatService {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         messageDao.sendMessage(senderId, tradeId, message);
 
-        // TODO: if time allows, send email notifying about new messages
+        // send mail to the counterpart
+        messageSenderFacade.sendNewUnseenMessages(trade, trade.getBuyer().getId() == senderId ? trade.getOffer().getSeller(): trade.getBuyer() );
         if (senderId == trade.getBuyer().getId())
             trade.setqUnseenMessagesSeller(trade.getqUnseenMessagesSeller()+1);
         else
@@ -37,15 +40,19 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     public void markBuyerMessagesAsSeen(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
-        trade.setqUnseenMessagesBuyer(0);
-        tradeDao.modifyTrade(trade);
+        if (trade.getqUnseenMessagesBuyer() > 0) {
+            trade.setqUnseenMessagesBuyer(0);
+            tradeDao.modifyTrade(trade);
+        }
     }
 
     @Override
     @Transactional
     public void markSellerMessagesAsSeen(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
-        trade.setqUnseenMessagesSeller(0);
-        tradeDao.modifyTrade(trade);
+        if (trade.getqUnseenMessagesSeller() > 0) {
+            trade.setqUnseenMessagesSeller(0);
+            tradeDao.modifyTrade(trade);
+        }
     }
 }

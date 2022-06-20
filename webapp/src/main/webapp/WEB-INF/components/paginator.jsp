@@ -2,7 +2,7 @@
 <%@ taglib prefix="messages" uri="http://www.springframework.org/tags" %>
 <div>
 
-    <div class="p-5 flex flex-row mx-40 justify-center ">
+    <div class="flex flex-row mx-40 justify-center ">
         <c:choose>
             <c:when test="${param.pages > 0}">
                 <div class="my-auto">

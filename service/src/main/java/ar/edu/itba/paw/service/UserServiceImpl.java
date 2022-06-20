@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
-import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
@@ -74,13 +71,7 @@ public class UserServiceImpl implements UserService {
         if (code < 0)
             throw new IllegalArgumentException("Code must be non negative");
 
-        Optional<UserAuth> userAuth;
-        try {
-            userAuth = userAuthDao.getUserAuthByUsername(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
-
+        Optional<UserAuth> userAuth = userAuthDao.getUserAuthByUsername(username);
         if (userAuth.isPresent() && userAuth.get().getCode() == code)
             return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
         else return false;
@@ -94,11 +85,7 @@ public class UserServiceImpl implements UserService {
         if (newPassword == null)
             throw new NullPointerException("New password cannot be null");
 
-        try {
-            return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form;
+package ar.edu.itba.paw.cryptuki.form.buyer;
 
 import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
 import ar.edu.itba.paw.model.Trade;

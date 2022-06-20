@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.persistence.CryptocurrencyDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +26,12 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService {
         if (id == null)
             throw new NullPointerException("Cryptocurrency id cannot be null");
 
-        try {
-            return cryptoCurrencyDao.getCryptocurrency(id);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        return cryptoCurrencyDao.getCryptocurrency(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Collection<Cryptocurrency> getAllCryptocurrencies() {
-        try {
-            return cryptoCurrencyDao.getAllCryptocurrencies();
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        return cryptoCurrencyDao.getAllCryptocurrencies();
     }
 }

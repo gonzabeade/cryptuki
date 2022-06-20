@@ -945,7 +945,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" href="http://pawserver.it.itba.edu.ar/paw-2022a-01/"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_79e4fa64746b26b101324a6f3ae7cd71/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
+                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" th:href="${url}"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_79e4fa64746b26b101324a6f3ae7cd71/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -984,8 +984,10 @@ body {
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-text es-p5t es-p5b es-p40r es-p40l es-m-p0r es-m-p0l">
-                                                                                        <span th:text="#{tradeId}">Trade #</span><span th:text="${tradeId}">1</span><p th:text="#{recommendation}"> has new messages. These should help you make a decision or coordinate with the counterpart. Please do not give any private information.</p>
+                                                                                    <td align="center"  style="margin-top: 20px;" class="esd-block-text es-p5t es-p5b es-p40r es-p40l es-m-p0r es-m-p0l">
+                                                                                        <br>
+                                                                                        <br>
+                                                                                        <span th:text="#{tradeId}">Trade #</span> <span th:text="${tradeId}">1</span> <span th:text="#{recommendation}"> has new messages. These should help you make a decision or coordinate with the counterpart. Please do not give any private information.</span>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1005,7 +1007,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a href class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif;" th:text="#{openChat}">Open chat</a></span></td>
+                                                                                    <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px; background: #5c68e2;"><a th:href="${url}+'/chat?tradeId='+${tradeId}" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px; font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif;" th:text="#{openChat}">Open chat</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

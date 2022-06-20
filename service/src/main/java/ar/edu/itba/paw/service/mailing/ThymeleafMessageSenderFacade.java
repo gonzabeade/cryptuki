@@ -204,7 +204,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = user.getLocale();
         identityNotVerifiedThymeleafMailMessage.setLocale(locale);
         identityNotVerifiedThymeleafMailMessage.setSubject(messageSource.getMessage("kycUnsuccessful", null, locale));
-        identityNotVerifiedThymeleafMailMessage.setParameters(getUrl());
+        identityNotVerifiedThymeleafMailMessage.setParameters(getUrl(), reason);
 
         mailMessageContactService.sendMessage(identityNotVerifiedThymeleafMailMessage);
         LOGGER.info("KYC rejected result  sent to user");

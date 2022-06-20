@@ -18,19 +18,15 @@ public class ModifyOfferForm extends UploadOfferForm {
         this.offerId = offerId;
     }
 
-    public void fillFromOffer(Offer offer) {
-        setOfferId(offer.getOfferId());
-        setMinInCrypto(offer.getMinInCrypto());
-        setMaxInCrypto(offer.getMaxInCrypto());
-        setCryptoCode(offer.getCrypto().getCode());
-        setUnitPrice((offer.getUnitPrice()));
-        setFirstChat(offer.getComments());
-        setLocation(offer.getLocation().toString());
-    }
-
     @Override
     public OfferPO toOfferParameterObject() {
         return super.toOfferParameterObject().withOfferId(offerId);
+    }
+
+    @Override
+    public void fillFromOffer(Offer offer) {
+        super.fillFromOffer(offer);
+        setOfferId(offer.getOfferId());
     }
 
 }

@@ -31,7 +31,7 @@ public class ComplainHibernateDao implements ComplainDao{
 
     @Override
     public Complain modifyComplain(Complain complain) {
-        em.persist(complain);
+        em.merge(complain);
         return complain;
     }
 
@@ -46,7 +46,7 @@ public class ComplainHibernateDao implements ComplainDao{
         complain.setModerator(moderatorUser);
         complain.setModeratorComments(moderatorComments);
         complain.setStatus(ComplainStatus.CLOSED);
-        em.persist(complain);
+        em.merge(complain);
         return Optional.of(complain);
     }
 

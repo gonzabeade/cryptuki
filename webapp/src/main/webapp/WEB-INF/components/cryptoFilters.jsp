@@ -12,7 +12,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </div>
-
     </div>
     <div class="flow-root" id="allPossibleCripto">
         <ul role="list" class="divide-y divide-gray-200 ">

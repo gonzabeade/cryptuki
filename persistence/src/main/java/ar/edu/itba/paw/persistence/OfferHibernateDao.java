@@ -128,7 +128,7 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Offer modifyOffer(Offer offer) {
-        em.persist(offer);
+        em.merge(offer);
         return offer;
     }
 
@@ -142,7 +142,7 @@ public class OfferHibernateDao implements OfferDao{
         Offer offer = em.find(Offer.class, offerId);
         if (offer != null) {
             offer.setOfferStatus(offerStatus);
-            em.persist(offer);
+            em.merge(offer);
             return Optional.of(offer);
         } else
             return Optional.empty();
@@ -150,7 +150,7 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Collection<LocationCountWrapper> getOfferCountByLocation() {
-        TypedQuery<LocationCountWrapper> query = em.createQuery("select new ar.edu.itba.paw.model.LocationCountWrapper(location, count(location)) from Offer group by location order by count(location) desc", LocationCountWrapper.class);
+        TypedQuery<LocationCountWrapper> query = em.createQuery("select new ar.edu.itba.paw.model.LocationCountWrapper(location, count(location)) from Offer where offerStatus = 'APR' group by location order by count(location) desc", LocationCountWrapper.class);
         return query.getResultList();
     }
 

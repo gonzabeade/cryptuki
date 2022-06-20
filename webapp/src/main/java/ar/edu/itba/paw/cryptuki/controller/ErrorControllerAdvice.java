@@ -16,13 +16,6 @@ class ErrorControllerAdvice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorControllerAdvice.class);
 
-    @ExceptionHandler(ServiceDataAccessException.class)
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView serviceDataAccess(ServiceDataAccessException sdae) {
-        LOGGER.warn("Captured ServiceDataAccessException", sdae);
-        return new ModelAndView("forward:/500");
-    }
-
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ModelAndView nullPointer(NullPointerException npe) {

@@ -16,28 +16,30 @@
     <link rel="icon" type="image/x-icon" href="<c:url value="/public/images/favicon.ico"/>">
 
 </head>
-<body class="bg-storml overflow-x-hidden">
+<body class="bg-storml overflow-x-hidden flex flex-col">
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:include page="../components/seller/sellerHeader.jsp"/>
 
-<div class="flex flex-row divide-x">
-    <div class="flex flex-col">
+
+<div class="flex flex-row divide-x w-full">
+    <div class="flex flex-col w-full">
         <div class="flex">
             <h1 class="mx-auto my-10 text-4xl font-semibold font-sans text-polar"><messages:message code="uploadYourAdvertisement"/></h1>
         </div>
         <c:set var="cryptocurrencies" value="${cryptocurrencies}" scope="request"/>
         <% request.setCharacterEncoding("UTF-8"); %>
-        <jsp:include page="../components/uploadForm.jsp"/>
+        <div class="flex mx-auto">
+            <jsp:include page="../components/uploadForm.jsp"/>
+        </div>
     </div>
-    <div class="flex flex-col w-full">
+<%--    <div class="flex flex-col w-full">--%>
 
-        <jsp:include page="../components/uploadMarketData.jsp"/>
-    </div>
+<%--        <jsp:include page="../components/uploadMarketData.jsp"/>--%>
+<%--    </div>--%>
 
 
 
 </div>
-
 
 <div class="shape-blob"></div>
 <div class="shape-blob one"></div>

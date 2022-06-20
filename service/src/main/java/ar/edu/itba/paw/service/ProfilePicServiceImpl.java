@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.exception.PersistenceException;
-import ar.edu.itba.paw.exception.ServiceDataAccessException;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.persistence.ProfilePicDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +26,7 @@ public class ProfilePicServiceImpl implements ProfilePicService {
 
         if (username == null)
             throw new NullPointerException("Username cannot be null");
-
-        try {
-            return profilePicDao.getProfilePicture(username);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        return profilePicDao.getProfilePicture(username);
     }
 
     @Override
@@ -48,10 +41,6 @@ public class ProfilePicServiceImpl implements ProfilePicService {
         if (type == null)
             throw new NullPointerException("Image type cannot be null");
 
-        try {
-            profilePicDao.uploadProfilePicture(username, profilePicture, type);
-        } catch (PersistenceException pe) {
-            throw new ServiceDataAccessException(pe);
-        }
+        profilePicDao.uploadProfilePicture(username, profilePicture, type);
     }
 }

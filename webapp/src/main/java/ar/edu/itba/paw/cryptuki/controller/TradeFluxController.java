@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.form.*;
+import ar.edu.itba.paw.cryptuki.form.buyer.OfferBuyForm;
 import ar.edu.itba.paw.cryptuki.utils.LastConnectionUtils;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.TradeStatus;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Optional;
 
 @Controller
 public class TradeFluxController {
@@ -33,7 +29,6 @@ public class TradeFluxController {
     private final ChatService chatService;
     private final UserService us;
     private final Environment environment;
-    private static final int PAGE_SIZE = 7;
 
     @Autowired
     public TradeFluxController(OfferService offerService, TradeService tradeService, UserService us, ChatService chatService, Environment environment) {
@@ -71,17 +66,15 @@ public class TradeFluxController {
             return mav;
         }
 
+        // We cannot control this from the service. The controller is the only one that can guarantee that the chats were displayed on screen.
         chatService.markBuyerMessagesAsSeen(tradeId);
-
         ModelAndView mav = new ModelAndView("trade");
         mav.addObject("buying",buying);
         mav.addObject("trade",trade);
         mav.addObject("otherLastLogin",LastConnectionUtils.toRelativeTime(offer.getSeller().getLastLogin()).getRelativeTime());
         mav.addObject("status",trade.getStatus().toString());
-
         return mav;
     }
-
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public ModelAndView executeTradePost(@Valid @ModelAttribute("offerBuyForm") final OfferBuyForm form, final BindingResult errors, final Authentication authentication){
@@ -93,11 +86,6 @@ public class TradeFluxController {
         User user = us.getUserByUsername(authentication.getName()).get(); // Already know that exists
         Trade trade = tradeService.makeTrade(form.getOfferId(), user.getId(), form.getAmount());
         return new ModelAndView("redirect:/trade"+"?tradeId="+trade.getTradeId());
-    }
-
-    @RequestMapping(value = "/receipt/{tradeId}", method = RequestMethod.GET)
-    public ModelAndView receipt(@PathVariable("tradeId") final int tradeId, final Authentication authentication) {
-        return receiptView("receipt", tradeId, authentication);
     }
 
     @RequestMapping(value = "/receiptDescription/{tradeId}", method = RequestMethod.GET)
@@ -113,7 +101,6 @@ public class TradeFluxController {
         mav.addObject("rated", true);
         return mav;
     }
-
 
     private ModelAndView receiptView(String viewName, int tradeId, Authentication authentication) {
         ModelAndView mav = new ModelAndView(viewName);
@@ -133,13 +120,11 @@ public class TradeFluxController {
         return mav;
     }
 
-
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
     public ModelAndView rate(@Valid @ModelAttribute("ratingForm") RatingForm ratingForm, final  BindingResult errors, final Authentication authentication){
         if(errors.hasErrors()){
             return receiptDescription(ratingForm, ratingForm.getTradeId(), authentication);
         }
-
         tradeService.rateCounterPartUserRegardingTrade(authentication.getName(), ratingForm.getRating(), ratingForm.getTradeId());
         return new ModelAndView("redirect:/receiptDescription/"+ratingForm.getTradeId()+"/success");
     }
@@ -151,21 +136,27 @@ public class TradeFluxController {
     }
 
     @RequestMapping(value="/acceptOffer", method= RequestMethod.POST)
-    public ModelAndView acceptOffer(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
+    public ModelAndView acceptOffer(@RequestParam(value = "tradeId") int tradeId) {
         tradeService.acceptTrade(tradeId);
         return new ModelAndView("redirect:/chat?tradeId="+tradeId);
     }
+
     @RequestMapping(value="/rejectOffer", method= RequestMethod.POST)
-    public ModelAndView rejectOffer(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
+    public ModelAndView rejectOffer(@RequestParam(value = "tradeId") int tradeId) {
        Trade trade = tradeService.rejectTrade(tradeId);
         return new ModelAndView("redirect:/seller/associatedTrades/rejected/"+trade.getOffer().getOfferId());
     }
-    @RequestMapping(value="/markAsSold", method= RequestMethod.POST)
-    public ModelAndView markAsSold(@RequestParam(value = "tradeId") int tradeId, final Authentication authentication) {
-        Trade trade = tradeService.sellTrade(tradeId);
-        return new ModelAndView("redirect:/seller/associatedTrades/completed/"+ trade.getOffer().getOfferId());
-    }
 
+    @RequestMapping(value="/markAsSold", method= RequestMethod.POST)
+    public ModelAndView markAsSold(@RequestParam(value = "tradeId") int tradeId) {
+        Trade trade = tradeService.sellTrade(tradeId);
+        if (!trade.getOffer().getOfferStatus().equals(OfferStatus.SOL))
+            return new ModelAndView("redirect:/seller/associatedTrades/completed/"+ trade.getOffer().getOfferId());
+
+        ModelAndView mav = new ModelAndView("offerSold");
+        mav.addObject("offerId", trade.getOffer().getOfferId());
+        return mav;
+    }
 
 
 }

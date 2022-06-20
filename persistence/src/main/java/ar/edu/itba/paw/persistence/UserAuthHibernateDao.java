@@ -56,7 +56,7 @@ public class UserAuthHibernateDao implements UserAuthDao{
         UserAuth userAuth = getUserAuthByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         if (userAuth.getCode() == code){
             userAuth.setUserStatus(UserStatus.VERIFIED);
-            em.persist(userAuth);
+            em.merge(userAuth);
             return true;
         }
         return false;
@@ -66,7 +66,7 @@ public class UserAuthHibernateDao implements UserAuthDao{
     public boolean changePassword(String username, String newPassword) {
         UserAuth userAuth = getUserAuthByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         userAuth.setPassword(newPassword);
-        em.persist(userAuth);
+        em.merge(userAuth);
         return true;
     }
 
@@ -74,7 +74,7 @@ public class UserAuthHibernateDao implements UserAuthDao{
     public void kickoutUser(int userId) {
         UserAuth auth = em.find(UserAuth.class, userId);
         auth.setUserStatus(UserStatus.KICKED);
-        em.persist(auth);
+        em.merge(auth);
     }
 
 }

@@ -939,7 +939,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" href="http://pawserver.it.itba.edu.ar/paw-2022a-01/"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
+                                                                                    <td align="center" class="esd-block-image es-p20b" style="font-size: 0px;"><a target="_blank" th:href="${url}"><img src="https://wnvzdr.stripocdn.email/content/guids/CABINET_d45dd0f3629d207f0dd5a549dafbd534/images/logo.png" alt="Logo" style="display: block;" width="200" title="Logo"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -1008,7 +1008,7 @@ body {
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-m-txt-c">
                                                                                         <h2 style="font-size: 19px;"><a target="_blank" style="font-size: 19px;">
-                                                                                                <font color="#333333" th:text="#{advertisment}">Advertisment&nbsp;</font>#<span th:text="${trade.tradeId}"/>
+                                                                                                <font color="#333333" th:text="#{advertisment}">Advertisment&nbsp;</font> #<span th:text="${trade.offer.offerId}"/>
                                                                                         </a>&nbsp;<span th:text="#{hasAPendingOffer}"></span></h2>
                                                                                     </td>
                                                                                 </tr>
@@ -1038,8 +1038,11 @@ body {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br><span th:text="${trade.offer.crypto.code}">BTC</span><br><strong><span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br>1.000.000 ARS<br><strong><span style="font-size:16px;" th:text="#{youWouldReceive}">You would receive:</span></strong><br><span
-                                                                                                th:text="${trade.offer.unitPrice}">1.000.000</span> ARS<br><strong><span style="font-size:16px;" th:text="#{youWouldPay}">You would pay:&nbsp;</span></strong><br><span th:text="${trade.quantity}">1 </span> <span th:text="${trade.offer.crypto.code}">BTC</span> </p>
+                                                                                        <p><strong><span style="font-size:16px;" th:text="#{coin}">Coin:&nbsp;</span></strong><br><span th:text="${trade.offer.crypto.code}">BTC</span>
+                                                                                            <br><strong><span style="font-size:16px;" th:text="#{unitPrice}">Unit Price:</span></strong><br>  <span th:text="${trade.offer.unitPrice}">1.000.000</span> ARS<br>
+                                                                                            <strong><span style="font-size:16px;" th:text="#{youWouldReceive}">You would receive:</span></strong><br>
+                                                                                            <span th:text="${trade.quantity}">1 </span> ARS<br>
+                                                                                            <strong><span style="font-size:16px;" th:text="#{youWouldPay}">You would pay:</span> </strong><br> <span th:text="${trade.quantity/ trade.offer.unitPrice }">1  </span><br><span th:text="${trade.offer.crypto.code}">BTC</span> </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1066,9 +1069,9 @@ body {
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
                                                                                         <p><span th:text="#{username}">Username:</span> <strong th:text="${trade.buyer.username.get()}">sarah_powell@domain.com</strong></p>
-                                                                                        <p><span th:text="#{tradeId}">TradeID:</span>#<strong th:text="${trade.tradeId}">65000500</strong></p>
-                                                                                        <p th:text="#{date}">Invoice date:&nbsp;<strong th:text="${trade.getLastModified()}">Apr 17, 2021</strong></p>
-                                                                                        <p><span th:text="#{rating}">Reputation:</span> <span th:text="${trade.buyer.rating/2}">5</span> <br>
+                                                                                        <p><span th:text="#{tradeId}">TradeID: </span>#<strong th:text="${trade.tradeId}">65000500</strong></p>
+                                                                                        <p th:text="#{date}">Invoice date:&nbsp;<strong th:text="${trade.getLastModified().toString()}">Apr 17, 2021</strong></p>
+                                                                                        <p><span th:text="#{rating}">Reputation:</span> <span th:text="${trade.buyer.rating}">5 /10</span> <br>
                                                                                             <span th:text="#{tradesMade}">Amount of trades made:</span> <span th:text="${trade.buyer.ratingCount}">12</span></p>
                                                                                     </td>
                                                                                 </tr>

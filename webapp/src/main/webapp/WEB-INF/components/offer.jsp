@@ -9,7 +9,7 @@
     <c:url  var="url" value="/seller/associatedTrades/${offer.offerId}"/>
 </c:if>
 
-<a  href="${url}" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mr-3 ${offer.offerStatus!= 'DEL' ? 'hover:-translate-y-1 hover:scale-105 duration-200': 'cursor-not-allowed' }">
+<a  href="${url}" class="z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-3 ${offer.offerStatus!= 'DEL' && offer.offerStatus!='SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200': 'cursor-not-allowed' }">
     <h1 class="text-center text-3xl font-semibold font-polard font-sans"><messages:message code="offer"/>#<c:out value="${offer.offerId}"/></h1>
 
     <div class="flex flex-col mx-auto mt-5">
@@ -25,7 +25,7 @@
         <p class="text-center"><messages:message code="Location.${offer.location}"/></p>
     </div>
 
-    <c:if test="${offer.offerStatus!= 'DEL' && offer.offerStatus!= 'PSE'}">
+    <c:if test="${offer.offerStatus!= 'DEL' && offer.offerStatus!= 'PSE' && offer.offerStatus!='SOL'}">
         <div class="flex flex-row justify-between">
             <c:url value="/offer/modify/${offer.offerId}" var="getUrl"/>
             <form method="get" action="${getUrl}" class="rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">
@@ -53,6 +53,10 @@
     <c:if test="${offer.offerStatus == 'DEL'}">
         <div class="bg-nred my-auto p-2 text-white text-center"><messages:message code="offerDeleted"/></div>
     </c:if>
+    <c:if test="${offer.offerStatus == 'SOL'}">
+        <div class="bg-gray-500 my-auto p-2 text-white text-center"><messages:message code="offerSold"/></div>
+    </c:if>
+
 
 
 </a>

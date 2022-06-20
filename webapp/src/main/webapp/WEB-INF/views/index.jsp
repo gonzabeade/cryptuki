@@ -49,8 +49,9 @@
     <jsp:include page="../components/ubicationFilter.jsp"/>
     <jsp:include page="../components/priceFilter.jsp"/>
     <div class="flex">
-            <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto" id="link"><messages:message code="applyFilters"/></button>
+            <button type="submit" class="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto"  onclick="resetPageNumber()"><messages:message code="applyFilters"/></button>
     </div>
+        <button type="submit"  id="link" class="hidden"></button>
     </div>
 
     <div class="flex flex-col w-4/5 mt-10">
@@ -123,6 +124,9 @@ function analyze(selectedCoins){
            coin[1].click()
        })
    }
+}
+function resetPageNumber(){
+    document.getElementById("page").value = 0;
 }
 </script>
 

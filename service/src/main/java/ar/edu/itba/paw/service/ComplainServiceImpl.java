@@ -7,7 +7,6 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;
 import ar.edu.itba.paw.persistence.UserAuthDao;
-import com.sun.media.jfxmedia.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +51,6 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
-//    @Secured("ROLE_ADMIN")
     public Collection<Complain> getComplainsBy(ComplainFilter filter) {
 
         if (filter == null)

@@ -31,14 +31,12 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
-    @PreAuthorize("#kycInformationPO.username == authentication.principal.getName()")
     public void newKycRequest(KycInformationPO kycInformationPO) {
         kycDao.newKycRequest(kycInformationPO);
     }
 
     @Override
     @Transactional
-    //@PreAuthorize( "hasRole('ADMIN') OR (#username == authentication.principal.getName())") TODO GONZA este rompe
     public Optional<KycInformation> getPendingKycRequest(String username) {
         return kycDao.getKycRequestsByStatus(username, KycStatus.PEN).stream().findFirst();
     }

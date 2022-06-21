@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +42,9 @@ public class ComplainHibernateDaoTest {
     @Autowired
     private DataSource ds;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private ComplainHibernateDao complainHibernateDao;
     private SimpleJdbcInsert jdbcInsert;
@@ -49,7 +54,6 @@ public class ComplainHibernateDaoTest {
 
     @Before
     public void setUp() {
-        int hola = 0;
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(COMPLAIN_TABLE);
@@ -77,6 +81,14 @@ public class ComplainHibernateDaoTest {
                 .withModerator(users.get(2))
                 .withModeratorComments("The complaint will be answered soon")
                 .withComplainerComments("There was a problem with the offer")
+                .withStatus(ComplainStatus.CLOSED)
+                .build()
+        );
+
+        complains.add(new Complain
+                .Builder(complainedTrade, users.get(1))
+                .withModeratorComments("The complaint will be answered soon")
+                .withComplainerComments("There was a problem with the offer")
                 .withStatus(ComplainStatus.PENDING)
                 .build()
         );
@@ -88,10 +100,9 @@ public class ComplainHibernateDaoTest {
     @Test
     public void testGetComplainsBy(){
         // Set up
-        int hola = 1;
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
-        for(Complain complain : complains){
-            insertComplain(complain);
+        for(int i = 0; i < complains.size(); i++){
+            insertComplain(complains.get(i), i);
         }
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_VIEW);
 
@@ -100,22 +111,24 @@ public class ComplainHibernateDaoTest {
 
         // Validations
         Assert.assertNotNull(testedComplains);
-        Assert.assertEquals(rows, testedComplains.size());
+        Assert.assertEquals(1, testedComplains.size());
     }
 
     @Test
     public void testGetComplainCount(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
-        for(Complain complain : complains){
-            insertComplain(complain);
+        for(int i = 0; i < complains.size(); i++){
+            insertComplain(complains.get(i), i);
         }
+
+        em.flush();
 
         // Execute
         long testedCount = complainHibernateDao.getComplainCount(filter);
 
         // Validations
-        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_TABLE), testedCount);
+        Assert.assertEquals(1, testedCount);
     }
 
     @Test
@@ -124,26 +137,34 @@ public class ComplainHibernateDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
 
         // Execute
-        Complain testedComplain = complainHibernateDao.makeComplain(new ComplainPO(TEST_INDEX, "gbeade"));
+        Complain testedComplain = complainHibernateDao.makeComplain(new ComplainPO(TEST_INDEX, complains.get(TEST_INDEX).getComplainer().getUsername().get()));
+
+        em.flush();
 
         // Validations
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, COMPLAIN_TABLE));
-    }
-
-    @Test
-    public void testModifyComplain(){
-
+        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_TABLE));
+        Assert.assertEquals(TEST_INDEX, testedComplain.getTrade().getTradeId());
+        Assert.assertEquals(complains.get(TEST_INDEX).getComplainer().getUsername().get(), testedComplain.getComplainer().getUsername().get());
     }
 
     @Test
     public void testCloseComplain(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
+        insertComplain(complains.get(1), 0);
 
+        // Execute
+        Complain testedComplain = complainHibernateDao.closeComplain(0, "mdedeu", "Se cerro la complaint").get();
+
+        // Validations
+        Assert.assertEquals(testedComplain.getModerator().get().getUsername(), users.get(2).getUsername());
+        Assert.assertEquals(testedComplain.getStatus(), ComplainStatus.CLOSED);
     }
 
-    private void insertComplain(Complain complain){
+    private void insertComplain(Complain complain, int id){
         HashMap<String, Object> complainMap = new HashMap<>();
 
-        complainMap.put("complain_id", 0);
+        complainMap.put("complain_id", id);
         complainMap.put("trade_id", complain.getTrade().getTradeId());
         complainMap.put("complainer_id", complain.getComplainer().getId());
         complainMap.put("complainer_comments", complain.getComplainerComments());
@@ -156,4 +177,5 @@ public class ComplainHibernateDaoTest {
         jdbcInsert.execute(complainMap);
 
     }
+
 }

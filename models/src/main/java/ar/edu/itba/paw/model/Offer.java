@@ -186,7 +186,4 @@ public class Offer {
         this.comments = comments;
     }
 
-    public void setSeller(User seller){
-        this.seller = seller;
-    }
 }

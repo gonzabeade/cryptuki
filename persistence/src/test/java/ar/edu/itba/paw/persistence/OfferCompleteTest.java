@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,6 +65,7 @@ public class OfferCompleteTest {
         users.add(new User("scastagnino@itba.edu.ar", "12345678", 7, 14, Locale.forLanguageTag("en-US")));
         users.get(1).setUserAuth(userAuths.get(1));
 
+
         offers = new ArrayList<>();
         offers.add(new Offer.Builder(10, 50, 100).withSeller(users.get(0)).build());
         offers.get(0).setOfferStatus(OfferStatus.APR);
@@ -72,7 +74,6 @@ public class OfferCompleteTest {
 
         testingFilter = new OfferFilter();
     }
-
 
     @Test
     public void TestGetOfferCount(){
@@ -83,8 +84,6 @@ public class OfferCompleteTest {
 
         // Exercise
         long tested_count = offerHibernateDao.getOfferCount(testingFilter);
-
-        em.flush();
 
         // Validations
         Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
@@ -112,6 +111,7 @@ public class OfferCompleteTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         for(int i = 0; i < offers.size(); i++)
             insertOffer(offers.get(i), i);
+        em.flush();
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
         testingFilter=new OfferFilter().withPageSize(rows).restrictedToUsername(userAuths.get(0).getUsername());
         OfferFilter filter = new OfferFilter().withPageSize(rows);
@@ -126,42 +126,70 @@ public class OfferCompleteTest {
     }
 
     @Test
-    public void TestGetOffersByPaymentMethods(){
-//        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
-//        PaymentMethod paymentMethod = PaymentMethod.getInstance("mp","mercado pago");
-//        testingFilter=new OfferFilter().withPageSize(rows).byPaymentMethod(paymentMethod.getName());
-//
-//        // Exercise
-//        List<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter).stream().collect(Collectors.toCollection(ArrayList::new));
-//
-//        // Validations
-//        Assert.assertNotNull(testedOffers);
-//        for(Offer offer : testedOffers)
-//            Assert.assertTrue(offer.getPaymentMethods().contains(paymentMethod));
-    }
-    @Test
     public void testGetOffersByPageAndPageSize(){
-//        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
-//        testingFilter=new OfferFilter().withPageSize(rows-1).fromPage(0);
-//
-//        // Exercise
-//        Collection<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter);
-//
-//        // Validations
-//        Assert.assertNotNull(testedOffers);
-//        Assert.assertEquals(rows-1,testedOffers.size());
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(int i = 0; i < offers.size(); i++)
+            insertOffer(offers.get(i), i);
+        em.flush();
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_TABLE);
+        testingFilter=new OfferFilter().withPageSize(rows-1).withPage(0);
+
+        // Exercise
+        Collection<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter);
+
+        // Validations
+        Assert.assertNotNull(testedOffers);
+        Assert.assertEquals(rows-1,testedOffers.size());
     }
 
     @Test
     public void testMakeOffer(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        em.flush();
+        OfferPO offerProperties  = new OfferPO()
+                .withOfferId(0)
+                .withStatus(offers.get(0).getOfferStatus())
+                .withMaxInCrypto(offers.get(0).getMaxInCrypto())
+                .withMinInCrypto(offers.get(0).getMinInCrypto())
+                .withUnitPrice(offers.get(0).getUnitPrice())
+                .withCryptoCode("ETH")
+                .withSellerId(0);
 
+        // Exercise
+        Offer testeOffer = offerHibernateDao.makeOffer(offerProperties);
+
+        // Validations
+        Assert.assertEquals(offers.get(0).getOfferId(), testeOffer.getOfferId());
     }
 
     @Test
     public void testChangeOfferStatus(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(int i = 0; i < offers.size(); i++)
+            insertOffer(offers.get(i), i);
 
+        // Exercise
+        Optional<Offer> testedOptional = offerHibernateDao.changeOfferStatus(0, OfferStatus.DEL);
+
+        // Validations
+        Assert.assertTrue(testedOptional.isPresent());
+        Assert.assertEquals(OfferStatus.DEL, testedOptional.get().getOfferStatus());
     }
 
+    @Test
+    public void testInvalidChangeOfferStatus(){
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+
+        // Exercise
+        Optional<Offer> testedOptional = offerHibernateDao.changeOfferStatus(-1, OfferStatus.APR);
+
+        // Validations
+        Assert.assertFalse(testedOptional.isPresent());
+    }
 
     private void insertOffer(Offer offer, int id){
         HashMap<String, Object> offerMap = new HashMap<>();
@@ -172,6 +200,8 @@ public class OfferCompleteTest {
         offerMap.put("min_quantity", offer.getMinInCrypto());
         offerMap.put("status_code", offer.getOfferStatus());
         offerMap.put("asking_price", offer.getUnitPrice());
+        offerMap.put("seller_id", id);
+        offerMap.put("crypto_code", "ETH");
 
         jdbcInsert.execute(offerMap);
 

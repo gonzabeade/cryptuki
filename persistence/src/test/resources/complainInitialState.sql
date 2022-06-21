@@ -20,10 +20,10 @@ INSERT INTO auth (status, code, role_id, user_id, uname, password) VALUES (1, 43
 INSERT INTO cryptocurrency (code, commercial_name) VALUES ('BTC', 'Bitcoin');
 INSERT INTO cryptocurrency (code, commercial_name) VALUES ('ETH', 'Ether');
 
-INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (0,0, 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC', 'CABA', '2022-05-01 02:08:03');
-INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (1,0, 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH', 'La Plata', '2022-05-01 02:08:03');
-INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (2,1, 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH', 'Pilar', '2022-05-01 02:08:03');
+INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (0,0, 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC', 'BOEDO', '2022-05-01 02:08:03');
+INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (1,0, 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH', 'BELGRANO', '2022-05-01 02:08:03');
+INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments, location, offer_date) VALUES (2,1, 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH', 'BARRACAS', '2022-05-01 02:08:03');
 
-INSERT INTO trade (trade_id,offer_id, buyer_id, quantity) VALUES (0,0, 1, 3.4);
-INSERT INTO trade (trade_id ,offer_id, buyer_id, quantity) VALUES (1,0, 1, 5.6);
-INSERT INTO trade (trade_id,offer_id, buyer_id, quantity) VALUES (2,0, 0, 3.4);
+INSERT INTO trade (trade_id,offer_id, buyer_id, quantity, rated_buyer, rated_seller, q_unseen_msg_buyer, q_unseen_msg_seller) VALUES (0,0, 1, 3.4, true, true, 0, 0);
+INSERT INTO trade (trade_id ,offer_id, buyer_id, quantity, rated_buyer, rated_seller, q_unseen_msg_buyer, q_unseen_msg_seller) VALUES (1,0, 1, 5.6, true, true, 0, 0);
+INSERT INTO trade (trade_id,offer_id, buyer_id, quantity, rated_buyer, rated_seller, q_unseen_msg_buyer, q_unseen_msg_seller) VALUES (2,0, 0, 3.4, true, true, 0, 0);

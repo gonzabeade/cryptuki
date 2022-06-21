@@ -52,8 +52,7 @@ public class ComplainHibernateDaoTest {
         int hola = 0;
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName(COMPLAIN_TABLE)
-                .usingGeneratedKeyColumns("complain_id");
+                .withTableName(COMPLAIN_TABLE);
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
 
         userAuths = new ArrayList<>();
@@ -149,6 +148,7 @@ public class ComplainHibernateDaoTest {
         complainMap.put("complainer_id", complain.getComplainer().getId());
         complainMap.put("complainer_comments", complain.getComplainerComments());
         complainMap.put("moderator_comments", complain.getModeratorComments());
+        complainMap.put("complain_date", "2022-05-01 02:08:03");
         if(complain.getModerator().isPresent())
             complainMap.put("moderator_id", complain.getModerator().get().getId());
         complainMap.put("status", complain.getStatus().toString());

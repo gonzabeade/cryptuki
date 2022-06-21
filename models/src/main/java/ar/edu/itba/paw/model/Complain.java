@@ -3,7 +3,6 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
-// TODO(gonza) check cardinality of relations
 @Entity
 @Table(name="complain")
 public class Complain {
@@ -19,10 +18,10 @@ public class Complain {
     @Column(name="status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ComplainStatus status = ComplainStatus.PENDING;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="complainer_id")
     private User complainer;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="moderator_id")
     private User moderator;
     @Column(name="complain_date", nullable = false, insertable = false)

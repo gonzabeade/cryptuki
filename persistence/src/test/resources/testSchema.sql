@@ -180,35 +180,29 @@ FROM trade
     JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
     JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;
 
--- CREATE VIEW offer_complete as
--- SELECT offer.offer_id as offer_id,
---        seller_id,
---        offer.comments as comments,
---        offer_date,
---        crypto_code,
---        status_code,
---        asking_price,
---        min_quantity,
---        max_quantity,
---        email,
---        rating_sum,
---        rating_count,
---        rating,
---        phone_number,
---        commercial_name,
---        payment_code,
---        status_description,
---        payment_description,
---        last_login,
---        uname,
---        location
--- FROM offer
---          JOIN users ON offer.seller_id = users.id
---          JOIN auth ON users.id = auth.user_id
---          JOIN cryptocurrency c on offer.crypto_code = c.code
---          LEFT OUTER JOIN payment_methods_at_offer pmao on offer.offer_id = pmao.offer_id
---          JOIN status s on s.code = offer.status_code
---          LEFT OUTER JOIN payment_method pm on pmao.payment_code = pm.code;
+CREATE VIEW offer_complete as
+SELECT offer.offer_id as offer_id,
+       seller_id,
+       offer.comments as comments,
+       offer_date,
+       crypto_code,
+       status_code,
+       asking_price,
+       min_quantity,
+       max_quantity,
+       email,
+       rating_sum,
+       rating_count,
+       rating,
+       phone_number,
+       commercial_name,
+       last_login,
+       uname,
+       location
+FROM offer
+         JOIN users ON offer.seller_id = users.id
+         JOIN auth ON users.id = auth.user_id
+         JOIN cryptocurrency c on offer.crypto_code = c.code
 
 CREATE VIEW complain_complete AS
 SELECT

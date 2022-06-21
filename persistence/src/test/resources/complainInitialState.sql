@@ -29,3 +29,5 @@ INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, m
 INSERT INTO trade (trade_id,offer_id, buyer_id, quantity) VALUES (0,0, 1, 3.4);
 INSERT INTO trade (trade_id ,offer_id, buyer_id, quantity) VALUES (1,0, 1, 5.6);
 INSERT INTO trade (trade_id,offer_id, buyer_id, quantity) VALUES (2,0, 0, 3.4);
+
+

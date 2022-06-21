@@ -19,8 +19,6 @@
 <body class="bg-storml">
   <jsp:include page="../../components/admin/header.jsp"/>
   <c:url value="/admin/kyccheck" var="kyccheckUrl" />
-<%--  TODO CHECK PORQUE  el ML ESTA EN 80 ESTO ESTA ASI--%>
-
   <div class="flex flex-col ml-80 p-10">
 
     <!--Title -->

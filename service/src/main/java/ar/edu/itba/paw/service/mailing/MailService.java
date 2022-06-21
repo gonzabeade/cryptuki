@@ -1,19 +1,28 @@
 package ar.edu.itba.paw.service.mailing;
 
 import ar.edu.itba.paw.service.ContactService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Service
 public class MailService implements ContactService<MailMessage> {
 
     private JavaMailSender mailSender;
     private String mainSender;
+    private final PasswordAuthentication passwordAuthentication;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
+
 
     @Override
     @Async
@@ -23,7 +32,6 @@ public class MailService implements ContactService<MailMessage> {
             throw new IllegalArgumentException("Cannot send emails from other account than the one configured");
 
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
-        // TODO: What goes instead of UTF-8?
         final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
         try {
             messageHelper.setSubject(message.getSubject());
@@ -31,7 +39,7 @@ public class MailService implements ContactService<MailMessage> {
             messageHelper.setTo(message.getTo());
             messageHelper.setText(message.getBody(), message.isHtml());
         } catch (MessagingException e) {
-            //e.printStackTrace();//TODO: replace with logger.
+            LOGGER.error("Messaging exception when sending email: "+e.getMessage());
         }
         mailSender.send(mimeMessage);
     }
@@ -41,7 +49,9 @@ public class MailService implements ContactService<MailMessage> {
         return new MailMessage(mainSender, to);
     }
 
-    public MailService(String email, String password) {
+    @Autowired
+    public MailService(@Value("${mail.username}") String email, PasswordAuthentication passwordAuthentication) {
+        this.passwordAuthentication = passwordAuthentication;
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mainSender = email;
@@ -58,11 +68,10 @@ public class MailService implements ContactService<MailMessage> {
                 Session.getInstance(properties, new Authenticator(){
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(email, password);
+                        return MailService.this.passwordAuthentication;
                     }
                 })
         );
-
         this.mailSender = mailSender;
     }
 

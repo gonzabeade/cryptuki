@@ -4,6 +4,7 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -32,12 +33,19 @@ public class User {
     private int ratingSum;
     @Column(name="rating_count", nullable = false)
     private int ratingCount;
-
     @Column(name="rating", nullable=false, updatable = false, insertable = false)
     private double rating;
-
     @Column(name="locale")
     private Locale locale;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Collection<Complain> complainCollection;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Collection<Offer> offerCollection;
+
 
     public User() {
         // Just for Hibernate!

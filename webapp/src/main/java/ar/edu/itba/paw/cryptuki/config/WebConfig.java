@@ -1,7 +1,4 @@
 package ar.edu.itba.paw.cryptuki.config;
-import ar.edu.itba.paw.service.ContactService;
-import ar.edu.itba.paw.service.mailing.MailMessage;
-import ar.edu.itba.paw.service.mailing.MailService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -31,6 +28,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.mail.PasswordAuthentication;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
@@ -45,6 +43,9 @@ import java.util.Properties;
 @EnableAsync
 @PropertySource("classpath:application.properties")
 public class WebConfig {
+
+    @Value("${webappBaseUrl}")
+    private String webappBaseUrl;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -85,12 +86,18 @@ public class WebConfig {
     }
 
     @Bean
+    @Qualifier("mailingMessageSource")
+    public MessageSource mailingMessageSource() {
+        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("/i18n/mailing/messages");
+        messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
+        return messageSource;
+    }
+
+    @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
-
-    @Value("${webappBaseUrl}")
-    private String webappBaseUrl;
 
     @Bean(name="baseUrl")
     public String baseUrl() {
@@ -118,19 +125,19 @@ public class WebConfig {
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-        // Si ponen esto en prod, hay tabla!!!
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("format_sql", "true");
+        //        Si ponen esto en prod, hay tabla!!!
+        //        properties.setProperty("hibernate.show_sql", "true");
+        //        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }
 
     @Bean
-    public ContactService<MailMessage> contactService(
+    public PasswordAuthentication passwordAuthentication(
             @Value("${mail.username}") String mail,
             @Value("${mail.password}") String password
     ) {
-        return new MailService(mail, password);
+        return new PasswordAuthentication(mail, password);
     }
 
     @Bean
@@ -146,15 +153,5 @@ public class WebConfig {
         templateEngine.addTemplateResolver(templateResolver);
         return templateEngine;
     }
-
-    @Bean
-    @Qualifier("mailingMessageSource")
-    public MessageSource mailingMessageSource() {
-        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasenames("/i18n/mailing/messages");
-        messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
-        return messageSource;
-    }
-
 
 }

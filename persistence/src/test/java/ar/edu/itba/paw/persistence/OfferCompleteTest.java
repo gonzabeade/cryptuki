@@ -86,7 +86,7 @@ public class OfferCompleteTest {
         long tested_count = offerHibernateDao.getOfferCount(testingFilter);
 
         // Validations
-        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
+        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_TABLE), tested_count);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class OfferCompleteTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         for(int i = 0; i < offers.size(); i++)
             insertOffer(offers.get(i), i);
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_TABLE);
         testingFilter=new OfferFilter().withPageSize(rows);
 
         // Exercise
@@ -111,18 +111,17 @@ public class OfferCompleteTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         for(int i = 0; i < offers.size(); i++)
             insertOffer(offers.get(i), i);
-        em.flush();
-        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_TABLE);
         testingFilter=new OfferFilter().withPageSize(rows).restrictedToUsername(userAuths.get(0).getUsername());
-        OfferFilter filter = new OfferFilter().withPageSize(rows);
 
         // Exercise
-        ArrayList<Offer> testedOffers = new ArrayList<>(offerHibernateDao.getOffersBy(filter));
+        ArrayList<Offer> testedOffers = new ArrayList<>(offerHibernateDao.getOffersBy(testingFilter));
 
         // Validations
         Assert.assertNotNull(testedOffers);
         Assert.assertEquals(1, testedOffers.size());
-        Assert.assertEquals(userAuths.get(0).getUsername(), testedOffers.get(0).getSeller().getUsername());
+        Assert.assertTrue(testedOffers.get(0).getSeller().getUsername().isPresent());
+        Assert.assertEquals(userAuths.get(0).getUsername(), testedOffers.get(0).getSeller().getUsername().get());
     }
 
     @Test
@@ -131,7 +130,6 @@ public class OfferCompleteTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         for(int i = 0; i < offers.size(); i++)
             insertOffer(offers.get(i), i);
-        em.flush();
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_TABLE);
         testingFilter=new OfferFilter().withPageSize(rows-1).withPage(0);
 
@@ -147,7 +145,6 @@ public class OfferCompleteTest {
     public void testMakeOffer(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
-        em.flush();
         OfferPO offerProperties  = new OfferPO()
                 .withOfferId(0)
                 .withStatus(offers.get(0).getOfferStatus())
@@ -195,12 +192,12 @@ public class OfferCompleteTest {
         HashMap<String, Object> offerMap = new HashMap<>();
 
         offerMap.put("offer_id", id);
+        offerMap.put("seller_id", id);
         offerMap.put("offer_date", "2022-05-01 02:08:03");
         offerMap.put("max_quantity", offer.getMaxInCrypto());
         offerMap.put("min_quantity", offer.getMinInCrypto());
         offerMap.put("status_code", offer.getOfferStatus());
         offerMap.put("asking_price", offer.getUnitPrice());
-        offerMap.put("seller_id", id);
         offerMap.put("crypto_code", "ETH");
 
         jdbcInsert.execute(offerMap);

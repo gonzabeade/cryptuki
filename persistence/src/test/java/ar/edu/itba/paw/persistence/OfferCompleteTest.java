@@ -8,10 +8,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = {"classpath:offerCompleteInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
+@Transactional
+@Rollback
 public class OfferCompleteTest {
 
     private static final String OFFER_VIEW = "offer_complete";
@@ -42,7 +46,6 @@ public class OfferCompleteTest {
     private OfferHibernateDao offerHibernateDao;
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
-    private Offer complainedOffer;
 
     @Before
     public void setUp(){
@@ -54,57 +57,72 @@ public class OfferCompleteTest {
         userAuths = new ArrayList<>();
         userAuths.add(new UserAuth(0, "gbeade", "pass_gbeade", 1234));
         userAuths.add(new UserAuth(1, "scastagnino", "pass_scastagnino", 4321));
-        userAuths.add(new UserAuth(2, "mdedeu", "pass_mdedeu", 4322));
 
         users = new ArrayList<>();
         users.add(new User("gbeade@itba.edu.ar", "87654321", 4, 20, Locale.forLanguageTag("en-US")));
         users.get(0).setUserAuth(userAuths.get(0));
         users.add(new User("scastagnino@itba.edu.ar", "12345678", 7, 14, Locale.forLanguageTag("en-US")));
         users.get(1).setUserAuth(userAuths.get(1));
-        users.add(new User("mdedeu@itba.edu.ar", "87654321", 7, 14, Locale.forLanguageTag("en-US")));
-        users.get(2).setUserAuth(userAuths.get(2));
 
-        complainedOffer = new Offer.Builder(10, 50, 100).withSeller(users.get(0)).build();
-        complainedOffer.setOfferStatus(OfferStatus.APR);
+        offers = new ArrayList<>();
+        offers.add(new Offer.Builder(10, 50, 100).withSeller(users.get(0)).build());
+        offers.get(0).setOfferStatus(OfferStatus.APR);
+        offers.add(new Offer.Builder(134, 5, 48).withSeller(users.get(1)).build());
+        offers.get(1).setOfferStatus(OfferStatus.APR);
+
+        testingFilter = new OfferFilter();
     }
 
 
     @Test
     public void TestGetOfferCount(){
-//
-//        // Exercise
-//        long tested_count = offerHibernateDao.getOfferCount(testingFilter);
-//
-//        // Validations
-//        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(int i = 0; i < offers.size(); i++)
+            insertOffer(offers.get(i), i);
+
+        // Exercise
+        long tested_count = offerHibernateDao.getOfferCount(testingFilter);
+
+        em.flush();
+
+        // Validations
+        Assert.assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW), tested_count);
     }
 
     @Test
     public void TestGetOffersByPageSize(){
-//        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
-//        testingFilter=new OfferFilter().withPageSize(rows);
-//
-//        // Exercise
-//        Collection<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter);
-//
-//        // Validations
-//        Assert.assertNotNull(testedOffers);
-//        Assert.assertEquals(rows,testedOffers.size());
+        // Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(int i = 0; i < offers.size(); i++)
+            insertOffer(offers.get(i), i);
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
+        testingFilter=new OfferFilter().withPageSize(rows);
+
+        // Exercise
+        Collection<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter);
+
+        // Validations
+        Assert.assertNotNull(testedOffers);
+        Assert.assertEquals(rows,testedOffers.size());
     }
 
     @Test
-    public void TestGetOffersByUserId(){
-//        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
-//        int askedId = 0 ;
-//        testingFilter=new OfferFilter().withPageSize(rows).byOfferId(askedId);
-//
-//        // Exercise
-//        List<Offer> testedOffers = offerHibernateDao.getOffersBy(testingFilter).stream().collect(Collectors.toCollection(ArrayList::new));
-//
-//        // Validations
-//        Assert.assertNotNull(testedOffers);
-//        Assert.assertEquals(testedOffers.size(),1);
-//        Assert.assertEquals(testedOffers.get(0).getId(),askedId);
+    public void TestGetOffersByUser(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
+        for(int i = 0; i < offers.size(); i++)
+            insertOffer(offers.get(i), i);
+        int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,OFFER_VIEW);
+        testingFilter=new OfferFilter().withPageSize(rows).restrictedToUsername(userAuths.get(0).getUsername());
+        OfferFilter filter = new OfferFilter().withPageSize(rows);
+
+        // Exercise
+        ArrayList<Offer> testedOffers = new ArrayList<>(offerHibernateDao.getOffersBy(filter));
+
+        // Validations
+        Assert.assertNotNull(testedOffers);
+        Assert.assertEquals(1, testedOffers.size());
+        Assert.assertEquals(userAuths.get(0).getUsername(), testedOffers.get(0).getSeller().getUsername());
     }
 
     @Test
@@ -132,6 +150,16 @@ public class OfferCompleteTest {
 //        // Validations
 //        Assert.assertNotNull(testedOffers);
 //        Assert.assertEquals(rows-1,testedOffers.size());
+    }
+
+    @Test
+    public void testMakeOffer(){
+
+    }
+
+    @Test
+    public void testChangeOfferStatus(){
+
     }
 
 

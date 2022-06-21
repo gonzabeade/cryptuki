@@ -31,6 +31,7 @@ public class OfferCompleteTest {
 
     private static final String OFFER_VIEW = "offer_complete";
     private static final String OFFER_TABLE = "offer";
+    private static final float DELTA = 0.0000000000001f;
 
     private ArrayList<User> users;
     private ArrayList<UserAuth> userAuths;
@@ -67,9 +68,9 @@ public class OfferCompleteTest {
 
 
         offers = new ArrayList<>();
-        offers.add(new Offer.Builder(10, 50, 100).withSeller(users.get(0)).build());
+        offers.add(new Offer.Builder(10, 50, 100).withLocation(Location.AGRONOMIA).withSeller(users.get(0)).build());
         offers.get(0).setOfferStatus(OfferStatus.APR);
-        offers.add(new Offer.Builder(134, 5, 48).withSeller(users.get(1)).build());
+        offers.add(new Offer.Builder(134, 5, 48).withLocation(Location.BALVANERA).withSeller(users.get(1)).build());
         offers.get(1).setOfferStatus(OfferStatus.APR);
 
         testingFilter = new OfferFilter();
@@ -146,19 +147,22 @@ public class OfferCompleteTest {
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, OFFER_TABLE);
         OfferPO offerProperties  = new OfferPO()
-                .withOfferId(0)
                 .withStatus(offers.get(0).getOfferStatus())
                 .withMaxInCrypto(offers.get(0).getMaxInCrypto())
                 .withMinInCrypto(offers.get(0).getMinInCrypto())
                 .withUnitPrice(offers.get(0).getUnitPrice())
                 .withCryptoCode("ETH")
+                .withLocation(offers.get(0).getLocation())
                 .withSellerId(0);
 
         // Exercise
-        Offer testeOffer = offerHibernateDao.makeOffer(offerProperties);
+        Offer testedOffer = offerHibernateDao.makeOffer(offerProperties);
 
         // Validations
-        Assert.assertEquals(offers.get(0).getOfferId(), testeOffer.getOfferId());
+        Assert.assertEquals(offers.get(0).getMaxInCrypto(), testedOffer.getMaxInCrypto(), DELTA);
+        Assert.assertEquals(offers.get(0).getMinInCrypto(), testedOffer.getMinInCrypto(), DELTA);
+        Assert.assertEquals(offers.get(0).getLocation(), testedOffer.getLocation());
+        Assert.assertEquals(offers.get(0).getOfferStatus(), testedOffer.getOfferStatus());
     }
 
     @Test

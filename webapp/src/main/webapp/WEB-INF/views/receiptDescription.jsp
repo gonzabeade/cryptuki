@@ -137,7 +137,7 @@
 
             <div class="flex flex-col mx-auto mt-10">
                 <c:if test="${(trade.buyer.username.get() == username && trade.sellerRated == false) || (trade.offer.seller.username.get() == username && trade.buyerRated == false)}">
-                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> ${trade.offer.seller.username.get() == username ? trade.buyer.username.get(): trade.offer.seller.username.get()}</h1>
+                    <h1 class="text-polard font-sans  font-bold text-center text-3xl mx-auto"><messages:message code="rate"/> <c:out value="${trade.offer.seller.username.get() == username ? trade.buyer.username.get(): trade.offer.seller.username.get()}"/></h1>
                     <c:url value="/rate" var="postUrl"/>
                     <form:form modelAttribute="ratingForm" action="${postUrl}" method="post" >
 

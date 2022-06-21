@@ -35,7 +35,6 @@
             </jsp:include>
         </div>
 <%--        <div class="my-5">--%>
-<%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
 <%--        </div>--%>
     </div>
 

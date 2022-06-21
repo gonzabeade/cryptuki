@@ -24,7 +24,7 @@
     <a class="mx-auto mt-10" href="<c:url value="/"/>"><img class='object-contain mx-auto' src="<c:url value="/public/images/logo.png"/>" alt="logo"></a>
 </div>
 <div class=" flex flex-col justify-center mx-20 my-10">
-    <h1 class="text-2xl text-polard font-bold font-sans text-center">${errorMsg}</h1>
+    <h1 class="text-2xl text-polard font-bold font-sans text-center"><c:out value="${errorMsg}"></c:out></h1>
     <img src="<c:url value="/public/images/${code}.png"/>" alt="<c:out value="${code}"/>" class="h-96 mx-auto"/>
     <a href="<c:url value="/"/>" class=" mx-auto mt-2 p-4 text-sm text-white font-sans text-center bg-frost rounded-lg"><messages:message code="returnHome"/></a>
 </div>

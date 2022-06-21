@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,10 +10,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,10 +25,13 @@ import java.util.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = {"classpath:tradeCompleteInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
+@Transactional
+@Rollback
 public class TradeCompleteTest {
 
     private static final String TRADE_VIEW = "trade_complete";
     private static final String TRADE_TABLE = "trade";
+    private static final float DELTA = 0.0000000000001f;
 
     private ArrayList<User> users;
     private ArrayList<UserAuth> userAuths;
@@ -76,7 +82,7 @@ public class TradeCompleteTest {
     }
 
     @Test
-    public void getTradeById(){
+    public void testGetTradeById(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
         for(int i = 0; i < trades.size(); i++)
@@ -90,17 +96,81 @@ public class TradeCompleteTest {
         Assert.assertEquals(0, testedTrade.get().getTradeId());
     }
 
+    @Test
+    public void testChangeTradeStatus(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+
+        //Execution
+        Trade testedTrade = tradeHibernateDao.changeTradeStatus(0, TradeStatus.ACCEPTED);
+
+        //Validations
+        Assert.assertEquals(0, testedTrade.getTradeId());
+        Assert.assertEquals(TradeStatus.ACCEPTED, testedTrade.getStatus());
+    }
+
+    @Test
+    public void testGetTradesCountAsSeller(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+        Set<TradeStatus> statuses = new HashSet<>();
+        statuses.add(TradeStatus.PENDING);
+        statuses.add(TradeStatus.ACCEPTED);
+
+        // Execution
+        long testedCount = tradeHibernateDao.getTradesAsSellerCount(offer.getSeller().getUsername().get(), statuses, 0);
+
+        // Validations
+        Assert.assertEquals(2, testedCount);
+    }
+
+    @Test
+    public void testGetTradesCountAsBuyer(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+        Set<TradeStatus> statuses = new HashSet<>();
+        statuses.add(TradeStatus.PENDING);
+        statuses.add(TradeStatus.ACCEPTED);
+
+        // Execution
+        long testedCount = tradeHibernateDao.getTradesAsBuyerCount(trades.get(1).getBuyer().getUsername().get(), statuses);
+
+        // Validations
+        Assert.assertEquals(1, testedCount);
+    }
+
+    @Test
+    public void testMakeValidTrade(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+
+        // Execute
+        Trade testedTrade = tradeHibernateDao.makeTrade(0, 1, 35);
+
+        //Validations
+        Assert.assertEquals(0, testedTrade.getOffer().getOfferId());
+        Assert.assertEquals(1, testedTrade.getBuyer().getId());
+        Assert.assertEquals(35, testedTrade.getQuantity(), DELTA);
+    }
+
     private void insertTrade(Trade trade, int id){
         HashMap<String, Object> tradeMap = new HashMap<>();
 
         tradeMap.put("trade_id", id);
         tradeMap.put("offer_id", trade.getOffer().getOfferId());
-        tradeMap.put("buyer_id", trade.getBuyer().getId());
+        tradeMap.put("buyer_id", id + 1);
         tradeMap.put("quantity", trade.getQuantity());
         tradeMap.put("rated_buyer", true);
         tradeMap.put("rated_seller", true);
         tradeMap.put("q_unseen_msg_buyer", 0);
         tradeMap.put("q_unseen_msg_seller", 0);
+        tradeMap.put("status", TradeStatus.PENDING.toString());
 
         jdbcInsert.execute(tradeMap);
 

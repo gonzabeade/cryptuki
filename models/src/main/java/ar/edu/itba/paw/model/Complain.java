@@ -127,4 +127,14 @@ public class Complain {
     public void setStatus(ComplainStatus status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == this)
+            return true;
+        if(!(o instanceof Complain))
+            return false;
+        Complain complain = (Complain) o;
+        return complain.getComplainId().equals(this.complainId);
+    }
 }

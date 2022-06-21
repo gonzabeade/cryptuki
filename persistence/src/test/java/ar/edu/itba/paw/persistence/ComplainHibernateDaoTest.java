@@ -9,10 +9,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -23,12 +25,14 @@ import java.util.Locale;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = {"classpath:complainInitialState.sql"})
 @ContextConfiguration(classes = TestConfig.class)
+@Transactional
+@Rollback
 public class ComplainHibernateDaoTest {
     private static final String COMPLAIN_TABLE = "complain";
     private static final String COMPLAIN_VIEW="complain_complete";
     private static final int TEST_INDEX = 0;
 
-    private ArrayList<Complain.Builder> complains;
+    private ArrayList<Complain> complains;
     private ArrayList<User> users;
     private ArrayList<UserAuth> userAuths;
     private ComplainFilter filter;
@@ -45,16 +49,19 @@ public class ComplainHibernateDaoTest {
 
     @Before
     public void setUp() {
+        int hola = 0;
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(COMPLAIN_TABLE)
                 .usingGeneratedKeyColumns("complain_id");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
 
+        userAuths = new ArrayList<>();
         userAuths.add(new UserAuth(0, "gbeade", "pass_gbeade", 1234));
         userAuths.add(new UserAuth(1, "scastagnino", "pass_scastagnino", 4321));
         userAuths.add(new UserAuth(2, "mdedeu", "pass_mdedeu", 4322));
 
+        users = new ArrayList<>();
         users.add(new User("gbeade@itba.edu.ar", "87654321", 4, 20, Locale.forLanguageTag("en-US")));
         users.get(0).setUserAuth(userAuths.get(0));
         users.add(new User("scastagnino@itba.edu.ar", "12345678", 7, 14, Locale.forLanguageTag("en-US")));
@@ -71,18 +78,21 @@ public class ComplainHibernateDaoTest {
                 .withModerator(users.get(2))
                 .withModeratorComments("The complaint will be answered soon")
                 .withComplainerComments("There was a problem with the offer")
-                .build();
+                .withStatus(ComplainStatus.PENDING)
+                .build()
         );
+
+        filter = new ComplainFilter();
 
     }
 
     @Test
     public void testGetComplainsBy(){
         // Set up
+        int hola = 1;
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
-        filter = new ComplainFilter();
-        for(Complain.Builder complain : complains){
-            insertComplain(complain.build());
+        for(Complain complain : complains){
+            insertComplain(complain);
         }
         int rows = JdbcTestUtils.countRowsInTable(jdbcTemplate,COMPLAIN_VIEW);
 
@@ -98,9 +108,8 @@ public class ComplainHibernateDaoTest {
     public void testGetComplainCount(){
         // Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, COMPLAIN_TABLE);
-        filter = new ComplainFilter();
-        for(Complain.Builder complain : complains){
-            insertComplain(complain.build());
+        for(Complain complain : complains){
+            insertComplain(complain);
         }
 
         // Execute
@@ -135,13 +144,14 @@ public class ComplainHibernateDaoTest {
     private void insertComplain(Complain complain){
         HashMap<String, Object> complainMap = new HashMap<>();
 
-        complainMap.put("trade_id", complain.getTradeId().get());
-        complainMap.put("complainer_id", users.get(complain.getComplainer()));
+        complainMap.put("complain_id", 0);
+        complainMap.put("trade_id", complain.getTrade().getTradeId());
+        complainMap.put("complainer_id", complain.getComplainer().getId());
         complainMap.put("complainer_comments", complain.getComplainerComments());
         complainMap.put("moderator_comments", complain.getModeratorComments());
-        complainMap.put("moderator_id", users.get(complain.getModerator().getId()));
+        if(complain.getModerator().isPresent())
+            complainMap.put("moderator_id", complain.getModerator().get().getId());
         complainMap.put("status", complain.getStatus().toString());
-        complainMap.put("complain_date",complain.getDate());
 
         jdbcInsert.execute(complainMap);
 

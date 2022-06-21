@@ -35,7 +35,7 @@ public class Trade {
     private int qUnseenMessagesBuyer;
     @Column(name="q_unseen_msg_seller")
     private int qUnseenMessagesSeller;
-    @OneToMany(mappedBy = "trade",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trade", fetch = FetchType.LAZY)
     @OrderBy("message_date")
     private Collection<Message> messageCollection = new LinkedList<>();
 

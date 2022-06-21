@@ -32,7 +32,6 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    @PreAuthorize("#complain.complainerUsername == authentication.principal.username and @customPreAuthorizer.isUserPartOfTrade(#complain.tradeId, authentication.principal)")
     public void makeComplain(ComplainPO complain) {
         if (complain == null)
             throw new NullPointerException("Complain Parameter Object object cannot be null.");

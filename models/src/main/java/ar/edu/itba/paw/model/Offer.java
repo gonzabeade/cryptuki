@@ -25,7 +25,7 @@ public class Offer {
     @Column(name="max_quantity", nullable = false)
     private double maxInCrypto;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="seller_id")
     private User seller;
 

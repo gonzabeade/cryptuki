@@ -64,4 +64,12 @@ public class CustomPreAuthorizer {
         return maybeTrade.get().getBuyer().getUsername().get().equals(userDetails.getUsername())
             || maybeTrade.get().getOffer().getSeller().getUsername().get().equals(userDetails.getUsername());
     }
+
+    public boolean doesUserHaveCode(String username, int code) {
+        Optional<User> maybeUser = userDao.getUserByUsername(username);
+        if (!maybeUser.isPresent())
+            return false;
+        User user = maybeUser.get();
+        return user.getUserAuth().getCode() == code;
+    }
 }

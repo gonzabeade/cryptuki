@@ -37,3 +37,13 @@
     </ol>
 </nav>
 
+<script>
+    window.onload = function underline() {
+        const searchParams = new URLSearchParams(window.location.search);
+
+    }
+</script>
+
+
+
+

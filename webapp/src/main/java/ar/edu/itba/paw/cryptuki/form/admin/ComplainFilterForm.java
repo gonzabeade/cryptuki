@@ -53,7 +53,6 @@ public class ComplainFilterForm {
         this.complainer= complainer;
     }
 
-
     public ComplainFilter toComplainFilter() {
         return new ComplainFilter()
                 .restrictedToComplainerUsername(complainer)

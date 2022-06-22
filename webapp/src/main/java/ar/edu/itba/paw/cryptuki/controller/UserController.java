@@ -64,14 +64,12 @@ public class UserController {
         return mav;
     }
 
-
     @RequestMapping(value="/verify", method = {RequestMethod.GET})
     public ModelAndView verify(@ModelAttribute("codeForm") final CodeForm form, @RequestParam(value = "user") String username){
         ModelAndView mav = new ModelAndView("emailVerification/codeVerification");
         mav.addObject("username", username); // Still not logged in
         return mav;
     }
-
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
     public ModelAndView verify(@Valid @ModelAttribute("codeForm") CodeForm form, BindingResult errors){
         if (errors.hasErrors())
@@ -147,6 +145,7 @@ public class UserController {
     public ModelAndView recoverPasswordPost(@Valid @ModelAttribute("recoverPasswordForm") RecoverPasswordForm form, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return recoverPasswordGet(new RecoverPasswordForm(), form.getUsername(), form.getCode());
+        userService.changePassword(form.getUsername(), form.getCode(), form.getPassword());
         return logInProgrammatically(form.getUsername());
     }
 

@@ -22,7 +22,7 @@
                 <c:url value="/profilePicSelector" var="postUrl"/>
                 <form:form modelAttribute="profilePicForm" action="${postUrl}" method="post" enctype="multipart/form-data">
                     <form:errors path="multipartFile" cssClass=" mx-auto text-red-500"/>
-                    <div class="group flex flex-col">
+                    <div class="group flex flex-col cursor-pointer">
                         <form:label path="multipartFile">
                             <div class="flex flex-col mx-auto">
                                 <img src="<c:url value="/profilepic/${param.username}"/>"  class=" shadow rounded-full w-36 object-cover mx-auto group-hover:opacity-60" alt="profile" >

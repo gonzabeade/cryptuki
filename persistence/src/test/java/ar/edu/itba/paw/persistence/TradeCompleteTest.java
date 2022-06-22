@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 
-import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
-import javafx.util.converter.LocalDateStringConverter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,13 +30,11 @@ import java.util.*;
 @Rollback
 public class TradeCompleteTest {
 
-    private static final String TRADE_VIEW = "trade_complete";
     private static final String TRADE_TABLE = "trade";
     private static final float DELTA = 0.0000000000001f;
 
     private ArrayList<User> users;
     private ArrayList<UserAuth> userAuths;
-    private ArrayList<Offer> offers;
     private OfferFilter testingFilter;
     private Offer offer;
     private ArrayList<Trade> trades;

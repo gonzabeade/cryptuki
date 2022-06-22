@@ -3,7 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.persistence.KycDao;
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.TradeDao;
 import ar.edu.itba.paw.persistence.UserDao;

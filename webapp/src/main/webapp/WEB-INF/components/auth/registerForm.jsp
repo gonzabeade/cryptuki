@@ -35,7 +35,7 @@
 
         <form:label path="phoneNumber" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="phoneNumber"/></form:label>
         <form:errors path="phoneNumber" cssClass="text-red-400" element="p"/>
-        <form:input type="tel" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="12345678"/>
+        <form:input type="tel" path="phoneNumber" cssClass="rounded-lg p-3" placeholder="e.g. 549182345"/>
 
     </div>
 

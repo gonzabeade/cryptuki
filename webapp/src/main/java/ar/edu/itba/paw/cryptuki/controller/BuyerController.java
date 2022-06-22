@@ -32,7 +32,7 @@ public class BuyerController {
     private final CryptocurrencyService cryptocurrencyService;
 
     private final UserService userService;
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 7;
 
     @Autowired
     public BuyerController(TradeService tradeService, OfferService offerService, UserService userService,CryptocurrencyService cryptocurrencyService)

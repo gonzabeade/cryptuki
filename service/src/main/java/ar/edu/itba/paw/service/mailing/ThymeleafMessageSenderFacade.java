@@ -175,7 +175,7 @@ public class ThymeleafMessageSenderFacade implements MessageSenderFacade {
         Locale locale = user.getLocale();
         newUnseenMessagesThymeleafMailMessage.setLocale(locale);
         newUnseenMessagesThymeleafMailMessage.setSubject(messageSource.getMessage("newUnseenMessages", null, locale));
-        newUnseenMessagesThymeleafMailMessage.setParameters(getUrl(), trade.getTradeId());
+        newUnseenMessagesThymeleafMailMessage.setParameters(getUrl(), trade.getTradeId(),  trade.getBuyer().getId() != user.getId());
 
         mailMessageContactService.sendMessage(newUnseenMessagesThymeleafMailMessage);
         LOGGER.info("Unseen messages notification sent to user");

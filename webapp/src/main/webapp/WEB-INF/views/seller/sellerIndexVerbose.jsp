@@ -55,7 +55,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <c:if test="${empty tradeList}">
+                    <c:if test="${! empty tradeList}">
                         <div class="mt-5">
                             <div class="py-4 bg-white rounded-lg shadow-md">
                                 <div class="flex justify-between items-center mb-2 px-4 pt-2">

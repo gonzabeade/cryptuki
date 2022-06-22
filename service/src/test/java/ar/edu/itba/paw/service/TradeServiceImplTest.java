@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.exception.NoSuchOfferException;
-import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.TradeDao;
-import ar.edu.itba.paw.persistence.UserAuthDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

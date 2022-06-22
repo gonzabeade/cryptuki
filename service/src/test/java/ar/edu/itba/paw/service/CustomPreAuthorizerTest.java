@@ -39,7 +39,7 @@ public class CustomPreAuthorizerTest {
     @InjectMocks
     CustomPreAuthorizer customPreAuthorizer;
 
-    private User user = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
+    private TestUser user = new TestUser("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
     private Offer offer = new Offer.Builder(10, 50,100).withSeller(user).build();
     private Trade trade = new Trade(offer, user, 20);
     private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);

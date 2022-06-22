@@ -139,7 +139,4 @@ public class User {
         this.userAuth = userAuth;
     }
 
-    public void setKyc(KycInformation kyc){
-        this.kyc = kyc;
-    }
 }

@@ -1,9 +1,12 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.test;
 
+
+import ar.edu.itba.paw.model.KycInformation;
+import ar.edu.itba.paw.model.User;
 
 import java.util.Locale;
 
-public class TestUser extends User{
+public class TestUser extends User {
 
     private KycInformation testKyc;
 

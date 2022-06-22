@@ -133,7 +133,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(#tradeId, authentication.principal)")
+    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(authentication.principal, #tradeId)")
     public void rateCounterPartUserRegardingTrade(String username, int rating, int tradeId) {
 
         if (rating < 1 || rating > 10)

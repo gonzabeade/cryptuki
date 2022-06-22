@@ -51,15 +51,18 @@
                 </div>
             </c:forEach>
         </div>
+
         <div class="flex flex-col">
             <jsp:include page="../../components/paginator.jsp">
                 <jsp:param name="activePage" value="${activePage}"/>
                 <jsp:param name="pages" value="${pages}"/>
                 <jsp:param name="baseUrl" value="/admin/kyccheck/"/>
             </jsp:include>
-            <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+            <c:if test="${pages > 0}">
+                <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: <c:out
+                        value="${pages}"/></h1>
+            </c:if>
         </div>
-
 
 
     </div>

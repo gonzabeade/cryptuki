@@ -44,12 +44,12 @@
             <div class="flex flex-col mr-10 my-4 w-1/2">
                 <form:errors path="givenNames" cssClass="text-red-500"/>
                 <form:label path="givenNames" class="text-start text-xl font-bold font-sans text-polar my-2"><messages:message code="names"/> </form:label>
-                <form:input path="givenNames" type="text" class="rounded-lg w-full p-3" placeholder="e.g. Gonzalo Manuel"/>
+                <form:input path="givenNames" type="text" class="rounded-lg w-full p-3" placeholder="e.g. Pedro Martin"/>
             </div>
             <div class="flex flex-col mr-10 my-4 w-1/2">
                 <form:errors path="surnames" cssClass="text-red-500"/>
                 <form:label path="surnames" class="text-start text-xl font-bold font-sans text-polar my-2"><messages:message code="surnames"/></form:label>
-                <form:input path="surnames" type="text" class="rounded-lg p-3" placeholder="Beade"/>
+                <form:input path="surnames" type="text" class="rounded-lg p-3" placeholder="e.g. Juarez"/>
             </div>
             <div class="flex flex-col mr-10 my-4 w-1/2">
                 <form:errors path="emissionCountry" cssClass="text-red-500"/>

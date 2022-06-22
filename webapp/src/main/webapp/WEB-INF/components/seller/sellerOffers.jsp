@@ -48,8 +48,7 @@
         <jsp:param name="pages" value="${pages}"/>
         <jsp:param name="baseUrl" value="/seller/"/>
       </jsp:include>
-      <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-    </div>
+      <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: <c:out value="${pages}" /> </h1>    </div>
   </c:if>
 
 </div>

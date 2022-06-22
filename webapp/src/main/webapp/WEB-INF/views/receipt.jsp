@@ -33,15 +33,15 @@
             <h1 class="text-polard font-extrabold text-2xl font-sans"><messages:message code="offerInformation"/>:</h1>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="cryptocurrency"/></h1>
-                <p class="text-polard font-sans text-center">${offer.crypto.commercialName}</p>
+                <p class="text-polard font-sans text-center"><c:out value="${offer.crypto.commercialName}"></c:out></p>
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="absolutePriceByCurrency"/></h1>
-                <p class="text-polard font-sans text-center">${offer.unitPrice} ARS</p>
+                <p class="text-polard font-sans text-center"><c:out value="${offer.unitPrice}"/> ARS</p>
             </div>
             <div class="mx-auto">
                 <h1 class="text-polard font-bold font-sans text-center text-lg"><messages:message code="trasactionDate"/></h1>
-                <p class="text-polard font-sans text-center">${trade.startDate.get()}</p>
+                <p class="text-polard font-sans text-center"><c:out value="${trade.startDate.get()}"/></p>
             </div>
         </div>
         <div class="flex flex-row mt-10">

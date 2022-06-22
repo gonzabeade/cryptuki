@@ -23,7 +23,8 @@
         <form:label path="repeatPassword" cssClass="text-center text-xl font-bold font-sans text-polar my-2"><messages:message code="repeatPassword"/></form:label>
         <form:errors path="repeatPassword" cssClass="text-red-400" element="p"/>
         <div class="flex flex-col">
-            <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3  w-full" placeholder="e.g micontraseña" onchange="passwordMatch()"/>
+            <c:set var="placeholdern"> <messages:message code="placeholder.myPass"/></c:set>
+            <form:input type="password" path="repeatPassword" cssClass="rounded-lg p-3  w-full" placeholder="${placeholdern}" onchange="passwordMatch()"/>
             <p class="text-red-400 hidden" id="repeatPassError"><messages:message code="passwordsDontMatch"/></p>
         </div>
 

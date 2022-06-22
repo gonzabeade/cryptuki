@@ -67,7 +67,7 @@
                     <form:option value="4"><messages:message code="loginOrder"/> </form:option>
                 </form:select>
             </div>
-            <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> ${offerCount} <messages:message code="results"/></h1>
+            <h1 class="text-right text-gray-400 mx-5"><messages:message code="youGot"/> <c:out value="${offerCount}"/> <messages:message code="results"/></h1>
         </div>
 
         <ol class="min-w-full">
@@ -101,8 +101,7 @@
                     <jsp:param name="pages" value="${pages}"/>
                     <jsp:param name="baseUrl" value="/buyer/market"/>
                 </jsp:include>
-                <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-            </div>
+                <h1 class="mx-auto text-gray-400 mx-auto"><messages:message code="totalPageAmount"/>: <c:out value="${pages}" /> </h1>            </div>
         </div>
     </ol>
     </div>

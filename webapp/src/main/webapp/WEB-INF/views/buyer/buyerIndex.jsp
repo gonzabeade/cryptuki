@@ -35,7 +35,6 @@
             </jsp:include>
         </div>
 <%--        <div class="my-5">--%>
-<%--            <jsp:include page="../../components/seller/sellerChatCard.jsp"/>--%>
 <%--        </div>--%>
     </div>
 
@@ -80,8 +79,10 @@
                     <jsp:param name="pages" value="${pages}"/>
                     <jsp:param name="baseUrl" value="/buyer/"/>
                 </jsp:include>
-                <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
-            </div>
+                <c:if test="${pages >0}">
+                    <h1 class="mx-auto text-gray-400 mx-auto mt-3"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+                </c:if>
+              </div>
         </c:if>
     </div>
 

@@ -27,9 +27,9 @@ public class NewUnseenMessagesThymeleafMailMessage extends ThymeleafMailMessage{
         Context context = new Context(getLocale());
         context.setVariable("tradeId", tradeId);
         if(isSeller){
-            url += "chat?tradeId=";
+            url += "/chat?tradeId=";
         }else{
-            url+= "trade?tradeId=";
+            url+= "/trade?tradeId=";
         }
         context.setVariable("url", url);
 

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
-import ar.edu.itba.paw.model.test.TestUser;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.KycDao;
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.TradeDao;
@@ -32,14 +32,12 @@ public class CustomPreAuthorizerTest {
     @Mock
     private TradeDao tradeDao;
     @Mock
-    private KycDao kycDao;
-    @Mock
     private UserDetails userDetails;
 
     @InjectMocks
     CustomPreAuthorizer customPreAuthorizer;
 
-    private TestUser user = new TestUser("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
+    private User user = new User("salvaCasta@gmail.com", "12345678", 7, 58, Locale.forLanguageTag("en-US"));
     private Offer offer = new Offer.Builder(10, 50,100).withSeller(user).build();
     private Trade trade = new Trade(offer, user, 20);
     private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);

@@ -54,7 +54,7 @@
 
     <div class="w-1/4 flex flex-row">
         <div class="flex my-auto ml-1">
-            <c:if test="${! (param.tradeStatus == 'SOLD' || param.tradeStatus == 'REJECTED')}">
+            <c:if test="${! (param.tradeStatus == 'SOLD' || param.tradeStatus == 'REJECTED' || param.tradeStatus == 'DELETED')}">
                 <a class="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href="<c:url value="/trade?tradeId=${param.tradeId}"/>">
                     <messages:message code="resumeTrade"/>
                 </a>

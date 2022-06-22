@@ -134,12 +134,11 @@ public class User {
     public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
     }
-
     public void setUserAuth(UserAuth userAuth) {
         this.userAuth = userAuth;
     }
-
     public void setKyc(KycInformation kyc){
         this.kyc = kyc;
     }
+
 }

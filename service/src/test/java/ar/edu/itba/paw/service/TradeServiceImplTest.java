@@ -2,10 +2,8 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserAuth;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.TradeDao;
 import ar.edu.itba.paw.persistence.UserAuthDao;
 import org.junit.Assert;
@@ -13,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Locale;
@@ -26,8 +25,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TradeServiceImplTest {
 
+    private static final float DELTA = 0.0000000000001f;
+
     @Mock
     private  TradeDao tradeDao;
+    @Mock
+    private OfferDao offerDao;
     @Mock
     private UserService userService;
 
@@ -38,34 +41,59 @@ public class TradeServiceImplTest {
     private UserAuth sellerAuth = new UserAuth(1, "shadad", "hadads", 1);
 
     private Offer offer = new Offer.Builder(10, 50,100).withSeller(seller).build();
-    private Trade trade = new Trade(offer, buyer, 20);
+    private Trade greaterTrade = new Trade(offer, buyer, 3000);
+    private Trade smallerTrade = new Trade(offer, buyer, 10);
 
 
     @InjectMocks
     private TradeServiceImpl tradeService;
 
     @Test
+    public void testSellOfferWithGreaterNewMax(){
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
+        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(greaterTrade);
+        when(offerDao.modifyOffer(Mockito.any(Offer.class))).thenReturn(offer);
+
+        Trade testedTrade = tradeService.sellTrade(0);
+
+        Assert.assertEquals(0, offer.getMaxInCrypto(), DELTA);
+        Assert.assertEquals(0, offer.getMaxInCrypto(), DELTA);
+    }
+
+    @Test
+    public void testSellOfferWithSmallerNewMax(){
+        double oldMax = offer.getMaxInCrypto();
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(smallerTrade));
+        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(smallerTrade);
+        when(offerDao.modifyOffer(Mockito.any(Offer.class))).thenReturn(offer);
+
+        Trade testedTrade = tradeService.sellTrade(0);
+
+        Assert.assertEquals(oldMax - smallerTrade.getQuantity()/ offer.getUnitPrice(), offer.getMaxInCrypto(), DELTA);
+    }
+
+    @Test
     public void testRateCounterpartAsBuyer(){
         buyer.setUserAuth(buyerAuth);
         seller.setUserAuth(sellerAuth);
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
         doNothing().when(userService).updateRatingBy(anyString(), anyInt());
 
         tradeService.rateCounterPartUserRegardingTrade(buyerAuth.getUsername(), 8, 0);
 
-        Assert.assertTrue(trade.isSellerRated());
+        Assert.assertTrue(greaterTrade.isSellerRated());
     }
 
     @Test
     public void testRateCounterpartAsSeller(){
         buyer.setUserAuth(buyerAuth);
         seller.setUserAuth(sellerAuth);
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
         doNothing().when(userService).updateRatingBy(anyString(), anyInt());
 
         tradeService.rateCounterPartUserRegardingTrade(sellerAuth.getUsername(), 8, 0);
 
-        Assert.assertTrue(trade.isBuyerRated());
+        Assert.assertTrue(greaterTrade.isBuyerRated());
     }
 
     @Test(expected = IllegalArgumentException.class)

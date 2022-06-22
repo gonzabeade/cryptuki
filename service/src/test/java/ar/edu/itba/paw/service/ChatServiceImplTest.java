@@ -27,6 +27,8 @@ public class ChatServiceImplTest {
     private MessageDao messageDao;
     @Mock
     private TradeDao tradeDao;
+    @Mock
+    private MessageSenderFacade messageSenderFacade;
     @InjectMocks
     private ChatServiceImpl chatService;
 
@@ -50,7 +52,6 @@ public class ChatServiceImplTest {
         int unseenMessages = trade.getqUnseenMessagesBuyer();
         Optional<Trade> tradeOptional = Optional.of(trade);
         when(tradeDao.getTradeById(anyInt())).thenReturn(tradeOptional);
-        doNothing().when(messageDao).sendMessage(anyInt(), anyInt(), anyString());
 
         chatService.sendMessage(auxUser.getId()+1, 0, "testMessage");
 
@@ -61,7 +62,6 @@ public class ChatServiceImplTest {
     public void testMarkBuyerMessagesAsSeen(){
         Optional<Trade> tradeOptional = Optional.of(trade);
         when(tradeDao.getTradeById(anyInt())).thenReturn(tradeOptional);
-        when(tradeDao.modifyTrade(trade)).thenReturn(trade);
 
         chatService.markBuyerMessagesAsSeen(0);
 
@@ -72,7 +72,6 @@ public class ChatServiceImplTest {
     public void testMarkSellerMessagesAsSeen(){
         Optional<Trade> tradeOptional = Optional.of(trade);
         when(tradeDao.getTradeById(anyInt())).thenReturn(tradeOptional);
-        when(tradeDao.modifyTrade(trade)).thenReturn(trade);
 
         chatService.markSellerMessagesAsSeen(0);
 

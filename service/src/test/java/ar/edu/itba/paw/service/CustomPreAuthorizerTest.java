@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.KycDao;
 import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.TradeDao;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,8 +31,6 @@ public class CustomPreAuthorizerTest {
     private OfferDao offerDao;
     @Mock
     private TradeDao tradeDao;
-    @Mock
-    private KycDao kycDao;
     @Mock
     private UserDetails userDetails;
 
@@ -88,30 +88,53 @@ public class CustomPreAuthorizerTest {
         Assert.assertFalse(uploaded);
     }
 
-//    //TODO:SALVA hay que ver como pasarle un argumento a offerDao.getOffersBy() que tenga en cuenta al argumento real
-//    @Test
-//    public void testValidUserAlterOffer(){
-//        kyc.setStatus(KycStatus.APR);
-//        ArrayList<Offer> singleOfferArray = new ArrayList<>();
-//        singleOfferArray.add(offer);
-//        user.setKyc(kyc);
-//        user.setUserAuth(userAuth);
-//
-//        when(offerDao.getOffersBy()).thenReturn(singleOfferArray);
-//        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
-//
-//        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
-//
-//        Assert.assertTrue(canAlter);
-//    }
-//
-//    @Test
-//    public void testNonSellerUserAlterOffer(){
-//    }
-//
-//    @Test
-//    public void testNonApprovedUserAlterOffer(){
-//    }
+    @Test
+    public void testValidUserAlterOffer(){
+        kyc.setStatus(KycStatus.APR);
+        ArrayList<Offer> singleOfferArray = new ArrayList<>();
+        singleOfferArray.add(offer);
+        user.setKyc(kyc);
+        user.setUserAuth(userAuth);
+
+        when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
+        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
+
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+
+        Assert.assertTrue(canAlter);
+    }
+
+    @Test
+    public void testNonSellerUserAlterOffer(){
+        kyc.setStatus(KycStatus.APR);
+        ArrayList<Offer> singleOfferArray = new ArrayList<>();
+        singleOfferArray.add(offer);
+        user.setKyc(kyc);
+        user.setUserAuth(otherAuth);
+
+        when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
+        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
+
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+
+        Assert.assertFalse(canAlter);
+    }
+
+    @Test
+    public void testNonApprovedUserAlterOffer(){
+        kyc.setStatus(KycStatus.PEN);
+        ArrayList<Offer> singleOfferArray = new ArrayList<>();
+        singleOfferArray.add(offer);
+        user.setKyc(kyc);
+        user.setUserAuth(userAuth);
+
+        when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
+        when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
+
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+
+        Assert.assertFalse(canAlter);
+    }
 
     @Test
     public void testUserIsOwnerOfTrade(){

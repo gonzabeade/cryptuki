@@ -79,6 +79,11 @@ public class UserController {
         userService.verifyUser(form.getUsername(), form.getCode());
         return logInProgrammatically(form.getUsername());
     }
+    @RequestMapping(value = "/verifyByMail", method = RequestMethod.POST)
+    public ModelAndView verify(@RequestParam("code") int code, @RequestParam("username") String username){
+        userService.verifyUser(username,  code);
+        return logInProgrammatically(username);
+    }
 
     @RequestMapping(value = "/profilepic/{username}", method = { RequestMethod.GET})
     public ResponseEntity<byte[]> imageGet(@PathVariable final String username) throws IOException, URISyntaxException {

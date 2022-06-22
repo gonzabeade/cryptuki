@@ -49,12 +49,15 @@
           </li>
         </c:forEach>
       </div>
+
       <jsp:include page="../../components/paginator.jsp">
         <jsp:param name="activePage" value="${activePage}"/>
         <jsp:param name="pages" value="${pages}"/>
         <jsp:param name="baseUrl" value="${baseUrl}"/>
       </jsp:include>
+      <c:if test="${pages > 0}">
       <h1 class="mx-auto text-gray-400"><messages:message code="totalPageAmount"/>: ${pages}</h1>
+      </c:if>
     </div>
 
   </div>

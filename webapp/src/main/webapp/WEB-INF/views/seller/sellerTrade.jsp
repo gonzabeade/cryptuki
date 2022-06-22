@@ -266,7 +266,10 @@
                     <jsp:param name="pages" value="${pages}"/>
                     <jsp:param name="baseUrl" value="/seller/associatedTrades/${offer.offerId}"/>
                 </jsp:include>
-                <h1 class="text-gray-400 mx-auto mb-10"><messages:message code="totalPageAmount"/>: <c:out value="${pages}"/></h1>
+                <c:if test="${pages > 0 }">
+                    <h1 class="text-gray-400 mx-auto mb-10"><messages:message code="totalPageAmount"/>: <c:out value="${pages}"/></h1>
+                </c:if>
+
             </h1>
 
         </div>

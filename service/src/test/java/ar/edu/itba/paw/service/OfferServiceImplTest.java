@@ -1,44 +1,20 @@
-//package ar.edu.itba.paw.service;
-//
-//import ar.edu.itba.paw.exception.PersistenceException;
-//import ar.edu.itba.paw.exception.ServiceDataAccessException;
-//import ar.edu.itba.paw.exception.UncategorizedPersistenceException;
-//import ar.edu.itba.paw.persistence.OfferDao;
-//import ar.edu.itba.paw.persistence.OfferStatusDao;
-//import org.junit.Assert;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.MockitoJUnitRunner;
-//import org.springframework.dao.DataAccessException;
-//
-//import static org.mockito.Mockito.doThrow;
-//import static org.mockito.Mockito.when;
-//@RunWith(MockitoJUnitRunner.class)
-//
-//public class OfferServiceImplTest {
-//
-//    @Mock
-//    private OfferDao offerDao;
-//
-//    @Mock
-//    private  MessageSenderFacade messageSenderFacade;
-//
-//    @Mock
-//    private TradeServiceImpl tradeServiceImpl;
-//
-//    @InjectMocks
-//    private OfferServiceImpl offerService;
-//
-//    @Test
-//    public void testGetOfferById(){
-//
-//    }
-//
-//    @Test
-//    public void testGetOfferByInvalidId(){
-//
-//    }
-//
-//}
+package ar.edu.itba.paw.service;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+
+//Los únicos métodos interesantes para testear en esta clase consisten en la creación de filtros lo cuales
+//son pasados al Dao como parámetros y la única forma que encontramos de testear esto es testeando el return value del Dao
+//sin embargo este está siendo mockeado y no tiene sentido validar que ese valor sea correcto
+//Además, las validaciones del estilo "una oferta solo puede ser modificada por el vendedor" se testean en CustomPreAuthorizerTest
+//Por estos dos motivos esta clase no cuenta con tests
+@RunWith(MockitoJUnitRunner.class)
+public class OfferServiceImplTest {
+
+    @Test
+    public void emptyTest(){
+
+    }
+
+}

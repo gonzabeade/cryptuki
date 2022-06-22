@@ -36,7 +36,6 @@ public class UserServiceImplTest {
     private UserAuth userAuth = new UserAuth(user.getId(), "salvaCasta", "castaSalva", 0);
 
 
-    //TODO:SALVA por algun motivo no devuelve true userAuthDao.changePassword
     @Test
     public void testSuccessCodeChangePasswordTest()  {
         user.setUserAuth(userAuth);

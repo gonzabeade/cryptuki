@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
+import javafx.util.converter.LocalDateStringConverter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -76,7 +79,9 @@ public class TradeCompleteTest {
 
         trades = new ArrayList<>();
         trades.add(new Trade(offer, users.get(1), 43));
+        trades.get(0).setLastModified(LocalDateTime.of(2022, Month.APRIL, 29, 19, 30, 40));
         trades.add(new Trade(offer, users.get(2), 43));
+        trades.get(1).setLastModified(LocalDateTime.of(2022, Month.JANUARY, 9, 21, 39, 10));
 
         testingFilter = new OfferFilter();
     }
@@ -112,6 +117,38 @@ public class TradeCompleteTest {
     }
 
     @Test
+    public void testGetMostRecentTradesAsSeller(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+
+        // Execution
+        ArrayList<Trade> testedTrades = new ArrayList<>(tradeHibernateDao.getMostRecentTradesAsSeller(offer.getSeller().getUsername().get(), 1));
+
+        // Validations
+        Assert.assertEquals(1, testedTrades.size());
+        Assert.assertEquals(trades.get(0).getLastModified(), testedTrades.get(0).getLastModified());
+    }
+
+    @Test
+    public void testGetTradesByPageAsSeller(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+        Set<TradeStatus> statuses = new HashSet<>();
+        statuses.add(TradeStatus.PENDING);
+        statuses.add(TradeStatus.ACCEPTED);
+
+        // Execution
+        Collection<Trade> testedTrades = tradeHibernateDao.getTradesAsSeller(offer.getSeller().getUsername().get(), 0, 2, statuses, 0);
+
+        // Validations
+        Assert.assertEquals(2, testedTrades.size());
+    }
+
+    @Test
     public void testGetTradesCountAsSeller(){
         //Set up
         JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
@@ -126,6 +163,23 @@ public class TradeCompleteTest {
 
         // Validations
         Assert.assertEquals(2, testedCount);
+    }
+
+    @Test
+    public void testGetTradesByPageAsBuyer(){
+        //Set up
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, TRADE_TABLE);
+        for(int i = 0; i < trades.size(); i++)
+            insertTrade(trades.get(i), i);
+        Set<TradeStatus> statuses = new HashSet<>();
+        statuses.add(TradeStatus.PENDING);
+        statuses.add(TradeStatus.ACCEPTED);
+
+        // Execution
+        Collection<Trade> testedTrades = tradeHibernateDao.getTradesAsBuyer(trades.get(1).getBuyer().getUsername().get(), 0, 1, statuses);
+
+        // Validations
+        Assert.assertEquals(1, testedTrades.size());
     }
 
     @Test
@@ -171,6 +225,12 @@ public class TradeCompleteTest {
         tradeMap.put("q_unseen_msg_buyer", 0);
         tradeMap.put("q_unseen_msg_seller", 0);
         tradeMap.put("status", TradeStatus.PENDING.toString());
+        tradeMap.put("last_modified", trade.getLastModified().getYear() +
+                "-" + trade.getLastModified().getMonthValue() +
+                "-" + trade.getLastModified().getDayOfMonth() +
+                " " + trade.getLastModified().getHour() +
+                ":" + trade.getLastModified().getMinute() +
+                ":" + trade.getLastModified().getSecond());
 
         jdbcInsert.execute(tradeMap);
 

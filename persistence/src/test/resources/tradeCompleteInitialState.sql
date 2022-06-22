@@ -22,23 +22,3 @@ INSERT INTO cryptocurrency (code, commercial_name) VALUES ('ETH', 'Ether');
 INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (0,0, 'BTC', 'APR', 10.33, 4.2, 2.6, 'Im selling BTC');
 INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (1,0, 'ETH', 'APR', 6, 10.7, 1, 'Im selling ETH');
 INSERT INTO offer (offer_id,seller_id, crypto_code, status_code, asking_price, max_quantity, min_quantity, comments) VALUES (2,1, 'ETH', 'APR', 6.5, 16.7, 0.4, 'Im selling ETH');
-
--- CREATE view  trade_complete AS
--- SELECT
---     trade_id,
---     offer_id,
---     buyer_auth.uname as buyer_uname,
---     seller_auth.uname as seller_uname,
---     last_modified,
---     trade.status,
---     quantity,
---     asking_price,
---     crypto_code,
---     commercial_name,
---     rated_buyer,
---     rated_seller
--- FROM trade
---          JOIN offer ON trade.offer_id = offer.offer_id
---          JOIN auth seller_auth ON offer.seller_id = seller_auth.user_id
---          JOIN auth buyer_auth ON buyer_auth.user_id = trade.buyer_id
---          JOIN cryptocurrency ON offer.crypto_code = cryptocurrency.code;

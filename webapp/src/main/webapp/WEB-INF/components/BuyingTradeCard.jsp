@@ -24,6 +24,9 @@
             <c:if test="${param.tradeStatus == 'SOLD' }">
                 <div class="bg-gray-400 w-40 text-white text-center p-2"><messages:message code="sold"/> </div>
             </c:if>
+            <c:if test="${param.tradeStatus == 'DELETED' }">
+                <div class="bg-blue-400 w-40 text-white text-center p-2"><messages:message code="sold"/> </div>
+            </c:if>
         </div>
 
 

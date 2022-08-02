@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,19 +56,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // TODO: Check!! Spring Security with Jersey configuration
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .and().authorizeRequests()
-                .antMatchers("/contact**","/", "/buyer/market", "/403", "/400", "/404", "/500", "/seeOffer**", "/profilepic**").permitAll()
-                .antMatchers( "/login", "/register", "/verify**", "/emailPasswordRecovery**", "/recoverPassword**").anonymous()
-                .antMatchers("/admin**","/kyc/idphoto**", "/kyc/validationphoto**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .failureHandler(failureHandler())
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .successHandler(successHandler())
-                .loginPage("/login")
+//                .loginPage("/login")
                 .and().rememberMe()
                 .rememberMeParameter("j_rememberme")
                 .userDetailsService(userDetailsService)

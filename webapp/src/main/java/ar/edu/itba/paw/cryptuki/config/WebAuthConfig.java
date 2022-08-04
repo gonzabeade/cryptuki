@@ -61,6 +61,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/offers**", "/offers/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .failureHandler(failureHandler())

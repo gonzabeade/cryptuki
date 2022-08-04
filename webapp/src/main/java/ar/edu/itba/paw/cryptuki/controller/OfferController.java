@@ -1,12 +1,15 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
+import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -35,24 +38,20 @@ public class OfferController {
     // GET /offers
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOffers(@QueryParam("page") @DefaultValue("0") final int page, @QueryParam("pageSize") @DefaultValue("1") final int pageSize) {
+    public Response listOffers(@QueryParam("page") @DefaultValue("0") final int page, @QueryParam("per_page") @DefaultValue("1") final int pageSize) {
 
         OfferFilter filter = new OfferFilter()
                 .withPage(page)
                 .withPageSize(pageSize);
 
         Collection<OfferDto> offers = offerService.getBuyableOffers(filter).stream().map(o -> OfferDto.fromOffer(o, uriInfo)).collect(Collectors.toList());
+        long offerCount = offerService.countBuyableOffers(filter);
+        int pages = (int)(offerCount + pageSize - 1) / pageSize;
 
         if (offers.isEmpty())
             return Response.noContent().build();
-
-        return Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {})
-                // TODO: make these better
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 999).build(), "last")
-                .build();
+        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {});
+        return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, offerCount).build();
     }
 
     @GET
@@ -67,15 +66,14 @@ public class OfferController {
     }
 
 
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @POST
-    public Response createOfferSample(String offerSample) {
-        System.out.println("OFFER CREATED: "+offerSample);
+    public Response createOffer(@Valid UploadOfferForm offerForm) {
 
-        OfferFilter filter = new OfferFilter().withPage(0);
-        OfferDto dto = offerService.getOfferById(23).map(o -> OfferDto.fromOffer(o, uriInfo)).get(); // TODO: when I create, It wont return optiona
+        Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(dto.getOfferId()))
+                .path(String.valueOf(offer.getOfferId()))
                 .build();
 
         return Response.created(uri).build();

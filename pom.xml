@@ -20,8 +20,8 @@
     <org.hsqldb.version>2.3.1</org.hsqldb.version>
     <javax.mail.version>1.6.2</javax.mail.version>
     <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>
-    <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
-    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+    <javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
+    <org.hibernate.validator.version>5.3.1.Final</org.hibernate.validator.version>
     <spring-security.version>4.0.4.RELEASE</spring-security.version>
     <org.slf4j.version>1.7.5</org.slf4j.version>
     <logback.version>1.1.2</logback.version>
@@ -53,7 +53,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>${org.hibernate.validator}</version>
+        <version>${org.hibernate.validator.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.jboss.logging</groupId>
@@ -271,6 +271,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-web</artifactId>
         <version>${org.springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jersey.ext</groupId>
+        <artifactId>jersey-bean-validation</artifactId>
+        <version>${jersey.version}</version>
       </dependency>
 
     </dependencies>

@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
+import ar.edu.itba.paw.cryptuki.form.SamplePostForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.service.OfferService;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 
 // TODO: Why API Response is ordered alphabetically?
+
 @Path("offers")
 @Component
 public class OfferController {
@@ -34,8 +37,6 @@ public class OfferController {
     public OfferController(OfferService offerService) {
         this.offerService = offerService;
     }
-
-    // GET /offers
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response listOffers(@QueryParam("page") @DefaultValue("0") final int page, @QueryParam("per_page") @DefaultValue("1") final int pageSize) {
@@ -60,7 +61,7 @@ public class OfferController {
         Optional<OfferDto> maybeOffer = offerService.getOfferById(id).map(o -> OfferDto.fromOffer(o, uriInfo));
 
         if (!maybeOffer.isPresent())
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NoSuchOfferException(id);
 
         return Response.ok(maybeOffer.get()).build();
     }
@@ -68,12 +69,12 @@ public class OfferController {
 
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @POST
-    public Response createOffer(@Valid UploadOfferForm offerForm) {
+    public Response createOffer(@Valid SamplePostForm offerForm) {
 
-        Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
-
+//        Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
+        System.out.println("#####"+offerForm.getSellerId());
         final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(offer.getOfferId()))
+                .path(String.valueOf(offerForm.getSellerId()))
                 .build();
 
         return Response.created(uri).build();

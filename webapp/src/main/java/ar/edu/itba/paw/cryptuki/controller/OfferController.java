@@ -47,7 +47,6 @@ public class OfferController {
 
         Collection<OfferDto> offers = offerService.getBuyableOffers(filter).stream().map(o -> OfferDto.fromOffer(o, uriInfo)).collect(Collectors.toList());
         long offerCount = offerService.countBuyableOffers(filter);
-        int pages = (int)(offerCount + pageSize - 1) / pageSize;
 
         if (offers.isEmpty())
             return Response.noContent().build();
@@ -69,10 +68,9 @@ public class OfferController {
 
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @POST
-    public Response createOffer(@Valid SamplePostForm offerForm) {
+    public Response createOffer(@Valid UploadOfferForm offerForm) {
 
-//        Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
-        System.out.println("#####"+offerForm.getSellerId());
+        Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
         final URI uri = uriInfo.getAbsolutePathBuilder()
                 .path(String.valueOf(offerForm.getSellerId()))
                 .build();

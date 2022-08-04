@@ -22,7 +22,7 @@ public class UploadOfferForm {
     private Double minInCrypto;
 
     @NotNull
-    @DecimalMin("0.00000001")
+    @DecimalMin("0.0000001")
     private Double maxInCrypto;
 
     @NotNull
@@ -32,9 +32,6 @@ public class UploadOfferForm {
     @Size(min=2, max=30)
     @NotNull
     private String cryptoCode;
-
-    @Size(min = 1)
-    private String[] paymentMethods = new String[] {"cas"};
 
     @Size(max = 140)
     private String firstChat;
@@ -54,9 +51,6 @@ public class UploadOfferForm {
     }
     public String getCryptoCode() {
         return cryptoCode;
-    }
-    public String[] getPaymentMethods() {
-        return paymentMethods;
     }
     public String getFirstChat() {
         return firstChat;
@@ -78,9 +72,6 @@ public class UploadOfferForm {
     }
     public void setCryptoCode(String cryptoCode) {
         this.cryptoCode = cryptoCode;
-    }
-    public void setPaymentMethods(String[] paymentMethods) {
-        this.paymentMethods = paymentMethods;
     }
     public void setFirstChat(String firstChat) {
         this.firstChat = firstChat;

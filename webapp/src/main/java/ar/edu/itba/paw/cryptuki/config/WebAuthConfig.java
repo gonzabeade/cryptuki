@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.config;
 import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
 import ar.edu.itba.paw.cryptuki.auth.CustomAuthenticationSuccessHandler;
 import ar.edu.itba.paw.cryptuki.auth.CustomFailureHandler;
+import ar.edu.itba.paw.cryptuki.auth.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,11 +16,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
@@ -32,8 +38,13 @@ import java.util.concurrent.TimeUnit;
         jsr250Enabled = true)
 @ComponentScan("ar.edu.itba.paw.cryptuki.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-    private CryptukiUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService; // Lo toque, puede que se rompa
+
+    @Autowired
+    private JwtFilter jwtFilter;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
@@ -56,33 +67,31 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    // TODO: Check!! Spring Security with Jersey configuration
     protected void configure(final HttpSecurity http) throws Exception {
-        http.sessionManagement()
+        http
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/offers**", "/offers/**").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-                .failureHandler(failureHandler())
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .successHandler(successHandler())
-//                .loginPage("/login")
-                .and().rememberMe()
-                .rememberMeParameter("j_rememberme")
-                .userDetailsService(userDetailsService)
-                .key(FileCopyUtils.copyToString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("key"))))
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/403")
-                .and().csrf().disable();
+                    .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/offers").authenticated()
+                    .anyRequest().authenticated()
+                .and().exceptionHandling()
+                    .accessDeniedPage("/403")
+                .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // JwtFilter homework
+                .csrf().disable();
     }
 
     @Override
-    public void configure(final WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) {
         web.ignoring().antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
+    }
+
+    @Bean
+    public CorsConfiguration corsConfiguration() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedHeader("http://localhost:9000/");
+        return corsConfiguration;
     }
 
     @Bean

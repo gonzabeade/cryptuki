@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -68,16 +69,22 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+//                userDetails,
+//                userDetails.getPassword(),
+//                userDetails.getAuthorities()
+//        );
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails.getUsername(),
+                userDetails.getPassword(),
                 userDetails.getAuthorities()
         );
 
         // TODO: Investigate that does this do
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+//        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.cryptuki.config;
 
-import ar.edu.itba.paw.cryptuki.auth.CryptukiUserDetailsService;
-import ar.edu.itba.paw.cryptuki.auth.CustomAuthenticationSuccessHandler;
-import ar.edu.itba.paw.cryptuki.auth.CustomFailureHandler;
-import ar.edu.itba.paw.cryptuki.auth.JwtFilter;
+import ar.edu.itba.paw.cryptuki.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -45,10 +42,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private DummyBearerFilter dummyBearerFilter;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -61,10 +67,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return new CustomFailureHandler();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -75,16 +77,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/offers").authenticated()
-                    .anyRequest().authenticated()
+                    .antMatchers(HttpMethod.GET, "/users/public/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/users/private/**").authenticated()
+                    .antMatchers(HttpMethod.POST, "/users").anonymous()
+                .anyRequest().authenticated()
                 .and().exceptionHandling()
                     .accessDeniedPage("/403")
-                .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // JwtFilter homework
+                .and()
+                    .addFilterBefore(dummyBearerFilter, UsernamePasswordAuthenticationFilter.class) // JwtFilter homework
                 .csrf().disable();
     }
 
     @Override
-    public void configure(final WebSecurity web) {
-        web.ignoring().antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
+    public void configure(final WebSecurity webSecurity) {
+        webSecurity.ignoring().antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
     }
 
     @Bean

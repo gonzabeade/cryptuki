@@ -1,9 +1,11 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.auth;
+package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.DuplicateEmail;
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.DuplicateUsername;
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.EqualFields;
+import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
+import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateUsername;
+import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
+import ar.edu.itba.paw.model.parameterObject.UserPO;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -25,11 +27,13 @@ public class RegisterForm {
     private String username;
 
     @Pattern(regexp = "\\d{8,10}")
+    @NotNull
     private String phoneNumber;
     @Size(min = 6, max = 100)
     private String password;
     @Size(min = 6, max = 100)
     private String repeatPassword;
+
     public String getUsername() {
         return username;
     }
@@ -49,20 +53,21 @@ public class RegisterForm {
     {
         this.repeatPassword = repeatPassword;
     }
-
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserPO toParameterObject() {
+        return new UserPO(username, password, email, phoneNumber);
     }
 
 }

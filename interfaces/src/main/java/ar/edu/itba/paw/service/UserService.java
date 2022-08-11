@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
+import ar.edu.itba.paw.model.parameterObject.UserPO;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface UserService {
 
     /** User creation */
-    void registerUser(String email, String username, String plainPassword, String phoneNumber, Locale locale);
+    void registerUser(UserPO userPO);
 
     /** User getters - both email and usernames are unique */
     Optional<User> getUserByEmail(String email);

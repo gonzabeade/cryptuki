@@ -1,14 +1,17 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
-import ar.edu.itba.paw.cryptuki.form.SamplePostForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -29,13 +32,15 @@ import java.util.stream.Collectors;
 public class OfferController {
 
     public final OfferService offerService;
+    public final UserService userService;
 
     @Context
-    public UriInfo uriInfo; // has information on current request. By default, points to the request that was just made.
+    public UriInfo uriInfo;
 
     @Autowired
-    public OfferController(OfferService offerService) {
+    public OfferController(OfferService offerService, UserService userService) {
         this.offerService = offerService;
+        this.userService = userService;
     }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -70,7 +75,11 @@ public class OfferController {
     @POST
     public Response createOffer(@Valid UploadOfferForm offerForm) {
 
+        String who = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
+        offerForm.setSellerId(user.getId());
         Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
+
         final URI uri = uriInfo.getAbsolutePathBuilder()
                 .path(String.valueOf(offerForm.getSellerId()))
                 .build();

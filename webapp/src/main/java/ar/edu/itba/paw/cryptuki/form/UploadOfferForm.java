@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.cryptuki.form;
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 )
 public class UploadOfferForm {
 
-    @NotNull
     private Integer sellerId;
 
     @NotNull

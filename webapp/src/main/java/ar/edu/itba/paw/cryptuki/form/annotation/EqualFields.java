@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.annotation;
+package ar.edu.itba.paw.cryptuki.form.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.validator.EqualFieldsValidator;
+import ar.edu.itba.paw.cryptuki.form.validator.EqualFieldsValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

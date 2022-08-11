@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         // browse request -> 403 / 401
-        // request X + Authorization: Digest base64(username:hash(password))
+        // request X + Authorization: Basic base64(username:password)
         // server -> logs the user -> generates JWT tokens -> lets the request pass -> adds headers in the response with the tokens
         // browser -> stores the tokens (refresh and session) in local storage. From now on, browser makes requests
             // Authorization: Bearer JWT (pass all important information for the user to display, like roles or url)
@@ -75,6 +75,8 @@ public class JwtFilter extends OncePerRequestFilter {
 //                userDetails.getAuthorities()
 //        );
 
+        // https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/authentication/AuthenticationManager.html
+        // TODO: AUTHENTICATION MANAGER
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(),
                 userDetails.getPassword(),

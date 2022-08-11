@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.validator;
+package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.AmountCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.service.OfferService;
 import org.springframework.beans.BeanWrapperImpl;

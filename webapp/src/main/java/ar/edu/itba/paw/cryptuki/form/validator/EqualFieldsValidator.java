@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.validator;
+package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.EqualFields;
+import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
 import org.springframework.beans.BeanWrapperImpl;
 
 import javax.validation.ConstraintValidator;

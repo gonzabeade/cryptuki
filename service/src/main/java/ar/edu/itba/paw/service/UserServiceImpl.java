@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
+import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -36,15 +37,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-    public void registerUser(String email, String username, String plainPassword, String phoneNumber, Locale locale){
+    public void registerUser(UserPO userPO){
 
-        if (email == null || username == null || plainPassword == null || phoneNumber == null)
-            throw new NullPointerException("Neither Auth nor User builder can be null");
-
-        User user = userDao.createUser(email, phoneNumber, locale);
-        String hashedPassword = passwordEncoder.encode(plainPassword);
+        User user = userDao.createUser(userPO.getEmail(), userPO.getPhoneNumber(), userPO.getLocale());
+        String hashedPassword = passwordEncoder.encode(userPO.getPlainPassword());
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
-        userAuthDao.createUserAuth(user, username,  hashedPassword, verifyCode);
+        userAuthDao.createUserAuth(user, userPO.getUsername(),  hashedPassword, verifyCode);
         messageSenderFacade.sendWelcomeMessage(user, verifyCode);
     }
 

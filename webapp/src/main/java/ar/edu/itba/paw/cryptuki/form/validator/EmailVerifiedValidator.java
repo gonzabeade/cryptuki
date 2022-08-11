@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.validator;
+package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.EmailVerified;
+import ar.edu.itba.paw.cryptuki.form.annotation.EmailVerified;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.service.UserService;

@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.validator;
+package ar.edu.itba.paw.cryptuki.form.validator;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.MultipartCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintValidator;

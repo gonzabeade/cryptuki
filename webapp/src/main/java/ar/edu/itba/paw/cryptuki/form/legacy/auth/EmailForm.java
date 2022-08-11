@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.legacy.auth;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.EmailRegistered;
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.EmailVerified;
+import ar.edu.itba.paw.cryptuki.form.annotation.EmailRegistered;
+import ar.edu.itba.paw.cryptuki.form.annotation.EmailVerified;
 
 import javax.validation.constraints.Pattern;
 

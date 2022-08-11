@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.annotation;
+package ar.edu.itba.paw.cryptuki.form.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.validator.AmountValidator;
+import ar.edu.itba.paw.cryptuki.form.validator.AmountValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

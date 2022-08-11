@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.cryptuki.form.legacy.seller;
 
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.MultipartSizeCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.MultipartSizeCheck;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
-import ar.edu.itba.paw.cryptuki.form.legacy.annotation.MultipartCheck;
+import ar.edu.itba.paw.cryptuki.form.annotation.MultipartCheck;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;

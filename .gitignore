@@ -131,6 +131,16 @@ fabric.properties
 
 webapp/src/main/resources/key
 webapp/src/main/resources/info
+webapp/src/main/webapp/static
+webapp/src/main/webapp/*.json
+webapp/src/main/webapp/*.ico
+webapp/src/main/webapp/*.html
+webapp/src/main/webapp/*.png
+webapp/src/main/webapp/*.txt
+
+
+
+
 spa-client/build
 spa-client/node_modules
 spa-client/node

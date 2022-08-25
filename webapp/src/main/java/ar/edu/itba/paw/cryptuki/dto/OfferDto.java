@@ -45,12 +45,12 @@ public class OfferDto {
 
         dto.seller = uriInfo.getAbsolutePathBuilder()
                 .replacePath("users")
-                .path(String.valueOf(offer.getSeller().getId()))
+                .path(offer.getSeller().getUsername().get())
                 .build();
 
         dto.trades = uriInfo.getAbsolutePathBuilder()
                 .replacePath("trades")
-                .queryParam("fromOffer", offer.getOfferId())
+                .queryParam("from_offer", offer.getOfferId())
                 .build();
 
         return dto;

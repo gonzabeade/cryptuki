@@ -10,7 +10,6 @@ public class ResponseHelper {
     }
 
 
-
     // TODO: decide whether it is the best way of not repeating code
     // TODO: decide whether the pageSize should be constantly repeated
     public static Response.ResponseBuilder genLinks(Response.ResponseBuilder rb, UriInfo uriInfo, int page, int pageSize, long totalCount) {

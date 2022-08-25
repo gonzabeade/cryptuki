@@ -296,11 +296,11 @@
   <build>
     <pluginManagement>
       <plugins>
-<!--        <plugin>-->
-<!--          <groupId>com.github.eirslett</groupId>-->
-<!--          <artifactId>frontend-maven-plugin</artifactId>-->
-<!--          <version>${frontend-maven-plugin.version}</version>-->
-<!--        </plugin>-->
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>${frontend-maven-plugin.version}</version>
+        </plugin>
         <plugin>
           <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
@@ -309,45 +309,45 @@
             <scanIntervalSeconds>10</scanIntervalSeconds>
           </configuration>
         </plugin>
-<!--        <plugin>-->
-<!--          <groupId>org.apache.maven.plugins</groupId>-->
-<!--          <artifactId>maven-resources-plugin</artifactId>-->
-<!--          <version>3.1.0</version>-->
-<!--          <executions>-->
-<!--            <execution>-->
-<!--              <id>copy-resources</id>-->
-<!--              <phase>process-classes</phase>-->
-<!--              <goals>-->
-<!--                <goal>copy-resources</goal>-->
-<!--              </goals>-->
-<!--              <configuration>-->
-<!--                <outputDirectory>../webapp/target/webapp</outputDirectory> &lt;!&ndash; CHECK&ndash;&gt;-->
-<!--                <resources>-->
-<!--                  <resource>-->
-<!--                    <directory>build</directory>-->
-<!--                  </resource>-->
-<!--                </resources>-->
-<!--              </configuration>-->
-<!--            </execution>-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>copy-resources</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>../webapp/target/webapp</outputDirectory> <!-- CHECK-->
+                <resources>
+                  <resource>
+                    <directory>build</directory>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
 
-            <!-- Delete this for execution in production. It is for intellij's smartTomcat-->
-<!--            <execution>-->
-<!--              <id>copy-resources-intellij</id>-->
-<!--              <phase>process-classes</phase>-->
-<!--              <goals>-->
-<!--                <goal>copy-resources</goal>-->
-<!--              </goals>-->
-<!--              <configuration>-->
-<!--                <outputDirectory>../webapp/src/main/webapp</outputDirectory>-->
-<!--                <resources>-->
-<!--                  <resource>-->
-<!--                    <directory>build</directory>-->
-<!--                  </resource>-->
-<!--                </resources>-->
-<!--              </configuration>-->
-<!--            </execution>-->
-<!--          </executions>-->
-<!--        </plugin>-->
+<!--             Delete this for execution in production. It is for intellij's smartTomcat-->
+            <execution>
+              <id>copy-resources-intellij</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>../webapp/src/main/webapp</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>build</directory>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

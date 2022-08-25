@@ -131,3 +131,6 @@ fabric.properties
 
 webapp/src/main/resources/key
 webapp/src/main/resources/info
+spa-client/build
+spa-client/node_modules
+spa-client/node

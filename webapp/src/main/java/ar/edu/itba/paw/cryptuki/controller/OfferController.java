@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 // TODO: Why API Response is ordered alphabetically?
 
-@Path("offers")
+@Path("/api/offers")
 @Component
 public class OfferController {
 

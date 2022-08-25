@@ -30,7 +30,7 @@ import java.util.Optional;
 // TODO: repeat password?
 // TODO: 'me' endpoint is not correct. Check for Sotuyos answer
 
-@Path("/users")
+@Path("/api/users")
 public class UserController {
 
     public final UserService userService;

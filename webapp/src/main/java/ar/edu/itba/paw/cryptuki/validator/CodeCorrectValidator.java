@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.validator;
+package ar.edu.itba.paw.cryptuki.validator;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.CodeCorrect;
+import ar.edu.itba.paw.cryptuki.annotation.CodeCorrect;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.BeanWrapperImpl;

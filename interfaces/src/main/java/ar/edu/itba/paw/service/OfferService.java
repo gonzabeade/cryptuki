@@ -22,8 +22,8 @@ public interface OfferService {
      * Depends on the underlying implementation, but by and large it retrieves all approved offers
      * except those where the logged-in username is the owner
      */
-    Collection<Offer> getBuyableOffers(OfferFilter filter);
-    long countBuyableOffers(OfferFilter filter);
+    Collection<Offer> getOffers(OfferFilter filter);
+    long countOffers(OfferFilter filter);
 
 
     /** Get offer by id. The first method is free to use, whereas the second method requires the caller to certify ownership */

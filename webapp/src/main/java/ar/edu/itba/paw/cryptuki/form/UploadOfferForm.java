@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.cryptuki.form;
-import ar.edu.itba.paw.cryptuki.form.annotation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;

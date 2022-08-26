@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.validator;
+package ar.edu.itba.paw.cryptuki.validator;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
+import ar.edu.itba.paw.cryptuki.annotation.DuplicateEmail;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

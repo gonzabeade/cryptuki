@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferFilter;
-import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,19 +47,23 @@ public class OfferController {
             @QueryParam("page") @DefaultValue("0") final int page,
             @QueryParam("per_page") @DefaultValue("1") final int pageSize,
             @QueryParam("crypto_code") final List<String> cryptoCodes,
-            @QueryParam("location") final List<String> locations,
-            @QueryParam("status") final List<OfferStatus> status
+            @QueryParam("location") @CollectionOfEnum(enumClass = Location.class) final List<String> locations,
+            @QueryParam("status") @CollectionOfEnum(enumClass = OfferStatus.class) final List<String> status,
+            @QueryParam("exclude_user") final List<String> excludedUsernames,
+            @QueryParam("by_user") final List<String> restrictedToUsernames
     ) {
 
         OfferFilter filter = new OfferFilter()
+                .excludeUsernames(excludedUsernames)
+                .restrictedToUsernames(restrictedToUsernames)
                 .withCryptoCodes(cryptoCodes)
                 .withLocations(locations)
-                .withOfferStatus(status)
+                .withOfferStatus(status.stream().map(o->OfferStatus.valueOf(o)).collect(Collectors.toList()))
                 .withPage(page)
                 .withPageSize(pageSize);
 
-        Collection<OfferDto> offers = offerService.getBuyableOffers(filter).stream().map(o -> OfferDto.fromOffer(o, uriInfo)).collect(Collectors.toList());
-        long offerCount = offerService.countBuyableOffers(filter);
+        Collection<OfferDto> offers = offerService.getOffers(filter).stream().map(o -> OfferDto.fromOffer(o, uriInfo)).collect(Collectors.toList());
+        long offerCount = offerService.countOffers(filter);
 
         if (offers.isEmpty())
             return Response.noContent().build();
@@ -75,7 +78,7 @@ public class OfferController {
 
         if (!maybeOffer.isPresent())
             throw new NoSuchOfferException(id);
-
+        
         return Response.ok(maybeOffer.get()).build();
     }
 

@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.annotation;
+package ar.edu.itba.paw.cryptuki.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.validator.EmailRegisteredValidator;
+import ar.edu.itba.paw.cryptuki.validator.UsernameRegisteredValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -14,10 +14,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {EmailRegisteredValidator.class})
-public @interface EmailRegistered {
+@Constraint(validatedBy = {UsernameRegisteredValidator.class})
+public @interface UsernameRegistered {
 
-    String message() default "User with that email does not exist";
+    String message() default "User with that username does not exist";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     

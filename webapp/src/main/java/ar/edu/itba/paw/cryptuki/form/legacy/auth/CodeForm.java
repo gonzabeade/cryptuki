@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.legacy.auth;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.CodeCorrect;
+import ar.edu.itba.paw.cryptuki.annotation.CodeCorrect;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

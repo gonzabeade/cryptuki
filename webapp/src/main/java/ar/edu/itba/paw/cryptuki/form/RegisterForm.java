@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateEmail;
-import ar.edu.itba.paw.cryptuki.form.annotation.DuplicateUsername;
-import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
+import ar.edu.itba.paw.cryptuki.annotation.DuplicateEmail;
+import ar.edu.itba.paw.cryptuki.annotation.DuplicateUsername;
+import ar.edu.itba.paw.cryptuki.annotation.EqualFields;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 
 import javax.validation.constraints.NotNull;

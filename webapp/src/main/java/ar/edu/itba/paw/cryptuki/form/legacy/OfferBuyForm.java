@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.legacy;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.AmountCheck;
+import ar.edu.itba.paw.cryptuki.annotation.AmountCheck;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

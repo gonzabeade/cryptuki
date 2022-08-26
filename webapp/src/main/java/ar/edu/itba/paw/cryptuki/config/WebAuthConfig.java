@@ -75,15 +75,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/offers**", "/offers/**").permitAll()
-                    .antMatchers(HttpMethod.POST, "/offers").authenticated()
-                    .antMatchers(HttpMethod.GET, "/users/public/**").permitAll()
-                    .antMatchers(HttpMethod.GET, "/users/private/**").authenticated()
-                    .antMatchers(HttpMethod.POST, "/users").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/offers**", "/api/offers/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
                     .antMatchers(HttpMethod.GET, "/**").permitAll()
-                .anyRequest().permitAll()
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")
                 .and()
                     .addFilterBefore(dummyBearerFilter, UsernamePasswordAuthenticationFilter.class) // JwtFilter homework
                 .csrf().disable();

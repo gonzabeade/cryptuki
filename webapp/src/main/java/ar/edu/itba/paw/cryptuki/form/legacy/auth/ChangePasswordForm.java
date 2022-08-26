@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.legacy.auth;
 
-import ar.edu.itba.paw.cryptuki.form.annotation.EqualFields;
+import ar.edu.itba.paw.cryptuki.annotation.EqualFields;
 
 import javax.validation.constraints.Size;
 

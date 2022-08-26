@@ -90,9 +90,21 @@ public class OfferFilter {
         return this;
     }
 
+    public OfferFilter excludeUsernames(Collection<String> excludedUsernames) {
+        if (excludedUsernames != null)
+            this.excludedUsernames.addAll(excludedUsernames);
+        return this;
+    }
+
     public OfferFilter restrictedToUsername(String username) {
         if (username != null)
             restrictedToUsernames.add(username);
+        return this;
+    }
+
+    public OfferFilter restrictedToUsernames(Collection<String> usernames) {
+        if (usernames != null)
+            restrictedToUsernames.addAll(usernames);
         return this;
     }
 

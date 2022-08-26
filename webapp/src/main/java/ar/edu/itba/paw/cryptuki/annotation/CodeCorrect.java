@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.annotation;
+package ar.edu.itba.paw.cryptuki.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.validator.CodeCorrectValidator;
+import ar.edu.itba.paw.cryptuki.validator.CodeCorrectValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

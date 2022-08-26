@@ -69,21 +69,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Offer> getBuyableOffers(OfferFilter filter){
-        filter.withOfferStatus(OfferStatus.APR);
-        String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (buyerUsername != null)
-            filter.excludeUsername(buyerUsername);
+    public Collection<Offer> getOffers(OfferFilter filter){
         return offerDao.getOffersBy(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public long countBuyableOffers(OfferFilter filter){
-        String buyerUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (buyerUsername != null)
-            filter.excludeUsername(buyerUsername);
-        filter.withOfferStatus(OfferStatus.APR);
+    public long countOffers(OfferFilter filter){
         return offerDao.getOfferCount(filter);
     }
 

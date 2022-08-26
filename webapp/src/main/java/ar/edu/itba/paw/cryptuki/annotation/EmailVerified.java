@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.form.annotation;
+package ar.edu.itba.paw.cryptuki.annotation;
 
-import ar.edu.itba.paw.cryptuki.form.validator.EmailVerifiedValidator;
+import ar.edu.itba.paw.cryptuki.validator.EmailVerifiedValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

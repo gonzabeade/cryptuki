@@ -11,11 +11,11 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NoSuchUserExceptionMapper implements ExceptionMapper<NoSuchUserException> {
 
-    private static final String MESSAGE = "User with such id does not exist";
+    private static final String MESSAGE = "User with username '%s' does not exist";
 
     @Override
     public Response toResponse(NoSuchUserException e) {
-        NotFoundErrorDto dto = NotFoundErrorDto.fromMessage(MESSAGE);
+        NotFoundErrorDto dto = NotFoundErrorDto.fromMessage(String.format(MESSAGE, e.getUsername()));
         return Response.status(Response.Status.NOT_FOUND).entity(dto).build();
     }
 }

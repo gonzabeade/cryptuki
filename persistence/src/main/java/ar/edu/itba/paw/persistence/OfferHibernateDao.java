@@ -150,7 +150,7 @@ public class OfferHibernateDao implements OfferDao{
 
     @Override
     public Collection<LocationCountWrapper> getOfferCountByLocation() {
-        TypedQuery<LocationCountWrapper> query = em.createQuery("select new ar.edu.itba.paw.model.LocationCountWrapper(location, count(location)) from Offer where offerStatus = 'APR' group by location order by count(location) desc", LocationCountWrapper.class);
+        TypedQuery<LocationCountWrapper> query = em.createQuery("select new java.util.AbstractMap.SimpleImmutableEntry(location, count(location)) from Offer where offerStatus = 'APR' group by location order by count(location) desc", LocationCountWrapper.class);
         return query.getResultList();
     }
 

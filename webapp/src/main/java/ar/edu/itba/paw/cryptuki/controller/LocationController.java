@@ -35,7 +35,7 @@ public class LocationController {
     @Produces({MediaType.APPLICATION_JSON})
     // TODO: Check if it can be done better from the persistence layer. The implementation uses the methods defined in TP2
     public Response getLocations() {
-        Collection<LocationCountWrapper> collection = offerService.getOfferCountByLocation(); // .stream().map(LocationDto::fromLocationCountWrapper).collect(Collectors.toList());
+        Collection<LocationCountWrapper> collection = offerService.getOfferCountByLocation(); 
 
         Map<Location, Long> extendedResult = new EnumMap<>(Location.class);
         for (LocationCountWrapper l: collection)

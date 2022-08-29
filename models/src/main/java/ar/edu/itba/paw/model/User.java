@@ -105,8 +105,8 @@ public class User {
         Duration loggedIn = Duration.between(lastLogin, LocalDateTime.now());
         return loggedIn.toMinutes();
     }
-    public KycInformation getKyc() {
-        return this.kyc;
+    public Optional<KycInformation> getKyc() {
+        return Optional.ofNullable(this.kyc);
     }
     public Optional<ProfilePicture> getProfilePicture() {
         return Optional.ofNullable(profilePicture);

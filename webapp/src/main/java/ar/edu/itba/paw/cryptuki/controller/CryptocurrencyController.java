@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.CryptocurrencyDto;
-import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.exception.NoSuchCryptocurrencyException;
-import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.service.CryptocurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

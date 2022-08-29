@@ -33,14 +33,14 @@ public class CustomPreAuthorizer {
         User user = maybeUser.get();
         return user.getUserAuth().getUserStatus().equals(UserStatus.VERIFIED)
                 && user.getKyc() != null
-                && user.getKyc().getStatus().equals(KycStatus.APR);
+                && user.getKyc().get().getStatus().equals(KycStatus.APR);
     }
 
     public boolean canUserAlterOffer(UserDetails userDetails, int offerId) {
         Optional<Offer> maybeOffer = offerDao.getOffersBy(new OfferFilter().restrictedToId(offerId)).stream().findFirst();
         if (!maybeOffer.isPresent())
             throw new NoSuchOfferException(offerId);
-        return maybeOffer.get().getSeller().getUsername().get().equals(userDetails.getUsername()) && maybeOffer.get().getSeller().getKyc().getStatus().equals(KycStatus.APR);
+        return maybeOffer.get().getSeller().getUsername().get().equals(userDetails.getUsername()) && maybeOffer.get().getSeller().getKyc().get().getStatus().equals(KycStatus.APR);
     }
 
     public boolean isUserOwnerOfTrade(UserDetails userDetails, int tradeId) {

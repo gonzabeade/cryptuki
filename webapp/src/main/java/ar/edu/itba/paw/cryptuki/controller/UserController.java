@@ -45,6 +45,7 @@ public class UserController {
 
     @GET
     @Path("/{username}")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getUser(@PathParam("username") String username) {
 
         Optional<UserDto> maybeUser = userService.getUserByUsername(username).map( u -> UserDto.fromUser(u, uriInfo));
@@ -55,15 +56,9 @@ public class UserController {
         return Response.ok(maybeUser.get()).build();
     }
 
-//    @GET
-//    @Path("/me")
-//    public Response getUserMe() {
-//        String who = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return getUser(who);
-//    }
-
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @POST
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response createUser(@Valid RegisterForm registerForm, @Context HttpServletRequest request) {
 
         UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());

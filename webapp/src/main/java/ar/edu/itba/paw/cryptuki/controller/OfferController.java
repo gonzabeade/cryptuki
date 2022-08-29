@@ -73,6 +73,7 @@ public class OfferController {
 
     @GET
     @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getOffer(@PathParam("id") int id) {
         Optional<OfferDto> maybeOffer = offerService.getOfferById(id).map(o -> OfferDto.fromOffer(o, uriInfo));
 
@@ -83,8 +84,9 @@ public class OfferController {
     }
 
 
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @POST
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response createOffer(@Valid UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();

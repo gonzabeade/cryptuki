@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.cryptuki.dto;
 
+import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.LocationCountWrapper;
+
+import java.util.Map;
 
 public class LocationDto {
 
@@ -11,6 +14,13 @@ public class LocationDto {
         LocationDto dto = new LocationDto();
         dto.locationCode = locationCountWrapper.getLocation().toString();
         dto.offerCount = locationCountWrapper.getLocationCount();
+        return dto;
+    }
+
+    public static LocationDto fromMapEntry(Map.Entry<Location, Long> entry) {
+        LocationDto dto = new LocationDto();
+        dto.locationCode = entry.getKey().toString();
+        dto.offerCount = entry.getValue();
         return dto;
     }
 

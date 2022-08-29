@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.CryptocurrencyDto;
 import ar.edu.itba.paw.cryptuki.dto.LocationDto;
+import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.LocationCountWrapper;
 import ar.edu.itba.paw.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("/api/locations")
@@ -29,13 +33,22 @@ public class LocationController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    // TODO: Check if it can be done better from the persistence layer. The implementation uses the methods defined in TP2
     public Response getLocations() {
-        Collection<LocationDto> collection = offerService.getOfferCountByLocation().stream().map(LocationDto::fromLocationCountWrapper).collect(Collectors.toList());
+        Collection<LocationCountWrapper> collection = offerService.getOfferCountByLocation(); // .stream().map(LocationDto::fromLocationCountWrapper).collect(Collectors.toList());
 
-        if (collection.isEmpty())
+        Map<Location, Long> extendedResult = new EnumMap<>(Location.class);
+        for (LocationCountWrapper l: collection)
+            extendedResult.put(l.getLocation(), l.getLocationCount());
+
+        for (Location l: Location.values())
+            extendedResult.putIfAbsent(l, 0l);
+
+        Collection<LocationDto> locationDtos = extendedResult.entrySet().stream().map(LocationDto::fromMapEntry).collect(Collectors.toList());
+
+        if (locationDtos.isEmpty())
             return Response.noContent().build();
-
-        return Response.ok(new GenericEntity<Collection<LocationDto>>(collection) {}).build();
+        return Response.ok(new GenericEntity<Collection<LocationDto>>(locationDtos) {}).build();
     }
 
 

@@ -45,6 +45,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DummyBearerFilter dummyBearerFilter;
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder

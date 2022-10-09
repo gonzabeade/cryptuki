@@ -13,10 +13,10 @@ import java.util.Arrays;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ElementType.PARAMETER})
-@Retention(RUNTIME)
-@Documented
 @Constraint(validatedBy = ValueOfEnumValidator.class)
+@Target(ElementType.FIELD)
+@Retention(RUNTIME)
+//@Documented
 public @interface ValueOfEnum {
     Class<? extends Enum<?>> enumClass();
     String message() default "must be any of {enumClass}";

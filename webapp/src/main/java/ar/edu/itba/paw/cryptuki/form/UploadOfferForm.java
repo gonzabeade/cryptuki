@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form;
 import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
@@ -37,6 +38,7 @@ public class UploadOfferForm {
 
     @Size(min = 1, max = 30)
     @NotNull
+    @ValueOfEnum(enumClass = Location.class)
     private String location;
 
     public Double getMinInCrypto() {

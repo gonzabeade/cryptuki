@@ -95,7 +95,7 @@ public class OfferController {
         Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(offerForm.getSellerId()))
+                .path(String.valueOf(offer.getOfferId()))
                 .build();
 
         return Response.created(uri).build();

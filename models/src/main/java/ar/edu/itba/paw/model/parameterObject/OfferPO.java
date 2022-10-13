@@ -132,6 +132,7 @@ public class OfferPO {
         offer.setMinInCrypto(offerPO.getMinInCrypto().orElse(offer.getUnitPrice()));
         offer.setComments(offerPO.getFirstChat().orElse(offer.getComments()));
         offer.setLocation(offerPO.getLocation().orElse(offer.getLocation()));
+        offer.setOfferStatus(offerPO.getOfferStatus());
 
         return offer;
 

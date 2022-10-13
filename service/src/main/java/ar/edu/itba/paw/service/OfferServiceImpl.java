@@ -93,7 +93,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerPO.offerId.get())")
+//    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerPO.offerId.get())")
     public Offer modifyOffer(OfferPO offerPO) {
 
         if (offerPO == null)

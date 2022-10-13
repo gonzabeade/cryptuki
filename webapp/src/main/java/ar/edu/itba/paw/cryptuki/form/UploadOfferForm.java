@@ -3,7 +3,9 @@ import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
 import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
@@ -41,6 +43,11 @@ public class UploadOfferForm {
     @ValueOfEnum(enumClass = Location.class)
     private String location;
 
+    @Size(min = 1, max = 10)
+    @NotNull
+    @ValueOfEnum(enumClass = OfferStatus.class)
+    private String offerStatus = "APR";
+
     public Double getMinInCrypto() {
         return minInCrypto;
     }
@@ -58,6 +65,9 @@ public class UploadOfferForm {
     }
     public String getLocation() {
         return location;
+    }
+    public String getOfferStatus() {
+        return offerStatus;
     }
     public Integer getSellerId() { return sellerId; }
 
@@ -80,6 +90,9 @@ public class UploadOfferForm {
     public void setLocation(String location) {
         this.location = location;
     }
+    public void setOfferStatus(String offerStatus) {
+        this.offerStatus = offerStatus;
+    }
     public void setSellerId(Integer sellerId) {
         this.sellerId = sellerId;
     }
@@ -92,7 +105,8 @@ public class UploadOfferForm {
                .withMaxInCrypto(maxInCrypto)
                .withMinInCrypto(minInCrypto)
                .withFirstChat(firstChat)
-               .withUnitPrice(unitPrice);
+               .withUnitPrice(unitPrice)
+               .withStatus(OfferStatus.valueOf(offerStatus));
     }
 
     public void fillFromOffer(Offer offer) {
@@ -102,6 +116,7 @@ public class UploadOfferForm {
         setUnitPrice((offer.getUnitPrice()));
         setFirstChat(offer.getComments());
         setLocation(offer.getLocation().toString());
+        setOfferStatus(offer.getOfferStatus().toString());
     }
 }
 

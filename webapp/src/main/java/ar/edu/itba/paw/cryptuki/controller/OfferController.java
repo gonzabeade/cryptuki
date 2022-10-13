@@ -100,4 +100,19 @@ public class OfferController {
 
         return Response.created(uri).build();
     }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response modifyOffer(@Valid UploadOfferForm offerForm, @PathParam("id") int id) {
+
+        String who = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
+        offerForm.setSellerId(user.getId());
+
+        Offer offer = offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
+
+        return Response.ok().build();
+    }
 }

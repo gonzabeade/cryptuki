@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -105,7 +105,7 @@ public class OfferController {
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response modifyOffer(@Valid UploadOfferForm offerForm, @PathParam("id") int id) {
+    public Response modifyOffer(@Valid ModifyOfferForm offerForm, @PathParam("id") int id) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));

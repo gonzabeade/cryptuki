@@ -1,33 +1,39 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.seller;
+package ar.edu.itba.paw.cryptuki.form.legacy;
 
-import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.form.OfferDataForm;
 import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferStatus;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
-public class ModifyOfferForm extends UploadOfferForm {
+public class ModifyOfferForm extends OfferDataForm {
 
+    @Size(min = 1, max = 10)
     @NotNull
-    private int offerId;
+    @ValueOfEnum(enumClass = OfferStatus.class)
+    private String offerStatus;
 
-    public int getOfferId() {
-        return offerId;
+    public String getOfferStatus() {
+        return offerStatus;
     }
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
+
+    public void setOfferStatus(String offerStatus) {
+        this.offerStatus = offerStatus;
     }
 
     @Override
     public OfferPO toOfferParameterObject() {
-        return super.toOfferParameterObject().withOfferId(offerId);
+        return super.toOfferParameterObject().withStatus(OfferStatus.valueOf(offerStatus));
     }
 
     @Override
     public void fillFromOffer(Offer offer) {
         super.fillFromOffer(offer);
-        setOfferId(offer.getOfferId());
+        setOfferStatus(offer.getOfferStatus().toString());
     }
 
 }

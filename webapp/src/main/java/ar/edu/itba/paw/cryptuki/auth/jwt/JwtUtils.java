@@ -22,83 +22,54 @@ public class JwtUtils { // Component that implements serializable?
     private static int REFRESH_TOKEN_VALIDITY = 24 * 60 * 60; // A day
 
     @Value("${jwt.accessSecret}")
-    private static String accessSecret= "PAPAYAREPLACETHIS";
-    @Value("${jwt.refreshSecret}")
-    private static String refreshSecret= "MAMAYAREPLACETHIS";
+    private static String secret= "PAPAYAREPLACETHIS";
 
-    private static JwtParser accessParser = Jwts.parser().setSigningKey(accessSecret);
-    private static JwtParser refreshParser = Jwts.parser().setSigningKey(refreshSecret);
+    private static JwtParser parser = Jwts.parser().setSigningKey(secret);
 
     private JwtUtils() {
     }
 
-    public static Claims getAllClaimsFromAccessToken(String token) {
-        if(!accessParser.isSigned(token))
-            throw new RuntimeException("Malformed token");
-        return Jwts.parser().setSigningKey(accessSecret).parseClaimsJws(token).getBody();
+    public static boolean isTokenValid(String token){
+        return parser.isSigned(token);
     }
 
-    public static Claims getAllClaimsFromRefreshToken(String token) {
-        if(!refreshParser.isSigned(token))
-            throw new RuntimeException("Malformed token");
-        return Jwts.parser().setSigningKey(refreshSecret).parseClaimsJws(token).getBody();
+    public static Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
-
-    public static <T> T getClaimFromAccessToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromAccessToken(token);
+    public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
-
-    public static <T> T getClaimFromRefreshToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromRefreshToken(token);
-        return claimsResolver.apply(claims);
+    public static String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
     }
-
-    public static String getUsernameFromRefreshToken(String token) {
-        return getClaimFromRefreshToken(token, Claims::getSubject);
+    public static LocalDate getIssuedAtDateFromToken(String token) {
+        return LocalDate.from((getClaimFromToken(token, Claims::getIssuedAt).toInstant()));
     }
-
-    public static String getUsernameFromAccessToken(String token) {
-        return getClaimFromAccessToken(token, Claims::getSubject);
+    public static LocalDate getExpirationDateFromToken(String token) {
+        return LocalDate.from((getClaimFromToken(token, Claims::getExpiration).toInstant()));
     }
-
-    public static LocalDate getIssuedAtDateFromAccessToken(String token) {
-        return LocalDate.from((getClaimFromAccessToken(token, Claims::getIssuedAt).toInstant()));
+    public static String getTypeFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get("type").toString());
     }
-
-    public static LocalDate getIssuedAtDateFromRefreshToken(String token) {
-        return LocalDate.from((getClaimFromRefreshToken(token, Claims::getIssuedAt).toInstant()));
-    }
-
-    public static LocalDate getExpirationDateFromAccessToken(String token) {
-        return LocalDate.from((getClaimFromAccessToken(token, Claims::getExpiration).toInstant()));
-    }
-
-    public static LocalDate getExpirationDateFromRefreshToken(String token) {
-        return LocalDate.from((getClaimFromRefreshToken(token, Claims::getExpiration).toInstant()));
-    }
-
-    public static boolean isAccessTokenExpired(String token) {
-        final LocalDate date = getExpirationDateFromAccessToken(token);
-        return date.isBefore(LocalDate.now());
-    }
-
-    public static boolean isRefreshTokenExpired(String token) {
-        final LocalDate date = getExpirationDateFromRefreshToken(token);
+    public static boolean isTokenExpired(String token) {
+        final LocalDate date = getExpirationDateFromToken(token);
         return date.isBefore(LocalDate.now());
     }
 
     public static String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), accessSecret, ACCESS_TOKEN_VALIDITY);
+        claims.put("type", "access");
+        return doGenerateToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
     }
 
     public static String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), refreshSecret, REFRESH_TOKEN_VALIDITY);
+        claims.put("type", "refresh");
+        return doGenerateToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
     }
 
-    private static String doGenerateToken(Map<String, Object> claims, String subject, String secret, int validityTimeInSecs) {
+    private static String doGenerateToken(Map<String, Object> claims, String subject, int validityTimeInSecs) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)

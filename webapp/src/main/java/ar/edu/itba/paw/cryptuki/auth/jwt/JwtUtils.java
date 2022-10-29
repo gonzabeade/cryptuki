@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.auth.jwt;
 
 import ar.edu.itba.paw.model.UserAuth;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,21 +18,29 @@ import java.util.function.Function;
 @PropertySource("classpath:application.properties")
 public class JwtUtils { // Component that implements serializable?
 
-    private static int JWT_TOKEN_VALIDITY = 24 * 60 * 60; // A day
+    private static int ACCESS_TOKEN_VALIDITY = 60 * 60; // An hour
+    private static int REFRESH_TOKEN_VALIDITY = 24 * 60 * 60; // A day
+
     @Value("${jwt.accessSecret}")
     private static String accessSecret= "PAPAYAREPLACETHIS";
-
     @Value("${jwt.refreshSecret}")
     private static String refreshSecret= "MAMAYAREPLACETHIS";
+
+    private static JwtParser accessParser = Jwts.parser().setSigningKey(accessSecret);
+    private static JwtParser refreshParser = Jwts.parser().setSigningKey(refreshSecret);
 
     private JwtUtils() {
     }
 
     public static Claims getAllClaimsFromAccessToken(String token) {
+        if(!accessParser.isSigned(token))
+            throw new RuntimeException("Malformed token");
         return Jwts.parser().setSigningKey(accessSecret).parseClaimsJws(token).getBody();
     }
 
     public static Claims getAllClaimsFromRefreshToken(String token) {
+        if(!refreshParser.isSigned(token))
+            throw new RuntimeException("Malformed token");
         return Jwts.parser().setSigningKey(refreshSecret).parseClaimsJws(token).getBody();
     }
 
@@ -69,53 +78,33 @@ public class JwtUtils { // Component that implements serializable?
         return LocalDate.from((getClaimFromRefreshToken(token, Claims::getExpiration).toInstant()));
     }
 
-    /////////////////
-
-    private static boolean isAccessTokenExpired(String token) {
+    public static boolean isAccessTokenExpired(String token) {
         final LocalDate date = getExpirationDateFromAccessToken(token);
         return date.isBefore(LocalDate.now());
     }
 
-    private static boolean isRefreshTokenExpired(String token) {
+    public static boolean isRefreshTokenExpired(String token) {
         final LocalDate date = getExpirationDateFromRefreshToken(token);
         return date.isBefore(LocalDate.now());
     }
 
     public static String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), accessSecret);
+        return doGenerateToken(claims, userDetails.getUsername(), accessSecret, ACCESS_TOKEN_VALIDITY);
     }
 
     public static String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), refreshSecret);
+        return doGenerateToken(claims, userDetails.getUsername(), refreshSecret, REFRESH_TOKEN_VALIDITY);
     }
 
-    private static String doGenerateToken(Map<String, Object> claims, String subject, String secret) {
+    private static String doGenerateToken(Map<String, Object> claims, String subject, String secret, int validityTimeInSecs) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() * JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() * 1000 + validityTimeInSecs))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-    }
-
-    public static boolean doValidateAccessToken(String token, UserDetails userDetails, String refreshSecret) {
-        final String username = getUsernameFromAccessToken(token);
-        return username.equals(userDetails.getUsername());  // && !isTokenExpired(token); TODO: CHECK!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
-
-    public static boolean doValidateRefreshToken(String token, UserDetails userDetails, String refreshSecret) {
-        final String username = getUsernameFromRefreshToken(token);
-        return username.equals(userDetails.getUsername());  // && !isTokenExpired(token); TODO: CHECK!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
-
-    public static boolean validateRefreshToken(String token, UserDetails userDetails){
-        return doValidateRefreshToken(token, userDetails, refreshSecret);
-    }
-
-    public static boolean validateAccessToken(String token, UserDetails userDetails){
-        return doValidateAccessToken(token, userDetails, accessSecret);
     }
 }

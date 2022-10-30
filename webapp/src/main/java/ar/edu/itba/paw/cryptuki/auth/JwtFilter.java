@@ -55,7 +55,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Get authorization header and validate
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if ( header == null || !header.startsWith("Bearer ")) {
+
+        //TODO: mirar como se maneja el Digest
+        //TODO: mirar que pasa con los tokens generados si las credenciales son invalidas
+        if ( header == null ) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
+        }
+        else if ( header.startsWith("Basic ") ) {
+            final String[] credentials = header.split(" ")[1].trim().split(":");
+
+            if(credentials.length != 2)
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+
+            String username = credentials[0].trim();
+            String password = credentials[1].trim();
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails)); //TODO: Que pasa con este header si falla el logueo
+
+            return;
+        }
+        else if ( !header.startsWith("Bearer ") ){
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
@@ -63,13 +86,30 @@ public class JwtFilter extends OncePerRequestFilter {
         // Get jwt token
         final String token = header.split(" ")[1].trim();
 
-        final String username = JwtUtils.getUsernameFromToken(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
+        //Validate that token was signed by server
+        if( !JwtUtils.isTokenValid(token) )
+            throw new RuntimeException("Token is invalid"); //TODO: mirar como devolver el error apropiado
 
-        if ( !JwtUtils.validateToken(token, userDetails)) { // TODO: Le clave un ! acá
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
+        if( JwtUtils.isTokenExpired(token) )
+            throw new RuntimeException("Token has expired");
+
+        final String username = JwtUtils.getUsernameFromToken(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if( JwtUtils.getTypeFromToken(token).equals("access") ) {
+            //Make the login and try to complete the request
+
         }
+        else if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
+            //Make the login, try to complete the request and generate an access token
+            httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
+        }
+
+//
+//        if ( !JwtUtils.validateToken(token, userDetails)) { // TODO: Le clave un ! acá
+//            filterChain.doFilter(httpServletRequest, httpServletResponse);
+//            return;
+//        }
 
 //        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 //                userDetails,

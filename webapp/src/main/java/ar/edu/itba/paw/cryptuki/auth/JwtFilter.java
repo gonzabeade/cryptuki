@@ -65,8 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username, password;
         UserDetails userDetails;
 
-        //TODO: mirar como se maneja el Digest
-        //TODO: mirar que pasa con los tokens generados si las credenciales son invalidas
+        //TODO: mirar como se maneja el Digest, para mi no tiene sentindo recibir un hash si va por https
         if ( header == null ) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
@@ -78,10 +77,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
 
             username = credentials[0].trim();
-            System.out.println(credentials[0].trim());
             password = credentials[1].trim();
-            System.out.println(credentials[1].trim());
 
+            //TODO: mirar como tratar de registrar al usuario
             //try {
             //    userService.registerUser(new UserPO(username, password, "scastagnino@itba.edu.ar", "12345678"));
             //}
@@ -89,14 +87,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
             //}
 
+            //TODO: mirar que hacer con los permisos, osea el tercer parametro
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    username,
+                    password
+            );
+
+            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
 
             httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails)); //TODO: Que pasa con este header si falla el logueo
             httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
         else if ( header.startsWith("Bearer ") ){
-            //filterChain.doFilter(httpServletRequest, httpServletResponse);
-            //return;
 
             // Get jwt token
             final String token = header.split(" ")[1].trim();
@@ -110,44 +118,27 @@ public class JwtFilter extends OncePerRequestFilter {
 
             username = JwtUtils.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
-            password = userDetails.getPassword();
+
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    userDetails.getAuthorities()
+            );
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
                 //Make the login, try to complete the request and generate an access token
                 httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
             }
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
-        else {
-            throw new RemoteException("Lacking authorization");
-        }
 
-
-//
-//        if ( !JwtUtils.validateToken(token, userDetails)) { // TODO: Le clave un ! acá
-//            filterChain.doFilter(httpServletRequest, httpServletResponse);
-//            return;
-//        }
-
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//                userDetails,
-//                userDetails.getPassword(),
-//                userDetails.getAuthorities()
-//        );
-
-        // https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/authentication/AuthenticationManager.html
-        // TODO: AUTHENTICATION MANAGER
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                username,
-                password,
-                userDetails.getAuthorities()
-        );
-
-        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        throw new RemoteException("Lacking authorization");
 
         // TODO: Investigate that does this do
-//        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+        // authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

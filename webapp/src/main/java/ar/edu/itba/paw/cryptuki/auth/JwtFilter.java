@@ -2,8 +2,10 @@ package ar.edu.itba.paw.cryptuki.auth;
 
 import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Optional;
 
 //curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/offers' --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjU5NzM2MDQ0fQ.S3_VHCLOQtk7A6gxO43hyi6N9F3F0yS8l54oQV6PtEGSN39bkfk1nEDa0wboeLYL07M2-F17zRqy9FxNx9kPeA'
@@ -29,10 +32,14 @@ import java.util.Optional;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @Autowired
-    public JwtFilter(UserDetailsService userDetailsService) {
+    public JwtFilter(UserDetailsService userDetailsService, AuthenticationManager authenticationManager, UserService userService) {
         this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     // JSON Web Tokens
@@ -55,6 +62,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Get authorization header and validate
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String username, password;
+        UserDetails userDetails;
 
         //TODO: mirar como se maneja el Digest
         //TODO: mirar que pasa con los tokens generados si las credenciales son invalidas
@@ -62,48 +71,56 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
-        else if ( header.startsWith("Basic ") ) {
+        else if ( header.startsWith("Digest ") ) {
             final String[] credentials = header.split(" ")[1].trim().split(":");
 
             if(credentials.length != 2)
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
 
-            String username = credentials[0].trim();
-            String password = credentials[1].trim();
+            username = credentials[0].trim();
+            System.out.println(credentials[0].trim());
+            password = credentials[1].trim();
+            System.out.println(credentials[1].trim());
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
+            //try {
+            //    userService.registerUser(new UserPO(username, password, "scastagnino@itba.edu.ar", "12345678"));
+            //}
+            //catch (RuntimeException e) {
 
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            //}
+
+            userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
+
             httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails)); //TODO: Que pasa con este header si falla el logueo
-
-            return;
-        }
-        else if ( !header.startsWith("Bearer ") ){
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        }
-
-        // Get jwt token
-        final String token = header.split(" ")[1].trim();
-
-        //Validate that token was signed by server
-        if( !JwtUtils.isTokenValid(token) )
-            throw new RuntimeException("Token is invalid"); //TODO: mirar como devolver el error apropiado
-
-        if( JwtUtils.isTokenExpired(token) )
-            throw new RuntimeException("Token has expired");
-
-        final String username = JwtUtils.getUsernameFromToken(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        if( JwtUtils.getTypeFromToken(token).equals("access") ) {
-            //Make the login and try to complete the request
-
-        }
-        else if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-            //Make the login, try to complete the request and generate an access token
             httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
         }
+        else if ( header.startsWith("Bearer ") ){
+            //filterChain.doFilter(httpServletRequest, httpServletResponse);
+            //return;
+
+            // Get jwt token
+            final String token = header.split(" ")[1].trim();
+
+            //Validate that token was signed by server
+            if( !JwtUtils.isTokenValid(token) )
+                throw new RuntimeException("Token is invalid"); //TODO: mirar como devolver el error apropiado
+
+            if( JwtUtils.isTokenExpired(token) )
+                throw new RuntimeException("Token has expired");
+
+            username = JwtUtils.getUsernameFromToken(token);
+            userDetails = userDetailsService.loadUserByUsername(username);
+            password = userDetails.getPassword();
+
+            if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
+                //Make the login, try to complete the request and generate an access token
+                httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
+            }
+        }
+        else {
+            throw new RemoteException("Lacking authorization");
+        }
+
 
 //
 //        if ( !JwtUtils.validateToken(token, userDetails)) { // TODO: Le clave un ! acá
@@ -119,11 +136,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/authentication/AuthenticationManager.html
         // TODO: AUTHENTICATION MANAGER
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(),
-                userDetails.getPassword(),
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                username,
+                password,
                 userDetails.getAuthorities()
         );
+
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         // TODO: Investigate that does this do
 //        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

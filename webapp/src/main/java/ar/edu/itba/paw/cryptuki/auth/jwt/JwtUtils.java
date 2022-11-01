@@ -10,6 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class JwtUtils { // Component that implements serializable?
     }
 
     public static Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return parser.parseClaimsJws(token).getBody();
     }
     public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
@@ -43,18 +45,18 @@ public class JwtUtils { // Component that implements serializable?
     public static String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
-    public static LocalDate getIssuedAtDateFromToken(String token) {
-        return LocalDate.from((getClaimFromToken(token, Claims::getIssuedAt).toInstant()));
+    public static Date getIssuedAtDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
     }
-    public static LocalDate getExpirationDateFromToken(String token) {
-        return LocalDate.from((getClaimFromToken(token, Claims::getExpiration).toInstant()));
+    public static Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
     }
     public static String getTypeFromToken(String token) {
         return getClaimFromToken(token, claims -> claims.get("type").toString());
     }
     public static boolean isTokenExpired(String token) {
-        final LocalDate date = getExpirationDateFromToken(token);
-        return date.isBefore(LocalDate.now());
+        final Date date = getExpirationDateFromToken(token);
+        return date.compareTo(new Date()) < 0;
     }
 
     public static String generateAccessToken(UserDetails userDetails) {
@@ -74,7 +76,7 @@ public class JwtUtils { // Component that implements serializable?
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() * 1000 + validityTimeInSecs))
+                .setExpiration(new Date(System.currentTimeMillis() + validityTimeInSecs * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }

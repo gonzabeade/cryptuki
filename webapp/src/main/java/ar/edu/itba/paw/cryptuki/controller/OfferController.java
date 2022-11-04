@@ -111,7 +111,11 @@ public class OfferController {
         User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
 
-        Offer offer = offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
+        try {
+            Offer offer = offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.fromStatusCode(403)).build();
+        }
 
         return Response.ok().build();
     }

@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.cryptuki.auth.jwt;
 
 import ar.edu.itba.paw.model.UserAuth;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +29,12 @@ public class JwtUtils { // Component that implements serializable?
     }
 
     public static boolean isTokenValid(String token){
-        return parser.isSigned(token);
+        try {
+            parser.parseClaimsJws(token);
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | ExpiredJwtException e) {
+            return false;
+        }
+        return true;
     }
 
     public static Claims getAllClaimsFromToken(String token) {
@@ -55,8 +57,12 @@ public class JwtUtils { // Component that implements serializable?
         return getClaimFromToken(token, claims -> claims.get("type").toString());
     }
     public static boolean isTokenExpired(String token) {
-        final Date date = getExpirationDateFromToken(token);
-        return date.compareTo(new Date()) < 0;
+        try {
+            parser.parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
+        return false;
     }
 
     public static String generateAccessToken(UserDetails userDetails) {

@@ -67,14 +67,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //TODO: mirar como se maneja el Digest, para mi no tiene sentindo recibir un hash si va por https
         if ( header == null ) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
         else if ( header.startsWith("Digest ") ) {
             final String[] credentials = header.split(" ")[1].trim().split(":");
 
-            if(credentials.length != 2)
+            if(credentials.length != 2) {
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
+            }
 
             username = credentials[0].trim();
             password = credentials[1].trim();
@@ -87,18 +90,20 @@ public class JwtFilter extends OncePerRequestFilter {
 
             //}
 
+            userDetails = userDetailsService.loadUserByUsername(username); //TODO: mirar que pasa con la excepcion que se tira si no existe el user
+
             //TODO: mirar que hacer con los permisos, osea el tercer parametro
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    username,
-                    password
+                    userDetails,
+                    password,
+                    userDetails.getAuthorities()
             );
 
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            userDetails = userDetailsService.loadUserByUsername(username); // TODO what happens when throws exception? AKA No user?
 
-            httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails)); //TODO: Que pasa con este header si falla el logueo
+            httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails));
             httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -109,25 +114,25 @@ public class JwtFilter extends OncePerRequestFilter {
             // Get jwt token
             final String token = header.split(" ")[1].trim();
 
-            //Validate that token was signed by server
-            if( !JwtUtils.isTokenValid(token) )
-                throw new RuntimeException("Token is invalid"); //TODO: mirar como devolver el error apropiado
-
-            if( JwtUtils.isTokenExpired(token) )
-                throw new RuntimeException("Token has expired");
+            //TODO: mirar como devolver los mensajes apropiados
+            //Validate that token was signed by server and that is hasn't expired
+            if( !JwtUtils.isTokenValid(token) ) {
+                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
 
             username = JwtUtils.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    username,
+                    userDetails,
                     null,
                     userDetails.getAuthorities()
             );
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                //Make the login, try to complete the request and generate an access token
                 httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
             }
 
@@ -135,7 +140,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        throw new RemoteException("Lacking authorization");
+        httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
         // TODO: Investigate that does this do
         // authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

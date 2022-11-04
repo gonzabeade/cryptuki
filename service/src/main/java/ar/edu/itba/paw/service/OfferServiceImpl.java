@@ -33,8 +33,8 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-//    @Secured("ROLE_USER")
-//    @PreAuthorize("@customPreAuthorizer.canUserUploadOffer(authentication.principal)")
+    @Secured("ROLE_USER")
+    @PreAuthorize("@customPreAuthorizer.canUserUploadOffer(authentication.principal)")
     public Offer makeOffer(OfferPO offerPO) {
 
         if (offerPO == null)
@@ -93,7 +93,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-//    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerPO.offerId.get())")
+    @PreAuthorize("@customPreAuthorizer.canUserAlterOffer(authentication.principal, #offerPO.offerId.get())")
     public Offer modifyOffer(OfferPO offerPO) {
 
         if (offerPO == null)

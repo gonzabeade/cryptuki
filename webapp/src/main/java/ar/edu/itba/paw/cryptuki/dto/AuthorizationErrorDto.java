@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.cryptuki.dto;
 
-import org.springframework.expression.AccessException;
+import org.springframework.security.access.AccessDeniedException;
 
 public class AuthorizationErrorDto {
 
     private String message;
 
-    public static AuthorizationErrorDto fromAccessException(final AccessException accessException) {
+    public static AuthorizationErrorDto fromAccessDeniedException(final AccessDeniedException accessDeniedException) {
         AuthorizationErrorDto dto = new AuthorizationErrorDto();
-        dto.message = accessException.getMessage();
+        dto.message = accessDeniedException.getMessage();
         return dto;
     }
 

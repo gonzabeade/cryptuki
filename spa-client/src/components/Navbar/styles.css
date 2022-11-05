@@ -1,5 +1,6 @@
 .navbar {
     display: flex;
+    overflow-y: scroll;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 5rem;
@@ -13,19 +14,13 @@
     justify-content: space-around;
 }
 
-.navbar--options > h1, h2 {
+.navbar--options > h1 {
     margin: 1rem;
     font: Roboto; 
     color: #2E3440;  
 }
 
-.navbar--options > h2 {
-    font-size: large; 
-    background-color: #D8DEE9;  
-    padding: 0.8rem; 
-    border: 2px solid #2E3440; 
-    border-radius: 10px;
-}
+
 
 
 

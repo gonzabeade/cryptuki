@@ -7,6 +7,5 @@ export const paths = {
     COMPLAINTS: '/complaints',
     LOCATIONS: '/locations',
     CRYPTOCURRENCIES: '/cryptocurrencies',
-    TIME_TABLE: '/timetable',
 }
   

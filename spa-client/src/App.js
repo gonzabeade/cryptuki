@@ -10,13 +10,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-      <Navbar></Navbar>
-      <div className="content">
-        <Landing></Landing>
-        {/* <Route path="/" element={<Landing/>}></Route> */}
+        <Navbar></Navbar>
+        <div className="content">
+          <Landing></Landing>
+          {/* <Route path="/" element={<Landing/>}></Route> */}
+        </div>
       </div>
-    </div>
-
     </BrowserRouter>
 
   );

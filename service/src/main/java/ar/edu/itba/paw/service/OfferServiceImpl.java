@@ -33,7 +33,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-//    @Secured("ROLE_USER")
+    @Secured("ROLE_USER")
 //    @PreAuthorize("@customPreAuthorizer.canUserUploadOffer(authentication.principal)")
     public Offer makeOffer(OfferPO offerPO) {
 

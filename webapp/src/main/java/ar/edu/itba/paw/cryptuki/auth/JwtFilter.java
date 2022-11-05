@@ -76,19 +76,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if(credentials.length != 2) {
                 httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
             }
 
             username = credentials[0].trim();
             password = credentials[1].trim();
-
-            //TODO: mirar como tratar de registrar al usuario
-            //try {
-            //    userService.registerUser(new UserPO(username, password, "scastagnino@itba.edu.ar", "12345678"));
-            //}
-            //catch (RuntimeException e) {
-
-            //}
 
             userDetails = userDetailsService.loadUserByUsername(username); //TODO: mirar que pasa con la excepcion que se tira si no existe el user
 
@@ -118,7 +110,6 @@ public class JwtFilter extends OncePerRequestFilter {
             //Validate that token was signed by server and that is hasn't expired
             if( !JwtUtils.isTokenValid(token) ) {
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
 

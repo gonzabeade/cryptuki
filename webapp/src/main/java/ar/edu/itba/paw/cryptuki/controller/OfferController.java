@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 @Component
 public class OfferController {
 
-    public final OfferService offerService;
-    public final UserService userService;
+    private final OfferService offerService;
+    private final UserService userService;
 
     @Context
     public UriInfo uriInfo;

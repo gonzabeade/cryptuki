@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
@@ -14,6 +15,8 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,14 +36,17 @@ import java.util.Optional;
 @Path("/api/users")
 public class UserController {
 
-    public final UserService userService;
+    private final UserService userService;
+
+    private final UserDetailsService userDetailsService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserDetailsService userDetailsService) {
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @GET
@@ -68,7 +74,13 @@ public class UserController {
                 .path(userPO.getUsername())
                 .build();
 
-        return Response.created(uri).build();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userPO.getUsername());
+
+        return Response
+                .created(uri)
+                .header("Refresh-Token", JwtUtils.generateRefreshToken(userDetails))
+                .header("Access-Token", JwtUtils.generateAccessToken(userDetails))
+                .build();
     }
 
 }

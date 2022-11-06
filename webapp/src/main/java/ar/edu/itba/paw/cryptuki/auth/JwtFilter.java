@@ -71,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
-        else if ( header.startsWith("Digest ") ) {
+        else if ( header.startsWith("Basic ") ) {
             final String[] credentials = header.split(" ")[1].trim().split(":");
 
             if(credentials.length != 2) {
@@ -95,8 +95,8 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-            httpServletResponse.addHeader("refresh_token", JwtUtils.generateRefreshToken(userDetails));
-            httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
+            httpServletResponse.addHeader("Refresh-Token", JwtUtils.generateRefreshToken(userDetails));
+            httpServletResponse.addHeader("Access-Token", JwtUtils.generateAccessToken(userDetails));
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
@@ -124,7 +124,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.addHeader("jwt_token", JwtUtils.generateAccessToken(userDetails));
+                httpServletResponse.addHeader("Access-Token", JwtUtils.generateAccessToken(userDetails));
             }
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);

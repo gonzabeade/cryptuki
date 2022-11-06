@@ -10,8 +10,8 @@ const Navbar = () => {
             <div className="navbar--options">
                 <h1>Mercado P2P</h1>
                 <h1>Contáctate</h1>
-                <h2 className="button gray">Inicia sesión</h2>
-                <h2 className="button dark">Regístrate</h2>
+                <button className="gray bold">Inicia sesión</button>
+                <button className="dark bold">Regístrate</button>
             </div>
         </nav>
     )

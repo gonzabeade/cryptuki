@@ -2,9 +2,9 @@ import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar';
 import Landing from './views/Landing';
-
 import React from "react";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import Register from './views/Register';
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
       <div className="App">
         <Navbar></Navbar>
         <div className="content">
+          {/* <Register></Register> */}
           <Landing></Landing>
           {/* <Route path="/" element={<Landing/>}></Route> */}
         </div>

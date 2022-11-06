@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: whitesmoke;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -11,3 +12,42 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.button {
+  border-radius: 0.7rem;
+  margin: 0 0.5rem; 
+  font: Roboto; 
+  padding: 0.8rem; 
+  border: solid; 
+  border-width: 2px; 
+  font-size: large; 
+}
+
+.button.blue {
+  color: whitesmoke; 
+  background-color: #5E81AC; 
+  border-color: #5E81AC; 
+  padding: 1.5rem 3rem; 
+}
+
+.button.gray {
+  color: #2E3440;  
+  font-size: large; 
+  background-color: #D8DEE9;  
+  border-color: #2E3440; 
+}
+
+.button.dark {
+  color: whitesmoke;  
+  font-size: large; 
+  background-color: #2E3440;  
+  padding: 0.8rem; 
+  border-color: #2E3440; 
+}
+
+.button:hover {
+  cursor: pointer;
+  border-color: #81A1C1;   
+  color: #81A1C1; 
+}
+

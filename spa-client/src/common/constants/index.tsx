@@ -7,14 +7,5 @@ export const paths = {
     COMPLAINTS: '/complaints',
     LOCATIONS: '/locations',
     CRYPTOCURRENCIES: '/cryptocurrencies',
-    TIME_TABLE: '/timetable',
-}
-  
-// export const APPLICATION_V1_JSON_TYPE = 'application/vnd.campus.api.v1+json'
-  
-export const userRoles = {
-    STUDENT: 1,
-    TEACHER: 2,
-    HELPER: 3,
 }
   

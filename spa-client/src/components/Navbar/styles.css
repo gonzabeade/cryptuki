@@ -1,0 +1,27 @@
+.navbar {
+    display: flex;
+    overflow-y: scroll;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 5rem;
+    background-color: white;
+}
+
+
+.navbar--options {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.navbar--options > h1 {
+    margin: 1rem;
+    font: Roboto; 
+    color: #2E3440;  
+}
+
+
+
+
+
+

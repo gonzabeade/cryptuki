@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.dto;
 
+import ar.edu.itba.paw.cryptuki.controller.UserController;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.model.KycInformation;
 
@@ -15,11 +16,8 @@ public class KycDto {
     private String idCode;
     private IdType idType;
 
-    private byte[] idPhoto;
-    private byte[] validationPhoto;
-
-    private String idPhotoType;
-    private String validationPhotoType;
+    private URI idPhoto;
+    private URI validationPhoto;
 
     private URI user;
     private URI self;
@@ -32,18 +30,23 @@ public class KycDto {
         dto.idCode = kycInformation.getIdCode();
         dto.surnames = kycInformation.getSurnames();
         dto.idType = kycInformation.getIdType();
-        dto.idPhoto = kycInformation.getIdPhoto();
-        dto.validationPhoto = kycInformation.getValidationPhoto();
-        dto.idPhotoType = kycInformation.getIdPhotoType();
-        dto.validationPhotoType = kycInformation.getValidationPhotoType();
+
 
         String username = kycInformation.getUser().getUsername().get();
 
         dto.self = uriInfo.getAbsolutePathBuilder().build();
 
-        dto.user = uriInfo.getBaseUriBuilder() // TODO: Check, incorrect
-                .replacePath("users")
-                .path(username)
+        dto.validationPhoto = uriInfo.getAbsolutePathBuilder()
+                .path("validationPhoto")
+                .build();
+
+        dto.idPhoto = uriInfo.getAbsolutePathBuilder()
+                .path("idPhoto")
+                .build();
+
+        dto.user = uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
+                .path(kycInformation.getUser().getUsername().get())
                 .build();
 
         return dto;
@@ -89,36 +92,20 @@ public class KycDto {
         this.idType = idType;
     }
 
-    public byte[] getIdPhoto() {
+    public URI getIdPhoto() {
         return idPhoto;
     }
 
-    public void setIdPhoto(byte[] idPhoto) {
+    public void setIdPhoto(URI idPhoto) {
         this.idPhoto = idPhoto;
     }
 
-    public byte[] getValidationPhoto() {
+    public URI getValidationPhoto() {
         return validationPhoto;
     }
 
-    public void setValidationPhoto(byte[] validationPhoto) {
+    public void setValidationPhoto(URI validationPhoto) {
         this.validationPhoto = validationPhoto;
-    }
-
-    public String getIdPhotoType() {
-        return idPhotoType;
-    }
-
-    public void setIdPhotoType(String idPhotoType) {
-        this.idPhotoType = idPhotoType;
-    }
-
-    public String getValidationPhotoType() {
-        return validationPhotoType;
-    }
-
-    public void setValidationPhotoType(String validationPhotoType) {
-        this.validationPhotoType = validationPhotoType;
     }
 
     public URI getUser() {

@@ -61,7 +61,7 @@ public class Offer {
         private final double maxInCrypto;
         private User seller;
         private Cryptocurrency crypto;
-        private OfferStatus offerStatus;
+        private OfferStatus offerStatus = OfferStatus.APR;
         private Location location;
 
         private Collection<Trade> trades;

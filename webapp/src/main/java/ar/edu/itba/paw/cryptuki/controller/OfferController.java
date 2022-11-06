@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
+import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -95,9 +95,28 @@ public class OfferController {
         Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(offerForm.getSellerId()))
+                .path(String.valueOf(offer.getOfferId()))
                 .build();
 
         return Response.created(uri).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response modifyOffer(@Valid ModifyOfferForm offerForm, @PathParam("id") int id) {
+
+        String who = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
+        offerForm.setSellerId(user.getId());
+
+        try {
+            Offer offer = offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.fromStatusCode(403)).build();
+        }
+
+        return Response.ok().build();
     }
 }

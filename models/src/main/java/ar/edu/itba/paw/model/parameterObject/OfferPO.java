@@ -11,7 +11,7 @@ import java.util.*;
 public class OfferPO {
     private Integer sellerId;
     private Integer offerId;
-    private OfferStatus offerStatus = OfferStatus.APR;
+    private OfferStatus offerStatus;
     private Double unitPrice;
     private Double maxInCrypto;
     private Double minInCrypto;
@@ -74,8 +74,8 @@ public class OfferPO {
         return sellerId != null ? OptionalInt.of(sellerId) : OptionalInt.empty();
     }
 
-    public OfferStatus getOfferStatus() {
-        return offerStatus;
+    public Optional<OfferStatus> getOfferStatus() {
+        return Optional.ofNullable(offerStatus);
     }
 
     public OptionalDouble getUnitPrice() {
@@ -117,7 +117,6 @@ public class OfferPO {
                 getMinInCrypto().orElseThrow(()->new IllegalArgumentException()),
                 getMaxInCrypto().orElseThrow(()->new IllegalArgumentException())
         )
-                    .withOfferStatus(getOfferStatus())
                     .withComments(getFirstChat().orElse(""))
                     .withCrypto(crypto)
                     .withLocation(getLocation().orElseThrow(()->new IllegalArgumentException()))
@@ -132,6 +131,7 @@ public class OfferPO {
         offer.setMinInCrypto(offerPO.getMinInCrypto().orElse(offer.getUnitPrice()));
         offer.setComments(offerPO.getFirstChat().orElse(offer.getComments()));
         offer.setLocation(offerPO.getLocation().orElse(offer.getLocation()));
+        offer.setOfferStatus(offerPO.getOfferStatus().orElse(offer.getOfferStatus()));
 
         return offer;
 

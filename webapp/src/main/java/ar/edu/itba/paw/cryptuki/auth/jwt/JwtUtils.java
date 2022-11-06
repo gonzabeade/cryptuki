@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.cryptuki.auth.jwt;
 
 import ar.edu.itba.paw.model.UserAuth;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,60 +17,73 @@ import java.util.function.Function;
 @PropertySource("classpath:application.properties")
 public class JwtUtils { // Component that implements serializable?
 
-    private static int JWT_TOKEN_VALIDITY = 24 * 60 * 60; // A day
-    @Value("${jwt.secret}")
-    private static String secret = "PAPAYAREPLACETHIS";
+    private static int ACCESS_TOKEN_VALIDITY = 60 * 60; // An hour
+    private static int REFRESH_TOKEN_VALIDITY = 24 * 60 * 60; // A day
+
+    @Value("${jwt.accessSecret}")
+    private static String secret= "PAPAYAREPLACETHIS";
+
+    private static JwtParser parser = Jwts.parser().setSigningKey(secret);
 
     private JwtUtils() {
     }
 
-    public static Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    public static boolean isTokenValid(String token){
+        try {
+            parser.parseClaimsJws(token);
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | ExpiredJwtException e) {
+            return false;
+        }
+        return true;
     }
 
+    public static Claims getAllClaimsFromToken(String token) {
+        return parser.parseClaimsJws(token).getBody();
+    }
     public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
-
     public static String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
-
-    public static LocalDate getIssuedAtDateFromToken(String token) {
-        return LocalDate.from((getClaimFromToken(token, Claims::getIssuedAt).toInstant()));
+    public static Date getIssuedAtDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
+    }
+    public static Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+    public static String getTypeFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get("type").toString());
+    }
+    public static boolean isTokenExpired(String token) {
+        try {
+            parser.parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
+        return false;
     }
 
-    public static LocalDate getExpirationDateFromToken(String token) {
-        return LocalDate.from((getClaimFromToken(token, Claims::getExpiration).toInstant()));
-    }
-
-    private static boolean isTokenExpired(String token) {
-        final LocalDate date = getExpirationDateFromToken(token);
-        return date.isBefore(LocalDate.now());
-    }
-
-    public static String generateToken(UserDetails userDetails) {
+    public static String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        claims.put("type", "access");
+        return doGenerateToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
     }
 
-    private static String doGenerateToken(Map<String, Object> claims, String subject) {
+    public static String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "refresh");
+        return doGenerateToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
+    }
+
+    private static String doGenerateToken(Map<String, Object> claims, String subject, int validityTimeInSecs) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() * JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + validityTimeInSecs * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-    }
-
-    public static boolean canTokenBeRefreshed(String token) {
-        return !isTokenExpired(token);
-    }
-
-    public static boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return username.equals(userDetails.getUsername());  // && !isTokenExpired(token); TODO: CHECK!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 }

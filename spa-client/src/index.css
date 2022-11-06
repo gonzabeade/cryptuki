@@ -13,6 +13,10 @@ code {
     monospace;
 }
 
+a {
+  text-decoration: none;
+}
+
 button {
   border-radius: 0.7rem;
   margin: 0 0.5rem; 

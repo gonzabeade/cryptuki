@@ -1,10 +1,12 @@
 .navbar {
     display: flex;
-    overflow-y: scroll;
+    overflow-y: hidden; 
     align-items: center;
     justify-content: space-between;
     padding: 1rem 5rem;
     background-color: white;
+
+    position: sticky; 
 }
 
 
@@ -14,11 +16,18 @@
     justify-content: space-around;
 }
 
-.navbar--options > h1 {
+.navbar--options  h1 {
     margin: 1rem;
     font: Roboto; 
     color: #2E3440;  
 }
+
+.navbar--options  h1:hover {
+    margin: 1rem;
+    font: Roboto; 
+    color: #656f7d;  
+}
+
 
 
 

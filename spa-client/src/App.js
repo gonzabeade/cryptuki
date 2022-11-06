@@ -3,7 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Landing from './views/Landing';
 import React from "react";
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Register from './views/Register';
 
 function App() {
@@ -12,9 +12,10 @@ function App() {
       <div className="App">
         <Navbar></Navbar>
         <div className="content">
-          {/* <Register></Register> */}
-          <Landing></Landing>
-          {/* <Route path="/" element={<Landing/>}></Route> */}
+        <Routes>
+          <Route path="/" element={<Landing/>}/>
+          <Route path="/register" element={<Register/>}/>
+        </Routes>
         </div>
       </div>
     </BrowserRouter>

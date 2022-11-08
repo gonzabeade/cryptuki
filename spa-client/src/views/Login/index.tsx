@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, FormEvent } from "react";
-import { paths } from "../../common/constants";
 import {Link} from "react-router-dom"; 
+import { paths } from "../../common/constants";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -71,7 +71,7 @@ const Register = () => {
     return (
         <section>
             <form onSubmit={handleSubmit}>
-                <h1>Regístrate</h1>
+                <h1>Inicia sesión</h1>
                 <label htmlFor="username">Usuario:</label>
                 <input
                     placeholder="e.g. miusuario"
@@ -99,24 +99,13 @@ const Register = () => {
                     onFocus={() => setPwdFocus(true)}
                     onBlur={() => setPwdFocus(false)}
                 />
-                <label htmlFor="confirm_pwd">Confirmar contraseña:</label>
-                <input
-                    type="password"
-                    id="confirm_pwd"
-                    placeholder="micontraseña"
-                    onChange={(e) => setMatchPwd(e.target.value)}
-                    value={matchPwd}
-                    required
-                    aria-invalid={validMatch ? "false" : "true"}
-                    aria-describedby="confirmnote"
-                    onFocus={() => setMatchFocus(true)}
-                    onBlur={() => setMatchFocus(false)}
-                />
-                <button className="green">Sign Up</button>
+                
+                <button className="green">Inicia sesión</button>
                 <p>
-                    Already registered?<br />
+                    ¿Aún o tienes una cuenta?<br />
                     <span className="line">
-                        <Link to="/login">Inicia sesión</Link>
+                        {/*put router link here*/}
+                        <Link to="/register">Regístrate</Link>
                     </span>
                 </p>
             </form>

@@ -1,6 +1,6 @@
 import { axiosPrivate } from "../api/axios";
 import { useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "./useAuth";
 
 let useRefreshToken = ()=>(() => null);  // implement
 
@@ -8,18 +8,18 @@ const useAxiosPrivate = () => {
 
     const refresh = useRefreshToken(); 
     const auth = useAuth(); 
-
-
+    
     useEffect( ()=> {
+
+        // When the dependencies change, subscribe interceptors to the axios instance 
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
             (config: any) => {
                 if ( ! config.headers?['Authorization'] : Boolean) { // Ese boolean esta menos chequeado 
                     // It is not a retry, it is the first attempt
                     // Just embed the already-calculated access token to the request 
-                    config.headers['Authorization'] = `Bearer ${auth?.user?.accessToken}`; 
+                    config.headers['Authorization'] = `Digest begoxa:begoxa` //  ${auth?.user?.accessToken}`; 
                 }
-                console.log("REQUEST INTERCEPTED"); 
                 return config; 
             }, 
             (error: any) => {
@@ -41,6 +41,7 @@ const useAxiosPrivate = () => {
             }
         )
 
+        // Clean-up function
         return () => {
             axiosPrivate.interceptors.request.eject(requestIntercept);
             axiosPrivate.interceptors.response.eject(responseIntercept);

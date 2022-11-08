@@ -1,15 +1,16 @@
 import {useEffect, useState} from "react";
 import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
-import {offerService} from "../../services"
 import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
 
 const Landing = () => {
 
     const [offers, setOffers] = useState<OfferModel[]>(); 
+    const offerService = useOfferService(); 
 
     useEffect( ()=>{
-        offerService.getOffers(0, 5)
+        offerService?.getOffers(0, 5)
         .then((data) =>
             setOffers(data)
         ) 

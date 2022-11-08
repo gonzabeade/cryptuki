@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect, FormEvent } from "react";
-import axios from '../../api/axios';
 import { paths } from "../../common/constants";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -46,14 +45,14 @@ const Register = () => {
             return;
         }
         try {
-            const response = await axios.post(
-                REGISTER_URL,
-                JSON.stringify({ user, pwd }), // Mock data in the future, when testing axios 
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            // const response = await axios.post(
+            //     REGISTER_URL,
+            //     JSON.stringify({ user, pwd }), // Mock data in the future, when testing axios 
+            //     {
+            //         headers: { 'Content-Type': 'application/json' },
+            //         withCredentials: true
+            //     }
+            // );
             // console.log(response?.data);
             // console.log(response?.accessToken);
             // console.log(JSON.stringify(response))

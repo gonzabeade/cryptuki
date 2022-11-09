@@ -10,7 +10,8 @@ const Landing = () => {
     const offerService = useOfferService(); 
 
     useEffect( ()=>{
-        offerService?.getOffers(0, 5)
+        console.log("GETTING OFFERS WITH", offers)
+        offerService?.getOffers(5, 5)
         .then((data) =>
             setOffers(data)
         ) 

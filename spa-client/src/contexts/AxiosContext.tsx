@@ -7,13 +7,11 @@ interface AxiosContextType {
     axiosInstance: AxiosInstance,
     addBasicAuthRequestInterceptor: (arg0: string, arg1: string) => void; 
     addBasicAuthResponseInterceptor: VoidFunction; 
+    addOAuthInterceptors: VoidFunction; 
 }
 
 
 export function AxiosProvider({ children }: { children: React.ReactNode }) {
-
-    const accessToken = useState(''); 
-    const refreshToken = useState(''); 
 
     const axiosInstance = axios.create({
         baseURL: paths.BASE_URL
@@ -36,16 +34,44 @@ export function AxiosProvider({ children }: { children: React.ReactNode }) {
         axiosInstance.interceptors.response.clear()
         const responseIntercept = axiosInstance.interceptors.response.use(
             response => {
-                console.log("Hello World!")
-                console.log(response.headers["jwt_token"])
-                console.log(response.headers["refresh_token"])
+                response.headers["x-access-token"] && localStorage.setItem("accessToken", response.headers["x-access-token"]); 
+                response.headers["x-refresh-token"] && localStorage.setItem("refreshToken", response.headers["x-refresh-token"])
+                console.log(localStorage.getItem("accessToken"))
                 return response
             }
         )
     }
 
+    const addOAuthRequestInterceptor = () => {
+        axiosInstance.interceptors.request.clear()
+        const requestIntercept = axiosInstance.interceptors.request.use(
+            (config: any) => {
+                if (  config.headers['Authorization'] ) { 
+                    // It is not a retry, it is the first attempt
+                    // Just embed the already-calculated access token to the request 
+                    config.headers['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}` 
+                }
+                return config; 
+            }, 
+            (error: any) => {
+                Promise.reject(error)
+            }
+        )
 
-    let value = { axiosInstance, addBasicAuthRequestInterceptor, addBasicAuthResponseInterceptor};
+        
+    }
+
+    const addOAuthResponseInterceptor = () => {
+
+    }
+
+    const addOAuthInterceptors = () => {
+        addOAuthRequestInterceptor() 
+        addOAuthResponseInterceptor()
+    }
+
+
+    let value = { axiosInstance, addBasicAuthRequestInterceptor, addBasicAuthResponseInterceptor, addOAuthInterceptors};
 
     return <AxiosContext.Provider value={value}>{children}</AxiosContext.Provider>;
 }

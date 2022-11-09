@@ -1,5 +1,4 @@
 import { paths } from "../common/constants";
-import requestConfig from "../api/requestConfig";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 
@@ -20,7 +19,12 @@ export class OfferService {
     }
 
     public async getOffers(page?: number, pageSize?: number): Promise<Array<OfferModel>> {
-        const resp = await this.axiosInstance.get<Array<OfferModel>>(this.basePath, requestConfig(page, pageSize))
+        const resp = await this.axiosInstance.get<Array<OfferModel>>(this.basePath, {
+            params: {
+                page,
+                per_page: pageSize 
+            }
+        })
         return resp.data; 
     }
 

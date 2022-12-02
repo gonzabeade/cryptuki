@@ -9,7 +9,6 @@ public class ChangePasswordForm {
 
     @Size(min = 6, max = 100)
     private String password;
-    private int code;
 
     public String getPassword() {
         return password;
@@ -19,11 +18,4 @@ public class ChangePasswordForm {
        this.password = password;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
 }

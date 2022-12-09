@@ -28,9 +28,35 @@
     color: #656f7d;  
 }
 
+.user-holder { 
+    display: flex; 
+    flex-direction: row;
+}
+
+.profile-icon {
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+    justify-items: center;
+    overflow-x: hidden;
+    padding-left: 0.5rem;
+}
 
 
+.profile-icon p {
+    margin: auto; 
+    font-weight: bold;
+    color: #2E3440;  
+}
+
+.profile-icon img {
+    width: 32px; 
+    margin: auto
+}
 
 
-
-
+.logout {
+    width: 32px; 
+    margin: auto; 
+    padding: 0 2rem; 
+}

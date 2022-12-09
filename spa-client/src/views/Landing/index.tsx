@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
@@ -15,7 +15,7 @@ const Landing = () => {
 
     useEffect( ()=>{
         offerService?.getOffers(5, 5)
-        .then((data) => setOffers(data))
+        .then((data: SetStateAction<OfferModel[] | undefined>) => setOffers(data))
         .catch( () => navigate("/login", {state: {from: location}, replace: true}))
     }, [])
 

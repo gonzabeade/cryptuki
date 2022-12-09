@@ -3,7 +3,7 @@ import {useAxios} from "./useAxios";
 
 const useOfferService = () => {
     const axiosInstance = useAxios(); 
-    const offerService = OfferService.getInstance(axiosInstance); 
+    const offerService = new OfferService(axiosInstance); 
     return offerService; 
 }
 

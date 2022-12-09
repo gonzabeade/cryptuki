@@ -1,7 +1,6 @@
 import { useState, FormEvent, useEffect, useContext } from "react";
 import {Link, useNavigate, useLocation} from "react-router-dom"; 
 import { paths } from "../../common/constants";
-import { useAuth } from "../../hooks/useAuth";
 import { withBasicAuthorization } from "../../hooks/useAxios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -17,7 +16,6 @@ const Login = () => {
     const from = location.state?.from?.pathname || "/"; 
 
     const navigate = useNavigate();
-    const auth = useAuth()
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

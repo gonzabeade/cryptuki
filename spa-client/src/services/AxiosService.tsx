@@ -26,12 +26,9 @@ export class AxiosService {
         /*Add response interceptor for Basic*/
         this.axiosBasicInstance.interceptors.response.use(
             response => {
-                console.log("INTERCEPTING RESPONSE BASIC"); 
                 response.headers["x-access-token"] && localStorage.setItem("accessToken", response.headers["x-access-token"]);
                 response.headers["x-refresh-token"] && localStorage.setItem("refreshToken", response.headers["x-refresh-token"]); 
-                console.log(localStorage.getItem("accessToken")); 
                 this.useBearerAuthentication(); 
-                console.log(this); 
                 return response
             }
         )
@@ -59,18 +56,14 @@ export class AxiosService {
             }, // Everything SHOULD be okay ... 
             async (error) => {  // But if it is not, it must be because of the token 
                 const previousRequest = error?.config;
-                console.log("CAUGHT AN ERROR IN BEARER", error?.response?.status == 401)
                 if (error?.response?.status === 401 && !previousRequest.sent) {
-                    previousRequest.sent = true; // Avoid endless loop 
-                    console.log("REFRESCANDO......MANDANDO REFRESH TOKEN", localStorage.getItem("refreshToken"))
-                    // previousRequest.headers['Authorization'] = `Bearer ${localStorage.getItem("refreshToken")}`;
-                    
+                    previousRequest.sent = true; // Avoid endless loop                     
                     return this.axiosBearerInstance({
                         ...previousRequest,
                         headers: {...previousRequest.headers, Authorization: `Bearer ${localStorage.getItem("refreshToken")}`},
                         sent: true
                     });
-                }
+                } 
                 return Promise.reject(error);
             }
         )
@@ -100,7 +93,6 @@ export class AxiosService {
 
         this.axiosBasicInstance.interceptors.request.use(
             (config: any) => {
-                console.log("INTERCEPTING REQUEST BASIC"); 
                 config.headers['Authorization'] = `Basic ${username}:${password}`;
                 return config;
             },

@@ -14,8 +14,8 @@ export class OfferService {
     }
 
     public static getInstance(axiosInstance: AxiosInstance) {
-        let instance = OfferService.instances.get(axiosInstance)
-        return instance === undefined ? new OfferService(axiosInstance) : instance 
+        let instance = OfferService.instances.get(axiosInstance); 
+        return instance === undefined ? new OfferService(axiosInstance) : instance; 
     }
 
     public async getOffers(page?: number, pageSize?: number): Promise<Array<OfferModel>> {

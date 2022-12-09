@@ -1,5 +1,5 @@
 import { useState, FormEvent, useEffect, useContext } from "react";
-import {Link, useNavigate} from "react-router-dom"; 
+import {Link, useNavigate, useLocation} from "react-router-dom"; 
 import { paths } from "../../common/constants";
 import { useAuth } from "../../hooks/useAuth";
 import { withBasicAuthorization } from "../../hooks/useAxios";
@@ -13,6 +13,8 @@ const Login = () => {
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
 
+    const location = useLocation(); 
+    const from = location.state?.from?.pathname || "/"; 
 
     const navigate = useNavigate();
     const auth = useAuth()
@@ -20,7 +22,7 @@ const Login = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         withBasicAuthorization(user, pwd); 
-        navigate("/"); 
+        navigate(from, {replace: true}); 
     }
 
     return (

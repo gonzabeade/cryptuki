@@ -26,9 +26,12 @@ export class AxiosService {
         /*Add response interceptor for Basic*/
         this.axiosBasicInstance.interceptors.response.use(
             response => {
+                console.log("INTERCEPTING RESPONSE BASIC"); 
                 response.headers["x-access-token"] && localStorage.setItem("accessToken", response.headers["x-access-token"]);
-                response.headers["x-refresh-token"] && localStorage.setItem("refreshToken", response.headers["x-refresh-token"])
-                console.log(localStorage.getItem("accessToken"))
+                response.headers["x-refresh-token"] && localStorage.setItem("refreshToken", response.headers["x-refresh-token"]); 
+                console.log(localStorage.getItem("accessToken")); 
+                this.useBearerAuthentication(); 
+                console.log(this); 
                 return response
             }
         )
@@ -36,10 +39,10 @@ export class AxiosService {
         /* Add request interceptor for Bearer */
         this.axiosBearerInstance.interceptors.request.use(
             (config: any) => {
-                if (config.headers['Authorization']) {
+                if (!config.headers['Authorization']) {
                     // It is not a retry, it is the first attempt
                     // Just embed the already-calculated access token to the request 
-                    config.headers['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}`
+                    config.headers['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}`; 
                 }
                 return config;
             },
@@ -49,20 +52,33 @@ export class AxiosService {
         )
 
         /* Add response interceptor for Bearer */
-        const responseIntercept = this.axiosBearerInstance.interceptors.response.use(
-            response => response, // Everything SHOULD be okay ... 
+        this.axiosBearerInstance.interceptors.response.use(
+            response => {
+                response.headers["x-access-token"] && localStorage.setItem("accessToken", response.headers["x-access-token"]);
+                return response
+            }, // Everything SHOULD be okay ... 
             async (error) => {  // But if it is not, it must be because of the token 
                 const previousRequest = error?.config;
-                if (error?.response?.status === '401' && !previousRequest.sent) {
-                    previousRequest.set = true; // Avoid endless loop 
-                    const newAccessToken = null; // await refresh(); 
-                    previousRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return this.axiosBearerInstance(previousRequest);
+                console.log("CAUGHT AN ERROR IN BEARER", error?.response?.status == 401)
+                if (error?.response?.status === 401 && !previousRequest.sent) {
+                    previousRequest.sent = true; // Avoid endless loop 
+                    console.log("REFRESCANDO......MANDANDO REFRESH TOKEN", localStorage.getItem("refreshToken"))
+                    // previousRequest.headers['Authorization'] = `Bearer ${localStorage.getItem("refreshToken")}`;
+                    
+                    return this.axiosBearerInstance({
+                        ...previousRequest,
+                        headers: {...previousRequest.headers, Authorization: `Bearer ${localStorage.getItem("refreshToken")}`},
+                        sent: true
+                    });
                 }
                 return Promise.reject(error);
             }
         )
 
+        if ( localStorage.getItem("accessToken") && localStorage.getItem("refreshToken"))
+            this.axiosActiveInstance = this.axiosBearerInstance; 
+        else 
+            this.axiosActiveInstance = this.axiosNoAuthenticationInstance;             
 
     }
 
@@ -82,8 +98,9 @@ export class AxiosService {
 
         this.axiosBasicInstance.interceptors.request.clear(); 
 
-        const requestIntercept = this.axiosBasicInstance.interceptors.request.use(
+        this.axiosBasicInstance.interceptors.request.use(
             (config: any) => {
+                console.log("INTERCEPTING REQUEST BASIC"); 
                 config.headers['Authorization'] = `Basic ${username}:${password}`;
                 return config;
             },

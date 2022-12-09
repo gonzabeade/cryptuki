@@ -13,13 +13,13 @@ const Login = () => {
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
 
-    const {addBasicAuthRequestInterceptor, addBasicAuthResponseInterceptor} = useContext(AxiosContext); 
+    const {withBasicAuthorization} = useContext(AxiosContext); 
     const navigate = useNavigate();
     const auth = useAuth()
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        addBasicAuthRequestInterceptor(user, pwd); 
-        addBasicAuthResponseInterceptor(); 
+        e.preventDefault();
+        withBasicAuthorization(user, pwd); 
         navigate("/"); 
     }
 

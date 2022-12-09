@@ -1,8 +1,8 @@
 import { useState, FormEvent, useEffect, useContext } from "react";
 import {Link, useNavigate} from "react-router-dom"; 
 import { paths } from "../../common/constants";
-import AxiosContext from "../../contexts/AxiosContext";
 import { useAuth } from "../../hooks/useAuth";
+import { withBasicAuthorization } from "../../hooks/useAxios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -13,7 +13,7 @@ const Login = () => {
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
 
-    const {withBasicAuthorization} = useContext(AxiosContext); 
+
     const navigate = useNavigate();
     const auth = useAuth()
 

@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import AxiosContext from "../contexts/AxiosContext";
 import { OfferService } from "../services/OfferService";
+import {useAxios} from "./useAxios";
 
 const useOfferService = () => {
-
-    const axiosInstance = useContext(AxiosContext).axiosInstance
+    const axiosInstance = useAxios(); 
     const offerService = OfferService.getInstance(axiosInstance); 
-
     return offerService; 
 }
 

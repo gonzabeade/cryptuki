@@ -12,7 +12,7 @@ import { AxiosProvider } from './contexts/AxiosContext';
 function App() {
   return (
     <AuthProvider>
-      <AxiosProvider>
+      {/* <AxiosProvider> */}
         <BrowserRouter>
           <div className="App">
             <Navbar></Navbar>
@@ -25,7 +25,7 @@ function App() {
             </div>
           </div>
         </BrowserRouter>
-      </AxiosProvider>
+      {/* </AxiosProvider> */}
     </AuthProvider>
   );
 }

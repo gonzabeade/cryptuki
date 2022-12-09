@@ -5,84 +5,58 @@ import AuthContext from "./AuthContext";
 
 interface AxiosContextType {
     axiosInstance: AxiosInstance,
-    addBasicAuthRequestInterceptor: (arg0: string, arg1: string) => void;
-    addBasicAuthResponseInterceptor: VoidFunction;
-    addOAuthInterceptors: VoidFunction;
+    useFirst: VoidFunction;
+    useSecond: VoidFunction;
 }
 
 
 export function AxiosProvider({ children }: { children: React.ReactNode }) {
 
-    const axiosInstance = axios.create({
+
+    /* Set up no authentication axios instance */
+    const axiosFirstInstance = axios.create({
         baseURL: paths.BASE_URL
     });
 
-    const addBasicAuthRequestInterceptor = (username: string, password: string) => {
-        axiosInstance.interceptors.request.clear()
-        const requestIntercept = axiosInstance.interceptors.request.use(
-            (config: any) => {
-                config.headers['Authorization'] = `Basic ${username}:${password}`;
-                return config;
-            },
-            (error: any) => {
-                Promise.reject(error)
-            }
-        )
+    /* Set up basic authentication axios instance */
+    const axiosSecondInstance = axios.create({
+        baseURL: paths.BASE_URL
+    });
+
+    var [axiosInstance, setAxiosInstance] = useState<AxiosInstance>(axiosFirstInstance); 
+
+
+    axiosFirstInstance.interceptors.request.use(
+        (config: any) => {
+            console.log("USING FIRST")
+            return config;
+        },
+        (error: any) => {
+            Promise.reject(error)
+        }
+    )
+
+    axiosSecondInstance.interceptors.request.use(
+        (config: any) => {
+            console.log("USING SECOND")
+            return config;
+        },
+        (error: any) => {
+            Promise.reject(error)
+        }
+    )
+
+    const useFirst = () => {
+        console.log("SETTING FIRST UP")
+        // setAxiosInstance(axiosFirstInstance); 
     }
 
-    const addBasicAuthResponseInterceptor = () => {
-        axiosInstance.interceptors.response.clear()
-        const responseIntercept = axiosInstance.interceptors.response.use(
-            response => {
-                response.headers["x-access-token"] && localStorage.setItem("accessToken", response.headers["x-access-token"]);
-                response.headers["x-refresh-token"] && localStorage.setItem("refreshToken", response.headers["x-refresh-token"])
-                console.log(localStorage.getItem("accessToken"))
-                return response
-            }
-        )
+    const useSecond = () => {
+        console.log("SETTING SECOND UP")
+        // setAxiosInstance(axiosSecondInstance); 
     }
 
-    const addOAuthRequestInterceptor = () => {
-        axiosInstance.interceptors.request.clear()
-        const requestIntercept = axiosInstance.interceptors.request.use(
-            (config: any) => {
-                if (config.headers['Authorization']) {
-                    // It is not a retry, it is the first attempt
-                    // Just embed the already-calculated access token to the request 
-                    config.headers['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}`
-                }
-                return config;
-            },
-            (error: any) => {
-                Promise.reject(error)
-            }
-        )
-    }
-
-    const addOAuthResponseInterceptor = () => {
-        axiosInstance.interceptors.response.clear()
-        const responseIntercept = axiosInstance.interceptors.response.use(
-            response => response, // Everything SHOULD be okay ... 
-            async (error) => {  // But if it is not, it must be because of the token 
-                const previousRequest = error?.config;
-                if (error?.response?.status === '401' && !previousRequest.sent) {
-                    previousRequest.set = true; // Avoid endless loop 
-                    const newAccessToken = null; // await refresh(); 
-                    previousRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosInstance(previousRequest);
-                }
-                return Promise.reject(error);
-            }
-        )
-    }
-
-    const addOAuthInterceptors = () => {
-        addOAuthRequestInterceptor()
-        addOAuthResponseInterceptor()
-    }
-
-
-    let value = { axiosInstance, addBasicAuthRequestInterceptor, addBasicAuthResponseInterceptor, addOAuthInterceptors };
+    let value = { axiosInstance, useFirst, useSecond};
 
     return <AxiosContext.Provider value={value}>{children}</AxiosContext.Provider>;
 }

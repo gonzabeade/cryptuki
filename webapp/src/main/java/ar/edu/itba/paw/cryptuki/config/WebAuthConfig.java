@@ -83,6 +83,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     .antMatchers(HttpMethod.GET, "/api/offers**", "/api/offers/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
+                    //.antMatchers(HttpMethod.GET, "/api/users/**/information").authenticated()
                     .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .and()
                     .addFilterBefore(jwtFilter, FilterSecurityInterceptor.class) // JwtFilter homework

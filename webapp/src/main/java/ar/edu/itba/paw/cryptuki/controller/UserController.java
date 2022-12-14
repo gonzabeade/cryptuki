@@ -2,11 +2,14 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
+import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.ProfilePicture;
+import ar.edu.itba.paw.model.Role;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
@@ -16,6 +19,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -70,6 +74,25 @@ public class UserController {
         return Response.ok(maybeUser.get()).build();
     }
 
+    @GET
+    @Path("/{username}/information")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserInformation(@PathParam("username") String username) {
+
+        Optional<UserInformationDto> maybeUser = userService.getUserByUsername(username).map(u -> UserInformationDto.fromUser(u, uriInfo));
+
+        if (!maybeUser.isPresent())
+            throw new NoSuchUserException(username);
+
+        String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User principal = userService.getUserByUsername(principalName).get();
+
+        if(!principalName.equals(username) && !principal.getUserAuth().getRole().equals(Role.ROLE_ADMIN))
+            throw new ForbiddenException();
+
+        return Response.ok(maybeUser.get()).build();
+    }
+
     @PUT
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
@@ -78,13 +101,11 @@ public class UserController {
             @PathParam("username") String username,
             @QueryParam("code") Integer code ){
 
-        Optional<UserDto> maybeUser = userService.getUserByUsername(username).map( u -> UserDto.fromUser(u, uriInfo));
+        Optional<User> maybeUser = userService.getUserByUsername(username);
 
         if (!maybeUser.isPresent())
             throw new NoSuchUserException(username);
 
-        //TODO: ver que los valores posibles de los codigos generados sean numeros positivos
-        //TODO: no se si hay una opcion mejor entre pasar el codigo por parametro o en el mismo objeto
         //TODO: cuando no se esta autenticado y se tiene codigo parece que no le gusta el authentication.principal.username y tira illegal argument exception, mirar que hacer con eso
 
         if(changePasswordForm.getPassword() == null)
@@ -105,11 +126,15 @@ public class UserController {
     @POST
     @Path("/{username}/validations")
     public Response createValidation(@NotNull @QueryParam("code") Integer code, @PathParam("username") String username){
+        Optional<User> maybeUser = userService.getUserByUsername(username);
 
-        if(userService.verifyUser(username, code))
-            return Response.status(Response.Status.CREATED).build();
+        if (!maybeUser.isPresent())
+            throw new NoSuchUserException(username);
 
-        return Response.status(Response.Status.BAD_REQUEST).build();
+        if(!userService.verifyUser(username, code))
+            throw new BadRequestException();
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @POST
@@ -133,7 +158,6 @@ public class UserController {
                 .build();
     }
 
-    //TODO manejar excepciones que vienen del manejo de las imagenes
     @PUT
     @Path("/{username}/picture")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
@@ -142,9 +166,7 @@ public class UserController {
                                      @FormDataParam("isBuyer") Boolean isBuyer,
                                      @FormDataParam("type") String type,
                                      @PathParam("username") String username) throws IOException {
-        //TODO: ver como manejar las IOExceptions
 
-        //TODO: el type se puede extraer del nombre del archivo, sacando la extension, hay que ver como se manejaria si se lo quiere usar de esa manera
         profilePicService.uploadProfilePicture(username, IOUtils.toByteArray(picture), type);
 
         return Response.ok().build();
@@ -155,10 +177,11 @@ public class UserController {
     @Produces({MediaType.MULTIPART_FORM_DATA})
     public Response getProfilePic(@PathParam("username") String username) throws IOException, URISyntaxException {
         Optional<ProfilePicture> picture = profilePicService.getProfilePicture(username);
+
         if(picture.isPresent()){
             return Response.ok(picture.get().getBytes()).build();
         }
-        //TODO: ver que hacer en el caso en el que la foto sea la default
+
         return Response.ok().build();
     }
 

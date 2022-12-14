@@ -3,7 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
-import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
+import ar.edu.itba.paw.cryptuki.form.legacy.auth.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ProfilePicForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -39,10 +39,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
-// TODO: verify user
-// TODO: repeat password?
-// TODO: 'me' endpoint is not correct. Check for Sotuyos answer
 
 @Path("/api/users")
 public class UserController {
@@ -105,8 +101,6 @@ public class UserController {
 
         if (!maybeUser.isPresent())
             throw new NoSuchUserException(username);
-
-        //TODO: cuando no se esta autenticado y se tiene codigo parece que no le gusta el authentication.principal.username y tira illegal argument exception, mirar que hacer con eso
 
         if(changePasswordForm.getPassword() == null)
             userService.changePasswordAnonymously(maybeUser.get().getEmail());

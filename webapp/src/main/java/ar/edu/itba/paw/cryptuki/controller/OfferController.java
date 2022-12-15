@@ -45,7 +45,7 @@ public class OfferController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response listOffers(
             @QueryParam("page") @DefaultValue("0") final int page,
-            @QueryParam("per_page") @DefaultValue("1") final int pageSize,
+            @QueryParam("per_page") @DefaultValue("5") final int pageSize,
             @QueryParam("crypto_code") final List<String> cryptoCodes,
             @QueryParam("location") @CollectionOfEnum(enumClass = Location.class) final List<String> locations,
             @QueryParam("status") @CollectionOfEnum(enumClass = OfferStatus.class) final List<String> status,
@@ -67,6 +67,7 @@ public class OfferController {
 
         if (offers.isEmpty())
             return Response.noContent().build();
+
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {});
         return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, offerCount).build();
     }

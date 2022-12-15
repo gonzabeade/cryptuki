@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.ComplainDto;
 import ar.edu.itba.paw.cryptuki.form.legacy.admin.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.support.TradeComplainSupportForm;
@@ -16,6 +17,9 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -49,27 +53,35 @@ public class ComplainsController {
         return Response.created(uri).build();
     }
 
+    //TODO: ver de usar la annotation @BeanParam para trabajar con objetos en vez de con parametros
+    //https://stackoverflow.com/questions/57275310/queryparam-incorrect-parameter-type-on-a-java-class
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getComplaints(
             @QueryParam("page") @DefaultValue("0") final int page,
             @QueryParam("per_page") @DefaultValue("5") final int pageSize,
-            @QueryParam("complain_status") final String complainStatus, //TODO: usar annotation para validar que sea un enum
+            @QueryParam("complain_status") @ValueOfEnum(enumClass = ComplainStatus.class) final String complainStatus,
             @QueryParam("offer_id") final int offerId,
             @QueryParam("trade_id") final int tradeId,
             @QueryParam("complainer_username") final String complainerUsername,
-            @QueryParam("moderator_username") final String moderatorUsername
+            @QueryParam("moderator_username") final String moderatorUsername,
+            @QueryParam("from_date") final String fromDate,
+            @QueryParam("to_date") final String toDate
         ) {
 
-        //TODO: ver como obtener LocalDate como QueryParam, mirar si hay alguna annotation
+        //TODO: ver con gonza como manejar el caso en el que no se pasan query params
+        //TODO: el filtro de offers toma arreglos en vez de complains
+        //TODO: mirar tambien si podemos manejar LocaDateTime en vez de LocalDate para guardar los minutos y eso...
         ComplainFilter complainFilter = new ComplainFilter()
                 .withPage(page)
-                .withPageSize(pageSize)
-                .withComplainStatus(ComplainStatus.valueOf(complainStatus))
-                .restrictedToOfferId(offerId)
-                .restrictedToTradeId(tradeId)
-                .restrictedToComplainerUsername(complainerUsername)
-                .restrictedToModeratorUsername(moderatorUsername);
+                .withPageSize(pageSize);
+//                .withComplainStatus(ComplainStatus.valueOf(complainStatus))
+//                .restrictedToOfferId(offerId)
+//                .restrictedToTradeId(tradeId)
+//                .restrictedToComplainerUsername(complainerUsername)
+//                .restrictedToModeratorUsername(moderatorUsername)
+//                .from(LocalDate.parse(fromDate))
+//                .to(LocalDate.parse(toDate));
 
         Collection<ComplainDto> complains = complainService.getComplainsBy(complainFilter).stream().map(o -> ComplainDto.fromComplain(o, uriInfo)).collect(Collectors.toList());
         long offerCount = complainService.countComplainsBy(complainFilter);

@@ -24,10 +24,14 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Optional;
 
+//URLs para curl
 //curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/offers' --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjU5NzM2MDQ0fQ.S3_VHCLOQtk7A6gxO43hyi6N9F3F0yS8l54oQV6PtEGSN39bkfk1nEDa0wboeLYL07M2-F17zRqy9FxNx9kPeA'
 //curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/api/offers' -H 'Authorization: Bearer gonzabeade'
 //curl -v -X PUT -F isBuyer=false -F picture=@Pictures/pic.jpeg 'http://localhost:8080/webapp/api/users/gonzabeadea/picture'
 //curl -v 'http://localhost:8080/webapp/api/offers' -H 'Authorization: Bearer gonzabeade'
+
+//Cosas para ver del proyecto
+//-Resolver complains sin poner un mensaje o querer banear a un usuario (Se puede pedir que el smg sea obligatorio, lo del ban no se)
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {

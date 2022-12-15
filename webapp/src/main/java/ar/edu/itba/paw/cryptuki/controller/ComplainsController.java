@@ -5,15 +5,21 @@ import ar.edu.itba.paw.cryptuki.dto.ComplainDto;
 import ar.edu.itba.paw.cryptuki.form.legacy.admin.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.support.TradeComplainSupportForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.ComplainStatus;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.service.ComplainService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -21,6 +27,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("api/complains")
@@ -28,13 +36,15 @@ import java.util.stream.Collectors;
 public class ComplainsController {
 
     private final ComplainService complainService;
+    private final UserService userService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public ComplainsController(ComplainService complainService){
+    public ComplainsController(ComplainService complainService, UserService userService){
         this.complainService = complainService;
+        this.userService = userService;
     }
 
     @POST
@@ -69,6 +79,10 @@ public class ComplainsController {
             @QueryParam("to_date") final String toDate
         ) {
 
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!userService.getUserByUsername(principal).get().getUserAuth().getRole().equals(Role.ROLE_ADMIN))
+            throw new ForbiddenException();
+
         //TODO: ver con gonza como manejar el caso en el que no se pasan query params
         //TODO: el filtro de offers toma arreglos en vez de complains
         //TODO: mirar tambien si podemos manejar LocaDateTime en vez de LocalDate para guardar los minutos y eso...
@@ -97,25 +111,45 @@ public class ComplainsController {
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getComplaint(@PathParam("id") int id) {
+        Optional<ComplainDto> maybeOffer = complainService.getComplainById(id).map(o -> ComplainDto.fromComplain(o, uriInfo));
 
-        return null;
-    }
+        //TODO: ver como pasar la excepcion a status code con gonza
+        if (!maybeOffer.isPresent())
+            throw new NoSuchComplainException(id);
 
-
-    @GET
-    @Path("/{id}/resolution")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getComplaintResolution(@PathParam("id") int id) {
-
-        return null;
+        return Response.ok(maybeOffer.get()).build();
     }
 
     @POST
     @Path("/{id}/resolution")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createComplaintResolution(@Valid SolveComplainForm solveComplainForm, @PathParam("id") int id) {
+    public Response createComplaintResolution(
+            @Valid SolveComplainForm solveComplainForm,
+            @PathParam("id") int id,
+            @NotNull @QueryParam("action") String action) {
 
-        return null;
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!userService.getUserByUsername(principal).get().getUserAuth().getRole().equals(Role.ROLE_ADMIN))
+            throw new ForbiddenException();
+
+        Optional<Complain> maybeComplain = complainService.getComplainById(id);
+        if(!maybeComplain.isPresent())
+            throw new NoSuchComplainException(id);
+
+        Complain complain = maybeComplain.get();
+
+        //TODO: el uso de estos metodos elimina las complains
+        //TODO: para mi habria que modificar el estado de las complains y no eliminar
+        if(action.equals("dismiss")) {
+            complainService.closeComplainWithDismiss(id, principal, solveComplainForm.getComments());
+            return Response.ok().build();
+        }
+        else if(action.equals("kick")){
+            complainService.closeComplainWithKickout(id, principal, solveComplainForm.getComments(), complain.getComplainer().getId());
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 }

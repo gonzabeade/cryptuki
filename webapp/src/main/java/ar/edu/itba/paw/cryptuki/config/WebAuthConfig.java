@@ -84,6 +84,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/users/**/information").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/complains/**").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/complains").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/complains/**/resolution").authenticated()
                 .and()

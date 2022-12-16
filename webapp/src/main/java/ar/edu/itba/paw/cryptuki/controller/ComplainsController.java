@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,8 +74,8 @@ public class ComplainsController {
             @QueryParam("complain_status") @ValueOfEnum(enumClass = ComplainStatus.class) final String complainStatus,
             @QueryParam("offer_id") final int offerId,
             @QueryParam("trade_id") final int tradeId,
-            @QueryParam("complainer_username") final String complainerUsername,
-            @QueryParam("moderator_username") final String moderatorUsername,
+            @QueryParam("complainer_username") final List<String> complainerUsernames,
+            @QueryParam("moderator_username") final List<String> moderatorUsernames,
             @QueryParam("from_date") final String fromDate,
             @QueryParam("to_date") final String toDate
         ) {
@@ -85,15 +86,15 @@ public class ComplainsController {
 
         //TODO: ver con gonza como manejar el caso en el que no se pasan query params
         //TODO: el filtro de offers toma arreglos en vez de complains
-        //TODO: mirar tambien si podemos manejar LocaDateTime en vez de LocalDate para guardar los minutos y eso...
+        //TODO: para poder tomar arreglos hay que hacer cambios en los atributos del filtro
         ComplainFilter complainFilter = new ComplainFilter()
                 .withPage(page)
-                .withPageSize(pageSize);
+                .withPageSize(pageSize)
+                .restrictedToComplainerUsernames(complainerUsernames)
+                .restrictedToModeratorUsernames(moderatorUsernames);
 //                .withComplainStatus(ComplainStatus.valueOf(complainStatus))
 //                .restrictedToOfferId(offerId)
 //                .restrictedToTradeId(tradeId)
-//                .restrictedToComplainerUsername(complainerUsername)
-//                .restrictedToModeratorUsername(moderatorUsername)
 //                .from(LocalDate.parse(fromDate))
 //                .to(LocalDate.parse(toDate));
 

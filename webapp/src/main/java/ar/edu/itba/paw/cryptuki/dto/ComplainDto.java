@@ -21,6 +21,7 @@ public class ComplainDto {
     private String moderatorComments;
     private LocalDateTime date;
 
+    private URI selfUri;
     private URI tradeUri;
     private URI offerUri;
     private URI complainerUri;
@@ -42,28 +43,41 @@ public class ComplainDto {
         }
         dto.setDate(complain.getDate());
 
+        dto.setSelfUri(
+                uriInfo.getAbsolutePathBuilder()
+                        .replacePath("trades")
+                        .path(String.valueOf(dto.getTradeId()))
+                        .path("complains")
+                        .path(String.valueOf(dto.getComplainId()))
+                        .build()
+        );
+
         dto.setTradeUri(
                 uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades/" + Integer.toString(dto.getTradeId()))
+                        .replacePath("trades")
+                        .path(String.valueOf(dto.getTradeId()))
                         .build()
         );
 
         dto.setOfferUri(
                 uriInfo.getAbsolutePathBuilder()
-                        .replacePath("offers/" + Integer.toString(dto.getOfferId()))
+                        .replacePath("offers")
+                        .path(String.valueOf(dto.getOfferId()))
                         .build()
         );
 
         dto.setComplainerUri(
                 uriInfo.getAbsolutePathBuilder()
-                        .replacePath("users/" + dto.getComplainer())
+                        .replacePath("users")
+                        .path(dto.getComplainer())
                         .build()
         );
 
         if(complain.getModerator().isPresent()) {
             dto.setModeratorUri(
                     uriInfo.getAbsolutePathBuilder()
-                            .replacePath("users/" + dto.getModerator())
+                            .replacePath("users")
+                            .path(dto.getModerator())
                             .build()
             );
         }
@@ -182,5 +196,13 @@ public class ComplainDto {
 
     public void setModeratorUri(URI moderatorUri) {
         this.moderatorUri = moderatorUri;
+    }
+
+    public URI getSelfUri() {
+        return selfUri;
+    }
+
+    public void setSelfUri(URI selfUri) {
+        this.selfUri = selfUri;
     }
 }

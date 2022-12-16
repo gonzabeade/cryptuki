@@ -127,8 +127,7 @@ public class ComplainsController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response createComplaintResolution(
             @Valid SolveComplainForm solveComplainForm,
-            @PathParam("id") int id,
-            @NotNull @QueryParam("action") String action) {
+            @PathParam("id") int id) {
 
         String principal = SecurityContextHolder.getContext().getAuthentication().getName();
         if(!userService.getUserByUsername(principal).get().getUserAuth().getRole().equals(Role.ROLE_ADMIN))
@@ -142,13 +141,13 @@ public class ComplainsController {
 
         //TODO: el uso de estos metodos elimina las complains
         //TODO: para mi habria que modificar el estado de las complains y no eliminar
-        if(action.equals("dismiss")) {
+        if(solveComplainForm.getResult().equals("dismiss")) {
             complainService.closeComplainWithDismiss(id, principal, solveComplainForm.getComments());
-            return Response.ok().build();
+            return Response.status(Response.Status.CREATED).build();
         }
-        else if(action.equals("kick")){
+        else if(solveComplainForm.getResult().equals("kick")){
             complainService.closeComplainWithKickout(id, principal, solveComplainForm.getComments(), complain.getComplainer().getId());
-            return Response.ok().build();
+            return Response.status(Response.Status.CREATED).build();
         }
 
         return Response.status(Response.Status.BAD_REQUEST).build();

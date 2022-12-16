@@ -1,21 +1,30 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
+import ar.edu.itba.paw.cryptuki.form.TradeForm;
+import ar.edu.itba.paw.cryptuki.form.legacy.MessageForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ChatService;
+import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,14 +34,18 @@ public class TradeController {
 
     private final TradeService tradeService;
     private final ChatService chatService;
+    private final UserService userService;
+    private final OfferService offerService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public TradeController(TradeService tradeService, ChatService chatService) {
+    public TradeController(TradeService tradeService, ChatService chatService, UserService userService, OfferService offerService) {
         this.tradeService = tradeService;
         this.chatService = chatService;
+        this.userService = userService;
+        this.offerService = offerService;
     }
 
     @GET
@@ -81,37 +94,97 @@ public class TradeController {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createTrade(@PathParam("offerId") int offerId) {
-        return null;
+    public Response createTrade(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+
+        Optional<Offer> maybeOffer = offerService.getOfferById(offerId);
+        if(!maybeOffer.isPresent())
+            throw new NoSuchOfferException(offerId);
+
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        User buyer = userService.getUserByUsername(principal).get();
+
+        //TODO: ver como se maneja el caso en el que quiero comprar mas o menos contidad de lo que esta permitido
+        Trade trade = tradeService.makeTrade(offerId, buyer.getId(), tradeForm.getQuantity());
+
+        if(trade == null)
+            throw new BadRequestException();
+
+        final URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(String.valueOf(trade.getTradeId()))
+                .build();
+
+        return Response.created(uri).build();
     }
 
     @PUT
     @Path("/{tradeId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response cancelTrade(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
+    public Response updateTrade(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
         return null;
     }
 
     @GET
     @Path("/{tradeId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrade(@PathParam("tradeId") int tradeId) {
-        return null;
+    public Response getTrade(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
+
+        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
+        if(!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+
+        Trade trade = maybeTrade.get();
+        if(offerId != trade.getOffer().getOfferId())
+            throw new BadRequestException();
+
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
+            throw new ForbiddenException();
+
+        return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
     }
 
     @GET
-    @Path("/{id}/messages")
+    @Path("/{tradeId}/messages")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getMessages(@PathParam("id") int id) {
-        return null;
+    public Response getMessages(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
+
+        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
+        if(!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+
+        Trade trade = maybeTrade.get();
+        if(offerId != trade.getOffer().getOfferId())
+            throw new BadRequestException();
+
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
+            throw new ForbiddenException();
+        return Response.ok(new GenericEntity<Collection<Message>>(trade.getMessageCollection()) {}).build();
     }
 
     @POST
-    @Path("/{id}/messages")
+    @Path("/{tradeId}/messages")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createMessage(@PathParam("id") int id){
-        return null;
+    public Response createMessage(@Valid MessageForm messageForm, @PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId){
+
+        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
+        if(!maybeTrade.isPresent())
+            throw new NoSuchTradeException(tradeId);
+
+        Trade trade = maybeTrade.get();
+        if(offerId != trade.getOffer().getOfferId())
+            throw new BadRequestException();
+
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
+            throw new ForbiddenException();
+
+        User sender = userService.getUserByUsername(principal).get();
+
+        chatService.sendMessage(sender.getId(), tradeId, messageForm.getMessage());
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.MessageForm;
@@ -22,10 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("api/offers/{offerId}/trades")
@@ -60,7 +58,14 @@ public class TradeController {
             @NotNull @QueryParam("status") @CollectionOfEnum(enumClass = TradeStatus.class) final List<String> status
     ) {
 
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!principal.equals(username))
+            throw new ForbiddenException();
+
         Set<TradeStatus> statusSet = status.stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
+        if(statusSet.isEmpty())
+            statusSet.addAll(Arrays.asList(TradeStatus.values()));
+
         long tradeCount;
         Collection<TradeDto> trades;
 
@@ -72,14 +77,14 @@ public class TradeController {
                     //TODO: para mandar diferentes cosas por buyer y por seller habria que hacer algunas cosas radicales en los paths
                     .filter(tradeDto -> tradeDto.getOfferId() == offerId)
                     .collect(Collectors.toList());
-            tradeCount = tradeService.getTradesAsBuyerCount(username, statusSet);
+            tradeCount = trades.size();
         }
         else if(role.equals("seller")) {
             trades = tradeService
                     .getTradesAsSeller(username, page, pageSize, statusSet, offerId)
                     .stream().map(o -> TradeDto.fromTrade(o, uriInfo))
                     .collect(Collectors.toList());
-            tradeCount = tradeService.getTradesAsBuyerCount(username, statusSet);
+            tradeCount = trades.size();
         }
         else
             throw new BadRequestException();
@@ -159,7 +164,10 @@ public class TradeController {
         String principal = SecurityContextHolder.getContext().getAuthentication().getName();
         if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
             throw new ForbiddenException();
-        return Response.ok(new GenericEntity<Collection<Message>>(trade.getMessageCollection()) {}).build();
+
+        Collection<MessageDto> messageDtos = trade.getMessageCollection()
+                .stream().map(o -> MessageDto.fromMessage(o, uriInfo)).collect(Collectors.toList());
+        return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
     }
 
     @POST

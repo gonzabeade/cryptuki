@@ -30,7 +30,7 @@ public class TradeDto {
         final TradeDto dto = new TradeDto();
 
         dto.setTradeId(trade.getTradeId());
-        dto.setOfferId(trade.getTradeId());
+        dto.setOfferId(trade.getOffer().getOfferId());
         dto.setSeller(trade.getOffer().getSeller().getUsername().get());
         dto.setBuyer(trade.getBuyer().getUsername().get());
         dto.setTradeStatus(trade.getStatus());

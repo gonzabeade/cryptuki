@@ -87,9 +87,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/complains/**").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/complains").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/complains/**/resolution").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.GET, "/api/trades/**").authenticated()
-                    .antMatchers(HttpMethod.POST, "/api/trades/**").authenticated()
-                    .antMatchers(HttpMethod.PUT, "/api/trades/**").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/offers/**/trades/**").authenticated()
+                    .antMatchers(HttpMethod.POST, "/api/offers/**/trades/**").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/api/offers/**/trades/**").authenticated()
                 .and()
                     .addFilterBefore(jwtFilter, FilterSecurityInterceptor.class) // JwtFilter homework
                 .cors()

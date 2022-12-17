@@ -1,21 +1,22 @@
-import {useEffect, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Landing = () => {
 
     const [offers, setOffers] = useState<OfferModel[]>(); 
+    const offerService = useOfferService();
+    
+    const navigate = useNavigate(); 
+    const location = useLocation(); 
 
     useEffect( ()=>{
-        fetch('http://localhost:8080/webapp/api/offers?per_page=10')
-        .then(res=>{
-            return res.json(); 
-        })
-        .then((data)=>{
-            setOffers(data)
-        })
-
+        offerService?.getOffers(5, 5)
+        .then((data: SetStateAction<OfferModel[] | undefined>) => setOffers(data))
+        .catch( () => navigate("/login", {state: {from: location}, replace: true}))
     }, [])
 
     return (

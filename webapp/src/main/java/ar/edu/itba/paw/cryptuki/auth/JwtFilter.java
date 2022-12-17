@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,7 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String username, password;
         UserDetails userDetails;
 
-        //TODO: mirar como se maneja el Digest, para mi no tiene sentindo recibir un hash si va por https
         if ( header == null ) {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -95,8 +95,8 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-            httpServletResponse.addHeader("Refresh-Token", JwtUtils.generateRefreshToken(userDetails));
-            httpServletResponse.addHeader("Access-Token", JwtUtils.generateAccessToken(userDetails));
+            httpServletResponse.addHeader("x-refresh-token", JwtUtils.generateRefreshToken(userDetails));
+            httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
@@ -124,7 +124,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.addHeader("Access-Token", JwtUtils.generateAccessToken(userDetails));
+                httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
             }
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);

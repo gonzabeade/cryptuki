@@ -24,7 +24,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
                 <div className="bold">{offer.location}</div>
             </div>
             <div className="column">
-                <div className="button blue">Compra</div>
+                <button className="blue">Compra</button>
             </div>           
         </div>
     )

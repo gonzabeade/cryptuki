@@ -5,7 +5,9 @@ const icons = {
     "ADA": require("./cryptos/ADA.png"), 
     "USDT": require("./cryptos/USDT.png"), 
     "ETH": require("./cryptos/ETH.png"), 
-    "logo": require("./logo.png")
+    "logo": require("./logo.png"), 
+    "profile": require("./profile.png"),
+    "logout": require("./logout.png")
 }
 
 

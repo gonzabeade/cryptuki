@@ -13,7 +13,12 @@ code {
     monospace;
 }
 
-.button {
+a {
+  text-decoration: none;
+  all: unset;
+}
+
+button {
   border-radius: 0.7rem;
   margin: 0 0.5rem; 
   font: Roboto; 
@@ -23,21 +28,27 @@ code {
   font-size: large; 
 }
 
-.button.blue {
+button.blue {
   color: whitesmoke; 
   background-color: #5E81AC; 
   border-color: #5E81AC; 
   padding: 1.5rem 3rem; 
 }
 
-.button.gray {
+button.green {
+  color: whitesmoke; 
+  background-color: #88C0D0; 
+  border-width: 0px; 
+}
+
+button.gray {
   color: #2E3440;  
   font-size: large; 
   background-color: #D8DEE9;  
   border-color: #2E3440; 
 }
 
-.button.dark {
+button.dark {
   color: whitesmoke;  
   font-size: large; 
   background-color: #2E3440;  
@@ -45,9 +56,54 @@ code {
   border-color: #2E3440; 
 }
 
-.button:hover {
+button:hover {
   cursor: pointer;
   border-color: #81A1C1;   
   color: #81A1C1; 
+}
+
+::placeholder { 
+  color: #2E3440;
+  opacity: 0.3; 
+}
+
+form {
+  margin: 5rem auto; 
+  padding: 2rem 4rem; 
+  display: flex;
+  flex-flow: column;
+  width: 30%; 
+  background-color: #D8DEE9;
+  border-color: #5E81AC;
+  border: solid;
+  border-width: 2px; 
+  border-radius: 2rem;
+}
+
+form > h1 { 
+  color: #2E3440; 
+  font-size: xx-large;
+}
+
+form > label { 
+  color: #2E3440; 
+  margin: 0 0 0.5rem 0; 
+  font-size: large;
+  font-weight: bold;
+}
+
+form > input { 
+  color: #2E3440; 
+  margin: 0.2rem 10% 2rem 10%; 
+  padding: 0.5rem 0.5rem; 
+  border: solid; 
+  border-width: 0;
+  border-radius: 0.6rem;
+  font-size: large;
+}
+
+form > button {
+  width: 15rem; 
+  margin: 1rem auto;
 }
 

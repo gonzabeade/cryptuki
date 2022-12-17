@@ -29,9 +29,21 @@ public class ComplainFilter {
         return this;
     }
 
+    public ComplainFilter restrictedToComplainerUsernames(Collection<String> usernames) {
+        if (usernames != null)
+            restrictedToComplainerUsernames.addAll(usernames);
+        return this;
+    }
+
     public ComplainFilter restrictedToModeratorUsername(String username) {
         if (username != null)
             restrictedToModeratorUsernames.add(username);
+        return this;
+    }
+
+    public ComplainFilter restrictedToModeratorUsernames(Collection<String> usernames) {
+        if (usernames != null)
+            restrictedToModeratorUsernames.addAll(usernames);
         return this;
     }
 

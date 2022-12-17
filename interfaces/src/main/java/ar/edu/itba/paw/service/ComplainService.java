@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ComplainService {
 
     /** Complain creation */
-    void makeComplain(ComplainPO complain);
+    Complain makeComplain(ComplainPO complain);
 
     /** Complain getters and count */
     Collection<Complain> getComplainsBy(ComplainFilter filter);

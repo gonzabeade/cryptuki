@@ -5,14 +5,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class MessageForm {
-    @NotNull
     private Integer userId;
 
     @NotNull
     @Size(min=1,max = 255)
     private String message;
 
-   @NotNull
    private Integer tradeId;
 
     public Integer getUserId() {

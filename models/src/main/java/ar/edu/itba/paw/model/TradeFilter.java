@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class TradeFilter {
 
@@ -33,6 +34,11 @@ public class TradeFilter {
         return this;
     }
 
+    public TradeFilter withTradeStatus(Collection<TradeStatus> tradeStatus) {
+        status.addAll(tradeStatus);
+        return this;
+    }
+
     public TradeFilter withLocation(String location) {
         if (location != null)
             locations.add(Location.valueOf(location));
@@ -45,15 +51,33 @@ public class TradeFilter {
         return this;
     }
 
+    public TradeFilter withLocations(Collection<String> locations) {
+        if (locations != null)
+            this.locations.addAll(locations.stream().map(l -> Location.valueOf(l)).collect(Collectors.toList()));
+        return this;
+    }
+
     public TradeFilter withCryptoCode(String cryptoCode) {
         if (cryptoCode != null)
             cryptoCodes.add(cryptoCode);
         return this;
     }
 
+    public TradeFilter withCryptoCodes(Collection<String> cryptoCodes) {
+        if (cryptoCodes != null)
+            this.cryptoCodes.addAll(cryptoCodes);
+        return this;
+    }
+
     public TradeFilter restrictedToUsername(String username) {
         if (username != null)
             restrictedToUsernames.add(username);
+        return this;
+    }
+
+    public TradeFilter restrictedToUsernames(Collection<String> usernames) {
+        if (usernames != null)
+            restrictedToUsernames.addAll(usernames);
         return this;
     }
 

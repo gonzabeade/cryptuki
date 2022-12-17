@@ -13,12 +13,8 @@ public class UserDto {
 
     private int id;
     private String username;
-    private String email;
-    private String phoneNumber;
-
     private int ratingCount;
     private double rating;
-    private UserStatus status;
     private LocalDateTime lastLogin;
     private Locale locale;
 
@@ -32,11 +28,8 @@ public class UserDto {
         UserDto dto = new UserDto();
 
         dto.id = user.getId();
-        dto.email = user.getEmail();
-        dto.phoneNumber = user.getPhoneNumber();
         dto.ratingCount = user.getRatingCount();
         dto.rating = user.getRating();
-        dto.status = auth.getUserStatus();
         dto.lastLogin = user.getLastLogin();
         dto.username = auth.getUsername();
         dto.locale = user.getLocale();
@@ -80,22 +73,6 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public int getRatingCount() {
         return ratingCount;
     }
@@ -110,14 +87,6 @@ public class UserDto {
 
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getLastLogin() {

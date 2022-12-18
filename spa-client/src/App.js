@@ -3,9 +3,13 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Landing from './views/Landing';
 import Login from './views/Login'; 
-import React from "react";
+import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Register from './views/Register';
+import Loader from "./components/Loader";
+
+
+//import all pages with lazy import
 
 function App() {
   return (
@@ -13,11 +17,14 @@ function App() {
         <div className="App">
           <Navbar></Navbar>
           <div className="content">
-          <Routes>
-            <Route path="/" element={<Landing/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/login" element={<Login/>}/>
-          </Routes>
+              <Suspense fallback={<Loader/>}>
+                  <Routes>
+                      <Route path="/" element={<Landing/>}/>
+                      <Route path="/register" element={<Register/>}/>
+                      <Route path="/login" element={<Login/>}/>
+                  </Routes>
+              </Suspense>
+
           </div>
         </div>
       </BrowserRouter>

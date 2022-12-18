@@ -1,11 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar';
-import Landing from './views/Landing';
-import Login from './views/Login'; 
 import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import Register from './views/Register';
 import Loader from "./components/Loader";
 
 

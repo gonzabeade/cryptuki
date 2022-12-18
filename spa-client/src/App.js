@@ -10,6 +10,9 @@ import Loader from "./components/Loader";
 
 
 //import all pages with lazy import
+const Landing = lazy(()=>import("./views/Landing/index"));
+const Register = lazy(()=>import("./views/Register/index"));
+const Login = lazy(()=>import("./views/Login/index"));
 
 function App() {
   return (

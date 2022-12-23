@@ -14,7 +14,7 @@ const BuyOffer = () => {
                       rating={4.9}
             />
             <Message left={false} content={"messi"}/>
-            <TradeStatusAlert icon={"fa-info"} color={"nyellow"} accentColor={"#816327"} title={"Hola"} subtitle={"Wait for me bitches"}/>
+            <TradeStatusAlert icon={"fa-info"} color={"#EBCB8B"} accentColor={"#816327"} title={"Your trade proposal was sent to the seller!"} subtitle={"Wait for the seller to accept your trade proposal"}/>
         </>
     );
 };

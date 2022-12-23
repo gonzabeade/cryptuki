@@ -1,5 +1,5 @@
 import React from 'react';
-import UserInfo from "../../components/UserInfo";
+import UserInfo from "../../components/UserInfo/index";
 
 const BuyOffer = () => {
     return (

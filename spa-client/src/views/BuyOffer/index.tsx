@@ -8,7 +8,7 @@ const BuyOffer = () => {
                  phone_number={"1234141"}
                  last_login={"ayer"}
                  trades_completed={3}
-                 rating={4}
+                 rating={4.9}
        />
     );
 };

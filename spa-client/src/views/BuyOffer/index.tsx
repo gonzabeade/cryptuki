@@ -1,6 +1,7 @@
 import React from 'react';
 import UserInfo from "../../components/UserInfo/index";
 import Message from "../../components/Message";
+import TradeStatusAlert from "../../components/TradeStatusAlert";
 
 const BuyOffer = () => {
     return (
@@ -12,9 +13,8 @@ const BuyOffer = () => {
                       trades_completed={3}
                       rating={4.9}
             />
-            <ul>
-                <Message left={false} content={"messi"}/>
-            </ul>
+            <Message left={false} content={"messi"}/>
+            <TradeStatusAlert icon={"fa-info"} color={"nyellow"} accentColor={"#816327"} title={"Hola"} subtitle={"Wait for me bitches"}/>
         </>
     );
 };

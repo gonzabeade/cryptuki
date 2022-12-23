@@ -4,8 +4,6 @@ import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
 
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
-
-
     return (
         <div className="crypto-card">
             <div className="column">

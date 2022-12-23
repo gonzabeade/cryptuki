@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import Navbar from './components/Navbar';
 import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
@@ -10,6 +8,7 @@ import Loader from "./components/Loader";
 const Landing = lazy(()=>import("./views/Landing/index"));
 const Register = lazy(()=>import("./views/Register/index"));
 const Login = lazy(()=>import("./views/Login/index"));
+const BuyOffer = lazy(()=>import("./views/BuyOffer/index"));
 
 function App() {
   return (
@@ -22,6 +21,7 @@ function App() {
                       <Route path="/" element={<Landing/>}/>
                       <Route path="/register" element={<Register/>}/>
                       <Route path="/login" element={<Login/>}/>
+                      <Route path="/offer/:id" element={<BuyOffer/>}/>
                   </Routes>
               </Suspense>
 

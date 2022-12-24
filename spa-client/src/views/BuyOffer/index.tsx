@@ -2,6 +2,7 @@ import React from 'react';
 import UserInfo from "../../components/UserInfo/index";
 import Message from "../../components/Message";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
+import {InformationCircleIcon} from "@heroicons/react/24/outline";
 
 const BuyOffer = () => {
     return (
@@ -14,7 +15,9 @@ const BuyOffer = () => {
                       rating={4.9}
             />
             <Message left={false} content={"messi"}/>
-            <TradeStatusAlert icon={"fa-info"} color={"#EBCB8B"} accentColor={"#816327"} title={"Your trade proposal was sent to the seller!"} subtitle={"Wait for the seller to accept your trade proposal"}/>
+            <div className="flex">
+                <TradeStatusAlert icon={<InformationCircleIcon className={`h-10 w-10 text-[#816327]`}/>} color={"#EBCB8B"} accentColor={"#816327"} title={"Your trade proposal was sent to the seller!"} subtitle={"Wait for the seller to accept your trade proposal"}/>
+            </div>
         </>
     );
 };

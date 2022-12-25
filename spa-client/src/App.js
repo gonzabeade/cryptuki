@@ -24,7 +24,6 @@ function App() {
                       <Route path="/offer/:id" element={<BuyOffer/>}/>
                   </Routes>
               </Suspense>
-
           </div>
         </div>
       </BrowserRouter>

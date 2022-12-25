@@ -17,10 +17,10 @@ const Navbar = () => {
                 <img src={icons.logo} alt="cryptuki logo"/>
             </Link>
             <div className="navbar--options">
-                <Link to="/">
+                <Link to="/" className="hover:cursor-pointer">
                     <h1>Mercado P2P</h1>
                 </Link>
-                <Link to="/contact">
+                <Link to="/contact" className="hover:cursor-pointer">
                     <h1>Contáctate</h1>
                 </Link>
                 {

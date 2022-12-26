@@ -4,6 +4,7 @@ import Message from "../../components/Message";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
 import {InformationCircleIcon} from "@heroicons/react/24/outline";
 import StatusCards from "../../components/StatusCards/StatusCards";
+import Paginator from "../../components/Paginator";
 
 const BuyOffer = () => {
     return (
@@ -64,9 +65,7 @@ const BuyOffer = () => {
                         allowFullScreen>
                     </iframe>
             </div>
-
-
-
+            <Paginator totalPages={2} actualPage={1}/>
         </div>
     );
 };

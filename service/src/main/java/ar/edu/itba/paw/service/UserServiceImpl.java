@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal")
     public boolean changePassword(String username, String newPassword) {
 
         if (newPassword == null)
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal")
     @Transactional
     public void updateUserConfigurationOnLogin(String username, Locale locale) {
         LocaleContextHolder.setLocale(locale);

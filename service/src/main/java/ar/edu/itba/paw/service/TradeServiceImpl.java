@@ -105,28 +105,28 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
         return tradeDao.getTradesAsSeller(username, page, pageSize, status, offerId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId) {
         return tradeDao.getTradesAsSellerCount(username, status, offerId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyer(username, page, pageSize, status);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public long getTradesAsBuyerCount(String username, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyerCount(username, status);
     }

@@ -97,13 +97,10 @@ public class UserController {
             @PathParam("username") String username,
             @QueryParam("code") Integer code ){
 
-        Optional<User> maybeUser = userService.getUserByUsername(username);
-
-        if (!maybeUser.isPresent())
-            throw new NoSuchUserException(username);
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
         if(changePasswordForm.getPassword() == null)
-            userService.changePasswordAnonymously(maybeUser.get().getEmail());
+            userService.changePasswordAnonymously(user.getEmail());
         else {
 
             String password = changePasswordForm.getPassword();

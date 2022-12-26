@@ -69,12 +69,14 @@ const Register = () => {
     }
 
     return (
-        <section>
-            <form onSubmit={handleSubmit}>
-                <h1>Regístrate</h1>
-                <label htmlFor="username">Usuario:</label>
+        <div  className=" w-full flex justify-center">
+            <form onSubmit={handleSubmit} className="flex
+            flex-col mx-auto mt-24 w-[600px]
+            bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-14
+            border-frostdr border-t-8">
+                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polard mb-4">Create your account</h1>
                 <input
-                    placeholder="e.g. miusuario"
+                    placeholder="Username"
                     type="text"
                     id="username"
                     autoComplete="off"
@@ -85,10 +87,10 @@ const Register = () => {
                     aria-describedby="uidnote"
                     onFocus={() => setUserFocus(true)}
                     onBlur={() => setUserFocus(false)}
+                    className="p-2 m-2 rounded-lg"
                 />
-                <label htmlFor="password">Contraseña:</label>
                 <input
-                    placeholder="micontraseña"
+                    placeholder="Password"
                     type="password"
                     id="password"
                     onChange={(e) => setPwd(e.target.value)}
@@ -98,12 +100,12 @@ const Register = () => {
                     aria-describedby="pwdnote"
                     onFocus={() => setPwdFocus(true)}
                     onBlur={() => setPwdFocus(false)}
+                    className="p-2 m-2 rounded-lg"
                 />
-                <label htmlFor="confirm_pwd">Confirmar contraseña:</label>
                 <input
                     type="password"
                     id="confirm_pwd"
-                    placeholder="micontraseña"
+                    placeholder="Repeat new password"
                     onChange={(e) => setMatchPwd(e.target.value)}
                     value={matchPwd}
                     required
@@ -111,16 +113,15 @@ const Register = () => {
                     aria-describedby="confirmnote"
                     onFocus={() => setMatchFocus(true)}
                     onBlur={() => setMatchFocus(false)}
+                    className="p-2 m-2 rounded-lg"
                 />
-                <button className="green">Sign Up</button>
-                <p>
-                    Already registered?<br />
-                    <span className="line">
-                        <Link to="/login">Inicia sesión</Link>
-                    </span>
-                </p>
+                <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold">Sign Up</button>
+                <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">Already registered?</p>
+                    <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">
+                        <Link to="/login">Sign in</Link>
+                    </p>
             </form>
-        </section>
+        </div>
     )
 }
 

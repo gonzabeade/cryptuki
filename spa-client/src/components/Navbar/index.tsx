@@ -4,6 +4,7 @@ import icons from "../../assets";
 import { Link } from 'react-router-dom';
 import useUserService from '../../hooks/useUserService';
 import {useEffect, useState} from 'react';
+import {UserCircleIcon} from "@heroicons/react/24/outline";
 
 const Navbar = () => {
 
@@ -89,25 +90,28 @@ const Navbar = () => {
                     </>
                 }
                 {username &&
-                    <div>
-                        <Link to="/seller">
-                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
+                    <div className="hidden lg:flex lg:flex-row">
+                        <Link to="/seller" className="mx-2">
+                            <button  className=" block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
                         </Link>
-                        <Link  className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
-                               onClick={() => {
-                                   setUsername(userService.getLoggedInUser())
-                               }} to="/buyer">
-                            <div>
-                                <img src={icons.profile} alt="profile icon"/>
-                                <p>{username}</p>
+                        <Link
+                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-frostdr hover:bg-blue-600  hover:cursor-pointer rounded-xl"
+                            onClick={() => {
+                                setUsername(userService.getLoggedInUser())
+                            }}
+                            to="/buyer">
+                            <div className={"flex flex-row"}>
+                                <UserCircleIcon height={30} width={30} color="polard"/>
+                                <p className="mx-3 font-roboto text-polard">{username}</p>
                             </div>
                         </Link>
-                        <img onClick={() => {
-                            localStorage.removeItem("refreshToken");
-                            localStorage.removeItem("accessToken");
-                            setUsername(null);
-                        }} src={icons.logout} alt="logout"/>
-                    </div>}
+                        <div onClick={logout} className="my-3 hover:cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                }
 
             </nav>
             <div className="navbar-menu relative z-50 hidden">
@@ -140,6 +144,26 @@ const Navbar = () => {
                                 <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
                                    to="/contact">Contact</Link>
                             </li>
+                            {username &&
+                                <>
+                                    <li>
+                                        <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
+                                              to="/seller">
+                                            Panel de vendedor
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
+                                              to="/buyer"
+                                              onClick={() => {
+                                                  setUsername(userService.getLoggedInUser())
+                                              }}>
+                                            Mi perfil
+                                        </Link>
+                                    </li>
+                                </>
+                              }
+
                         </ul>
                     </div>
                     <div className="mt-auto">
@@ -154,76 +178,24 @@ const Navbar = () => {
                         </div>
                         }
                         {username &&
-                            <div>
-                                <Link to="/seller">
-                                    <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
-                                </Link>
-                                <Link  className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
-                                       onClick={() => {
-                                    setUsername(userService.getLoggedInUser())
-                                }} to="/buyer">
-                                    <div>
-                                        <img src={icons.profile} alt="profile icon"/>
-                                        <p>{username}</p>
-                                    </div>
-                                </Link>
-                                <img onClick={() => {
-                                    localStorage.removeItem("refreshToken");
-                                    localStorage.removeItem("accessToken");
-                                    setUsername(null);
-                                }} src={icons.logout} alt="logout"/>
-                            </div>}
+                            <div className="pt-6">
+                                <Link
+                                    className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                                    to="/" onClick={logout}>Sign out</Link>
+                            </div>
+                        }
+
                     </div>
                 </nav>
             </div>
         </>
 
     );
-    // return (
-    //     <div className="flex w-full bg-white p-7">
-    //         <nav className="flex flex-row">
-    //             <Link  className="my-auto" to="/">
-    //                 <img src={icons.logo} alt="cryptuki logo"/>
-    //             </Link>
-    //             <div className="flex flex-row my-auto mx-auto justify-between">
-    //                 <Link to="/" className="hover:cursor-pointer justify-around">
-    //                     <h1>Mercado P2P</h1>
-    //                 </Link>
-    //                 <Link to="/contact" className="hover:cursor-pointer">
-    //                     <h1>Contáctate</h1>
-    //                 </Link>
-    //                 {
-    //                     !username &&
-    //                     <div >
-    //                         <Link to="/login">
-    //                             <button className="gray bold">Inicia sesión</button>
-    //                         </Link>
-    //                         <Link to="/register">
-    //                             <button className="dark bold">Regístrate</button>
-    //                         </Link>
-    //                     </div>
-    //                 }
-    //                 {
-    //                     username &&
-    //                     <div>
-    //                         <Link to="/seller">
-    //                             <button className="gray bold">Panel de vendedor</button>
-    //                         </Link>
-    //                         <Link onClick={ () => {setUsername(userService.getLoggedInUser())}} to="/buyer">
-    //                             <div>
-    //                                 <img src={icons.profile} alt="profile icon"/>
-    //                                 <p>{username}</p>
-    //                             </div>
-    //                         </Link>
-    //                         <img onClick={() => {localStorage.removeItem("refreshToken"); localStorage.removeItem("accessToken"); setUsername(null); } } src={icons.logout} alt="logout"/>
-    //                     </div>
-    //                 }
-    //             </div>
-    //         </nav>
-    //     </div>
-
-    // )
-
+    function logout() {
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        setUsername(null);
+    }
 };
 
 

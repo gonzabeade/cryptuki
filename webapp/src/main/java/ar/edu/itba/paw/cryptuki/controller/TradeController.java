@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
+import ar.edu.itba.paw.cryptuki.form.MessageForm;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
@@ -17,6 +18,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.apache.taglibs.standard.lang.jstl.ArraySuffix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -128,6 +130,33 @@ public class TradeController {
             return Response.noContent().build();
         return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
     }
+
+    @POST
+    @Path("/{tradeId}/messages")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response postNewMessage(@Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
+
+        String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUsername(senderUsername).orElseThrow(()-> new NoSuchUserException(senderUsername));
+        chatService.sendMessage(user.getId(), tradeId, messageForm.getMessage());
+
+
+        // TODO - Check  - Should return a 201 - Created but for that access to new message
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/{tradeId}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response modifyTrade(@PathParam("tradeId") int tradeId) {
+
+        // TODO: Implement
+
+        return null;
+    }
+
 
 
 }

@@ -27,7 +27,7 @@ const Login = () => {
         <div className=" w-full flex justify-center">
             <form onSubmit={handleSubmit} className="flex
             flex-col mx-auto mt-24 w-[600px]
-            bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-20
+            bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-16
             border-frostdr border-t-8">
                 <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polard">Sign in </h1>
                 <h4 className="text-center font-lato text-black/[.4] text-sm mb-4">Welcome to Cryptuki</h4>

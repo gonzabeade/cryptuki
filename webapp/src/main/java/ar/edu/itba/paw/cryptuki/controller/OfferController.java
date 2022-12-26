@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
+import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
@@ -84,7 +85,6 @@ public class OfferController {
         return Response.ok(maybeOffer.get()).build();
     }
 
-
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
@@ -119,5 +119,19 @@ public class OfferController {
         }
 
         return Response.ok().build();
+    }
+
+
+    @GET
+    @Path("/{offerId}/trades")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getTrades(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+
+        final URI uri = uriInfo.getBaseUriBuilder()
+                .path("/api/trades")
+                .queryParam("from_offer", offerId)
+                .build();
+
+        return Response.status(Response.Status.MOVED_PERMANENTLY).location(uri).build();
     }
 }

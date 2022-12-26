@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
+import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.*;
@@ -126,4 +128,6 @@ public class TradeController {
             return Response.noContent().build();
         return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
     }
+
+
 }

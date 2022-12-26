@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
+import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;
@@ -93,5 +94,21 @@ public class TradeController {
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
         return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount).build();
+    }
+
+    @GET
+    @Path("/{tradeId}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getTrade(@PathParam("tradeId") int tradeId) {
+
+        Trade trade;
+        try {
+            trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        } catch (AccessDeniedException ade) {
+            // Hide 403 Forbidden into a 404 for security concerns
+            throw new NoSuchTradeException(tradeId, ade);
+        }
+
+        return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
     }
 }

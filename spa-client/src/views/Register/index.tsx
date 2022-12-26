@@ -115,7 +115,7 @@ const Register = () => {
                     onBlur={() => setMatchFocus(false)}
                     className="p-2 m-2 rounded-lg"
                 />
-                <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold">Sign Up</button>
+                <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">Sign Up</button>
                 <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">Already registered?</p>
                     <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">
                         <Link to="/login">Sign in</Link>

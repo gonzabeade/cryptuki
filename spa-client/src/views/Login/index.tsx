@@ -51,7 +51,7 @@ const Login = () => {
                     className="p-2 m-2 rounded-lg"
                 />
                 
-                <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold">Sign in</button>
+                <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">Sign in</button>
                 <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">No account? No problem<br/></p>
                 <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">{/*put router link here*/}<Link
                     to="/register">Create your account</Link>

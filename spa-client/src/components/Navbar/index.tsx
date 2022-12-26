@@ -78,10 +78,37 @@ const Navbar = () => {
                         <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500"   to="/contact">Contact</Link>
                     </li>
                 </ul>
-                <Link className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-xl transition duration-200"
-                   to="/login">Sign In</Link>
-                <Link className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200 hover:cursor-pointer"
-                   to="/register">Sign up</Link>
+                {!username &&
+                    <>
+                        <Link
+                            className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-xl transition duration-200"
+                            to="/login">Sign In</Link>
+                        <Link
+                            className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200 hover:cursor-pointer"
+                            to="/register">Sign up</Link>
+                    </>
+                }
+                {username &&
+                    <div>
+                        <Link to="/seller">
+                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
+                        </Link>
+                        <Link  className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                               onClick={() => {
+                                   setUsername(userService.getLoggedInUser())
+                               }} to="/buyer">
+                            <div>
+                                <img src={icons.profile} alt="profile icon"/>
+                                <p>{username}</p>
+                            </div>
+                        </Link>
+                        <img onClick={() => {
+                            localStorage.removeItem("refreshToken");
+                            localStorage.removeItem("accessToken");
+                            setUsername(null);
+                        }} src={icons.logout} alt="logout"/>
+                    </div>}
+
             </nav>
             <div className="navbar-menu relative z-50 hidden">
                 <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
@@ -116,12 +143,36 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className="mt-auto">
-                        <div className="pt-6">
-                            <Link className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl "
-                               to="/login">Sign in</Link>
-                            <Link className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
-                                  to="/register">Sign Up</Link>
+                        {!username && <div className="pt-6">
+
+                            <Link
+                                className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl "
+                                to="/login">Sign in</Link>
+                            <Link
+                                className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                                to="/register">Sign Up</Link>
                         </div>
+                        }
+                        {username &&
+                            <div>
+                                <Link to="/seller">
+                                    <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
+                                </Link>
+                                <Link  className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                                       onClick={() => {
+                                    setUsername(userService.getLoggedInUser())
+                                }} to="/buyer">
+                                    <div>
+                                        <img src={icons.profile} alt="profile icon"/>
+                                        <p>{username}</p>
+                                    </div>
+                                </Link>
+                                <img onClick={() => {
+                                    localStorage.removeItem("refreshToken");
+                                    localStorage.removeItem("accessToken");
+                                    setUsername(null);
+                                }} src={icons.logout} alt="logout"/>
+                            </div>}
                     </div>
                 </nav>
             </div>

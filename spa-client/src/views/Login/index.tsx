@@ -24,39 +24,41 @@ const Login = () => {
     }
 
     return (
-        <section>
-            <form onSubmit={handleSubmit}>
-                <h1>Inicia sesión</h1>
-                <label htmlFor="username">Usuario:</label>
+        <div className=" w-full flex justify-center">
+            <form onSubmit={handleSubmit} className="flex
+            flex-col mx-auto mt-24 w-[600px]
+            bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-20
+            border-frostdr border-t-8">
+                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polard">Sign in </h1>
+                <h4 className="text-center font-lato text-polarl text-sm mb-4">Welcome to Cryptuki</h4>
                 <input
-                    placeholder="e.g. miusuario"
+                    placeholder="Username"
                     type="text"
                     id="username"
                     autoComplete="off"
                     onChange={(e) => setUser(e.target.value)}
                     value={user}
                     required
+                    className="p-2 m-2 rounded-lg"
                 />
-                <label htmlFor="password">Contraseña:</label>
                 <input
-                    placeholder="micontraseña"
+                    placeholder="Password"
                     type="password"
                     id="password"
                     onChange={(e) => setPwd(e.target.value)}
                     value={pwd}
                     required
+                    className="p-2 m-2 rounded-lg"
                 />
                 
-                <button type="submit" className="green">Inicia sesión</button>
-                <p>
-                    ¿Aún o tienes una cuenta?<br />
-                    <span className="line">
-                        {/*put router link here*/}
-                        <Link to="/register">Regístrate</Link>
-                    </span>
+                <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold">Inicia sesión</button>
+                <p className="font-roboto font-light mx-auto text-xs mt-2">¿Aún o tienes una cuenta?<br/></p>
+                <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs">{/*put router link here*/}<Link
+                    to="/register">Regístrate</Link>
                 </p>
+
             </form>
-        </section>
+        </div>
     )
 }
 

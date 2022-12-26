@@ -52,9 +52,9 @@ const Login = () => {
                 />
                 
                 <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold">Inicia sesión</button>
-                <p className="font-roboto font-light mx-auto text-xs mt-2">¿Aún o tienes una cuenta?<br/></p>
+                <p className="font-roboto font-light mx-auto text-xs mt-2">No account? No problem<br/></p>
                 <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs">{/*put router link here*/}<Link
-                    to="/register">Regístrate</Link>
+                    to="/register">Create your account</Link>
                 </p>
 
             </form>

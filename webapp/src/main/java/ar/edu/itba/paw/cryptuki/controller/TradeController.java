@@ -1,16 +1,14 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
@@ -96,11 +94,7 @@ public class TradeController {
         return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount).build();
     }
 
-    @GET
-    @Path("/{tradeId}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrade(@PathParam("tradeId") int tradeId) {
-
+    private Trade getTrade(int tradeId) {
         Trade trade;
         try {
             trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
@@ -108,7 +102,28 @@ public class TradeController {
             // Hide 403 Forbidden into a 404 for security concerns
             throw new NoSuchTradeException(tradeId, ade);
         }
+        return trade;
+    }
 
+    @GET
+    @Path("/{tradeId}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response listTrade(@PathParam("tradeId") int tradeId) {
+        Trade trade = getTrade(tradeId);
         return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
+    }
+
+    @GET
+    @Path("/{tradeId}/messages")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getTradeMessages(@PathParam("tradeId") int tradeId) {
+        Trade trade = getTrade(tradeId);
+        User seller = trade.getOffer().getSeller();
+        User buyer = trade.getBuyer();
+        List<MessageDto> messageDtos = trade.getMessageCollection().stream().map( m -> MessageDto.fromMessage(m, uriInfo, seller, buyer)).collect(Collectors.toList());
+
+        if (messageDtos.isEmpty())
+            return Response.noContent().build();
+        return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
     }
 }

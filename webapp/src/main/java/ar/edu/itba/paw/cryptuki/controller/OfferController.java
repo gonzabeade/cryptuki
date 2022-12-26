@@ -10,8 +10,10 @@ import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.OfferService;
+import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -33,14 +35,16 @@ public class OfferController {
 
     private final OfferService offerService;
     private final UserService userService;
+    private final TradeService tradeService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService) {
+    public OfferController(OfferService offerService, UserService userService, TradeService tradeService) {
         this.offerService = offerService;
         this.userService = userService;
+        this.tradeService = tradeService;
     }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -133,5 +137,24 @@ public class OfferController {
                 .build();
 
         return Response.status(Response.Status.MOVED_PERMANENTLY).location(uri).build();
+    }
+
+    @POST
+    @Path("/{offerId}/trades")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createTrade(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User buyer = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username)); // Will never throw exception
+
+        Trade trade = tradeService.makeTrade(offerId, buyer.getId(), tradeForm.getQuantity());
+
+        final URI uri = uriInfo.getBaseUriBuilder()
+                .path("/api/trades")
+                .path(String.valueOf(trade.getTradeId()))
+                .build();
+
+        return Response.created(uri).build();
     }
 }

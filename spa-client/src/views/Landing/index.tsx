@@ -16,7 +16,7 @@ const Landing = () => {
     useEffect( ()=>{
         offerService?.getOffers(5, 5)
         .then((data: SetStateAction<OfferModel[] | undefined>) => setOffers(data))
-        .catch( () => navigate("/login", {state: {from: location}, replace: true}))
+        // .catch( () => navigate("/login", {state: {from: location}, replace: true}))
     }, [offerService, location, navigate])
 
     return (

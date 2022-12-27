@@ -73,10 +73,10 @@ const Navbar = () => {
                 </div>
                 <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
                     <li>
-                        <Link to="/" className="text-sm text-gray-400 hover:text-gray-500 hover:cursor-pointer">Marketplace P2P</Link>
+                        <Link to="/" className="text-sm text-gray-400 hover:text-gray-500 hover:cursor-pointer font-semibold">Marketplace P2P</Link>
                     </li>
                     <li>
-                        <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500"   to="/contact">Contact</Link>
+                        <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/contact">Contact</Link>
                     </li>
                 </ul>
                 {!username &&
@@ -90,19 +90,19 @@ const Navbar = () => {
                     </>
                 }
                 {username &&
-                    <div className="hidden lg:flex lg:flex-row">
+                    <div className="hidden lg:flex lg:flex-row mt-2">
                         <Link to="/seller" className="mx-2">
-                            <button  className=" block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl ">Panel de vendedor</button>
+                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl font-roboto font-semibold">Panel de vendedor</button>
                         </Link>
                         <Link
-                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-frostdr hover:bg-blue-600  hover:cursor-pointer rounded-xl"
+                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-frostdr hover:bg-blue-700   hover:cursor-pointer rounded-xl font-semibold"
                             onClick={() => {
                                 setUsername(userService.getLoggedInUser())
                             }}
                             to="/buyer">
                             <div className={"flex flex-row"}>
-                                <UserCircleIcon height={30} width={30} color="polard"/>
-                                <p className="mx-3 font-roboto text-polard">{username}</p>
+                                <UserCircleIcon height={30} width={30} color="white"/>
+                                <p className="mx-3 font-roboto text-white font-semibold">{username}</p>
                             </div>
                         </Link>
                         <div onClick={logout} className="my-3 hover:cursor-pointer">
@@ -147,13 +147,13 @@ const Navbar = () => {
                             {username &&
                                 <>
                                     <li>
-                                        <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
+                                        <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
                                               to="/seller">
                                             Panel de vendedor
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
+                                        <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
                                               to="/buyer"
                                               onClick={() => {
                                                   setUsername(userService.getLoggedInUser())

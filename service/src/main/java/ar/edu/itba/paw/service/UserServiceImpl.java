@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("#username == authentication.principal")
     @Transactional
     public boolean verifyUser(String username, Integer code) {
         return userAuthDao.verifyUser(username,code);

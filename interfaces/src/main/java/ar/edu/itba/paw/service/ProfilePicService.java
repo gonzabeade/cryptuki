@@ -7,6 +7,6 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface ProfilePicService {
-    Optional<ProfilePicture> getProfilePicture(String username) throws URISyntaxException, IOException;
+    Optional<ProfilePicture> getProfilePicture(String username);
     void uploadProfilePicture(String username, byte[] profilePicture, String type);
 }

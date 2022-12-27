@@ -10,8 +10,7 @@ import java.util.Locale;
 
 public class UserDto {
 
-
-    private int id;
+    private int userId;
     private String username;
     private int ratingCount;
     private double rating;
@@ -19,121 +18,47 @@ public class UserDto {
     private Locale locale;
 
     private URI complains;
-    private URI kyc;
+    private URI kycInformation;
     private URI offers;
     private URI self;
+    private URI contactInformation;
+
 
     public static UserDto fromUser(User user, UriInfo uriInfo) {
         UserAuth auth = user.getUserAuth();
         UserDto dto = new UserDto();
 
-        dto.id = user.getId();
+        dto.userId = user.getId();
         dto.ratingCount = user.getRatingCount();
         dto.rating = user.getRating();
         dto.lastLogin = user.getLastLogin();
         dto.username = auth.getUsername();
         dto.locale = user.getLocale();
 
-        dto.self = uriInfo.getAbsolutePathBuilder()
-                .replacePath("users")
+        dto.self = uriInfo.getBaseUriBuilder()
+                .path("api/users")
                 .path(dto.username)
                 .build();
 
-        dto.kyc = uriInfo.getAbsolutePathBuilder()
-                .replacePath("kyc")
+        dto.kycInformation = uriInfo.getBaseUriBuilder()
+                .path("api/users")
                 .path(dto.username)
+                .path("kyc")
                 .build();
 
-        dto.complains = uriInfo.getAbsolutePathBuilder()
-                .replacePath("complains")
-                .queryParam("fromUser", dto.username)
+
+        dto.complains = uriInfo.getBaseUriBuilder()
+                .path("api/complaints")
+                .queryParam("from_user", dto.username)
                 .build();
 
-        dto.offers = uriInfo.getAbsolutePathBuilder()
-                .replacePath("offers")
-                .queryParam("fromUser", dto.username)
+        dto.offers = uriInfo.getBaseUriBuilder()
+                .path("api/offers")
+                .queryParam("from_user", dto.username)
                 .build();
 
         return dto;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getRatingCount() {
-        return ratingCount;
-    }
-
-    public void setRatingCount(int ratingCount) {
-        this.ratingCount = ratingCount;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    public URI getComplains() {
-        return complains;
-    }
-
-    public void setComplains(URI complains) {
-        this.complains = complains;
-    }
-
-    public URI getKyc() {
-        return kyc;
-    }
-
-    public void setKyc(URI kyc) {
-        this.kyc = kyc;
-    }
-
-    public URI getOffers() {
-        return offers;
-    }
-
-    public void setOffers(URI offers) {
-        this.offers = offers;
-    }
-
-    public URI getSelf() {
-        return self;
-    }
-
-    public void setSelf(URI self) {
-        this.self = self;
-    }
 }

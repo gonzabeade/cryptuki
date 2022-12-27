@@ -6,6 +6,7 @@ import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.form.legacy.auth.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ProfilePicForm;
+import ar.edu.itba.paw.exception.BadMultipartFormatException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
@@ -15,6 +16,7 @@ import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -38,23 +40,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 
 @Path("/api/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserDetailsService userDetailsService;
-   private final ProfilePicService profilePicService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public UserController(UserService userService, UserDetailsService userDetailsService, ProfilePicService profilePicService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userDetailsService = userDetailsService;
-        this.profilePicService = profilePicService;
     }
 
     @GET
@@ -62,31 +62,46 @@ public class UserController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUser(@PathParam("username") String username) {
 
-        Optional<UserDto> maybeUser = userService.getUserByUsername(username).map( u -> UserDto.fromUser(u, uriInfo));
+        UserDto userDto = userService.getUserByUsername(username)
+                .map(u->UserDto.fromUser(u, uriInfo))
+                .orElseThrow(()-> new NoSuchUserException(username));
 
-        if (!maybeUser.isPresent())
-            throw new NoSuchUserException(username);
+        return Response.ok(userDto).build();
+    }
 
-        return Response.ok(maybeUser.get()).build();
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createUser(@Valid RegisterForm registerForm, @Context HttpServletRequest request) {
+
+        UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());
+        userService.registerUser(userPO);
+
+        final URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(userPO.getUsername())
+                .build();
+
+        return Response.created(uri).build();
     }
 
     @GET
-    @Path("/{username}/information")
+    @Path("/{username}/contactInformation")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserInformation(@PathParam("username") String username) {
 
-        Optional<UserInformationDto> maybeUser = userService.getUserByUsername(username).map(u -> UserInformationDto.fromUser(u, uriInfo));
-
-        if (!maybeUser.isPresent())
-            throw new NoSuchUserException(username);
+        UserInformationDto userInformationDto = userService.getUserByUsername(username)
+                .map(u->UserInformationDto.fromUser(u, uriInfo))
+                .orElseThrow(()->new NoSuchUserException(username));
 
         String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User principal = userService.getUserByUsername(principalName).get();
+        User principal = userService.getUserByUsername(principalName).orElseThrow(()->new NoSuchUserException(principalName));
 
-        if(!principalName.equals(username) && !principal.getUserAuth().getRole().equals(Role.ROLE_ADMIN))
+        // The service does not expose a method for validating this
+        // It is simpler to validate this in the controller than to create a dummy method in the service
+        if (!principalName.equals(username) && !principal.getUserAuth().getRole().equals(Role.ROLE_ADMIN))
             throw new ForbiddenException();
 
-        return Response.ok(maybeUser.get()).build();
+        return Response.ok(userInformationDto).build();
     }
 
     @PUT
@@ -95,7 +110,8 @@ public class UserController {
     public Response changePassword(
             @Valid ChangePasswordForm changePasswordForm,
             @PathParam("username") String username,
-            @QueryParam("code") Integer code ){
+            @QueryParam("code") Integer code
+    ){
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
@@ -114,66 +130,23 @@ public class UserController {
         return Response.ok().build();
     }
 
+    // TODO - How is the consumer of the api supposed to know the location of this endpoint?
     @POST
     @Path("/{username}/validations")
     public Response createValidation(@NotNull @QueryParam("code") Integer code, @PathParam("username") String username){
-        Optional<User> maybeUser = userService.getUserByUsername(username);
 
-        if (!maybeUser.isPresent())
-            throw new NoSuchUserException(username);
+        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
-        if(!userService.verifyUser(username, code))
+        if (!userService.verifyUser(username, code))
             throw new BadRequestException();
 
-        return Response.status(Response.Status.CREATED).build();
-    }
-
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid RegisterForm registerForm, @Context HttpServletRequest request) {
-
-        UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());
-        userService.registerUser(userPO);
-
         final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(userPO.getUsername())
+                .path("/api/users")
+                .path(username)
                 .build();
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userPO.getUsername());
-
-        return Response
-                .created(uri)
-                .header("Refresh-Token", JwtUtils.generateRefreshToken(userDetails))
-                .header("Access-Token", JwtUtils.generateAccessToken(userDetails))
-                .build();
+        return Response.created(uri).build();
     }
 
-    @PUT
-    @Path("/{username}/picture")
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public Response changeProfilePic(@FormDataParam("picture") InputStream picture,
-                                     @FormDataParam("picture") FormDataContentDisposition pictureMetadata,
-                                     @FormDataParam("isBuyer") Boolean isBuyer,
-                                     @FormDataParam("type") String type,
-                                     @PathParam("username") String username) throws IOException {
-
-        profilePicService.uploadProfilePicture(username, IOUtils.toByteArray(picture), type);
-
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("/{username}/picture")
-    @Produces({MediaType.MULTIPART_FORM_DATA})
-    public Response getProfilePic(@PathParam("username") String username) throws IOException, URISyntaxException {
-        Optional<ProfilePicture> picture = profilePicService.getProfilePicture(username);
-
-        if(picture.isPresent()){
-            return Response.ok(picture.get().getBytes()).build();
-        }
-
-        return Response.ok().build();
-    }
 
 }

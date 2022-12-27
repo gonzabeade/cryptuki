@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Base64;
 import java.util.Optional;
 
 //URLs para curl
@@ -77,7 +78,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         else if ( header.startsWith("Basic ") ) {
-            final String[] credentials = header.split(" ")[1].trim().split(":");
+            final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
+            final String[] credentials = String.valueOf(base64credentials).trim().split(":");
 
             if(credentials.length != 2) {
                 httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);

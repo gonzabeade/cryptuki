@@ -82,20 +82,20 @@ const Navbar = () => {
                 {!username &&
                     <>
                         <Link
-                            className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-xl transition duration-200"
+                            className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200"
                             to="/login">Sign In</Link>
                         <Link
-                            className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200 hover:cursor-pointer"
+                            className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"
                             to="/register">Sign up</Link>
                     </>
                 }
                 {username &&
                     <div className="hidden lg:flex lg:flex-row mt-2">
                         <Link to="/seller" className="mx-2">
-                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl font-roboto font-semibold">Panel de vendedor</button>
+                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg font-roboto font-semibold">Panel de vendedor</button>
                         </Link>
                         <Link
-                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-frostdr hover:bg-blue-700   hover:cursor-pointer rounded-xl font-semibold"
+                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-frostdr hover:bg-blue-700   hover:cursor-pointer rounded-lg font-semibold"
                             onClick={() => {
                                 setUsername(userService.getLoggedInUser())
                             }}
@@ -170,17 +170,17 @@ const Navbar = () => {
                         {!username && <div className="pt-6">
 
                             <Link
-                                className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-xl "
+                                className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg "
                                 to="/login">Sign in</Link>
                             <Link
-                                className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                                className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
                                 to="/register">Sign Up</Link>
                         </div>
                         }
                         {username &&
                             <div className="pt-6">
                                 <Link
-                                    className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-xl"
+                                    className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
                                     to="/" onClick={logout}>Sign out</Link>
                             </div>
                         }

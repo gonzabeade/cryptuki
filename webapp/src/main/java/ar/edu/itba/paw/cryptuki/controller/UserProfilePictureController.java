@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Path("/api/users/{username}/picture")
-public class ProfilePictureController {
+public class UserProfilePictureController {
 
     private final UserService userService;
     private final ProfilePicService profilePicService;
@@ -31,7 +31,7 @@ public class ProfilePictureController {
     @Context
     public UriInfo uriInfo;
 
-    public ProfilePictureController(UserService userService, ProfilePicService profilePicService, Collection<BadMultipartFormatException.MultipartDescriptor> pictureMultipartFormat) {
+    public UserProfilePictureController(UserService userService, ProfilePicService profilePicService, Collection<BadMultipartFormatException.MultipartDescriptor> pictureMultipartFormat) {
         this.userService = userService;
         this.profilePicService = profilePicService;
         this.pictureMultipartFormat = pictureMultipartFormat;

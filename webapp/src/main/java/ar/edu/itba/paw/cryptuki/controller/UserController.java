@@ -104,6 +104,8 @@ public class UserController {
         return Response.ok(userInformationDto).build();
     }
 
+
+    // TODO - These two endpoints are the two most polemic ones !!!!
     @PUT
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})

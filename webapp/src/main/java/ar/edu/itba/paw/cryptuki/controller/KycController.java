@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -101,7 +102,8 @@ public class KycController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
     public Response putKyc(@PathParam("username") String username) {
-        return null;
+        // TODO - Implement !
+        throw new NotImplementedException();
     }
 
 

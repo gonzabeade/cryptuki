@@ -20,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -141,9 +143,11 @@ public class TradeController {
         User user = userService.getUserByUsername(senderUsername).orElseThrow(()-> new NoSuchUserException(senderUsername));
         chatService.sendMessage(user.getId(), tradeId, messageForm.getMessage());
 
-
-        // TODO - Check  - Should return a 201 - Created but for that access to new message
-        return Response.noContent().build();
+        // There is not a unique identifier for a message
+        // But we expose a URI for the whole collection of messages,
+        // where the individual message created may be found
+        final URI uri = uriInfo.getRequestUri();
+        return Response.created(uri).build();
     }
 
     @PUT
@@ -152,9 +156,8 @@ public class TradeController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response modifyTrade(@PathParam("tradeId") int tradeId) {
 
-        // TODO: Implement
-
-        return null;
+        // TODO - Implement !
+        throw new NotImplementedException();
     }
 
 

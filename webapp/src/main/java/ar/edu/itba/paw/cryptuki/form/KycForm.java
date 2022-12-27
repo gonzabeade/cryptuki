@@ -1,11 +1,7 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.seller;
+package ar.edu.itba.paw.cryptuki.form;
 
-import ar.edu.itba.paw.cryptuki.annotation.MultipartSizeCheck;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
-import ar.edu.itba.paw.cryptuki.annotation.MultipartCheck;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
@@ -37,13 +33,6 @@ public class KycForm {
     @NotNull
     private String idType;
 
-    @MultipartCheck
-    @MultipartSizeCheck(maxSize = (1<<21))
-    private MultipartFile idPhoto;
-
-    @MultipartCheck
-    @MultipartSizeCheck(maxSize = (1<<21))
-    private MultipartFile validationPhoto;
 
     public String getGivenNames() {
         return givenNames;
@@ -85,21 +74,6 @@ public class KycForm {
         this.idType = idType; // throws IllegalArgumentException, translated into bad request
     }
 
-    public MultipartFile getIdPhoto() {
-        return idPhoto;
-    }
-
-    public void setIdPhoto(MultipartFile idPhoto) {
-        this.idPhoto = idPhoto;
-    }
-
-    public MultipartFile getValidationPhoto() {
-        return validationPhoto;
-    }
-
-    public void setValidationPhoto(MultipartFile validationPhoto) {
-        this.validationPhoto = validationPhoto;
-    }
 
     public String getUsername() {
         return username;
@@ -113,14 +87,20 @@ public class KycForm {
     public KycInformationPO toParameterObject() throws IOException {
         return new KycInformationPO(username, givenNames, surnames)
                 .withIdCode(idCode)
-                .withIdPhoto(idPhoto.getBytes())
-                .withIdPhotoType(idPhoto.getContentType())
                 .withIdType(IdType.valueOf(idType))
-                .withEmissionCountry(emissionCountry)
-                .withValidationPhoto(validationPhoto.getBytes())
-                .withValidationPhotoType(validationPhoto.getContentType());
+                .withEmissionCountry(emissionCountry);
     }
 
-
+    @Override
+    public String toString() {
+        return "KycForm{" +
+                "givenNames='" + givenNames + '\'' +
+                ", surnames='" + surnames + '\'' +
+                ", username='" + username + '\'' +
+                ", emissionCountry='" + emissionCountry + '\'' +
+                ", idCode='" + idCode + '\'' +
+                ", idType='" + idType + '\'' +
+                '}';
+    }
 }
 

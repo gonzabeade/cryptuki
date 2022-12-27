@@ -1,15 +1,40 @@
 package ar.edu.itba.paw.exception;
 
-public class AlreadyHasKycRequestException extends RuntimeException {
+import java.util.Collection;
 
-    private String username;
+public class BadMultipartFormatException extends RuntimeException {
 
-    public AlreadyHasKycRequestException(String username) {
-        super(String.format("User `%s` already has an active KYC filing.", username));
-        this.username = username;
+    // TODO - Is it the best place for this class?
+    public static class MultipartDescriptor {
+        private String type;
+        private String paramName;
+
+        public MultipartDescriptor(String type, String paramName) {
+            this.type = type;
+            this.paramName = paramName;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getParamName() {
+            return paramName;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("{name: %s, content-type: %s]", paramName, type);
+        }
     }
 
-    public String getUsername() {
-        return username;
+    private Collection<MultipartDescriptor> multipartDescriptors;
+    public BadMultipartFormatException(Collection<MultipartDescriptor> multipartDescriptors) {
+        super("Multipart format not respected.");
+        this.multipartDescriptors = multipartDescriptors;
+    }
+
+    public Collection<MultipartDescriptor> getDescriptors() {
+        return multipartDescriptors;
     }
 }

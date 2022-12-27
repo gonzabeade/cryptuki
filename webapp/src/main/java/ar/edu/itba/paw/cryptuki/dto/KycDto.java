@@ -46,7 +46,7 @@ public class KycDto {
 
         dto.user = uriInfo.getBaseUriBuilder()
                 .path(UserController.class)
-                .path(kycInformation.getUser().getUsername().get())
+                .path(username)
                 .build();
 
         return dto;

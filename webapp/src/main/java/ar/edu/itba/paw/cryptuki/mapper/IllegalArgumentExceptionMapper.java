@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.cryptuki.mapper;
 
 import ar.edu.itba.paw.cryptuki.dto.IllegalArgumentErrorDto;
-import ar.edu.itba.paw.cryptuki.dto.NotFoundErrorDto;
-import ar.edu.itba.paw.exception.NoSuchOfferException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

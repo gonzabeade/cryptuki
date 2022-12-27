@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.cryptuki.dto;
 
-public class NotFoundErrorDto {
+public class GenericErrorDto {
 
     private String message;
 
-    public static NotFoundErrorDto fromMessage(String message) {
-        NotFoundErrorDto dto = new NotFoundErrorDto();
+    public static GenericErrorDto fromMessage(String message) {
+        GenericErrorDto dto = new GenericErrorDto();
         dto.message = message;
         return dto;
     }

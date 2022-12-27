@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.mapper;
 
-import ar.edu.itba.paw.cryptuki.dto.NotFoundErrorDto;
-import ar.edu.itba.paw.cryptuki.dto.ValidationErrorDto;
+import ar.edu.itba.paw.cryptuki.dto.GenericErrorDto;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -14,7 +13,7 @@ public class NoSuchOfferExceptionMapper implements ExceptionMapper<NoSuchOfferEx
 
     @Override
     public Response toResponse(NoSuchOfferException e) {
-        NotFoundErrorDto dto = NotFoundErrorDto.fromMessage(MESSAGE);
+        GenericErrorDto dto = GenericErrorDto.fromMessage(MESSAGE);
         return Response.status(Response.Status.NOT_FOUND).entity(dto).build();
     }
 }

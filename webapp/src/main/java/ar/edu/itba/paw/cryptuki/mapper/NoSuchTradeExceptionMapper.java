@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.mapper;
 
-import ar.edu.itba.paw.cryptuki.dto.NotFoundErrorDto;
-import ar.edu.itba.paw.exception.NoSuchCryptocurrencyException;
+import ar.edu.itba.paw.cryptuki.dto.GenericErrorDto;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 
 import javax.ws.rs.core.Response;
@@ -15,7 +14,7 @@ public class NoSuchTradeExceptionMapper implements ExceptionMapper<NoSuchTradeEx
 
     @Override
     public Response toResponse(NoSuchTradeException e) {
-        NotFoundErrorDto dto = NotFoundErrorDto.fromMessage(String.format(MESSAGE, e.getTradeId()));
+        GenericErrorDto dto = GenericErrorDto.fromMessage(String.format(MESSAGE, e.getTradeId()));
         return Response.status(Response.Status.NOT_FOUND).entity(dto).build();
     }
 }

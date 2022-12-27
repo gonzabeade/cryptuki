@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.AlreadyHasKycRequestException;
 import ar.edu.itba.paw.model.Country;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
@@ -32,6 +33,9 @@ public class KycServiceImpl implements KycService {
     @Override
     @Transactional
     public void newKycRequest(KycInformationPO kycInformationPO) {
+        String username = kycInformationPO.getUsername();
+        if (getPendingKycRequest(username).isPresent())
+            throw new AlreadyHasKycRequestException(username);
         kycDao.newKycRequest(kycInformationPO);
     }
 

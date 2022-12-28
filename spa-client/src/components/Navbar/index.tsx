@@ -71,12 +71,12 @@ const Navbar = () => {
                     </>
                 }
                 {username &&
-                    <div className="hidden lg:flex lg:flex-row mt-2">
+                    <div className="hidden lg:flex lg:flex-row">
                         <Link to="/seller" className="mx-2">
-                            <button  className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg font-roboto font-semibold">Panel de vendedor</button>
+                            <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">Panel de vendedor</button>
                         </Link>
                         <Link
-                            className="block px-4 py-3 mb-3 leading-loose text-xs text-center leading-none bg-frostdr hover:bg-blue-700   hover:cursor-pointer rounded-lg font-semibold"
+                            className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"
                             onClick={() => {
                                 setUsername(userService.getLoggedInUser())
                             }}
@@ -87,7 +87,7 @@ const Navbar = () => {
                                 <p className="mx-3 font-roboto text-white font-semibold">Mi perfil</p>
                             </div>
                         </Link>
-                        <div onClick={logout} className="my-3 hover:cursor-pointer">
+                        <div onClick={logout} className=" pt-1.5 hover:cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#5E81AC" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>

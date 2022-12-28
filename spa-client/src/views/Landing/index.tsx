@@ -4,7 +4,7 @@ import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import { useLocation, useNavigate } from "react-router-dom";
-import CryptoFilters from "../../components/CryptoFilters";
+import CryptoFilters from "../../components/CryptoFilters/index";
 
 const Landing = () => {
 

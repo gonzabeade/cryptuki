@@ -65,7 +65,7 @@ const BuyOffer = () => {
                         allowFullScreen>
                     </iframe>
             </div>
-            <Paginator totalPages={2} actualPage={1}/>
+            <Paginator totalPages={2} actualPage={1} callback={()=>console.log("callback")}/>
         </div>
     );
 };

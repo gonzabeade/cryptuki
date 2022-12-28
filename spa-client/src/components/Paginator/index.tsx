@@ -3,21 +3,23 @@ import React, {useState} from 'react';
 
 type PaginatorProps =  {
     totalPages:number,
-    actualPage:number
+    actualPage:number,
+    callback:Function
 }
 
-const Paginator:React.FC<PaginatorProps> = ({totalPages, actualPage}) => {
+const Paginator:React.FC<PaginatorProps> = ({totalPages, actualPage, callback}) => {
 
     let [pageActive, setPageActive] = useState<number>(actualPage);
 
-    function prevPage(){
+    async function prevPage(){
         //throw event to get new offers
+        await callback(pageActive - 1);
         setPageActive(pageActive - 1);
-        console.log("prev")
+
     }
-    function nextPage(){
+    async function nextPage(){
+        await callback(pageActive + 1);
         setPageActive(pageActive + 1)
-        console.log("next")
     }
 
     return (

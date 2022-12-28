@@ -84,8 +84,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/users/**/information").authenticated()
-                    .antMatchers(HttpMethod.GET, "/api/complains/**").authenticated()
+                    .antMatchers(HttpMethod.GET,"/api/complains").hasRole("ADMIN") /*todo: check get method on complains is only allowed for admins */
                     .antMatchers(HttpMethod.POST, "/api/complains").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/complains/**").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/complains/**/resolution").hasRole("ADMIN")
                     .antMatchers(HttpMethod.GET, "/api/offers/**/trades/**").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/offers/**/trades/**").authenticated()

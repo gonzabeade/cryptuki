@@ -8,7 +8,7 @@ public class TradeComplainSupportForm extends GeneralSupportForm {
 
     @NotNull
     private Integer tradeId;
-    @NotNull
+//    @NotNull fill with the authentication token.
     private String username;
 
     public String getUsername() {

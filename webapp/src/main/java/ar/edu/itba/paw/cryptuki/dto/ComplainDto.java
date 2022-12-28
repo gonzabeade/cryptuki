@@ -44,30 +44,28 @@ public class ComplainDto {
         dto.setDate(complain.getDate());
 
         dto.setSelfUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades")
-                        .path(String.valueOf(dto.getTradeId()))
-                        .path("complains")
+                uriInfo.getBaseUriBuilder()
+                        .replacePath("complains")
                         .path(String.valueOf(dto.getComplainId()))
                         .build()
         );
 
         dto.setTradeUri(
-                uriInfo.getAbsolutePathBuilder()
+                uriInfo.getBaseUriBuilder()
                         .replacePath("trades")
                         .path(String.valueOf(dto.getTradeId()))
                         .build()
         );
 
         dto.setOfferUri(
-                uriInfo.getAbsolutePathBuilder()
+                uriInfo.getBaseUriBuilder()
                         .replacePath("offers")
                         .path(String.valueOf(dto.getOfferId()))
                         .build()
         );
 
         dto.setComplainerUri(
-                uriInfo.getAbsolutePathBuilder()
+                uriInfo.getBaseUriBuilder()
                         .replacePath("users")
                         .path(dto.getComplainer())
                         .build()
@@ -75,7 +73,7 @@ public class ComplainDto {
 
         if(complain.getModerator().isPresent()) {
             dto.setModeratorUri(
-                    uriInfo.getAbsolutePathBuilder()
+                    uriInfo.getBaseUriBuilder()
                             .replacePath("users")
                             .path(dto.getModerator())
                             .build()

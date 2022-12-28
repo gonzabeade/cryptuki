@@ -14,34 +14,12 @@ const Navbar = () => {
 
 
     useEffect(()=>{
-        // open
-        const burger = document.querySelectorAll('.navbar-burger');
+        menuListeners();
+    });
+
+    function menuListeners(){
         const menu = document.querySelectorAll('.navbar-menu');
-
-        if (burger.length && menu.length) {
-            for (var i = 0; i < burger.length; i++) {
-                burger[i].addEventListener('click', function () {
-                    for (var j = 0; j < menu.length; j++) {
-                        menu[j].classList.toggle('hidden');
-                    }
-                });
-            }
-        }
-
-        // close
-        const close = document.querySelectorAll('.navbar-close');
         const backdrop = document.querySelectorAll('.navbar-backdrop');
-
-        if (close.length) {
-            for (var i = 0; i < close.length; i++) {
-                close[i].addEventListener('click', function () {
-                    for (var j = 0; j < menu.length; j++) {
-                        menu[j].classList.toggle('hidden');
-                    }
-                });
-            }
-        }
-
         if (backdrop.length) {
             for (var i = 0; i < backdrop.length; i++) {
                 backdrop[i].addEventListener('click', function () {
@@ -51,7 +29,10 @@ const Navbar = () => {
                 });
             }
         }
-    });
+    }
+    function closeMobileMenu(){
+        document.getElementById('close')?.click()
+    }
 
     return (
         <>
@@ -64,7 +45,7 @@ const Navbar = () => {
                     </svg>
                 </Link>
                 <div className="lg:hidden">
-                    <button className="navbar-burger flex items-center text-polard p-3">
+                    <button className="navbar-burger flex items-center text-polard p-3" onClick={()=> document.querySelectorAll('.navbar-menu')[0].classList.toggle('hidden')}>
                         <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <title>Mobile menu</title>
                             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
@@ -101,12 +82,13 @@ const Navbar = () => {
                             }}
                             to="/buyer">
                             <div className={"flex flex-row"}>
-                                <UserCircleIcon height={30} width={30} color="white"/>
-                                <p className="mx-3 font-roboto text-white font-semibold">{username}</p>
+                                {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
+                                {/*<p className="mx-3 font-roboto text-white font-semibold">{username}</p>*/}
+                                <p className="mx-3 font-roboto text-white font-semibold">Mi perfil</p>
                             </div>
                         </Link>
                         <div onClick={logout} className="my-3 hover:cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#5E81AC" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -126,7 +108,7 @@ const Navbar = () => {
                                     fill="#4C566A"/>
                             </svg>
                         </a>
-                        <button className="navbar-close">
+                        <button className="navbar-close" id="close" onClick={()=> document.querySelectorAll('.navbar-menu')[0].classList.toggle('hidden')}>
                             <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
@@ -138,17 +120,17 @@ const Navbar = () => {
                         <ul>
                             <li className="mb-1">
                                 <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-roboto"
-                                   to="/">Marketplace P2P</Link>
+                                   to="/" onClick={closeMobileMenu}>Marketplace P2P</Link>
                             </li>
                             <li className="mb-1">
                                 <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
-                                   to="/contact">Contact</Link>
+                                   to="/contact" onClick={closeMobileMenu}>Contact</Link>
                             </li>
                             {username &&
                                 <>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
-                                              to="/seller">
+                                              to="/seller" onClick={closeMobileMenu}>
                                             Panel de vendedor
                                         </Link>
                                     </li>
@@ -157,6 +139,7 @@ const Navbar = () => {
                                               to="/buyer"
                                               onClick={() => {
                                                   setUsername(userService.getLoggedInUser())
+                                                  closeMobileMenu()
                                               }}>
                                             Mi perfil
                                         </Link>
@@ -171,17 +154,17 @@ const Navbar = () => {
 
                             <Link
                                 className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg "
-                                to="/login">Sign in</Link>
+                                to="/login" onClick={closeMobileMenu}>Sign in</Link>
                             <Link
                                 className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                to="/register">Sign Up</Link>
+                                to="/register" onClick={closeMobileMenu}>Sign Up</Link>
                         </div>
                         }
                         {username &&
                             <div className="pt-6">
                                 <Link
                                     className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                    to="/" onClick={logout}>Sign out</Link>
+                                    to="/" onClick={()=> {logout(); closeMobileMenu();}}>Sign out</Link>
                             </div>
                         }
 

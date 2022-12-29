@@ -6,7 +6,7 @@ const Support= () => {
             <div className=" flex  flex-col justify-center mx-10">
                 <div className="flex flex-col mt-10 mb-10 ">
                     <h1 className="text-center text-4xl font-semibold font-sans text-polar">
-                        Need Help?
+                        Need help?
                     </h1>
                     <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
                         In case of any inconvenience, contact us.
@@ -29,7 +29,7 @@ const Support= () => {
                         </div>
                     </div>
                     <div className="flex flex-row p-5">
-                        <button type="submit" className="bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                        <button type="submit" className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
                             Submit
                         </button>
                     </div>

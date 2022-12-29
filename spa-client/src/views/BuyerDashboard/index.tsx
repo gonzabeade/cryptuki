@@ -10,9 +10,7 @@ const BuyerDashboard = () => {
     return (
         <div className="flex h-full w-full px-20 my-10">
             <div className="flex flex-col h-full mx-20 w-1/5">
-                <div className="">
                   <UserProfileCards username={"mdedeu"} phoneNumber={1234566} email={"mdedeu@itba.edu.ar"} rating={4.32} tradeQuantity={4}/>
-                </div>
             </div>
             {/*//  Middle Panel: trade */}
             <div className="flex flex-col h-full mr-20 w-3/5">

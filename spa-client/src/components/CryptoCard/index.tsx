@@ -2,8 +2,10 @@ import React from "react";
 import './styles.css';
 import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
-
+import {useNavigate} from "react-router-dom";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
+    const navigate = useNavigate();
+
     return (
         <div className="crypto-card rounded-lg">
             <div className="column">
@@ -22,7 +24,8 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
                 <div className="bold text-polar">{offer.location}</div>
             </div>
             <div className="column">
-                <button className="my-auto rounded-lg bg-frost px-6 py-3 text-white font-bold hover:bg-frostd">Compra</button>
+                <button className="my-auto rounded-lg bg-frost px-6 py-3 text-white font-bold hover:bg-frostd"
+                onClick={()=> navigate(offer.url)}>Compra</button>
             </div>           
         </div>
     )

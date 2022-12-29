@@ -13,7 +13,7 @@ const UserInfo: React.FC<UserInfoProps> = ({username, email, phone_number, last_
 
     return (
 
-        <div className="w-full max-w-sm rounded-lg shadow-md bg-gray-800  border-gray-700  m-10">
+        <div className="w-full max-w-sm rounded-lg shadow-md bg-gray-800  border-gray-700 ">
             <div className="flex flex-col items-center pb-10 pt-5">
                 <h1 className="mb-1 text-sm font-medium text-white italic">You will trade with</h1>
                 <h5 className="mb-1 text-xl font-medium text-white">{username}</h5>

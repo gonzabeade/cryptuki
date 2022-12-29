@@ -6,12 +6,12 @@ type ChatSnippetProps = {
 
 const ChatSnippet:React.FC<ChatSnippetProps> = ({otherUserActive}) => {
     return (
-        <div className="flex flex-row h-full w-full justify-around mr-10 mt-8">
+        <div className="flex flex-row h-full w-full justify-around mr-10 mt-10">
             <div className="container mx-10 h-4/5 F border-gray-200">
                 <div className=" border rounded bg-[#FAFCFF]">
                     <div>
-                        <div className=" flex  flex-col w-full">
-                            <div className="flex relative flex items-center p-3 border-b border-gray-300 justify-around">
+                        <div className=" flex flex-col w-full px-3">
+                            <div className="flex relative items-center py-3 border-b border-gray-300 justify-between">
                                 <div className={"flex"}>
                                     <img className="object-cover w-10 h-10 my-auto rounded-full"
                                          src="imagen de perfil" alt="username"/>
@@ -21,7 +21,7 @@ const ChatSnippet:React.FC<ChatSnippetProps> = ({otherUserActive}) => {
                                             <span className="text-left text-sm text-justify ">2022-02-1023</span> </>}
                                     </div>
                                 </div>
-                                {otherUserActive &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-14  top-6 "></span>}
+                                {otherUserActive &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>}
 
                                 <h1 className="text-right font-sans font-bold justify-self-end">
                                   Trade proposal # 45
@@ -39,7 +39,7 @@ const ChatSnippet:React.FC<ChatSnippetProps> = ({otherUserActive}) => {
 
                                 <form className="flex flex-row w-full">
                                     <input type="text" placeholder="Message"
-                                           className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                                           className="block w-full py-2 pl-4 mr-3 bg-gray-100 rounded-lg outline-none focus:text-gray-700"
                                            name="message" required/>
                                     <input type="hidden" value="${param.tradeId}"/>
                                     <input type="hidden" value="${param.senderId}"/>

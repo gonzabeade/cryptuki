@@ -57,7 +57,7 @@ const Navbar = () => {
                         <Link to="/" className="text-sm text-gray-400 hover:text-gray-500 hover:cursor-pointer font-semibold">Marketplace P2P</Link>
                     </li>
                     <li>
-                        <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/contact">Contact</Link>
+                        <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/support">Contact</Link>
                     </li>
                 </ul>
                 {!username &&
@@ -124,7 +124,7 @@ const Navbar = () => {
                             </li>
                             <li className="mb-1">
                                 <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"
-                                   to="/contact" onClick={closeMobileMenu}>Contact</Link>
+                                   to="/support" onClick={closeMobileMenu}>Contact</Link>
                             </li>
                             {username &&
                                 <>

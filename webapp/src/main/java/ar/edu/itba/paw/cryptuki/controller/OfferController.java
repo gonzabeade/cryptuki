@@ -81,12 +81,8 @@ public class OfferController {
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getOffer(@PathParam("id") int id) {
-        Optional<OfferDto> maybeOffer = offerService.getOfferById(id).map(o -> OfferDto.fromOffer(o, uriInfo));
-
-        if (!maybeOffer.isPresent())
-            throw new NoSuchOfferException(id);
-        
-        return Response.ok(maybeOffer.get()).build();
+        Offer offer = offerService.getOfferById(id).orElseThrow(()->new NoSuchOfferException(id));
+        return Response.ok(OfferDto.fromOffer(offer,uriInfo)).build();
     }
 
     @POST
@@ -115,10 +111,10 @@ public class OfferController {
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
-
         try {
-            Offer offer = offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
+            offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
         } catch (RuntimeException e) {
+            //TODO: 403 may not apply.
             return Response.status(Response.Status.fromStatusCode(403)).build();
         }
 

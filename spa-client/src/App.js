@@ -9,6 +9,7 @@ const Landing = lazy(()=>import("./views/Landing/index"));
 const Register = lazy(()=>import("./views/Register/index"));
 const Login = lazy(()=>import("./views/Login/index"));
 const BuyOffer = lazy(()=>import("./views/BuyOffer/index"));
+const Trade = lazy(()=>import("./views/Trade/index"));
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                       <Route path="/register" element={<Register/>}/>
                       <Route path="/login" element={<Login/>}/>
                       <Route path="/offer/:id" element={<BuyOffer/>}/>
+                      <Route path="/trade/:id" element={<Trade/>}/>
                   </Routes>
               </Suspense>
           </div>

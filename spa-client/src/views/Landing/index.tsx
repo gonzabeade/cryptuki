@@ -5,6 +5,7 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoFilters from "../../components/CryptoFilters/index";
+import Paginator from "../../components/Paginator";
 
 const Landing = () => {
 
@@ -34,12 +35,14 @@ const Landing = () => {
     }, [offerService, location, navigate])
 
     return (
-        <div className="flex flex-wrap w-full h-full justify-around">
-            <div className={" flex w-1/3 justify-center "}>
+        <div className="flex flex-wrap w-full h-full justify-between">
+            <div className="flex w-1/3">
                 <CryptoFilters/>
             </div>
-            <div className="w-2/3">
+
+            <div className="flex flex-col w-2/3">
                 {offers?.map( (offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
+                <Paginator totalPages={10} actualPage={1} callback={()=>console.log("called")}/>
             </div>
         </div>
 

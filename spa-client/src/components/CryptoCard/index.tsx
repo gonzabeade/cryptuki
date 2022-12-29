@@ -5,7 +5,7 @@ import OfferModel from "../../types/OfferModel";
 
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     return (
-        <div className="crypto-card">
+        <div className="crypto-card rounded-lg">
             <div className="column">
                 <div className="label">Vendedor:</div>
                 <div className="bold">gonzabeade</div>

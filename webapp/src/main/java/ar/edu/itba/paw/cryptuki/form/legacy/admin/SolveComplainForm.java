@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.cryptuki.form.legacy.admin;
 
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.model.ComplaintResolution;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -8,7 +11,8 @@ public class SolveComplainForm {
     private String comments;
 
     @NotNull
-    private String result;
+    @ValueOfEnum(enumClass = ComplaintResolution.class)
+    private String resolution;
     public String getComments() {
         return comments;
     }
@@ -16,11 +20,11 @@ public class SolveComplainForm {
         this.comments = comments;
     }
 
-    public String getResult() {
-        return result;
+    public String getResolution() {
+        return resolution;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
     }
 }

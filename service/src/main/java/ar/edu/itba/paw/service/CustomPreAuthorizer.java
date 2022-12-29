@@ -18,12 +18,14 @@ public class CustomPreAuthorizer {
     private final TradeDao tradeDao;
     private final KycDao kycDao;
 
+    private final ComplainDao complainDao;
     @Autowired
-    public CustomPreAuthorizer(UserDao userDao, OfferDao offerDao, TradeDao tradeDao, KycDao kycDao) {
+    public CustomPreAuthorizer(UserDao userDao, OfferDao offerDao, TradeDao tradeDao, KycDao kycDao, ComplainDao complainDao) {
         this.userDao = userDao;
         this.offerDao = offerDao;
         this.tradeDao = tradeDao;
         this.kycDao = kycDao;
+        this.complainDao = complainDao;
     }
 
     public boolean canUserUploadOffer(UserDetails userDetails) {
@@ -72,4 +74,13 @@ public class CustomPreAuthorizer {
         User user = maybeUser.get();
         return user.getUserAuth().getCode() == code;
     }
+
+    public boolean canUserPeepComplain(String username, int complainId){
+        Optional<Complain> optionalComplain = complainDao.getComplainsBy(new ComplainFilter().restrictedToComplainId(complainId))
+                .stream().findFirst();
+        if(!optionalComplain.isPresent())
+            return false;
+        return isUserPartOfTrade(username,optionalComplain.get().getTrade().getTradeId());
+    }
+
 }

@@ -32,6 +32,7 @@ public class ComplainServiceImpl implements ComplainService{
     @Override
     @Transactional
     @Secured("ROLE_USER")
+    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(authentication.principal, #complain.tradeId)")
     public Complain makeComplain(ComplainPO complain) {
         if (complain == null)
             throw new NullPointerException("Complain Parameter Object object cannot be null.");
@@ -59,10 +60,12 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ADMIN') or @customPreAuthorizer.canUserPeepComplain(authentication.principal, #id)")
     public Optional<Complain> getComplainById(int id) {
         if (id < 0)
             throw new IllegalArgumentException("Complain id can only be non negative.");
-        return getComplainsBy(new ComplainFilter().restrictedToComplainId(id)).stream().findFirst();
+        return getComplainsBy(new ComplainFilter().restrictedToComplainId(id))
+                .stream().findFirst();
     }
 
     @Override

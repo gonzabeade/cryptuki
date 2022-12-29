@@ -21,7 +21,96 @@ const Landing = () => {
         url:"/offer/1",
         seller:"marquitos",
         trades:"1"
-    }]);
+    },
+        {
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        },
+        {
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        },
+        {
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        },{
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        }
+        ,{
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        },{
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        }
+        ,{
+            cryptoCode:"BTC",
+            date:new Date(),
+            location:"Balvanera",
+            maxInCrypto:2,
+            minInCrypto:0.001,
+            offerId:1,
+            offerStatus:"PENDING",
+            unitPrice:1000000,
+            url:"/offer/1",
+            seller:"marquitos",
+            trades:"1"
+        }]);
     const offerService = useOfferService();
     
     const navigate = useNavigate(); 

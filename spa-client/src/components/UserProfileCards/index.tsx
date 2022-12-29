@@ -15,7 +15,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">
                     <div className="w-full text-sm leading-normal text-gray-400 flex justify-end items-center mt-1">
-                        <a href="/changePassword" className="mr-3 underline">
+                        <a href="/changePassword" className="mr-3 underline cursor-pointer">
                             Change your password
                         </a>
                     </div>
@@ -57,10 +57,12 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                     <p className="text-black">{tradeQuantity}</p>
                     <span className="text-gray-400">Cantidad de trades</span>
                 </div>
-                {tradeQuantity > 0 ?
-                    <RatingStars rating={rating}/>
-                : ""
-                }
+                <div className="flex flex-wrap">
+                    {tradeQuantity > 0 ?
+                        <RatingStars rating={rating}/>
+                        : ""
+                    }
+                </div>
             </div>
         </div>
     );

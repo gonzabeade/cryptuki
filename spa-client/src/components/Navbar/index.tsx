@@ -80,7 +80,7 @@ const Navbar = () => {
                             onClick={() => {
                                 setUsername(userService.getLoggedInUser())
                             }}
-                            to="/buyer">
+                            to="/buyer/mdedeu">
                             <div className={"flex flex-row"}>
                                 {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
                                 {/*<p className="mx-3 font-roboto text-white font-semibold">{username}</p>*/}
@@ -136,7 +136,7 @@ const Navbar = () => {
                                     </li>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
-                                              to="/buyer"
+                                              to="/buyer/mdedeu"
                                               onClick={() => {
                                                   setUsername(userService.getLoggedInUser())
                                                   closeMobileMenu()

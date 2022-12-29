@@ -56,7 +56,7 @@ const Trade:React.FC<TradeProps> =  ({trade}) => {
                 </div>
             </div>
             <div className="w-2/5">
-                <ChatSnippet/>
+                <ChatSnippet otherUserActive={true}/>
             </div>
 
         </div>

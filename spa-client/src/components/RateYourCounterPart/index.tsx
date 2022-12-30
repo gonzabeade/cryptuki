@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
 
+
+
 type RateYourCounterPartProps = {
     usernameRater:string,
     usernameRated:string,
@@ -9,7 +11,7 @@ type RateYourCounterPartProps = {
 
 const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, usernameRater,  tradeId}) => {
 
-    const [alreadyRated, setAlreadyReady] = useState<boolean>(false);
+    const [alreadyRated, setAlreadyRated] = useState<boolean>(false);
     const [rating, setRating] = useState<number>();
     function hoverOnRating(number:number) {
         let element;
@@ -29,35 +31,35 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
 
     }
     function setRatingAndSend(rating:number) {
-        let button =  document.getElementById("sendRating");
         setRating(rating * 2);
-        button?.click();
+        setAlreadyRated(true);
     }
+
     return (
         <>
-            {alreadyRated &&
-                <>
-                    <h1 className="text-polard font-roboto  font-bold text-center text-3xl mx-auto">
+            {!alreadyRated &&
+                <div className="flex flex-col">
+                    <h1 className="text-polard font-roboto font-bold text-center text-xl mx-auto">
                         Rate {usernameRated}
                     </h1>
-                    <form method="post">
+                    <form>
 
                         {/*<input type="hidden"/> tradeId*/}
                         <div className="flex flex-col">
                             <div className="flex flex-row mx-auto mt-3">
-                                        <span className=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star1"
+                                        <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star1"
                                               onClick={()=>setRatingAndSend(1)} onMouseLeave={()=>leaveHoverOnRating(1)}
                                               onMouseOver={()=>hoverOnRating(1)}></span>
-                                <span className=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star2"
+                                <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star2"
                                       onClick={()=>setRatingAndSend(2)} onMouseLeave={()=>leaveHoverOnRating(2)}
                                       onMouseOver={()=>hoverOnRating(2)}></span>
-                                <span className=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star3"
+                                <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star3"
                                       onClick={()=>setRatingAndSend(3)} onMouseLeave={()=>leaveHoverOnRating(3)}
                                       onMouseOver={()=>hoverOnRating(3)}></span>
-                                <span className=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star4"
+                                <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star4"
                                       onClick={()=>setRatingAndSend(4)} onMouseLeave={()=>leaveHoverOnRating(4)}
                                       onMouseOver={()=>hoverOnRating(4)}></span>
-                                <span className=" cursor-pointer fa fa-star-o text-orange-400 text-3xl" id="star5"
+                                <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star5"
                                       onClick={()=>setRatingAndSend(5)} onMouseLeave={()=>leaveHoverOnRating(5)}
                                       onMouseOver={()=>hoverOnRating(5)}></span>
 
@@ -72,8 +74,8 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
                         </div>
 
                     </form>
-                </>}
-            {!alreadyRated &&
+                </div>}
+            {alreadyRated &&
                 <div className="mb-5 mt-5">
                     <ConfirmationToggle title={"Rating sent"}/>
                 </div>

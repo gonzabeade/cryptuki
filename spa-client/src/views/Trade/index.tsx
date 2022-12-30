@@ -5,7 +5,9 @@ import TradeStatusAlert from "../../components/TradeStatusAlert";
 import {InformationCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
 import {useNavigate} from "react-router-dom";
+import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
+import 'reactjs-popup/dist/index.css';
 
 type TradeProps = {
     trade:TransactionModel;
@@ -20,6 +22,10 @@ const Trade:React.FC<TradeProps> =  ({trade}) => {
                 <h1 className="text-polar text-xl text-center mx-auto my-2 font-lato font-bold">Buying process</h1>
                 <Stepper active={0}/>
                 <hr className="mt-4 mb-2"/>
+                {/*{trade.status === 'accepted' && <AdviceOnP2P/>}*/}
+                {/*<Popup  contentStyle={{borderRadius: "0.5rem"}} trigger={<button className="p-3 bg-frostdr text-white font-roboto font-bold mx-auto rounded-lg my-2">Advice on P2P trading</button>} position="center center" modal>*/}
+                {/*    <AdviceOnP2P/>*/}
+                {/*</Popup>*/}
                 <div className="flex flex-col shadow-2xl p-3 rounded-r-lg border-frostdr border-l-8 ">
                     <h1 className="text-xl text-polar mx-auto font-bold font-lato">Offer Information</h1>
                     <h1 className="text-lg text-polar mx-auto font-bold font-lato">Location</h1>
@@ -59,8 +65,8 @@ const Trade:React.FC<TradeProps> =  ({trade}) => {
                     </div>
                 </div>
                 {/* TODO ver el tema de webhook*/}
-                {trade.status === 'accepted' && <AdviceOnP2P/>}
-                {trade.status === 'sold' }
+
+
             </div>
             <div className="w-2/5">
                 <ChatSnippet otherUserActive={true}/>

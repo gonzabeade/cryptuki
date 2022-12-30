@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useRef} from 'react';
 
 const AdviceOnP2P = () => {
     return (
-        <div className="flex flex-col mx-auto">
+        <div className="flex flex-col mx-auto rounded-lg">
             <div className="flex flex-row mx-auto mt-10">
                 <h1 className="text-polard text-2xl font-bold text-center mr-5 ">
                     Advice on P2P Operation
@@ -28,7 +28,7 @@ const AdviceOnP2P = () => {
                     </p>
                 </li>
             </ul>
-
+            {/*<button className="p-3 bg-frostdr font-bold font-roboto mx-auto rounded-lg text-white" onClick={()=>document.getElementsByTagName("h1")[0].click()} >Ok, continue</button>*/}
         </div>
     );
 };

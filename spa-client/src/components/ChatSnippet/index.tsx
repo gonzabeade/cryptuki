@@ -7,6 +7,7 @@ type ChatSnippetProps = {
 const ChatSnippet:React.FC<ChatSnippetProps> = ({otherUserActive}) => {
     return (
         <div className="flex flex-row h-full w-full justify-around mr-10 mt-10">
+            {/* TODO ver el tema de webhook*/}
             <div className="container mx-10 h-4/5 F border-gray-200">
                 <div className=" border rounded bg-[#FAFCFF]">
                     <div>

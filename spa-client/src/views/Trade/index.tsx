@@ -5,6 +5,7 @@ import TradeStatusAlert from "../../components/TradeStatusAlert";
 import {InformationCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
 import {useNavigate} from "react-router-dom";
+import AdviceOnP2P from "../../components/AdviceOnP2P";
 
 type TradeProps = {
     trade:TransactionModel;
@@ -57,6 +58,9 @@ const Trade:React.FC<TradeProps> =  ({trade}) => {
                         </form>
                     </div>
                 </div>
+                {/* TODO ver el tema de webhook*/}
+                {trade.status === 'accepted' && <AdviceOnP2P/>}
+                {trade.status === 'sold' }
             </div>
             <div className="w-2/5">
                 <ChatSnippet otherUserActive={true}/>

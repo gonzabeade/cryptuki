@@ -12,6 +12,7 @@ const Trade = lazy(()=>import("./views/Trade/index"));
 const Support = lazy(()=>import("./views/Support/index"));
 const BuyerDashboard = lazy(()=>import("./views/BuyerDashboard/index"));
 const SellerDashboard = lazy(()=>import("./views/SellerDashboard/index"));
+const Receipt = lazy(()=>import("./views/Receipt/index"));
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                       <Route path="/support" element={<Support/>}/>
                       <Route path="/buyer/:username" element={<BuyerDashboard/>}/>
                       <Route path="/seller/:username" element={<SellerDashboard/>}/>
+                      <Route path="/trade/:id/receipt" element={<Receipt/>}/>
                   </Routes>
               </Suspense>
           </div>

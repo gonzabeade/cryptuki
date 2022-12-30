@@ -88,7 +88,7 @@ const Receipt: React.FC<TransactionModel> = ({
                             Home
                         </Link>
                         <Link className=" cursor-pointer font-semibold bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center"
-                           to="/">
+                           to="/support">
                             I had a problem
                         </Link>
                     </div>

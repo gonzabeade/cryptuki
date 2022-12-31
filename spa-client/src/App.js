@@ -25,7 +25,6 @@ function App() {
           <div className="content">
               <Suspense fallback={<Loader/>}>
                   <Routes>
-                      <Route path="/" element={<Landing/>}/>
                       <Route path="/register" element={<Register/>}/>
                       <Route path="/login" element={<Login/>}/>
                       <Route path="/offer/:id" element={<BuyOffer/>}/>
@@ -36,6 +35,7 @@ function App() {
                       <Route path="/trade/:id/receipt" element={<Receipt/>}/>
                       <Route path="/chat/:id" element={<SellerTrade/>}/>
                       <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
+                      <Route path="*" element={<Landing/>}/>
                   </Routes>
               </Suspense>
           </div>

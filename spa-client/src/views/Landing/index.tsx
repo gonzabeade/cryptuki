@@ -129,7 +129,25 @@ const Landing = () => {
                 <CryptoFilters/>
             </div>
 
-            <div className="flex flex-col w-2/3">
+            <div className="flex flex-col w-2/3 mt-10">
+                <div className="flex flex-row mx-10 justify-between">
+                    <div className="flex flex-row">
+                        <h3 className="font-bold mx-2 my-auto">Order by</h3>
+                        <form>
+                            <select className="p-2 rounded-lg">
+                                <option>Lowest Price</option>
+                                <option>Most recent</option>
+                                <option>Best Rated user</option>
+                                <option>Higher price</option>
+                                <option>Seller Last login</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div>
+                        <h3 className="text-gray-400">You got 18 results</h3>
+                    </div>
+
+                </div>
                 {offers?.map( (offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
                 <Paginator totalPages={10} actualPage={1} callback={()=>console.log("called")}/>
             </div>

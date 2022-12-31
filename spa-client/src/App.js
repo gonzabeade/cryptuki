@@ -16,6 +16,7 @@ const SellerDashboard = lazy(()=>import("./views/SellerDashboard/index"));
 const Receipt = lazy(()=>import("./views/Receipt/index"));
 const SellerTrade = lazy(()=>import("./views/SellerTrade/index"));
 const SellerOfferDashboard = lazy(()=>import("./views/SellerOfferDashboard/index"));
+const UploadAd = lazy(()=>import("./views/UploadAd/index"));
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                       <Route path="/trade/:id/receipt" element={<Receipt/>}/>
                       <Route path="/chat/:id" element={<SellerTrade/>}/>
                       <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
+                      <Route path="/offer/upload" element={<UploadAd/>}/>
                       <Route path="*" element={<Landing/>}/>
                   </Routes>
               </Suspense>

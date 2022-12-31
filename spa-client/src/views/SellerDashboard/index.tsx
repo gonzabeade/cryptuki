@@ -102,7 +102,7 @@ const SellerDashboard = () => {
                 }
 
                 <div className="mx-auto mt-5">
-                    <a href="/upload"
+                    <a href="/offer/upload"
                        className="py-2 pr-4 pl-3 text-lg text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto cursor-pointer">Upload
                         Advertisment</a>
                 </div>

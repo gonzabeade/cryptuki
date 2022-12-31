@@ -2,11 +2,13 @@ import React from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import RatingStars from "../RatingStars";
 import {Link} from "react-router-dom";
+import ChatButton from "../ChatButton";
 
 type OfferInformationForSellerProps = {
-    trade:TransactionModel
+    trade:TransactionModel,
+    chat:boolean
 }
-const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade}) => {
+const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade, chat}) => {
     return (
         <div className="flex flex-col justify-center px-10">
             <div
@@ -107,6 +109,9 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 {
                     trade.status !== 'accepted' && trade.status !== 'pending' &&
                     <div className="flex h-2/5 my-2"/>
+                }
+                {
+                    chat && <ChatButton tradeId={2} qUnseenMessagesSeller={1}/>
                 }
             </div>
 

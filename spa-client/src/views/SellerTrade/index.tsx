@@ -1,7 +1,6 @@
 import React from 'react';
 import ChatSnippet from "../../components/ChatSnippet";
 import OfferInformationForSeller from "../../components/OfferInformationForSeller";
-import OfferModel from "../../types/OfferModel";
 
 const SellerTrade = () => {
     return (
@@ -22,7 +21,7 @@ const SellerTrade = () => {
                     url:"/offer/1",
                     seller:"marquitos",
                     trades:"1"
-                }}}/>
+                }}} chat={false}/>
         </div>
     );
 };

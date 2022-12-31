@@ -14,34 +14,31 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                Offer Information
             </div>
             <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12 ">
-                <div className="flex font-sans h-fit w-full mt-5">
-                    {/*<c:if test="${trade.status == 'PENDING' }">*/}
-                    {/*    <div className="bg-nyellow  w-full text-white  text-center p-2">*/}
-                    {/*        <messages:message*/}
-                    {/*            code="pending"/>*/}
-                    {/*    </div>*/}
-                    {/*</c:if>*/}
-
-                    {/*<c:if test="${trade.status == 'REJECTED' }">*/}
-                    {/*    <div className="bg-nred/[0.6] w-full text-white  text-center p-2">*/}
-                    {/*        <messages:message*/}
-                    {/*            code="rejected"/>*/}
-                    {/*    </div>*/}
-                    {/*</c:if>*/}
-
-                    {/*<c:if test="${trade.status == 'ACCEPTED' }">*/}
-                    {/*    <div className="bg-ngreen w-full text-white text-center p-2">*/}
-                    {/*        <messages:message*/}
-                    {/*            code="accepted"/>*/}
-                    {/*    </div>*/}
-                    {/*</c:if>*/}
-
-                    {/*<c:if test="${trade.status == 'SOLD' }">*/}
-                    {/*    <div className="bg-gray-400 w-full text-white text-center p-2">*/}
-                    {/*        <messages:message*/}
-                    {/*            code="sold"/>*/}
-                    {/*    </div>*/}
-                    {/*</c:if>*/}
+                <div className="flex font-sans h-fit w-full mt-2">
+                    {
+                        trade.status === 'sold' &&
+                        <div className="font-semibold bg-gray-400 w-full text-white text-center p-2 rounded-lg">
+                           Sold
+                        </div>
+                    }
+                    {
+                        trade.status === 'pending' &&
+                        <div className=" font-semibold bg-nyellow  w-full text-white text-center p-2 rounded-lg">
+                            Pending
+                        </div>
+                    }
+                    {
+                        trade.status === 'rejected' &&
+                        <div className=" font-semibold bg-nred/[0.6] w-full text-white  text-center p-2 rounded-lg">
+                            Rejected
+                        </div>
+                    }
+                    {
+                        trade.status === 'accepted' &&
+                        <div className=" font-semibold bg-ngreen  w-full text-white  text-center p-2 rounded-lg">
+                            Rejected
+                        </div>
+                    }
                 </div>
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">

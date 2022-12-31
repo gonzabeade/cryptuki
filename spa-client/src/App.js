@@ -14,6 +14,7 @@ const BuyerDashboard = lazy(()=>import("./views/BuyerDashboard/index"));
 const SellerDashboard = lazy(()=>import("./views/SellerDashboard/index"));
 const Receipt = lazy(()=>import("./views/Receipt/index"));
 const SellerTrade = lazy(()=>import("./views/SellerTrade/index"));
+const SellerOfferDashboard = lazy(()=>import("./views/SellerOfferDashboard/index"));
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                       <Route path="/seller/:username" element={<SellerDashboard/>}/>
                       <Route path="/trade/:id/receipt" element={<Receipt/>}/>
                       <Route path="/chat/:id" element={<SellerTrade/>}/>
+                      <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
                   </Routes>
               </Suspense>
           </div>

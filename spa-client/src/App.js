@@ -2,6 +2,7 @@ import Navbar from './components/Navbar';
 import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
+import './index.css'
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));
@@ -39,6 +40,11 @@ function App() {
                   </Routes>
               </Suspense>
           </div>
+            <div className="shape-blob"></div>
+            <div className="shape-blob one"></div>
+            <div className="shape-blob two"></div>
+            <div className="shape-blob left-[50%]"></div>
+            <div className="shape-blob left-[5%] top-[80%]"></div>
         </div>
       </BrowserRouter>
   );

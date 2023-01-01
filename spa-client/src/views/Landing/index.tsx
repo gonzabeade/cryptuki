@@ -128,6 +128,9 @@ const Landing = () => {
             toast.error("Something went wrong, check your connectivity");
         }
     }
+    function orderOffers(){
+        //order
+    }
 
     useEffect(  ()=>{
          const fetchOffers = async () =>  {
@@ -150,7 +153,7 @@ const Landing = () => {
                         <div className="flex flex-row">
                             <h3 className="font-bold mx-2 my-auto">Order by</h3>
                             <form>
-                                <select className="p-2 rounded-lg">
+                                <select className="p-2 rounded-lg" onChange={orderOffers}>
                                     <option>Lowest Price</option>
                                     <option>Most recent</option>
                                     <option>Best Rated user</option>
@@ -160,7 +163,7 @@ const Landing = () => {
                             </form>
                         </div>
                         <div>
-                            <h3 className="text-gray-400">You got 18 results</h3>
+                            <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
                         </div>
 
                     </div>

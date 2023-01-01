@@ -1,6 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
 import {ChevronDownIcon, MagnifyingGlassCircleIcon} from "@heroicons/react/24/outline";
+import {NEIGHBORHOODS} from "../../common/constants";
+import {CryptocurrencyModel} from "../../types/Cryptocurrency";
+import Result from "../../types/Result";
+import toast from "react-hot-toast";
+import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
 type CryptoFormValues = {
 
@@ -15,6 +20,23 @@ type CryptoFiltersProps = {
 //todo hay que mandarle un callback para actualizar las offers
 const CryptoFilters = ({callback}:CryptoFiltersProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<CryptoFormValues>();
+    const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
+    const cryptocurrencyService = useCryptocurrencyService();
+
+    function fetchCryptocurrencies(){
+        const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
+
+        if(apiCall.statusCode === 200){
+            setCryptoCurrencies(apiCall.getData());
+        } else{
+            toast.error("Something went wrong.");
+        }
+    }
+
+    useEffect(()=>{
+        fetchCryptocurrencies();
+    },[]);
+
 
     function onSubmit(data:CryptoFormValues){
         callback(data);
@@ -31,24 +53,42 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                            {...register("amount")} />
                        <select className="p-2 m-2 rounded-lg shadow"  {...register("amountCurrency")}>
                            <option>ARS</option>
-                           <option>ETH</option>
-                           <option>BTC</option>
+                           {
+                               cryptocurrencies.map((cryptocurrency)=>{
+                                   return (
+                                       <option value={cryptocurrency.code} key={cryptocurrency.code}>
+                                           {cryptocurrency.name}
+                                       </option>
+                                   );
+                               })
+                           }
                        </select>
                    </div>
               </div>
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Location</h2>
                    <select multiple className="p-2 m-2 rounded-lg shadow"  {...register("locations")}>
-                       <option>Barrio 1</option>
-                       <option>Barrio 2</option>
+                       { NEIGHBORHOODS.map((neighborhood)=>{
+                           return (
+                               <option value={neighborhood} key={neighborhood}>
+                                   {neighborhood}
+                               </option>
+                           );
+                       })}
                    </select>
                </div>
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Cryptos</h2>
                    <select multiple className="p-2 m-2 rounded-lg shadow"  {...register("cryptos")}>
-                       <option>USDC</option>
-                       <option>USDT</option>
-                       <option>DAI</option>
+                       {
+                           cryptocurrencies.map((cryptocurrency)=>{
+                               return (
+                                   <option value={cryptocurrency.code} key={cryptocurrency.code}>
+                                       {cryptocurrency.name}
+                                   </option>
+                               );
+                           })
+                       }
                    </select>
                </div>
                <div className="bg-gray-100 w-full py-3 rounded-b-lg flex">
@@ -60,11 +100,6 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                </div>
 
            </form>
-
-
-           {/*multiple cryptos*/}
-           {/*multiple locations*/}
-           {/*amount*/}
        </div>
     );
 };

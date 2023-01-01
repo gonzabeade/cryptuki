@@ -1,6 +1,18 @@
 import React from 'react';
+import {useForm} from "react-hook-form";
 
+type ContactFormValues = {
+    email:string,
+    message:string
+}
+//TODO errors and tradeId param?
 const Support= () => {
+    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>();
+
+    function onSubmit(data:ContactFormValues){
+
+    }
+
     return (
         <>
             <div className=" flex  flex-col justify-center mx-10">
@@ -17,15 +29,15 @@ const Support= () => {
                 </div>
             </div>
             <div className="flex justify-center">
-                <form className="flex flex-col min-w-[50%]">
+                <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col p-5 justify-center">
                         <div className="flex-row justify-center">
-                            <input type="email" className="min-w-full h-10 justify-center rounded-lg p-2" placeholder="Email"/>
+                            <input type="email" className="min-w-full h-10 justify-center rounded-lg p-2" placeholder="Email" {...register("email", {required:true})}/>
                         </div>
                     </div>
                     <div className="flex flex-col p-5 ">
                         <div className="flex-row justify-center">
-                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder="Message"/>
+                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder="Message" {...register("message", {required:true})}/>
                         </div>
                     </div>
                     <div className="flex flex-row p-5">

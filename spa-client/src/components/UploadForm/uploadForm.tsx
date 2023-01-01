@@ -1,6 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 
 const UploadForm = () => {
+
+    const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
+    const [neighborhoods, setNeighborhoods] = useState<string[]>([]);
+
+
+    function fetchCryptocurrencies(){
+
+    }
+
+
+
+    function fetchNeighborhoods(){
+
+    }
+
+    useEffect(()=>{
+        fetchCryptocurrencies();
+        fetchNeighborhoods();
+    }, [cryptocurrencies, setCryptoCurrencies, setNeighborhoods])
+
     return (
         <div className="flex flex-row mx-auto">
             <form className="flex flex-col min-w-[50%]">

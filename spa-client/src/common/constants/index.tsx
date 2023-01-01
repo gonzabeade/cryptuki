@@ -8,4 +8,7 @@ export const paths = {
     LOCATIONS: '/locations',
     CRYPTOCURRENCIES: '/cryptocurrencies',
 }
+export const NEIGHBORHOODS =[
+
+]
   

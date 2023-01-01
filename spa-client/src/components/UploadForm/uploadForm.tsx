@@ -1,26 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
+import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
+import Result from "../../types/Result";
+import {NEIGHBORHOODS} from "../../common/constants";
+import toast from "react-hot-toast";
 
 const UploadForm = () => {
 
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
-    const [neighborhoods, setNeighborhoods] = useState<string[]>([]);
+    const cryptocurrencyService = useCryptocurrencyService();
 
 
     function fetchCryptocurrencies(){
+        const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
 
-    }
-
-
-
-    function fetchNeighborhoods(){
+        if(apiCall.statusCode === 200){
+            setCryptoCurrencies(apiCall.getData);
+        } else{
+            toast.error("Something went wrong.");
+        }
 
     }
 
     useEffect(()=>{
         fetchCryptocurrencies();
-        fetchNeighborhoods();
-    }, [cryptocurrencies, setCryptoCurrencies, setNeighborhoods])
+    }, [setCryptoCurrencies, cryptocurrencyService])
 
     return (
         <div className="flex flex-row mx-auto">
@@ -36,11 +40,17 @@ const UploadForm = () => {
                             <div className="flex flex-row justify-center mx-auto">
                                 <select className="rounded-lg p-3">
                                     <option disabled selected>Choose an option</option>
-                                    {/*<c:forEach var="coin" items="${cryptocurrencies}">*/}
-                                    {/*    <form:option value="${coin.code}">*/}
-                                    {/*        <c:out value="${coin.commercialName}"/>*/}
-                                    {/*    </form:option>*/}
-                                    {/*</c:forEach>*/}
+                                    {
+                                        cryptocurrencies.map((cryptocurrency)=>{
+                                           return (
+                                               <option value={cryptocurrency.code}>
+                                                   {cryptocurrency.name}
+                                               </option>
+                                           );
+                                        })
+                                    }
+
+
                                 </select>
                             </div>
                             <h1 className="flex flex-row mx-auto mt-4">
@@ -94,9 +104,13 @@ const UploadForm = () => {
                             <h2 className="text-lg font-sans text-polard text-center flex flex-row justify-center my-3">Neighborhood*</h2>
                             <select className="font-sans text-polard mb-3 text-center rounded-lg p-2 ">
                                 <option disabled selected>Choose option</option>
-                                {/*<c:forEach items="${location}" var="hood">*/}
-                                {/*    <form:option value="${hood}"><messages:message code="Location.${hood}"/></form:option>*/}
-                                {/*</c:forEach>*/}
+                                { NEIGHBORHOODS.map((neighborhood)=>{
+                                    return (
+                                        <option value={neighborhood}>
+                                            {neighborhood}
+                                        </option>
+                                    );
+                                })}
                             </select>
                         </div>
                     </div>

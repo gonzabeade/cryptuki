@@ -1,10 +1,10 @@
-import { OfferService } from "../services/OfferService";
+import {OfferService} from "../services/OfferService";
 import {useAxios} from "./useAxios";
 
 const useOfferService = () => {
-    const axiosInstance = useAxios(); 
-    const offerService = new OfferService(axiosInstance); 
-    return offerService; 
+    const axiosInstance = useAxios();
+
+    return new OfferService(axiosInstance);
 }
 
 

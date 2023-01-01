@@ -3,6 +3,7 @@ import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
 import './index.css'
+import Error from "./views/Error";
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));
@@ -38,7 +39,8 @@ function App() {
                       <Route path="/chat/:id" element={<SellerTrade/>}/>
                       <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
                       <Route path="/offer/upload" element={<UploadAd/>}/>
-                      <Route path="*" element={<Landing/>}/>
+                      <Route path="/" element={<Landing/>}/>
+                      <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
                   </Routes>
               </Suspense>
           </div>

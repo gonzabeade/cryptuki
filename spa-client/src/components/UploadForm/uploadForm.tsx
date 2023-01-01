@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Index = () => {
+const UploadForm = () => {
     return (
         <div className="flex flex-row mx-auto">
             <form className="flex flex-col min-w-[50%]">
@@ -103,4 +103,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default UploadForm;

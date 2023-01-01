@@ -83,7 +83,7 @@ const BuyOffer = () => {
                     <p className="mx-auto font-bold text-polar">or</p>
                     <label className="mx-auto text-center mt-3">Amount in ARS</label>
                     <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`} onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
-                    <div className="flex flex-row justify-evenly mt-3">
+                    <div className="flex flex-row justify-evenly mt-3 mb-3">
                         <button className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg">Cancel</button>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg">Make trade proposal</button>
                     </div>
@@ -101,16 +101,17 @@ const BuyOffer = () => {
                     <h1 className="font-sans font-bold text-2xl mx-auto text-polar mt-6 mb-2">
                         Location
                     </h1>
+                { offer?.location ? <iframe
+                    className="mx-auto mb-10"
+                    width="450"
+                    height="250"
+                    frameBorder="0"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://www.google.com/maps/embed/v1/search?key=${process.env.GMAPS_API_KEY}&q=${offer.location}`}
+                    allowFullScreen>
+                </iframe>:
+                    <div>Loading Map...</div>}
 
-                    <iframe
-                        className="mx-auto mb-10"
-                        width="450"
-                        height="250"
-                        frameBorder="0"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps/embed/v1/search?key=${apiKey}&q=${offer.location}"
-                        allowFullScreen>
-                    </iframe>
             </div>
         </div>
     );

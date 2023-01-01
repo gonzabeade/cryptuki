@@ -4,53 +4,75 @@ import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import Result from "../../types/Result";
 import {NEIGHBORHOODS} from "../../common/constants";
 import toast from "react-hot-toast";
+import {useForm} from "react-hook-form";
+
+type UploadFormValues = {
+    minInCrypto:number,
+    maxInCrypto:number,
+    location:string,
+    unitPrice:number,
+    cryptoCode:string,
+    automaticResponse?:string
+}
+//TODO- Errors and pattern validations
 
 const UploadForm = () => {
+
+    //State
 
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
 
-
-    function fetchCryptocurrencies(){
+     function fetchCryptocurrencies(){
         const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
 
         if(apiCall.statusCode === 200){
-            setCryptoCurrencies(apiCall.getData);
+            setCryptoCurrencies(apiCall.getData());
         } else{
             toast.error("Something went wrong.");
         }
-
+    }
+    //TODO: This feels like a bad practice. Maybe useEffect on selected value?
+    function changeSuggestedPrice(){
+        const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
+        const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
+        const price = document.getElementById("priceCrypto") as HTMLElement;
+        price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS': 'No price detected' ;
     }
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    }, [setCryptoCurrencies, cryptocurrencyService])
+    },[])
+
+    //Form
+    const { register, handleSubmit, formState: { errors } } = useForm<UploadFormValues>();
+
+    function onSubmit(data:UploadFormValues) {
+        console.log(data);
+    }
 
     return (
         <div className="flex flex-row mx-auto">
-            <form className="flex flex-col min-w-[50%]">
+            <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-row divide-x">
                     <div className="flex flex-col mx-5 w-1/3">
                         <h1 className="font-sans text-polar font-bold text-xl text-center">1. Price
                             Settings </h1>
-                        <input type="hidden" value="${sellerId}"/>
                         <div className="flex flex-col justify-center">
                             <label
                                 className="text-lg font-sans text-polard  mb-3 mt-2 text-center">Cryptocurrency*</label>
                             <div className="flex flex-row justify-center mx-auto">
-                                <select className="rounded-lg p-3">
-                                    <option disabled selected>Choose an option</option>
+                                <select className="rounded-lg p-3" onSelect={changeSuggestedPrice} id="cryptoSelected" {...register("cryptoCode",{required:true})} defaultValue={"DEFAULT"}>
+                                    <option disabled value="DEFAULT">Choose an option</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{
                                            return (
-                                               <option value={cryptocurrency.code}>
+                                               <option value={cryptocurrency.code} key={cryptocurrency.code}>
                                                    {cryptocurrency.name}
                                                </option>
                                            );
                                         })
                                     }
-
-
                                 </select>
                             </div>
                             <h1 className="flex flex-row mx-auto mt-4">
@@ -63,7 +85,9 @@ const UploadForm = () => {
                                 ARS*</label>
                             <div className="flex flex-col justify-center ">
                                 <input type="number" className="h-10 justify-center rounded-lg p-3 mx-auto "
-                                       step=".01"/>
+                                       step=".01"
+                                       {...register("unitPrice", {required:true})}
+                                />
                             </div>
                         </div>
                         <div className="flex flex-col justify-center mt-4">
@@ -76,7 +100,8 @@ const UploadForm = () => {
                                         <p id="minCoin" className="mx-2">BTC</p></label>
                                     <div className="flex flex-row justify-center mx-auto">
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
-                                               step=".00000001"/>
+                                               step=".00000001"
+                                               {...register("minInCrypto", {required:true})}/>
                                     </div>
                                 </div>
                                 <div className="my-5">
@@ -89,7 +114,8 @@ const UploadForm = () => {
                                         <p id="maxCoin" className="mx-2">BTC</p></label>
                                     <div className="flex flex-row justify-center mx-auto">
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
-                                               step=".00000001"/>
+                                               step=".00000001"
+                                               {...register("maxInCrypto", {required:true})}/>
                                     </div>
                                 </div>
                             </div>
@@ -102,11 +128,11 @@ const UploadForm = () => {
                             Location</label>
                         <div className="flex flex-col justify-center px-5">
                             <h2 className="text-lg font-sans text-polard text-center flex flex-row justify-center my-3">Neighborhood*</h2>
-                            <select className="font-sans text-polard mb-3 text-center rounded-lg p-2 ">
-                                <option disabled selected>Choose option</option>
+                            <select className="font-sans text-polard mb-3 text-center rounded-lg p-2 " {...register("location",{required:true})} defaultValue={"DEFAULT"}>
+                                <option disabled value="DEFAULT">Choose option</option>
                                 { NEIGHBORHOODS.map((neighborhood)=>{
                                     return (
-                                        <option value={neighborhood}>
+                                        <option value={neighborhood} key={neighborhood}>
                                             {neighborhood}
                                         </option>
                                     );
@@ -120,7 +146,8 @@ const UploadForm = () => {
                         <h2 className="text-justify">You can set an automatic response every time someone makes you a
                             trade proposal </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
-                            <textarea className="w-full h-36 rounded-lg mx-auto p-5"/>
+                            <textarea className="w-full h-36 rounded-lg mx-auto p-5"
+                                      {...register("automaticResponse")}/>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,6 @@ export const paths = {
     CRYPTOCURRENCIES: '/cryptocurrencies',
 }
 export const NEIGHBORHOODS =[
-
+'Balvanera'
 ]
   

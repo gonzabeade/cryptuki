@@ -7,5 +7,6 @@ export default interface UserModel {
     username:string,
     lastLogin:string,
     trades_completed:number,
-    rating:number
+    rating:number,
+    image_url:string
 }

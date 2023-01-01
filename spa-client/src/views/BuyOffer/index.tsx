@@ -84,8 +84,8 @@ const BuyOffer = () => {
                     <label className="mx-auto text-center mt-3">Amount in ARS</label>
                     <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`} onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
-                        <button className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg">Cancel</button>
-                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg">Make trade proposal</button>
+                        <button className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold">Cancel</button>
+                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>
                     </div>
                 </form>
             </div>

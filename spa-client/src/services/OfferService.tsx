@@ -21,6 +21,14 @@ export class OfferService {
         })
         return Result.ok(resp.data);
     }
+    public async getOfferInformation(offerId:number):Promise<Result<OfferModel>>{
+        const resp = await this.axiosInstance.get<OfferModel>(this.basePath, {
+            params:{
+                offerId: offerId
+            }
+        })
+        return Result.ok(resp.data);
+    }
 
 }
 

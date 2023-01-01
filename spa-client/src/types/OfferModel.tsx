@@ -1,3 +1,6 @@
+import TransactionModel from "./TransactionModel";
+import UserModel from "./UserModel";
+
 export default interface OfferModel {
 
         comments?: string,
@@ -12,7 +15,7 @@ export default interface OfferModel {
         url: string, 
 
 
-        seller: string, // TODO: Change to UserModel 
-        trades: string  // TODO: Change to TradesModel[]  
+        seller: UserModel, // TODO: Change to UserModel
+        trades: TransactionModel[]  // TODO: Change to TradesModel[]
 
 }

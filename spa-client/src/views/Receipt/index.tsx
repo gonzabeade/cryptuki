@@ -1,18 +1,35 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import OfferModel from "../../types/OfferModel";
-import UserProfileCards from "../../components/UserProfileCards";
-import {Link} from "react-router-dom";
+import {Link, useParams, useSearchParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
+import useTradeService from "../../hooks/useTradeService";
+import toast from "react-hot-toast";
 
-const Receipt: React.FC<TransactionModel> = ({
-                                                 status,
-                                                 icon,
-                                                 buyer,
-                                                 seller,
-                                                 offer
-                                             }) => {
+
+const Receipt = () => {
+
+    const [trade, setTrade] = useState<TransactionModel>();
+    const params = useParams();
+    const tradeService = useTradeService();
+
+    async function fetchTrade(tradeId:number){
+        const resp = await tradeService.getTradeInformation(tradeId);
+        if(resp.statusCode === 200){
+            setTrade(resp.getData());
+        }else{
+            toast.error("Error fetching trade");
+        }
+    }
+
+    useEffect(()=>{
+        // const tradeId = params.tradeId;
+        //fetch trade
+        fetchTrade(1);
+
+    })
+
+
     return (
         <>
             <div className="flex flex-row divide-x-2 divide-polard mt-5">
@@ -34,6 +51,7 @@ const Receipt: React.FC<TransactionModel> = ({
                         <h1 className="mx-auto text-polard font-bold text-xl mt-10 mb-5">
                             Transaction Data
                         </h1>
+                        {/*TODO ver como switcheamos esto dependiendo del usuario que ve*/}
                         <div
                             className="py-5 px-14 mx-auto rounded-lg bg-white shadow flex  flex-col">
                             <div className="flex flex-row px-30">
@@ -73,7 +91,7 @@ const Receipt: React.FC<TransactionModel> = ({
                                     Transaction confirmation time
                                 </h4>
                                 <h2 className="text-lg font-roboto text-polar text-center my-auto ">
-                                    30-12-2022 12:01
+                                    {trade? trade.date.toDateString(): 'No date provided'}
                                 </h2>
                             </div>
                         </div>
@@ -96,6 +114,7 @@ const Receipt: React.FC<TransactionModel> = ({
 
             <div className="flex flex-col w-2/5">
                 <div className="flex flex-col mx-10 items-center">
+                    {/*TODO ver como switcheamos con usuarios */}
                     <UserInfo username={"mdedeu"} email={"mdedeu@itba.edu.ar"} phone_number={"1245432"} last_login={"ayer"} trades_completed={12} rating={4.5}/>
                     <div className="flex flex-col mx-auto mt-10">
                         <RateYourCounterPart usernameRater={"mdedeu"} usernameRated={"messi"} tradeId={21}/>

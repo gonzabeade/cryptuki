@@ -7,5 +7,6 @@ export default interface TransactionModel {
     offer:OfferModel
     amount:number
     id:number
+    date:Date
     //TODO:lo q falte
 }

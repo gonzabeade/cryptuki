@@ -3,16 +3,21 @@ import { useForm } from 'react-hook-form';
 import {ChevronDownIcon, MagnifyingGlassCircleIcon} from "@heroicons/react/24/outline";
 
 type CryptoFormValues = {
+
     cryptos?:string[],
     locations?:string[],
-    amount?:number
+    amount?:number,
+    amountCurrency?:string
 }
-
-const CryptoFilters = () => {
+type CryptoFiltersProps = {
+    callback:Function
+}
+//todo hay que mandarle un callback para actualizar las offers
+const CryptoFilters = ({callback}:CryptoFiltersProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<CryptoFormValues>();
 
     function onSubmit(data:CryptoFormValues){
-        console.log(data)
+        callback(data);
     }
 
     return (
@@ -22,8 +27,9 @@ const CryptoFilters = () => {
                <div className="flex flex-col  px-6 py-3 mt-2">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Amount</h2>
                    <div className="flex flex-row mx-auto">
-                       <input type="number" placeholder="Amount" className="p-2 m-2 rounded-lg shadow" step="0.000001"/>
-                       <select className="p-2 m-2 rounded-lg shadow">
+                       <input type="number" placeholder="Amount" className="p-2 m-2 rounded-lg shadow" step="0.000001"
+                           {...register("amount")} />
+                       <select className="p-2 m-2 rounded-lg shadow"  {...register("amountCurrency")}>
                            <option>ARS</option>
                            <option>ETH</option>
                            <option>BTC</option>
@@ -32,14 +38,14 @@ const CryptoFilters = () => {
               </div>
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Location</h2>
-                   <select multiple className="p-2 m-2 rounded-lg shadow">
+                   <select multiple className="p-2 m-2 rounded-lg shadow"  {...register("locations")}>
                        <option>Barrio 1</option>
                        <option>Barrio 2</option>
                    </select>
                </div>
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Cryptos</h2>
-                   <select multiple className="p-2 m-2 rounded-lg shadow">
+                   <select multiple className="p-2 m-2 rounded-lg shadow"  {...register("cryptos")}>
                        <option>USDC</option>
                        <option>USDT</option>
                        <option>DAI</option>
@@ -48,7 +54,6 @@ const CryptoFilters = () => {
                <div className="bg-gray-100 w-full py-3 rounded-b-lg flex">
                    <button type="submit" className="rounded-lg bg-frostdr w-24 mx-auto p-2">
                        <div className="flex flex-row mx-auto justify-center">
-                           {/*<MagnifyingGlassCircleIcon width={20} height={20} className="my-auto" color="white"/>*/}
                            <p className="font-roboto font-bold text-white mx-2 text-center">Filter</p>
                        </div>
                    </button>

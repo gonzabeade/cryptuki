@@ -1,6 +1,7 @@
 import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
+import Result from "../types/Result";
 
 export class OfferService {
 
@@ -11,14 +12,14 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number): Promise<Array<OfferModel>> {
-        const resp = await this.axiosInstance.get<Array<OfferModel>>(this.basePath, {
+    public async getOffers(page?: number, pageSize?: number): Promise<Result<OfferModel[]>> {
+        const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params: {
                 page,
                 per_page: pageSize 
             }
         })
-        return resp.data; 
+        return Result.ok(resp.data);
     }
 
 }

@@ -88,6 +88,8 @@ public class ComplainController {
             @PathParam("id") int id
     ) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+
         Complain complain = complainService.getComplainById(id).orElseThrow(() -> new NoSuchComplainException(id));
         if (ComplaintResolution.DISMISS.equals(ComplaintResolution.valueOf(solveComplainForm.getResolution()))) {
             complainService.closeComplainWithDismiss(id, username, solveComplainForm.getComments());
@@ -107,6 +109,7 @@ public class ComplainController {
 
     @GET
     @Path("/{id}/resolution")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
     public Response getComplaintResolution(@PathParam("id") int id) {
         Complain complain = complainService.getComplainById(id).

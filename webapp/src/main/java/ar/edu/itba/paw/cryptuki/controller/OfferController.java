@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
@@ -48,24 +50,9 @@ public class OfferController {
     }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOffers(
-            @QueryParam("page") @DefaultValue("0") final int page,
-            @QueryParam("per_page") @DefaultValue("5") final int pageSize,
-            @QueryParam("crypto_code") final List<String> cryptoCodes,
-            @QueryParam("location") @CollectionOfEnum(enumClass = Location.class) final List<String> locations,
-            @QueryParam("status") @CollectionOfEnum(enumClass = OfferStatus.class) final List<String> status,
-            @QueryParam("exclude_user") final List<String> excludedUsernames,
-            @QueryParam("by_user") final List<String> restrictedToUsernames
-    ) {
+    public Response listOffers(@BeanParam OfferBeanParam offerBeanParam) {
 
-        OfferFilter filter = new OfferFilter()
-                .excludeUsernames(excludedUsernames)
-                .restrictedToUsernames(restrictedToUsernames)
-                .withCryptoCodes(cryptoCodes)
-                .withLocations(locations)
-                .withOfferStatus(status.stream().map(o->OfferStatus.valueOf(o)).collect(Collectors.toList()))
-                .withPage(page)
-                .withPageSize(pageSize);
+        OfferFilter filter = offerBeanParam.toOfferFilter();
 
         Collection<OfferDto> offers = offerService.getOffers(filter).stream().map(o -> OfferDto.fromOffer(o, uriInfo)).collect(Collectors.toList());
         long offerCount = offerService.countOffers(filter);
@@ -74,7 +61,7 @@ public class OfferController {
             return Response.noContent().build();
 
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {});
-        return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, offerCount).build();
+        return ResponseHelper.genLinks(rb, uriInfo, offerBeanParam.getPage(), offerBeanParam.getPageSize(), offerCount).build();
     }
 
     @GET

@@ -2,9 +2,10 @@ package ar.edu.itba.paw.cryptuki.dto;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import javax.validation.ValidationException;
+import java.util.Arrays;
 
-// TODO: Think and play with the path value! Trunctae, look at examples, etc.
 public class ValidationErrorDto {
 
     private String message;
@@ -13,7 +14,11 @@ public class ValidationErrorDto {
     public static ValidationErrorDto fromValidationException(final ConstraintViolation violation) {
         final ValidationErrorDto dto = new ValidationErrorDto();
         dto.message = violation.getMessage();
-        dto.path = violation.getPropertyPath().toString();
+        Path.Node leaf = null;
+        for (Path.Node p: violation.getPropertyPath())
+            leaf = p;
+        if (leaf != null && !leaf.toString().equals(""))
+            dto.path = String.valueOf(leaf);
         return dto;
     }
 

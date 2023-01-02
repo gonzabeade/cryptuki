@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = CollectionOfEnumValidator.class)

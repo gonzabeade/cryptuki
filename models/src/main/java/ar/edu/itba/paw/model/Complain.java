@@ -31,6 +31,10 @@ public class Complain {
     @Column(name="moderator_comments")
     private String moderatorComments;
 
+    @Column(name="resolution", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private ComplaintResolution resolution = null;
+
     public static class Builder {
 
         private Trade trade;
@@ -83,7 +87,7 @@ public class Complain {
         // Just for Hibernate!
     }
 
-    public Integer getComplainId() {
+    public int getComplainId() {
         return complainId;
     }
 
@@ -127,6 +131,14 @@ public class Complain {
         this.status = status;
     }
 
+    public ComplaintResolution getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(ComplaintResolution resolution) {
+        this.resolution = resolution;
+    }
+
     @Override
     public boolean equals(Object o){
         if(o == this)
@@ -134,6 +146,6 @@ public class Complain {
         if(!(o instanceof Complain))
             return false;
         Complain complain = (Complain) o;
-        return complain.getComplainId().equals(this.complainId);
+        return complain.getComplainId() == this.complainId;
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.ComplainDto;
+import ar.edu.itba.paw.cryptuki.dto.ComplainResolutionDto;
 import ar.edu.itba.paw.cryptuki.form.legacy.admin.SolveComplainForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.support.TradeComplainSupportForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
@@ -25,18 +26,16 @@ import java.util.stream.Collectors;
 
 @Path("api/complaints")
 @Component
-public class ComplainsController {
+public class ComplainController {
 
     private final ComplainService complainService;
-    private final UserService userService;
 
     @Context
     public UriInfo uriInfo;
 
     @Autowired
-    public ComplainsController(ComplainService complainService, UserService userService) {
+    public ComplainController(ComplainService complainService) {
         this.complainService = complainService;
-        this.userService = userService;
     }
 
     @POST
@@ -59,15 +58,15 @@ public class ComplainsController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getComplaints(@BeanParam ComplainBeanParam complainBeanParam) {
-        ComplainFilter complainFilter = complainBeanParam.mapToComplainFilter();
+        ComplainFilter complainFilter = complainBeanParam.toComplainFilter();
         Collection<ComplainDto> complains = complainService.getComplainsBy(complainFilter)
-                .stream().map(o -> ComplainDto.fromComplain(o, uriInfo))
+                .stream()
+                .map(o -> ComplainDto.fromComplain(o, uriInfo))
                 .collect(Collectors.toList());
         long offerCount = complainService.countComplainsBy(complainFilter);
 
         if (complains.isEmpty())
             return Response.noContent().build();
-
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<ComplainDto>>(complains) {});
         return ResponseHelper.genLinks(rb, uriInfo, complainBeanParam.getPage(), complainBeanParam.getPageSize(), offerCount).build();
     }
@@ -86,7 +85,8 @@ public class ComplainsController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response createComplaintResolution(
             @Valid SolveComplainForm solveComplainForm,
-            @PathParam("id") int id) {
+            @PathParam("id") int id
+    ) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Complain complain = complainService.getComplainById(id).orElseThrow(() -> new NoSuchComplainException(id));
         if (ComplaintResolution.DISMISS.equals(ComplaintResolution.valueOf(solveComplainForm.getResolution()))) {
@@ -94,8 +94,14 @@ public class ComplainsController {
         } else {
             complainService.closeComplainWithKickout(id, username, solveComplainForm.getComments(), complain.getComplainer().getId());
         }
-        return Response.created(uriInfo.getRequestUri()).build();
 
+        final URI uri = uriInfo.getBaseUriBuilder()
+                .replacePath("/api/complaints")
+                .path(String.valueOf(complain.getComplainId()))
+                .path("resolution")
+                .build();
+
+        return Response.created(uri).build();
     }
 
 
@@ -105,14 +111,11 @@ public class ComplainsController {
     public Response getComplaintResolution(@PathParam("id") int id) {
         Complain complain = complainService.getComplainById(id).
                 orElseThrow(() -> new NoSuchComplainException(id));
+
         if(complain.getStatus().equals(ComplainStatus.PENDING))
             return Response.status(Response.Status.NO_CONTENT).build();
 
-        final URI uri = uriInfo.getBaseUriBuilder()
-                .replacePath("/api/complaints")
-                .path(String.valueOf(complain.getComplainId()))
-                .build();
-        return Response.status(Response.Status.MOVED_PERMANENTLY).location(uri).build();
+        return Response.ok(ComplainResolutionDto.fromComplain(complain, uriInfo)).build();
     }
 
 }

@@ -16,16 +16,16 @@ public class ComplainBeanParam {
     @QueryParam("per_page")
     @DefaultValue("5")
     private int pageSize;
-    @QueryParam("complain_status")
+    @QueryParam("status")
     @ValueOfEnum(enumClass = ComplainStatus.class)
     private String complainStatus;
-    @QueryParam("offer_id")
+    @QueryParam("with_offer")
     private Integer offerId;
-    @QueryParam("trade_id")
+    @QueryParam("with_trade")
     private Integer tradeId;
-    @QueryParam("complainer_username")
+    @QueryParam("complainer")
     private List<String> complainerUsernames;
-    @QueryParam("moderator_username")
+    @QueryParam("moderator")
     private List<String> moderatorUsernames;
     @QueryParam("from_date")
     private String fromDate;
@@ -104,7 +104,7 @@ public class ComplainBeanParam {
         this.toDate = toDate;
     }
 
-    public ComplainFilter mapToComplainFilter(){
+    public ComplainFilter toComplainFilter(){
         ComplainFilter complainFilter = new ComplainFilter()
                 .withPage(page)
                 .withPageSize(pageSize)

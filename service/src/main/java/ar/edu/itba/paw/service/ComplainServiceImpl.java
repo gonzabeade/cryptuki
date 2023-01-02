@@ -74,6 +74,10 @@ public class ComplainServiceImpl implements ComplainService{
     public void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId) {
 
         Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+
+        complain.setResolution(ComplaintResolution.KICK);
+        complainDao.modifyComplain(complain);
+
         userAuthDao.kickoutUser(kickedUserId);
 
         User kickedOutUser;
@@ -94,6 +98,10 @@ public class ComplainServiceImpl implements ComplainService{
     @Transactional
     public void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment){
         Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+
+        complain.setResolution(ComplaintResolution.DISMISS);
+        complainDao.modifyComplain(complain);
+
         messageSenderFacade.sendComplainClosedWithDismission(complain.getComplainer(), comment);
     }
 

@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 
 public class ComplainFilter {
@@ -19,7 +16,7 @@ public class ComplainFilter {
     private Collection<Integer> restrictedToComplainIds = new HashSet<>();
     private Collection<Integer> restrictedToTradeIds = new HashSet<>();
     private Collection<Integer> restrictedToOfferIds = new HashSet<>();
-    private ComplainStatus complainStatus = ComplainStatus.PENDING;
+    private Collection<ComplainStatus> complainStatus = EnumSet.noneOf(ComplainStatus.class);
     private LocalDate from;
     private LocalDate to;
 
@@ -76,12 +73,12 @@ public class ComplainFilter {
     }
 
     public ComplainFilter withComplainStatus(ComplainStatus complainStatus) {
-        this.complainStatus = complainStatus;
+        this.complainStatus.add(complainStatus);
         return this;
     }
 
     public ComplainFilter withComplainStatus(String complainStatus) {
-        this.complainStatus = ComplainStatus.valueOf(complainStatus);
+        this.complainStatus.add(ComplainStatus.valueOf(complainStatus));
         return this;
     }
 
@@ -122,8 +119,8 @@ public class ComplainFilter {
         return Collections.unmodifiableCollection(restrictedToOfferIds);
     }
 
-    public ComplainStatus getComplainStatus() {
-        return complainStatus;
+    public Collection<ComplainStatus> getComplainStatus() {
+        return Collections.unmodifiableCollection(complainStatus);
     }
 
     public Optional<LocalDate> getFrom() {

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +38,8 @@ public class DummyBearerFilter extends OncePerRequestFilter {
 
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if ( header == null || !header.startsWith("Bearer ")) {
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+//            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 

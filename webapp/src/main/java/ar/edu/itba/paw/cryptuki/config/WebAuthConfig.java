@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -46,6 +47,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtFilter jwtFilter;
+
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
 
     @Autowired
     private DummyBearerFilter dummyBearerFilter;
@@ -84,7 +88,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
-                    .antMatchers(HttpMethod.GET, "/api/users/**/information").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/users/**/secrets").authenticated()
                     .antMatchers(HttpMethod.GET,"/api/complaints").hasRole("ADMIN") /*todo: check get method on complaints is only allowed for admins */
                     .antMatchers(HttpMethod.POST, "/api/complaints").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/complaints/**").authenticated()
@@ -107,16 +111,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/public/css/**", "/public/js/**", "/public/images/**","/public/styles/**", "/favicon.ico", "/errors");
     }
-
-//    @Bean
-//    public CorsConfiguration corsConfiguration() {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.addAllowedHeader("http://localhost:3000");
-//        return corsConfiguration;
-//
-//
-//    }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

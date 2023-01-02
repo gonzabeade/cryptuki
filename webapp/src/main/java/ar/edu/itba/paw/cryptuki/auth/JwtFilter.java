@@ -49,35 +49,18 @@ public class JwtFilter extends OncePerRequestFilter {
         this.userService = userService;
     }
 
-    // JSON Web Tokens
-    // The authentication is going to be made through the Authorization Header
-    // Authorization: Basic base64(username:password)
-    // Authorization: Digest base64(username:hash(password))
-    // Authorization: Bearer base64(jwt_json)
-        // We will use the token in every request from the authorization on.
-        // Storage Local or Memory for storing the token. Local Storage of the browser is OK.
-        // Refresh token & Another token every request
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
-        // browse request -> 403 / 401
-        // request X + Authorization: Basic base64(username:password)
-        // server -> logs the user -> generates JWT tokens -> lets the request pass -> adds headers in the response with the tokens
-        // browser -> stores the tokens (refresh and session) in local storage. From now on, browser makes requests
-            // Authorization: Bearer JWT (pass all important information for the user to display, like roles or url)
-            // Authorization: Bearer RefreshToken
-
-        // Get authorization header and validate
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         String username, password;
         UserDetails userDetails;
 
-        if ( header == null ) {
+
+        if (header == null) {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
-        }
-        else if ( header.startsWith("Basic ") ) {
+        } else if ( header.startsWith("Basic ") ) {
             final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
             final String[] credentials = String.valueOf(base64credentials).trim().split(":");
 
@@ -107,8 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
-        }
-        else if ( header.startsWith("Bearer ") ){
+        } else if (header.startsWith("Bearer ")){
 
             // Get jwt token
             final String token = header.split(" ")[1].trim();

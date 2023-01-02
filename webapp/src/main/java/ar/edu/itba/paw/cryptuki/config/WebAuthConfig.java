@@ -49,9 +49,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private JwtFilter jwtFilter;
 
     @Autowired
-    private AccessDeniedHandler accessDeniedHandler;
-
-    @Autowired
     private DummyBearerFilter dummyBearerFilter;
 
 

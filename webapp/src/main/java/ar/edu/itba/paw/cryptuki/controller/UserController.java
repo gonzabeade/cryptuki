@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
+import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.auth.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ProfilePicForm;
@@ -11,6 +12,7 @@ import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
@@ -85,7 +87,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/{username}/contactInformation")
+    @Path("/{username}/secrets")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserInformation(@PathParam("username") String username) {
 
@@ -134,18 +136,17 @@ public class UserController {
 
     // TODO - How is the consumer of the api supposed to know the location of this endpoint?
     @POST
-    @Path("/{username}/validations")
-    public Response createValidation(@NotNull @QueryParam("code") Integer code, @PathParam("username") String username){
+    @Path("/{username}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    public Response createValidation(
+            @Valid UserEmailValidationForm userEmailValidationForm,
+            @PathParam("username") String username
+    ){
 
-        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-
-        if (!userService.verifyUser(username, code))
+        if (!userService.verifyUser(username, userEmailValidationForm.getCode()))
             throw new BadRequestException();
 
-        final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path("/api/users")
-                .path(username)
-                .build();
+        final URI uri = uriInfo.getAbsolutePathBuilder().build();
 
         return Response.created(uri).build();
     }

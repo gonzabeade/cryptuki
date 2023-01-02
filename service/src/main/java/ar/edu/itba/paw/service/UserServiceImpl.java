@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.exception.UserAlreadyVerifiedException;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
@@ -98,9 +99,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal")
     @Transactional
     public boolean verifyUser(String username, Integer code) {
+        User user = userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+
+        if (!user.getUserAuth().getUserStatus().equals(UserStatus.UNVERIFIED)) {
+            throw new UserAlreadyVerifiedException(user.getUsername().get(), user.getUserAuth().getUserStatus());
+        }
+
         return userAuthDao.verifyUser(username,code);
     }
 

@@ -34,6 +34,7 @@ const UploadForm = () => {
     }
     //TODO: This feels like a bad practice. Maybe useEffect on selected value?
     function changeSuggestedPrice(){
+         console.log("entered")
         const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
         const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
         const price = document.getElementById("priceCrypto") as HTMLElement;
@@ -62,7 +63,8 @@ const UploadForm = () => {
                             <label
                                 className="text-lg font-sans text-polard  mb-3 mt-2 text-center">Cryptocurrency*</label>
                             <div className="flex flex-row justify-center mx-auto">
-                                <select className="rounded-lg p-3" onSelect={changeSuggestedPrice} id="cryptoSelected" {...register("cryptoCode",{required:true})} defaultValue={"DEFAULT"}>
+                                <select className="rounded-lg p-3" id="cryptoSelected"
+                                        {...register("cryptoCode",{required:true, onChange:changeSuggestedPrice})} defaultValue={"DEFAULT"}>
                                     <option disabled value="DEFAULT">Choose an option</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{

@@ -63,7 +63,7 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     </init-param>
     <init-param>
       <param-name>jersey.config.servlet.filter.contextPath</param-name>
-      <param-value>/api</param-value>
+      <param-value>/</param-value>
     </init-param>
   </filter>
 

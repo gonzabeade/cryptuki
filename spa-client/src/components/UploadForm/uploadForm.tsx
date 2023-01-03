@@ -77,7 +77,7 @@ const UploadForm = () => {
                                         })
                                     }
                                 </select>
-                                {errors && errors.cryptoCode && <p className="text-red-600">{errors.cryptoCode.message}</p> }
+                                {errors && errors.cryptoCode && <p className="text-red-600 mx-auto mt-2">{errors.cryptoCode.message}</p> }
                             </div>
                             <h1 className="flex flex-row mx-auto mt-4">
                                 <p className="text-sm text-gray-400 mr-2">*Suggested Price </p>
@@ -93,7 +93,7 @@ const UploadForm = () => {
                                        {...register("unitPrice", {required:"You must set a price per unit", min: {value:100, message:"Please input an amount greater than 100 ARS"}})}
                                 />
                             </div>
-                            {errors && errors.unitPrice && <p className="text-red-600 mx-auto">{errors.unitPrice.message}</p> }
+                            {errors && errors.unitPrice && <p className="text-red-600 mx-auto mt-2">{errors.unitPrice.message}</p> }
                         </div>
                         <div className="flex flex-col justify-center mt-4">
                             <h2 className="text-lg font-sans text-polard mb-3 text-center flex flex-row justify-center ">Limits*</h2>
@@ -114,7 +114,7 @@ const UploadForm = () => {
                                                    }
                                                })}/>
                                     </div>
-                                    {errors && errors.minInCrypto && <p className="text-red-600">{errors.minInCrypto.message}</p> }
+                                    {errors && errors.minInCrypto && <p className="text-red-600 mx-auto mt-2">{errors.minInCrypto.message}</p> }
                                 </div>
                                 <div className="mt-12">
                                     -
@@ -135,7 +135,7 @@ const UploadForm = () => {
                                                    }
                                                })}/>
                                     </div>
-                                    {errors && errors.maxInCrypto && <p className="text-red-600">{errors.maxInCrypto.message}</p> }
+                                    {errors && errors.maxInCrypto && <p className="text-red-600 mt-2 mx-auto">{errors.maxInCrypto.message}</p> }
                                 </div>
                             </div>
                         </div>
@@ -172,9 +172,9 @@ const UploadForm = () => {
                             trade proposal </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
                             <textarea className="w-full h-36 rounded-lg mx-auto p-5"
-                                      {...register("automaticResponse", {maxLength:240})}/>
+                                      {...register("automaticResponse", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
                         </div>
-                        {errors && errors.automaticResponse && <p className="text-red-600">{errors.automaticResponse.message}</p> }
+                        {errors && errors.automaticResponse && <p className="mt-2 text-red-600 mx-auto">{errors.automaticResponse.message}</p> }
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">

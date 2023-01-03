@@ -50,7 +50,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                    <h2 className="font-semibold text-polar mx-auto text-lg">Amount</h2>
                    <div className="flex flex-row mx-auto">
                        <input type="number" placeholder="Amount" className="p-2 m-2 rounded-lg shadow" step="0.000001"
-                           {...register("amount")} />
+                           {...register("amount", {min:{value:0, message:"Amount must be greater than 0"}})} />
                        <select className="p-2 m-2 rounded-lg shadow"  {...register("amountCurrency")}>
                            <option>ARS</option>
                            {
@@ -64,6 +64,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                            }
                        </select>
                    </div>
+                   {errors && errors.amount && <p className="text-red-600 mx-auto my-2">{errors.amount.message} </p>}
               </div>
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">Location</h2>

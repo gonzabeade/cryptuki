@@ -18,7 +18,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                                 <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
                                    href="/chat?tradeId=${trade.tradeId}">
                                     <div className="flex-shrink-0">
-                                        {transaction.icon}
+                                        {/*{transaction.icon}*/}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-row justify-between">

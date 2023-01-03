@@ -1,11 +1,10 @@
 import React from 'react';
 import ChatSnippet from "../../components/ChatSnippet";
-import OfferInformationForSeller from "../../components/OfferInformationForSeller";
 
 const SellerTrade = () => {
     return (
         <div className="flex flex-row mt-7">
-            <ChatSnippet otherUserActive={true}/>
+            {/*<ChatSnippet otherUserActive={true} counterPart={} tradeId={}/>*/}
             {/*<OfferInformationForSeller trade={{ status:'pending', icon:<></>,*/}
             {/*    buyer:"mdedeu",*/}
             {/*    seller:"mdedeuS",*/}

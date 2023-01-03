@@ -39,7 +39,7 @@ const Trade =  () => {
     return (
         <div className="flex flex-row mx-5">
             <div className="w-3/5 flex flex-col justify-center">
-                <TradeStatusAlert status={'pending'}/>
+                <TradeStatusAlert status={trade?.status}/>
                 <h1 className="text-polar text-xl text-center mx-auto my-2 font-lato font-bold">Buying process</h1>
                 <Stepper active={0}/>
                 <hr className="mt-4 mb-2"/>
@@ -77,17 +77,20 @@ const Trade =  () => {
                         <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr"  onClick={()=>navigate('/')}>Return to Home</button>
 
                         <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2" onClick={()=>navigate('/contact')}>I had a problem</button>
+                        {
+                            trade?.status === 'pending' &&
+                            <form className="flex">
+                                <button type="submit" className=" bg-nred hover:bg-nredd  text-white  p-3 h-12 justify-center rounded-lg font-sans text-center" onClick={takeBackProposal}>
+                                    Take back trade proposal
+                                </button>
+                            </form>
+                        }
 
-                        <form className="flex">
-                            <button type="submit" className=" bg-nred hover:bg-nredd  text-white  p-3 h-12 justify-center rounded-lg font-sans text-center" onClick={takeBackProposal}>
-                                Take back trade proposal
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
             <div className="w-2/5">
-                <ChatSnippet otherUserActive={true} counterPart={trade?.offer.seller} tradeId={trade? trade.id: 0}/>
+                <ChatSnippet otherUserActive={trade?.offer.seller.lastLogin === 'online'} counterPart={trade?.offer.seller} tradeId={trade? trade.id: 0}/>
             </div>
 
         </div>

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.validator;
 
-import ar.edu.itba.paw.cryptuki.annotation.EmailRegistered;
+import ar.edu.itba.paw.cryptuki.annotation.validation.EmailRegistered;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

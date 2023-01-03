@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
@@ -15,7 +14,6 @@ import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +22,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 // TODO: Solve <4>The root of the app was not properly defined. Either use a Servlet 3.x container or add an init-param jersey.config.servlet.filter.contextPath to the filter configuration. Due to Servlet 2.x API, Jersey cannot determine the request base URI solely from the ServletContext. The application will most likely not work.
@@ -48,6 +44,7 @@ public class OfferController {
         this.userService = userService;
         this.tradeService = tradeService;
     }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response listOffers(@BeanParam OfferBeanParam offerBeanParam) {
@@ -60,7 +57,8 @@ public class OfferController {
         if (offers.isEmpty())
             return Response.noContent().build();
 
-        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {});
+        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {
+        });
         return ResponseHelper.genLinks(rb, uriInfo, offerBeanParam.getPage(), offerBeanParam.getPageSize(), offerCount).build();
     }
 
@@ -68,8 +66,8 @@ public class OfferController {
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getOffer(@PathParam("id") int id) {
-        Offer offer = offerService.getOfferById(id).orElseThrow(()->new NoSuchOfferException(id));
-        return Response.ok(OfferDto.fromOffer(offer,uriInfo)).build();
+        Offer offer = offerService.getOfferById(id).orElseThrow(() -> new NoSuchOfferException(id));
+        return Response.ok(OfferDto.fromOffer(offer, uriInfo)).build();
     }
 
     @POST
@@ -78,7 +76,7 @@ public class OfferController {
     public Response createOffer(@Valid UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
+        User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
         Offer offer = offerService.makeOffer(offerForm.toOfferParameterObject());
 
@@ -96,7 +94,7 @@ public class OfferController {
     public Response modifyOffer(@Valid ModifyOfferForm offerForm, @PathParam("id") int id) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.getUserByUsername(who).orElseThrow(()->new NoSuchUserException(who));
+        User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
         try {
             offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
@@ -129,7 +127,7 @@ public class OfferController {
     public Response createTrade(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User buyer = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username)); // Will never throw exception
+        User buyer = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username)); // Will never throw exception
 
         Trade trade = tradeService.makeTrade(offerId, buyer.getId(), tradeForm.getQuantity());
 

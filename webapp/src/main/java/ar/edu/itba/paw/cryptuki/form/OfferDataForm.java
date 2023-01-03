@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.cryptuki.form;
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.cryptuki.annotation.validation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
-import java.util.Collection;
 
 @MinLessThanMax(
         min="minInCrypto",
@@ -20,17 +15,6 @@ import java.util.Collection;
 abstract public class OfferDataForm {
 
     private Integer sellerId;
-
-    @CollectionOfEnum(enumClass = TradeStatus.class)
-    private Collection<String> sts;
-
-    public Collection<String> getSts() {
-        return sts;
-    }
-
-    public void setSts(Collection<String> sts) {
-        this.sts = sts;
-    }
 
     @NotNull
     @DecimalMin("0.0000001")

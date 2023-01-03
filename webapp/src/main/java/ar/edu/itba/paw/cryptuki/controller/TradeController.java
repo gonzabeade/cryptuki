@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
-import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
-import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
@@ -15,7 +13,6 @@ import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
-import org.apache.taglibs.standard.lang.jstl.ArraySuffix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;

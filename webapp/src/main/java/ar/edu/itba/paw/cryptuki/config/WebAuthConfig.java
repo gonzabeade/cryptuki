@@ -85,6 +85,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/offers/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/offers**").permitAll()
+
+
                     .antMatchers(HttpMethod.GET, "/api/users/**/secrets").authenticated()
                     .antMatchers(HttpMethod.GET,"/api/complaints").hasRole("ADMIN") /*todo: check get method on complaints is only allowed for admins */
                     .antMatchers(HttpMethod.POST, "/api/complaints").authenticated()

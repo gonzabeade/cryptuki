@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.utils;
 
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.OfferFilter;
 import ar.edu.itba.paw.model.OfferOrderCriteria;
@@ -25,7 +25,9 @@ public class OfferBeanParam {
     @CollectionOfEnum(enumClass = Location.class)
     private List<String> locations;
     @QueryParam("status")
-    @CollectionOfEnum(enumClass = OfferStatus.class)
+    @CollectionOfEnum(
+            enumClass = OfferStatus.class
+    )
     private List<String> status;
     @QueryParam("exclude_user")
     private List<String> excludedUsernames;

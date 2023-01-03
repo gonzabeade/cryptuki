@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.annotation;
+package ar.edu.itba.paw.cryptuki.annotation.validation;
 
 import ar.edu.itba.paw.cryptuki.validator.EqualFieldsValidator;
 

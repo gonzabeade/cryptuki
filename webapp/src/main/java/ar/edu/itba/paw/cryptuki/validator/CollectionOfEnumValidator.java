@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.validator;
 
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

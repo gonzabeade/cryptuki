@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.cryptuki.annotation;
+package ar.edu.itba.paw.cryptuki.annotation.validation;
 
-import ar.edu.itba.paw.cryptuki.validator.MultipartCheckValidator;
+import ar.edu.itba.paw.cryptuki.validator.EmailVerifiedValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,14 +11,14 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target(FIELD)
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {MultipartCheckValidator.class})
-public @interface MultipartCheck {
+@Constraint(validatedBy = {EmailVerifiedValidator.class})
+public @interface EmailVerified {
 
-    String message() default "You must upload a file";
+    String message() default "User with that email does not exist";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
+    
 }

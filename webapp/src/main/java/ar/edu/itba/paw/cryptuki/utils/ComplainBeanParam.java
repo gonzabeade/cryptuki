@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.utils;
 
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
 import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.ComplainStatus;
 

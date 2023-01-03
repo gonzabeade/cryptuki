@@ -9,7 +9,10 @@ import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.OfferFilter;
+import ar.edu.itba.paw.model.Trade;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
@@ -24,8 +27,6 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-// TODO: Solve <4>The root of the app was not properly defined. Either use a Servlet 3.x container or add an init-param jersey.config.servlet.filter.contextPath to the filter configuration. Due to Servlet 2.x API, Jersey cannot determine the request base URI solely from the ServletContext. The application will most likely not work.
-// TODO: Why API Response is ordered alphabetically?
 
 @Path("/api/offers")
 @Component

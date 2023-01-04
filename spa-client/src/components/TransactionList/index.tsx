@@ -1,9 +1,21 @@
 import React from 'react';
 import TransactionModel from "../../types/TransactionModel";
+import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 
 type TransactionListProps = {
     transactions:TransactionModel[],
 }
+
+type TradeShortInfo = {
+    icon:JSX.Element,
+    title:string,
+    subtitle:string
+}
+const TRADE_STATUS = new Map([
+    ['sold', {icon: <CheckCircleIcon className="text-gray-400 w-6 h-6"/>, title: "Title", subtitle: "You've marked this trade as sold  "}],
+    ['rejected', {icon: <XCircleIcon className="text-nred w-6 h-6"/>, title: "Title", subtitle: "You've rejected this trade proposal "}]
+
+    ])
 const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
     return (
         <div className="mt-5">
@@ -18,15 +30,14 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                                 <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
                                    href={"/chat/"+transaction.id}>
                                     <div className="flex-shrink-0">
-                                        {/*{transaction.icon} Depende del estado*/}
+                                        {TRADE_STATUS.get(transaction.status as string)?.icon}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-row justify-between">
                                             <p className="text-sm font-medium text-polar-600 truncate">{transaction.buyer.username}</p>
                                             <h1 className="text-xs my-auto  text-polar truncate">{transaction.status} for {transaction.amount + ' ' + transaction.offer.cryptoCode} </h1>
                                         </div>
-                                        <p className="text-sm text-gray-500 truncate">Te hizo una oferta
-                                        {/*Dependiendo del estado, el mensaje*/}
+                                        <p className="text-sm text-gray-500 truncate">{TRADE_STATUS.get(transaction.status as string)?.subtitle }
                                         </p>
                                     </div>
                                 </a>

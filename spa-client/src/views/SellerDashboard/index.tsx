@@ -56,7 +56,7 @@ const SellerDashboard = () => {
             date: new Date()
         },
         {
-            status:'pending',
+            status:'rejected',
             buyer:{
                 accessToken: "",
                 refreshToken: "string",

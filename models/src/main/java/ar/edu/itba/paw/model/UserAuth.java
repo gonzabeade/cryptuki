@@ -72,4 +72,8 @@ public class UserAuth  {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 }

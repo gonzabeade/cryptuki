@@ -88,13 +88,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new NoSuchUserException(email);
 
+        int nonce = (int)(Math.random()*Integer.MAX_VALUE);
         UserAuth user = maybeUser.get();
+        user.setCode(nonce);
+        userAuthDao.modifyUserAuth(user);
         messageSenderFacade.sendForgotPasswordMessage(user.getUser(), user.getCode());
     }
 

@@ -17,6 +17,9 @@ public interface UserAuthDao {
     /** Changes the state of a user to UserStatus.VERIFIED, given that the code matches with the one stored*/
     boolean verifyUser(String username, int code);
 
+    /** Merger for UserAuth*/
+    void modifyUserAuth(UserAuth userAuth);
+
     /** Changes the password of a user*/
     boolean changePassword(String username, String newPassword);
 

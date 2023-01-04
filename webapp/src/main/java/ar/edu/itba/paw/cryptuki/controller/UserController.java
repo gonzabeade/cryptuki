@@ -112,26 +112,8 @@ public class UserController {
     @PUT
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    public Response changePassword(
-            /*@Valid*/ ChangePasswordForm changePasswordForm,
-            @PathParam("username") String username,
-            @QueryParam("code") Integer code
-    ){
-
-//        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-//
-//        if(changePasswordForm.getPassword() == null)
-//            userService.changePasswordAnonymously(user.getEmail());
-//        else {
-//
-//            String password = changePasswordForm.getPassword();
-//
-//            if(code != null)
-//                userService.changePassword(username, code, password);
-//            else
-//                userService.changePassword(username, password);
-//        }
-
+    public Response changePassword(@Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
+        userService.changePassword(username, changePasswordForm.getPassword());
         return Response.ok().build();
     }
 

@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
         if (newPassword == null)
             throw new NullPointerException("New password cannot be null");
-
+        userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
     }
 

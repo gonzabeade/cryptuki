@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.cryptuki.config;
-import ar.edu.itba.paw.cryptuki.config.auth.*;
+import ar.edu.itba.paw.cryptuki.config.auth.filter.DummyBearerFilter;
+import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
+import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
+import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +12,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,6 +34,7 @@ import java.util.Collections;
 @EnableWebSecurity
 public class WebAuthConfig {
 
+    /** Bean declarations for authentication requirements**/
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -40,11 +43,6 @@ public class WebAuthConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return new CustomAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -59,12 +57,15 @@ public class WebAuthConfig {
         return source;
     }
 
+
+    /** WebSecurityConfigurerAdapter implementations that co-exist and are triggered on different endpoints **/
     @Order(0)
     @Configuration
     @ComponentScan
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
 
         @Autowired
+        @Qualifier("nonceUserDetailsService")
         private UserDetailsService userDetailsService;
 
         @Override
@@ -80,9 +81,17 @@ public class WebAuthConfig {
                     .anyRequest().authenticated()
                     .and()
                     .addFilterBefore(new NonceBasicFilter(userDetailsService, authenticationManagerBean()), FilterSecurityInterceptor.class) // JwtFilter homework
-                    .addFilterBefore(new DummyBearerFilter(userDetailsService), NonceBasicFilter.class)
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //We don't need sessions to be created.
-            ;
+                    .addFilterBefore(new DummyBearerFilter(userDetailsService), NonceBasicFilter.class);
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+            authenticationManagerBuilder.userDetailsService(userDetailsService);
+        }
+
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
         }
     }
 
@@ -97,6 +106,7 @@ public class WebAuthConfig {
     public static class RestConfiguration extends WebSecurityConfigurerAdapter {
 
         @Autowired
+        @Qualifier("passwordUserDetailsService")
         private UserDetailsService userDetailsService;
 
         @Autowired
@@ -104,7 +114,6 @@ public class WebAuthConfig {
 
         @Autowired
         private PasswordEncoder passwordEncoder;
-
 
         @Override
         public void configure(final WebSecurity webSecurity) {
@@ -141,7 +150,6 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PUT, "/api/offers/**/trades/**").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/trades").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/trades/**").authenticated()
-
                     .and()
                     .addFilterBefore(dummyBearerFilter, FilterSecurityInterceptor.class) // JwtFilter homework
                     .cors()
@@ -160,6 +168,11 @@ public class WebAuthConfig {
             return new JwtFilter(userDetailsService, authenticationManagerBean());
         }
 
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
+        }
     }
 
 

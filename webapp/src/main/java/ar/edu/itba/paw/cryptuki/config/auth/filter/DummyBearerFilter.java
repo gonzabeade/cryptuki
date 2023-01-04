@@ -1,6 +1,7 @@
-package ar.edu.itba.paw.cryptuki.config.auth;
+package ar.edu.itba.paw.cryptuki.config.auth.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,7 @@ public class DummyBearerFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public DummyBearerFilter(UserDetailsService userDetailsService) {
+    public DummyBearerFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.config.auth;
+package ar.edu.itba.paw.cryptuki.config.auth.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

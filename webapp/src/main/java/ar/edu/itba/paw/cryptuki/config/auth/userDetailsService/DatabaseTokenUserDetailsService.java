@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Component
-public class DatabaseTokenUserDetailsService implements UserDetailsService {
+public abstract class DatabaseTokenUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
@@ -37,6 +37,8 @@ public class DatabaseTokenUserDetailsService implements UserDetailsService {
         final User user = userService.getUserByUsername(username).orElseThrow( ()-> new UsernameNotFoundException(""));
 
         final Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserAuth().getRole().name()));// get roles of username
-        return new UserDetailsImpl(username, user.getUserAuth().getPassword(), authorities, user.getUserAuth().getUserStatus().equals(UserStatus.VERIFIED));
+        return new UserDetailsImpl(username, getTokenFromUser(user), authorities, user.getUserAuth().getUserStatus().equals(UserStatus.VERIFIED));
     }
+
+    protected abstract String getTokenFromUser(User user);
 }

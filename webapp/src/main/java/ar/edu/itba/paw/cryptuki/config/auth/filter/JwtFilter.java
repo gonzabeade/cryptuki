@@ -1,8 +1,9 @@
-package ar.edu.itba.paw.cryptuki.config.auth;
+package ar.edu.itba.paw.cryptuki.config.auth.filter;
 
 import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public JwtFilter(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
+    public JwtFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
     }

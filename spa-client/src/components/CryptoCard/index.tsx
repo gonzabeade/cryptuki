@@ -3,6 +3,7 @@ import './styles.css';
 import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
 import {useNavigate} from "react-router-dom";
+import RatingStars from "../RatingStars";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();
 
@@ -10,9 +11,9 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
         <div className="crypto-card rounded-lg">
             <div className="column">
                 <div className="label">Vendedor:</div>
-                <div className="bold text-polar">gonzabeade</div>
-                <div className="light">Usuario nuevo</div>
-                <div className="label">Último Login: 2022-05-08</div>
+                <div className="bold text-polar">{offer.seller.username}</div>
+                {offer.seller.rating === 0 || !offer.seller.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={offer.seller.rating}/>}
+                <div className="label">Último Login: {offer.seller.lastLogin}</div>
             </div>
             <div className="column">
                 <div className="label">Precio:</div>
@@ -25,7 +26,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             </div>
             <div className="column">
                 <button className="my-auto rounded-lg bg-frost px-6 py-3 text-white font-bold hover:bg-frostd"
-                onClick={()=> navigate(offer.url)}>Compra</button>
+                onClick={()=> navigate('/offer/' + offer.offerId)}>Compra</button>
             </div>           
         </div>
     )

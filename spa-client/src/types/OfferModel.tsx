@@ -11,8 +11,7 @@ export default interface OfferModel {
         minInCrypto: number,
         offerId: number,
         offerStatus: string,
-        unitPrice: number, 
-        url: string, 
+        unitPrice: number,
 
 
         seller: UserModel, // TODO: Change to UserModel

@@ -39,7 +39,6 @@ const Trade =  () => {
             offerId:1,
             offerStatus:"PENDING",
             unitPrice:1000000,
-            url:"/offer/1",
             seller: {
                 accessToken: "",
                 refreshToken: "string",

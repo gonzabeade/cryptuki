@@ -10,13 +10,13 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
         const navigate = useNavigate();
     return (
         <a href={offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL'? "/seller/offer/"+offer.offerId : "/seller/#"} className={` cursor-pointer z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200' : 'cursor-not-allowed' }`} >
-            <h1 className="text-center text-3xl font-semibold font-polard font-sans">
+            <h1 className=" text-polar text-center text-xl font-bold ">
                Offer
                 #{offer.offerId}
             </h1>
 
             <div className="flex flex-col mx-auto mt-5">
-                <h1 className="font-bold text-lg text-center">
+                <h1 className="text-polar font-bold text-lg text-center">
                     Accepted Range
                 </h1>
                 <p className="text-center">
@@ -24,7 +24,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
                 </p>
             </div>
             <div className="flex flex-col mx-auto">
-                <h1 className="font-bold text-lg">
+                <h1 className="font-bold text-lg text-polar">
                     Unit price
                 </h1>
                 <p className="text-center">
@@ -32,7 +32,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
                 </p>
             </div>
             <div className="flex flex-col mx-auto mb-5">
-                <h1 className="font-bold text-lg">
+                <h1 className="font-bold text-lg text-polar">
                    Location
                 </h1>
                 <p className="text-center">

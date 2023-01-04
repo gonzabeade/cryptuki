@@ -4,7 +4,7 @@ import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
-import toast from "react-hot-toast";
+import {toast} from "react-toastify";
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
     tradeId:number

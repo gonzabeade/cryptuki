@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 
 
 const Receipt = () => {
@@ -14,11 +14,17 @@ const Receipt = () => {
     const tradeService = useTradeService();
 
     async function fetchTrade(tradeId:number){
-        const resp = await tradeService.getTradeInformation(tradeId);
-        if(resp.statusCode === 200){
-            setTrade(resp.getData());
-        }else{
+
+        try{
+            const resp = await tradeService.getTradeInformation(tradeId);
+            if(resp.statusCode === 200){
+                setTrade(resp.getData());
+            }else{
+                toast.error("Custom Error");
+            }
+        }catch (e){
             toast.error("Error fetching trade");
+            console.log("here")
         }
     }
 

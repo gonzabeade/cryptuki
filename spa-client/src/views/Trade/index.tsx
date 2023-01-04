@@ -9,7 +9,7 @@ import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
 import useTradeService from "../../hooks/useTradeService";
-import toast from "react-hot-toast";
+import {toast} from "react-toastify";
 import OfferModel from "../../types/OfferModel";
 
 const Trade =  () => {

@@ -4,8 +4,9 @@ import {ChevronDownIcon, MagnifyingGlassCircleIcon} from "@heroicons/react/24/ou
 import {NEIGHBORHOODS} from "../../common/constants";
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import Result from "../../types/Result";
-import toast from "react-hot-toast";
+
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
+import {toast} from "react-toastify";
 
 type CryptoFormValues = {
 

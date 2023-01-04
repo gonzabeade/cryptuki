@@ -12,7 +12,8 @@ export class AxiosService {
     }); 
 
     private axiosNoAuthenticationInstance : AxiosInstance = axios.create({
-        baseURL: paths.BASE_URL
+        baseURL: paths.BASE_URL,
+        timeout: 1000,
     });
 
     private axiosActiveInstance : AxiosInstance = this.axiosNoAuthenticationInstance; 

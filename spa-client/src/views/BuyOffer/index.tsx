@@ -4,7 +4,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
 import {set, useForm} from "react-hook-form";
-import toast from "react-hot-toast";
+import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 type BuyOfferFormValues = {
     amount:number

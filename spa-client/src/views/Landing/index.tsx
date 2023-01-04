@@ -6,7 +6,7 @@ import useOfferService from "../../hooks/useOfferService";
 import { useLocation, useNavigate } from "react-router-dom";
 import CryptoFilters from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
-import toast from "react-hot-toast";
+import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 
 const Landing = () => {
@@ -157,7 +157,13 @@ const Landing = () => {
 
     useEffect(  ()=>{
          const fetchOffers = async () =>  {
-             await getOffers(5,5);
+
+             try{
+                 const resp = await getOffers(5,5);
+             }catch (e){
+                 console.log("here")
+                 toast.error("Error fetching offers")
+             }
          }
 
          fetchOffers();

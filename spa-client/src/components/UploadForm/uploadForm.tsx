@@ -3,7 +3,7 @@ import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import Result from "../../types/Result";
 import {NEIGHBORHOODS} from "../../common/constants";
-import toast from "react-hot-toast";
+import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 
 export interface UploadFormValues {

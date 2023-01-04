@@ -6,6 +6,8 @@ import OfferModel from "../../types/OfferModel";
 import Paginator from "../../components/Paginator";
 import UserProfileCards from "../../components/UserProfileCards";
 import StatusCardsSeller from "../../components/StatusCardsSeller";
+import OfferCardProfile from "../../components/OfferCardProfile";
+import Loader from "../../components/Loader";
 
 
 const SellerDashboard = () => {
@@ -145,12 +147,12 @@ const SellerDashboard = () => {
                         <StatusCardsSeller  active={"all"} callback={()=>console.log("a")} base_url={"/"}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
-                        {/* CREATE COMPONENT OFFER and foreach for my offers*/}
-                        {/*<c:forEach var="offer" items="${offerList}">*/}
-                        {/*    <%--    Tarjeta de anuncio--%>*/}
-                        {/*    <c:set var="offer" value="${offer}" scope="request"/>*/}
-                        {/*    <jsp:include page="../../components/offer.jsp"/>*/}
-                        {/*</c:forEach>*/}
+                        {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}
+                        {offers.map((offer)=>{
+                            return(
+                                <OfferCardProfile offer={offer}/>
+                            );
+                        })}
                     </div>
                     {offers.length >= 1 && <div className="mx-auto">
                         <Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>

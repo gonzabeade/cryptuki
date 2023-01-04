@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import useChatService from "../../hooks/useChatService";
-import trade from "../../views/Trade";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 

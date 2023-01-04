@@ -5,6 +5,7 @@ import {MessageModel} from "../../types/MessageModel";
 import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
 import {toast} from "react-toastify";
+import {createHashRouter} from "react-router-dom";
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
     tradeId:number
@@ -27,11 +28,17 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     useEffect(()=>{
       getMessages();
-    })
+    }, [messages])
 
-    function sendMessage(message:string){
-        //send with tradeId
-
+    async function sendMessage(message:string){
+        try{
+            const resp = await chatService.sendMessage(tradeId, userService.getLoggedInUser(), message);
+            if(resp.statusCode == 200){
+                setMessages([messages, resp.getData()]);
+            }
+        }catch (e) {
+         toast.error("Connection error. Failed to send message");
+        }
 
     }
 

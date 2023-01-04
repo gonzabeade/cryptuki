@@ -1,6 +1,6 @@
 import React, {InputHTMLAttributes, useEffect, useState} from 'react';
 import UserInfo from "../../components/UserInfo/index";
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
 import {set, useForm} from "react-hook-form";
@@ -14,6 +14,7 @@ const BuyOffer = () => {
 
     const params = useParams();
     const offerService = useOfferService();
+    const navigate = useNavigate();
     const [offer, setOffer] = useState<OfferModel>(
     {
         cryptoCode:"BTC",
@@ -72,6 +73,8 @@ const BuyOffer = () => {
     }
     function onSubmit(data:BuyOfferFormValues){
         alert(data.amount);
+        //Receive trade Id created const tradeId = await Service.createTradeProposal
+        navigate('/trade/' + 1);
     }
 
     useEffect(()=>{
@@ -101,10 +104,10 @@ const BuyOffer = () => {
                         </h2>
                         <div className="flex flex-row mt-3 font-sans ">
                             <h2 className="font-sans mx-2"><b className="text-polar">
-                                Minimum acceptable offer:</b> {offer? offer.minInCrypto * offer.unitPrice: 'Loading...' }
+                                Minimum acceptable offer:</b> {offer? offer.minInCrypto * offer.unitPrice  + ' ARS': 'Loading...' }
                             </h2>
                             <h2 className="font-sans"><b className="text-polar">
-                                Maximum acceptable offer: </b>{offer? offer.maxInCrypto * offer.unitPrice: 'Loading...' }
+                                Maximum acceptable offer: </b>{offer? offer.maxInCrypto * offer.unitPrice + ' ARS': 'Loading...' }
                             </h2>
                         </div>
                         <h2 className="pt-2 font-sans text-center"><b className="text-polar">
@@ -116,14 +119,16 @@ const BuyOffer = () => {
                 <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
                     <label className="mx-auto text-center">Amount in ARS</label>
                     <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"  {...register("amount", {required:"You must input an amount"})} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
+                    {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}
                     <p className="mx-auto font-bold text-polar">or</p>
                     <label className="mx-auto text-center mt-3">Amount in crypto</label>
                     <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
-                        <button className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold">Cancel</button>
+                        <Link to="/" className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" >Cancel</Link>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>
                     </div>
                 </form>
+
             </div>
             <div className="flex flex-col w-2/5 items-center">
             <UserInfo

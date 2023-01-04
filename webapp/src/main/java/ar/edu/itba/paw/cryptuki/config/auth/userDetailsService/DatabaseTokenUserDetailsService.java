@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.config.auth;
+package ar.edu.itba.paw.cryptuki.config.auth.userDetailsService;
 
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserStatus;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Component
-public class CryptukiUserDetailsService implements UserDetailsService {
+public class DatabaseTokenUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;

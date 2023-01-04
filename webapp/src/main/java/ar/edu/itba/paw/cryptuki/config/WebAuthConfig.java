@@ -52,7 +52,7 @@ public class WebAuthConfig {
         return source;
     }
 
-    @Order(0)
+    @Order(-1)
     @Configuration
     @ComponentScan
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
@@ -113,6 +113,7 @@ public class WebAuthConfig {
         @Override
         protected void configure(final HttpSecurity http) throws Exception {
             http
+                    .antMatcher("/api/**")
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().headers().cacheControl().disable()
@@ -122,8 +123,6 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/offers/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/offers**").permitAll()
-
-
                     .antMatchers(HttpMethod.GET, "/api/users/**/secrets").authenticated()
                     .antMatchers(HttpMethod.GET,"/api/complaints").hasRole("ADMIN") /*todo: check get method on complaints is only allowed for admins */
                     .antMatchers(HttpMethod.POST, "/api/complaints").authenticated()

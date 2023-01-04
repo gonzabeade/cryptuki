@@ -32,6 +32,8 @@ public class NonceBasicFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
+        System.out.println("TRAKA-1");
+
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         String username, password;
         UserDetails userDetails;

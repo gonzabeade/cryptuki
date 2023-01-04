@@ -1,6 +1,7 @@
 import React from 'react';
 import ChatSnippet from "../../components/ChatSnippet";
 import OfferInformationForSeller from "../../components/OfferInformationForSeller";
+import {Link} from "react-router-dom";
 
 const SellerTrade = () => {
     return (
@@ -17,6 +18,7 @@ const SellerTrade = () => {
                 rating:1.3,
                 image_url:"/"
             }} tradeId={4}/>
+            <div className="flex flex-col justify-center px-10">
             <OfferInformationForSeller trade={{
                 status:'pending',
                 buyer:{
@@ -58,7 +60,14 @@ const SellerTrade = () => {
                 id:1,
                 date: new Date()
             }} chat={false}/>
+            <div className="mx-auto">
+                <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
+                    Home
+                </Link>
+            </div>
         </div>
+        </div>
+
     );
 };
 

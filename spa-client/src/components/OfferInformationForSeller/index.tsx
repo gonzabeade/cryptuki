@@ -121,12 +121,6 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     chat && <ChatButton tradeId={trade.id} />
                 }
             </div>
-
-            <div className="mx-auto">
-                <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
-                   Home
-                </Link>
-            </div>
         </div>
 
     );

@@ -5,25 +5,25 @@ import Result from "../../types/Result";
 import {NEIGHBORHOODS} from "../../common/constants";
 import toast from "react-hot-toast";
 import {useForm} from "react-hook-form";
+import {useParams} from "react-router-dom";
+import OfferModel from "../../types/OfferModel";
+import {UploadFormValues} from "../UploadForm/uploadForm";
 
-export interface UploadFormValues {
-    minInCrypto:number,
-    maxInCrypto:number,
-    location:string,
-    unitPrice:number,
-    cryptoCode:string,
-    automaticResponse?:string
+interface ModifyFormValues extends UploadFormValues {
+   offerId:number
 }
 //TODO- Errors and pattern validations
 
-const UploadForm = () => {
+const EditOfferForm = () => {
 
     //State
 
+    const params = useParams();
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
+    const [offer, setOffer] = useState<OfferModel>();
 
-     function fetchCryptocurrencies(){
+    function fetchCryptocurrencies(){
         const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
 
         if(apiCall.statusCode === 200){
@@ -39,15 +39,37 @@ const UploadForm = () => {
         const price = document.getElementById("priceCrypto") as HTMLElement;
         price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS': 'No price detected' ;
     }
+    async function offerInitialValues(){
+        //build form values with offer
+       return {
+           offerId:offer?.offerId || 1,
+            minInCrypto: offer?.minInCrypto || 0,
+            maxInCrypto:offer?.maxInCrypto || 0 ,
+            location:offer?.location || 'DEFAULT',
+            unitPrice:offer?.unitPrice || 0,
+            cryptoCode:offer?.cryptoCode || 'BTC',
+            automaticResponse: offer?.comments || 'a'
+       }
+    }
 
     useEffect(()=>{
         fetchCryptocurrencies();
     },[])
+    useEffect(()=>{
+        //fetch offer with param id
+        //set Offer
+        //set initial values
+
+    })
+
+
 
     //Form
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadFormValues>();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm<ModifyFormValues>({defaultValues: async () => offerInitialValues()});
 
-    function onSubmit(data:UploadFormValues) {
+    function onSubmit(data:ModifyFormValues) {
+
+        //add offer id param  and modify
         console.log(data);
     }
 
@@ -64,16 +86,16 @@ const UploadForm = () => {
                             <div className="flex flex-col justify-center mx-auto">
                                 <select className="rounded-lg p-3" id="cryptoSelected"
                                         {...register("cryptoCode",{required:"You must choose a cryptocurrency to sell", validate:{
-                                            notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
+                                                notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
                                             }, onChange:changeSuggestedPrice})} defaultValue="DEFAULT">
                                     <option disabled value="DEFAULT">Choose an option</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{
-                                           return (
-                                               <option value={cryptocurrency.code} key={cryptocurrency.code}>
-                                                   {cryptocurrency.name}
-                                               </option>
-                                           );
+                                            return (
+                                                <option value={cryptocurrency.code} key={cryptocurrency.code}>
+                                                    {cryptocurrency.name}
+                                                </option>
+                                            );
                                         })
                                     }
                                 </select>
@@ -101,8 +123,8 @@ const UploadForm = () => {
                                 <div>
                                     <label
                                         className="text-sm font-sans text-polard mb-3 text-center flex flex-row justify-center ">
-                                       Min in
-                                        <p id="minCoin" className="mx-2">BTC</p></label>
+                                        Min in
+                                        <p id="minCoin" className="mx-2">{offer?.cryptoCode}</p></label>
                                     <div className="flex flex-row justify-center mx-auto">
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
                                                step=".00000001"
@@ -123,7 +145,7 @@ const UploadForm = () => {
                                     <label
                                         className="text-sm font-sans text-polard mb-3 text-center flex flex-row justify-center">
                                         Max in
-                                        <p id="maxCoin" className="mx-2">BTC</p></label>
+                                        <p id="maxCoin" className="mx-2">{offer?.cryptoCode}</p></label>
                                     <div className="flex flex-row justify-center mx-auto">
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
                                                step=".00000001"
@@ -178,7 +200,7 @@ const UploadForm = () => {
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
-                    <a className=" cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
+                    <a className=" font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
                        href="/">Cancel
                     </a>
                     <button type="submit"
@@ -191,4 +213,4 @@ const UploadForm = () => {
     );
 };
 
-export default UploadForm;
+export default EditOfferForm;

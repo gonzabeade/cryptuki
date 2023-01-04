@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const Receipt = () => {
 
     const [trade, setTrade] = useState<TransactionModel>();
-    const params = useParams();
+    // const params = useParams();
     const tradeService = useTradeService();
 
     async function fetchTrade(tradeId:number){

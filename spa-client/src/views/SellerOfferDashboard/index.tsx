@@ -112,7 +112,7 @@ const SellerOfferDashboard = () => {
         fetchTradesAssociatedWithOffer();
 
 
-    }, [trades, offer])
+    })
 
 
     function changeStatus(status:string){

@@ -1,4 +1,3 @@
-import TransactionModel from "./TransactionModel";
 import UserModel from "./UserModel";
 
 export default interface OfferModel {

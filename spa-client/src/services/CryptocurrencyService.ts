@@ -1,8 +1,6 @@
 import {AxiosInstance} from "axios";
-import jwtDecode from "jwt-decode";
 import {CryptocurrencyModel} from "../types/Cryptocurrency";
 import Result from "../types/Result";
-import TransactionModel from "../types/TransactionModel";
 import {paths} from "../common/constants";
 
 export class CryptocurrencyService {

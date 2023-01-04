@@ -1,5 +1,4 @@
 import React from 'react';
-import {MessageModel} from "../../types/MessageModel";
 
 
 type MessageProps = {

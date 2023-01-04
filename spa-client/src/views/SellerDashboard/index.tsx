@@ -7,11 +7,11 @@ import Paginator from "../../components/Paginator";
 import UserProfileCards from "../../components/UserProfileCards";
 import StatusCardsSeller from "../../components/StatusCardsSeller";
 import OfferCardProfile from "../../components/OfferCardProfile";
-import Loader from "../../components/Loader";
 import useOfferService from "../../hooks/useOfferService";
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
+
 
 
 const SellerDashboard = () => {
@@ -133,6 +133,8 @@ const SellerDashboard = () => {
             if(resp.statusCode === 200){
                 setOffers(resp.getData())
             }
+            // TODO boca
+            setKyc({status:'APR'});
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
         }
@@ -151,11 +153,11 @@ const SellerDashboard = () => {
 
     useEffect(()=>{
        getOffers();
-    },[offers])
+    })
 
     useEffect(()=>{
        getLastTransactions();
-    },[lastTransactions])
+    })
 
     return (
         <div className="flex h-full w-full px-10 my-10">
@@ -167,7 +169,7 @@ const SellerDashboard = () => {
                 </div>
                 {!kyc && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
-                        <img className="w-5 h-5 mr-4 my-auto " src="attention"/>
+                        <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc"}/>
                         <p>
                             Validate your identity
                         </p>
@@ -182,7 +184,7 @@ const SellerDashboard = () => {
                 {
                     kyc.status !== 'APR' ?
                         <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
-                            <img className="w-5 h-5 mr-4 my-auto " src="attention"/>
+                            <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"transaction"}/>
                             <p>Validation of identity submitted. Please wait </p>
                         </div> : <TransactionList transactions={lastTransactions}/>
 

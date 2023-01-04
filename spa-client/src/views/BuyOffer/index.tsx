@@ -1,11 +1,10 @@
-import React, {InputHTMLAttributes, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import UserInfo from "../../components/UserInfo/index";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
-import {set, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import useUserService from "../../hooks/useUserService";
 type BuyOfferFormValues = {
     amount:number
 }
@@ -64,7 +63,7 @@ const BuyOffer = () => {
            retrieveOfferInformation(parseInt(params.id));
         }
 
-    },[params])
+    })
 
 
     return (
@@ -125,6 +124,7 @@ const BuyOffer = () => {
                         Location
                     </h1>
                 { offer?.location ? <iframe
+                    title={"google map"}
                     className="mx-auto mb-10"
                     width="450"
                     height="250"

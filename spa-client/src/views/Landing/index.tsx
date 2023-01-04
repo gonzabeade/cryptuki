@@ -1,14 +1,12 @@
-import {SetStateAction, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
-import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CryptoFilters from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
-import Result from "../../types/Result";
 
 const Landing = () => {
 
@@ -140,9 +138,9 @@ const Landing = () => {
     // }]
     const offerService = useOfferService();
     
-    const navigate = useNavigate(); 
-    const location = useLocation();
-    const [params] = useSearchParams();
+    // const navigate = useNavigate();
+    // const location = useLocation();
+    // const [params] = useSearchParams();
 
     async function getOffers(page:number, pageSize:number){
         try{
@@ -166,7 +164,7 @@ const Landing = () => {
 
     useEffect(  ()=>{
             getOffers(5, 5);
-        },[offers]);
+    });
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">

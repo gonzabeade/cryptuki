@@ -1,10 +1,9 @@
-import { useRef, useState, useEffect, FormEvent } from "react";
-import { paths } from "../../common/constants";
+import { useState, useEffect, FormEvent } from "react";
 import {Link} from "react-router-dom"; 
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = paths.USERS;
+// const REGISTER_URL = paths.USERS;
 
 const Register = () => {
 
@@ -63,6 +62,9 @@ const Register = () => {
             setUser('');
             setPwd('');
             setMatchPwd('');
+            if(userFocus && pwdFocus && matchFocus && errMsg && success){
+                console.log("a")
+            }
         } catch (err) {
             // Errors in the POST 
         }

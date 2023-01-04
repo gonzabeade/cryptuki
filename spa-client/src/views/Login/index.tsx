@@ -1,11 +1,11 @@
 import { useState, FormEvent } from "react";
 import {Link, useNavigate, useLocation} from "react-router-dom"; 
-import { paths } from "../../common/constants";
+
 import { withBasicAuthorization } from "../../hooks/useAxios";
 
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = paths.USERS;
+// const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+// const REGISTER_URL = paths.USERS;
 
 const Login = () => {
 

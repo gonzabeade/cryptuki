@@ -41,7 +41,7 @@ const UploadForm = () => {
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    },[])
+    })
 
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadFormValues>();

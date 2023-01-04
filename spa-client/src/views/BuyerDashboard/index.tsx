@@ -25,7 +25,7 @@ const BuyerDashboard = () => {
 
 
     }
-    useEffect(()=>{fetchTradesBuyerProfile()}, []);
+    useEffect(()=>{fetchTradesBuyerProfile()});
 
     return (
         <div className="flex h-full w-full px-20 my-10">
@@ -49,7 +49,7 @@ const BuyerDashboard = () => {
                 {trades.length === 0 &&
                     <h2 className="text-center text-xl font-semibold font-sans text-polar mt-4">No transactions
                         available</h2>}
-                {trades.length != 0 &&
+                {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
                         <Paginator totalPages={10} actualPage={1} callback={() => console.log("change page")}/>
                     </div>}

@@ -39,14 +39,16 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
 
     return (
         <>
+            {/*TODO esto es para sacar el warning, despues tengo que meter el switch el tradeId agregarlo al post de rating*/}
+            {usernameRater}
+            {tradeId}
+            {rating}
             {!alreadyRated &&
                 <div className="flex flex-col">
                     <h1 className="text-polard font-roboto font-bold text-center text-xl mx-auto">
                         Rate {usernameRated}
                     </h1>
                     <form>
-
-                        {/*<input type="hidden"/> tradeId*/}
                         <div className="flex flex-col">
                             <div className="flex flex-row mx-auto mt-3">
                                         <span className=" cursor-pointer fa fa-star-o text-yellow-400 text-3xl" id="star1"

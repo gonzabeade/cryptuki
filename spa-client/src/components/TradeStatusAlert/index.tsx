@@ -8,24 +8,24 @@ type TradeStatusAlertProps = {
 
 let TRADE_STATUS = new Map([
         ['pending', {
-            icon: <InformationCircleIcon width={24} height={24} color={"nyellowd"}/>,
-            color: "nyellow",
-            accentColor: "nyellowd",
+            icon: <InformationCircleIcon className="w-12 h-12 text-nyellowd"/>,
+            color: "#EBCB8B",
+            accentColor: "#936f26",
             title: "Your trade proposal was sent to the seller!",
             subtitle: "Wait for the seller to accept your trade proposal",
         }
         ],
     ['rejected',  {
-        icon: <FaceFrownIcon width={24} height={24} color={"nredd"}/>,
-        color: "nred",
-        accentColor: "nredd",
+        icon: <FaceFrownIcon className="w-12 h-12 text-nredd"/>,
+        color: "#EBCB8B",
+        accentColor: "#ad2b36",
         title: "This proposal has been rejected",
         subtitle: "Make a new trade proposal if you still want to buy from this seller",
     }],
     ['accepted',  {
-        icon: <CheckCircleIcon width={24} height={24} color={"ngreend"}/>,
-        color: "ngreen",
-        accentColor: "ngreend",
+        icon: <CheckCircleIcon className="w-12 h-12 text-ngreend"/>,
+        color: "#A3BE8C",
+        accentColor: "#47523e",
         title: "The seller accepted your trade proposal",
         subtitle: "Meet the seller to make the trade",
     }]
@@ -45,8 +45,8 @@ const TradeStatusAlert: React.FC<TradeStatusAlertProps> = ({status}) => {
     );
 
     return (
-        <div className={`flex p-5 text-center rounded-lg mx-auto my-10 border-2`} style={{ backgroundColor: tradeStatus.color, border: "1px solid " + tradeStatus.accentColor }}>
-            {/*{tradeStatus.icon}*/}
+        <div className={`flex p-5 text-center rounded-lg mx-auto mt-10 mb-2 border-2`} style={{ backgroundColor: tradeStatus.color, border: "1px solid " + tradeStatus.accentColor }}>
+            {tradeStatus.icon}
             <div className="flex flex-col mx-4">
                 <p className={` text-left text-xl`} style={{
                     color: tradeStatus.accentColor

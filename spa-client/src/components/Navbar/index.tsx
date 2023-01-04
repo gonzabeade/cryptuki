@@ -4,8 +4,6 @@ import icons from "../../assets";
 import { Link } from 'react-router-dom';
 import useUserService from '../../hooks/useUserService';
 import {useEffect, useState} from 'react';
-import {UserCircleIcon} from "@heroicons/react/24/outline";
-
 const Navbar = () => {
 
     const userService = useUserService();

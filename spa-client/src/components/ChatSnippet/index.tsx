@@ -1,19 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Message from "../Message";
 import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
+import useUserService from "../../hooks/useUserService";
+import useChatService from "../../hooks/useChatService";
+import toast from "react-hot-toast";
 type ChatSnippetProps = {
-    otherUserActive:boolean,
     counterPart:UserModel | undefined,
     tradeId:number
 }
 
-const ChatSnippet= ({otherUserActive, counterPart, tradeId}:ChatSnippetProps) => {
+const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
-    const [messages, setMessages] = useState<MessageModel[]>([])
+    const [messages, setMessages] = useState<MessageModel[]>([]);
+    const userService = useUserService();
+    const chatService = useChatService();
+
+    async function getMessages(){
+        const resp = await  chatService.getMessages();
+        if(resp.statusCode === 200){
+            setMessages(resp.getData());
+        }else{
+            toast.error("Error fetching messages")
+        }
+    }
+
+    useEffect(()=>{
+      getMessages();
+    })
 
     function sendMessage(message:string){
         //send with tradeId
+
 
     }
 
@@ -30,11 +48,11 @@ const ChatSnippet= ({otherUserActive, counterPart, tradeId}:ChatSnippetProps) =>
                                          src={counterPart?.image_url} alt={counterPart?.username}/>
                                     <div className="flex flex-col ml-4">
                                         <span className="block font-bold text-gray-600 text-justify ">{counterPart?.username}</span>
-                                        {otherUserActive && <> <span className="font-sans text-gray-400 text-sm text-justify ">Ultimo login</span>
+                                        {counterPart?.lastLogin === 'online' && <> <span className="font-sans text-gray-400 text-sm text-justify ">Ultimo login</span>
                                             <span className="text-left text-sm text-justify ">{counterPart?.lastLogin}</span> </>}
                                     </div>
                                 </div>
-                                {otherUserActive &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>}
+                                {counterPart?.lastLogin === 'online' &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>}
 
                                 <h1 className="text-right font-sans font-bold justify-self-end">
                                   Trade proposal # {tradeId}
@@ -46,7 +64,7 @@ const ChatSnippet= ({otherUserActive, counterPart, tradeId}:ChatSnippetProps) =>
                                     {
                                         messages.map((message)=>{
                                             return (
-                                                <Message content={message.content} left={message.left}/>
+                                                <Message content={message.content} left={message.username !== userService.getLoggedInUser() }/>
                                             );
                                         })
                                     }

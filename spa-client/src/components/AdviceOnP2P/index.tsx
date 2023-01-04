@@ -2,13 +2,13 @@ import React, {useRef} from 'react';
 
 const AdviceOnP2P = () => {
     return (
-        <div className="flex flex-col mx-auto rounded-lg">
-            <div className="flex flex-row mx-auto mt-10">
-                <h1 className="text-polard text-2xl font-bold text-center mr-5 ">
+        <div className="flex flex-col mx-auto rounded-lg py-10">
+            <div className="flex flex-row mx-auto">
+                <h1 className="text-polard text-2xl font-bold text-center mr-5">
                     Advice on P2P Operation
                 </h1>
             </div>
-            <ul className="mx-20 list-decimal my-3">
+            <ul className="mx-20 list-decimal ">
                 <li className="mt-5 text-polard text-lg">
                     When the seller is about to transfer the crypto, try a transaction with small amounts first, to verify your address and chain are correct.
                 </li>

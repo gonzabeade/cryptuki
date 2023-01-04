@@ -150,7 +150,7 @@ const SellerDashboard = () => {
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}
                         {offers.map((offer)=>{
                             return(
-                                <OfferCardProfile offer={offer}/>
+                                <OfferCardProfile offer={offer} key={offer.offerId}/>
                             );
                         })}
                     </div>

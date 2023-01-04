@@ -62,9 +62,9 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
                                 <ul className="space-y-2">
                                     {
-                                        messages.map((message)=>{
+                                        messages.map((message, key)=>{
                                             return (
-                                                <Message content={message.content} left={message.username !== userService.getLoggedInUser() }/>
+                                                <Message key={key} content={message.content} left={message.username !== userService.getLoggedInUser() }/>
                                             );
                                         })
                                     }

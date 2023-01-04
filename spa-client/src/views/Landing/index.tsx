@@ -11,8 +11,31 @@ import Loader from "../../components/Loader";
 
 const Landing = () => {
 
-    const [offers, setOffers] = useState<OfferModel[]|null>(null);
-    // [{
+    const [offers, setOffers] = useState<OfferModel[]|null>([
+        {
+        cryptoCode:"BTC",
+        date:new Date(),
+        location:"Balvanera",
+        maxInCrypto:2,
+        minInCrypto:0.001,
+        offerId:1,
+        offerStatus:"PENDING",
+        unitPrice:1000000,
+        url:"/offer/1",
+        seller: {
+            accessToken: "",
+            refreshToken: "string",
+            admin: false,
+            email:"mdedeu@itba.edu.ar",
+            phoneNumber:"1245311",
+            username:"mdedeu",
+            lastLogin:"online",
+            trades_completed:1,
+            rating:1.3,
+            image_url:"/"
+        }
+    }]);
+    // // [{
     //     cryptoCode:"BTC",
     //     date:new Date(),
     //     location:"Balvanera",
@@ -148,34 +171,39 @@ const Landing = () => {
                     <CryptoFilters callback={()=>console.log("messi")}/>
                 </div>
 
-                <div className="flex flex-col w-2/3 mt-10">
-                    <div className="flex flex-row mx-10 justify-between">
-                        <div className="flex flex-row">
-                            <h3 className="font-bold mx-2 my-auto">Order by</h3>
-                            <form>
-                                <select className="p-2 rounded-lg" onChange={orderOffers}>
-                                    <option>Lowest Price</option>
-                                    <option>Most recent</option>
-                                    <option>Best Rated user</option>
-                                    <option>Higher price</option>
-                                    <option>Seller Last login</option>
-                                </select>
-                            </form>
-                        </div>
-                        <div>
-                            <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
-                        </div>
 
-                    </div>
                     {offers ?
                         <>
+                        <div className="flex flex-col w-2/3 mt-10">
+                            <div className="flex flex-row mx-10 justify-between">
+                                <div className="flex flex-row">
+                                    <h3 className="font-bold mx-2 my-auto">Order by</h3>
+                                    <form>
+                                        <select className="p-2 rounded-lg" onChange={orderOffers}>
+                                            <option>Lowest Price</option>
+                                            <option>Most recent</option>
+                                            <option>Best Rated user</option>
+                                            <option>Higher price</option>
+                                            <option>Seller Last login</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div>
+                                    <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
+                                </div>
+
+                            </div>
                             {offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
                             <Paginator totalPages={10} actualPage={1} callback={() => console.log("called")}/>
+                        </div>
                         </>
                         :
-                        <Loader/>
+                        <div className="flex flex-col w-2/3 mt-10">
+                            <Loader/>
+                        </div>
+
                     }
-                </div>
+
             </div>
     </>
 

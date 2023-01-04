@@ -3,13 +3,41 @@ import UserInfo from "../../components/UserInfo/index";
 import {useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
-import {set} from "react-hook-form";
+import {set, useForm} from "react-hook-form";
 import toast from "react-hot-toast";
 import useUserService from "../../hooks/useUserService";
+type BuyOfferFormValues = {
+    amount:number
+}
 const BuyOffer = () => {
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<BuyOfferFormValues>();
+
     const params = useParams();
     const offerService = useOfferService();
-    const [offer, setOffer] = useState<OfferModel>()
+    const [offer, setOffer] = useState<OfferModel>(
+    {
+        cryptoCode:"BTC",
+            date:new Date(),
+        location:"Balvanera",
+        maxInCrypto:2,
+        minInCrypto:0.001,
+        offerId:1,
+        offerStatus:"PENDING",
+        unitPrice:1000000,
+        url:"/offer/1",
+        seller: {
+        accessToken: "",
+            refreshToken: "string",
+            admin: false,
+            email:"mdedeu@itba.edu.ar",
+            phoneNumber:"1245311",
+            username:"mdedeu",
+            lastLogin:"online",
+            trades_completed:1,
+            rating:1.3,
+            image_url:"/"
+    }
+    })
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -25,7 +53,8 @@ const BuyOffer = () => {
         if(offer){
             const cryptoAmount:number =  arsAmount / offer?.unitPrice
             const cryptoInput:HTMLInputElement = document.getElementById("crypto_amount")! as HTMLInputElement;
-            cryptoInput.value = cryptoAmount.toString();
+            if(!isNaN(cryptoAmount))
+                cryptoInput.value = cryptoAmount.toString();
         }
     }
 
@@ -34,8 +63,15 @@ const BuyOffer = () => {
         if(offer){
             const arsAmount:number =  cryptoAmount * offer?.unitPrice
             const arsInput:HTMLInputElement = document.getElementById("ars_amount")! as HTMLInputElement;
-            arsInput.value = arsAmount.toString();
+            if(!isNaN(arsAmount)){
+                arsInput.value = arsAmount.toString();
+                setValue('amount', arsAmount);
+            }
+
         }
+    }
+    function onSubmit(data:BuyOfferFormValues){
+        alert(data.amount);
     }
 
     useEffect(()=>{
@@ -60,7 +96,7 @@ const BuyOffer = () => {
                         </h1>
                         <h2 className="font-sans font-medium  text-xl text-center text-polar">
 
-                            {offer? offer.unitPrice+ ' ARS': 'Loading...'}
+                            {offer? offer.unitPrice + ' ARS': 'Loading...'}
 
                         </h2>
                         <div className="flex flex-row mt-3 font-sans ">
@@ -77,12 +113,12 @@ const BuyOffer = () => {
                         </h2>
                     </div>
                 </div>
-                <form className="flex flex-col mt-5">
-                    <label className="mx-auto text-center">Amount in crypto</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS" onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
+                <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
+                    <label className="mx-auto text-center">Amount in ARS</label>
+                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"  {...register("amount", {required:"You must input an amount"})} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
                     <p className="mx-auto font-bold text-polar">or</p>
-                    <label className="mx-auto text-center mt-3">Amount in ARS</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`} onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
+                    <label className="mx-auto text-center mt-3">Amount in crypto</label>
+                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
                         <button className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold">Cancel</button>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>

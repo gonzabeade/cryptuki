@@ -24,14 +24,20 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
 
-    function fetchCryptocurrencies(){
-        const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
+    async function fetchCryptocurrencies(){
+        try{
+            const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
 
-        if(apiCall.statusCode === 200){
-            setCryptoCurrencies(apiCall.getData());
-        } else{
-            toast.error("Something went wrong.");
+            if(apiCall.statusCode === 200){
+                setCryptoCurrencies(apiCall.getData());
+            } else{
+                toast.error("Something went wrong.");
+            }
+        }catch (e){
+            toast.error("Couldn't fetch cryptocurrencies")
+
         }
+
     }
 
     useEffect(()=>{

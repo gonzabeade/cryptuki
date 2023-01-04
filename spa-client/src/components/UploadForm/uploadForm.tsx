@@ -22,8 +22,8 @@ const UploadForm = () => {
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
 
-     function fetchCryptocurrencies(){
-        const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
+     async function fetchCryptocurrencies(){
+        const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
 
         if(apiCall.statusCode === 200){
             setCryptoCurrencies(apiCall.getData());

@@ -7,6 +7,7 @@ export const paths = {
     COMPLAINTS: '/complaints',
     LOCATIONS: '/locations',
     CRYPTOCURRENCIES: '/cryptocurrencies',
+    CHAT: '/chat'
 }
 export const NEIGHBORHOODS =[
 'Balvanera'

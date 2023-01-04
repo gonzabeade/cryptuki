@@ -23,8 +23,8 @@ const EditOfferForm = () => {
     const cryptocurrencyService = useCryptocurrencyService();
     const [offer, setOffer] = useState<OfferModel>();
 
-    function fetchCryptocurrencies(){
-        const apiCall:Result<CryptocurrencyModel[]> = cryptocurrencyService.getCryptocurrencies();
+    async function fetchCryptocurrencies(){
+        const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
 
         if(apiCall.statusCode === 200){
             setCryptoCurrencies(apiCall.getData());
@@ -56,7 +56,8 @@ const EditOfferForm = () => {
         fetchCryptocurrencies();
     },[])
     useEffect(()=>{
-        //fetch offer with param id
+        //fetch offer with param id TODO
+
         //set Offer
         //set initial values
 

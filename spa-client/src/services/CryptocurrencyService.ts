@@ -2,20 +2,26 @@ import {AxiosInstance} from "axios";
 import jwtDecode from "jwt-decode";
 import {CryptocurrencyModel} from "../types/Cryptocurrency";
 import Result from "../types/Result";
+import TransactionModel from "../types/TransactionModel";
+import {paths} from "../common/constants";
 
 export class CryptocurrencyService {
 
     private readonly axiosInstance : AxiosInstance;
+    private readonly basePath = paths.BASE_URL + paths.CRYPTOCURRENCIES;
 
     public constructor(axiosInstance: AxiosInstance) {
         this.axiosInstance = axiosInstance;
     }
 
-    public getCryptocurrencies():Result<CryptocurrencyModel[]>{
-        //fetch to our backend and modify price with TC API
-        return Result.ok([{name:"bitcoin", code:"BTC", price:102001301.34}]);
-
-    }
+     public async getCryptocurrencies():Promise<Result<CryptocurrencyModel[]>> {
+         //fetch to our backend and modify price with TC API
+         const resp = await this.axiosInstance.get<CryptocurrencyModel[]>(this.basePath);
+         if(resp.status === 200){
+             return Result.ok(resp.data);
+         }
+         return Result.fail(resp.data, 500);
+     }
 
 
 }

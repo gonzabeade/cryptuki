@@ -11,6 +11,7 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callbac
     const [activeStatus, setActiveStatus] = useState<string>(active);
 
     async function fetchTrades(status:string){
+        //todo
         await callback(status);
         setActiveStatus(status);
     }

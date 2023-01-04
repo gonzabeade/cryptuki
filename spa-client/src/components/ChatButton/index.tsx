@@ -7,7 +7,7 @@ const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
     const [qUnseenMessagesSeller, setqUnseenMessagesSeller] = useState<number>(0);
 
     useEffect(()=>{
-        //fetch unseen
+        //fetch unseen TODO
     })
     return (
         <div className="flex flex-row mx-auto">

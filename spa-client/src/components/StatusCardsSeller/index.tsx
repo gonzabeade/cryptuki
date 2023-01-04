@@ -15,7 +15,7 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callbac
         setActiveStatus(status);
     }
     return (
-        <nav className="border-gray-200 py-3 h-20">
+        <nav className="border-gray-200 py-3 h-20 mx-auto">
             <div className="container mx-auto my-auto px-20 h-full">
                 <ol className="flex justify-center mt-4">
                     <li className="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">

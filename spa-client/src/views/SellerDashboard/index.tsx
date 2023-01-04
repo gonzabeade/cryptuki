@@ -143,7 +143,7 @@ const SellerDashboard = () => {
                     <h1 className="text-center text-2xl font-bold font-sans text-polar">Uploaded offers</h1>
                 </div>
                 <div className="flex flex-col w-full mt-2">
-                    <div className="flex w-full ">
+                    <div className="flex w-full mx-auto ">
                         <StatusCardsSeller  active={"all"} callback={()=>console.log("a")} base_url={"/"}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">

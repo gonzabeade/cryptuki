@@ -16,16 +16,18 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                         {transactions.map(transaction => (
                             <li className="py-2">
                                 <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
-                                   href="/chat?tradeId=${trade.tradeId}">
+                                   href={"/chat/"+transaction.id}>
                                     <div className="flex-shrink-0">
-                                        {/*{transaction.icon}*/}
+                                        {/*{transaction.icon} Depende del estado*/}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-row justify-between">
-                                            <p className="text-sm font-medium text-polar-600 truncate">buyer_username</p>
-                                            <h1 className="text-sm  text-polar truncate"></h1>
+                                            <p className="text-sm font-medium text-polar-600 truncate">{transaction.buyer.username}</p>
+                                            <h1 className="text-xs my-auto  text-polar truncate">{transaction.status} for {transaction.amount + ' ' + transaction.offer.cryptoCode} </h1>
                                         </div>
-                                        <p className="text-sm text-gray-500 truncate">Te hizo una oferta </p>
+                                        <p className="text-sm text-gray-500 truncate">Te hizo una oferta
+                                        {/*Dependiendo del estado, el mensaje*/}
+                                        </p>
                                     </div>
                                 </a>
                             </li>

@@ -83,29 +83,27 @@ const SellerOfferDashboard = () => {
     const tradeService = useTradeService();
     const offerService = useOfferService();
     async function fetchTradesAssociatedWithOffer(){
-        try{
-            if(params.id){
+        try {
+            if (params.id) {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
-                if(resp.statusCode === 200){
+                if (resp.statusCode === 200) {
                     setTrades(resp.getData());
-                    if(resp.getData()){
+                    if (resp.getData()) {
                         setOffer(resp.getData()[0].offer);
-                    }else{
+                    } else {
                         const offerResp = await offerService.getOfferInformation(Number(params.id));
-                        if(offerResp.statusCode === 200){
+                        if (offerResp.statusCode === 200) {
                             setOffer(offerResp.getData());
                         }
                     }
                 }
-            }else{
+            } else {
                 toast.error("No offer ID!");
             }
-        }catch (e) {
+
+        } catch (e) {
             toast.error("Connection error. Failed to fetch trades");
         }
-
-
-
     }
 
 

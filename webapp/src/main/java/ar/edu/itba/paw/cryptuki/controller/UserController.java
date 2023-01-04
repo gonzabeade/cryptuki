@@ -107,8 +107,8 @@ public class UserController {
         return Response.ok(userInformationDto).build();
     }
 
+    // TODO - How is the consumer of the api supposed to know the location of these endpoints?
 
-    // TODO - These two endpoints are the two most polemic ones !!!!
     @PUT
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
@@ -117,7 +117,6 @@ public class UserController {
         return Response.ok().build();
     }
 
-    // TODO - How is the consumer of the api supposed to know the location of this endpoint?
     @POST
     @Path("/{username}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})

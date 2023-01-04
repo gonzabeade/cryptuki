@@ -1,10 +1,15 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.dto.KycDto;
+import ar.edu.itba.paw.cryptuki.dto.ValidationErrorDto;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
+import ar.edu.itba.paw.cryptuki.form.KycStatusForm;
 import ar.edu.itba.paw.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
+import ar.edu.itba.paw.model.KycStatus;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.service.KycService;
@@ -98,12 +103,30 @@ public class KycController {
         return Response.created(uri).build();
     }
 
-    @PUT
+    @PATCH
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response putKyc(@PathParam("username") String username) {
-        // TODO - Implement !
-        throw new NotImplementedException();
+    public Response putKyc(@PathParam("username") String username, @Valid KycStatusForm kycStatusForm) {
+
+        userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+        KycInformation kyc = kycService.getPendingKycRequest(username).orElseThrow(()->new NoSuchKycException(username));
+
+        KycStatus status = KycStatus.valueOf(kycStatusForm.getStatus());
+        if (status != KycStatus.APR && status != KycStatus.REJ) {
+            // If we have enough time, we should do another validator to check this and
+            // trap it with the mapper instead of building it ourselves
+            ValidationErrorDto dto = new ValidationErrorDto();
+            dto.setMessage("must be one of APR or REJ");
+            dto.setPath("status");
+            return Response.status(Response.Status.BAD_REQUEST).entity(dto).build();
+        }
+
+        if (kycStatusForm.getStatus().equals(KycStatus.REJ))
+            kycService.rejectKycRequest(kyc.getKycId(), kycStatusForm.getComments());
+        else
+            kycService.validateKycRequest(kyc.getKycId());
+
+        return Response.noContent().build();
     }
 
 

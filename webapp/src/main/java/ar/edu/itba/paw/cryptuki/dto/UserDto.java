@@ -21,7 +21,10 @@ public class UserDto {
     private URI kycInformation;
     private URI offers;
     private URI self;
-    private URI contactInformation;
+    private URI secrets;
+    private URI password;
+    private URI picture;
+
 
 
     public static UserDto fromUser(User user, UriInfo uriInfo) {
@@ -55,6 +58,24 @@ public class UserDto {
         dto.offers = uriInfo.getBaseUriBuilder()
                 .path("api/offers")
                 .queryParam("from_user", dto.username)
+                .build();
+
+        dto.secrets = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("secrets")
+                .build();
+
+        dto.password = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("password")
+                .build();
+
+        dto.password = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("picture")
                 .build();
 
         return dto;
@@ -140,11 +161,27 @@ public class UserDto {
         this.self = self;
     }
 
-    public URI getContactInformation() {
-        return contactInformation;
+    public URI getSecrets() {
+        return secrets;
     }
 
-    public void setContactInformation(URI contactInformation) {
-        this.contactInformation = contactInformation;
+    public void setSecrets(URI secrets) {
+        this.secrets = secrets;
+    }
+
+    public URI getPassword() {
+        return password;
+    }
+
+    public void setPassword(URI password) {
+        this.password = password;
+    }
+
+    public URI getPicture() {
+        return picture;
+    }
+
+    public void setPicture(URI picture) {
+        this.picture = picture;
     }
 }

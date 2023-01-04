@@ -142,12 +142,7 @@ public class TradeController {
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(senderUsername).orElseThrow(()-> new NoSuchUserException(senderUsername));
         chatService.sendMessage(user.getId(), tradeId, messageForm.getMessage());
-
-        // There is not a unique identifier for a message
-        // But we expose a URI for the whole collection of messages,
-        // where the individual message created may be found
-        final URI uri = uriInfo.getRequestUri();
-        return Response.created(uri).build();
+        return Response.noContent().build();
     }
 
 

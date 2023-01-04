@@ -17,7 +17,7 @@ const Trade =  () => {
     const navigate = useNavigate();
     const searchParams = useSearchParams();
     const [trade, setTrade] = useState<TransactionModel>({
-        status:'accepted',
+        status:'sold',
         buyer:'messi',
         offer: {
             cryptoCode:"BTC",
@@ -49,12 +49,17 @@ const Trade =  () => {
     const tradeService = useTradeService();
 
     async function fetchTrade(tradeId: number) {
-        const resp = await tradeService.getTradeInformation(tradeId);
-        if(resp.statusCode === 200){
-            setTrade(resp.getData);
-        }else{
-            toast.error("Error fetching trade")
-        }
+            const resp = await tradeService.getTradeInformation(tradeId);
+            if(resp.statusCode === 200){
+                console.log("ok")
+                if(resp.getData().status === 'sold'){
+                    console.log("status")
+                    navigate('/trade/'+ resp.getData().id+ '/receipt');
+                }
+                setTrade(resp.getData);
+            }else{
+                toast.error("Error fetching trade")
+            }
     }
     async function takeBackProposal(){
         //post to take back

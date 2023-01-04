@@ -26,7 +26,6 @@ const Receipt = () => {
         // const tradeId = params.tradeId;
         //fetch trade
         fetchTrade(1);
-
     })
 
 

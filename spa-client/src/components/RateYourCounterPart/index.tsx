@@ -32,7 +32,9 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
     }
     function setRatingAndSend(rating:number) {
         setRating(rating * 2);
+        //await call api to rate. If oK, then set Already rated to true
         setAlreadyRated(true);
+
     }
 
     return (

@@ -1,14 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import RatingStars from "../RatingStars";
 import {Link} from "react-router-dom";
 import ChatButton from "../ChatButton";
+import Trade from "../../views/Trade";
+import {set} from "react-hook-form";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
     chat:boolean
 }
 const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade, chat}) => {
+    const [tradeStatus, setTradeStatus] = useState<string>(trade.status);
+
+    function changeStatus(status:string, tradeId:number){
+        //change with api , if ok then
+        setTradeStatus(status);
+    }
     return (
         <div className="flex flex-col justify-center px-10">
             <div
@@ -18,36 +26,35 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
             <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12 ">
                 <div className="flex font-sans h-fit w-full mt-2">
                     {
-                        trade.status === 'sold' &&
+                        tradeStatus === 'sold' &&
                         <div className="font-semibold bg-gray-400 w-full text-white text-center p-2 rounded-lg">
                            Sold
                         </div>
                     }
                     {
-                        trade.status === 'pending' &&
+                        tradeStatus === 'pending' &&
                         <div className=" font-semibold bg-nyellow  w-full text-white text-center p-2 rounded-lg">
                             Pending
                         </div>
                     }
                     {
-                        trade.status === 'rejected' &&
+                        tradeStatus === 'rejected' &&
                         <div className=" font-semibold bg-nred/[0.6] w-full text-white  text-center p-2 rounded-lg">
                             Rejected
                         </div>
                     }
                     {
-                        trade.status === 'accepted' &&
+                        tradeStatus === 'accepted' &&
                         <div className=" font-semibold bg-ngreen  w-full text-white  text-center p-2 rounded-lg">
-                            Rejected
+                            Accepted
                         </div>
                     }
                 </div>
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                     <h1 className="mx-auto">
-                        10
-                        BTC
-                        ⟶  1000000 ARS
+                        {trade.amount + ' ' + trade.offer.cryptoCode}
+                        ⟶ {trade.amount * trade.offer.unitPrice} ARS
                     </h1>
                 </div>
 
@@ -55,40 +62,40 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <h1 className="font-bold font-roboto text-polar mx-auto text-center">Buyer:</h1>
                     <div className="flex mx-auto">
                         <h1 className=" text-lg font-sans font-semibold text-center">
-                            mdedeu
+                            {trade.buyer.username}
                         </h1>
                     </div>
                     <div className="flex mx-auto">
                         <h1 className="font-sans font-semibold text-center text-gray-400">
-                            mdedeu@itba.edu.ar
+                            {trade.buyer.email}
                         </h1>
                     </div>
                     <div className="flex mx-auto">
                         <h1 className="text-xs text-gray-400 font-sans font-semibold text-center">
-                            1234241341
+                            {trade.buyer.phoneNumber}
                         </h1>
                     </div>
-                    <RatingStars rating={1.3}/>
+                    <RatingStars rating={trade.buyer.rating}/>
                 </div>
 
-                {trade.status === 'sold' &&
-                    <a className="mx-auto bg-gray-200 text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
-                       href="/trade/:id/receipt">
+                {tradeStatus === 'sold' &&
+                    <a className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
+                       href="/support">
                         Help
                     </a>
                 }
-                {trade.status === 'pending' &&
+                {tradeStatus === 'pending' &&
                     <div className="flex flex-row">
                         <form method="post" className="flex justify-center mx-auto my-3">
                             <button type="submit"
-                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4">
+                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('rejected', trade.id)}>
                                 Reject
                             </button>
                         </form>
 
                         <form className="flex justify-center mx-auto my-3">
                             <button type="submit"
-                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans ">
+                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('accepted', trade.id)}>
                                 Accept
                             </button>
                         </form>
@@ -96,18 +103,18 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 }
 
                 {
-                    trade.status === 'ACCEPTED' &&
+                    tradeStatus === 'accepted' &&
 
 
                     <form className="flex justify-center mx-auto my-3">
                         <button type="submit"
-                                className="font-bold w-fit bg-frostdr text-white p-3 rounded-lg font-sans mx-auto">
+                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus('sold', trade.id)}>
                             Mark as sold
                         </button>
                     </form>
                 }
                 {
-                    trade.status !== 'accepted' && trade.status !== 'pending' &&
+                    tradeStatus !== 'accepted' && tradeStatus !== 'pending' &&
                     <div className="flex h-2/5 my-2"/>
                 }
                 {
@@ -117,7 +124,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
             <div className="mx-auto">
                 <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
-                   Back
+                   Home
                 </Link>
             </div>
         </div>

@@ -24,7 +24,18 @@ export class TradeService {
 
         return Result.ok({
             status:'sold',
-            buyer:'messi',
+            buyer:{
+                accessToken: "",
+                refreshToken: "string",
+                admin: false,
+                email:"mdedeu@itba.edu.ar",
+                phoneNumber:"1245311",
+                username:"mdedeu",
+                lastLogin:"online",
+                trades_completed:1,
+                rating:1.3,
+                image_url:"/"
+            },
             offer: {
                 cryptoCode:"BTC",
                 date:new Date(),

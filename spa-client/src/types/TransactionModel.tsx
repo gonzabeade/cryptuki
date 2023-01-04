@@ -1,8 +1,9 @@
 import OfferModel from "./OfferModel";
+import UserModel from "./UserModel";
 
 export default interface TransactionModel {
     status:string,
-    buyer:string,
+    buyer:UserModel,
     offer:OfferModel
     amount:number
     id:number

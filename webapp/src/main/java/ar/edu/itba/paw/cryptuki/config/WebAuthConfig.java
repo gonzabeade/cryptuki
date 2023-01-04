@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.config;
 import ar.edu.itba.paw.cryptuki.config.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -41,6 +43,11 @@ public class WebAuthConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
@@ -52,7 +59,7 @@ public class WebAuthConfig {
         return source;
     }
 
-    @Order(-1)
+    @Order(0)
     @Configuration
     @ComponentScan
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
@@ -73,6 +80,7 @@ public class WebAuthConfig {
                     .anyRequest().authenticated()
                     .and()
                     .addFilterBefore(new NonceBasicFilter(userDetailsService, authenticationManagerBean()), FilterSecurityInterceptor.class) // JwtFilter homework
+                    .addFilterBefore(new DummyBearerFilter(userDetailsService), NonceBasicFilter.class)
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //We don't need sessions to be created.
             ;
         }
@@ -146,12 +154,6 @@ public class WebAuthConfig {
             authenticationManagerBuilder
                     .userDetailsService(userDetailsService)
                     .passwordEncoder(passwordEncoder);
-        }
-
-        @Bean
-        @Override
-        public AuthenticationManager authenticationManagerBean() throws Exception {
-            return super.authenticationManagerBean();
         }
 
         public JwtFilter jwtFilter() throws Exception {

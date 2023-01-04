@@ -39,7 +39,8 @@ public class NonceBasicFilter extends OncePerRequestFilter {
         UserDetails userDetails;
 
         if (header == null || !header.startsWith("Basic ")) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 

@@ -39,8 +39,7 @@ public class DummyBearerFilter extends OncePerRequestFilter {
 
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if ( header == null || !header.startsWith("Bearer ")) {
-//            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 

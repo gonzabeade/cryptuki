@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
+import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
@@ -147,16 +149,27 @@ public class TradeController {
         return Response.created(uri).build();
     }
 
-    @PUT
+
+    @PATCH
     @Path("/{tradeId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response modifyTrade(@PathParam("tradeId") int tradeId) {
-
-        // TODO - Implement !
-        throw new NotImplementedException();
+    public Response modifyTrade(@PathParam("tradeId") int tradeId, @Valid TradeStatusForm tradeStatusForm) {
+        Trade trade = this.tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
+            case ACCEPTED:
+                this.tradeService.acceptTrade(tradeId);
+            case SOLD:
+                this.tradeService.sellTrade(tradeId);
+            case DELETED:
+                this.tradeService.deleteTrade(tradeId);
+            case REJECTED:
+                this.tradeService.rejectTrade(tradeId);//422?
+            case PENDING: return Response.status(400).build();
+        }
+        //204?
+        return Response.ok(TradeDto.fromTrade(trade,uriInfo)).build();
     }
-
 
 
 }

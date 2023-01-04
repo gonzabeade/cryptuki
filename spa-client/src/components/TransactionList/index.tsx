@@ -9,7 +9,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
         <div className="mt-5">
             <div className="py-4 bg-white rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-2 px-4 pt-2">
-                    <h5 className="text-xl font-bold leading-none text-polar">Last transactions</h5>
+                    <h5 className="text-xl font-bold leading-none text-polar mx-auto">Last transactions</h5>
                 </div>
                 <div className="px-4">
                     <ul role="list" className="divide-y divide-gray-200">
@@ -23,8 +23,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex flex-row justify-between">
                                             <p className="text-sm font-medium text-polar-600 truncate">buyer_username</p>
-                                            <h1 className="text-sm  text-polar truncate">Pending , quantity,
-                                                cripto </h1>
+                                            <h1 className="text-sm  text-polar truncate"></h1>
                                         </div>
                                         <p className="text-sm text-gray-500 truncate">Te hizo una oferta </p>
                                     </div>

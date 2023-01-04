@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {KycModel} from "../../types/KycModel";
 import TransactionList from "../../components/TransactionList";
 import TransactionModel from "../../types/TransactionModel";
@@ -8,92 +8,96 @@ import UserProfileCards from "../../components/UserProfileCards";
 import StatusCardsSeller from "../../components/StatusCardsSeller";
 import OfferCardProfile from "../../components/OfferCardProfile";
 import Loader from "../../components/Loader";
+import useOfferService from "../../hooks/useOfferService";
+import useTradeService from "../../hooks/useTradeService";
+import {toast} from "react-toastify";
+import useUserService from "../../hooks/useUserService";
 
 
 const SellerDashboard = () => {
     const [kyc, setKyc] = useState<KycModel>({status:'APR'});
 
     const [lastTransactions, setLastTransactions] = useState<TransactionModel[]>([
-        {
-            status:'sold',
-            buyer:{
-                accessToken: "",
-                refreshToken: "string",
-                admin: false,
-                email:"mdedeu@itba.edu.ar",
-                phoneNumber:"1245311",
-                username:"mdedeu",
-                lastLogin:"online",
-                trades_completed:1,
-                rating:1.3,
-                image_url:"/"
-            },
-            offer: {
-                cryptoCode:"BTC",
-                date:new Date(),
-                location:"Balvanera",
-                maxInCrypto:2,
-                minInCrypto:0.001,
-                offerId:1,
-                offerStatus:"PENDING",
-                unitPrice:1000000,
-                seller: {
-                    accessToken: "",
-                    refreshToken: "string",
-                    admin: false,
-                    email:"mdedeu@itba.edu.ar",
-                    phoneNumber:"1245311",
-                    username:"mdedeu",
-                    lastLogin:"online",
-                    trades_completed:1,
-                    rating:1.3,
-                    image_url:"/"
-                }
-            },
-            amount: 1000,
-            id:1,
-            date: new Date()
-        },
-        {
-            status:'rejected',
-            buyer:{
-                accessToken: "",
-                refreshToken: "string",
-                admin: false,
-                email:"mdedeu@itba.edu.ar",
-                phoneNumber:"1245311",
-                username:"mdedeu",
-                lastLogin:"online",
-                trades_completed:1,
-                rating:1.3,
-                image_url:"/"
-            },
-            offer: {
-                cryptoCode:"BTC",
-                date:new Date(),
-                location:"Balvanera",
-                maxInCrypto:2,
-                minInCrypto:0.001,
-                offerId:1,
-                offerStatus:"PENDING",
-                unitPrice:1000000,
-                seller: {
-                    accessToken: "",
-                    refreshToken: "string",
-                    admin: false,
-                    email:"mdedeu@itba.edu.ar",
-                    phoneNumber:"1245311",
-                    username:"mdedeu",
-                    lastLogin:"online",
-                    trades_completed:1,
-                    rating:1.3,
-                    image_url:"/"
-                }
-            },
-            amount: 1000,
-            id:1,
-            date: new Date()
-        }
+        // {
+        //     status:'sold',
+        //     buyer:{
+        //         accessToken: "",
+        //         refreshToken: "string",
+        //         admin: false,
+        //         email:"mdedeu@itba.edu.ar",
+        //         phoneNumber:"1245311",
+        //         username:"mdedeu",
+        //         lastLogin:"online",
+        //         trades_completed:1,
+        //         rating:1.3,
+        //         image_url:"/"
+        //     },
+        //     offer: {
+        //         cryptoCode:"BTC",
+        //         date:new Date(),
+        //         location:"Balvanera",
+        //         maxInCrypto:2,
+        //         minInCrypto:0.001,
+        //         offerId:1,
+        //         offerStatus:"PENDING",
+        //         unitPrice:1000000,
+        //         seller: {
+        //             accessToken: "",
+        //             refreshToken: "string",
+        //             admin: false,
+        //             email:"mdedeu@itba.edu.ar",
+        //             phoneNumber:"1245311",
+        //             username:"mdedeu",
+        //             lastLogin:"online",
+        //             trades_completed:1,
+        //             rating:1.3,
+        //             image_url:"/"
+        //         }
+        //     },
+        //     amount: 1000,
+        //     id:1,
+        //     date: new Date()
+        // },
+        // {
+        //     status:'rejected',
+        //     buyer:{
+        //         accessToken: "",
+        //         refreshToken: "string",
+        //         admin: false,
+        //         email:"mdedeu@itba.edu.ar",
+        //         phoneNumber:"1245311",
+        //         username:"mdedeu",
+        //         lastLogin:"online",
+        //         trades_completed:1,
+        //         rating:1.3,
+        //         image_url:"/"
+        //     },
+        //     offer: {
+        //         cryptoCode:"BTC",
+        //         date:new Date(),
+        //         location:"Balvanera",
+        //         maxInCrypto:2,
+        //         minInCrypto:0.001,
+        //         offerId:1,
+        //         offerStatus:"PENDING",
+        //         unitPrice:1000000,
+        //         seller: {
+        //             accessToken: "",
+        //             refreshToken: "string",
+        //             admin: false,
+        //             email:"mdedeu@itba.edu.ar",
+        //             phoneNumber:"1245311",
+        //             username:"mdedeu",
+        //             lastLogin:"online",
+        //             trades_completed:1,
+        //             rating:1.3,
+        //             image_url:"/"
+        //         }
+        //     },
+        //     amount: 1000,
+        //     id:1,
+        //     date: new Date()
+        // }
     ]);
     const [offers, setOffers] = useState<OfferModel[]>([
         // {
@@ -119,6 +123,39 @@ const SellerDashboard = () => {
         //     }
         // }
         ]);
+
+    const offerService = useOfferService();
+    const tradeService = useTradeService();
+    const userService = useUserService();
+    async function getOffers(){
+        try{
+            const resp = await offerService.getOffersByOwner(5,5, userService.getLoggedInUser());
+            if(resp.statusCode === 200){
+                setOffers(resp.getData())
+            }
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch offers");
+        }
+    }
+
+    async function getLastTransactions(){
+        try{
+            const resp = await tradeService.getLastTransactions(userService.getLoggedInUser());
+            if(resp.statusCode === 200){
+                setLastTransactions(resp.getData())
+            }
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch lasts transactions");
+        }
+    }
+
+    useEffect(()=>{
+       getOffers();
+    },[offers])
+
+    useEffect(()=>{
+       getLastTransactions();
+    },[lastTransactions])
 
     return (
         <div className="flex h-full w-full px-10 my-10">

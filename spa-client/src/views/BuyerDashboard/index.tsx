@@ -1,11 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import UserProfileCards from "../../components/UserProfileCards";
 import StatusCards from "../../components/StatusCards/StatusCards";
 import Paginator from "../../components/Paginator";
 import TransactionModel from "../../types/TransactionModel";
+import useTradeService from "../../hooks/useTradeService";
+import useUserService from "../../hooks/useUserService";
+import {toast} from "react-toastify";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
+    const tradeService = useTradeService();
+    const userService= useUserService();
+
+
+    async function fetchTradesBuyerProfile(){
+        try {
+            const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser(), 'all');
+            if(resp.statusCode === 200){
+                setTrades(resp.getData())
+            }
+        }catch (e){
+            toast.error("Connection error. Failed to fetch trades");
+        }
+
+
+    }
+    useEffect(()=>{fetchTradesBuyerProfile()}, []);
 
     return (
         <div className="flex h-full w-full px-20 my-10">
@@ -20,7 +40,11 @@ const BuyerDashboard = () => {
                 </div>
                 <StatusCards active={"pending"} base_url={"/buyer/mdedeu"} callback={() => console.log("a")}/>
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
-                    {/*foreach trade*/}
+                    {trades.length >0 && trades.map((trade)=>{
+                        return (
+                            <></>
+                        );
+                    })}
                 </div>
                 {trades.length === 0 &&
                     <h2 className="text-center text-xl font-semibold font-sans text-polar mt-4">No transactions

@@ -29,6 +29,14 @@ export class OfferService {
         })
         return Result.ok(resp.data);
     }
+    public async getOffersByOwner(page:number, pageSize:number, username:string|null):Promise<Result<OfferModel[]>>{
+        const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
+            params:{
+                owner: username
+            }
+        })
+        return Result.ok(resp.data);
+    }
 
 }
 

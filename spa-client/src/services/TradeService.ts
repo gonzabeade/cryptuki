@@ -19,4 +19,21 @@ export class TradeService {
             });
             return Result.ok(resp.data);
     }
+    public async getLastTransactions(username:string|null):Promise<Result<TransactionModel[]>>{
+        const resp = await this.axiosInstance.get<TransactionModel[]>(this.basePath, {
+            params: {
+                username: username
+            }
+        });
+        return Result.ok(resp.data);
+    }
+    public async getRelatedTrades(username:string|null, status:string):Promise<Result<TransactionModel[]>>{
+        const resp = await this.axiosInstance.get<TransactionModel[]>(this.basePath, {
+            params: {
+                username: username,
+                status: status
+            }
+        });
+        return Result.ok(resp.data);
+    }
 }

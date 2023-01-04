@@ -4,7 +4,7 @@ import {CryptocurrencyModel} from "../types/Cryptocurrency";
 import {MessageModel} from "../types/MessageModel";
 import {paths} from "../common/constants";
 
-export class ChatService {
+export class ChatService{
 
     private readonly axiosInstance : AxiosInstance;
     private readonly basePath = paths.BASE_URL + paths.CHAT;
@@ -18,5 +18,7 @@ export class ChatService {
        return Result.ok(resp.data);
     }
 
-
+    public async getUnseenMessagesCount(tradeId:number, username:string | null):Promise<Result<number>>{
+        return Result.ok(2);
+    }
 }

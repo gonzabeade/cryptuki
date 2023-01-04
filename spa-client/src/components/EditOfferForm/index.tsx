@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import {useParams} from "react-router-dom";
 import OfferModel from "../../types/OfferModel";
 import {UploadFormValues} from "../UploadForm/uploadForm";
+import useOfferService from "../../hooks/useOfferService";
 
 interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -22,6 +23,7 @@ const EditOfferForm = () => {
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
     const [offer, setOffer] = useState<OfferModel>();
+    const offerService = useOfferService();
 
     async function fetchCryptocurrencies(){
         const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
@@ -55,13 +57,27 @@ const EditOfferForm = () => {
     useEffect(()=>{
         fetchCryptocurrencies();
     },[])
+
+    async function getOffer(){
+        try{
+            if(params.id){
+                const resp = await offerService.getOfferInformation(Number(params.id));
+                if(resp.statusCode === 200){
+                    setOffer(resp.getData());
+                }else{
+                    toast.error("unkown error in fetching offer")
+                }
+            }
+        }catch (e){
+            toast.error("Error fetching offer");
+        }
+
+    }
+
     useEffect(()=>{
-        //fetch offer with param id TODO
+        getOffer();
 
-        //set Offer
-        //set initial values
-
-    })
+    }, [offer])
 
 
 

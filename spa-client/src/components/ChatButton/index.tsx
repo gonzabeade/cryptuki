@@ -1,13 +1,34 @@
 import React, {useEffect, useState} from 'react';
+import useChatService from "../../hooks/useChatService";
+import trade from "../../views/Trade";
+import useUserService from "../../hooks/useUserService";
+import {toast} from "react-toastify";
 
 type ChatButtonProps ={
     tradeId:number
 }
 const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
     const [qUnseenMessagesSeller, setqUnseenMessagesSeller] = useState<number>(0);
+    const chatService = useChatService();
+    const userService = useUserService();
+
+    async function fetchUnseenMessages(){
+        try{
+            const resp = await chatService.getUnseenMessagesCount(tradeId, userService.getLoggedInUser());
+            if(resp.statusCode === 200){
+                setqUnseenMessagesSeller(resp.getData());
+            }else{
+                toast.error("Unkown chat problems");
+            }
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch chats");
+        }
+
+
+    }
 
     useEffect(()=>{
-        //fetch unseen TODO
+        fetchUnseenMessages();
     })
     return (
         <div className="flex flex-row mx-auto">

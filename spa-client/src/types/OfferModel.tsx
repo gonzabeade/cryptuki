@@ -16,6 +16,5 @@ export default interface OfferModel {
 
 
         seller: UserModel, // TODO: Change to UserModel
-        // trades: TransactionModel[]  // TODO: Change to TradesModel[] ESTO CHEQUEAR , ES CIRCULAR, deberia ir en otr pa mi
 
 }

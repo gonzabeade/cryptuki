@@ -204,7 +204,7 @@ const EditOfferForm = () => {
                        href="/">Cancel
                     </a>
                     <button type="submit"
-                            className="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
+                            className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
                         Submit
                     </button>
                 </div>

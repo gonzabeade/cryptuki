@@ -19,7 +19,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                             Change your password
                         </a>
                     </div>
-                    <div className="flex flex-col mt-5">
+                    <div className="flex flex-col mt-5 font-bold text-polar text-xl">
                       {/*form para cambiar profile pic*/}
                         {username}
                     </div>

@@ -7,6 +7,7 @@ type RatingStarsProps = {
 const RatingStars : React.FC<RatingStarsProps> = ({rating}) => {
     return (
         <div className="flex items-center flex-wrap justify-center mx-auto">
+            <div className=" flex flex-row mx-auto">
             { [...Array(Math.trunc(rating))].map((element, key)=>{
                 return (
                     <div key={key}>
@@ -20,6 +21,7 @@ const RatingStars : React.FC<RatingStarsProps> = ({rating}) => {
                     </div>
                 );})
             }
+            </div>
 
             <p className="ml-2 text-sm font-medium text-gray-400 text-center">{rating} out of 5</p>
         </div>

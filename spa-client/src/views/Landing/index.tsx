@@ -13,28 +13,29 @@ import Result from "../../types/Result";
 const Landing = () => {
 
     const [offers, setOffers] = useState<OfferModel[]|null>([
-        {
-        cryptoCode:"BTC",
-        date:new Date(),
-        location:"Balvanera",
-        maxInCrypto:2,
-        minInCrypto:0.001,
-        offerId:1,
-        offerStatus:"PENDING",
-        unitPrice:1000000,
-        seller: {
-            accessToken: "",
-            refreshToken: "string",
-            admin: false,
-            email:"mdedeu@itba.edu.ar",
-            phoneNumber:"1245311",
-            username:"mdedeu",
-            lastLogin:"online",
-            trades_completed:1,
-            rating:1.3,
-            image_url:"/"
-        }
-    }]);
+    //     {
+    //     cryptoCode:"BTC",
+    //     date:new Date(),
+    //     location:"Balvanera",
+    //     maxInCrypto:2,
+    //     minInCrypto:0.001,
+    //     offerId:1,
+    //     offerStatus:"PENDING",
+    //     unitPrice:1000000,
+    //     seller: {
+    //         accessToken: "",
+    //         refreshToken: "string",
+    //         admin: false,
+    //         email:"mdedeu@itba.edu.ar",
+    //         phoneNumber:"1245311",
+    //         username:"mdedeu",
+    //         lastLogin:"online",
+    //         trades_completed:1,
+    //         rating:1.3,
+    //         image_url:"/"
+    //     }
+    // }
+    ]);
     // // [{
     //     cryptoCode:"BTC",
     //     date:new Date(),
@@ -198,7 +199,8 @@ const Landing = () => {
 
                             </div>
                             {offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            <Paginator totalPages={10} actualPage={1} callback={() => console.log("called")}/>
+                            {offers.length >0 &&  <Paginator totalPages={10} actualPage={1} callback={() => console.log("called")}/>}
+
                         </div>
                         </>
                         :

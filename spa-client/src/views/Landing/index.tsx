@@ -3,11 +3,12 @@ import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
-import { useLocation, useNavigate } from "react-router-dom";
+import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CryptoFilters from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
+import Result from "../../types/Result";
 
 const Landing = () => {
 
@@ -140,34 +141,31 @@ const Landing = () => {
     
     const navigate = useNavigate(); 
     const location = useLocation();
+    const params = useSearchParams();
 
     async function getOffers(page:number, pageSize:number){
-        const apiCall = await offerService?.getOffers(page, pageSize);
+        try{
+            const apiCall = await offerService?.getOffers(page, pageSize);
 
-        if(apiCall.statusCode === 200){
-            setOffers(apiCall.getData());
-        }else{
-            toast.error("Something went wrong, check your connectivity");
+            if(apiCall.statusCode === 200){
+                setOffers(apiCall.getData());
+            }else{
+                toast.error("Something went wrong, check your connectivity");
+            }
+        }catch (e){
+            toast.error("Connection error. Failed to fetch offers")
         }
+
     }
-    function orderOffers(){
+    function orderOffers(page:number, pageSize: number){
         //order
+        //fetch with added param TODO
+
     }
 
     useEffect(  ()=>{
-         const fetchOffers = async () =>  {
-
-             try{
-                 const resp = await getOffers(5,5);
-             }catch (e){
-                 console.log("here")
-                 toast.error("Error fetching offers")
-             }
-         }
-
-         fetchOffers();
-
-    }, [offerService, location, navigate])
+            getOffers(5, 5);
+        },[offers]);
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">
@@ -184,7 +182,8 @@ const Landing = () => {
                                 <div className="flex flex-row">
                                     <h3 className="font-bold mx-2 my-auto">Order by</h3>
                                     <form>
-                                        <select className="p-2 rounded-lg" onChange={orderOffers}>
+                                        {/*TODO page and size*/}
+                                        <select className="p-2 rounded-lg" onChange={()=>orderOffers(5, 5)}>
                                             <option>Lowest Price</option>
                                             <option>Most recent</option>
                                             <option>Best Rated user</option>

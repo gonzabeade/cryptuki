@@ -15,38 +15,21 @@ const BuyOffer = () => {
     const params = useParams();
     const offerService = useOfferService();
     const navigate = useNavigate();
-    const [offer, setOffer] = useState<OfferModel>(
-    {
-        cryptoCode:"BTC",
-            date:new Date(),
-        location:"Balvanera",
-        maxInCrypto:2,
-        minInCrypto:0.001,
-        offerId:1,
-        offerStatus:"PENDING",
-        unitPrice:1000000,
-        seller: {
-        accessToken: "",
-            refreshToken: "string",
-            admin: false,
-            email:"mdedeu@itba.edu.ar",
-            phoneNumber:"1245311",
-            username:"mdedeu",
-            lastLogin:"online",
-            trades_completed:1,
-            rating:1.3,
-            image_url:"/"
-    }
-    })
+    const [offer, setOffer] = useState<OfferModel>();
 
 
     async function  retrieveOfferInformation(offerId:number){
-        const resp = await  offerService.getOfferInformation(offerId);
-        if(resp.statusCode === 200 ){
-            setOffer(resp.getData());
-        }else{
-            toast.error("No offer with that ID")
+        try{
+            const resp = await  offerService.getOfferInformation(offerId);
+            if(resp.statusCode === 200 ){
+                setOffer(resp.getData());
+            }else{
+                toast.error("No offer with that ID");
+            }
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch offer");
         }
+
     }
     function fillCrypto(e:any){
         const arsAmount:number = parseInt(e.target.value);

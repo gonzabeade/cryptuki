@@ -34,7 +34,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                 toast.error("Something went wrong.");
             }
         }catch (e){
-            toast.error("Couldn't fetch cryptocurrencies")
+            toast.error("Connection error. Failed to fetch cryptocurrencies")
 
         }
 

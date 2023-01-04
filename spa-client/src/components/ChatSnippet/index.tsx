@@ -21,7 +21,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
         if(resp.statusCode === 200){
             setMessages(resp.getData());
         }else{
-            toast.error("Error fetching messages")
+            toast.error("Connection error. Couldn't fetch messages")
         }
     }
 

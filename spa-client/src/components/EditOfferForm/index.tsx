@@ -69,7 +69,7 @@ const EditOfferForm = () => {
                 }
             }
         }catch (e){
-            toast.error("Error fetching offer");
+            toast.error("Connection error. Failed to fetch offer");
         }
 
     }

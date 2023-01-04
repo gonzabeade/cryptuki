@@ -33,14 +33,12 @@ public class UserController {
 
     private final UserService userService;
 
+    private final ValidatorFactory validatorFactory;
     @Autowired
-    public UserController(UserService userService, Validator validator) {
+    public UserController(UserService userService, ValidatorFactory validatorFactory) {
         this.userService = userService;
-        this.validator = validator;
+        this.validatorFactory = validatorFactory;
     }
-
-    private final Validator validator;
-
 
     @Context
     public UriInfo uriInfo;
@@ -66,6 +64,7 @@ public class UserController {
     public Response toNewUser(RegisterForm registerForm, Locale locale) {
 
         /* Manual validation - @Valid does not work on non-controller methods*/
+        Validator validator = validatorFactory.getValidator();
         Set<ConstraintViolation<RegisterForm>> violations = validator.validate(registerForm);
         if (!violations.isEmpty())
             throw new ConstraintViolationException(violations);

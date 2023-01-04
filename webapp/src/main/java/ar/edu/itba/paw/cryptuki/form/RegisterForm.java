@@ -9,30 +9,26 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
-@EqualFields(
-        field1="password",
-        field2="repeatPassword"
-)
 public class RegisterForm {
 
 
     @Size(min=6, max= 100)
     @DuplicateEmail
     @Pattern(regexp=".+@.+\\..+")
+    @NotNull
     private String email;
     @Size(min = 6, max = 100)
     @DuplicateUsername
     @Pattern(regexp = "[a-zA-Z0-9]+")
+    @NotNull
     private String username;
 
     @Pattern(regexp = "\\d{8,10}")
     @NotNull
     private String phoneNumber;
     @Size(min = 6, max = 100)
+    @NotNull
     private String password;
-    @Size(min = 6, max = 100)
-    private String repeatPassword;
 
     public String getUsername() {
         return username;
@@ -45,13 +41,6 @@ public class RegisterForm {
     }
     public void setPassword(String password) {
         this.password = password;
-    }
-    public String getRepeatPassword() {
-        return repeatPassword;
-    }
-    public void setRepeatPassword(String repeatPassword)
-    {
-        this.repeatPassword = repeatPassword;
     }
     public String getEmail() {
         return email;

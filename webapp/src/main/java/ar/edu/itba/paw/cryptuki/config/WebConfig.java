@@ -27,6 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.mail.PasswordAuthentication;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
@@ -143,7 +144,7 @@ public class WebConfig {
     }
 
     @Bean
-    public Validator validator() {
+    public ValidatorFactory validatorFactory() {
         return new LocalValidatorFactoryBean();
     }
 

@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void registerUser(UserPO userPO){
-
         User user = userDao.createUser(userPO.getEmail(), userPO.getPhoneNumber(), userPO.getLocale());
         String hashedPassword = passwordEncoder.encode(userPO.getPlainPassword());
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);

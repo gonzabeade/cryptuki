@@ -14,7 +14,6 @@ export interface UploadFormValues {
     cryptoCode:string,
     automaticResponse?:string
 }
-//TODO- Errors and pattern validations
 
 const UploadForm = () => {
 

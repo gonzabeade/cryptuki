@@ -36,4 +36,12 @@ export class TradeService {
         });
         return Result.ok(resp.data);
     }
+    public async getTradesWithOfferId(offerId:number):Promise<Result<TransactionModel[]>>{
+        const resp = await this.axiosInstance.get<TransactionModel[]>(this.basePath, {
+            params: {
+                offerId: offerId,
+            }
+        });
+        return Result.ok(resp.data);
+    }
 }

@@ -4,78 +4,116 @@ import OfferModel from "../../types/OfferModel";
 import Paginator from "../../components/Paginator";
 import TransactionModel from "../../types/TransactionModel";
 import OfferInformationForSeller from "../../components/OfferInformationForSeller";
+import useTradeService from "../../hooks/useTradeService";
+import {useParams} from "react-router-dom";
+import {toast} from "react-toastify";
+import useOfferService from "../../hooks/useOfferService";
 
 const SellerOfferDashboard = () => {
 
     const [selectedStatus, setSelectedStatus] = useState<string>("all");
     const [trades, setTrades] = useState<TransactionModel[]>([
-        {
-            status:'rejected',
-            buyer:{
-                accessToken: "",
-                refreshToken: "string",
-                admin: false,
-                email:"mdedeu@itba.edu.ar",
-                phoneNumber:"1245311",
-                username:"mdedeu",
-                lastLogin:"online",
-                trades_completed:1,
-                rating:1.3,
-                image_url:"/"
-            },
-            offer: {
-                cryptoCode:"BTC",
-                date:new Date(),
-                location:"Balvanera",
-                maxInCrypto:2,
-                minInCrypto:0.001,
-                offerId:1,
-                offerStatus:"PENDING",
-                unitPrice:1000000,
-                seller: {
-                    accessToken: "",
-                    refreshToken: "string",
-                    admin: false,
-                    email:"mdedeu@itba.edu.ar",
-                    phoneNumber:"1245311",
-                    username:"mdedeu",
-                    lastLogin:"online",
-                    trades_completed:1,
-                    rating:1.3,
-                    image_url:"/"
-                }
-            },
-            amount: 1000,
-            id:1,
-            date: new Date()
-        }
+        // {
+        //     status:'rejected',
+        //     buyer:{
+        //         accessToken: "",
+        //         refreshToken: "string",
+        //         admin: false,
+        //         email:"mdedeu@itba.edu.ar",
+        //         phoneNumber:"1245311",
+        //         username:"mdedeu",
+        //         lastLogin:"online",
+        //         trades_completed:1,
+        //         rating:1.3,
+        //         image_url:"/"
+        //     },
+        //     offer: {
+        //         cryptoCode:"BTC",
+        //         date:new Date(),
+        //         location:"Balvanera",
+        //         maxInCrypto:2,
+        //         minInCrypto:0.001,
+        //         offerId:1,
+        //         offerStatus:"PENDING",
+        //         unitPrice:1000000,
+        //         seller: {
+        //             accessToken: "",
+        //             refreshToken: "string",
+        //             admin: false,
+        //             email:"mdedeu@itba.edu.ar",
+        //             phoneNumber:"1245311",
+        //             username:"mdedeu",
+        //             lastLogin:"online",
+        //             trades_completed:1,
+        //             rating:1.3,
+        //             image_url:"/"
+        //         }
+        //     },
+        //     amount: 1000,
+        //     id:1,
+        //     date: new Date()
+        // }
 
     ]);
-    const [offer, setOffer] = useState<OfferModel>({
-        cryptoCode:"BTC",
-        date:new Date(),
-        location:"Balvanera",
-        maxInCrypto:2,
-        minInCrypto:0.001,
-        offerId:1,
-        offerStatus:"PENDING",
-        unitPrice:1000000,
-        seller: {
-            accessToken: "",
-            refreshToken: "string",
-            admin: false,
-            email:"mdedeu@itba.edu.ar",
-            phoneNumber:"1245311",
-            username:"mdedeu",
-            lastLogin:"online",
-            trades_completed:1,
-            rating:1.3,
-            image_url:"/"
+    const [offer, setOffer] = useState<OfferModel>(
+    //     {
+    //     cryptoCode:"BTC",
+    //     date:new Date(),
+    //     location:"Balvanera",
+    //     maxInCrypto:2,
+    //     minInCrypto:0.001,
+    //     offerId:1,
+    //     offerStatus:"PENDING",
+    //     unitPrice:1000000,
+    //     seller: {
+    //         accessToken: "",
+    //         refreshToken: "string",
+    //         admin: false,
+    //         email:"mdedeu@itba.edu.ar",
+    //         phoneNumber:"1245311",
+    //         username:"mdedeu",
+    //         lastLogin:"online",
+    //         trades_completed:1,
+    //         rating:1.3,
+    //         image_url:"/"
+    //     }
+    // }
+    );
+    const params = useParams();
+    const tradeService = useTradeService();
+    const offerService = useOfferService();
+    async function fetchTradesAssociatedWithOffer(){
+        try{
+            if(params.id){
+                const resp = await tradeService.getTradesWithOfferId(Number(params.id));
+                if(resp.statusCode === 200){
+                    setTrades(resp.getData());
+                    if(resp.getData()){
+                        setOffer(resp.getData()[0].offer);
+                    }else{
+                        const offerResp = await offerService.getOfferInformation(Number(params.id));
+                        if(offerResp.statusCode === 200){
+                            setOffer(offerResp.getData());
+                        }
+                    }
+                }
+            }else{
+                toast.error("No offer ID!");
+            }
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch trades");
         }
-    });
+
+
+
+    }
+
 
     useEffect(()=>{
         //fetch trade. If no results, fetch offer. Else, setOffer trade[0].offer
+        fetchTradesAssociatedWithOffer();
+
+
     }, [trades, offer])
 
 
@@ -89,7 +127,7 @@ const SellerOfferDashboard = () => {
             <div className="flex flex-row h-full w-full px-20 my-10">
                 <div className="flex flex-col h-3/5 w-1/5 pr-2">
                     <div className="flex flex-col w-full py-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF]">
-                        <h1 className="font-sans w-full mx-auto text-center text-2xl font-bold">
+                        <h1 className="font-sans w-full mx-auto text-center text-xl font-bold text-polar">
                             Trade proposals received
                         </h1>
                     </div>
@@ -98,7 +136,7 @@ const SellerOfferDashboard = () => {
                     </div>
 
                     <a href="/"
-                       className=" font-bold rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
+                       className=" mt-2 font-bold rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
                         Back
                     </a>
                 </div>

@@ -1,4 +1,5 @@
 package ar.edu.itba.paw.cryptuki.config;
+import ar.edu.itba.paw.cryptuki.config.auth.autenticationEntryPoint.CustomAuthenticationEntryPoint;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.DummyBearerFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
@@ -90,7 +91,8 @@ public class WebAuthConfig {
                     .anyRequest().authenticated()
                     .and()
                     .addFilterBefore(new NonceBasicFilter(passwordUserDetailsService, authenticationManagerBean()), FilterSecurityInterceptor.class)
-                    .addFilterBefore(jwtFilter(), NonceBasicFilter.class);
+                    .addFilterBefore(jwtFilter(), NonceBasicFilter.class)
+                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         }
 
         @Override
@@ -199,7 +201,8 @@ public class WebAuthConfig {
                     .addFilterBefore(jwtFilter(), FilterSecurityInterceptor.class) // JwtFilter homework
                     .cors()
                     .and()
-                    .csrf().disable();
+                    .csrf().disable()
+                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         }
 
         @Override

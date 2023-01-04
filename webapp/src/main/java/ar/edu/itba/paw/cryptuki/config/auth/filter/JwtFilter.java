@@ -21,15 +21,6 @@ import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.util.Base64;
 
-//URLs para curl
-//curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/offers' --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjU5NzM2MDQ0fQ.S3_VHCLOQtk7A6gxO43hyi6N9F3F0yS8l54oQV6PtEGSN39bkfk1nEDa0wboeLYL07M2-F17zRqy9FxNx9kPeA'
-//curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/api/offers' -H 'Authorization: Bearer gonzabeade'
-//curl -v -X PUT -F isBuyer=false -F picture=@Pictures/pic.jpeg 'http://localhost:8080/webapp/api/users/gonzabeadea/picture'
-//curl -v 'http://localhost:8080/webapp/api/offers' -H 'Authorization: Bearer gonzabeade'
-
-//Cosas para ver del proyecto
-//-Resolver complains sin poner un mensaje o querer banear a un usuario (Se puede pedir que el smg sea obligatorio, lo del ban no se)
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -50,10 +41,12 @@ public class JwtFilter extends OncePerRequestFilter {
         UserDetails userDetails;
 
 
-        if (header == null) {
+        // Continue ...
+        if (header == null)
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        } else if ( header.startsWith("Basic ") ) {
+
+
+        if ( header.startsWith("Basic ") ) {
             final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
             final String[] credentials = new String(base64credentials).trim().split(":");
 
@@ -67,7 +60,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             userDetails = userDetailsService.loadUserByUsername(username); //TODO: mirar que pasa con la excepcion que se tira si no existe el user
 
-            //TODO: mirar que hacer con los permisos, osea el tercer parametro
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     password,
@@ -81,16 +73,14 @@ public class JwtFilter extends OncePerRequestFilter {
             httpServletResponse.addHeader("x-refresh-token", JwtUtils.generateRefreshToken(userDetails));
             httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
 
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else if (header.startsWith("Bearer ")){
 
             // Get jwt token
             final String token = header.split(" ")[1].trim();
 
-            //TODO: mirar como devolver los mensajes apropiados
             //Validate that token was signed by server and that is hasn't expired
-            if( !JwtUtils.isTokenValid(token) ) {
+            if (!JwtUtils.isTokenValid(token)) {
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
@@ -108,15 +98,8 @@ public class JwtFilter extends OncePerRequestFilter {
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
                 httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
             }
-
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
-
-        httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         filterChain.doFilter(httpServletRequest, httpServletResponse);
-        // TODO: Investigate that does this do
-        // authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-
     }
 }

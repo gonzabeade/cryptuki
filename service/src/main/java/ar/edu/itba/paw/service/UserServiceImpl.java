@@ -77,13 +77,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal")
+    @PreAuthorize("#username == authentication.principal.username")
     public boolean changePassword(String username, String newPassword) {
 
         if (newPassword == null)
             throw new NullPointerException("New password cannot be null");
-        userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        User user = userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+        boolean value = userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        if (value) {
+            UserAuth auth = user.getUserAuth();
+            auth.setCode(null);
+            userAuthDao.modifyUserAuth(auth);
+        }
+        return value;
     }
 
     @Override

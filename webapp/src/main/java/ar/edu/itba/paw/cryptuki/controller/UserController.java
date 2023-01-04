@@ -127,7 +127,6 @@ public class UserController {
             throw new BadRequestException();
 
         final URI uri = uriInfo.getAbsolutePathBuilder().build();
-
         return Response.created(uri).build();
     }
 

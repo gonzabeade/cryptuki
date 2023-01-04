@@ -8,16 +8,78 @@ import OfferInformationForSeller from "../../components/OfferInformationForSelle
 const SellerOfferDashboard = () => {
 
     const [selectedStatus, setSelectedStatus] = useState<string>("all");
-    const [trades, setTrades] = useState<TransactionModel[]>([]);
-    const [offer, setOffer] = useState<OfferModel>();
+    const [trades, setTrades] = useState<TransactionModel[]>([
+        {
+            status:'rejected',
+            buyer:{
+                accessToken: "",
+                refreshToken: "string",
+                admin: false,
+                email:"mdedeu@itba.edu.ar",
+                phoneNumber:"1245311",
+                username:"mdedeu",
+                lastLogin:"online",
+                trades_completed:1,
+                rating:1.3,
+                image_url:"/"
+            },
+            offer: {
+                cryptoCode:"BTC",
+                date:new Date(),
+                location:"Balvanera",
+                maxInCrypto:2,
+                minInCrypto:0.001,
+                offerId:1,
+                offerStatus:"PENDING",
+                unitPrice:1000000,
+                url:"/offer/1",
+                seller: {
+                    accessToken: "",
+                    refreshToken: "string",
+                    admin: false,
+                    email:"mdedeu@itba.edu.ar",
+                    phoneNumber:"1245311",
+                    username:"mdedeu",
+                    lastLogin:"online",
+                    trades_completed:1,
+                    rating:1.3,
+                    image_url:"/"
+                }
+            },
+            amount: 1000,
+            id:1,
+            date: new Date()
+        }
+
+    ]);
+    const [offer, setOffer] = useState<OfferModel>({
+        cryptoCode:"BTC",
+        date:new Date(),
+        location:"Balvanera",
+        maxInCrypto:2,
+        minInCrypto:0.001,
+        offerId:1,
+        offerStatus:"PENDING",
+        unitPrice:1000000,
+        url:"/offer/1",
+        seller: {
+            accessToken: "",
+            refreshToken: "string",
+            admin: false,
+            email:"mdedeu@itba.edu.ar",
+            phoneNumber:"1245311",
+            username:"mdedeu",
+            lastLogin:"online",
+            trades_completed:1,
+            rating:1.3,
+            image_url:"/"
+        }
+    });
 
     useEffect(()=>{
-        //fetch trade
-    }, [trades])
+        //fetch trade. If no results, fetch offer. Else, setOffer trade[0].offer
+    }, [trades, offer])
 
-    useEffect(()=>{
-        //fetch offer
-    }, [offer])
 
     function changeStatus(status:string){
         //fetch to our service that asks for trades in specific state
@@ -33,9 +95,12 @@ const SellerOfferDashboard = () => {
                             Trade proposals received
                         </h1>
                     </div>
-                    {offer && <OfferCardProfile offer={offer}/>}
+                    <div className="flex mx-auto">
+                        {offer && <OfferCardProfile offer={offer}/>}
+                    </div>
+
                     <a href="/"
-                       className="rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
+                       className=" font-bold rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
                         Back
                     </a>
                 </div>
@@ -86,7 +151,7 @@ const SellerOfferDashboard = () => {
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <div className="flex flex-wrap pl-3 mt-10">
+                        <div className="flex flex-wrap pl-3 mt-10 mx-auto">
                             {trades && trades.map((trade)=>{
                                 return(
                                     <OfferInformationForSeller trade={trade} chat={true} key={trade.id}/>

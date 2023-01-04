@@ -9,7 +9,7 @@ type OfferCardProfileProps = {
 const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
         const navigate = useNavigate();
     return (
-        <a href={"/seller/offer/"+offer.offerId} className={` cursor-pointer z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-3 ${ offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200' : 'cursor-not-allowed' }`} >
+        <a href={"/seller/offer/"+offer.offerId} className={` cursor-pointer z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200' : 'cursor-not-allowed' }`} >
             <h1 className="text-center text-3xl font-semibold font-polard font-sans">
                Offer
                 #{offer.offerId}

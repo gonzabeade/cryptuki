@@ -118,7 +118,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <div className="flex h-2/5 my-2"/>
                 }
                 {
-                    chat && <ChatButton tradeId={2} qUnseenMessagesSeller={1}/>
+                    chat && <ChatButton tradeId={trade.id} />
                 }
             </div>
 

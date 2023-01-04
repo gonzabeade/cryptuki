@@ -51,11 +51,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
         if (header == null) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else if ( header.startsWith("Basic ") ) {
             final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
-            final String[] credentials = String.valueOf(base64credentials).trim().split(":");
+            final String[] credentials = new String(base64credentials).trim().split(":");
 
             if(credentials.length != 2) {
                 httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST); // TODO: Check -- No se si es correcto esto
@@ -114,7 +114,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
         // TODO: Investigate that does this do
         // authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 

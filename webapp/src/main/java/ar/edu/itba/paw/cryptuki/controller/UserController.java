@@ -4,7 +4,7 @@ import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
 import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.auth.ChangePasswordForm;
+import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Role;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -114,7 +113,7 @@ public class UserController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     public Response changePassword(@Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
         userService.changePassword(username, changePasswordForm.getPassword());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @POST

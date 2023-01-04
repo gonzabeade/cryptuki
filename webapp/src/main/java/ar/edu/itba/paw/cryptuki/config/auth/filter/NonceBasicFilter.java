@@ -44,11 +44,11 @@ public class NonceBasicFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String token = header.split(" ")[1];
-        final String[] credentials = token.trim().split(":");
+        final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
+        final String[] credentials = new String(base64credentials).trim().split(":");
 
-        if(credentials.length != 2) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        if (credentials.length != 2) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
@@ -57,7 +57,6 @@ public class NonceBasicFilter extends OncePerRequestFilter {
 
         userDetails = userDetailsService.loadUserByUsername(username); //TODO: mirar que pasa con la excepcion que se tira si no existe el user
 
-        //TODO: mirar que hacer con los permisos, osea el tercer parametro
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
                 password,

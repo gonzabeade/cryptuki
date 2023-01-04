@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.auth;
+package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.cryptuki.annotation.validation.EqualFields;
 

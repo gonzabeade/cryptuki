@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.CryptocurrencyDto;
-import ar.edu.itba.paw.cryptuki.utils.CacheHeaders;
+import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchCryptocurrencyException;
 import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.service.CryptocurrencyService;
@@ -16,7 +16,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/api/cryptocurrencies")
@@ -39,7 +38,7 @@ public class CryptocurrencyController {
         if (cryptocurrencies.isEmpty())
             return Response.noContent().build();
         final Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<Collection<CryptocurrencyDto>>(cryptocurrencies) {});
-        CacheHeaders.setUnconditionalCache(responseBuilder);
+        ResponseHelper.setUnconditionalCache(responseBuilder);
         return responseBuilder.build();
     }
 
@@ -49,7 +48,7 @@ public class CryptocurrencyController {
     public Response getCryptocurrency(@PathParam("code") String code) {
         Cryptocurrency cryptocurrency = cryptocurrencyService.getCryptocurrency(code).orElseThrow(()->new NoSuchCryptocurrencyException(code));
         final Response.ResponseBuilder responseBuilder = Response.ok(CryptocurrencyDto.fromCryptocurrency(cryptocurrency));
-        CacheHeaders.setUnconditionalCache(responseBuilder);
+        ResponseHelper.setUnconditionalCache(responseBuilder);
         return responseBuilder.build();
     }
 }

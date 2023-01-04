@@ -11,7 +11,7 @@ import static java.lang.Math.ceil;
 
 public class ResponseHelper {
 
-    public static final int MAX_AGE = 10000;
+    public static final int MAX_AGE = 60*60*24;;
 
     private ResponseHelper() {
         // Helper class
@@ -34,6 +34,7 @@ public class ResponseHelper {
     public static void setUnconditionalCache(Response.ResponseBuilder responseBuilder) {
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(MAX_AGE);
+        cacheControl.setNoTransform(false);
         responseBuilder.cacheControl(cacheControl);
     }
 

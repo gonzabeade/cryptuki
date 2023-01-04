@@ -3,6 +3,8 @@ import ar.edu.itba.paw.cryptuki.config.auth.filter.DummyBearerFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
+import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
+import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -65,8 +69,13 @@ public class WebAuthConfig {
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        @Qualifier("nonceUserDetailsService")
-        private UserDetailsService userDetailsService;
+        private NonceUserDetailsService nonceUserDetailsService;
+
+        @Autowired
+        private PasswordUserDetailsService passwordUserDetailsService;
+
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -80,18 +89,31 @@ public class WebAuthConfig {
                     .and().authorizeRequests()
                     .anyRequest().authenticated()
                     .and()
-                    .addFilterBefore(new NonceBasicFilter(userDetailsService, authenticationManagerBean()), FilterSecurityInterceptor.class) // JwtFilter homework
-                    .addFilterBefore(new DummyBearerFilter(userDetailsService), NonceBasicFilter.class);
+                    .addFilterBefore(new NonceBasicFilter(passwordUserDetailsService, authenticationManagerBean()), FilterSecurityInterceptor.class)
+                    .addFilterBefore(jwtFilter(), NonceBasicFilter.class);
         }
 
         @Override
         protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-            authenticationManagerBuilder.userDetailsService(userDetailsService);
+            DaoAuthenticationProvider ap1 = new DaoAuthenticationProvider();
+            DaoAuthenticationProvider ap2 = new DaoAuthenticationProvider();
+
+            ap1.setUserDetailsService(nonceUserDetailsService);
+            ap2.setUserDetailsService(passwordUserDetailsService);
+            ap2.setPasswordEncoder(passwordEncoder);
+
+            authenticationManagerBuilder
+                    .authenticationProvider(ap1)
+                    .authenticationProvider(ap2);
         }
 
         @Override
         public AuthenticationManager authenticationManagerBean() throws Exception {
             return super.authenticationManagerBean();
+        }
+
+        public JwtFilter jwtFilter() throws Exception {
+            return new JwtFilter(passwordUserDetailsService, authenticationManagerBean());
         }
     }
 
@@ -152,7 +174,7 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.GET, "/api/trades").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/trades/**").authenticated()
                     .and()
-                    .addFilterBefore(dummyBearerFilter, FilterSecurityInterceptor.class) // JwtFilter homework
+                    .addFilterBefore(jwtFilter(), FilterSecurityInterceptor.class) // JwtFilter homework
                     .cors()
                     .and()
                     .csrf().disable();

@@ -96,7 +96,8 @@ public class TradeController {
 
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
-        return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount).build();
+        ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount);
+        return rb.build();
     }
 
     private Trade getTrade(int tradeId) {

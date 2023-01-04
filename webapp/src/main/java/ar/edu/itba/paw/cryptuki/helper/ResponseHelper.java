@@ -11,14 +11,13 @@ import static java.lang.Math.ceil;
 
 public class ResponseHelper {
 
+    public static final int MAX_AGE = 10000;
+
     private ResponseHelper() {
         // Helper class
     }
 
-
-    // TODO: decide whether it is the best way of not repeating code
-    // TODO: decide whether the pageSize should be constantly repeated
-    public static Response.ResponseBuilder genLinks(Response.ResponseBuilder rb, UriInfo uriInfo, int page, int pageSize, long totalCount) {
+    public static void genLinks(Response.ResponseBuilder rb, UriInfo uriInfo, int page, int pageSize, long totalCount) {
 
         int maxPage = (int) ceil((float) totalCount / pageSize) - 1;
 
@@ -28,10 +27,14 @@ public class ResponseHelper {
         if ( page < maxPage)
             rb.link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", page+1).build(), "next");
 
-        // TODO: ask whether should add last and first if already in last and first
         rb.link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", 0).build(), "first");
         rb.link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", maxPage).build(), "last");
-        return rb;
+    }
+
+    public static void setUnconditionalCache(Response.ResponseBuilder responseBuilder) {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(MAX_AGE);
+        responseBuilder.cacheControl(cacheControl);
     }
 
 

@@ -79,12 +79,24 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
+  <!-- PPT Optimizations -->
+  <!-- Unconditional Cache Filter   -->
+  <filter>
+    <filter-name>staticCacheFilter</filter-name>
+    <filter-class>ar.edu.itba.paw.cryptuki.config.StaticCacheFilter</filter-class>
+  </filter>
 
+  <!-- Only apply to static files from the front  TODO - Puede que haya Lionel Messi con los filtros -->
+  <filter-mapping>
+    <filter-name>staticCacheFilter</filter-name>
+    <url-pattern>/static/*</url-pattern>
+  </filter-mapping>
 
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/static/*</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>index</servlet-name>
     <jsp-file>/index.html</jsp-file>

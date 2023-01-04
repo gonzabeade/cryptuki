@@ -68,7 +68,8 @@ public class ComplainController {
         if (complains.isEmpty())
             return Response.noContent().build();
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<ComplainDto>>(complains) {});
-        return ResponseHelper.genLinks(rb, uriInfo, complainBeanParam.getPage(), complainBeanParam.getPageSize(), offerCount).build();
+        ResponseHelper.genLinks(rb, uriInfo, complainBeanParam.getPage(), complainBeanParam.getPageSize(), offerCount);
+        return rb.build();
     }
 
     @GET

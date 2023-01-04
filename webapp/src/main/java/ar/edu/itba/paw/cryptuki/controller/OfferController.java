@@ -58,9 +58,9 @@ public class OfferController {
         if (offers.isEmpty())
             return Response.noContent().build();
 
-        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {
-        });
-        return ResponseHelper.genLinks(rb, uriInfo, offerBeanParam.getPage(), offerBeanParam.getPageSize(), offerCount).build();
+        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<OfferDto>>(offers) {});
+        ResponseHelper.genLinks(rb, uriInfo, offerBeanParam.getPage(), offerBeanParam.getPageSize(), offerCount);
+        return rb.build();
     }
 
     @GET

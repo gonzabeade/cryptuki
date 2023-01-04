@@ -33,11 +33,11 @@ public class Message implements Serializable {
         this.date = LocalDateTime.now();
     }
 
-    public Integer getSender() {
+    public int getSender() {
         return sender;
     }
 
-    public Integer getTrade() {
+    public int getTrade() {
         return trade;
     }
 

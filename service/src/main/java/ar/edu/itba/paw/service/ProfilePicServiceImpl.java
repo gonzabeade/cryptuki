@@ -32,7 +32,7 @@ public class ProfilePicServiceImpl implements ProfilePicService {
     @Override
     @Secured("ROLE_USER")
     @Transactional
-    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal")
     public void uploadProfilePicture(String username, byte[] profilePicture, String type) {
 
         if (username == null)

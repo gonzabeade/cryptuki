@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.exception.UserAlreadyVerifiedException;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.UserStatus;
@@ -38,7 +39,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void registerUser(UserPO userPO){
-
         User user = userDao.createUser(userPO.getEmail(), userPO.getPhoneNumber(), userPO.getLocale());
         String hashedPassword = passwordEncoder.encode(userPO.getPlainPassword());
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
@@ -82,29 +82,45 @@ public class UserServiceImpl implements UserService {
 
         if (newPassword == null)
             throw new NullPointerException("New password cannot be null");
-
-        return userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        User user = userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+        boolean value = userAuthDao.changePassword(username, passwordEncoder.encode(newPassword));
+        if (value) {
+            UserAuth auth = user.getUserAuth();
+            auth.setCode(null);
+            userAuthDao.modifyUserAuth(auth);
+        }
+        return value;
     }
 
     @Override
+    @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     public void changePasswordAnonymously(String email) {
         Optional<UserAuth> maybeUser = userAuthDao.getUserAuthByEmail(email);
         if (!maybeUser.isPresent() || maybeUser.get().getUserStatus().equals(UserStatus.UNVERIFIED))
             throw new NoSuchUserException(email);
 
+        int nonce = (int)(Math.random()*Integer.MAX_VALUE);
         UserAuth user = maybeUser.get();
+        user.setCode(nonce);
+        userAuthDao.modifyUserAuth(user);
         messageSenderFacade.sendForgotPasswordMessage(user.getUser(), user.getCode());
     }
 
     @Override
     @Transactional
     public boolean verifyUser(String username, Integer code) {
+        User user = userDao.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+
+        if (!user.getUserAuth().getUserStatus().equals(UserStatus.UNVERIFIED)) {
+            throw new UserAlreadyVerifiedException(user.getUsername().get(), user.getUserAuth().getUserStatus());
+        }
+
         return userAuthDao.verifyUser(username,code);
     }
 
     @Override
-    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal")
     @Transactional
     public void updateUserConfigurationOnLogin(String username, Locale locale) {
         LocaleContextHolder.setLocale(locale);

@@ -11,67 +11,51 @@ import java.time.LocalDateTime;
 public class TradeDto {
 
     private int tradeId;
-    private int offerId;
-    private String Seller;
-    private String Buyer;
-    private TradeStatus tradeStatus;
-    private double quantity;
+    private TradeStatus status;
+    private double buyingQuantity;
     private LocalDateTime lastModified;
 
-    private URI selfUri;
-    private URI offerUri;
-    private URI sellerUri;
-    private URI buyerUri;
-    private URI messagesUri;
+    private URI self;
+    private URI offer;
+    private URI seller;
+    private URI buyer;
+    private URI messages;
 
 
     public static TradeDto fromTrade(final Trade trade, final UriInfo uriInfo) {
 
         final TradeDto dto = new TradeDto();
 
-        dto.setTradeId(trade.getTradeId());
-        dto.setOfferId(trade.getOffer().getOfferId());
-        dto.setSeller(trade.getOffer().getSeller().getUsername().get());
-        dto.setBuyer(trade.getBuyer().getUsername().get());
-        dto.setTradeStatus(trade.getStatus());
-        dto.setQuantity(trade.getQuantity());
-        dto.setLastModified(trade.getLastModified());
+        dto.buyingQuantity = trade.getQuantity();
+        dto.lastModified = trade.getLastModified();
+        dto.status = trade.getStatus();
+        dto.tradeId = trade.getTradeId();
 
-        dto.setSelfUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades")
-                        .path(String.valueOf(dto.getTradeId()))
-                        .build()
-        );
+        dto.self = uriInfo.getBaseUriBuilder()
+                        .path("/api/trades")
+                        .path(String.valueOf(dto.tradeId))
+                        .build();
 
-        dto.setOfferUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("offers")
-                        .path(String.valueOf(dto.getOfferId()))
-                        .build()
-        );
+        dto.offer = uriInfo.getBaseUriBuilder()
+                        .path("/api/offers")
+                        .path(String.valueOf(trade.getOffer().getOfferId()))
+                        .build();
 
-        dto.setSellerUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("users")
-                        .path(String.valueOf(dto.getSeller()))
-                        .build()
-        );
+        dto.seller = uriInfo.getBaseUriBuilder()
+                .path("/api/users")
+                .path(trade.getOffer().getSeller().getUsername().get())
+                .build();
 
-        dto.setBuyerUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("users")
-                        .path(String.valueOf(dto.getBuyer()))
-                        .build()
-        );
+        dto.buyer = uriInfo.getBaseUriBuilder()
+                .path("/api/users")
+                .path(trade.getBuyer().getUsername().get())
+                .build();
 
-        dto.setMessagesUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades")
-                        .path(String.valueOf(dto.getTradeId()))
-                        .path("messages")
-                        .build()
-        );
+        dto.messages = uriInfo.getBaseUriBuilder()
+                .path("/api/trades")
+                .path(String.valueOf(dto.tradeId))
+                .path("/messages")
+                .build();
 
         return dto;
     }
@@ -84,44 +68,20 @@ public class TradeDto {
         this.tradeId = tradeId;
     }
 
-    public int getOfferId() {
-        return offerId;
+    public TradeStatus getStatus() {
+        return status;
     }
 
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
+    public void setStatus(TradeStatus status) {
+        this.status = status;
     }
 
-    public String getSeller() {
-        return Seller;
+    public double getBuyingQuantity() {
+        return buyingQuantity;
     }
 
-    public void setSeller(String seller) {
-        Seller = seller;
-    }
-
-    public String getBuyer() {
-        return Buyer;
-    }
-
-    public void setBuyer(String buyer) {
-        Buyer = buyer;
-    }
-
-    public TradeStatus getTradeStatus() {
-        return tradeStatus;
-    }
-
-    public void setTradeStatus(TradeStatus tradeStatus) {
-        this.tradeStatus = tradeStatus;
-    }
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
+    public void setBuyingQuantity(double buyingQuantity) {
+        this.buyingQuantity = buyingQuantity;
     }
 
     public LocalDateTime getLastModified() {
@@ -132,43 +92,43 @@ public class TradeDto {
         this.lastModified = lastModified;
     }
 
-    public URI getOfferUri() {
-        return offerUri;
+    public URI getSelf() {
+        return self;
     }
 
-    public void setOfferUri(URI offerUri) {
-        this.offerUri = offerUri;
+    public void setSelf(URI self) {
+        this.self = self;
     }
 
-    public URI getSellerUri() {
-        return sellerUri;
+    public URI getOffer() {
+        return offer;
     }
 
-    public void setSellerUri(URI sellerUri) {
-        this.sellerUri = sellerUri;
+    public void setOffer(URI offer) {
+        this.offer = offer;
     }
 
-    public URI getBuyerUri() {
-        return buyerUri;
+    public URI getSeller() {
+        return seller;
     }
 
-    public void setBuyerUri(URI buyerUri) {
-        this.buyerUri = buyerUri;
+    public void setSeller(URI seller) {
+        this.seller = seller;
     }
 
-    public URI getMessagesUri() {
-        return messagesUri;
+    public URI getBuyer() {
+        return buyer;
     }
 
-    public void setMessagesUri(URI messagesUri) {
-        this.messagesUri = messagesUri;
+    public void setBuyer(URI buyer) {
+        this.buyer = buyer;
     }
 
-    public URI getSelfUri() {
-        return selfUri;
+    public URI getMessages() {
+        return messages;
     }
 
-    public void setSelfUri(URI selfUri) {
-        this.selfUri = selfUri;
+    public void setMessages(URI messages) {
+        this.messages = messages;
     }
 }

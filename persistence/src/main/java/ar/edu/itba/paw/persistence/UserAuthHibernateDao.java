@@ -63,6 +63,11 @@ public class UserAuthHibernateDao implements UserAuthDao{
 }
 
     @Override
+    public void modifyUserAuth(UserAuth userAuth) {
+        em.merge(userAuth);
+    }
+
+    @Override
     public boolean changePassword(String username, String newPassword) {
         UserAuth userAuth = getUserAuthByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         userAuth.setPassword(newPassword);

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.OptionalInt;
 
 @Entity
 @Table(name = "auth")
@@ -16,8 +17,8 @@ public class UserAuth  {
     @Column(name = "role_id")
     @Enumerated(EnumType.ORDINAL)
     private Role role = Role.ROLE_USER;
-    @Column(name="code", nullable = false)
-    private int code;
+    @Column(name="code")
+    private Integer code;
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     private UserStatus userStatus = UserStatus.UNVERIFIED;
@@ -70,5 +71,9 @@ public class UserAuth  {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 }

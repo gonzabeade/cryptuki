@@ -163,7 +163,7 @@ public class CustomPreAuthorizerTest {
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
         user.setUserAuth(userAuth);
 
-        boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails, 0);
+        boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails.getUsername(), 0);
 
         Assert.assertTrue(isPartOfTrade);
     }
@@ -174,7 +174,7 @@ public class CustomPreAuthorizerTest {
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
         user.setUserAuth(otherAuth);
 
-        boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails, 0);
+        boolean isPartOfTrade = customPreAuthorizer.isUserPartOfTrade(userDetails.getUsername(), 0);
 
         Assert.assertFalse(isPartOfTrade);
     }

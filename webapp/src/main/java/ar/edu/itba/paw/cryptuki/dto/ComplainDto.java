@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.dto;
 import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainStatus;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.time.LocalDate;
@@ -11,79 +12,42 @@ import java.time.LocalDateTime;
 public class ComplainDto {
 
     private int complainId;
-    private int tradeId;
-    private int offerId;
     private ComplainStatus complainStatus;
-    private String complainer;
-    private String moderator;
-    private String complainerEmail;
-    private String complainerComments;
-    private String moderatorComments;
+    private String comments;
     private LocalDateTime date;
 
-    private URI selfUri;
-    private URI tradeUri;
-    private URI offerUri;
-    private URI complainerUri;
-    private URI moderatorUri;
+    private URI self;
+    private URI trade;
+    private URI complainer;
+    private URI resolution;
 
     public static ComplainDto fromComplain(final Complain complain, final UriInfo uriInfo) {
         final ComplainDto dto = new ComplainDto();
 
-        dto.setComplainId(complain.getComplainId());
-        dto.setTradeId(complain.getTrade().getTradeId());
-        dto.setOfferId(complain.getTrade().getOffer().getOfferId());
-        dto.setComplainStatus(complain.getStatus());
-        dto.setComplainer(complain.getComplainer().getUsername().get());
-        dto.setComplainerEmail(complain.getComplainer().getEmail());
-        dto.setComplainerComments(complain.getComplainerComments().get());
-        if(complain.getModerator().isPresent()) {
-            dto.setModerator(complain.getModerator().get().getUsername().get());
-            dto.setModeratorComments(complain.getModeratorComments().get());
-        }
-        dto.setDate(complain.getDate());
+        dto.comments = complain.getComplainerComments().orElse("");
+        dto.complainStatus = complain.getStatus();
+        dto.date = complain.getDate();
+        dto.complainId = complain.getComplainId();
 
-        dto.setSelfUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades")
-                        .path(String.valueOf(dto.getTradeId()))
-                        .path("complains")
-                        .path(String.valueOf(dto.getComplainId()))
-                        .build()
-        );
+        UriBuilder complainUriBuilder = uriInfo.getBaseUriBuilder()
+                .path("/api/complaints")
+                .path(String.valueOf(complain.getComplainId()));
 
-        dto.setTradeUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("trades")
-                        .path(String.valueOf(dto.getTradeId()))
-                        .build()
-        );
+        dto.self = complainUriBuilder.build();
 
-        dto.setOfferUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("offers")
-                        .path(String.valueOf(dto.getOfferId()))
-                        .build()
-        );
+        dto.resolution = complainUriBuilder.path("resolution").build();
 
-        dto.setComplainerUri(
-                uriInfo.getAbsolutePathBuilder()
-                        .replacePath("users")
-                        .path(dto.getComplainer())
-                        .build()
-        );
+        dto.complainer = uriInfo.getBaseUriBuilder()
+                .path("/api/users")
+                .path(complain.getComplainer().getUsername().get())
+                .build();
 
-        if(complain.getModerator().isPresent()) {
-            dto.setModeratorUri(
-                    uriInfo.getAbsolutePathBuilder()
-                            .replacePath("users")
-                            .path(dto.getModerator())
-                            .build()
-            );
-        }
+        dto.trade = uriInfo.getBaseUriBuilder()
+                .path("/api/trades")
+                .path(String.valueOf(complain.getTrade().getTradeId()))
+                .build();
 
         return dto;
-
     }
 
     public int getComplainId() {
@@ -94,22 +58,6 @@ public class ComplainDto {
         this.complainId = complainId;
     }
 
-    public int getTradeId() {
-        return tradeId;
-    }
-
-    public void setTradeId(int tradeId) {
-        this.tradeId = tradeId;
-    }
-
-    public int getOfferId() {
-        return offerId;
-    }
-
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
-    }
-
     public ComplainStatus getComplainStatus() {
         return complainStatus;
     }
@@ -118,44 +66,12 @@ public class ComplainDto {
         this.complainStatus = complainStatus;
     }
 
-    public String getComplainer() {
-        return complainer;
+    public String getComments() {
+        return comments;
     }
 
-    public void setComplainer(String complainer) {
-        this.complainer = complainer;
-    }
-
-    public String getModerator() {
-        return moderator;
-    }
-
-    public void setModerator(String moderator) {
-        this.moderator = moderator;
-    }
-
-    public String getComplainerEmail() {
-        return complainerEmail;
-    }
-
-    public void setComplainerEmail(String complainerEmail) {
-        this.complainerEmail= complainerEmail;
-    }
-
-    public String getComplainerComments() {
-        return complainerComments;
-    }
-
-    public void setComplainerComments(String complainerComments) {
-        this.complainerComments = complainerComments;
-    }
-
-    public String getModeratorComments() {
-        return moderatorComments;
-    }
-
-    public void setModeratorComments(String moderatorComments) {
-        this.moderatorComments = moderatorComments;
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public LocalDateTime getDate() {
@@ -166,43 +82,35 @@ public class ComplainDto {
         this.date = date;
     }
 
-    public URI getTradeUri() {
-        return tradeUri;
+    public URI getSelf() {
+        return self;
     }
 
-    public void setTradeUri(URI tradeUri) {
-        this.tradeUri = tradeUri;
+    public void setSelf(URI self) {
+        this.self = self;
     }
 
-    public URI getOfferUri() {
-        return offerUri;
+    public URI getTrade() {
+        return trade;
     }
 
-    public void setOfferUri(URI offerUri) {
-        this.offerUri = offerUri;
+    public void setTrade(URI trade) {
+        this.trade = trade;
     }
 
-    public URI getComplainerUri() {
-        return complainerUri;
+    public URI getComplainer() {
+        return complainer;
     }
 
-    public void setComplainerUri(URI complainerUri) {
-        this.complainerUri = complainerUri;
+    public void setComplainer(URI complainer) {
+        this.complainer = complainer;
     }
 
-    public URI getModeratorUri() {
-        return moderatorUri;
+    public URI getResolution() {
+        return resolution;
     }
 
-    public void setModeratorUri(URI moderatorUri) {
-        this.moderatorUri = moderatorUri;
-    }
-
-    public URI getSelfUri() {
-        return selfUri;
-    }
-
-    public void setSelfUri(URI selfUri) {
-        this.selfUri = selfUri;
+    public void setResolution(URI resolution) {
+        this.resolution = resolution;
     }
 }

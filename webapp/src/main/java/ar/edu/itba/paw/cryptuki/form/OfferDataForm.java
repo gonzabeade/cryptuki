@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form;
-import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferStatus;
+import ar.edu.itba.paw.cryptuki.annotation.validation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.OfferPO;
 
 import javax.validation.constraints.NotNull;

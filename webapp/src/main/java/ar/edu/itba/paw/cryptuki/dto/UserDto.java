@@ -10,59 +10,83 @@ import java.util.Locale;
 
 public class UserDto {
 
-
-    private int id;
+    private int userId;
     private String username;
     private int ratingCount;
     private double rating;
     private LocalDateTime lastLogin;
     private Locale locale;
 
-    private URI complains;
-    private URI kyc;
+    private URI complaints;
+    private URI kycInformation;
     private URI offers;
     private URI self;
+    private URI secrets;
+    private URI password;
+    private URI picture;
+
+
 
     public static UserDto fromUser(User user, UriInfo uriInfo) {
         UserAuth auth = user.getUserAuth();
         UserDto dto = new UserDto();
 
-        dto.id = user.getId();
+        dto.userId = user.getId();
         dto.ratingCount = user.getRatingCount();
         dto.rating = user.getRating();
         dto.lastLogin = user.getLastLogin();
         dto.username = auth.getUsername();
         dto.locale = user.getLocale();
 
-        dto.self = uriInfo.getAbsolutePathBuilder()
-                .replacePath("users")
+        dto.self = uriInfo.getBaseUriBuilder()
+                .path("api/users")
                 .path(dto.username)
                 .build();
 
-        dto.kyc = uriInfo.getAbsolutePathBuilder()
-                .replacePath("kyc")
+        dto.kycInformation = uriInfo.getBaseUriBuilder()
+                .path("api/users")
                 .path(dto.username)
+                .path("kyc")
                 .build();
 
-        dto.complains = uriInfo.getAbsolutePathBuilder()
-                .replacePath("complains")
-                .queryParam("fromUser", dto.username)
+
+        dto.complaints = uriInfo.getBaseUriBuilder()
+                .path("api/complaints")
+                .queryParam("from_user", dto.username)
                 .build();
 
-        dto.offers = uriInfo.getAbsolutePathBuilder()
-                .replacePath("offers")
-                .queryParam("fromUser", dto.username)
+        dto.offers = uriInfo.getBaseUriBuilder()
+                .path("api/offers")
+                .queryParam("from_user", dto.username)
+                .build();
+
+        dto.secrets = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("secrets")
+                .build();
+
+        dto.password = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("password")
+                .build();
+
+        dto.password = uriInfo.getBaseUriBuilder()
+                .path("api/users")
+                .path(dto.username)
+                .path("picture")
                 .build();
 
         return dto;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -105,20 +129,20 @@ public class UserDto {
         this.locale = locale;
     }
 
-    public URI getComplains() {
-        return complains;
+    public URI getComplaints() {
+        return complaints;
     }
 
-    public void setComplains(URI complains) {
-        this.complains = complains;
+    public void setComplaints(URI complains) {
+        this.complaints = complains;
     }
 
-    public URI getKyc() {
-        return kyc;
+    public URI getKycInformation() {
+        return kycInformation;
     }
 
-    public void setKyc(URI kyc) {
-        this.kyc = kyc;
+    public void setKycInformation(URI kycInformation) {
+        this.kycInformation = kycInformation;
     }
 
     public URI getOffers() {
@@ -135,5 +159,29 @@ public class UserDto {
 
     public void setSelf(URI self) {
         this.self = self;
+    }
+
+    public URI getSecrets() {
+        return secrets;
+    }
+
+    public void setSecrets(URI secrets) {
+        this.secrets = secrets;
+    }
+
+    public URI getPassword() {
+        return password;
+    }
+
+    public void setPassword(URI password) {
+        this.password = password;
+    }
+
+    public URI getPicture() {
+        return picture;
+    }
+
+    public void setPicture(URI picture) {
+        this.picture = picture;
     }
 }

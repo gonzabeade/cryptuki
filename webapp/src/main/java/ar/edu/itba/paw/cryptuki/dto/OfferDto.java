@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.dto;
 
 import ar.edu.itba.paw.model.*;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -38,19 +39,20 @@ public class OfferDto {
         dto.comments = offer.getComments();
         dto.location = offer.getLocation();
 
-        dto.self = uriInfo.getAbsolutePathBuilder()
-                .replacePath("offers")
-                .path(String.valueOf(offer.getOfferId()))
+        UriBuilder builder = uriInfo.getBaseUriBuilder()
+                .path("/api/offers")
+                .path(String.valueOf(offer.getOfferId()));
+
+        dto.self = builder
                 .build();
 
-        dto.seller = uriInfo.getAbsolutePathBuilder()
-                .replacePath("users")
+        dto.seller = uriInfo.getBaseUriBuilder()
+                .replacePath("/api/users")
                 .path(offer.getSeller().getUsername().get())
                 .build();
 
-        dto.trades = uriInfo.getAbsolutePathBuilder()
-                .replacePath("trades")
-                .queryParam("from_offer", offer.getOfferId())
+        dto.trades = builder
+                .path("trades")
                 .build();
 
         return dto;

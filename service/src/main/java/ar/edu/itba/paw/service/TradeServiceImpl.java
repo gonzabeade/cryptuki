@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.exception.*;
-import ar.edu.itba.paw.model.Offer;
-import ar.edu.itba.paw.model.OfferStatus;
-import ar.edu.itba.paw.model.Trade;
-import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +36,14 @@ public class TradeServiceImpl implements TradeService {
     @Secured("ROLE_USER")
     @Transactional
     public Trade makeTrade(int offerId, int buyerId, double quantity) {
+        Offer offer = offerDao.getOffersBy(new OfferFilter().restrictedToId(offerId))
+                .stream()
+                .findFirst()
+                .orElseThrow(()->new NoSuchOfferException(offerId));
+
+        if (offer.getSeller().getUsername().get().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+            throw new IllegalArgumentException("Cannot create trade on own offer");
+
         Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
         String firstChat = newTrade.getOffer().getComments();
         if (firstChat != null && !firstChat.equals(""))
@@ -105,28 +111,28 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public Collection<Trade> getTradesAsSeller(String username, int page, int pageSize, Set<TradeStatus> status, int offerId) {
         return tradeDao.getTradesAsSeller(username, page, pageSize, status, offerId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public long getTradesAsSellerCount(String username, Set<TradeStatus> status, int offerId) {
         return tradeDao.getTradesAsSellerCount(username, status, offerId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public Collection<Trade> getTradesAsBuyer(String username, int page, int pageSize, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyer(username, page, pageSize, status);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public long getTradesAsBuyerCount(String username, Set<TradeStatus> status) {
         return tradeDao.getTradesAsBuyerCount(username, status);
     }

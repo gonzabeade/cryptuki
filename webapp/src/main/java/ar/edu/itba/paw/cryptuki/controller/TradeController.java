@@ -1,32 +1,34 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.annotation.CollectionOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
+import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
-import ar.edu.itba.paw.cryptuki.form.TradeForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
+import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Path("api/offers/{offerId}/trades")
+@Path("/api/trades")
 @Component
 public class TradeController {
 
@@ -47,126 +49,87 @@ public class TradeController {
     }
 
     @GET
-    @Path("/user/{username}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrades(
-            @PathParam("offerId") int offerId,
-            @PathParam("username") String username,
-            @NotNull @QueryParam("role") String role,
+    public Response listTrades(
             @QueryParam("page") @DefaultValue("0") final int page,
             @QueryParam("per_page") @DefaultValue("5") final int pageSize,
-            @NotNull @QueryParam("status") @CollectionOfEnum(enumClass = TradeStatus.class) final List<String> status
+            @QueryParam("status") @CollectionOfEnum(enumClass = TradeStatus.class) final List<String> status,
+            @QueryParam("from_offer") final Integer offerId,
+            @QueryParam("buyer") final String buyerUsername
     ) {
 
-        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!principal.equals(username))
-            throw new ForbiddenException();
+        // Do not allow queries on these QueryParams simultaneously
+        boolean isBuyerPresent = buyerUsername != null;
+        boolean isOfferIdPresent = offerId != null;
 
-        Set<TradeStatus> statusSet = status.stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
-        if(statusSet.isEmpty())
+        if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
+            throw new IllegalArgumentException("Exactly one of the following filters is allowed: `from_offer`, `buyer`");
+
+        // If status collection is empty, then no filtering is intended
+        // Use every status in query
+        Set<TradeStatus> statusSet = status.stream().map(o->TradeStatus.valueOf(o)).collect(Collectors.toSet());
+        if (statusSet.isEmpty())
             statusSet.addAll(Arrays.asList(TradeStatus.values()));
 
+        Collection<Trade> trades;
         long tradeCount;
-        Collection<TradeDto> trades;
+        if (isBuyerPresent) {
+            trades = tradeService.getTradesAsBuyer(buyerUsername, page, pageSize, statusSet);
+            tradeCount = tradeService.getTradesAsBuyerCount(buyerUsername, statusSet);
+        } else {
+            Offer offer = offerService.getOfferById(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
+            String username = offer.getSeller().getUsername().get(); // Legacy - From 1st Sprint, when users may not have usernames
 
-        if(role.equals("buyer")) {
-            trades = tradeService
-                    .getTradesAsBuyer(username, page, pageSize, statusSet)
-                    .stream().map(o -> TradeDto.fromTrade(o, uriInfo))
-                    //TODO: estoy sacando solo las trades que van con esta oferta
-                    //TODO: para mandar diferentes cosas por buyer y por seller habria que hacer algunas cosas radicales en los paths
-                    .filter(tradeDto -> tradeDto.getOfferId() == offerId)
-                    .collect(Collectors.toList());
-            tradeCount = trades.size();
-        }
-        else if(role.equals("seller")) {
-            trades = tradeService
-                    .getTradesAsSeller(username, page, pageSize, statusSet, offerId)
-                    .stream().map(o -> TradeDto.fromTrade(o, uriInfo))
-                    .collect(Collectors.toList());
-            tradeCount = trades.size();
-        }
-        else
-            throw new BadRequestException();
+            // If access is denied, hide 403 response status under a 404,
+            // to prevent making information public
+            try {
+                trades = tradeService.getTradesAsSeller(username, page, pageSize, statusSet, offerId);
+                tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, offerId);
+            } catch (AccessDeniedException ade) {
+                throw new NoSuchOfferException(offerId, ade);
+            }
 
-        if(tradeCount == 0)
+        }
+
+        if (trades.isEmpty())
             return Response.noContent().build();
 
-        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(trades) {});
-        return ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount).build();
+        Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
+        Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
+        ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount);
+        return rb.build();
     }
 
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response createTrade(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
-
-        Optional<Offer> maybeOffer = offerService.getOfferById(offerId);
-        if(!maybeOffer.isPresent())
-            throw new NoSuchOfferException(offerId);
-
-        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
-        User buyer = userService.getUserByUsername(principal).get();
-
-        //TODO: ver como se maneja el caso en el que quiero comprar mas o menos contidad de lo que esta permitido
-        Trade trade = tradeService.makeTrade(offerId, buyer.getId(), tradeForm.getQuantity());
-
-        if(trade == null)
-            throw new BadRequestException();
-
-        final URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(trade.getTradeId()))
-                .build();
-
-        return Response.created(uri).build();
-    }
-
-    @PUT
-    @Path("/{tradeId}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response updateTrade(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
-        return null;
+    private Trade getTrade(int tradeId) {
+        Trade trade;
+        try {
+            trade = tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        } catch (AccessDeniedException ade) {
+            // Hide 403 Forbidden into a 404 for security concerns
+            throw new NoSuchTradeException(tradeId, ade);
+        }
+        return trade;
     }
 
     @GET
     @Path("/{tradeId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrade(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
-
-        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
-        if(!maybeTrade.isPresent())
-            throw new NoSuchTradeException(tradeId);
-
-        Trade trade = maybeTrade.get();
-        if(offerId != trade.getOffer().getOfferId())
-            throw new BadRequestException();
-
-        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
-            throw new ForbiddenException();
-
+    public Response listTrade(@PathParam("tradeId") int tradeId) {
+        Trade trade = getTrade(tradeId);
         return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
     }
 
     @GET
     @Path("/{tradeId}/messages")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getMessages(@PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId) {
+    public Response getTradeMessages(@PathParam("tradeId") int tradeId) {
+        Trade trade = getTrade(tradeId);
+        User seller = trade.getOffer().getSeller();
+        User buyer = trade.getBuyer();
+        List<MessageDto> messageDtos = trade.getMessageCollection().stream().map( m -> MessageDto.fromMessage(m, uriInfo, seller, buyer)).collect(Collectors.toList());
 
-        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
-        if(!maybeTrade.isPresent())
-            throw new NoSuchTradeException(tradeId);
-
-        Trade trade = maybeTrade.get();
-        if(offerId != trade.getOffer().getOfferId())
-            throw new BadRequestException();
-
-        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
-            throw new ForbiddenException();
-
-        Collection<MessageDto> messageDtos = trade.getMessageCollection()
-                .stream().map(o -> MessageDto.fromMessage(o, uriInfo)).collect(Collectors.toList());
+        if (messageDtos.isEmpty())
+            return Response.noContent().build();
         return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
     }
 
@@ -174,25 +137,35 @@ public class TradeController {
     @Path("/{tradeId}/messages")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createMessage(@Valid MessageForm messageForm, @PathParam("offerId") int offerId, @PathParam("tradeId") int tradeId){
+    public Response postNewMessage(@Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
 
-        Optional<Trade> maybeTrade = tradeService.getTradeById(tradeId);
-        if(!maybeTrade.isPresent())
-            throw new NoSuchTradeException(tradeId);
-
-        Trade trade = maybeTrade.get();
-        if(offerId != trade.getOffer().getOfferId())
-            throw new BadRequestException();
-
-        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!principal.equals(trade.getBuyer().getUsername().get()) && !principal.equals(trade.getOffer().getSeller().getUsername().get()))
-            throw new ForbiddenException();
-
-        User sender = userService.getUserByUsername(principal).get();
-
-        chatService.sendMessage(sender.getId(), tradeId, messageForm.getMessage());
-
-        return Response.status(Response.Status.CREATED).build();
+        String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUsername(senderUsername).orElseThrow(()-> new NoSuchUserException(senderUsername));
+        chatService.sendMessage(user.getId(), tradeId, messageForm.getMessage());
+        return Response.noContent().build();
     }
+
+
+    @PATCH
+    @Path("/{tradeId}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response modifyTrade(@PathParam("tradeId") int tradeId, @Valid TradeStatusForm tradeStatusForm) {
+        Trade trade = this.tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
+            case ACCEPTED:
+                this.tradeService.acceptTrade(tradeId);
+            case SOLD:
+                this.tradeService.sellTrade(tradeId);
+            case DELETED:
+                this.tradeService.deleteTrade(tradeId);
+            case REJECTED:
+                this.tradeService.rejectTrade(tradeId);//422?
+            case PENDING: return Response.status(400).build();
+        }
+        //204?
+        return Response.ok(TradeDto.fromTrade(trade,uriInfo)).build();
+    }
+
 
 }

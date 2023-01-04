@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.mapper;
 
 
-import ar.edu.itba.paw.cryptuki.dto.NotFoundErrorDto;
+import ar.edu.itba.paw.cryptuki.dto.GenericErrorDto;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
@@ -15,7 +15,7 @@ public class ResourceNotFoundExceptionMapper implements ExceptionMapper<NotFound
 
     @Override
     public Response toResponse(NotFoundException e) {
-        NotFoundErrorDto dto = NotFoundErrorDto.fromMessage(MESSAGE);
+        GenericErrorDto dto = GenericErrorDto.fromMessage(MESSAGE);
         return Response.status(Response.Status.NOT_FOUND).entity(dto).build();
     }
 }

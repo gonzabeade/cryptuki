@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.validator;
 
-import ar.edu.itba.paw.cryptuki.annotation.MinLessThanMax;
+import ar.edu.itba.paw.cryptuki.annotation.validation.MinLessThanMax;
 import ar.edu.itba.paw.service.OfferService;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.CryptocurrencyDto;
+import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchCryptocurrencyException;
+import ar.edu.itba.paw.model.Cryptocurrency;
 import ar.edu.itba.paw.service.CryptocurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/api/cryptocurrencies")
@@ -36,21 +37,18 @@ public class CryptocurrencyController {
 
         if (cryptocurrencies.isEmpty())
             return Response.noContent().build();
-
-        return Response.ok(new GenericEntity<Collection<CryptocurrencyDto>>(cryptocurrencies) {}).build();
+        final Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<Collection<CryptocurrencyDto>>(cryptocurrencies) {});
+        ResponseHelper.setUnconditionalCache(responseBuilder);
+        return responseBuilder.build();
     }
 
     @GET
     @Path("/{code}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCryptocurrency(@PathParam("code") String code) {
-
-        Optional<CryptocurrencyDto> maybeCryptocurrency = cryptocurrencyService.getCryptocurrency(code).map(CryptocurrencyDto::fromCryptocurrency);
-
-        if (!maybeCryptocurrency.isPresent()) {
-            throw new NoSuchCryptocurrencyException(code);
-        }
-
-        return Response.ok(maybeCryptocurrency.get()).build();
+        Cryptocurrency cryptocurrency = cryptocurrencyService.getCryptocurrency(code).orElseThrow(()->new NoSuchCryptocurrencyException(code));
+        final Response.ResponseBuilder responseBuilder = Response.ok(CryptocurrencyDto.fromCryptocurrency(cryptocurrency));
+        ResponseHelper.setUnconditionalCache(responseBuilder);
+        return responseBuilder.build();
     }
 }

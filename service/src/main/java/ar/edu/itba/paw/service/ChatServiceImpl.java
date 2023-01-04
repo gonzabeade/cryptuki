@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistence.MessageDao;
 import ar.edu.itba.paw.model.Trade;
 import ar.edu.itba.paw.persistence.TradeDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(authentication.principal, #tradeId)")
     public void sendMessage(Integer senderId, Integer tradeId, String message) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         messageDao.sendMessage(senderId, tradeId, message);

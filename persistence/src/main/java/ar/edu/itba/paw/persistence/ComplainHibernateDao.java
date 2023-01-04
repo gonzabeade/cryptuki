@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class ComplainHibernateDao implements ComplainDao{
@@ -103,9 +104,9 @@ public class ComplainHibernateDao implements ComplainDao{
     private void fillQueryBuilderFilter(ComplainFilter filter, Map<String, Object> args, StringBuilder sqlQueryBuilder) {
         sqlQueryBuilder.append("WHERE TRUE ");
 
-        sqlQueryBuilder.append("AND status IN (:status)");
-        args.put("status", filter.getComplainStatus().toString());
-
+//        sqlQueryBuilder.append();
+//        args.put("status", filter.getComplainStatus().toString());
+        testAndSet(filter.getComplainStatus().stream().map(x->x.toString()).collect(Collectors.toList()), args, "status", sqlQueryBuilder, "AND status IN (:status)");
         testAndSet(filter.getRestrictedToComplainerUsernames(), args, "complainerUnames", sqlQueryBuilder, "AND complainer_uname IN (:complainerUnames) ");
         testAndSet(filter.getRestrictedToModeratorUsernames(), args, "moderatorUnames", sqlQueryBuilder, "AND moderator_uname IN (:moderatorUnames) ");
         testAndSet(filter.getRestrictedToTradeIds(), args, "tradeIds", sqlQueryBuilder, "AND trade_id IN (:tradeIds) ");

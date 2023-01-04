@@ -9,6 +9,11 @@ public class NoSuchOfferException extends RuntimeException {
         this.offerId = offerId;
     }
 
+    public NoSuchOfferException(int offerId, Throwable cause) {
+        super("Offer with id does not exist. Id: "+offerId, cause);
+        this.offerId = offerId;
+    }
+
     public int getOfferId() {
         return offerId;
     }

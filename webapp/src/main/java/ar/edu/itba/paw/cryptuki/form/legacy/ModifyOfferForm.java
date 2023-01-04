@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.cryptuki.form.legacy;
 
-import ar.edu.itba.paw.cryptuki.annotation.ValueOfEnum;
+import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
 import ar.edu.itba.paw.cryptuki.form.OfferDataForm;
 import ar.edu.itba.paw.model.Offer;
 import ar.edu.itba.paw.model.OfferStatus;

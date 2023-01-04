@@ -17,7 +17,6 @@ public interface UserService {
     Optional<User> getUserByUsername(String username);
 
     /** Password manipulation */
-    boolean changePassword(String username, int code, String newPassword);
     boolean changePassword(String username, String newPassword);
     void changePasswordAnonymously(String email);
 
@@ -27,5 +26,13 @@ public interface UserService {
     /** Update User statistics */
     void updateUserConfigurationOnLogin(String username, Locale locale);
     void updateRatingBy(String username, int rating);
+
+    /**
+     * @deprecated
+     * Password change with nonce/code is done via Spring Security
+     * in newer versions.
+     */
+    @Deprecated
+    boolean changePassword(String username, int code, String newPassword);
 
 }

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.cryptuki.form.legacy;
 
-import ar.edu.itba.paw.cryptuki.annotation.MultipartCheck;
-import ar.edu.itba.paw.cryptuki.annotation.MultipartSizeCheck;
+import ar.edu.itba.paw.cryptuki.annotation.validation.MultipartCheck;
+import ar.edu.itba.paw.cryptuki.annotation.validation.MultipartSizeCheck;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ProfilePicForm {

@@ -15,7 +15,7 @@ import OfferModel from "../../types/OfferModel";
 const Trade =  () => {
 
     const navigate = useNavigate();
-    const searchParams = useSearchParams();
+    const [searchParams]= useSearchParams();
     const [trade, setTrade] = useState<TransactionModel>({
         status:'sold',
         buyer:{

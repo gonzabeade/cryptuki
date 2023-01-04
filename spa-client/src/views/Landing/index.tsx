@@ -142,7 +142,7 @@ const Landing = () => {
     
     const navigate = useNavigate(); 
     const location = useLocation();
-    const params = useSearchParams();
+    const [params] = useSearchParams();
 
     async function getOffers(page:number, pageSize:number){
         try{

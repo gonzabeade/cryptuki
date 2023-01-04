@@ -1,15 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
+import useUserService from "../../hooks/useUserService";
+import {useSearchParams} from "react-router-dom";
 
 type ContactFormValues = {
-    email:string,
-    message:string
+    email:string|null,
+    message:string|null,
+    tradeId?:number
 }
 //TODO errors and tradeId param?
 const Support= () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>();
+
+    const userService = useUserService();
+    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>(/*{defaultValues: async () => getDefaultValues()} */);
+    const [searchParams]= useSearchParams();
+
+    function getDefaultValues(): ContactFormValues{
+        return {
+            email: userService.getLoggedInUser(),
+            message: null
+        }
+    }
+
 
     function onSubmit(data:ContactFormValues){
+        if(searchParams && searchParams.get("tradeId")){
+
+        }
+
 
     }
 

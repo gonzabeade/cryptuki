@@ -1,18 +1,14 @@
-package ar.edu.itba.paw.cryptuki.auth;
+package ar.edu.itba.paw.cryptuki.config.auth;
 
-import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.parameterObject.UserPO;
+import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Base64;
-import java.util.Optional;
 
 //URLs para curl
 //curl -v -d'{"sellerId":24, "minInCrypto":1, "maxInCrypto":2, "location":"CABALLITO", "unitPrice":250, "cryptoCode":"DAI"}' -H'Content-Type: application/json' 'http://localhost:8080/webapp/offers' --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjU5NzM2MDQ0fQ.S3_VHCLOQtk7A6gxO43hyi6N9F3F0yS8l54oQV6PtEGSN39bkfk1nEDa0wboeLYL07M2-F17zRqy9FxNx9kPeA'
@@ -40,13 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
 
     @Autowired
-    public JwtFilter(UserDetailsService userDetailsService, AuthenticationManager authenticationManager, UserService userService) {
+    public JwtFilter(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
     }
 
     @Override
@@ -65,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
             final String[] credentials = String.valueOf(base64credentials).trim().split(":");
 
             if(credentials.length != 2) {
-                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST); // TODO: Check -- No se si es correcto esto
                 return;
             }
 

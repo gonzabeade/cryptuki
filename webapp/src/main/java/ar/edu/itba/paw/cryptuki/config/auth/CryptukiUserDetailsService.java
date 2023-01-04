@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.auth;
+package ar.edu.itba.paw.cryptuki.config.auth;
 
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserStatus;

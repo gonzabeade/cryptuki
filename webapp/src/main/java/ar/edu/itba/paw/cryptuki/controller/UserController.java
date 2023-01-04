@@ -1,50 +1,26 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.auth.jwt.JwtUtils;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.auth.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.ProfilePicForm;
-import ar.edu.itba.paw.exception.BadMultipartFormatException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserStatus;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
-import ar.edu.itba.paw.service.ProfilePicService;
 import ar.edu.itba.paw.service.UserService;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
 
 @Path("/api/users")
 public class UserController {
@@ -112,24 +88,24 @@ public class UserController {
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     public Response changePassword(
-            @Valid ChangePasswordForm changePasswordForm,
+            /*@Valid*/ ChangePasswordForm changePasswordForm,
             @PathParam("username") String username,
             @QueryParam("code") Integer code
     ){
 
-        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
-
-        if(changePasswordForm.getPassword() == null)
-            userService.changePasswordAnonymously(user.getEmail());
-        else {
-
-            String password = changePasswordForm.getPassword();
-
-            if(code != null)
-                userService.changePassword(username, code, password);
-            else
-                userService.changePassword(username, password);
-        }
+//        User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+//
+//        if(changePasswordForm.getPassword() == null)
+//            userService.changePasswordAnonymously(user.getEmail());
+//        else {
+//
+//            String password = changePasswordForm.getPassword();
+//
+//            if(code != null)
+//                userService.changePassword(username, code, password);
+//            else
+//                userService.changePassword(username, password);
+//        }
 
         return Response.ok().build();
     }

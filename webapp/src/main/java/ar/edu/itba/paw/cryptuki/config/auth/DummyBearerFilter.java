@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.auth;
+package ar.edu.itba.paw.cryptuki.config.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;

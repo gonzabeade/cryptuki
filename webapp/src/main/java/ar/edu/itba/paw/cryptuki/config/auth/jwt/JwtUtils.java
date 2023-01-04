@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.auth.jwt;
+package ar.edu.itba.paw.cryptuki.config.auth.jwt;
 
 import ar.edu.itba.paw.model.UserAuth;
 import io.jsonwebtoken.*;

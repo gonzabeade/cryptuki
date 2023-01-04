@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.auth;
+package ar.edu.itba.paw.cryptuki.config.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

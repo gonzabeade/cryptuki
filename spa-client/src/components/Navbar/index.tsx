@@ -70,7 +70,7 @@ const Navbar = () => {
                 }
                 {username &&
                     <div className="hidden lg:flex lg:flex-row">
-                        <Link to="/seller/mdedeu" className="mx-2">
+                        <Link to="/seller/" className="mx-2">
                             <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">Panel de vendedor</button>
                         </Link>
                         <Link
@@ -78,7 +78,7 @@ const Navbar = () => {
                             onClick={() => {
                                 setUsername(userService.getLoggedInUser())
                             }}
-                            to="/buyer/mdedeu">
+                            to="/buyer/">
                             <div className={"flex flex-row"}>
                                 {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
                                 {/*<p className="mx-3 font-roboto text-white font-semibold">{username}</p>*/}
@@ -128,13 +128,13 @@ const Navbar = () => {
                                 <>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
-                                              to="/seller/mdedeu" onClick={closeMobileMenu}>
+                                              to="/seller/" onClick={closeMobileMenu}>
                                             Panel de vendedor
                                         </Link>
                                     </li>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
-                                              to="/buyer/mdedeu"
+                                              to="/buyer/"
                                               onClick={() => {
                                                   setUsername(userService.getLoggedInUser())
                                                   closeMobileMenu()

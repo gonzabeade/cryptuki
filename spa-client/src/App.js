@@ -34,8 +34,8 @@ function App() {
                       <Route path="/offer/:id" element={<BuyOffer/>}/>
                       <Route path="/trade/:id" element={<Trade/>}/>
                       <Route path="/support" element={<Support/>}/>
-                      <Route path="/buyer/:username" element={<BuyerDashboard/>}/>
-                      <Route path="/seller/:username" element={<SellerDashboard/>}/>
+                      <Route path="/buyer/" element={<BuyerDashboard/>}/>
+                      <Route path="/seller/" element={<SellerDashboard/>}/>
                       <Route path="/trade/:id/receipt" element={<Receipt/>}/>
                       <Route path="/chat/:id" element={<SellerTrade/>}/>
                       <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>

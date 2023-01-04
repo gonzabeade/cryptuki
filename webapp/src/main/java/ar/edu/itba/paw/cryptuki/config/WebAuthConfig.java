@@ -137,6 +137,7 @@ public class WebAuthConfig {
                     .and().authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/offers").authenticated()
+                    .antMatchers(HttpMethod.POST, "/api/users**").anonymous()
                     .antMatchers(HttpMethod.PUT, "/api/offers/**").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/offers/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/offers**").permitAll()

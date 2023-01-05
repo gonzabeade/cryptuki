@@ -6,6 +6,7 @@ import TransactionModel from "../../types/TransactionModel";
 import useTradeService from "../../hooks/useTradeService";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
+import TradeBuyerCard from "../../components/TradeBuyerCard";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -41,7 +42,8 @@ const BuyerDashboard = () => {
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
                     {trades.length >0 && trades.map((trade)=>{
                         return (
-                            <></>
+                            //TODO unseenMessages
+                            <TradeBuyerCard trade={trade} unSeenMessages={1}/>
                         );
                     })}
                 </div>

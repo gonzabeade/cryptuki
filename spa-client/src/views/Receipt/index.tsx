@@ -29,9 +29,7 @@ const Receipt = () => {
     }
 
     useEffect(()=>{
-        // const tradeId = params.tradeId;
-        //fetch trade
-        fetchTrade(1);
+        fetchTrade(Number(params.id));
     })
 
 

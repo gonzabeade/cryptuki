@@ -11,132 +11,7 @@ import Loader from "../../components/Loader";
 
 const Landing = () => {
 
-    const [offers, setOffers] = useState<OfferModel[]|null>([
-    //     {
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     seller: {
-    //         accessToken: "",
-    //         refreshToken: "string",
-    //         admin: false,
-    //         email:"mdedeu@itba.edu.ar",
-    //         phoneNumber:"1245311",
-    //         username:"mdedeu",
-    //         lastLogin:"online",
-    //         trades_completed:1,
-    //         rating:1.3,
-    //         image_url:"/"
-    //     }
-    // }
-    ]);
-    // // [{
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     url:"/offer/1",
-    //     seller:"marquitos",
-    //     trades:"1"
-    // },
-    //     {
-    //         cryptoCode:"BTC",
-    //         date:new Date(),
-    //         location:"Balvanera",
-    //         maxInCrypto:2,
-    //         minInCrypto:0.001,
-    //         offerId:1,
-    //         offerStatus:"PENDING",
-    //         unitPrice:1000000,
-    //         url:"/offer/1",
-    //         seller:"marquitos",
-    //         trades:"1"
-    //     },
-    //     {
-    //         cryptoCode:"BTC",
-    //         date:new Date(),
-    //         location:"Balvanera",
-    //         maxInCrypto:2,
-    //         minInCrypto:0.001,
-    //         offerId:1,
-    //         offerStatus:"PENDING",
-    //         unitPrice:1000000,
-    //         url:"/offer/1",
-    //         seller:"marquitos",
-    //         trades:"1"
-    //     },
-    //     {
-    //         cryptoCode:"BTC",
-    //         date:new Date(),
-    //         location:"Balvanera",
-    //         maxInCrypto:2,
-    //         minInCrypto:0.001,
-    //         offerId:1,
-    //         offerStatus:"PENDING",
-    //         unitPrice:1000000,
-    //         url:"/offer/1",
-    //         seller:"marquitos",
-    //         trades:"1"
-    //     },{
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     url:"/offer/1",
-    //     seller:"marquitos",
-    //     trades:"1"
-    // }
-    //     ,{
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     url:"/offer/1",
-    //     seller:"marquitos",
-    //     trades:"1"
-    // },{
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     url:"/offer/1",
-    //     seller:"marquitos",
-    //     trades:"1"
-    // }
-    //     ,{
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     url:"/offer/1",
-    //     seller:"marquitos",
-    //     trades:"1"
-    // }]
+    const [offers, setOffers] = useState<OfferModel[]|null>([]);
     const offerService = useOfferService();
     
     const navigate = useNavigate(); 
@@ -158,9 +33,8 @@ const Landing = () => {
 
     }
     function orderOffers(page:number, pageSize: number){
-        //order
-        //fetch with added param TODO
-
+        //TODO order
+        //fetch with added param
     }
 
     useEffect(  ()=>{

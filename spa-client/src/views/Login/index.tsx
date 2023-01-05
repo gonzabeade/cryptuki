@@ -6,7 +6,7 @@ import { withBasicAuthorization } from "../../hooks/useAxios";
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = paths.USERS;
-
+//TODO adapt this to react hook form
 const Login = () => {
 
     const [user, setUser] = useState('');

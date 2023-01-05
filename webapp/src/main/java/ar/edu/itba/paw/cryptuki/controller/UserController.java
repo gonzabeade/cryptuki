@@ -3,9 +3,9 @@ package ar.edu.itba.paw.cryptuki.controller;
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
-import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
+import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
@@ -16,10 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.ws.rs.*;
 import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -62,6 +60,9 @@ public class UserController {
     }
 
     public Response toNewUser(RegisterForm registerForm, Locale locale) {
+        if(registerForm == null)
+            throw new BadRequestException("User data must be provided.");
+
 
         /* Manual validation - @Valid does not work on non-controller methods*/
         Validator validator = validatorFactory.getValidator();
@@ -100,7 +101,7 @@ public class UserController {
         // The service does not expose a method for validating this
         // It is simpler to validate this in the controller than to create a dummy method in the service
         if (!principalName.equals(username) && !principal.getUserAuth().getRole().equals(Role.ROLE_ADMIN))
-            throw new ForbiddenException();
+            throw new ForbiddenException("Forbidden action");
 
         return Response.ok(userInformationDto).build();
     }
@@ -124,7 +125,7 @@ public class UserController {
     ){
 
         if (!userService.verifyUser(username, userEmailValidationForm.getCode()))
-            throw new BadRequestException();
+            throw new BadRequestException("Bad request");
 
         final URI uri = uriInfo.getAbsolutePathBuilder().build();
         return Response.created(uri).build();

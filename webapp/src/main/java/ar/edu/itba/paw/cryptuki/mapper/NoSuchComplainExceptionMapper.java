@@ -5,7 +5,9 @@ import ar.edu.itba.paw.exception.NoSuchComplainException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
+@Provider
 public class NoSuchComplainExceptionMapper implements ExceptionMapper<NoSuchComplainException> {
 
     private static final String MESSAGE = "Complain with id '%d' does not exist";

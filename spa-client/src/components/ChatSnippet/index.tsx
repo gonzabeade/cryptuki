@@ -18,7 +18,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     const chatService = useChatService();
 
     async function getMessages(){
-        const resp = await chatService.getMessages();
+        const resp = await chatService.getMessages(tradeId);
         if(resp.statusCode === 200){
             setMessages(resp.getData());
         }else{

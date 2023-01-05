@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 type ChatButtonProps ={
     tradeId:number
 }
+
 const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
     const [qUnseenMessagesSeller, setqUnseenMessagesSeller] = useState<number>(0);
     const chatService = useChatService();
@@ -45,7 +46,8 @@ const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
                     <p className="text-xs">
                         {qUnseenMessagesSeller}
                     </p>
-                </div>}
+                </div>
+            }
         </div>
     );
 };

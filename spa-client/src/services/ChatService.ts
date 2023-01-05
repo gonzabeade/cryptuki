@@ -6,14 +6,14 @@ import {paths} from "../common/constants";
 export class ChatService{
 
     private readonly axiosInstance : AxiosInstance;
-    private readonly basePath = paths.BASE_URL + paths.CHAT;
+    private readonly basePath = paths.BASE_URL + paths.TRADE;
 
     public constructor(axiosInstance: AxiosInstance) {
         this.axiosInstance = axiosInstance;
     }
 
-    public async getMessages():Promise<Result<MessageModel[]>>{
-       const resp = await this.axiosInstance.get<MessageModel[]>(this.basePath);
+    public async getMessages(tradeId:number):Promise<Result<MessageModel[]>>{
+       const resp = await this.axiosInstance.get<MessageModel[]>(this.basePath + tradeId + '/messages');
        return Result.ok(resp.data);
     }
 

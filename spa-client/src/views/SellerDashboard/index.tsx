@@ -66,7 +66,7 @@ const SellerDashboard = () => {
                         <img className="w-5 h-5 mr-4 my-auto " src="attention" alt="kyc"/>
                         <p>
                             Validate your identity
-                        </p>
+                             </p>
                     </div>
                     <div className="mx-auto mt-8">
                         <a href="/kyc"

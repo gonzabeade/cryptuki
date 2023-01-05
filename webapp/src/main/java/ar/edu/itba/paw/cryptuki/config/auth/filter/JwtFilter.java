@@ -42,8 +42,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
         // Continue ...
-        if (header == null)
+        if (header == null){
             filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
+        }
 
 
         if ( header.startsWith("Basic ") ) {
@@ -73,7 +75,6 @@ public class JwtFilter extends OncePerRequestFilter {
             httpServletResponse.addHeader("x-refresh-token", JwtUtils.generateRefreshToken(userDetails));
             httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
 
-            return;
         } else if (header.startsWith("Bearer ")){
 
             // Get jwt token
@@ -98,8 +99,10 @@ public class JwtFilter extends OncePerRequestFilter {
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
                 httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
             }
-            return;
+
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
+        return;
+
     }
 }

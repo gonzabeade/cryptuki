@@ -72,7 +72,7 @@ public class UserDto {
                 .path("password")
                 .build();
 
-        dto.password = uriInfo.getBaseUriBuilder()
+        dto.picture = uriInfo.getBaseUriBuilder()
                 .path("api/users")
                 .path(dto.username)
                 .path("picture")

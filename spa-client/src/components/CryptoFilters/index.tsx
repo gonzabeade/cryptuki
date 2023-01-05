@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
-import {ChevronDownIcon, MagnifyingGlassCircleIcon} from "@heroicons/react/24/outline";
 import {NEIGHBORHOODS} from "../../common/constants";
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import Result from "../../types/Result";

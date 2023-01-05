@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
-import {InformationCircleIcon, QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
+import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
@@ -10,7 +10,6 @@ import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
-import OfferModel from "../../types/OfferModel";
 
 const Trade =  () => {
 

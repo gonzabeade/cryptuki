@@ -9,7 +9,7 @@ type OfferCardProfileProps = {
 const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
         const navigate = useNavigate();
     return (
-        <a href={offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL'? "/seller/offer/"+offer.offerId : "/seller/#"} className={` cursor-pointer z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus != 'DEL' && offer.offerStatus != 'SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200' : 'cursor-not-allowed' }`} >
+        <a href={offer.offerStatus !== 'DEL' && offer.offerStatus !== 'SOL'? "/seller/offer/"+offer.offerId : "/seller/#"} className={` cursor-pointer z-10 flex flex-col p-3 bg-[#FAFCFF] rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus !== 'DEL' && offer.offerStatus !== 'SOL' ? 'hover:-translate-y-1 hover:scale-105 duration-200' : 'cursor-not-allowed' }`} >
             <h1 className=" text-polar text-center text-xl font-bold ">
                Offer
                 #{offer.offerId}
@@ -40,7 +40,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer }) =>{
                 </p>
             </div>
             {
-                offer.offerStatus !== 'DEL' && offer.offerStatus!= 'PSE' && offer.offerStatus!=='SOL' &&
+                offer.offerStatus !== 'DEL' && offer.offerStatus !== 'PSE' && offer.offerStatus !== 'SOL' &&
                 <>
                     <div className="flex flex-row justify-between my-2">
                         <div className="rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2">

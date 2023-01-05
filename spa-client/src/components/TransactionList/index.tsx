@@ -6,11 +6,6 @@ type TransactionListProps = {
     transactions:TransactionModel[],
 }
 
-type TradeShortInfo = {
-    icon:JSX.Element,
-    title:string,
-    subtitle:string
-}
 const TRADE_STATUS = new Map([
     ['sold', {icon: <CheckCircleIcon className="text-gray-400 w-6 h-6"/>, title: "Title", subtitle: "You've marked this trade as sold  "}],
     ['rejected', {icon: <XCircleIcon className="text-nred w-6 h-6"/>, title: "Title", subtitle: "You've rejected this trade proposal "}]
@@ -24,7 +19,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                     <h5 className="text-xl font-bold leading-none text-polar mx-auto">Last transactions</h5>
                 </div>
                 <div className="px-4">
-                    <ul role="list" className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-gray-200">
                         {transactions.map(transaction => (
                             <li className="py-2">
                                 <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"

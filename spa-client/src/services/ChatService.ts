@@ -1,6 +1,5 @@
-import axios, {AxiosInstance} from "axios";
+import  {AxiosInstance} from "axios";
 import Result from "../types/Result";
-import {CryptocurrencyModel} from "../types/Cryptocurrency";
 import {MessageModel} from "../types/MessageModel";
 import {paths} from "../common/constants";
 

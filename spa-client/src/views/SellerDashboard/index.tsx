@@ -7,7 +7,6 @@ import Paginator from "../../components/Paginator";
 import UserProfileCards from "../../components/UserProfileCards";
 import StatusCardsSeller from "../../components/StatusCardsSeller";
 import OfferCardProfile from "../../components/OfferCardProfile";
-import Loader from "../../components/Loader";
 import useOfferService from "../../hooks/useOfferService";
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
@@ -167,7 +166,7 @@ const SellerDashboard = () => {
                 </div>
                 {!kyc && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
-                        <img className="w-5 h-5 mr-4 my-auto " src="attention"/>
+                        <img className="w-5 h-5 mr-4 my-auto " src="attention" alt="kyc"/>
                         <p>
                             Validate your identity
                         </p>
@@ -182,7 +181,7 @@ const SellerDashboard = () => {
                 {
                     kyc.status !== 'APR' ?
                         <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
-                            <img className="w-5 h-5 mr-4 my-auto " src="attention"/>
+                            <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc submitted"}/>
                             <p>Validation of identity submitted. Please wait </p>
                         </div> : <TransactionList transactions={lastTransactions}/>
 

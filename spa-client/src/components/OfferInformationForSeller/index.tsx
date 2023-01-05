@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import RatingStars from "../RatingStars";
-import {Link} from "react-router-dom";
 import ChatButton from "../ChatButton";
-import Trade from "../../views/Trade";
-import {set} from "react-hook-form";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,

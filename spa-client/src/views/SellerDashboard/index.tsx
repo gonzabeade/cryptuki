@@ -150,11 +150,11 @@ const SellerDashboard = () => {
 
     useEffect(()=>{
        getOffers();
-    },[offers])
+    })
 
     useEffect(()=>{
        getLastTransactions();
-    },[lastTransactions])
+    })
 
     return (
         <div className="flex h-full w-full px-10 my-10">

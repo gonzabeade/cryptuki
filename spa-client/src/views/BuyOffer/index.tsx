@@ -63,7 +63,7 @@ const BuyOffer = () => {
            retrieveOfferInformation(parseInt(params.id));
         }
 
-    },[params])
+    })
 
 
     return (

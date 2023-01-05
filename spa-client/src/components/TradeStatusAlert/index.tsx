@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {CheckCircleIcon, FaceFrownIcon, InformationCircleIcon} from "@heroicons/react/24/outline";
-import Trade from "../../views/Trade";
 
 type TradeStatusAlertProps = {
         status:string|undefined

@@ -56,7 +56,7 @@ const EditOfferForm = () => {
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    },[])
+    })
 
     async function getOffer(){
         try{
@@ -76,8 +76,7 @@ const EditOfferForm = () => {
 
     useEffect(()=>{
         getOffer();
-
-    }, [offer])
+    })
 
 
 

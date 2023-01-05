@@ -77,7 +77,7 @@ const Trade =  () => {
     useEffect(()=>{
        // const tradeId:string = searchParams.tradeId;
         fetchTrade(1);
-    }, [trade])
+    })
 
 
     return (

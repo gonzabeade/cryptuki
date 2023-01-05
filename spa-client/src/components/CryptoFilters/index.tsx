@@ -41,7 +41,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    },[]);
+    });
 
 
     function onSubmit(data:CryptoFormValues){

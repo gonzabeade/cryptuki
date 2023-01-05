@@ -165,7 +165,7 @@ const Landing = () => {
 
     useEffect(  ()=>{
             getOffers(5, 5);
-        },[offers]);
+        });
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">

@@ -2,7 +2,7 @@ import React from 'react';
 import RatingStars from "../RatingStars";
 
 type  UserProfileCardsProps = {
-    username:string,
+    username:string|null,
     phoneNumber:number,
     email:string,
     rating:number,

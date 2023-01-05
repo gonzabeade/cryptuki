@@ -17,7 +17,6 @@ type CryptoFormValues = {
 type CryptoFiltersProps = {
     callback:Function
 }
-//todo hay que mandarle un callback para actualizar las offers
 const CryptoFilters = ({callback}:CryptoFiltersProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<CryptoFormValues>();
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);

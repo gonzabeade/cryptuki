@@ -12,73 +12,8 @@ import useOfferService from "../../hooks/useOfferService";
 const SellerOfferDashboard = () => {
 
     const [selectedStatus, setSelectedStatus] = useState<string>("all");
-    const [trades, setTrades] = useState<TransactionModel[]>([
-        // {
-        //     status:'rejected',
-        //     buyer:{
-        //         accessToken: "",
-        //         refreshToken: "string",
-        //         admin: false,
-        //         email:"mdedeu@itba.edu.ar",
-        //         phoneNumber:"1245311",
-        //         username:"mdedeu",
-        //         lastLogin:"online",
-        //         trades_completed:1,
-        //         rating:1.3,
-        //         image_url:"/"
-        //     },
-        //     offer: {
-        //         cryptoCode:"BTC",
-        //         date:new Date(),
-        //         location:"Balvanera",
-        //         maxInCrypto:2,
-        //         minInCrypto:0.001,
-        //         offerId:1,
-        //         offerStatus:"PENDING",
-        //         unitPrice:1000000,
-        //         seller: {
-        //             accessToken: "",
-        //             refreshToken: "string",
-        //             admin: false,
-        //             email:"mdedeu@itba.edu.ar",
-        //             phoneNumber:"1245311",
-        //             username:"mdedeu",
-        //             lastLogin:"online",
-        //             trades_completed:1,
-        //             rating:1.3,
-        //             image_url:"/"
-        //         }
-        //     },
-        //     amount: 1000,
-        //     id:1,
-        //     date: new Date()
-        // }
-
-    ]);
-    const [offer, setOffer] = useState<OfferModel>(
-    //     {
-    //     cryptoCode:"BTC",
-    //     date:new Date(),
-    //     location:"Balvanera",
-    //     maxInCrypto:2,
-    //     minInCrypto:0.001,
-    //     offerId:1,
-    //     offerStatus:"PENDING",
-    //     unitPrice:1000000,
-    //     seller: {
-    //         accessToken: "",
-    //         refreshToken: "string",
-    //         admin: false,
-    //         email:"mdedeu@itba.edu.ar",
-    //         phoneNumber:"1245311",
-    //         username:"mdedeu",
-    //         lastLogin:"online",
-    //         trades_completed:1,
-    //         rating:1.3,
-    //         image_url:"/"
-    //     }
-    // }
-    );
+    const [trades, setTrades] = useState<TransactionModel[]>([]);
+    const [offer, setOffer] = useState<OfferModel>();
     const params = useParams();
     const tradeService = useTradeService();
     const offerService = useOfferService();
@@ -194,6 +129,7 @@ const SellerOfferDashboard = () => {
                         </div>
 
                         <h1 className="mx-auto text-center">
+                            {/*TODO Paginator pages todo este sistema tiene q estar con variables de estado*/}
                             {trades.length>0 ?  <Paginator totalPages={10} actualPage={1} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
                         </h1>

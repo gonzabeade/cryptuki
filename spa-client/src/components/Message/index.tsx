@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 type MessageProps = {
     left:boolean,
     content:string

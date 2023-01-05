@@ -4,7 +4,7 @@ import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
 import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
@@ -14,50 +14,12 @@ import {toast} from "react-toastify";
 const Trade =  () => {
 
     const navigate = useNavigate();
-    // const [searchParams]= useSearchParams();
-    const [trade, setTrade] = useState<TransactionModel>({
-        status:'sold',
-        buyer:{
-            accessToken: "",
-            refreshToken: "string",
-            admin: false,
-            email:"mdedeu@itba.edu.ar",
-            phoneNumber:"1245311",
-            username:"mdedeu",
-            lastLogin:"online",
-            trades_completed:1,
-            rating:1.3,
-            image_url:"/"
-        },
-        offer: {
-            cryptoCode:"BTC",
-            date:new Date(),
-            location:"Balvanera",
-            maxInCrypto:2,
-            minInCrypto:0.001,
-            offerId:1,
-            offerStatus:"PENDING",
-            unitPrice:1000000,
-            seller: {
-                accessToken: "",
-                refreshToken: "string",
-                admin: false,
-                email:"mdedeu@itba.edu.ar",
-                phoneNumber:"1245311",
-                username:"mdedeu",
-                lastLogin:"online",
-                trades_completed:1,
-                rating:1.3,
-                image_url:"/"
-            }
-        },
-        amount: 1000,
-        id:1,
-        date: new Date()
-    });
+    const [searchParams]= useSearchParams();
+    const [trade, setTrade] = useState<TransactionModel>();
     const tradeService = useTradeService();
 
-    async function fetchTrade(tradeId: number) {
+    async function fetchTrade(tradeId: number | null) {
+        if(tradeId){
             const resp = await tradeService.getTradeInformation(tradeId);
             if(resp.statusCode === 200){
                 console.log("ok")
@@ -69,14 +31,15 @@ const Trade =  () => {
             }else{
                 toast.error("Error fetching trade")
             }
+        }
     }
     async function takeBackProposal(){
-        //post to take back
+        //TODO post to take back
     }
 
     useEffect(()=>{
        // const tradeId:string = searchParams.tradeId;
-        fetchTrade(1);
+        fetchTrade(Number(searchParams.get("tradeId")));
     })
 
 

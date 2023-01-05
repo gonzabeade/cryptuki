@@ -13,116 +13,12 @@ import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 
 
-
 const SellerDashboard = () => {
-    const [kyc, setKyc] = useState<KycModel>({status:'APR'});
+    //TODO fetch this state
+    const [kyc, setKyc] = useState<KycModel>({status:'PEN'});
 
-    const [lastTransactions, setLastTransactions] = useState<TransactionModel[]>([
-        // {
-        //     status:'sold',
-        //     buyer:{
-        //         accessToken: "",
-        //         refreshToken: "string",
-        //         admin: false,
-        //         email:"mdedeu@itba.edu.ar",
-        //         phoneNumber:"1245311",
-        //         username:"mdedeu",
-        //         lastLogin:"online",
-        //         trades_completed:1,
-        //         rating:1.3,
-        //         image_url:"/"
-        //     },
-        //     offer: {
-        //         cryptoCode:"BTC",
-        //         date:new Date(),
-        //         location:"Balvanera",
-        //         maxInCrypto:2,
-        //         minInCrypto:0.001,
-        //         offerId:1,
-        //         offerStatus:"PENDING",
-        //         unitPrice:1000000,
-        //         seller: {
-        //             accessToken: "",
-        //             refreshToken: "string",
-        //             admin: false,
-        //             email:"mdedeu@itba.edu.ar",
-        //             phoneNumber:"1245311",
-        //             username:"mdedeu",
-        //             lastLogin:"online",
-        //             trades_completed:1,
-        //             rating:1.3,
-        //             image_url:"/"
-        //         }
-        //     },
-        //     amount: 1000,
-        //     id:1,
-        //     date: new Date()
-        // },
-        // {
-        //     status:'rejected',
-        //     buyer:{
-        //         accessToken: "",
-        //         refreshToken: "string",
-        //         admin: false,
-        //         email:"mdedeu@itba.edu.ar",
-        //         phoneNumber:"1245311",
-        //         username:"mdedeu",
-        //         lastLogin:"online",
-        //         trades_completed:1,
-        //         rating:1.3,
-        //         image_url:"/"
-        //     },
-        //     offer: {
-        //         cryptoCode:"BTC",
-        //         date:new Date(),
-        //         location:"Balvanera",
-        //         maxInCrypto:2,
-        //         minInCrypto:0.001,
-        //         offerId:1,
-        //         offerStatus:"PENDING",
-        //         unitPrice:1000000,
-        //         seller: {
-        //             accessToken: "",
-        //             refreshToken: "string",
-        //             admin: false,
-        //             email:"mdedeu@itba.edu.ar",
-        //             phoneNumber:"1245311",
-        //             username:"mdedeu",
-        //             lastLogin:"online",
-        //             trades_completed:1,
-        //             rating:1.3,
-        //             image_url:"/"
-        //         }
-        //     },
-        //     amount: 1000,
-        //     id:1,
-        //     date: new Date()
-        // }
-    ]);
-    const [offers, setOffers] = useState<OfferModel[]>([
-        // {
-        //     cryptoCode:"BTC",
-        //     date:new Date(),
-        //     location:"Balvanera",
-        //     maxInCrypto:2,
-        //     minInCrypto:0.001,
-        //     offerId:1,
-        //     offerStatus:"SOL",
-        //     unitPrice:1000000,
-        //     seller: {
-        //         accessToken: "",
-        //         refreshToken: "string",
-        //         admin: false,
-        //         email:"mdedeu@itba.edu.ar",
-        //         phoneNumber:"1245311",
-        //         username:"mdedeu",
-        //         lastLogin:"online",
-        //         trades_completed:1,
-        //         rating:1.3,
-        //         image_url:"/"
-        //     }
-        // }
-        ]);
+    const [lastTransactions, setLastTransactions] = useState<TransactionModel[]>([]);
+    const [offers, setOffers] = useState<OfferModel[]>([]);
 
     const offerService = useOfferService();
     const tradeService = useTradeService();
@@ -133,8 +29,6 @@ const SellerDashboard = () => {
             if(resp.statusCode === 200){
                 setOffers(resp.getData())
             }
-            // TODO boca
-            setKyc({status:'APR'});
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
         }
@@ -169,10 +63,10 @@ const SellerDashboard = () => {
                 </div>
                 {!kyc && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
-                        <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc"}/>
+                        <img className="w-5 h-5 mr-4 my-auto " src="attention" alt="kyc"/>
                         <p>
                             Validate your identity
-                        </p>
+                             </p>
                     </div>
                     <div className="mx-auto mt-8">
                         <a href="/kyc"
@@ -184,7 +78,7 @@ const SellerDashboard = () => {
                 {
                     kyc.status !== 'APR' ?
                         <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
-                            <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"transaction"}/>
+                            <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc submitted"}/>
                             <p>Validation of identity submitted. Please wait </p>
                         </div> : <TransactionList transactions={lastTransactions}/>
 
@@ -204,6 +98,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className="flex flex-col w-full mt-2">
                     <div className="flex w-full mx-auto ">
+                        {/*TODO callback*/}
                         <StatusCardsSeller  active={"all"} callback={()=>console.log("a")} base_url={"/"}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">

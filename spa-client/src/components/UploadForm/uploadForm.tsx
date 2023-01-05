@@ -18,18 +18,21 @@ export interface UploadFormValues {
 const UploadForm = () => {
 
     //State
-
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
 
      async function fetchCryptocurrencies(){
-        const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
+         try{
+             const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
 
-        if(apiCall.statusCode === 200){
-            setCryptoCurrencies(apiCall.getData());
-        } else{
-            toast.error("Something went wrong.");
-        }
+             if(apiCall.statusCode === 200){
+                 setCryptoCurrencies(apiCall.getData());
+             } else{
+                 toast.error("Something went wrong.");
+             }
+         }catch (e) {
+             toast.error("Connection error. Failed to fetch cryptocurrencies");
+         }
     }
     //TODO: This feels like a bad practice. Maybe useEffect on selected value?
     function changeSuggestedPrice(){

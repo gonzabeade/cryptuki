@@ -44,4 +44,13 @@ export class TradeService {
         });
         return Result.ok(resp.data);
     }
+    public async createTrade(amount:number, offerId:number|undefined):Promise<Result<TransactionModel>>{
+        const resp = await this.axiosInstance.post(this.basePath, {
+            body: {
+                offerId: offerId,
+                amount:amount
+            }
+        });
+        return Result.ok(resp.data);
+    }
 }

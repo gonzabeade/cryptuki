@@ -84,7 +84,7 @@ public class WebAuthConfig {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().headers().cacheControl().disable()
-                    .and().antMatcher("/api/users/**/password")
+                    .and().antMatcher("/api/users/*/password")
                     .csrf().disable()
                     .cors()
                     .and().authorizeRequests()

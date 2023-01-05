@@ -3,8 +3,9 @@ import UserInfo from "../../components/UserInfo/index";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
-import {useForm} from "react-hook-form";
+import { useForm} from "react-hook-form";
 import {toast} from "react-toastify";
+import useTradeService from "../../hooks/useTradeService";
 type BuyOfferFormValues = {
     amount:number
 }
@@ -15,6 +16,7 @@ const BuyOffer = () => {
     const offerService = useOfferService();
     const navigate = useNavigate();
     const [offer, setOffer] = useState<OfferModel>();
+    const tradeService = useTradeService();
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -52,17 +54,20 @@ const BuyOffer = () => {
 
         }
     }
-    function onSubmit(data:BuyOfferFormValues){
-        alert(data.amount);
-        //Receive trade Id created const tradeId = await Service.createTradeProposal
-        navigate('/trade/' + 1);
+    async function onSubmit(data:BuyOfferFormValues){
+        try{
+            const resp = await tradeService.createTrade(data.amount, offer?.offerId);
+            //TODO Analize this result
+            navigate('/trade/' + resp.getData().id);
+        }catch (e){
+            toast.error("Connection error. Failed to create trade");
+        }
     }
 
     useEffect(()=>{
         if(params.id){
-           retrieveOfferInformation(parseInt(params.id));
+           retrieveOfferInformation(Number(params.id));
         }
-
     })
 
 
@@ -124,7 +129,7 @@ const BuyOffer = () => {
                         Location
                     </h1>
                 { offer?.location ? <iframe
-                    title={"google map"}
+                    title={"google maps"}
                     className="mx-auto mb-10"
                     width="450"
                     height="250"

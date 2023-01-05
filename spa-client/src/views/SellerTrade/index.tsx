@@ -4,6 +4,7 @@ import OfferInformationForSeller from "../../components/OfferInformationForSelle
 import {Link} from "react-router-dom";
 
 const SellerTrade = () => {
+    // TODO fetch de la counterpart, trade Info from param
     return (
         <div className="flex flex-row mt-7">
             <ChatSnippet  counterPart={{

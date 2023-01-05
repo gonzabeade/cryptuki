@@ -1,6 +1,5 @@
 export default function Loader() {
     return (
-        //TODO modify this loader to match our interface
         <div className="animate-pulse space-y-3">
             <div className="flex justify-between">
                 <div className="bg-slate-300 h-8 w-96 rounded-full my-4"> </div>

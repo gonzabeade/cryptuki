@@ -5,6 +5,7 @@ import {MessageModel} from "../../types/MessageModel";
 import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
 import {toast} from "react-toastify";
+
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
     tradeId:number
@@ -17,7 +18,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     const chatService = useChatService();
 
     async function getMessages(){
-        const resp = await chatService.getMessages();
+        const resp = await chatService.getMessages(tradeId);
         if(resp.statusCode === 200){
             setMessages(resp.getData());
         }else{
@@ -43,7 +44,6 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     return (
         <div className="flex flex-row h-full w-full justify-around mr-10 mt-10">
-            {/* TODO ver el tema de webhook*/}
             <div className="container mx-10 h-4/5 F border-gray-200">
                 <div className=" border rounded bg-[#FAFCFF]">
                     <div>
@@ -79,12 +79,13 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                             </div>
 
                             <div className="flex justify-end w-full p-3  border-gray-300">
+                    {/*TODO form*/}
                                 <form className="flex flex-row w-full" >
                                     <input type="text" placeholder="Message"
                                            className="block w-full py-2 pl-4 mr-3 bg-gray-100 rounded-lg outline-none focus:text-gray-700"
                                            name="message" required/>
-{/*todo form message*/}
-                                    <button type="submit" onClick={()=>{sendMessage("a")}}>
+
+                                    <button type="submit">
                                         <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
                                              xmlns="http://www.w3.org/2000/svg"
                                              viewBox="0 0 20 20" fill="currentColor">

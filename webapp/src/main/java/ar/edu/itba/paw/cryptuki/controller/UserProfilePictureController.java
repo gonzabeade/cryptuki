@@ -8,6 +8,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -18,7 +19,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Path("/api/users/{username}/picture")
@@ -31,10 +34,13 @@ public class UserProfilePictureController {
     @Context
     public UriInfo uriInfo;
 
-    public UserProfilePictureController(UserService userService, ProfilePicService profilePicService, Collection<BadMultipartFormatException.MultipartDescriptor> pictureMultipartFormat) {
+    @Autowired
+    public UserProfilePictureController(UserService userService, ProfilePicService profilePicService) {
         this.userService = userService;
         this.profilePicService = profilePicService;
-        this.pictureMultipartFormat = pictureMultipartFormat;
+        this.pictureMultipartFormat =  Arrays.asList(
+                new BadMultipartFormatException.MultipartDescriptor("image/*", "picture")
+        );
     }
 
     @PUT

@@ -34,7 +34,7 @@ public class CustomPreAuthorizer {
             return false;
         User user = maybeUser.get();
         return user.getUserAuth().getUserStatus().equals(UserStatus.VERIFIED)
-                && user.getKyc() != null
+                && user.getKyc().isPresent()
                 && user.getKyc().get().getStatus().equals(KycStatus.APR);
     }
 

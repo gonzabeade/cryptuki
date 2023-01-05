@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-//@Provider
+//TODO DESCOMENTAR @Provider
 public class DefaultExceptionMapper implements ExceptionMapper<Exception> {
 
     private static final String MESSAGE = "Internal server error - Cause unknown";

@@ -5,13 +5,11 @@ type StatusCardsProps = {
     base_url:string,
     callback:Function
 }
-//TODO status strings
 const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callback}) => {
 
     const [activeStatus, setActiveStatus] = useState<string>(active);
 
     async function fetchTrades(status:string){
-        //todo
         await callback(status);
         setActiveStatus(status);
     }

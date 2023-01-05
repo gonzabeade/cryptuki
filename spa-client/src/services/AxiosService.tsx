@@ -1,12 +1,13 @@
 import { paths } from "../common/constants";
 import axios, { AxiosInstance } from "axios";
 
+//Por default tiene que ser la Bearer, menos en el form de login. Las no autenticadas con la no auth
 export class AxiosService {
 
     private readonly axiosBearerInstance : AxiosInstance = axios.create({
         baseURL: paths.BASE_URL
     });
-     
+     //formulario de login
     private axiosBasicInstance : AxiosInstance = axios.create({
         baseURL: paths.BASE_URL
     }); 

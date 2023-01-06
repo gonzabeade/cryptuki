@@ -26,7 +26,7 @@ export class UserService {
     public async  getUser(username:string):Promise<UserModel>{
         //TODO
         const secrets = await this.axiosInstance.get<UserModel>(this.basePath + username + '/secrets');
-        const publicInfo = await this.axiosInstance.get<UserModel>(this.basePath + username);
+        // const publicInfo = await this.axiosInstance.get<UserModel>(this.basePath + username);
         return secrets.data;
     }
 

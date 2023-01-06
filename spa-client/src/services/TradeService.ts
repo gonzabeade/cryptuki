@@ -52,4 +52,12 @@ export class TradeService {
         });
         return resp.data;
     }
+    public async changeTradeStatus(tradeId:number, status:string):Promise<TransactionModel>{
+        const resp = await this.axiosInstance.put(paths.BASE_URL + paths.TRADE + tradeId , {
+            body: {
+                status: status
+            }
+        });
+        return resp.data;
+    }
 }

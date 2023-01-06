@@ -14,10 +14,13 @@ const BuyerDashboard = () => {
     const tradeService = useTradeService();
     const userService= useUserService();
     const [user, setUser] = useState<UserModel>();
+    const [actualPage, setActualPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     async function fetchTradesBuyerProfile(){
         try {
             const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser(), 'all');
+            //TODO aca deberia devolverme las paginas
             setTrades(resp);
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
@@ -54,8 +57,8 @@ const BuyerDashboard = () => {
                         available</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
-                        {/*TODO aca ver de hacer el fetch de pages available y actual page, tiene que volver de la query de get*/}
-                        <Paginator totalPages={10} actualPage={1} callback={() => console.log("change page")}/>
+                        {/*TODO callback*/}
+                        <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("change page")}/>
                     </div>}
 
             </div>

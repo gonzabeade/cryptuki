@@ -36,7 +36,12 @@ const Trade =  () => {
         }
     }
     async function takeBackProposal(){
-        //TODO post to take back
+        try{
+            const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"PSU" );
+            setTrade(resp);
+        }catch (e) {
+            toast.error("Connection error. Failed to take back proposal");
+        }
     }
     async function fetchSeller(){
 
@@ -47,7 +52,7 @@ const Trade =  () => {
     })
     async function fetchOffer(){
         if(trade){
-            //TODO offer id
+            //TODO offer from trade.offer URI
             const resp = await offerService.getOfferInformation(1);
             setOffer(resp);
         }

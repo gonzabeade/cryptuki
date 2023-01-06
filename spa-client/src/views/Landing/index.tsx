@@ -49,13 +49,13 @@ const Landing = () => {
                                 <div className="flex flex-row">
                                     <h3 className="font-bold mx-2 my-auto">Order by</h3>
                                     <form>
-                                        {/*TODO page and size*/}
-                                        <select className="p-2 rounded-lg" onChange={()=>orderOffers("best_rated")}>
-                                            <option>Lowest Price</option>
-                                            <option>Most recent</option>
-                                            <option>Best Rated user</option>
-                                            <option>Higher price</option>
-                                            <option>Seller Last login</option>
+                                        {/*//TODO Options should trigger a fetch*/}
+                                        <select className="p-2 rounded-lg">
+                                            <option value={""}>Lowest Price</option>
+                                            <option value={""}>Most recent</option>
+                                            <option value={""}>Best Rated user</option>
+                                            <option value={""}>Higher price</option>
+                                            <option value={""}>Seller Last login</option>
                                         </select>
                                     </form>
                                 </div>

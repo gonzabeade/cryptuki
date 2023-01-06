@@ -17,6 +17,9 @@ const SellerOfferDashboard = () => {
     const params = useParams();
     const tradeService = useTradeService();
     const offerService = useOfferService();
+
+    const [actualPage, setActualPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
     async function fetchTradesAssociatedWithOffer(){
         try {
             if (params.id) {
@@ -24,6 +27,7 @@ const SellerOfferDashboard = () => {
                 setTrades(resp);
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);
+                //TODOset pages
             } else {
                 toast.error("No offer ID!");
             }
@@ -121,8 +125,8 @@ const SellerOfferDashboard = () => {
                         </div>
 
                         <h1 className="mx-auto text-center">
-                            {/*TODO Paginator pages todo este sistema tiene q estar con variables de estado*/}
-                            {trades.length>0 ?  <Paginator totalPages={10} actualPage={1} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
+                            {/*TODO callback*/}
+                            {trades.length>0 ?  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
                         </h1>
                     </div>

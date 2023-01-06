@@ -16,7 +16,6 @@ type RegisterFormValues = {
     phoneNumber: string;
     email: string;
 }
-// TODO idem Login
 const Register = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>();

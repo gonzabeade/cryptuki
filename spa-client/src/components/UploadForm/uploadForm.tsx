@@ -11,7 +11,7 @@ export interface UploadFormValues {
     location:string,
     unitPrice:number,
     cryptoCode:string,
-    automaticResponse?:string
+    comments?:string
 }
 
 const UploadForm = () => {
@@ -168,9 +168,9 @@ const UploadForm = () => {
                             trade proposal </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
                             <textarea className="w-full h-36 rounded-lg mx-auto p-5"
-                                      {...register("automaticResponse", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
+                                      {...register("comments", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
                         </div>
-                        {errors && errors.automaticResponse && <p className="mt-2 text-red-600 mx-auto">{errors.automaticResponse.message}</p> }
+                        {errors && errors.comments && <p className="mt-2 text-red-600 mx-auto">{errors.comments.message}</p> }
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">

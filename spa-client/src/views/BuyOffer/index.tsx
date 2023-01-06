@@ -7,6 +7,7 @@ import { useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
+import useUserService from "../../hooks/useUserService";
 type BuyOfferFormValues = {
     amount:number
 }
@@ -19,6 +20,7 @@ const BuyOffer = () => {
     const [offer, setOffer] = useState<OfferModel>();
     const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
+    const userService = useUserService();
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -68,9 +70,18 @@ const BuyOffer = () => {
            retrieveOfferInformation(Number(params.id));
         }
     },[])
+
+    async function fetchSeller(username:string){
+        try{
+            setSeller(await userService.getUser(username));
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch seller");
+        }
+    }
     useEffect(()=>{
         if(offer){
             //fetch offer seller model
+            fetchSeller(userService.getUsernameFromURI(offer.seller));
         }
     },[]);
 

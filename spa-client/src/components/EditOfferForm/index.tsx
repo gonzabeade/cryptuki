@@ -10,7 +10,7 @@ import OfferModel from "../../types/OfferModel";
 import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
 
-interface ModifyFormValues extends UploadFormValues {
+export interface ModifyFormValues extends UploadFormValues {
    offerId:number
 }
 
@@ -48,7 +48,7 @@ const EditOfferForm = () => {
             location: offerRetrieved?.location || 'DEFAULT',
             unitPrice: offerRetrieved?.unitPrice || 0,
             cryptoCode: offerRetrieved?.cryptoCode || 'BTC',
-            automaticResponse: offerRetrieved?.comments || 'a'
+            comments: offerRetrieved?.comments || 'a'
         }
     }
 
@@ -60,7 +60,6 @@ const EditOfferForm = () => {
         try{
             if(params.id){
                 const resp = await offerService.getOfferInformation(Number(params.id));
-                console.log(resp)
                 setOffer(resp);
                 return resp;
             }
@@ -70,16 +69,17 @@ const EditOfferForm = () => {
 
     }
 
-
-
-
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<ModifyFormValues>({defaultValues: async () => offerInitialValues()});
 
     function onSubmit(data:ModifyFormValues) {
-
-        //add offer id param  and modify
-        console.log(data);
+        try{
+            const resp = offerService.modifyOffer(data);
+            toast.success("Offer modified successfully");
+            //TODO: Redirect to offer page
+        }catch (e) {
+            toast.error("Connection error. Failed to modify offer");
+        }
     }
 
     return (
@@ -203,9 +203,9 @@ const EditOfferForm = () => {
                             trade proposal </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
                             <textarea className="w-full h-36 rounded-lg mx-auto p-5"
-                                      {...register("automaticResponse", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
+                                      {...register("comments", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
                         </div>
-                        {errors && errors.automaticResponse && <p className="mt-2 text-red-600 mx-auto">{errors.automaticResponse.message}</p> }
+                        {errors && errors.comments && <p className="mt-2 text-red-600 mx-auto">{errors.comments.message}</p> }
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">

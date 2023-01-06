@@ -1,76 +1,43 @@
 import { useState, useEffect, FormEvent } from "react";
-import { paths } from "../../common/constants";
-import {Link} from "react-router-dom"; 
+import {paths, sleep} from "../../common/constants";
+import {Link, useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import useUserService from "../../hooks/useUserService";
+import {toast} from "react-toastify";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = paths.USERS;
+
+type RegisterFormValues = {
+    username: string;
+    password: string;
+    repeatPassword: string;
+    phoneNumber: string;
+    email: string;
+}
 // TODO idem Login
 const Register = () => {
 
-    const [user, setUser] = useState('');
-    const [validName, setValidName] = useState(false);
-    const [userFocus, setUserFocus] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>();
+    const userService = useUserService();
+    const navigate = useNavigate();
 
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
-
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
-
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
-
-    useEffect(() => {
-        setValidName(USER_REGEX.test(user));
-    }, [user])
-
-    useEffect(() => {
-        setValidPwd(PWD_REGEX.test(pwd));
-        setValidMatch(pwd === matchPwd);
-    }, [pwd, matchPwd])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [user, pwd, matchPwd])
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // if button enabled with JS hack
-        const v1 = USER_REGEX.test(user);
-        const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
-            setErrMsg("Invalid Entry");
-            return;
+    async function onSubmit(data:RegisterFormValues){
+        try{
+            const resp = userService.register(data.username, data.password, data.repeatPassword, data.phoneNumber, data.email);
+            toast.success("Successfully registered!");
+            await sleep(1000);
+            navigate('/verify?user='+data.username);
+        }catch (e) {
+            toast.error("Connection error. Please try again later");
         }
-        try {
-            // const response = await axios.post(
-            //     REGISTER_URL,
-            //     JSON.stringify({ user, pwd }), // Mock data in the future, when testing axios 
-            //     {
-            //         headers: { 'Content-Type': 'application/json' },
-            //         withCredentials: true
-            //     }
-            // );
-            // console.log(response?.data);
-            // console.log(response?.accessToken);
-            // console.log(JSON.stringify(response))
-            setSuccess(true);
-            //clear state and controlled inputs
-            //need value attrib on inputs for this
-            setUser('');
-            setPwd('');
-            setMatchPwd('');
-        } catch (err) {
-            // Errors in the POST 
-        }
+
     }
 
     return (
         <div  className=" w-full flex justify-center">
-            <form onSubmit={handleSubmit} className="flex
+            <form onSubmit={handleSubmit(onSubmit)} className="flex
             flex-col mx-auto mt-24 w-[600px]
             bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-14
             border-frostdr border-t-8">
@@ -80,40 +47,37 @@ const Register = () => {
                     type="text"
                     id="username"
                     autoComplete="off"
-                    onChange={(e) => setUser(e.target.value)}
-                    value={user}
                     required
-                    aria-invalid={validName ? "false" : "true"}
-                    aria-describedby="uidnote"
-                    onFocus={() => setUserFocus(true)}
-                    onBlur={() => setUserFocus(false)}
                     className="p-2 m-2 rounded-lg"
+                    {...register("username", {required: true, pattern: {value:USER_REGEX, message: "Invalid username"}})}
                 />
                 <input
                     placeholder="Password"
                     type="password"
                     id="password"
-                    onChange={(e) => setPwd(e.target.value)}
-                    value={pwd}
-                    required
-                    aria-invalid={validPwd ? "false" : "true"}
-                    aria-describedby="pwdnote"
-                    onFocus={() => setPwdFocus(true)}
-                    onBlur={() => setPwdFocus(false)}
                     className="p-2 m-2 rounded-lg"
+                    {...register("password",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
                 />
                 <input
                     type="password"
                     id="confirm_pwd"
                     placeholder="Repeat new password"
-                    onChange={(e) => setMatchPwd(e.target.value)}
-                    value={matchPwd}
-                    required
-                    aria-invalid={validMatch ? "false" : "true"}
-                    aria-describedby="confirmnote"
-                    onFocus={() => setMatchFocus(true)}
-                    onBlur={() => setMatchFocus(false)}
                     className="p-2 m-2 rounded-lg"
+                    {...register("repeatPassword",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                />
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                    className="p-2 m-2 rounded-lg"
+                    {...register("email",{required: true})}
+                />
+                <input
+                    type="number"
+                    id="phoneNumber"
+                    placeholder="Phone number"
+                    className="p-2 m-2 rounded-lg"
+                    {...register("phoneNumber",{required: true})}
                 />
                 <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">Sign Up</button>
                 <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">Already registered?</p>

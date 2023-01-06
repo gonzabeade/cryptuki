@@ -24,7 +24,8 @@ const Login = () => {
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);
         try{
-            await userService.login(data.username, data.password, data.rememberMe);
+            // await userService.login(data.username, data.password, data.rememberMe);
+            //dummy call to get the token
             toast.success("Successfully logged in!");
 
             await sleep(1000);

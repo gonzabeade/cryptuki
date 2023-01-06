@@ -40,15 +40,16 @@ const EditOfferForm = () => {
     }
     async function offerInitialValues(){
         //build form values with offer
-       return {
-           offerId:offer?.offerId || 1,
-            minInCrypto: offer?.minInCrypto || 0,
-            maxInCrypto:offer?.maxInCrypto || 0 ,
-            location:offer?.location || 'DEFAULT',
-            unitPrice:offer?.unitPrice || 0,
-            cryptoCode:offer?.cryptoCode || 'BTC',
-            automaticResponse: offer?.comments || 'a'
-       }
+        const offerRetrieved = await getOffer();
+        return {
+            offerId: offerRetrieved?.offerId || 1,
+            minInCrypto: offerRetrieved?.minInCrypto || 0,
+            maxInCrypto: offerRetrieved?.maxInCrypto || 0,
+            location: offerRetrieved?.location || 'DEFAULT',
+            unitPrice: offerRetrieved?.unitPrice || 0,
+            cryptoCode: offerRetrieved?.cryptoCode || 'BTC',
+            automaticResponse: offerRetrieved?.comments || 'a'
+        }
     }
 
     useEffect(()=>{
@@ -59,18 +60,16 @@ const EditOfferForm = () => {
         try{
             if(params.id){
                 const resp = await offerService.getOfferInformation(Number(params.id));
+                console.log(resp)
                 setOffer(resp);
+                return resp;
             }
         }catch (e){
-            console.log(e);
             toast.error("Connection error. Failed to fetch offer");
         }
 
     }
 
-    useEffect(()=>{
-        getOffer();
-    },[])
 
 
 

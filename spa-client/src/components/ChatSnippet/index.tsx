@@ -18,12 +18,13 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     const chatService = useChatService();
 
     async function getMessages(){
-        const resp = await chatService.getMessages(tradeId);
-        if(resp.statusCode === 200){
-            setMessages(resp.getData());
-        }else{
-            toast.error("Connection error. Couldn't fetch messages")
+        try{
+            const resp = await chatService.getMessages(tradeId);
+            setMessages(resp);
+        }catch (e) {
+            toast.error("Error fetching messages. Check your connection")
         }
+
     }
 
     useEffect(()=>{
@@ -33,9 +34,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     async function sendMessage(message:string){
         try{
             const resp = await chatService.sendMessage(tradeId, message);
-            if(resp.statusCode === 200){
-                setMessages([messages, resp.getData()]);
-            }
+            setMessages(messages.concat(resp));
         }catch (e) {
          toast.error("Connection error. Failed to send message");
         }

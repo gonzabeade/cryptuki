@@ -18,9 +18,7 @@ const BuyerDashboard = () => {
     async function fetchTradesBuyerProfile(){
         try {
             const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser(), 'all');
-            if(resp.statusCode === 200){
-                setTrades(resp.getData())
-            }
+            setTrades(resp);
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
         }

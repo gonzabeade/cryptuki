@@ -19,14 +19,8 @@ const Landing = () => {
     async function getOffers(page?:number, pageSize?:number){
         try{
             const apiCall = await offerService?.getOffers(page, pageSize);
-
-            if(apiCall.statusCode === 200){
-                setOffers(apiCall.getData());
-                //get Headers and set Actual and total pages
-
-            }else{
-                toast.error("Something went wrong. ");
-            }
+            setOffers(apiCall);
+            //get Headers and set Actual and total pages
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }

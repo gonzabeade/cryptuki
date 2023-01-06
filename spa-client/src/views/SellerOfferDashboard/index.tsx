@@ -21,13 +21,9 @@ const SellerOfferDashboard = () => {
         try {
             if (params.id) {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
-                if (resp.statusCode === 200) {
-                    setTrades(resp.getData());
-                    const offerResp = await offerService.getOfferInformation(Number(params.id));
-                    if (offerResp.statusCode === 200) {
-                        setOffer(offerResp.getData());
-                    }
-                }
+                setTrades(resp);
+                const offerResp = await offerService.getOfferInformation(Number(params.id));
+                setOffer(offerResp);
             } else {
                 toast.error("No offer ID!");
             }

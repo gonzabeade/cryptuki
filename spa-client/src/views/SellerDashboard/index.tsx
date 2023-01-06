@@ -44,10 +44,7 @@ const SellerDashboard = () => {
     async function getOffers(){
         try{
             const resp = await offerService.getOffersByOwner(userService.getLoggedInUser()!);
-
-            if(resp.statusCode === 200){
-                setOffers(resp.getData())
-            }
+            setOffers(resp)
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
         }
@@ -56,8 +53,8 @@ const SellerDashboard = () => {
     async function getLastTransactions(){
         try{
             const resp = await tradeService.getLastTransactions(userService.getLoggedInUser());
-            if(resp.statusCode === 200){
-                setLastTransactions(resp.getData())
+            if(resp){
+                setLastTransactions(resp)
             }
         }catch (e) {
             console.log(e)

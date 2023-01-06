@@ -17,11 +17,7 @@ const Receipt = () => {
 
         try{
             const resp = await tradeService.getTradeInformation(tradeId);
-            if(resp.statusCode === 200){
-                setTrade(resp.getData());
-            }else{
-                toast.error("Custom Error");
-            }
+            setTrade(resp);
         }catch (e){
             toast.error("Error fetching trade");
             console.log("here")

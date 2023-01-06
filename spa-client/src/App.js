@@ -21,6 +21,9 @@ const SellerTrade = lazy(()=>import("./views/SellerTrade/index"));
 const SellerOfferDashboard = lazy(()=>import("./views/SellerOfferDashboard/index"));
 const UploadAd = lazy(()=>import("./views/UploadAd/index"));
 const EditOffer = lazy(()=>import("./views/EditOffer/index"));
+const Verify = lazy(()=>import("./views/Verify/index"));
+
+
 
 
 function App() {
@@ -44,6 +47,7 @@ function App() {
                       <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
                       <Route path="/offer/upload" element={<UploadAd/>}/>
                       <Route path="/offer/:id/edit" element={<EditOffer/>}/>
+                      <Route path="/verify" element={<Verify/>}/>
                       <Route path="/" element={<Landing/>}/>
                       <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
                   </Routes>

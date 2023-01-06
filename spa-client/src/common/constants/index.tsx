@@ -12,4 +12,19 @@ export const NEIGHBORHOODS =[
 'Balvanera'
 ]
 export const sleep = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
+export enum OFFER_STATUS {
+    "Pending "='APR',
+    "Sold" = 'SOL',
+    "Deleted"='DEL',
+    "PausedBySeller"='PSE',
+    "PausedByUser"='PSU'
+}
+
+export enum TRADE_STATUS {
+    'APR',
+    'SOL',
+    'DEL',
+    'PSE',
+    'PSU'
+}
   

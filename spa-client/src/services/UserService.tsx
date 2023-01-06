@@ -11,6 +11,7 @@ export class UserService {
     public constructor(axiosInstance: AxiosInstance) {
         this.axiosInstance = axiosInstance; 
     }
+
     //TODO decision. Metodo para recuperar toda la user data o mover User Models en todo momento?
     public getLoggedInUser(): string | null {
         const refreshToken = localStorage.getItem("refreshToken"); 

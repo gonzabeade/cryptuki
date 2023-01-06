@@ -13,33 +13,30 @@ const Landing = () => {
 
     const [offers, setOffers] = useState<OfferModel[]|null>([]);
     const offerService = useOfferService();
-    
-    const navigate = useNavigate(); 
-    const location = useLocation();
-    const [params] = useSearchParams();
+    const [actualPage, setActualPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
 
-    async function getOffers(page:number, pageSize:number){
+    async function getOffers(page?:number, pageSize?:number){
         try{
             const apiCall = await offerService?.getOffers(page, pageSize);
 
             if(apiCall.statusCode === 200){
                 setOffers(apiCall.getData());
             }else{
-                toast.error("Something went wrong, check your connectivity");
+                toast.error("Something went wrong. ");
             }
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }
 
     }
-    function orderOffers(page:number, pageSize: number){
-        //TODO order
+    function orderOffers(order_by:string){
         //fetch with added param
     }
 
     useEffect(  ()=>{
-            getOffers(5, 5);
-        });
+            getOffers();
+        }, []);
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">
@@ -57,7 +54,7 @@ const Landing = () => {
                                     <h3 className="font-bold mx-2 my-auto">Order by</h3>
                                     <form>
                                         {/*TODO page and size*/}
-                                        <select className="p-2 rounded-lg" onChange={()=>orderOffers(5, 5)}>
+                                        <select className="p-2 rounded-lg" onChange={()=>orderOffers("best_rated")}>
                                             <option>Lowest Price</option>
                                             <option>Most recent</option>
                                             <option>Best Rated user</option>
@@ -72,7 +69,7 @@ const Landing = () => {
 
                             </div>
                             {offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers.length >0 &&  <Paginator totalPages={10} actualPage={1} callback={() => console.log("called")}/>}
+                            {offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
 
                         </div>
                         </>

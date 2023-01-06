@@ -5,17 +5,21 @@ import OfferModel from "../../types/OfferModel";
 import {useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars";
 import UserModel from "../../types/UserModel";
+import useUserService from "../../hooks/useUserService";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();
     const [seller, setSeller] = React.useState<UserModel>();
+    const userService = useUserService();
 
-    async function fetchUserData(){
+    async function fetchUserData(username:string){
         //fetch seller data
+
     }
 
     useEffect(()=>{
-        fetchUserData();
-    })
+        const username = userService.getUsernameFromURI(offer.seller)
+        // fetchUserData(username);
+    },[])
 
     return (
         <div className="crypto-card rounded-lg">

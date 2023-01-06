@@ -15,7 +15,7 @@ export class OfferService {
     public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<Result<OfferModel[]>> {
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params: {
-                page,
+                page:page,
                 per_page: pageSize ,
                 cryptoCodes: cryptoCodes,
                 locations: locations,
@@ -23,7 +23,6 @@ export class OfferService {
             }
         })
         return Result.ok(resp.data);
-        //TODO fijarse como pingo devolver los headers de lastPage y totalPages
     }
     public async getOfferInformation(offerId:number):Promise<Result<OfferModel>>{
         const resp = await this.axiosInstance.get<OfferModel>(this.basePath + offerId)

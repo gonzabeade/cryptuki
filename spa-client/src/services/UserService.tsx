@@ -1,9 +1,13 @@
 import { AxiosInstance } from "axios";
 import jwtDecode from "jwt-decode";
+import Result from "../types/Result";
+import UserModel from "../types/UserModel";
+import {paths} from "../common/constants";
 
 export class UserService {
 
-    private readonly axiosInstance : AxiosInstance; 
+    private readonly axiosInstance : AxiosInstance;
+    private readonly basePath = paths.BASE_URL + paths.USERS;
 
     public constructor(axiosInstance: AxiosInstance) {
         this.axiosInstance = axiosInstance; 
@@ -19,9 +23,17 @@ export class UserService {
         return null; 
     }
 
-    public getUsernameFromURI(uri:string, basePath:string):string{
-        const username = uri.replace(basePath, "");
-        return username.substring(0, username.indexOf("/"));
+    public async  getUser(username:string):Promise<Result<UserModel>>{
+        //TODO
+        const secrets = await this.axiosInstance.get<UserModel>(this.basePath + username + '/secrets');
+        const publicInfo = await this.axiosInstance.get<UserModel>(this.basePath + username);
+        return Result.ok(secrets.data);
+    }
+
+
+    public getUsernameFromURI(uri:string):string{
+        const n = uri.lastIndexOf('/');
+        return uri.substring(n + 1);
     }
 
 }

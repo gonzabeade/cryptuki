@@ -18,6 +18,7 @@ type CryptoFiltersProps = {
     callback:Function
 }
 const CryptoFilters = ({callback}:CryptoFiltersProps) => {
+
     const { register, handleSubmit, formState: { errors } } = useForm<CryptoFormValues>();
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
@@ -40,7 +41,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    });
+    },[]);
 
 
     function onSubmit(data:CryptoFormValues){

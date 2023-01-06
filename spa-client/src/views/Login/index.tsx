@@ -12,7 +12,6 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 type LoginFormValues = {
     username: string;
     password: string;
-    rememberMe: boolean;
 }
 
 const Login = () => {
@@ -24,8 +23,10 @@ const Login = () => {
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);
         try{
-            // await userService.login(data.username, data.password, data.rememberMe);
-            //dummy call to get the token
+            // dummy call to get the token
+            await userService.getUser(data.username);
+
+
             toast.success("Successfully logged in!");
 
             await sleep(1000);
@@ -61,16 +62,6 @@ const Login = () => {
                     className="p-2 m-2 rounded-lg"
                 />
                 {errors && errors.password && <span className="text-red-500">{errors.password.message}</span>}
-                <div className="flex m-2">
-                    <input
-                        type="checkbox"
-                        id="checkbox"
-                        {...register("rememberMe")}
-                        className="mx-2 rounded-lg"
-                        defaultChecked={true}
-                    />
-                    <label>Remember me</label>
-                </div>
 
                 
                 <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold hover:bg-polar">Sign in</button>

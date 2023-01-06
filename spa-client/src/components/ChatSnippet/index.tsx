@@ -5,10 +5,14 @@ import {MessageModel} from "../../types/MessageModel";
 import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
 import {toast} from "react-toastify";
+import {useForm} from "react-hook-form";
 
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
     tradeId:number
+}
+type ChatFormValues ={
+    message:string
 }
 
 const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
@@ -16,6 +20,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     const [messages, setMessages] = useState<MessageModel[]>([]);
     const userService = useUserService();
     const chatService = useChatService();
+    const { register, handleSubmit, formState: { errors } } = useForm<ChatFormValues>();
 
     async function getMessages(){
         try{
@@ -31,9 +36,9 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
       getMessages();
     },[])
 
-    async function sendMessage(message:string){
+    async function sendMessage(data:ChatFormValues){
         try{
-            const resp = await chatService.sendMessage(tradeId, message);
+            const resp = await chatService.sendMessage(tradeId, data.message);
             setMessages(messages.concat(resp));
         }catch (e) {
          toast.error("Connection error. Failed to send message");
@@ -78,11 +83,12 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                             </div>
 
                             <div className="flex justify-end w-full p-3  border-gray-300">
-                    {/*TODO form*/}
-                                <form className="flex flex-row w-full" >
+                                <form className="flex flex-row w-full" onSubmit={handleSubmit(sendMessage)}>
                                     <input type="text" placeholder="Message"
                                            className="block w-full py-2 pl-4 mr-3 bg-gray-100 rounded-lg outline-none focus:text-gray-700"
-                                           name="message" required/>
+                                           required
+                                            {...register("message", { required: true })}
+                                    />
 
                                     <button type="submit">
                                         <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90"

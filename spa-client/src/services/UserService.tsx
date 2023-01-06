@@ -35,9 +35,7 @@ export class UserService {
         const n = uri.lastIndexOf('/');
         return uri.substring(n + 1);
     }
-    public async login(username:string, password:string, rememberMe:boolean){
-        await this.axiosInstance.post(this.basePath + "login", {username: username, password: password, rememberMe:rememberMe});
-    }
+
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
         await this.axiosInstance.post(this.basePath + "register", {
             username: username,

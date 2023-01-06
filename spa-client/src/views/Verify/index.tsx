@@ -11,7 +11,7 @@ const Verify = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<VerifyFormValues>();
     const userService = useUserService();
     const [searchParams]= useSearchParams();
-    //query params the username
+
 
     async function onSubmit(data:VerifyFormValues){
         try{

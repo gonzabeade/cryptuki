@@ -151,20 +151,18 @@ public class TradeController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
     public Response modifyTrade(@PathParam("tradeId") int tradeId, @Valid TradeStatusForm tradeStatusForm) {
-        Trade trade = this.tradeService.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
             case ACCEPTED:
-                this.tradeService.acceptTrade(tradeId);
+                this.tradeService.acceptTrade(tradeId);break;
             case SOLD:
-                this.tradeService.sellTrade(tradeId);
+                this.tradeService.sellTrade(tradeId);break;
             case DELETED:
-                this.tradeService.deleteTrade(tradeId);
+                this.tradeService.deleteTrade(tradeId);break;
             case REJECTED:
-                this.tradeService.rejectTrade(tradeId);//422?
-            case PENDING: return Response.status(400).build();
+                this.tradeService.rejectTrade(tradeId);break;
+            case PENDING: throw new BadRequestException("Trade can not be set to PENDING");
         }
-        //204?
-        return Response.ok(TradeDto.fromTrade(trade,uriInfo)).build();
+        return Response.noContent().build();
     }
 
 

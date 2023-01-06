@@ -7,18 +7,8 @@ const SellerTrade = () => {
     // TODO fetch de la counterpart, trade Info from param
     return (
         <div className="flex flex-row mt-7">
-            <ChatSnippet  counterPart={{
-                accessToken: "",
-                refreshToken: "string",
-                admin: false,
-                email:"mdedeu@itba.edu.ar",
-                phoneNumber:"1245311",
-                username:"mdedeu",
-                lastLogin:"online",
-                trades_completed:1,
-                rating:1.3,
-                image_url:"/"
-            }} tradeId={4}/>
+            {/*//TODO Counterpart*/}
+            {/*<ChatSnippet  counterPart={} tradeId={}/>*/}
             <div className="flex flex-col justify-center px-10">
             <OfferInformationForSeller trade={
                 {

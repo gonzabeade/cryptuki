@@ -33,7 +33,7 @@ const BuyerDashboard = () => {
         <div className="flex h-full w-full px-20 my-10">
             <div className="flex flex-col h-full mx-20 w-1/5">
                 {/*TODO Evaluar esto con lo de User model*/}
-                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber : "Loading"} email={user? user.email:"loading"} rating={user? user.rating: 0} tradeQuantity={user? user.trades_completed:0}/>
+                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber : "Loading"} email={user? user.email:"loading"} rating={user? user.rating: 0} tradeQuantity={user? user.ratingCount:0}/>
             </div>
             {/*//  Middle Panel: trade */}
             <div className="flex flex-col h-full mr-20 w-3/5">

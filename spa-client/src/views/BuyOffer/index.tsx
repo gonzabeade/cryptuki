@@ -128,8 +128,8 @@ const BuyOffer = () => {
                 username={seller? (seller.username): 'Loading...'}
                 email={seller? seller.email: 'Loading'}
                 phone_number={seller? seller.phoneNumber :'Loading'}
-                last_login={seller? seller.lastLogin: 'Loading'}
-                trades_completed={seller? seller.trades_completed: 0}
+                last_login={seller? seller.lastLogin.toDateString(): 'Loading'}
+                trades_completed={seller? seller.ratingCount: 0}
                 rating={seller? seller.rating: 0}/>
 
                     <h1 className="font-sans font-bold text-2xl mx-auto text-polar mt-6 mb-2">

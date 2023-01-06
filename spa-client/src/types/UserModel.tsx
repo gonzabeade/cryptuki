@@ -1,12 +1,19 @@
 export default interface UserModel {
+    userId:number,
+    username:string,
+    rating:number,
+    lastLogin:Date,
+    locale:string,
+
+    complaints:string,
+    kycInformation:string,
+    offers:string,
+    self:string;
+    secrets:string;
     accessToken: string, 
-    refreshToken: string, 
-    admin: boolean;
+    refreshToken: string,
     email:string,
     phoneNumber:string,
-    username:string,
-    lastLogin:string,
-    trades_completed:number,
-    rating:number,
-    image_url:string
+    ratingCount:number,
+    picture:string
 }

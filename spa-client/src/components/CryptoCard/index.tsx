@@ -23,7 +23,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
                 <div className="label">Vendedor:</div>
                 <div className="bold text-polar">{seller?.username}</div>
                 {seller?.rating === 0 || !seller?.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={seller?.rating}/>}
-                <div className="label">Último Login: {seller?.lastLogin}</div>
+                <div className="label">Último Login: {seller?.lastLogin.toDateString()}</div>
             </div>
             <div className="column">
                 <div className="label">Precio:</div>

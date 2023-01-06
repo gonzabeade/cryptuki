@@ -51,14 +51,14 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                             <div className="flex relative items-center py-3 border-b border-gray-300 justify-between">
                                 <div className={"flex"}>
                                     <img className="object-cover w-10 h-10 my-auto rounded-full"
-                                         src={counterPart?.image_url} alt={counterPart?.username}/>
+                                         src={counterPart?.picture} alt={counterPart?.username}/>
                                     <div className="flex flex-col ml-4">
                                         <span className="block font-bold text-gray-600 text-justify ">{counterPart?.username}</span>
-                                        {counterPart?.lastLogin === 'online' && <> <span className="font-sans text-gray-400 text-sm text-justify ">Ultimo login</span>
-                                            <span className="text-left text-sm text-justify ">{counterPart?.lastLogin}</span> </>}
+                                        {counterPart? counterPart.lastLogin.getTime() === Date.now() && <> <span className="font-sans text-gray-400 text-sm text-justify ">Ultimo login</span>
+                                            <span className="text-left text-sm text-justify ">{counterPart? counterPart.lastLogin.toDateString(): "Loading"}</span> </>: "Loading"}
                                     </div>
                                 </div>
-                                {counterPart?.lastLogin === 'online' &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>}
+                                {counterPart? counterPart.lastLogin.getTime() === Date.now() &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>:"Loading"}
 
                                 <h1 className="text-right font-sans font-bold justify-self-end">
                                   Trade proposal # {tradeId}

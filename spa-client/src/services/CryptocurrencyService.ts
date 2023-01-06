@@ -13,11 +13,12 @@ export class CryptocurrencyService {
     }
 
      public async getCryptocurrencies():Promise<Result<CryptocurrencyModel[]>> {
-         //fetch to our backend and modify price with TC API
+
          const resp = await this.axiosInstance.get<CryptocurrencyModel[]>(this.basePath);
-         //TODO add TC price data
+
 
          if(resp.status === 200){
+             //fetch TC data and add it to the response
              return Result.ok(resp.data);
          }
          return Result.fail(resp.data, 500);

@@ -22,7 +22,7 @@ export class TradeService {
     public async getLastTransactions(username:string|null):Promise<Result<TransactionModel[]>>{
         const resp = await this.axiosInstance.get<TransactionModel[]>(this.basePath, {
             params: {
-                username: username
+                buyer: username
             }
         });
         return Result.ok(resp.data);
@@ -39,13 +39,13 @@ export class TradeService {
     public async getTradesWithOfferId(offerId:number):Promise<Result<TransactionModel[]>>{
         const resp = await this.axiosInstance.get<TransactionModel[]>(this.basePath, {
             params: {
-                offerId: offerId,
+                from_offer: offerId,
             }
         });
         return Result.ok(resp.data);
     }
     public async createTrade(amount:number, offerId:number|undefined):Promise<Result<TransactionModel>>{
-        const resp = await this.axiosInstance.post(this.basePath, {
+        const resp = await this.axiosInstance.post(paths.BASE_URL + offerId + paths.TRADE, {
             body: {
                 offerId: offerId,
                 amount:amount

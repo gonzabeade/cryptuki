@@ -62,7 +62,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                                cryptocurrencies.map((cryptocurrency)=>{
                                    return (
                                        <option value={cryptocurrency.code} key={cryptocurrency.code}>
-                                           {cryptocurrency.name}
+                                           {cryptocurrency.commercialName}
                                        </option>
                                    );
                                })
@@ -90,7 +90,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                            cryptocurrencies.map((cryptocurrency)=>{
                                return (
                                    <option value={cryptocurrency.code} key={cryptocurrency.code}>
-                                       {cryptocurrency.name}
+                                       {cryptocurrency.commercialName}
                                    </option>
                                );
                            })

@@ -12,27 +12,27 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number): Promise<Result<OfferModel[]>> {
+    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[]): Promise<Result<OfferModel[]>> {
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params: {
                 page,
-                per_page: pageSize 
+                per_page: pageSize ,
+                cryptoCodes: cryptoCodes,
+                locations: locations
             }
         })
         return Result.ok(resp.data);
     }
     public async getOfferInformation(offerId:number):Promise<Result<OfferModel>>{
-        const resp = await this.axiosInstance.get<OfferModel>(this.basePath, {
-            params:{
-                offerId: offerId
-            }
-        })
+        const resp = await this.axiosInstance.get<OfferModel>(this.basePath + offerId)
         return Result.ok(resp.data);
     }
     public async getOffersByOwner(page:number, pageSize:number, username:string|null):Promise<Result<OfferModel[]>>{
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params:{
-                owner: username
+                page:page,
+                pageSize:pageSize,
+                by_user: username
             }
         })
         return Result.ok(resp.data);

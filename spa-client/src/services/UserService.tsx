@@ -19,4 +19,9 @@ export class UserService {
         return null; 
     }
 
+    public getUsernameFromURI(uri:string, basePath:string):string{
+        const username = uri.replace(basePath, "");
+        return username.substring(0, username.indexOf("/"));
+    }
+
 }

@@ -32,7 +32,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     async function sendMessage(message:string){
         try{
-            const resp = await chatService.sendMessage(tradeId, userService.getLoggedInUser(), message);
+            const resp = await chatService.sendMessage(tradeId, message);
             if(resp.statusCode === 200){
                 setMessages([messages, resp.getData()]);
             }
@@ -70,7 +70,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                                     {
                                         messages.map((message, key)=>{
                                             return (
-                                                <Message key={key} content={message.content} left={message.username !== userService.getLoggedInUser() }/>
+                                                <Message key={key} content={message.content} left={message.senderURI !== userService.getLoggedInUser() }/>
                                             );
                                         })
                                     }

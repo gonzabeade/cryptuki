@@ -111,7 +111,7 @@ const EditOfferForm = () => {
                                         cryptocurrencies.map((cryptocurrency)=>{
                                             return (
                                                 <option value={cryptocurrency.code} key={cryptocurrency.code}>
-                                                    {cryptocurrency.name}
+                                                    {cryptocurrency.commercialName}
                                                 </option>
                                             );
                                         })

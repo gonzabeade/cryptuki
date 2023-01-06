@@ -46,7 +46,11 @@ export class UserService {
             phoneNumber: phoneNumber,
             email: email
         });
-
+    }
+    public async verifyUser(code:number, username:string){
+        await this.axiosInstance.post(this.basePath + username, {
+           code:code
+        });
     }
 
 }

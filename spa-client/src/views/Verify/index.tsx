@@ -1,15 +1,26 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
+import useUserService from "../../hooks/useUserService";
+import {useSearchParams} from "react-router-dom";
+import {toast} from "react-toastify";
 type VerifyFormValues ={
     code:number
 }
 
 const Verify = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<VerifyFormValues>();
+    const userService = useUserService();
+    const [searchParams]= useSearchParams();
     //query params the username
 
     async function onSubmit(data:VerifyFormValues){
-        console.log(data);
+        try{
+            await userService.verifyUser(data.code, searchParams.get("user")!);
+            toast.success("Successfully verified!");
+        }catch (e){
+            toast.error("Connection error. Please try again later");
+        }
+
     }
     return (
 

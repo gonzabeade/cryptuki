@@ -141,7 +141,7 @@ public class CustomPreAuthorizerTest {
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails, 0);
+        boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails.getUsername(), 0);
 
         Assert.assertTrue(isOwner);
     }
@@ -152,7 +152,7 @@ public class CustomPreAuthorizerTest {
         when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(trade));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails, 0);
+        boolean isOwner = customPreAuthorizer.isUserOwnerOfTrade(userDetails.getUsername(), 0);
 
         Assert.assertFalse(isOwner);
     }

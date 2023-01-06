@@ -1,7 +1,4 @@
-import UserModel from "./UserModel";
-
 export default interface OfferModel {
-
         comments?: string,
         cryptoCode: string,
         date: Date,
@@ -11,8 +8,6 @@ export default interface OfferModel {
         offerId: number,
         offerStatus: string,
         unitPrice: number,
-
-
-        seller: UserModel, // TODO: Change to UserModel
-
+        seller: string,
+        self:string
 }

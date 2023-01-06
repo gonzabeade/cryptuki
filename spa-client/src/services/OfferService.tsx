@@ -12,13 +12,14 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[]): Promise<Result<OfferModel[]>> {
+    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<Result<OfferModel[]>> {
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params: {
                 page,
                 per_page: pageSize ,
                 cryptoCodes: cryptoCodes,
-                locations: locations
+                locations: locations,
+                orderBy: orderBy
             }
         })
         return Result.ok(resp.data);

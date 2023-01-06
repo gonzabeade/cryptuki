@@ -10,13 +10,19 @@ import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
+import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
+import UserModel from "../../types/UserModel";
 
 const Trade =  () => {
 
     const navigate = useNavigate();
     const [searchParams]= useSearchParams();
     const [trade, setTrade] = useState<TransactionModel>();
+    const [offer, setOffer] = useState<OfferModel>();
+    const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
+    const offerService = useOfferService();
 
     async function fetchTrade(tradeId: number | null) {
         if(tradeId){
@@ -25,7 +31,7 @@ const Trade =  () => {
                 console.log("ok")
                 if(resp.getData().status === 'sold'){
                     console.log("status")
-                    navigate('/trade/'+ resp.getData().id+ '/receipt');
+                    navigate('/trade/'+ resp.getData().tradeId+ '/receipt');
                 }
                 setTrade(resp.getData);
             }else{
@@ -36,11 +42,34 @@ const Trade =  () => {
     async function takeBackProposal(){
         //TODO post to take back
     }
+    async function fetchSeller(){
+
+    }
+
+    useEffect(()=>{
+        fetchSeller();
+    })
+    async function fetchOffer(){
+        if(trade){
+            //TODO offer id
+            const resp = await offerService.getOfferInformation(1);
+            if(resp.statusCode === 200){
+                setOffer(resp.getData());
+            }else{
+                toast.error("Error fetching offer")
+            }
+        }
+    }
+
+    useEffect(()=>{
+        fetchOffer();
+    })
 
     useEffect(()=>{
        // const tradeId:string = searchParams.tradeId;
         fetchTrade(Number(searchParams.get("tradeId")));
     })
+
 
 
     return (
@@ -60,14 +89,14 @@ const Trade =  () => {
                 <div className="flex flex-col shadow-2xl p-3 rounded-r-lg border-frostdr border-l-8 ">
                     <h1 className="text-xl text-polar mx-auto font-bold font-lato">Offer Information</h1>
                     <h1 className="text-lg text-polar mx-auto font-bold font-lato">Location</h1>
-                    <h3 className="text-polar text-md mx-auto">{trade?.offer.location}</h3>
+                    <h3 className="text-polar text-md mx-auto">{offer?.location}</h3>
 
                     <div className="flex flex-row justify-center mt-3 mx-auto my-auto">
                         <div className="flex flex-col mx-10 order-1" id="left">
                             <h1 className="text-center text-lg">
                                You pay
                             </h1>
-                            <h1 className="text-center text-xl font-semibold text-polar">${trade?.amount} ARS</h1>
+                            <h1 className="text-center text-xl font-semibold text-polar">${trade?.buyingQuantity} ARS</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 my-5 order-2 mx-10" fill="none"
                              viewBox="0 0 24 24" stroke="black" strokeWidth="2">
@@ -78,8 +107,8 @@ const Trade =  () => {
                                 You receive
                             </h1>
                             <h1 className="text-center text-xl font-semibold text-polar">
-                                { trade && trade?.amount / trade?.offer.unitPrice}
-                                {trade?.offer.cryptoCode}
+                                { trade && trade?.buyingQuantity / (offer? offer.unitPrice :0)}
+                                {offer?.cryptoCode}
                             </h1>
                         </div>
                     </div>
@@ -100,7 +129,8 @@ const Trade =  () => {
                 </div>
             </div>
             <div className="w-2/5">
-                <ChatSnippet counterPart={trade?.offer.seller} tradeId={trade? trade.id: 0}/>
+                //TODO disociate username from URI
+                <ChatSnippet counterPart={seller} tradeId={trade? trade.tradeId: 0}/>
             </div>
 
         </div>

@@ -3,7 +3,7 @@ import RatingStars from "../RatingStars";
 
 type  UserProfileCardsProps = {
     username:string|null,
-    phoneNumber:number,
+    phoneNumber:string,
     email:string,
     rating:number,
     tradeQuantity:number

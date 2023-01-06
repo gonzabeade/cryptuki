@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const Receipt = () => {
 
     const [trade, setTrade] = useState<TransactionModel>();
-    // const params = useParams();
+    const params = useParams();
     const tradeService = useTradeService();
 
     async function fetchTrade(tradeId:number){
@@ -94,7 +94,7 @@ const Receipt = () => {
                                     Transaction confirmation time
                                 </h4>
                                 <h2 className="text-lg font-roboto text-polar text-center my-auto ">
-                                    {trade? trade.date.toDateString(): 'No date provided'}
+                                    {trade? trade.lastModified.toDateString(): 'No date provided'}
                                 </h2>
                             </div>
                         </div>

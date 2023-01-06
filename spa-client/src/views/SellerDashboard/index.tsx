@@ -11,6 +11,7 @@ import useOfferService from "../../hooks/useOfferService";
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
+import UserModel from "../../types/UserModel";
 
 
 const SellerDashboard = () => {
@@ -23,6 +24,20 @@ const SellerDashboard = () => {
     const offerService = useOfferService();
     const tradeService = useTradeService();
     const userService = useUserService();
+
+    const [user, setUser] = useState<UserModel>(
+        //get user from JWT?
+    );
+
+    async function fetchUserData(){
+
+    }
+
+    useEffect(()=>{
+        fetchUserData();
+    })
+
+
     async function getOffers(){
         try{
             const resp = await offerService.getOffersByOwner(5,5, userService.getLoggedInUser());
@@ -59,7 +74,7 @@ const SellerDashboard = () => {
             {/*// Left Panel: chat and seller stats*/}
             <div className="flex flex-col h-full mx-10 px-10 w-1/3">
                 <div>
-                  <UserProfileCards username={"mdedeu"} phoneNumber={123457} email={"mdedeu@itba.edu.ar"} rating={4.5} tradeQuantity={2}/>
+                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber: "Loading"} email={user? user.email: "loading"} rating={user? user.rating:0} tradeQuantity={user? user.trades_completed : 0}/>
                 </div>
                 {!kyc && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">

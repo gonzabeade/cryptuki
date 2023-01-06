@@ -23,13 +23,9 @@ const SellerOfferDashboard = () => {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
                 if (resp.statusCode === 200) {
                     setTrades(resp.getData());
-                    if (resp.getData()) {
-                        setOffer(resp.getData()[0].offer);
-                    } else {
-                        const offerResp = await offerService.getOfferInformation(Number(params.id));
-                        if (offerResp.statusCode === 200) {
-                            setOffer(offerResp.getData());
-                        }
+                    const offerResp = await offerService.getOfferInformation(Number(params.id));
+                    if (offerResp.statusCode === 200) {
+                        setOffer(offerResp.getData());
                     }
                 }
             } else {
@@ -123,7 +119,7 @@ const SellerOfferDashboard = () => {
                         <div className="flex flex-wrap pl-3 mt-10 mx-auto">
                             {trades && trades.map((trade)=>{
                                 return(
-                                    <OfferInformationForSeller trade={trade} chat={true} key={trade.id}/>
+                                    <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId}/>
                                 );
                             })}
                         </div>

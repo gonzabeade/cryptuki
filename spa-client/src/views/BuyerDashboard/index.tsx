@@ -7,11 +7,13 @@ import useTradeService from "../../hooks/useTradeService";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import TradeBuyerCard from "../../components/TradeBuyerCard";
+import UserModel from "../../types/UserModel";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const tradeService = useTradeService();
     const userService= useUserService();
+    const [user, setUser] = useState<UserModel>();
 
     async function fetchTradesBuyerProfile(){
         try {
@@ -23,13 +25,15 @@ const BuyerDashboard = () => {
             toast.error("Connection error. Failed to fetch trades");
         }
     }
-    useEffect(()=>{fetchTradesBuyerProfile()});
+    useEffect(()=>{
+        fetchTradesBuyerProfile();
+    });
 
     return (
         <div className="flex h-full w-full px-20 my-10">
             <div className="flex flex-col h-full mx-20 w-1/5">
                 {/*TODO Evaluar esto con lo de User model*/}
-                  <UserProfileCards username={"mdedeu"} phoneNumber={1234566} email={"mdedeu@itba.edu.ar"} rating={4.32} tradeQuantity={4}/>
+                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber : "Loading"} email={user? user.email:"loading"} rating={user? user.rating: 0} tradeQuantity={user? user.trades_completed:0}/>
             </div>
             {/*//  Middle Panel: trade */}
             <div className="flex flex-col h-full mr-20 w-3/5">

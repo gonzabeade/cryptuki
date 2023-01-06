@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
+import OfferModel from "../../types/OfferModel";
 
 type TradeCardProp = {
     trade:TransactionModel,
@@ -7,6 +8,15 @@ type TradeCardProp = {
 }
 
 const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
+
+    const [offer, setOffer] = useState<OfferModel>();
+
+    async function fetchOffer(){
+        //fetch with uri
+    }
+    useEffect(()=>{
+        fetchOffer();
+    })
 
     return (
         <div className="shadow-xl flex rounded-lg  py-5 px-12 bg-[#FAFCFF] mt-3 justify-start">
@@ -33,15 +43,15 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
                     {
                         trade.status !== "sold" &&  <h1 className="font-sans">You would pay: </h1>
                     }
-                    <h3 className="font-sans font-semibold">{trade.amount * trade.offer.unitPrice} ARS</h3>
+                    <h3 className="font-sans font-semibold">{trade.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</h3>
                 </div>
 
                 <div className="flex flex-col font-sans justify-center ">
                     <h1 className="font-sans">In exchange for: </h1>
                     <div className="flex">
-                        <h1 className="text-xl font-sans font-bold">{trade.amount / trade.offer.unitPrice} </h1>
-                        <h1 className="text-xl font-sans font-bold mx-2">{trade.offer.cryptoCode}</h1>
-                        <img src={'/'+trade.offer.cryptoCode+'.png'} alt={trade.offer.cryptoCode} className="w-7 h-7 mx-auto"/>
+                        <h1 className="text-xl font-sans font-bold">{trade.buyingQuantity / (offer? offer.unitPrice: 1)} </h1>
+                        <h1 className="text-xl font-sans font-bold mx-2">{offer?.cryptoCode}</h1>
+                        <img src={'/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-7 h-7 mx-auto"/>
                     </div>
                 </div>
 
@@ -50,12 +60,12 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
             <div className="w-1/4 flex flex-row">
                 <div className="flex my-auto ml-1">
                     {trade.status != 'sold' && trade.status != 'rejected' && trade.status !== 'deleted' &&
-                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade?tradeId="+trade.id}>
+                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade?tradeId="+trade.tradeId}>
                         Resume trade
                         </a>
                     }
                     {trade.status === "sold" &&
-                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade/"+ trade.id
+                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade/"+ trade.tradeId
                         +"/receipt"}>
                            Help
                         </a>
@@ -65,7 +75,7 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
             <div className="ml-4 flex flex-row  align-middle my-auto font-sans">
                 {unSeenMessages !== 0 &&
                     <>
-                        <a href={"/trade?tradeId" + trade.id} className="flex flex-row">
+                        <a href={"/trade?tradeId" + trade.tradeId} className="flex flex-row">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round"

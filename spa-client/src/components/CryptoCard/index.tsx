@@ -1,19 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import './styles.css';
 import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
 import {useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars";
+import UserModel from "../../types/UserModel";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();
+    const [seller, setSeller] = React.useState<UserModel>();
+
+    async function fetchUserData(){
+        //fetch seller data
+    }
+
+    useEffect(()=>{
+        fetchUserData();
+    })
 
     return (
         <div className="crypto-card rounded-lg">
             <div className="column">
                 <div className="label">Vendedor:</div>
-                <div className="bold text-polar">{offer.seller.username}</div>
-                {offer.seller.rating === 0 || !offer.seller.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={offer.seller.rating}/>}
-                <div className="label">Último Login: {offer.seller.lastLogin}</div>
+                <div className="bold text-polar">{seller?.username}</div>
+                {seller?.rating === 0 || !seller?.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={seller?.rating}/>}
+                <div className="label">Último Login: {seller?.lastLogin}</div>
             </div>
             <div className="column">
                 <div className="label">Precio:</div>

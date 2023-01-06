@@ -6,6 +6,7 @@ import OfferModel from "../../types/OfferModel";
 import { useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
+import UserModel from "../../types/UserModel";
 type BuyOfferFormValues = {
     amount:number
 }
@@ -16,6 +17,7 @@ const BuyOffer = () => {
     const offerService = useOfferService();
     const navigate = useNavigate();
     const [offer, setOffer] = useState<OfferModel>();
+    const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
 
 
@@ -58,7 +60,7 @@ const BuyOffer = () => {
         try{
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
             //TODO Analize this result
-            navigate('/trade/' + resp.getData().id);
+            navigate('/trade/' + resp.getData().tradeId);
         }catch (e){
             toast.error("Connection error. Failed to create trade");
         }
@@ -69,6 +71,11 @@ const BuyOffer = () => {
            retrieveOfferInformation(Number(params.id));
         }
     })
+    useEffect(()=>{
+        if(offer){
+            //fetch offer seller model
+        }
+    });
 
 
     return (
@@ -118,12 +125,12 @@ const BuyOffer = () => {
             </div>
             <div className="flex flex-col w-2/5 items-center">
             <UserInfo
-                username={offer? (offer.seller.username): 'Loading...'}
-                email={offer? offer.seller.email: 'Loading'}
-                phone_number={offer? offer.seller.phoneNumber :'Loading'}
-                last_login={offer? offer.seller.lastLogin: 'Loading'}
-                trades_completed={offer? offer.seller.trades_completed: 0}
-                rating={offer? offer.seller.rating: 0}/>
+                username={seller? (seller.username): 'Loading...'}
+                email={seller? seller.email: 'Loading'}
+                phone_number={seller? seller.phoneNumber :'Loading'}
+                last_login={seller? seller.lastLogin: 'Loading'}
+                trades_completed={seller? seller.trades_completed: 0}
+                rating={seller? seller.rating: 0}/>
 
                     <h1 className="font-sans font-bold text-2xl mx-auto text-polar mt-6 mb-2">
                         Location

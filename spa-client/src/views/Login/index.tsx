@@ -19,8 +19,8 @@ const Login = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        withBasicAuthorization(user, pwd); 
-        navigate(from, {replace: true}); 
+        withBasicAuthorization(user, pwd);
+        navigate(from, {replace: true});
     }
 
     return (

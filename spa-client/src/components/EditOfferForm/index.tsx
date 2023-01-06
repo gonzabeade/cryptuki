@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
-import Result from "../../types/Result";
+
 import {NEIGHBORHOODS} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
@@ -24,13 +24,8 @@ const EditOfferForm = () => {
 
     async function fetchCryptocurrencies(){
         try{
-            const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
-
-            if(apiCall.statusCode === 200){
-                setCryptoCurrencies(apiCall.getData());
-            } else{
-                toast.error("Something went wrong.");
-            }
+            const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
+            setCryptoCurrencies(apiCall);
         }catch (e){
             toast.error("Connection error. Failed to fetch cryptocurrencies");
         }
@@ -58,19 +53,16 @@ const EditOfferForm = () => {
 
     useEffect(()=>{
         fetchCryptocurrencies();
-    })
+    },[])
 
     async function getOffer(){
         try{
             if(params.id){
                 const resp = await offerService.getOfferInformation(Number(params.id));
-                if(resp.statusCode === 200){
-                    setOffer(resp.getData());
-                }else{
-                    toast.error("unkown error in fetching offer")
-                }
+                setOffer(resp);
             }
         }catch (e){
+            console.log(e);
             toast.error("Connection error. Failed to fetch offer");
         }
 
@@ -78,7 +70,7 @@ const EditOfferForm = () => {
 
     useEffect(()=>{
         getOffer();
-    })
+    },[])
 
 
 

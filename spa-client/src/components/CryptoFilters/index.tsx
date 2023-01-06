@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
 import {NEIGHBORHOODS} from "../../common/constants";
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
-import Result from "../../types/Result";
 
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
@@ -25,13 +24,8 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
 
     async function fetchCryptocurrencies(){
         try{
-            const apiCall:Result<CryptocurrencyModel[]> = await cryptocurrencyService.getCryptocurrencies();
-
-            if(apiCall.statusCode === 200){
-                setCryptoCurrencies(apiCall.getData());
-            } else{
-                toast.error("Something went wrong.");
-            }
+            const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
+            setCryptoCurrencies(apiCall);
         }catch (e){
             toast.error("Connection error. Failed to fetch cryptocurrencies")
 

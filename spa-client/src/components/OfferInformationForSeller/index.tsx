@@ -20,7 +20,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
     useEffect(()=>{
         fetchBuyer();
-    })
+    },[])
 
     async function fetchOffer(){
         //fetch offer from offer? . Split to get offer id or get directly
@@ -28,7 +28,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
     useEffect(()=>{
         fetchOffer();
-    })
+    },[])
 
 
     function changeStatus(status:string, tradeId:number){

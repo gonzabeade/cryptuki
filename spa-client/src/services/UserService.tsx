@@ -1,6 +1,5 @@
 import { AxiosInstance } from "axios";
 import jwtDecode from "jwt-decode";
-import Result from "../types/Result";
 import UserModel from "../types/UserModel";
 import {paths} from "../common/constants";
 
@@ -23,11 +22,11 @@ export class UserService {
         return null; 
     }
 
-    public async  getUser(username:string):Promise<Result<UserModel>>{
+    public async  getUser(username:string):Promise<UserModel>{
         //TODO
         const secrets = await this.axiosInstance.get<UserModel>(this.basePath + username + '/secrets');
         const publicInfo = await this.axiosInstance.get<UserModel>(this.basePath + username);
-        return Result.ok(secrets.data);
+        return secrets.data;
     }
 
 

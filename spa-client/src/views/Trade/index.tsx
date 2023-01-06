@@ -27,16 +27,12 @@ const Trade =  () => {
     async function fetchTrade(tradeId: number | null) {
         if(tradeId){
             const resp = await tradeService.getTradeInformation(tradeId);
-            if(resp.statusCode === 200){
-                console.log("ok")
-                if(resp.getData().status === 'sold'){
+
+            if(resp.status === 'sold'){
                     console.log("status")
-                    navigate('/trade/'+ resp.getData().tradeId+ '/receipt');
-                }
-                setTrade(resp.getData);
-            }else{
-                toast.error("Error fetching trade")
+                    navigate('/trade/'+ resp.tradeId+ '/receipt');
             }
+            setTrade(resp);
         }
     }
     async function takeBackProposal(){
@@ -53,11 +49,7 @@ const Trade =  () => {
         if(trade){
             //TODO offer id
             const resp = await offerService.getOfferInformation(1);
-            if(resp.statusCode === 200){
-                setOffer(resp.getData());
-            }else{
-                toast.error("Error fetching offer")
-            }
+            setOffer(resp);
         }
     }
 

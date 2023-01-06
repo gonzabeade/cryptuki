@@ -22,14 +22,14 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
     }
     useEffect(()=>{
         fetchOffer()
-    })
+    },[])
 
     async  function fetchBuyer(){
 
     }
     useEffect(()=>{
         fetchBuyer()
-    })
+    },[])
     return (
         <div className="mt-5">
             <div className="py-4 bg-white rounded-lg shadow-md">

@@ -30,7 +30,7 @@ const Receipt = () => {
 
     useEffect(()=>{
         fetchTrade(Number(params.id));
-    })
+    },[])
 
 
     return (

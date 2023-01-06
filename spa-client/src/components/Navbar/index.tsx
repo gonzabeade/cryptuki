@@ -12,7 +12,7 @@ const Navbar = () => {
 
     useEffect(()=>{
         menuListeners();
-    });
+    },[]);
 
     function menuListeners(){
         const menu = document.querySelectorAll('.navbar-menu');

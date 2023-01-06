@@ -22,6 +22,8 @@ const Landing = () => {
 
             if(apiCall.statusCode === 200){
                 setOffers(apiCall.getData());
+                //get Headers and set Actual and total pages
+
             }else{
                 toast.error("Something went wrong. ");
             }

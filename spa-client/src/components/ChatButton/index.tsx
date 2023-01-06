@@ -15,11 +15,7 @@ const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
     async function fetchUnseenMessages(){
         try{
             const resp = await chatService.getUnseenMessagesCount(tradeId, userService.getLoggedInUser());
-            if(resp.statusCode === 200){
-                setqUnseenMessagesSeller(resp.getData());
-            }else{
-                toast.error("Unkown chat problems");
-            }
+                setqUnseenMessagesSeller(resp);
         }catch (e) {
             toast.error("Connection error. Failed to fetch chats");
         }
@@ -29,7 +25,7 @@ const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
 
     useEffect(()=>{
         fetchUnseenMessages();
-    })
+    },[])
     return (
         <div className="flex flex-row mx-auto">
             <a href={`/chat/${tradeId}`}

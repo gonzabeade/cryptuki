@@ -1,5 +1,4 @@
 import  {AxiosInstance} from "axios";
-import Result from "../types/Result";
 import {MessageModel} from "../types/MessageModel";
 import {paths} from "../common/constants";
 
@@ -12,18 +11,18 @@ export class ChatService{
         this.axiosInstance = axiosInstance;
     }
 
-    public async getMessages(tradeId:number):Promise<Result<MessageModel[]>>{
-       const resp = await this.axiosInstance.get<MessageModel[]>(this.basePath + tradeId + '/messages');
-       return Result.ok(resp.data);
+    public async getMessages(tradeId:number):Promise<MessageModel[]>{
+       const resp = await this.axiosInstance.get<MessageModel[]>(this.basePath + tradeId + 'messages');
+       return resp.data;
     }
 
-    public async getUnseenMessagesCount(tradeId:number, username:string | null):Promise<Result<number>>{
-        return Result.ok(2);
+    public async getUnseenMessagesCount(tradeId:number, username:string | null):Promise<number>{
+       return 2;
     }
-    public async sendMessage(tradeId:number, content:string):Promise<Result<any>>{
-        const resp = await this.axiosInstance.post(this.basePath + tradeId + '/messages', {body:{
+    public async sendMessage(tradeId:number, content:string):Promise<void>{
+        const resp = await this.axiosInstance.post(this.basePath + tradeId + 'messages', {body:{
                 message:content
             }});
-        return Result.ok(resp.data);
+        return resp.data;
     }
 }

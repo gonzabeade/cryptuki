@@ -1,7 +1,6 @@
 import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
-import Result from "../types/Result";
 
 export class OfferService {
 
@@ -12,7 +11,7 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<Result<OfferModel[]>> {
+    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params: {
                 page:page,
@@ -22,13 +21,14 @@ export class OfferService {
                 orderBy: orderBy
             }
         })
-        return Result.ok(resp.data);
+        return resp.data;
     }
-    public async getOfferInformation(offerId:number):Promise<Result<OfferModel>>{
-        const resp = await this.axiosInstance.get<OfferModel>(this.basePath + offerId)
-        return Result.ok(resp.data);
+    public async getOfferInformation(offerId:number):Promise<OfferModel>{
+
+        const resp = await this.axiosInstance.get<OfferModel>(this.basePath + offerId);
+        return resp.data;
     }
-    public async getOffersByOwner(page:number, pageSize:number, username:string|null):Promise<Result<OfferModel[]>>{
+    public async getOffersByOwner(username:string, page?:number, pageSize?:number):Promise<OfferModel[]>{
         const resp = await this.axiosInstance.get<OfferModel[]>(this.basePath, {
             params:{
                 page:page,
@@ -36,7 +36,7 @@ export class OfferService {
                 by_user: username
             }
         })
-        return Result.ok(resp.data);
+        return resp.data;
     }
 
 }

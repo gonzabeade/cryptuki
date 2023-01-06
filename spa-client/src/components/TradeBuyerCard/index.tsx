@@ -16,7 +16,7 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
     }
     useEffect(()=>{
         fetchOffer();
-    })
+    },[])
 
     return (
         <div className="shadow-xl flex rounded-lg  py-5 px-12 bg-[#FAFCFF] mt-3 justify-start">

@@ -24,11 +24,8 @@ const BuyOffer = () => {
     async function  retrieveOfferInformation(offerId:number){
         try{
             const resp = await  offerService.getOfferInformation(offerId);
-            if(resp.statusCode === 200 ){
-                setOffer(resp.getData());
-            }else{
-                toast.error("No offer with that ID");
-            }
+            setOffer(resp);
+
         }catch (e) {
             toast.error("Connection error. Couldn't fetch offer");
         }
@@ -60,7 +57,7 @@ const BuyOffer = () => {
         try{
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
             //TODO Analize this result
-            navigate('/trade/' + resp.getData().tradeId);
+            navigate('/trade/' + resp.tradeId);
         }catch (e){
             toast.error("Connection error. Failed to create trade");
         }
@@ -70,12 +67,12 @@ const BuyOffer = () => {
         if(params.id){
            retrieveOfferInformation(Number(params.id));
         }
-    })
+    },[])
     useEffect(()=>{
         if(offer){
             //fetch offer seller model
         }
-    });
+    },[]);
 
 
     return (

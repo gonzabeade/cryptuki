@@ -25,22 +25,26 @@ const SellerDashboard = () => {
     const tradeService = useTradeService();
     const userService = useUserService();
 
-    const [user, setUser] = useState<UserModel>(
-        //get user from JWT?
-    );
+    const [user, setUser] = useState<UserModel>();
 
     async function fetchUserData(){
+        try{
+            const apiCall = await userService?.getUser(userService.getLoggedInUser()!);
+        }catch (e){
+            toast.error("Connection error. Failed to fetch user data")
+        }
 
     }
 
     useEffect(()=>{
         fetchUserData();
-    })
+    },[])
 
 
     async function getOffers(){
         try{
-            const resp = await offerService.getOffersByOwner(5,5, userService.getLoggedInUser());
+            const resp = await offerService.getOffersByOwner(userService.getLoggedInUser()!);
+
             if(resp.statusCode === 200){
                 setOffers(resp.getData())
             }
@@ -56,17 +60,18 @@ const SellerDashboard = () => {
                 setLastTransactions(resp.getData())
             }
         }catch (e) {
+            console.log(e)
             toast.error("Connection error. Failed to fetch lasts transactions");
         }
     }
 
     useEffect(()=>{
        getOffers();
-    })
+    },[])
 
     useEffect(()=>{
        getLastTransactions();
-    })
+    },[])
 
     return (
         <div className="flex h-full w-full px-10 my-10">
@@ -118,15 +123,17 @@ const SellerDashboard = () => {
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}
+                    </div>
+                    {offers.length >= 1 && <div className="mx-auto">
                         {offers.map((offer)=>{
                             return(
                                 <OfferCardProfile offer={offer} key={offer.offerId}/>
                             );
                         })}
-                    </div>
-                    {offers.length >= 1 && <div className="mx-auto">
                         <Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>
-                    </div>}
+                    </div>
+
+                    }
                 </div>
             </div>
         </div>

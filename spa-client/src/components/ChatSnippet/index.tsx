@@ -28,7 +28,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     useEffect(()=>{
       getMessages();
-    })
+    },[])
 
     async function sendMessage(message:string){
         try{

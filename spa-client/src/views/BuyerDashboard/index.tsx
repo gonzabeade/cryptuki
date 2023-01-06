@@ -27,7 +27,7 @@ const BuyerDashboard = () => {
     }
     useEffect(()=>{
         fetchTradesBuyerProfile();
-    });
+    },[]);
 
     return (
         <div className="flex h-full w-full px-20 my-10">

@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
-import {NEIGHBORHOODS} from "../../common/constants";
+import {NEIGHBORHOODS, sleep} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import OfferModel from "../../types/OfferModel";
 import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
@@ -21,6 +21,7 @@ const EditOfferForm = () => {
     const cryptocurrencyService = useCryptocurrencyService();
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
+    const navigate = useNavigate();
 
     async function fetchCryptocurrencies(){
         try{
@@ -31,8 +32,7 @@ const EditOfferForm = () => {
         }
 
     }
-    //TODO: This feels like a bad practice. Maybe useEffect on selected value?
-    function changeSuggestedPrice(){
+   function changeSuggestedPrice(){
         const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
         const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
         const price = document.getElementById("priceCrypto") as HTMLElement;
@@ -76,7 +76,8 @@ const EditOfferForm = () => {
         try{
             const resp = offerService.modifyOffer(data);
             toast.success("Offer modified successfully");
-            //TODO: Redirect to offer page
+            sleep(1000);
+            navigate('/offer'+ data.offerId);
         }catch (e) {
             toast.error("Connection error. Failed to modify offer");
         }

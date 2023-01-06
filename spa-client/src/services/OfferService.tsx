@@ -23,6 +23,7 @@ export class OfferService {
             }
         })
         return Result.ok(resp.data);
+        //TODO fijarse como pingo devolver los headers de lastPage y totalPages
     }
     public async getOfferInformation(offerId:number):Promise<Result<OfferModel>>{
         const resp = await this.axiosInstance.get<OfferModel>(this.basePath + offerId)

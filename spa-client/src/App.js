@@ -38,7 +38,7 @@ function App() {
                   <Routes>
                       <Route path="/register" element={<Register/>}/>
                       <Route path="/login" element={<Login/>}/>
-                      <Route path="/offer/:id" element={<BuyOffer/>}/>
+                      <Route path="/offer/:id" element={<LoggedGate><BuyOffer/></LoggedGate>}/>
                       <Route path="/trade/:id" element={<Trade/>}/>
                       <Route path="/support" element={<Support/>}/>
                       <Route path="/buyer/" element={<BuyerDashboard/>}/>

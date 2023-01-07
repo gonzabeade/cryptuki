@@ -1,4 +1,4 @@
-import {Link, useNavigate, useNavigation} from "react-router-dom";
+import {Link, useLocation, useNavigate, useNavigation} from "react-router-dom";
 import {paths, sleep} from "../../common/constants";
 import {withBasicAuthorization} from "../../hooks/useAxios";
 import {useForm} from "react-hook-form";
@@ -18,18 +18,20 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
     const tradeService = useTradeService();
     const navigate = useNavigate();
+    const location = useLocation();
 
+    //TODO por favor hacer un auth context esto es nefasto
     useEffect(()=>{
-        if(localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")){
 
-            // const { url} = location.state as propState;
-            // if (location.state && location.state.url) {
-            //     navigate(location.state.url);
-            // } else {
-            //     navigate('/');
-            // }
+        if(localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")){
+            if(location.state && location.state.url) {
+                navigate(location.state.url);
+            }else{
+                navigate("/")
+            }
         }
-    });
+    },[navigate, location.state, localStorage.getItem("accessToken") || localStorage.getItem("refreshToken") ]);
+
 
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);

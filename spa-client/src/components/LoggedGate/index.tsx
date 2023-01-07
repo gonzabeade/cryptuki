@@ -7,7 +7,7 @@ type LoggedGateProps = {
 const LoggedGate = ({children}:LoggedGateProps) => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    //TODO hay que hacer un auth context para detectar cuando cambia el isLogged
     useEffect(()=>{
         //if not authenticated , redirect to login and save url in state
         if(!localStorage.getItem("accessToken") && !localStorage.getItem("refreshToken")){
@@ -17,7 +17,7 @@ const LoggedGate = ({children}:LoggedGateProps) => {
                 }
             })
         }
-    }, [navigate, location]);
+    }, [navigate, location.pathname]);
 
     return (
         <>

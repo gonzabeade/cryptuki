@@ -36,7 +36,6 @@ public class DummyBearerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("TRAKA-2");
 
         final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if ( header == null || !header.startsWith("Bearer ")) {

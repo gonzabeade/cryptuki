@@ -13,10 +13,6 @@ public class TradeStatusForm {
     @ValueOfEnum(enumClass = TradeStatus.class, message = "Incorrect value from newStatus")
     private String newStatus;
 
-    public TradeStatusForm() {
-
-    }
-
     public String getNewStatus() {
         return newStatus;
     }

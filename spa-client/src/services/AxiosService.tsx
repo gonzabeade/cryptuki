@@ -81,22 +81,19 @@ export class AxiosService {
         return AxiosService.axiosServiceInstance;  
     }
 
-    public getActiveAxiosInstance():AxiosInstance {
-        return this.axiosActiveInstance;  
-    }
-
     public static getAxiosInstance():AxiosInstance{
        return AxiosService.axiosServiceInstance.getActiveAxiosInstance();
     }
 
+    private getActiveAxiosInstance():AxiosInstance {
+        return this.axiosActiveInstance;
+    }
 
     public useBearerAuthentication() {
         this.axiosActiveInstance = this.axiosBearerInstance; 
     }
 
     public useBasicAuthentication(username: string, password: string) {
-
-
         this.axiosBasicInstance.interceptors.request.clear();
 
 

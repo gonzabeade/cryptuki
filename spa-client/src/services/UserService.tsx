@@ -5,10 +5,10 @@ import {paths} from "../common/constants";
 
 export class UserService {
 
-    private readonly axiosInstance : AxiosInstance;
+    private readonly axiosInstance : ()=>AxiosInstance;
     private readonly basePath = paths.BASE_URL + paths.USERS;
 
-    public constructor(axiosInstance: AxiosInstance) {
+    public constructor(axiosInstance: ()=>AxiosInstance) {
         this.axiosInstance = axiosInstance; 
     }
 
@@ -23,7 +23,7 @@ export class UserService {
     }
 
     public async  getUser(username:string):Promise<UserModel>{
-        const resp = await this.axiosInstance.get<UserModel>(this.basePath + username);
+        const resp = await this.axiosInstance().get<UserModel>(this.basePath + username);
         return resp.data;
     }
 
@@ -34,7 +34,7 @@ export class UserService {
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
-        await this.axiosInstance.post(this.basePath + "register", {
+        await this.axiosInstance().post(this.basePath + "register", {
             username: username,
             password: password,
             repeatPassword: repeatPassword,
@@ -43,7 +43,7 @@ export class UserService {
         });
     }
     public async verifyUser(code:number, username:string){
-        await this.axiosInstance.post(this.basePath + username, {
+        await this.axiosInstance().post(this.basePath + username, {
            code:code
         });
     }

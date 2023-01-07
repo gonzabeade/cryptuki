@@ -4,7 +4,6 @@ import {TradeService} from "../services/TradeService";
 
 const useTradeService = () => {
     const axiosInstance = useAxios();
-
     return new TradeService(axiosInstance);
 }
 

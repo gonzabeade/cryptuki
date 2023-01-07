@@ -1,4 +1,5 @@
 import { AxiosService } from "../services/AxiosService";
+import {AxiosInstance} from "axios";
 
 const withBasicAuthorization = (username: string, password: string) => {
     const axiosService = AxiosService.getInstance(); 
@@ -15,9 +16,8 @@ const withBearerAuthorization = () => {
     axiosService.useBearerAuthentication(); 
 }
 
-const useAxios = () => {
-    const axiosService = AxiosService.getInstance(); 
-    return axiosService.getActiveAxiosInstance(); 
+const useAxios = ():()=>AxiosInstance => {
+    return AxiosService.getAxiosInstance;
 }
 
 export {withBasicAuthorization, withBearerAuthorization, withNoAuthorization, useAxios}; 

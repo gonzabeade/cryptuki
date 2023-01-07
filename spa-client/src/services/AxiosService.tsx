@@ -81,9 +81,14 @@ export class AxiosService {
         return AxiosService.axiosServiceInstance;  
     }
 
-    public getActiveAxiosInstance() {
+    public getActiveAxiosInstance():AxiosInstance {
         return this.axiosActiveInstance;  
     }
+
+    public static getAxiosInstance():AxiosInstance{
+       return AxiosService.axiosServiceInstance.getActiveAxiosInstance();
+    }
+
 
     public useBearerAuthentication() {
         this.axiosActiveInstance = this.axiosBearerInstance; 
@@ -91,11 +96,13 @@ export class AxiosService {
 
     public useBasicAuthentication(username: string, password: string) {
 
-        this.axiosBasicInstance.interceptors.request.clear(); 
+
+        this.axiosBasicInstance.interceptors.request.clear();
+
 
         this.axiosBasicInstance.interceptors.request.use(
             (config: any) => {
-                config.headers['Authorization'] = `Basic ${username}:${password}`;
+                config.headers['Authorization'] = `Basic ${btoa(username + ':' + password)}`;
                 return config;
             },
             (error: any) => {
@@ -103,7 +110,8 @@ export class AxiosService {
             }
         )
 
-        this.axiosActiveInstance = this.axiosBasicInstance; 
+        this.axiosActiveInstance = this.axiosBasicInstance;
+
     }
 
     public useNoAuthentication() {

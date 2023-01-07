@@ -1,10 +1,11 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useNavigation} from "react-router-dom";
 import {paths, sleep} from "../../common/constants";
 import {withBasicAuthorization} from "../../hooks/useAxios";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
+import {useEffect} from "react";
 
 
 type LoginFormValues = {
@@ -17,6 +18,18 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
     const tradeService = useTradeService();
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")){
+
+            // const { url} = location.state as propState;
+            // if (location.state && location.state.url) {
+            //     navigate(location.state.url);
+            // } else {
+            //     navigate('/');
+            // }
+        }
+    });
 
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);

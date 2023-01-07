@@ -6,6 +6,7 @@ import './index.css'
 import Error from "./views/Error";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import LoggedGate from "./components/LoggedGate";
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));

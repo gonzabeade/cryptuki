@@ -1,18 +1,14 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.UserDto;
-import ar.edu.itba.paw.cryptuki.dto.UserInformationDto;
 import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.Role;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
@@ -86,25 +82,6 @@ public class UserController {
         return email == null ? toNewUser(registerForm, request.getLocale()) : toUserNonce(email);
     }
 
-    @GET
-    @Path("/{username}/secrets")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserInformation(@PathParam("username") String username) {
-
-        UserInformationDto userInformationDto = userService.getUserByUsername(username)
-                .map(u->UserInformationDto.fromUser(u, uriInfo))
-                .orElseThrow(()->new NoSuchUserException(username));
-
-        String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User principal = userService.getUserByUsername(principalName).orElseThrow(()->new NoSuchUserException(principalName));
-
-        // The service does not expose a method for validating this
-        // It is simpler to validate this in the controller than to create a dummy method in the service
-        if (!principalName.equals(username) && !principal.getUserAuth().getRole().equals(Role.ROLE_ADMIN))
-            throw new ForbiddenException("Forbidden action");
-
-        return Response.ok(userInformationDto).build();
-    }
 
     // TODO - How is the consumer of the api supposed to know the location of these endpoints?
 

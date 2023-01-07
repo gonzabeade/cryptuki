@@ -78,11 +78,12 @@ const BuyOffer = () => {
         }
     }
     useEffect(()=>{
-        if(offer){
             //fetch offer seller model
+        if(offer){
             fetchSeller(userService.getUsernameFromURI(offer.seller));
         }
-    },[]);
+
+    },[offer]);
 
 
     return (

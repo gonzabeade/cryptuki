@@ -16,6 +16,9 @@ public class UserDto {
     private double rating;
     private LocalDateTime lastLogin;
     private Locale locale;
+    private String email;
+    private String phoneNumber;
+    private UserStatus status;
 
     private URI complaints;
     private URI kycInformation;
@@ -37,6 +40,9 @@ public class UserDto {
         dto.lastLogin = user.getLastLogin();
         dto.username = auth.getUsername();
         dto.locale = user.getLocale();
+        dto.email = user.getEmail();
+        dto.phoneNumber = user.getPhoneNumber();
+        dto.status = auth.getUserStatus();
 
         dto.self = uriInfo.getBaseUriBuilder()
                 .path("api/users")
@@ -183,5 +189,29 @@ public class UserDto {
 
     public void setPicture(URI picture) {
         this.picture = picture;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

@@ -59,7 +59,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                 </div>
                 <div className="flex flex-wrap">
                     {tradeQuantity > 0 ?
-                        <RatingStars rating={rating}/>
+                        <RatingStars rating={rating/2}/>
                         : ""
                     }
                 </div>

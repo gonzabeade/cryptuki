@@ -25,8 +25,6 @@ const Login = () => {
         try{
             // dummy call to get the token
             await userService.getUser(data.username);
-
-
             toast.success("Successfully logged in!");
 
             await sleep(1000);

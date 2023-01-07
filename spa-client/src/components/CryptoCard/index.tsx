@@ -6,19 +6,24 @@ import {useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+import {toast} from "react-toastify";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();
     const [seller, setSeller] = React.useState<UserModel>();
     const userService = useUserService();
 
     async function fetchUserData(username:string){
-        //fetch seller data
-
+        try{
+            const resp = await userService.getUser(username);
+            setSeller(resp);
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch user data");
+        }
     }
 
     useEffect(()=>{
         const username = userService.getUsernameFromURI(offer.seller)
-        // fetchUserData(username);
+        fetchUserData(username);
     },[])
 
     return (
@@ -26,8 +31,8 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             <div className="column">
                 <div className="label">Vendedor:</div>
                 <div className="bold text-polar">{seller?.username}</div>
-                {seller?.rating === 0 || !seller?.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={seller?.rating}/>}
-                <div className="label">Último Login: {seller?.lastLogin.toDateString()}</div>
+                {seller?.rating === 0 || !seller?.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={seller?.rating/2}/>}
+                <div className="label">Último Login: {seller?.lastLogin.toString().substring(0,10)}</div>
             </div>
             <div className="column">
                 <div className="label">Precio:</div>

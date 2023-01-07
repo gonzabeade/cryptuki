@@ -13,6 +13,7 @@ import {toast} from "react-toastify";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
+import useUserService from "../../hooks/useUserService";
 
 const Trade =  () => {
 
@@ -23,6 +24,7 @@ const Trade =  () => {
     const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
     const offerService = useOfferService();
+    const userService = useUserService();
 
     async function fetchTrade(tradeId: number | null) {
         if(tradeId){
@@ -44,6 +46,12 @@ const Trade =  () => {
         }
     }
     async function fetchSeller(){
+        try{
+            const resp  = await  userService.getUser(trade?.seller!);
+            setSeller(resp);
+        }catch (e) {
+
+        }
 
     }
 

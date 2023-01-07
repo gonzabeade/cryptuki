@@ -94,7 +94,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                             {buyer?.phoneNumber}
                         </h1>
                     </div>
-                    <RatingStars rating={buyer? buyer.rating: 0}/>
+                    <RatingStars rating={buyer? buyer.rating/2: 0}/>
                 </div>
 
                 {tradeStatus === 'sold' &&

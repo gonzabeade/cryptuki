@@ -136,7 +136,7 @@ const BuyOffer = () => {
                 username={seller? (seller.username): 'Loading...'}
                 email={seller? seller.email: 'Loading'}
                 phone_number={seller? seller.phoneNumber :'Loading'}
-                last_login={seller? seller.lastLogin.toDateString(): 'Loading'}
+                last_login={seller? seller.lastLogin.toString().substring(0,10): 'Loading'}
                 trades_completed={seller? seller.ratingCount: 0}
                 rating={seller? seller.rating: 0}/>
 

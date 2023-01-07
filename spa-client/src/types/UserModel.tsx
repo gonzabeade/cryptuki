@@ -1,12 +1,4 @@
-//TODO hablar esto con @Gonza
-export  interface UserSecretsModel{
-    //secrets
-    email:string,
-    phoneNumber:string,
-    status:string,
-}
-
-export interface UserDTONormal {
+export default interface UserModel {
     //normal
     userId:number,
     username:string,
@@ -21,6 +13,9 @@ export interface UserDTONormal {
     complaints:string,
     kycInformation:string,
     offers:string,
+    email:string,
+    phoneNumber:string,
+    status:string,
 }
 
-export default interface UserModel extends UserSecretsModel, UserDTONormal {}
+

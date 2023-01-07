@@ -30,6 +30,7 @@ const SellerDashboard = () => {
     async function fetchUserData(){
         try{
             const apiCall = await userService?.getUser(userService.getLoggedInUser()!);
+            setUser(apiCall);
         }catch (e){
             toast.error("Connection error. Failed to fetch user data")
         }

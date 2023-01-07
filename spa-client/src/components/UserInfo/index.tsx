@@ -22,7 +22,7 @@ const UserInfo: React.FC<UserInfoProps> = ({username, email, phone_number, last_
                 <span className="text-sm text-gray-400">Last Active: {last_login}</span>
                 <span className="text-sm text-gray-400">Trades Completed: {trades_completed}</span>
 
-                <RatingStars rating={rating}/>
+                <RatingStars rating={rating/2}/>
             </div>
         </div>
 

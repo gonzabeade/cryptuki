@@ -38,16 +38,16 @@ function App() {
                   <Routes>
                       <Route path="/register" element={<Register/>}/>
                       <Route path="/login" element={<Login/>}/>
-                      <Route path="/offer/:id" element={<LoggedGate><BuyOffer/></LoggedGate>}/>
-                      <Route path="/trade/:id" element={<Trade/>}/>
+                      <Route path="/offer/:id" element={<BuyOffer/>}/>
+                      <Route path="/trade/:id" element={<LoggedGate><Trade/></LoggedGate>}/>
                       <Route path="/support" element={<Support/>}/>
-                      <Route path="/buyer/" element={<BuyerDashboard/>}/>
-                      <Route path="/seller/" element={<SellerDashboard/>}/>
-                      <Route path="/trade/:id/receipt" element={<Receipt/>}/>
-                      <Route path="/chat/:id" element={<SellerTrade/>}/>
-                      <Route path="/seller/offer/:id" element={<SellerOfferDashboard/>}/>
-                      <Route path="/offer/upload" element={<UploadAd/>}/>
-                      <Route path="/offer/:id/edit" element={<EditOffer/>}/>
+                      <Route path="/buyer/" element={<LoggedGate><BuyerDashboard/></LoggedGate>}/>
+                      <Route path="/seller/" element={<LoggedGate><SellerDashboard/></LoggedGate>}/>
+                      <Route path="/trade/:id/receipt" element={<LoggedGate><Receipt/></LoggedGate>}/>
+                      <Route path="/chat/:id" element={<LoggedGate><SellerTrade/></LoggedGate>}/>
+                      <Route path="/seller/offer/:id" element={<LoggedGate><SellerOfferDashboard/></LoggedGate>}/>
+                      <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
+                      <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
                       <Route path="/verify" element={<Verify/>}/>
                       <Route path="/" element={<Landing/>}/>
                       <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>

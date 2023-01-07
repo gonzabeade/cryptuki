@@ -4,10 +4,8 @@ import {withBasicAuthorization} from "../../hooks/useAxios";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
+import useTradeService from "../../hooks/useTradeService";
 
-
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 type LoginFormValues = {
     username: string;
@@ -17,18 +15,18 @@ type LoginFormValues = {
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
-    const userService = useUserService();
+    const tradeService = useTradeService();
     const navigate = useNavigate();
 
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);
         try{
             // dummy call to get the token
-            await userService.getUser(data.username);
+            const resp = await tradeService.getLastTransactions(data.username);
             toast.success("Successfully logged in!");
-
             await sleep(1000);
         }catch (e){
+            console.log(e)
             toast.error("Invalid credentials");
         }
 
@@ -47,7 +45,13 @@ const Login = () => {
                     type="text"
                     id="username"
                     autoComplete="off"
-                    {...register("username", {required: true, pattern: {value:USER_REGEX, message: "Invalid username"}})}
+                    {...register("username", {required: true, minLength: {
+                            value: 3,
+                            message:"Username must be at least 3 characters long"
+                        }, maxLength: {
+                            value: 23,
+                            message:"Username must be at most 23 characters long"
+                        }})}
                     className="p-2 m-2 rounded-lg"
                 />
                 {errors && errors.username && <span className="text-red-500">{errors.username.message}</span>}
@@ -55,7 +59,10 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     id="password"
-                    {...register("password",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"
+                    {...register("password",{required: true, minLength: {value: 6, message: "Password must contain at least 6 characters."
+                        }, maxLength:{
+                            value:24,
+                            message:"Password must contain max 24 characters"
                         }})}
                     className="p-2 m-2 rounded-lg"
                 />

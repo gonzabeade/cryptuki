@@ -27,17 +27,22 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
     },[])
 
     return (
-        <div className="crypto-card rounded-lg">
+        <div className="crypto-card rounded-lg ">
             <div className="column">
                 <div className="label">Vendedor:</div>
-                <div className="bold text-polar">{seller?.username}</div>
-                {seller?.rating === 0 || !seller?.rating ? <div className="light">Usuario nuevo</div>: <RatingStars rating={seller?.rating/2}/>}
-                <div className="label">Último Login: {seller?.lastLogin.toString().substring(0,10)}</div>
+                <div className="flex flex-row text-gray-400 text-center">
+                    <div className="bold text-polar">{seller?.username }</div>
+                    {seller?.ratingCount === 0 || !seller?.rating ?
+                        <div className="light">Usuario nuevo</div> : <div className=" text-polar text-xs items-center ml-1 mt-0.5">({ seller.ratingCount} trades completed)</div>
+                    }
+                </div>
+                {seller?.ratingCount !== 0 && seller?.rating && <RatingStars rating={seller.rating/2}/>}
+                <div className="label text-gray-400 text-xs font-medium">Último Login: {seller?.lastLogin.toString().substring(0, 10)}</div>
             </div>
             <div className="column">
                 <div className="label">Precio:</div>
                 <div className="bold text-polar">{offer.unitPrice} ARS por {offer.cryptoCode}<img src={"/images/"+ offer.cryptoCode+".png"} alt={offer.cryptoCode}></img></div>
-                <div className="light">Min: {offer.minInCrypto} ARS - Máx: {offer.maxInCrypto} ARS</div>
+                <div className="text-gray-400 font-medium">Min: {offer.minInCrypto} ARS - Máx: {offer.maxInCrypto} ARS</div>
             </div>
             <div className="column">
                 <div className="label">Ubicación:</div>

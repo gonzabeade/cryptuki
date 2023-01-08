@@ -23,7 +23,7 @@ const RatingStars : React.FC<RatingStarsProps> = ({rating}) => {
             }
             </div>
 
-            <p className="ml-2 text-sm font-medium text-gray-400 text-center">{rating} out of 5</p>
+            <p className="ml-2 text-xs font-medium text-gray-400 text-center">{rating} out of 5</p>
         </div>
     );
 };

@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+
+require('dotenv').configure();
 type BuyOfferFormValues = {
     amount:number
 }

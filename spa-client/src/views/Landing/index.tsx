@@ -26,8 +26,13 @@ const Landing = () => {
         }
 
     }
-    function orderOffers(order_by:string){
-        //fetch with added param
+    async function orderOffers(order_by:string){
+        try{
+            const apiCall = await offerService?.getOrderedOffers(actualPage, order_by );
+            setOffers(apiCall);
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch offers")
+        }
     }
 
     useEffect(  ()=>{
@@ -49,13 +54,12 @@ const Landing = () => {
                                 <div className="flex flex-row">
                                     <h3 className="font-bold mx-2 my-auto">Order by</h3>
                                     <form>
-                                        {/*//TODO Options should trigger a fetch*/}
-                                        <select className="p-2 rounded-lg">
-                                            <option value={""}>Lowest Price</option>
-                                            <option value={""}>Most recent</option>
-                                            <option value={""}>Best Rated user</option>
-                                            <option value={""}>Higher price</option>
-                                            <option value={""}>Seller Last login</option>
+                                        <select className="p-2 rounded-lg" onChange={(e)=>{orderOffers(e.target.value)} }>
+                                            <option value={"PRICE_LOWER"}>Lowest Price</option>
+                                            <option value={"DATE"}>Most recent</option>
+                                            <option value={"RATE"}>Best Rated user</option>
+                                            <option value={"PRICE_UPPER"}>Higher price</option>
+                                            <option value={"LAST_LOGIN"}>Seller Last login</option>
                                         </select>
                                     </form>
                                 </div>

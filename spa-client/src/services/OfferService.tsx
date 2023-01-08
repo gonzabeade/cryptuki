@@ -29,11 +29,10 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
-    public async getOffersByOwner(username:string, page?:number, pageSize?:number):Promise<OfferModel[]>{
+    public async getOffersByOwner(username:string, page?:number):Promise<OfferModel[]>{
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:{
                 page:page,
-                pageSize:pageSize,
                 by_user: username
             }
         })
@@ -50,8 +49,15 @@ export class OfferService {
             comments: offer.comments
         })
         return resp.data;
-
-
+    }
+    public async getOrderedOffers(page?:number, orderBy?:string):Promise<OfferModel[]>{
+        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
+            params:{
+                page:page,
+                orderBy:orderBy
+            }
+        })
+        return resp.data;
     }
 
 }

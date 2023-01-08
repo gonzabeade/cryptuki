@@ -155,7 +155,7 @@ const BuyOffer = () => {
                     src={`https://www.google.com/maps/embed/v1/search?key=${process.env.REACT_APP_GMAPS_API_KEY}&q=${offer.location}`}
                     allowFullScreen>
                 </iframe>:
-                    <div>Loading Map...</div>}
+                    <div className="mx-10 mb-10 w-[450px] h-[250px] animate-pulse bg-slate-300"></div>}
 
             </div>
         </div>

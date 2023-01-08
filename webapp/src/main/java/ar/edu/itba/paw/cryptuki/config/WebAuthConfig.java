@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -26,6 +25,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -188,10 +188,10 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PUT, "/api/users/*/picture").authenticated()
 
                     .antMatchers(HttpMethod.GET, "/api/users/*/kyc").authenticated()
-                    .antMatchers(HttpMethod.PATCH, "/api/users/*/kyc").authenticated()
+                    .antMatchers(HttpMethod.PATCH, "/api/users/*/kyc").hasRole("ADMIN")
                     .antMatchers(HttpMethod.POST, "/api/users/*/kyc").authenticated()
-                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc/validationPhoto").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc/idPhoto").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/users/*/kyc/validationPhoto").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/users/*/kyc/idPhoto").hasRole("ADMIN")
 
                     .antMatchers(HttpMethod.GET, "/api/cryptocurrencies").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/cryptocurrencies/*").permitAll()
@@ -202,7 +202,8 @@ public class WebAuthConfig {
                     .cors()
                     .and()
                     .csrf().disable()
-                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                    .exceptionHandling()
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         }
 
         @Override

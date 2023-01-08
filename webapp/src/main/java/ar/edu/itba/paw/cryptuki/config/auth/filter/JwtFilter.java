@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -49,18 +50,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
         if ( header.startsWith("Basic ") ) {
-            final byte[] base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
-            final String[] credentials = new String(base64credentials).trim().split(":");
+            final String[] credentials;
+            final byte[] base64credentials;
 
-            if(credentials.length != 2) {
-                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST); // TODO: Check -- No se si es correcto esto
+            try {
+                base64credentials = Base64.getDecoder().decode(header.split(" ")[1]);
+                credentials = new String(base64credentials).trim().split(":");
+            } catch (Exception e) { // Which Exception is it
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
+
+            if (credentials.length != 2) {
                 return;
             }
 
             username = credentials[0].trim();
             password = credentials[1].trim();
 
-            userDetails = userDetailsService.loadUserByUsername(username); //TODO: mirar que pasa con la excepcion que se tira si no existe el user
+            try {
+                userDetails = userDetailsService.loadUserByUsername(username);
+            } catch (UsernameNotFoundException e) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
@@ -69,11 +82,11 @@ public class JwtFilter extends OncePerRequestFilter {
             );
 
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-            httpServletResponse.addHeader("x-refresh-token", JwtUtils.generateRefreshToken(userDetails));
-            httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
+            httpServletResponse.setHeader("X-Refresh-Token", JwtUtils.generateRefreshToken(userDetails));
+            httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
 
         } else if (header.startsWith("Bearer ")){
 
@@ -82,7 +95,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             //Validate that token was signed by server and that is hasn't expired
             if (!JwtUtils.isTokenValid(token)) {
-                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpServletResponse.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
 
@@ -97,12 +111,10 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.addHeader("x-access-token", JwtUtils.generateAccessToken(userDetails));
+                httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
             }
 
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
-        return;
-
     }
 }

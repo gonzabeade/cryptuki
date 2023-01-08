@@ -60,7 +60,7 @@ public class KycController {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
-        Optional<KycInformation> maybeKycInformation = user.getKyc();
+        Optional<KycInformation> maybeKycInformation = kycService.getPendingKycRequest(user.getUsername().get());
 
         if (!maybeKycInformation.isPresent())
             return Response.noContent().build();

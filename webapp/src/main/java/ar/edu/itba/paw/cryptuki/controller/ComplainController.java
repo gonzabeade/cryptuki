@@ -12,12 +12,12 @@ import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.ComplainStatus;
 import ar.edu.itba.paw.model.ComplaintResolution;
 import ar.edu.itba.paw.service.ComplainService;
-import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -41,7 +41,7 @@ public class ComplainController {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createComplaint(@Valid TradeComplainSupportForm tradeComplainSupportForm) {
+    public Response createComplaint(@NotNull @Valid TradeComplainSupportForm tradeComplainSupportForm) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Complain complain = complainService.makeComplain(tradeComplainSupportForm.toComplainPO(username));
@@ -85,7 +85,7 @@ public class ComplainController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
     public Response createComplaintResolution(
-            @Valid SolveComplainForm solveComplainForm,
+            @NotNull @Valid SolveComplainForm solveComplainForm,
             @PathParam("id") int id
     ) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

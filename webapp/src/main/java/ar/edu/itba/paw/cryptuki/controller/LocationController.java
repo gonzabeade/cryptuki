@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.dto.CryptocurrencyDto;
 import ar.edu.itba.paw.cryptuki.dto.LocationDto;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.LocationCountWrapper;
@@ -16,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,7 @@ public class LocationController {
             extendedResult.put(l.getLocation(), l.getLocationCount());
 
         for (Location l: Location.values())
-            extendedResult.putIfAbsent(l, 0l);
+            extendedResult.putIfAbsent(l, 0L);
 
         Collection<LocationDto> locationDtos = extendedResult.entrySet().stream().map(LocationDto::fromMapEntry).collect(Collectors.toList());
 

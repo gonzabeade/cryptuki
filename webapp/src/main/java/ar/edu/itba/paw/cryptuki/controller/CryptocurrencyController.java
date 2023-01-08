@@ -33,7 +33,7 @@ public class CryptocurrencyController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCryptocurrencies() {
 
-        Collection<CryptocurrencyDto> cryptocurrencies = cryptocurrencyService.getAllCryptocurrencies().stream().map( c->CryptocurrencyDto.fromCryptocurrency(c)).collect(Collectors.toList());
+        Collection<CryptocurrencyDto> cryptocurrencies = cryptocurrencyService.getAllCryptocurrencies().stream().map(CryptocurrencyDto::fromCryptocurrency).collect(Collectors.toList());
 
         if (cryptocurrencies.isEmpty())
             return Response.noContent().build();

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.cryptuki.mapper;
 
 import ar.edu.itba.paw.cryptuki.dto.GenericErrorDto;
-import ar.edu.itba.paw.exception.NoSuchCryptocurrencyException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

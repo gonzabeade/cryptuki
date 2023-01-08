@@ -54,7 +54,7 @@ public class CustomPreAuthorizerTest {
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
+        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails.getUsername());
 
         Assert.assertTrue(uploaded);
     }
@@ -68,7 +68,7 @@ public class CustomPreAuthorizerTest {
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
+        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails.getUsername());
 
         Assert.assertFalse(uploaded);
     }
@@ -82,7 +82,7 @@ public class CustomPreAuthorizerTest {
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails);
+        boolean uploaded = customPreAuthorizer.canUserUploadOffer(userDetails.getUsername());
 
         Assert.assertFalse(uploaded);
     }
@@ -98,7 +98,7 @@ public class CustomPreAuthorizerTest {
         when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails.getUsername(), 0);
 
         Assert.assertTrue(canAlter);
     }
@@ -114,7 +114,7 @@ public class CustomPreAuthorizerTest {
         when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails.getUsername(), 0);
 
         Assert.assertFalse(canAlter);
     }
@@ -130,7 +130,7 @@ public class CustomPreAuthorizerTest {
         when(offerDao.getOffersBy(Mockito.any(OfferFilter.class))).thenReturn(singleOfferArray);
         when(userDetails.getUsername()).thenReturn(userAuth.getUsername());
 
-        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails, 0);
+        boolean canAlter = customPreAuthorizer.canUserAlterOffer(userDetails.getUsername(), 0);
 
         Assert.assertFalse(canAlter);
     }

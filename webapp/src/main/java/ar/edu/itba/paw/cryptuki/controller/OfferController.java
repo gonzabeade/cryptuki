@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
@@ -21,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -125,7 +125,7 @@ public class OfferController {
     @Path("/{offerId}/trades")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createTrade(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+    public Response createTrade(@NotNull @Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User buyer = userService.getUserByUsername(username).orElseThrow(() -> new NoSuchUserException(username)); // Will never throw exception

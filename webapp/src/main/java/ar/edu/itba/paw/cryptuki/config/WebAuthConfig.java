@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.config.auth.filter.DummyBearerFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
+import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAccessDeniedHandler;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -203,6 +203,7 @@ public class WebAuthConfig {
                     .and()
                     .csrf().disable()
                     .exceptionHandling()
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         }
 

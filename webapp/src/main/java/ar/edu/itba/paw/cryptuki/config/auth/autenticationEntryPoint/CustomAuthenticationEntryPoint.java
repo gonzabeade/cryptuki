@@ -18,13 +18,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        // WWW-Authenticate
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.addHeader("WWW-Authenticate", "Basic realm=\"Endpoints belonging to the API\"\n");
         response.addHeader("WWW-Authenticate", "Basic realm=\"Only for PUT to /users/{username}/password\"\n");
         response.setHeader("WWW-Authenticate", "Bearer realm=\"Endpoints belonging to the API\"\n");
-
         response.getWriter().write(BODY);
     }
 }

@@ -9,8 +9,8 @@ type TransactionListProps = {
 }
 
 const TRADE_STATUS = new Map([
-    ['sold', {icon: <CheckCircleIcon className="text-gray-400 w-6 h-6"/>, title: "Title", subtitle: "You've marked this trade as sold  "}],
-    ['rejected', {icon: <XCircleIcon className="text-nred w-6 h-6"/>, title: "Title", subtitle: "You've rejected this trade proposal "}]
+    ['SOLD', {icon: <CheckCircleIcon className="text-gray-400 w-6 h-6"/>, title: "Title", subtitle: "You've marked this trade as sold  "}],
+    ['REJECTED', {icon: <XCircleIcon className="text-nred w-6 h-6"/>, title: "Title", subtitle: "You've rejected this trade proposal "}]
 
     ])
 const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {

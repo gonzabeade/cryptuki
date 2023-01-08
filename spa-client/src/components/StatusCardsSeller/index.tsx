@@ -18,36 +18,36 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callbac
             <div className="container mx-auto my-auto px-20 h-full">
                 <ol className="flex justify-center mt-4">
                     <li className="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchTrades('all')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'all'? 'decoration-frostdr underline underline-offset-8':' '}`}>
+                        <button onClick={()=>fetchTrades('ALL')}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'ALL'? 'decoration-frostdr underline underline-offset-8':' '}`}>
                                 All
                             </p>
                         </button>
                     </li>
                     <li className="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchTrades('accepted')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'accepted'?'decoration-frostdr underline underline-offset-8':' '} `}>
+                        <button onClick={()=>fetchTrades('ACCEPTED')}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'ACCEPTED'?'decoration-frostdr underline underline-offset-8':' '} `}>
                                 Active
                             </p>
                         </button>
                     </li>
                     <li className="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchTrades('pending')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'pending'?'decoration-frostdr underline underline-offset-8':' '}`}>
+                        <button onClick={()=>fetchTrades('PENDING')}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'PENDING'?'decoration-frostdr underline underline-offset-8':' '}`}>
                                 Paused
                             </p>
                         </button>
                     </li>
                     <li className="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchTrades('rejected')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'rejected'?'decoration-frostdr underline underline-offset-8':' '} `}>
+                        <button onClick={()=>fetchTrades('REJECTED')}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'REJECTED'?'decoration-frostdr underline underline-offset-8':' '} `}>
                                 Deleted
                             </p>
                         </button>
                     </li>
                     <li className="bg-gray-200 rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchTrades('sold')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'sold'? 'decoration-frostdr underline underline-offset-8':' '}`}>
+                        <button onClick={()=>fetchTrades('SOLD')}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'SOLD'? 'decoration-frostdr underline underline-offset-8':' '}`}>
                                 Completed
                             </p>
                         </button>

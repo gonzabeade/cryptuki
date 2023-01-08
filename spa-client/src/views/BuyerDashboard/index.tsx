@@ -43,7 +43,7 @@ const BuyerDashboard = () => {
                     <h1 className="text-center text-2xl font-bold font-sans text-polar">Trade Proposals</h1>
                 </div>
                 {/*TODO hacer el get de los trades con el estado filtrao*/}
-                <StatusCards active={"pending"} base_url={"/buyer/"} callback={() => console.log("a")}/>
+                <StatusCards active={"PENDING"} base_url={"/buyer/"} callback={() => console.log("a")}/>
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
                     {trades.length >0 && trades.map((trade)=>{
                         return (

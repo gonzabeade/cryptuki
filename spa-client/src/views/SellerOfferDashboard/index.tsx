@@ -11,7 +11,7 @@ import useOfferService from "../../hooks/useOfferService";
 
 const SellerOfferDashboard = () => {
 
-    const [selectedStatus, setSelectedStatus] = useState<string>("all");
+    const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const [offer, setOffer] = useState<OfferModel>();
     const params = useParams();
@@ -47,7 +47,7 @@ const SellerOfferDashboard = () => {
 
 
     function changeStatus(status:string){
-        //fetch to our service that asks for trades in specific state
+        //TODO fetch to our service that asks for trades in specific state
         setSelectedStatus(status);
     }
 

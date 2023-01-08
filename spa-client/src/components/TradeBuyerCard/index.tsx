@@ -22,26 +22,26 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
         <div className="shadow-xl flex rounded-lg  py-5 px-12 bg-[#FAFCFF] mt-3 justify-start">
             <div className="w-3/4 flex flex-row">
                 <div className="flex flex-col font-sans my-auto mr-5">
-                    {trade.status === "pending" &&
+                    {trade.status === "PENDING" &&
                         <div className="bg-nyellow  w-40 text-white  text-center p-2">Pending</div>}
-                    {trade.status === "rejected" &&
+                    {trade.status === "REJECTED" &&
                         <div className="bg-nred/[0.6] w-40 text-white  text-center p-2">Rejected</div>}
-                    {trade.status === "accepted" &&  <div className="bg-ngreen w-40 text-white text-center p-2">Accepted</div>
+                    {trade.status === "ACCEPTED" &&  <div className="bg-ngreen w-40 text-white text-center p-2">Accepted</div>
                     }
                     {
-                        trade.status === "sold" && <div className="bg-gray-400 w-40 text-white text-center p-2">Sold </div>
+                        trade.status === "SOLD" && <div className="bg-gray-400 w-40 text-white text-center p-2">Sold </div>
                     }
                     {
-                        trade.status === "deleted" &&     <div className="bg-blue-400 w-40 text-white text-center p-2">Deleted</div>
+                        trade.status === "DELETED" &&     <div className="bg-blue-400 w-40 text-white text-center p-2">Deleted</div>
                     }
                 </div>
 
                 <div className=" flex flex-col font-sans justify-center mr-5">
                     {
-                        trade.status === "sold" &&  <h1 className="font-sans">You bought for: </h1>
+                        trade.status === "SOLD" &&  <h1 className="font-sans">You bought for: </h1>
                     }
                     {
-                        trade.status !== "sold" &&  <h1 className="font-sans">You would pay: </h1>
+                        trade.status !== "SOLD" &&  <h1 className="font-sans">You would pay: </h1>
                     }
                     <h3 className="font-sans font-semibold">{trade.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</h3>
                 </div>
@@ -59,12 +59,12 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
 
             <div className="w-1/4 flex flex-row">
                 <div className="flex my-auto ml-1">
-                    {trade.status != 'sold' && trade.status != 'rejected' && trade.status !== 'deleted' &&
+                    {trade.status != 'SOLD' && trade.status != 'REJECTED' && trade.status !== 'DELETED' &&
                         <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade?tradeId="+trade.tradeId}>
                         Resume trade
                         </a>
                     }
-                    {trade.status === "sold" &&
+                    {trade.status === "SOLD" &&
                         <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade/"+ trade.tradeId
                         +"/receipt"}>
                            Help

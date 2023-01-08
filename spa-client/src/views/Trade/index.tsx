@@ -30,8 +30,7 @@ const Trade =  () => {
         if(tradeId){
             const resp = await tradeService.getTradeInformation(tradeId);
 
-            if(resp.status === 'sold'){
-                    console.log("status")
+            if(resp.status === 'SOLD'){
                     navigate('/trade/'+ resp.tradeId+ '/receipt');
             }
             setTrade(resp);
@@ -39,7 +38,7 @@ const Trade =  () => {
     }
     async function takeBackProposal(){
         try{
-            const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"PSU" );
+            const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
             toast.error("Connection error. Failed to take back proposal");
@@ -84,7 +83,7 @@ const Trade =  () => {
                 <h1 className="text-polar text-xl text-center mx-auto my-1 font-lato font-bold">Buying process</h1>
                 <Stepper active={0}/>
                 <hr className="mt-4 mb-2"/>
-                { trade && trade.status === 'accepted' && <Popup  contentStyle={{borderRadius: "0.5rem" , padding:"1rem"}} trigger={<button className="p-3 bg-frostdr text-white font-roboto font-bold mx-auto rounded-lg my-2 flex flex-row">
+                { trade && trade.status === 'ACCEPTED' && <Popup  contentStyle={{borderRadius: "0.5rem" , padding:"1rem"}} trigger={<button className="p-3 bg-frostdr text-white font-roboto font-bold mx-auto rounded-lg my-2 flex flex-row">
                     <QuestionMarkCircleIcon className={"text-white h-6 w-6 my-auto mr-1"}/>
                     <p>Advice on P2P trading</p>
                 </button>} position="center center" modal>
@@ -122,7 +121,7 @@ const Trade =  () => {
 
                         <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate('/support')}>I had a problem</button>
                         {
-                            trade?.status === 'pending' &&
+                            trade?.status === 'PENDING' &&
                             <form className="flex">
                                 <button type="submit" className=" bg-nred hover:bg-nredd  text-white  p-3 h-12 justify-center rounded-lg font-sans text-center font-bold" onClick={takeBackProposal}>
                                     Take back trade proposal

@@ -6,7 +6,7 @@ type TradeStatusAlertProps = {
 }
 
 let TRADE_STATUS = new Map([
-        ['pending', {
+        ['PENDING', {
             icon: <InformationCircleIcon className="w-12 h-12 text-nyellowd"/>,
             color: "#EBCB8B",
             accentColor: "#936f26",
@@ -14,14 +14,14 @@ let TRADE_STATUS = new Map([
             subtitle: "Wait for the seller to accept your trade proposal",
         }
         ],
-    ['rejected',  {
+    ['REJECTED',  {
         icon: <FaceFrownIcon className="w-12 h-12 text-nredd"/>,
         color: "#EBCB8B",
         accentColor: "#ad2b36",
         title: "This proposal has been rejected",
         subtitle: "Make a new trade proposal if you still want to buy from this seller",
     }],
-    ['accepted',  {
+    ['ACCEPTED',  {
         icon: <CheckCircleIcon className="w-12 h-12 text-ngreend"/>,
         color: "#A3BE8C",
         accentColor: "#47523e",

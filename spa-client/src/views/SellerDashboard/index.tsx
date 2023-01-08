@@ -71,6 +71,16 @@ const SellerDashboard = () => {
        getLastTransactions();
     },[])
 
+    async function fetchOffersWithStatus(status:string) {
+        try{
+           const resp = await offerService.getOffersByStatus(status);
+           setOffers(resp);
+        }catch (e) {
+            toast.error("Connection error fetching offers with status "+ status)
+        }
+
+    }
+
     return (
         <div className="flex h-full w-full px-10 my-10">
 
@@ -116,8 +126,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className="flex flex-col w-full mt-2">
                     <div className="flex w-full mx-auto ">
-                        {/*TODO callback*/}
-                        <StatusCardsSeller  active={"ALL"} callback={()=>console.log("a")} base_url={"/"}/>
+                        <StatusCardsSeller  active={"ALL"} callback={fetchOffersWithStatus} base_url={"/"}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}

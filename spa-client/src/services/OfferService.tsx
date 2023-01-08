@@ -59,6 +59,20 @@ export class OfferService {
         })
         return resp.data;
     }
+    public async getOffersByStatus(status:string|undefined, page?:number){
+
+        if(status === 'ALL'){
+            status = undefined
+        }
+
+        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
+            params:{
+                page:page,
+                status:status
+            }
+        })
+        return resp.data;
+    }
 
 }
 

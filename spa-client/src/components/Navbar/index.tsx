@@ -13,6 +13,8 @@ const Navbar = () => {
     useEffect(()=>{
         menuListeners();
     },[]);
+    //TODO aca falta un useEffect para ver si esta logeado o no
+
 
     function menuListeners(){
         const menu = document.querySelectorAll('.navbar-menu');

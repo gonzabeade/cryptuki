@@ -152,7 +152,7 @@ const BuyOffer = () => {
                     height="250"
                     frameBorder="0"
                     referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps/embed/v1/search?key=${process.env.GMAPS_API_KEY}&q=${offer.location}`}
+                    src={`https://www.google.com/maps/embed/v1/search?key=${process.env.REACT_APP_GMAPS_API_KEY}&q=${offer.location}`}
                     allowFullScreen>
                 </iframe>:
                     <div>Loading Map...</div>}

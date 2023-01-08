@@ -19,8 +19,8 @@ const BuyerDashboard = () => {
 
     async function fetchTradesBuyerProfile(){
         try {
-            const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser(), 'all');
-            //TODO aca deberia devolverme las paginas
+            const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser());
+            //TODO aca deberia devolverme las paginas en los headers
             setTrades(resp);
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
@@ -28,6 +28,19 @@ const BuyerDashboard = () => {
     }
     useEffect(()=>{
         fetchTradesBuyerProfile();
+    },[]);
+
+    async function fetchUserData(){
+        try{
+            const resp = await userService.getUser(userService.getLoggedInUser()!);
+            setUser(resp);
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch user data");
+        }
+    }
+
+    useEffect(()=>{
+        fetchUserData();
     },[]);
 
     return (

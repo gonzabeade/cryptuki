@@ -27,10 +27,10 @@ export class TradeService {
         });
         return resp.data;
     }
-    public async getRelatedTrades(username:string|null, status:string):Promise<TransactionModel[]>{
+    public async getRelatedTrades(username:string|null, status?:string):Promise<TransactionModel[]>{
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {
-                username: username,
+                buyer: username,
                 status: status
             }
         });

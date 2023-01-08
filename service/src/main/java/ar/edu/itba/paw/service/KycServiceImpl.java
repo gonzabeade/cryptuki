@@ -32,6 +32,7 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
+    @PreAuthorize("#kycInformationPO.username == authentication.principal")
     public void newKycRequest(KycInformationPO kycInformationPO) {
         String username = kycInformationPO.getUsername();
         if (getPendingKycRequest(username).isPresent())

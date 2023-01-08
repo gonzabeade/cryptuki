@@ -6,12 +6,12 @@ import ar.edu.itba.paw.model.KycStatus;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class KycStatusForm {
 
     @NotNull
-    @Min(0)
-    @Max(240)
+    @Size(min = 0, max = 240)
     private String comments;
 
     @NotNull

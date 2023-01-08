@@ -75,15 +75,15 @@ public class KycController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postKyc(
             @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
-            @FormDataParam("id-photo") FormDataBodyPart idPhoto,
-            @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
+             @FormDataParam("id-photo") FormDataBodyPart idPhoto,
+             @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
     ) throws IOException {
 
         if (idPhoto == null || validationPhoto == null || kycInformation == null )
             throw new BadMultipartFormatException(kycMultipartFormat);
 
         byte[] idPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
-        byte[] validationPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
+        byte[] validationPhotoBytes = IOUtils.toByteArray(validationPhoto.getValueAs(InputStream.class));
 
         // TODO - If enough time, write it as an annotation
         // --  Replace @MultipartCheck ?

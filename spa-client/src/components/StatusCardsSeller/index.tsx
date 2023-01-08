@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {toast} from "react-toastify";
+import {OFFER_STATUS} from "../../common/constants";
 
 type StatusCardsProps = {
     active:string,
-    base_url:string,
     callback:Function
 }
-const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callback}) => {
+const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, callback}) => {
 
     const [activeStatus, setActiveStatus] = useState<string>(active);
 
@@ -26,29 +26,29 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, base_url, callbac
                         </button>
                     </li>
                     <li className="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchOffers('ACCEPTED')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'ACCEPTED'?'decoration-frostdr underline underline-offset-8':' '} `}>
+                        <button onClick={()=>fetchOffers(OFFER_STATUS.Pending)}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.Pending ?'decoration-frostdr underline underline-offset-8':' '} `}>
                                 Active
                             </p>
                         </button>
                     </li>
                     <li className="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchOffers('PENDING')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'PENDING'?'decoration-frostdr underline underline-offset-8':' '}`}>
+                        <button onClick={()=>fetchOffers(OFFER_STATUS.PausedBySeller)}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.PausedBySeller ?'decoration-frostdr underline underline-offset-8':' '}`}>
                                 Paused
                             </p>
                         </button>
                     </li>
                     <li className="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchOffers('REJECTED')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === 'REJECTED'?'decoration-frostdr underline underline-offset-8':' '} `}>
+                        <button onClick={()=>fetchOffers(OFFER_STATUS.Deleted)}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.Deleted?'decoration-frostdr underline underline-offset-8':' '} `}>
                                 Deleted
                             </p>
                         </button>
                     </li>
                     <li className="bg-gray-200 rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
-                        <button onClick={()=>fetchOffers('SOLD')}>
-                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'SOLD'? 'decoration-frostdr underline underline-offset-8':' '}`}>
+                        <button onClick={()=>fetchOffers(OFFER_STATUS.Sold)}>
+                            <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === OFFER_STATUS.Sold? 'decoration-frostdr underline underline-offset-8':' '}`}>
                                 Completed
                             </p>
                         </button>

@@ -61,4 +61,13 @@ export class TradeService {
         });
         return resp.data;
     }
+    public async getTradesWithStatus(status:string, username:string){
+        const resp = await this.axiosInstance().get(paths.BASE_URL + paths.TRADE  , {
+            params: {
+                buyer: username,
+                status: status
+            }
+        });
+        return resp.data;
+    }
 }

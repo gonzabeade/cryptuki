@@ -126,7 +126,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className="flex flex-col w-full mt-2">
                     <div className="flex w-full mx-auto ">
-                        <StatusCardsSeller  active={"ALL"} callback={fetchOffersWithStatus} base_url={"/"}/>
+                        <StatusCardsSeller  active={"ALL"} callback={fetchOffersWithStatus}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}

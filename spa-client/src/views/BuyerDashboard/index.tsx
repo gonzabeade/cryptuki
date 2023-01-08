@@ -20,12 +20,20 @@ const BuyerDashboard = () => {
     async function fetchTradesBuyerProfile(){
         try {
             const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser());
-            //TODO aca deberia devolverme las paginas en los headers
             setTrades(resp);
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
         }
     }
+    async function fetchTradesWithStatus(status:string){
+        try {
+            const resp = await tradeService.getTradesWithStatus(status, user?.username!);
+            setTrades(resp);
+        }catch (e) {
+            toast.error("Couldn't fethc trades with status " + status);
+        }
+    }
+
     useEffect(()=>{
         fetchTradesBuyerProfile();
     },[]);
@@ -46,7 +54,6 @@ const BuyerDashboard = () => {
     return (
         <div className="flex h-full w-full px-20 my-10">
             <div className="flex flex-col h-full mx-20 w-1/5">
-                {/*TODO Evaluar esto con lo de User model*/}
                   <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber : "Loading"} email={user? user.email:"loading"} rating={user? user.rating: 0} tradeQuantity={user? user.ratingCount:0}/>
             </div>
             {/*//  Middle Panel: trade */}
@@ -55,8 +62,7 @@ const BuyerDashboard = () => {
                     className="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
                     <h1 className="text-center text-2xl font-bold font-sans text-polar">Trade Proposals</h1>
                 </div>
-                {/*TODO hacer el get de los trades con el estado filtrao*/}
-                <StatusCards active={"PENDING"} base_url={"/buyer/"} callback={() => console.log("a")}/>
+                <StatusCards active={"PENDING"}  callback={fetchTradesWithStatus}/>
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
                     {trades.length >0 && trades.map((trade)=>{
                         return (

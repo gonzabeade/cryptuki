@@ -10,7 +10,7 @@ public class TradeStatusForm {
 
     @NotNull
     @Size(min = 1, max = 30)
-    @ValueOfEnum(enumClass = TradeStatus.class, message = "Incorrect value from newStatus")
+    @ValueOfEnum(enumClass = TradeStatus.class)
     private String newStatus;
 
     public String getNewStatus() {

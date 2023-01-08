@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,10 +21,15 @@ public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, Ch
 
     @Override
     public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
 
-        return acceptedValues.contains(value.toString());
+        if (value == null || acceptedValues.contains(value.toString()))
+            return true;
+
+        context.disableDefaultConstraintViolation();
+        context
+                .buildConstraintViolationWithTemplate(String.format("Value must be any of %s", acceptedValues))
+                .addConstraintViolation();
+
+        return false;
     }
 }

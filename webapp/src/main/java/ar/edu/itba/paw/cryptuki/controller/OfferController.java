@@ -48,7 +48,7 @@ public class OfferController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOffers(@BeanParam OfferBeanParam offerBeanParam) {
+    public Response listOffers(@Valid @BeanParam OfferBeanParam offerBeanParam) {
 
         OfferFilter filter = offerBeanParam.toOfferFilter();
 

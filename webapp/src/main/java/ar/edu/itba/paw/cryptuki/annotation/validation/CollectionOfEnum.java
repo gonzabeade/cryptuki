@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = CollectionOfEnumValidator.class)
 public @interface CollectionOfEnum {
     Class<? extends Enum<?>> enumClass();
-    String message() default "some element in the collection is not valid";
+    String message() default "some element in collection does not belong to class {enumClass}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

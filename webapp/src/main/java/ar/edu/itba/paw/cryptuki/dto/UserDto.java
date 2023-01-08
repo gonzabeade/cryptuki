@@ -24,7 +24,6 @@ public class UserDto {
     private URI kycInformation;
     private URI offers;
     private URI self;
-    private URI secrets;
     private URI password;
     private URI picture;
 
@@ -64,12 +63,6 @@ public class UserDto {
         dto.offers = uriInfo.getBaseUriBuilder()
                 .path("api/offers")
                 .queryParam("from_user", dto.username)
-                .build();
-
-        dto.secrets = uriInfo.getBaseUriBuilder()
-                .path("api/users")
-                .path(dto.username)
-                .path("secrets")
                 .build();
 
         dto.password = uriInfo.getBaseUriBuilder()
@@ -167,13 +160,6 @@ public class UserDto {
         this.self = self;
     }
 
-    public URI getSecrets() {
-        return secrets;
-    }
-
-    public void setSecrets(URI secrets) {
-        this.secrets = secrets;
-    }
 
     public URI getPassword() {
         return password;

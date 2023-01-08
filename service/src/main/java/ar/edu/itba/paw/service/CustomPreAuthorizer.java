@@ -5,6 +5,7 @@ import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -75,6 +76,11 @@ public class CustomPreAuthorizer {
         Complain complain = complainDao.getComplainsBy(new ComplainFilter().restrictedToComplainId(complainId))
                 .stream().findFirst().orElseThrow(()-> new NoSuchComplainException(complainId));
         return isUserPartOfTrade(username,complain.getTrade().getTradeId());
+    }
+
+
+    public boolean isUserPartOfTrade(String username, ComplainPO complainPO) {
+        return complainPO!=null && isUserPartOfTrade(username,complainPO.getTradeId());
     }
 
 }

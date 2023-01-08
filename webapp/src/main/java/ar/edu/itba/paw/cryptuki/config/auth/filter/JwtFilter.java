@@ -82,7 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
             );
 
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
 
             httpServletResponse.setHeader("X-Refresh-Token", JwtUtils.generateRefreshToken(userDetails));

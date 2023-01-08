@@ -31,12 +31,11 @@ public class ComplainServiceImpl implements ComplainService{
 
     @Override
     @Transactional
-    @Secured("ROLE_USER")
-    @PreAuthorize("@customPreAuthorizer.isUserPartOfTrade(authentication.principal, #complain.tradeId)")
+    @PreAuthorize("hasRole('USER') or @customPreAuthorizer.isUserPartOfTrade(authentication.principal, #complain)")
     public Complain makeComplain(ComplainPO complain) {
         if (complain == null)
             throw new NullPointerException("Complain Parameter Object object cannot be null.");
-        Complain createdComplain = complainDao.makeComplain(complain);;
+        Complain createdComplain = complainDao.makeComplain(complain);
         messageSenderFacade.sendComplaintReceipt(createdComplain.getComplainer(), createdComplain.getTrade(), createdComplain.getComplainerComments().orElse("No comments"));
 
         return createdComplain;

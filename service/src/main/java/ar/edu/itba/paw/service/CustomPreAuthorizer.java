@@ -6,6 +6,7 @@ import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.parameterObject.KycInformationPO;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,6 +82,10 @@ public class CustomPreAuthorizer {
 
     public boolean isUserPartOfTrade(String username, ComplainPO complainPO) {
         return complainPO!=null && isUserPartOfTrade(username,complainPO.getTradeId());
+    }
+
+    public boolean isKycFromUser(String username, KycInformationPO kycInformationPO){
+        return kycInformationPO != null && username!=null && username.equals(kycInformationPO.getUsername());
     }
 
 }

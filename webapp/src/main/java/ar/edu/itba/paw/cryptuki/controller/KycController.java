@@ -93,8 +93,7 @@ public class KycController {
         if (idPhotoBytes.length > MAX_SIZE || validationPhotoBytes.length > MAX_SIZE)
             throw new IllegalArgumentException(String.format("Uploaded files have a max size of %d bytes", MAX_SIZE));
 
-        kycInformation.setUsername(username);
-        KycInformationPO kycInformationPO = kycInformation.toParameterObject()
+        KycInformationPO kycInformationPO = kycInformation.toParameterObject(username)
                 .withIdPhoto(idPhotoBytes)
                 .withIdPhotoType(idPhoto.getMediaType().getSubtype())
                 .withValidationPhoto(validationPhotoBytes)

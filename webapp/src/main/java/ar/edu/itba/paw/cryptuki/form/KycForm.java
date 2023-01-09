@@ -17,10 +17,6 @@ public class KycForm {
     @NotNull
     private String surnames;
 
-//    @Size(min=1, max=140)
-//    @NotNull
-    private String username;
-
     @Size(min=1, max=140)
     @NotNull
     private String emissionCountry;
@@ -75,16 +71,8 @@ public class KycForm {
     }
 
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-
-    public KycInformationPO toParameterObject() throws IOException {
+    public KycInformationPO toParameterObject(String username) {
         return new KycInformationPO(username, givenNames, surnames)
                 .withIdCode(idCode)
                 .withIdType(IdType.valueOf(idType))
@@ -96,7 +84,6 @@ public class KycForm {
         return "KycForm{" +
                 "givenNames='" + givenNames + '\'' +
                 ", surnames='" + surnames + '\'' +
-                ", username='" + username + '\'' +
                 ", emissionCountry='" + emissionCountry + '\'' +
                 ", idCode='" + idCode + '\'' +
                 ", idType='" + idType + '\'' +

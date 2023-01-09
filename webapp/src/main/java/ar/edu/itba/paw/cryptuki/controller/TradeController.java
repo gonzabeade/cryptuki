@@ -4,7 +4,9 @@ import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
+import ar.edu.itba.paw.cryptuki.dto.TradeRatingDTO;
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
@@ -167,6 +169,23 @@ public class TradeController {
                 this.tradeService.rejectTrade(tradeId);break;
             case PENDING: throw new BadRequestException("Trade can not be set to PENDING");
         }
+        return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{tradeId}/rating")
+    public Response getTradeRating(@PathParam("tradeId") int tradeId){
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        return Response.ok(TradeRatingDTO.fromTrade(trade,uriInfo)).build();
+    }
+
+    @PUT
+    @Path("/{tradeId}/rating")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response rateTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid RatingForm ratingForm){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        tradeService.rateCounterPartUserRegardingTrade(username,ratingForm.getRating(),tradeId);
         return Response.noContent().build();
     }
 

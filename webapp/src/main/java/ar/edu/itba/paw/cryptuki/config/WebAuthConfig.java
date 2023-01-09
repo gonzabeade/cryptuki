@@ -172,6 +172,10 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PATCH, "/api/trades/*").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/trades/*/messages").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/trades/*/messages").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/trades/*/rating").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/api/trades/*/rating").authenticated()
+
+
 
                     .antMatchers(HttpMethod.GET, "/api/complaints").hasRole("ADMIN")
                     .antMatchers(HttpMethod.POST, "/api/complaints").authenticated()

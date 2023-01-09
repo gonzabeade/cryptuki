@@ -60,7 +60,8 @@ public class KycController {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
-        Optional<KycInformation> maybeKycInformation = kycService.getPendingKycRequest(user.getUsername().get());
+        Optional<KycInformation> maybeKycInformation = kycService
+                .getPendingKycRequest(user.getUsername().orElseThrow(()->new NoSuchUserException(username)));
 
         if (!maybeKycInformation.isPresent())
             return Response.noContent().build();
@@ -74,6 +75,7 @@ public class KycController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postKyc(
+            @PathParam("username") String username,
             @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
              @FormDataParam("id-photo") FormDataBodyPart idPhoto,
              @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
@@ -91,11 +93,12 @@ public class KycController {
         if (idPhotoBytes.length > MAX_SIZE || validationPhotoBytes.length > MAX_SIZE)
             throw new IllegalArgumentException(String.format("Uploaded files have a max size of %d bytes", MAX_SIZE));
 
+        kycInformation.setUsername(username);
         KycInformationPO kycInformationPO = kycInformation.toParameterObject()
                 .withIdPhoto(idPhotoBytes)
-                .withIdPhotoType(idPhoto.getContentDisposition().getType())
+                .withIdPhotoType(idPhoto.getMediaType().getSubtype())
                 .withValidationPhoto(validationPhotoBytes)
-                .withValidationPhotoType(validationPhoto.getContentDisposition().getType());
+                .withValidationPhotoType(validationPhoto.getMediaType().getSubtype());
 
         kycService.newKycRequest(kycInformationPO);
         final URI uri = uriInfo.getRequestUri();

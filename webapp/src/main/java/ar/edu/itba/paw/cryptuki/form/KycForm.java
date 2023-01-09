@@ -17,8 +17,8 @@ public class KycForm {
     @NotNull
     private String surnames;
 
-    @Size(min=1, max=140)
-    @NotNull
+//    @Size(min=1, max=140)
+//    @NotNull
     private String username;
 
     @Size(min=1, max=140)

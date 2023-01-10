@@ -9,13 +9,17 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class UnauthorizedExceptionMapper implements ExceptionMapper<AuthenticationException> {
+public class UnauthorizedExceptionMapper extends GenericMapper<AuthenticationException> {
 
     private static String MESSAGE ="Unauthorized action";
+
     @Override
-    public Response toResponse(AuthenticationException e) {
-        GenericErrorDto dto = GenericErrorDto.fromMessage(MESSAGE);
-        return Response.status(Response.Status.UNAUTHORIZED).entity(dto).build();
+    public String getMessage() {
+        return MESSAGE;
     }
 
+    @Override
+    public Response.Status getStatus() {
+        return Response.Status.UNAUTHORIZED;
+    }
 }

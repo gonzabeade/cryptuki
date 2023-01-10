@@ -14,6 +14,7 @@ public class ClientErrorExceptionMapper implements ExceptionMapper<ClientErrorEx
 
     private static final String MESSAGE = "client error - %s";
 
+
     @Override
     public Response toResponse(ClientErrorException e) {
         GenericErrorDto dto = GenericErrorDto.fromMessage(String.format(MESSAGE, e.getMessage()));

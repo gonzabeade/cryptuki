@@ -15,7 +15,6 @@ public class NotAllowedExceptionMapper implements ExceptionMapper<NotAllowedExce
     @Override
     public Response toResponse(NotAllowedException e) {
         GenericErrorDto dto = GenericErrorDto.fromMessage(MESSAGE);
-
         return Response
                 .status(Response.Status.METHOD_NOT_ALLOWED)
                 .entity(dto)

@@ -6,10 +6,11 @@ type  UserProfileCardsProps = {
     phoneNumber:string,
     email:string,
     rating:number,
-    tradeQuantity:number
+    tradeQuantity:number,
+    picture:string
 }
 
-const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumber, email, rating, tradeQuantity}) => {
+const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumber, email, rating, tradeQuantity, picture}) => {
     return (
         <div className="bg-white shadow rounded-lg py-1">
             <div className="flex flex-col">
@@ -20,7 +21,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                         </a>
                     </div>
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
-                      {/*form para cambiar profile pic*/}
+                        <img src={picture} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"}/>
                         {username}
                     </div>
                 </div>

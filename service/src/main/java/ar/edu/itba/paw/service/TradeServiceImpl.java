@@ -54,14 +54,14 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradePending(#tradeId)")
     public Trade rejectTrade(int tradeId) {
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.REJECTED);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradeAccepted(#tradeId)")
     public Trade sellTrade(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
         tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
@@ -84,14 +84,14 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradePending(#tradeId)")
     public Trade acceptTrade(int tradeId) {
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.ACCEPTED);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.canTradeBeDeleted(#tradeId)")
     public void deleteTrade(int tradeId) {
         tradeDao.deleteTrade(tradeId);
     }

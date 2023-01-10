@@ -186,7 +186,7 @@ public class TradeController {
     public Response rateTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid RatingForm ratingForm){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         tradeService.rateCounterPartUserRegardingTrade(username,ratingForm.getRating(),tradeId);
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
 

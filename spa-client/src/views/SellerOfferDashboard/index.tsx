@@ -119,7 +119,7 @@ const SellerOfferDashboard = () => {
                         <div className="flex flex-wrap pl-3 mt-10 mx-auto">
                             {trades && trades.map((trade)=>{
                                 return(
-                                    <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId}/>
+                                    <OfferInformationForSeller trade={trade!} chat={true} key={trade.tradeId}/>
                                 );
                             })}
                         </div>

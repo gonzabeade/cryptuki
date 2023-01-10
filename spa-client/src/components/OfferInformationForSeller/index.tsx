@@ -15,7 +15,7 @@ type OfferInformationForSellerProps = {
     chat:boolean
 }
 const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade, chat}) => {
-    const [tradeStatus, setTradeStatus] = useState<string>(trade.status);
+    const [tradeStatus, setTradeStatus] = useState<string>();
     const [offer, setOffer] = useState<OfferModel>();
     const [buyer, setBuyer] = useState<UserModel>();
     const offerService = useOfferService();
@@ -24,7 +24,6 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
     async function fetchBuyer(){
         try{
-            console.log(trade.buyer);
             const resp = await userService.getUser(userService.getUsernameFromURI(trade.buyer));
             setBuyer(resp);
         }catch (e) {
@@ -33,13 +32,12 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
     }
 
     useEffect(()=>{
-        fetchBuyer();
+        // fetchBuyer();
     },[])
 
     async function fetchOffer(){
         //fetch offer from offer? . Split to get offer id or get directly
-        console.log(trade.offer);
-        const offerId = trade.offer.split("/")[4];
+        const offerId = trade?.offer.split("/")[4];
         try{
             const resp = await offerService.getOfferInformation(Number(offerId));
             setOffer(resp);
@@ -50,8 +48,12 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
     }
 
     useEffect(()=>{
-        fetchOffer();
+        // fetchOffer();
     },[])
+
+    useEffect(()=>{
+        setTradeStatus(trade?.status);
+    },[trade])
 
 
     async function changeStatus(status:string, tradeId:number){
@@ -99,8 +101,8 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                     <h1 className="mx-auto">
-                        {trade.buyingQuantity + ' ' + offer?.cryptoCode}
-                        ⟶ {trade.buyingQuantity * (offer? offer.unitPrice: 1)} ARS
+                        {trade?.buyingQuantity + ' ' + offer?.cryptoCode}
+                        ⟶ {trade?.buyingQuantity * (offer? offer.unitPrice: 1)} ARS
                     </h1>
                 </div>
 
@@ -134,14 +136,14 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <div className="flex flex-row">
                         <form method="post" className="flex justify-center mx-auto my-3">
                             <button type="submit"
-                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('REJECTED', trade.tradeId)}>
+                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('REJECTED', trade?.tradeId)}>
                                 Reject
                             </button>
                         </form>
 
                         <form className="flex justify-center mx-auto my-3">
                             <button type="submit"
-                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('ACCEPTED', trade.tradeId)}>
+                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('ACCEPTED', trade?.tradeId)}>
                                 Accept
                             </button>
                         </form>
@@ -154,7 +156,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                     <form className="flex justify-center mx-auto my-3">
                         <button type="submit"
-                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus('SOLD', trade.tradeId)}>
+                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus('SOLD', trade?.tradeId)}>
                             Mark as sold
                         </button>
                     </form>
@@ -164,7 +166,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <div className="flex h-2/5 my-2"/>
                 }
                 {
-                    chat && <ChatButton tradeId={trade.tradeId} />
+                    chat && <ChatButton tradeId={trade?.tradeId} />
                 }
             </div>
         </div>

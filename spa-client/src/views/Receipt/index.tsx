@@ -57,6 +57,7 @@ const Receipt = () => {
     useEffect(()=>{
         fetchBuyerOrSeller();
     }, [])
+
     async function getOffer(){
         if (trade) {
             //TODO get ID from trade.offer
@@ -183,10 +184,9 @@ const Receipt = () => {
 
             <div className="flex flex-col w-2/5">
                 <div className="flex flex-col mx-10 items-center">
-
                     <UserInfo username={counterPart?.username!} email={counterPart?.email!} phone_number={counterPart?.phoneNumber!} last_login={counterPart?.lastLogin.toString()!} trades_completed={counterPart?.ratingCount!} rating={counterPart?.rating!}/>
                     <div className="flex flex-col mx-auto mt-10">
-                        <RateYourCounterPart usernameRater={"mdedeu"} usernameRated={"messi"} tradeId={21}/>
+                        <RateYourCounterPart usernameRater={userService.getLoggedInUser()!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
                     </div>
                 </div>
             </div>

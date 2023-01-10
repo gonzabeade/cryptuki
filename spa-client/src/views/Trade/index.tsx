@@ -27,8 +27,8 @@ const Trade =  () => {
     const userService = useUserService();
 
     useEffect(()=>{
-        // fetchSeller();
-    },[])
+        fetchSeller();
+    },[trade])
 
 
 
@@ -66,8 +66,10 @@ const Trade =  () => {
 
     async function fetchSeller(){
         try{
-            const resp  = await  userService.getUser(trade?.seller!);
-            setSeller(resp);
+            if(trade){
+                const resp  = await  userService.getUser(userService.getUsernameFromURI(trade?.seller!));
+                setSeller(resp);
+            }
         }catch (e) {
                 toast.error("Connection error. Failed to fetch seller")
         }
@@ -144,7 +146,6 @@ const Trade =  () => {
                 </div>
             </div>
             <div className="w-2/5">
-                {/*//TODO disociate username from URI*/}
                 <ChatSnippet counterPart={seller} tradeId={trade? trade.tradeId: 0}/>
             </div>
 

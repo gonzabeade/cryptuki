@@ -58,11 +58,20 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                                          src={counterPart?.picture} alt={counterPart?.username}/>
                                     <div className="flex flex-col ml-4">
                                         <span className="block font-bold text-gray-600 text-justify ">{counterPart?.username}</span>
-                                        {counterPart? counterPart.lastLogin.getTime() === Date.now() && <> <span className="font-sans text-gray-400 text-sm text-justify ">Ultimo login</span>
-                                            <span className="text-left text-sm text-justify ">{counterPart? counterPart.lastLogin.toString().substring(0,10): "Loading"}</span> </>: "Loading"}
+                                        {counterPart ? 
+                                            <>
+                                            <span className="font-sans text-gray-400 text-sm text-justify ">
+                                                Ultimo login
+                                            </span>
+                                                <span
+                                                    className="text-left text-xs text-justify text-gray-400 ">{counterPart ? counterPart.lastLogin.toString().substring(0, 10) : "Loading"}
+                                                </span>
+                                            </>
+
+                                            : "Loading"}
                                     </div>
                                 </div>
-                                {counterPart? counterPart.lastLogin.getTime() === Date.now() &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>:"Loading"}
+                                {counterPart? Date.parse(counterPart.lastLogin.toString()) === Date.now() &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>:"Loading"}
 
                                 <h1 className="text-right font-sans font-bold justify-self-end">
                                   Trade proposal # {tradeId}

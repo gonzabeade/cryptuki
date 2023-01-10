@@ -1,14 +1,10 @@
 package ar.edu.itba.paw.cryptuki.config.auth.jwt;
 
-import ar.edu.itba.paw.model.UserAuth;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

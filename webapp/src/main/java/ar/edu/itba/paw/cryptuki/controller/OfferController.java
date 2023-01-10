@@ -97,13 +97,7 @@ public class OfferController {
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
-        try {
-            offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
-        } catch (RuntimeException e) {
-            //TODO: 403 may not apply.
-            return Response.status(Response.Status.fromStatusCode(403)).build();
-        }
-
+        offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
         return Response.ok().build();
     }
 

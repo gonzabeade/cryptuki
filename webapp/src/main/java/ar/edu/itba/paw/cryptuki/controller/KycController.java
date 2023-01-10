@@ -18,9 +18,9 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.ByteArrayInputStream;
@@ -34,7 +34,7 @@ import java.util.Optional;
 @Path("/api/users/{username}/kyc")
 public class KycController {
 
-    private static long MAX_SIZE = 1 << 21;
+    private static final long MAX_SIZE = 1 << 21;
     private final UserService userService;
     private final KycService kycService;
 
@@ -60,7 +60,8 @@ public class KycController {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
-        Optional<KycInformation> maybeKycInformation = user.getKyc();
+        Optional<KycInformation> maybeKycInformation = kycService
+                .getPendingKycRequest(user.getUsername().orElseThrow(()->new NoSuchUserException(username)));
 
         if (!maybeKycInformation.isPresent())
             return Response.noContent().build();
@@ -74,16 +75,17 @@ public class KycController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postKyc(
-            @Valid @FormDataParam("kyc-information") KycForm kycInformation,
-            @FormDataParam("id-photo") FormDataBodyPart idPhoto,
-            @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
+            @PathParam("username") String username,
+            @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
+             @FormDataParam("id-photo") FormDataBodyPart idPhoto,
+             @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
     ) throws IOException {
 
         if (idPhoto == null || validationPhoto == null || kycInformation == null )
             throw new BadMultipartFormatException(kycMultipartFormat);
 
         byte[] idPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
-        byte[] validationPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
+        byte[] validationPhotoBytes = IOUtils.toByteArray(validationPhoto.getValueAs(InputStream.class));
 
         // TODO - If enough time, write it as an annotation
         // --  Replace @MultipartCheck ?
@@ -91,11 +93,11 @@ public class KycController {
         if (idPhotoBytes.length > MAX_SIZE || validationPhotoBytes.length > MAX_SIZE)
             throw new IllegalArgumentException(String.format("Uploaded files have a max size of %d bytes", MAX_SIZE));
 
-        KycInformationPO kycInformationPO = kycInformation.toParameterObject()
+        KycInformationPO kycInformationPO = kycInformation.toParameterObject(username)
                 .withIdPhoto(idPhotoBytes)
-                .withIdPhotoType(idPhoto.getContentDisposition().getType())
+                .withIdPhotoType(idPhoto.getMediaType().getSubtype())
                 .withValidationPhoto(validationPhotoBytes)
-                .withValidationPhotoType(validationPhoto.getContentDisposition().getType());
+                .withValidationPhotoType(validationPhoto.getMediaType().getSubtype());
 
         kycService.newKycRequest(kycInformationPO);
         final URI uri = uriInfo.getRequestUri();
@@ -106,7 +108,7 @@ public class KycController {
     @PATCH
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response putKyc(@PathParam("username") String username, @Valid KycStatusForm kycStatusForm) {
+    public Response putKyc(@PathParam("username") String username, @NotNull @Valid KycStatusForm kycStatusForm) {
 
         userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
         KycInformation kyc = kycService.getPendingKycRequest(username).orElseThrow(()->new NoSuchKycException(username));
@@ -121,7 +123,7 @@ public class KycController {
             return Response.status(Response.Status.BAD_REQUEST).entity(dto).build();
         }
 
-        if (kycStatusForm.getStatus().equals(KycStatus.REJ))
+        if (KycStatus.valueOf(kycStatusForm.getStatus()).equals(KycStatus.REJ))
             kycService.rejectKycRequest(kyc.getKycId(), kycStatusForm.getComments());
         else
             kycService.validateKycRequest(kyc.getKycId());

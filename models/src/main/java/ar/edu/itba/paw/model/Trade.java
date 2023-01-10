@@ -31,6 +31,29 @@ public class Trade {
     private boolean isBuyerRated;
     @Column(name="rated_seller")
     private boolean isSellerRated;
+
+    @Column(name="buyer_rating")
+    private Integer buyer_rating;
+
+    public Integer getBuyer_rating() {
+        return buyer_rating;
+    }
+
+    public void setBuyer_rating(Integer buyer_rating) {
+        this.buyer_rating = buyer_rating;
+    }
+
+    public Integer getSeller_rating() {
+        return seller_rating;
+    }
+
+    public void setSeller_rating(Integer seller_rating) {
+        this.seller_rating = seller_rating;
+    }
+
+    @Column(name="seller_rating")
+    private Integer seller_rating;
+
     @Column(name="q_unseen_msg_buyer")
     private int qUnseenMessagesBuyer;
     @Column(name="q_unseen_msg_seller")

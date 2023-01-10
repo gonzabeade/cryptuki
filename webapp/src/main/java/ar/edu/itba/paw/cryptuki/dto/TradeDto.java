@@ -21,6 +21,8 @@ public class TradeDto {
     private URI buyer;
     private URI messages;
 
+    private URI rating;
+
 
     public static TradeDto fromTrade(final Trade trade, final UriInfo uriInfo) {
 
@@ -55,6 +57,11 @@ public class TradeDto {
                 .path("/api/trades")
                 .path(String.valueOf(dto.tradeId))
                 .path("/messages")
+                .build();
+        dto.rating = uriInfo.getBaseUriBuilder()
+                .path("/api/trades")
+                .path(String.valueOf(dto.tradeId))
+                .path("/rating")
                 .build();
 
         return dto;
@@ -130,5 +137,13 @@ public class TradeDto {
 
     public void setMessages(URI messages) {
         this.messages = messages;
+    }
+
+    public URI getRating() {
+        return rating;
+    }
+
+    public void setRating(URI rating) {
+        this.rating = rating;
     }
 }

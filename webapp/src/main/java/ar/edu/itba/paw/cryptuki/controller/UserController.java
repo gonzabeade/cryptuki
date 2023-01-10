@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -88,7 +89,7 @@ public class UserController {
     @PUT
     @Path("/{username}/password")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    public Response changePassword(@Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
+    public Response changePassword(@NotNull @Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
         userService.changePassword(username, changePasswordForm.getPassword());
         return Response.noContent().build();
     }
@@ -97,7 +98,7 @@ public class UserController {
     @Path("/{username}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     public Response createValidation(
-            @Valid UserEmailValidationForm userEmailValidationForm,
+            @NotNull @Valid UserEmailValidationForm userEmailValidationForm,
             @PathParam("username") String username
     ){
 

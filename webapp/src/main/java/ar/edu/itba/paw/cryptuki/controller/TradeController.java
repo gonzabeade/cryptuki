@@ -4,13 +4,18 @@ import ar.edu.itba.paw.cryptuki.annotation.httpMethod.PATCH;
 import ar.edu.itba.paw.cryptuki.annotation.validation.CollectionOfEnum;
 import ar.edu.itba.paw.cryptuki.dto.MessageDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
+import ar.edu.itba.paw.cryptuki.dto.TradeRatingDTO;
 import ar.edu.itba.paw.cryptuki.form.MessageForm;
+import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Offer;
+import ar.edu.itba.paw.model.Trade;
+import ar.edu.itba.paw.model.TradeStatus;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.ChatService;
 import ar.edu.itba.paw.service.OfferService;
 import ar.edu.itba.paw.service.TradeService;
@@ -19,13 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.net.URI;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/api/trades")
@@ -63,11 +70,11 @@ public class TradeController {
         boolean isOfferIdPresent = offerId != null;
 
         if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
-            throw new IllegalArgumentException("Exactly one of the following filters is allowed: `from_offer`, `buyer`");
+            throw new IllegalArgumentException("Exactly one of the following filters must be provided: `from_offer`, `buyer`");
 
         // If status collection is empty, then no filtering is intended
         // Use every status in query
-        Set<TradeStatus> statusSet = status.stream().map(o->TradeStatus.valueOf(o)).collect(Collectors.toSet());
+        Set<TradeStatus> statusSet = status.stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
         if (statusSet.isEmpty())
             statusSet.addAll(Arrays.asList(TradeStatus.values()));
 
@@ -78,7 +85,7 @@ public class TradeController {
             tradeCount = tradeService.getTradesAsBuyerCount(buyerUsername, statusSet);
         } else {
             Offer offer = offerService.getOfferById(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
-            String username = offer.getSeller().getUsername().get(); // Legacy - From 1st Sprint, when users may not have usernames
+            String username = offer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
 
             // If access is denied, hide 403 response status under a 404,
             // to prevent making information public
@@ -137,7 +144,7 @@ public class TradeController {
     @Path("/{tradeId}/messages")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response postNewMessage(@Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
+    public Response postNewMessage(@NotNull @Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
 
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(senderUsername).orElseThrow(()-> new NoSuchUserException(senderUsername));
@@ -150,7 +157,7 @@ public class TradeController {
     @Path("/{tradeId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response modifyTrade(@PathParam("tradeId") int tradeId, @Valid TradeStatusForm tradeStatusForm) {
+    public Response modifyTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid TradeStatusForm tradeStatusForm) {
         switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
             case ACCEPTED:
                 this.tradeService.acceptTrade(tradeId);break;
@@ -162,6 +169,23 @@ public class TradeController {
                 this.tradeService.rejectTrade(tradeId);break;
             case PENDING: throw new BadRequestException("Trade can not be set to PENDING");
         }
+        return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{tradeId}/rating")
+    public Response getTradeRating(@PathParam("tradeId") int tradeId){
+        Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        return Response.ok(TradeRatingDTO.fromTrade(trade,uriInfo)).build();
+    }
+
+    @PUT
+    @Path("/{tradeId}/rating")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response rateTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid RatingForm ratingForm){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        tradeService.rateCounterPartUserRegardingTrade(username,ratingForm.getRating(),tradeId);
         return Response.noContent().build();
     }
 

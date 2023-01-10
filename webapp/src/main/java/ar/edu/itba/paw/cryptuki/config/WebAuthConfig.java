@@ -4,6 +4,7 @@ import ar.edu.itba.paw.cryptuki.config.auth.filter.DummyBearerFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
+import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAccessDeniedHandler;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -172,6 +172,10 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PATCH, "/api/trades/*").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/trades/*/messages").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/trades/*/messages").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/trades/*/rating").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/api/trades/*/rating").authenticated()
+
+
 
                     .antMatchers(HttpMethod.GET, "/api/complaints").hasRole("ADMIN")
                     .antMatchers(HttpMethod.POST, "/api/complaints").authenticated()
@@ -188,10 +192,10 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.PUT, "/api/users/*/picture").authenticated()
 
                     .antMatchers(HttpMethod.GET, "/api/users/*/kyc").authenticated()
-                    .antMatchers(HttpMethod.PATCH, "/api/users/*/kyc").authenticated()
+                    .antMatchers(HttpMethod.PATCH, "/api/users/*/kyc").hasRole("ADMIN")
                     .antMatchers(HttpMethod.POST, "/api/users/*/kyc").authenticated()
-                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc/validationPhoto").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc/idPhoto").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/users/*/kyc/validationPhoto").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/users/*/kyc/idPhoto").hasRole("ADMIN")
 
                     .antMatchers(HttpMethod.GET, "/api/cryptocurrencies").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/cryptocurrencies/*").permitAll()
@@ -202,7 +206,9 @@ public class WebAuthConfig {
                     .cors()
                     .and()
                     .csrf().disable()
-                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                    .exceptionHandling()
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         }
 
         @Override

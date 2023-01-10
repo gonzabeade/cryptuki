@@ -32,6 +32,7 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
+    @PreAuthorize("@customPreAuthorizer.isKycFromUser(authentication.principal,#kycInformationPO)")
     public void newKycRequest(KycInformationPO kycInformationPO) {
         String username = kycInformationPO.getUsername();
         if (getPendingKycRequest(username).isPresent())
@@ -41,6 +42,7 @@ public class KycServiceImpl implements KycService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal")
     public Optional<KycInformation> getPendingKycRequest(String username) {
         return kycDao.getKycRequestsByStatus(username, KycStatus.PEN).stream().findFirst();
     }

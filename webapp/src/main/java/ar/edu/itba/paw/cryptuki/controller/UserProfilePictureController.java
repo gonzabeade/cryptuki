@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Optional;
 
 @Path("/api/users/{username}/picture")

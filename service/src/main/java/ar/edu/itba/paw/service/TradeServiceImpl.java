@@ -149,13 +149,42 @@ public class TradeServiceImpl implements TradeService {
 
         String buyerUsername = trade.getBuyer().getUserAuth().getUsername();
 
-        if (username.equals(buyerUsername)){
-            userService.updateRatingBy(trade.getOffer().getSeller().getUserAuth().getUsername(), rating);
-            trade.markSellerAsRated();
-        } else {
-            userService.updateRatingBy(buyerUsername, rating);
-            trade.markBuyerAsRated();
-        }
+        if (username.equals(buyerUsername))
+            updateSellerRating(rating,tradeId);
+        else
+            updateBuyerRating(rating,tradeId);
     }
+
+    private void updateSellerRating(int newTradeRating, int tradeId){
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        User seller = trade.getOffer().getSeller();
+        trade.setSeller_rating(newTradeRating);
+        if(!trade.isSellerRated()){
+            userService.updateRatingBy(seller.getUsername().orElseThrow(()-> new IllegalStateException() ), newTradeRating);
+            trade.markSellerAsRated();
+        }else
+            updateUserRating(seller.getRatingSum() ,newTradeRating,seller);
+
+    }
+
+    private void updateBuyerRating(int newTradeRating, int tradeId){
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        User buyer = trade.getBuyer();
+        trade.setBuyer_rating(newTradeRating);
+        if(!trade.isBuyerRated()){
+            userService.updateRatingBy(buyer.getUsername().orElseThrow(()-> new IllegalStateException()), newTradeRating);
+            trade.markBuyerAsRated();
+        }else
+            updateUserRating(trade.getBuyer().getRatingSum() , newTradeRating,buyer);
+
+    }
+
+
+
+    private void updateUserRating(int oldTradeRating,int newTradeRating,  User user){
+        int oldUserRating = user.getRatingSum();
+        user.setRatingSum(oldUserRating - oldTradeRating + newTradeRating);
+    }
+
 
 }

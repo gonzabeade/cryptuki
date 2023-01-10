@@ -25,7 +25,6 @@ export class OfferService {
         return resp.data;
     }
     public async getOfferInformation(offerId:number):Promise<OfferModel>{
-
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
@@ -72,6 +71,11 @@ export class OfferService {
             }
         })
         return resp.data;
+    }
+
+    public getOfferIdFromURI(uri:string):string{
+        const n = uri.lastIndexOf('/');
+        return uri.substring(n + 1);
     }
 
 }

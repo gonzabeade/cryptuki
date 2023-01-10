@@ -28,15 +28,17 @@ const Trade =  () => {
 
     useEffect(()=>{
         // fetchSeller();
-    })
+    },[])
 
-    useEffect(()=>{
-        // fetchOffer();
-    })
+
 
     useEffect(()=>{
         fetchTrade(Number(params.id));
     },[])
+
+    useEffect(()=>{
+        fetchOffer();
+    },[trade])
 
     async function fetchTrade(tradeId: number | null) {
         try{
@@ -75,14 +77,13 @@ const Trade =  () => {
     async function fetchOffer(){
         try{
             if(trade){
-                //TODO offer from trade.offer URI
-                const resp = await offerService.getOfferInformation(1);
+                const resp = await offerService.getOfferInformation(Number(offerService.getOfferIdFromURI(trade.offer)));
                 setOffer(resp);
             }
         }catch (e) {
+            console.log(e)
             toast.error("Connection error. Could not fetch offer");
         }
-
     }
 
 
@@ -111,7 +112,7 @@ const Trade =  () => {
                             <h1 className="text-center text-lg">
                                You pay
                             </h1>
-                            <h1 className="text-center text-xl font-semibold text-polar">${trade?.buyingQuantity} ARS</h1>
+                            <h1 className="text-center text-xl font-semibold text-polar">{trade?.buyingQuantity + ' '} ARS</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 my-5 order-2 mx-10" fill="none"
                              viewBox="0 0 24 24" stroke="black" strokeWidth="2">
@@ -122,8 +123,7 @@ const Trade =  () => {
                                 You receive
                             </h1>
                             <h1 className="text-center text-xl font-semibold text-polar">
-                                { trade && trade?.buyingQuantity / (offer? offer.unitPrice :0)}
-                                {offer?.cryptoCode}
+                                { trade && offer ? trade.buyingQuantity / (offer.unitPrice) + ' '  + offer.cryptoCode: 'Loading' }
                             </h1>
                         </div>
                     </div>

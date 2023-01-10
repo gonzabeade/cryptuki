@@ -4,7 +4,7 @@ import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import {useLocation, useNavigate,  useSearchParams} from "react-router-dom";
-import CryptoFilters from "../../components/CryptoFilters/index";
+import CryptoFilters, {CryptoFormValues} from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
@@ -34,6 +34,9 @@ const Landing = () => {
             toast.error("Connection error. Failed to fetch offers")
         }
     }
+    async function getOffersWithFilters(data:CryptoFormValues){
+        console.log(data);
+    }
 
     useEffect(  ()=>{
             getOffers();
@@ -42,8 +45,7 @@ const Landing = () => {
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">
                 <div className="flex w-1/3">
-                    {/*TODO this callback should update offers*/}
-                    <CryptoFilters callback={()=>console.log("messi")}/>
+                    <CryptoFilters callback={getOffersWithFilters}/>
                 </div>
 
 

@@ -5,6 +5,10 @@ import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
 import { toast } from 'react-toastify';
+import useUserService from "../../hooks/useUserService";
+import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
+import UserModel from "../../types/UserModel";
 
 
 const Receipt = () => {
@@ -12,9 +16,13 @@ const Receipt = () => {
     const [trade, setTrade] = useState<TransactionModel>();
     const params = useParams();
     const tradeService = useTradeService();
+    const userService = useUserService();
+    const [isBuyer, setIsBuyer] = useState<boolean>(true);
+    const [offer, setOffer] = useState<OfferModel>();
+    const offerService = useOfferService();
+    const [counterPart, setCounterPart] = useState<UserModel>();
 
     async function fetchTrade(tradeId:number){
-
         try{
             const resp = await tradeService.getTradeInformation(tradeId);
             setTrade(resp);
@@ -26,7 +34,40 @@ const Receipt = () => {
 
     useEffect(()=>{
         fetchTrade(Number(params.id));
-    },[])
+    },[]);
+    async function fetchBuyerOrSeller(){
+        try{
+            if(trade){
+                //trade.buyer get URI
+                if(trade.buyer === userService.getLoggedInUser()){
+                    //fetch seller
+                    // setCounterPart(trade.seller);
+                    setIsBuyer(true);
+                }else{
+                    //fetch buyer
+                    setIsBuyer(false);
+                }
+            }
+        }catch (e){
+            toast.error("Error fetching buyer or seller");
+        }
+
+    }
+
+    useEffect(()=>{
+        fetchBuyerOrSeller();
+    }, [])
+    async function getOffer(){
+        if (trade) {
+            //TODO get ID from trade.offer
+            const resp =  await offerService.getOfferInformation(Number(trade.offer));
+            setOffer(resp);
+        }
+    }
+
+    useEffect(()=>{
+        getOffer();
+    }, [])
 
 
     return (
@@ -50,7 +91,6 @@ const Receipt = () => {
                         <h1 className="mx-auto text-polard font-bold text-xl mt-10 mb-5">
                             Transaction Data
                         </h1>
-                        {/*TODO ver como switcheamos esto dependiendo del usuario que ve*/}
                         <div
                             className="py-5 px-14 mx-auto rounded-lg bg-white shadow flex  flex-col">
                             <div className="flex flex-row px-30">
@@ -60,8 +100,25 @@ const Receipt = () => {
                                     </h1>
 
                                     <div className="flex flex-row">
-                                        <h2 className="text-lg  font-lato text-polar text-left my-auto">110000.34 ARS
-                                        </h2>
+                                        {isBuyer ?
+                                            <>
+                                                <h2 className="text-lg  font-lato text-polar text-left my-auto">
+                                                    {offer?.unitPrice! * trade?.buyingQuantity!}
+                                                </h2>
+                                                <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
+                                                    ARS
+                                                </h1>
+                                            </>
+                                            :
+                                            <>
+                                                <h2 className="text-lg  font-lato text-polar text-left my-auto">
+                                                    {trade?.buyingQuantity}
+                                                </h2>
+                                                <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
+                                                    {offer?.cryptoCode}
+                                                </h1>
+                                            </>
+                                           }
                                     </div>
                                 </div>
                                 <div className="mx-10 my-auto">
@@ -76,12 +133,25 @@ const Receipt = () => {
                                     </h1>
 
                                     <div className="flex flex-row">
-                                        <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                            0000.2
-                                        </h2>
-                                        <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
-                                            BTC
-                                        </h1>
+                                        {isBuyer ?
+                                            <>
+                                                <h2 className="text-lg  font-lato text-polar text-left my-auto">
+                                                    {trade?.buyingQuantity}
+                                                </h2>
+                                                <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
+                                                    {offer?.cryptoCode}
+                                                </h1>
+                                            </>
+                                            :
+                                            <>
+                                                <h2 className="text-lg  font-lato text-polar text-left my-auto">
+                                                    {offer?.unitPrice! * trade?.buyingQuantity!}
+                                                </h2>
+                                                <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
+                                                    ARS
+                                                </h1>
+                                            </>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -113,8 +183,8 @@ const Receipt = () => {
 
             <div className="flex flex-col w-2/5">
                 <div className="flex flex-col mx-10 items-center">
-                    {/*TODO ver como switcheamos con usuarios */}
-                    <UserInfo username={"mdedeu"} email={"mdedeu@itba.edu.ar"} phone_number={"1245432"} last_login={"ayer"} trades_completed={12} rating={4.5}/>
+
+                    <UserInfo username={counterPart?.username!} email={counterPart?.email!} phone_number={counterPart?.phoneNumber!} last_login={counterPart?.lastLogin.toString()!} trades_completed={counterPart?.ratingCount!} rating={counterPart?.rating!}/>
                     <div className="flex flex-col mx-auto mt-10">
                         <RateYourCounterPart usernameRater={"mdedeu"} usernameRated={"messi"} tradeId={21}/>
                     </div>

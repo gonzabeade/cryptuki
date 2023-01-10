@@ -6,13 +6,14 @@ import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
 
-type CryptoFormValues = {
+export type CryptoFormValues = {
 
     cryptos?:string[],
     locations?:string[],
     amount?:number,
     amountCurrency?:string
 }
+
 type CryptoFiltersProps = {
     callback:Function
 }

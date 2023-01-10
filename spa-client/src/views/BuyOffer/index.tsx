@@ -59,7 +59,10 @@ const BuyOffer = () => {
     async function onSubmit(data:BuyOfferFormValues){
         try{
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
-            navigate('/trade/' + resp.tradeId);
+
+            //TODO getTradeId from URL
+
+            navigate('/trade/' + resp);
         }catch (e){
             toast.error("Connection error. Failed to create trade");
         }

@@ -33,7 +33,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     }
 
     useEffect(()=>{
-      getMessages();
+      // getMessages();
     },[])
 
     async function sendMessage(data:ChatFormValues){

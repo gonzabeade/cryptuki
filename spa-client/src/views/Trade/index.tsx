@@ -4,7 +4,7 @@ import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
 import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
@@ -18,7 +18,7 @@ import useUserService from "../../hooks/useUserService";
 const Trade =  () => {
 
     const navigate = useNavigate();
-    const [searchParams]= useSearchParams();
+    const params= useParams();
     const [trade, setTrade] = useState<TransactionModel>();
     const [offer, setOffer] = useState<OfferModel>();
     const [seller, setSeller] = useState<UserModel>();
@@ -26,15 +26,32 @@ const Trade =  () => {
     const offerService = useOfferService();
     const userService = useUserService();
 
-    async function fetchTrade(tradeId: number | null) {
-        if(tradeId){
-            const resp = await tradeService.getTradeInformation(tradeId);
+    useEffect(()=>{
+        // fetchSeller();
+    })
 
-            if(resp.status === 'SOLD'){
+    useEffect(()=>{
+        // fetchOffer();
+    })
+
+    useEffect(()=>{
+        fetchTrade(Number(params.id));
+    },[])
+
+    async function fetchTrade(tradeId: number | null) {
+        try{
+            if(tradeId){
+                const resp = await tradeService.getTradeInformation(tradeId);
+
+                if(resp.status === 'SOLD'){
                     navigate('/trade/'+ resp.tradeId+ '/receipt');
+                }
+                setTrade(resp);
             }
-            setTrade(resp);
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch trade");
         }
+
     }
     async function takeBackProposal(){
         try{
@@ -44,42 +61,36 @@ const Trade =  () => {
             toast.error("Connection error. Failed to take back proposal");
         }
     }
+
     async function fetchSeller(){
         try{
             const resp  = await  userService.getUser(trade?.seller!);
             setSeller(resp);
         }catch (e) {
-
+                toast.error("Connection error. Failed to fetch seller")
         }
 
     }
 
-    useEffect(()=>{
-        fetchSeller();
-    })
     async function fetchOffer(){
-        if(trade){
-            //TODO offer from trade.offer URI
-            const resp = await offerService.getOfferInformation(1);
-            setOffer(resp);
+        try{
+            if(trade){
+                //TODO offer from trade.offer URI
+                const resp = await offerService.getOfferInformation(1);
+                setOffer(resp);
+            }
+        }catch (e) {
+            toast.error("Connection error. Could not fetch offer");
         }
+
     }
-
-    useEffect(()=>{
-        fetchOffer();
-    })
-
-    useEffect(()=>{
-       // const tradeId:string = searchParams.tradeId;
-        fetchTrade(Number(searchParams.get("tradeId")));
-    })
 
 
 
     return (
         <div className="flex flex-row mx-5">
             <div className="w-3/5 flex flex-col justify-center">
-                <TradeStatusAlert status={trade?.status}/>
+                <TradeStatusAlert status={trade?.status!}/>
                 <h1 className="text-polar text-xl text-center mx-auto my-1 font-lato font-bold">Buying process</h1>
                 <Stepper active={0}/>
                 <hr className="mt-4 mb-2"/>
@@ -133,7 +144,7 @@ const Trade =  () => {
                 </div>
             </div>
             <div className="w-2/5">
-                //TODO disociate username from URI
+                {/*//TODO disociate username from URI*/}
                 <ChatSnippet counterPart={seller} tradeId={trade? trade.tradeId: 0}/>
             </div>
 

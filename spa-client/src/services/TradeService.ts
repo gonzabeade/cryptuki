@@ -12,11 +12,7 @@ export class TradeService {
         this.axiosInstance = axiosInstance;
     }
     public async getTradeInformation(tradeId: number):Promise<TransactionModel> {
-            const resp = await this.axiosInstance().get<TransactionModel>(this.basePath, {
-                params: {
-                    tradeId: tradeId
-                }
-            });
+            const resp = await this.axiosInstance().get<TransactionModel>(this.basePath + tradeId);
             return resp.data;
     }
     public async getLastTransactions(username:string|null):Promise<TransactionModel[]>{
@@ -44,14 +40,11 @@ export class TradeService {
         });
         return resp.data;
     }
-    public async createTrade(amount:number, offerId:number|undefined):Promise<TransactionModel>{
-        const resp = await this.axiosInstance().post(paths.BASE_URL + offerId + paths.TRADE, {
-            body: {
-                offerId: offerId,
-                amount:amount
-            }
+    public async createTrade(amount:number, offerId:number|undefined):Promise<string>{
+        const resp = await this.axiosInstance().post(paths.BASE_URL + paths.OFFERS + offerId + paths.TRADE, {
+                 quantity: amount
         });
-        return resp.data;
+        return resp.headers["Location"]!;
     }
     public async changeTradeStatus(tradeId:number, status:string):Promise<TransactionModel>{
         const resp = await this.axiosInstance().put(paths.BASE_URL + paths.TRADE + tradeId , {

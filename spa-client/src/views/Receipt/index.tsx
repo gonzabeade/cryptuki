@@ -28,7 +28,6 @@ const Receipt = () => {
             setTrade(resp);
         }catch (e){
             toast.error("Error fetching trade");
-            console.log("here")
         }
     }
 
@@ -40,7 +39,7 @@ const Receipt = () => {
             if(trade){
                 //trade.buyer get URI
                 if(trade.buyer === userService.getLoggedInUser()){
-                    //fetch seller
+                    // fetch seller
                     // setCounterPart(trade.seller);
                     setIsBuyer(true);
                 }else{

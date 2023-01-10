@@ -57,7 +57,7 @@ const TradeStatusAlert: React.FC<TradeStatusAlertProps> = ({status}) => {
 
     useEffect(()=>{
         setTradeStatusOnStart();
-    },[])
+    },[status])
 
     return (
         <div className={`flex p-5 text-center rounded-lg mx-auto mt-10 mb-2 border-2`} style={{ backgroundColor: tradeStatus?.color, border: "1px solid " + tradeStatus?.accentColor }}>

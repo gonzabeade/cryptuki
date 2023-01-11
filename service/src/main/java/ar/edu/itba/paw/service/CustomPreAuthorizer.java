@@ -88,24 +88,6 @@ public class CustomPreAuthorizer {
         return kycInformationPO != null && username!=null && username.equals(kycInformationPO.getUsername());
     }
 
-    public boolean isTradePending(int tradeId){
-       return isTradeOfStatus(tradeId,TradeStatus.PENDING);
-    }
-
-    public boolean isTradeAccepted(int tradeId){
-        return isTradeOfStatus(tradeId,TradeStatus.ACCEPTED);
-    }
-
-    public boolean canTradeBeDeleted(int tradeId){
-        return isTradePending(tradeId) || isTradeAccepted(tradeId);
-    }
-
-
-    private boolean isTradeOfStatus(int tradeId, TradeStatus status){
-        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
-        return trade!=null && trade.getStatus().equals(status);
-    }
-
 
 
 }

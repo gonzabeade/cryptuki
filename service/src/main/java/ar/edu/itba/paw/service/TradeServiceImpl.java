@@ -54,16 +54,21 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradePending(#tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade rejectTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.REJECTED);
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.REJECTED);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradeAccepted(#tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade sellTrade(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.ACCEPTED))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.SOLD);
         tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
         Offer offer = trade.getOffer();
         double newMaxInCrypto = offer.getMaxInCrypto() - trade.getQuantity() / offer.getUnitPrice();
@@ -84,15 +89,21 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.isTradePending(#tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade acceptTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.ACCEPTED);
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.ACCEPTED);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId) and @customPreAuthorizer.canTradeBeDeleted(#tradeId)")
+    @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId)")
     public void deleteTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.DELETED);
         tradeDao.deleteTrade(tradeId);
     }
 

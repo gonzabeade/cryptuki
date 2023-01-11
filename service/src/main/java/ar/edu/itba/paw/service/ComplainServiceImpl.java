@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.exception.ClosedComplain;
 import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
@@ -71,8 +72,10 @@ public class ComplainServiceImpl implements ComplainService{
     @Secured("ROLE_ADMIN")
     @Transactional
     public void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId) {
-
-        Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+        Complain complain = getComplainById(complainId).orElseThrow(()-> new NoSuchComplainException(complainId));
+        if(complain.getStatus().equals(ComplainStatus.CLOSED))
+            throw new ClosedComplain(complainId);
+        complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
 
         complain.setResolution(ComplaintResolution.KICK);
         complainDao.modifyComplain(complain);
@@ -96,7 +99,10 @@ public class ComplainServiceImpl implements ComplainService{
     @Secured("ROLE_ADMIN")
     @Transactional
     public void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment){
-        Complain complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
+        Complain complain = getComplainById(complainId).orElseThrow(()-> new NoSuchComplainException(complainId));
+        if(complain.getStatus().equals(ComplainStatus.CLOSED))
+            throw new ClosedComplain(complainId);
+        complain = complainDao.closeComplain(complainId, moderatorUsername, comment).orElseThrow(()->new NoSuchComplainException(complainId));
 
         complain.setResolution(ComplaintResolution.DISMISS);
         complainDao.modifyComplain(complain);

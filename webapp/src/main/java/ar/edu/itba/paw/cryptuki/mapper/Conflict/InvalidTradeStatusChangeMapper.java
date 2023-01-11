@@ -5,7 +5,7 @@ import ar.edu.itba.paw.exception.InvalidTradeStatusChange;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class UnmodifiableTradeExceptionMapper extends ConflictMapper<InvalidTradeStatusChange> {
+public class InvalidTradeStatusChangeMapper extends ConflictMapper<InvalidTradeStatusChange> {
     @Override
     public String getMessage() {
         return this.exceptionMessage;

@@ -27,7 +27,7 @@ const SellerOfferDashboard = () => {
                 setTrades(resp);
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);
-                //TODOset pages
+                console.log("trades fetched")
             } else {
                 toast.error("No offer ID!");
             }
@@ -41,8 +41,6 @@ const SellerOfferDashboard = () => {
     useEffect(()=>{
         //fetch trade. If no results, fetch offer. Else, setOffer trade[0].offer
         fetchTradesAssociatedWithOffer();
-
-
     })
 
 
@@ -119,7 +117,7 @@ const SellerOfferDashboard = () => {
                         <div className="flex flex-wrap pl-3 mt-10 mx-auto">
                             {trades && trades.map((trade)=>{
                                 return(
-                                    <OfferInformationForSeller trade={trade!} chat={true} key={trade.tradeId}/>
+                                    <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId}/>
                                 );
                             })}
                         </div>

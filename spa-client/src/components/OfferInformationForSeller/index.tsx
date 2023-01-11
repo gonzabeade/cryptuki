@@ -24,36 +24,35 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
     async function fetchBuyer(){
         try{
-            const resp = await userService.getUser(userService.getUsernameFromURI(trade.buyer));
-            setBuyer(resp);
+            if(trade){
+                const resp = await userService.getUser(userService.getUsernameFromURI(trade?.buyer));
+                setBuyer(resp);
+            }
         }catch (e) {
             toast.error("Connection error. Couldn't fetch buyer");
         }
     }
 
     useEffect(()=>{
-        // fetchBuyer();
-    },[])
+        fetchBuyer();
+    },[trade])
 
     async function fetchOffer(){
-        //fetch offer from offer? . Split to get offer id or get directly
-        const offerId = trade?.offer.split("/")[4];
-        try{
-            const resp = await offerService.getOfferInformation(Number(offerId));
-            setOffer(resp);
-        }catch (e) {
-            toast.error("Connection error. Couldn't fetch offer");
+        if(trade){
+            const offerId = offerService.getOfferIdFromURI(trade?.offer);
+            try{
+                const resp = await offerService.getOfferInformation(Number(offerId));
+                setOffer(resp);
+            }catch (e) {
+                toast.error("Connection error. Couldn't fetch offer");
+            }
         }
-
     }
-
     useEffect(()=>{
-        // fetchOffer();
-    },[])
-
-    useEffect(()=>{
+        fetchOffer();
         setTradeStatus(trade?.status);
     },[trade])
+
 
 
     async function changeStatus(status:string, tradeId:number){
@@ -100,21 +99,23 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 </div>
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">
-                    <h1 className="mx-auto">
-                        {trade?.buyingQuantity + ' ' + offer?.cryptoCode}
-                        ⟶ {trade?.buyingQuantity * (offer? offer.unitPrice: 1)} ARS
+                    <h1 className="mx-auto my-auto flex flex-row justify-around">
+                        <p className={"text-polar text-lg font-bold"}>   {trade?.buyingQuantity + ' ' + offer?.cryptoCode}</p>
+                        <p className={"mx-2"}>⟶</p>
+                        <p  className={"text-polar text-lg font-bold"}>  {trade?.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</p>
+
                     </h1>
                 </div>
 
                 <div className="flex flex-col my-2">
                     <h1 className="font-bold font-roboto text-polar mx-auto text-center">Buyer:</h1>
                     <div className="flex mx-auto">
-                        <h1 className=" text-lg font-sans font-semibold text-center">
+                        <h1 className=" text-lg font-sans text-center text-polar">
                             {buyer?.username}
                         </h1>
                     </div>
                     <div className="flex mx-auto">
-                        <h1 className="font-sans font-semibold text-center text-gray-400">
+                        <h1 className="font-sans text-center text-gray-400 text-md">
                             {buyer?.email}
                         </h1>
                     </div>
@@ -123,7 +124,8 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                             {buyer?.phoneNumber}
                         </h1>
                     </div>
-                    <RatingStars rating={buyer? buyer.rating/2: 0}/>
+                    { buyer && buyer.ratingCount > 0 &&  <RatingStars rating={buyer? buyer.rating/2: 0}/>}
+
                 </div>
 
                 {tradeStatus === 'SOLD' &&

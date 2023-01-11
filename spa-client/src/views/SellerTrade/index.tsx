@@ -6,6 +6,7 @@ import useTradeService from "../../hooks/useTradeService";
 import TransactionModel from "../../types/TransactionModel";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
+import {toast} from "react-toastify";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();
@@ -17,10 +18,23 @@ const SellerTrade = () => {
 
     async function fetchTrade(){
         const tradeId = params.id;
-        //TODO FETCH
+        try{
+            const resp = await tradeService.getTradeInformation(Number(tradeId));
+            setTrade(resp);
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch trade");
+        }
     }
     async function fetchCounterPart(){
-        //TODO FETCH
+        if(trade){
+            try{
+                const resp = await userService.getUser(userService.getUsernameFromURI(trade.buyer));
+                setCounterPart(resp);
+
+            }catch (e) {
+                toast.error("Connection error. Couldn't fetch counterpart");
+            }
+        }
     }
 
     useEffect(()=>{
@@ -29,7 +43,7 @@ const SellerTrade = () => {
 
     useEffect(()=>{
         fetchCounterPart();
-    },[])
+    },[trade])
 
     return (
         <div className="flex flex-row mt-7">

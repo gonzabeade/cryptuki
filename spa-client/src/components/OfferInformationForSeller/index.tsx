@@ -60,6 +60,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
             const resp = await tradeService.changeTradeStatus(tradeId, status);
             setTradeStatus(status);
         }catch (e) {
+            console.log(e);
             toast.error("Connection error. Couldn't change trade status");
         }
     }
@@ -136,19 +137,19 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 }
                 {tradeStatus === 'PENDING' &&
                     <div className="flex flex-row">
-                        <form method="post" className="flex justify-center mx-auto my-3">
-                            <button type="submit"
-                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('REJECTED', trade?.tradeId)}>
+                        <div className="flex justify-center mx-auto my-3">
+                            <button
+                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('REJECTED', trade?.tradeId!)}>
                                 Reject
                             </button>
-                        </form>
+                        </div>
 
-                        <form className="flex justify-center mx-auto my-3">
-                            <button type="submit"
-                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('ACCEPTED', trade?.tradeId)}>
+                        <div className="flex justify-center mx-auto my-3">
+                            <button
+                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('ACCEPTED', trade?.tradeId!)}>
                                 Accept
                             </button>
-                        </form>
+                        </div>
                     </div>
                 }
 

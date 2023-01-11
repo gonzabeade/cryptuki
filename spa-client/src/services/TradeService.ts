@@ -47,10 +47,8 @@ export class TradeService {
         return resp.headers["Location"]!;
     }
     public async changeTradeStatus(tradeId:number, status:string):Promise<TransactionModel>{
-        const resp = await this.axiosInstance().put(paths.BASE_URL + paths.TRADE + tradeId , {
-            body: {
-                status: status
-            }
+        const resp = await this.axiosInstance().patch(paths.BASE_URL + paths.TRADE + tradeId , {
+                newStatus: status
         });
         return resp.data;
     }

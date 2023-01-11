@@ -157,6 +157,8 @@ public class TradeServiceImpl implements TradeService {
             throw new IllegalArgumentException("Rating is out of bounds.");
 
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        if(!trade.getStatus().equals(TradeStatus.SOLD))
+            throw new NoRateableTradeException(tradeId);
 
         String buyerUsername = trade.getBuyer().getUserAuth().getUsername();
 

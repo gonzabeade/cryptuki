@@ -154,4 +154,5 @@ public class OfferHibernateDao implements OfferDao{
         return query.getResultList();
     }
 
+
 }

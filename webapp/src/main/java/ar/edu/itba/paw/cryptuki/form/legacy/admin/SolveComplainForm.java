@@ -2,6 +2,7 @@ package ar.edu.itba.paw.cryptuki.form.legacy.admin;
 
 import ar.edu.itba.paw.cryptuki.annotation.validation.ValueOfEnum;
 import ar.edu.itba.paw.model.ComplaintResolution;
+import ar.edu.itba.paw.model.parameterObject.SolveComplainPO;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,4 +28,15 @@ public class SolveComplainForm {
     public void setResolution(String resolution) {
         this.resolution = resolution;
     }
+
+    public SolveComplainPO toSolveComplainPO(String moderatorUsername, int complainId){
+        SolveComplainPO solveComplainPO = new SolveComplainPO();
+        solveComplainPO.setComplainId(complainId);
+        solveComplainPO.setModeratorUsername(moderatorUsername);
+        solveComplainPO.setComments(comments);
+        solveComplainPO.setResolution(resolution);
+        return solveComplainPO;
+    }
+
+
 }

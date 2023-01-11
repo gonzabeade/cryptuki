@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 import ar.edu.itba.paw.model.parameterObject.SolveComplainPO;
 import ar.edu.itba.paw.persistence.ComplainDao;
+import ar.edu.itba.paw.persistence.OfferDao;
 import ar.edu.itba.paw.persistence.UserAuthDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -22,15 +23,17 @@ public class ComplainServiceImpl implements ComplainService{
 
     private final ComplainDao complainDao;
     private final UserAuthDao userAuthDao;
+    private final OfferDao offerDao;
 
 
     private final MessageSenderFacade messageSenderFacade;
 
     @Autowired
-    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade, UserAuthDao userAuthDao) {
+    public ComplainServiceImpl(ComplainDao complainDao, MessageSenderFacade messageSenderFacade, UserAuthDao userAuthDao, OfferDao offerDao) {
         this.complainDao = complainDao;
         this.messageSenderFacade = messageSenderFacade;
         this.userAuthDao = userAuthDao;
+        this.offerDao = offerDao;
     }
 
     @Override
@@ -112,6 +115,8 @@ public class ComplainServiceImpl implements ComplainService{
             kickedOutUser = trade.getBuyer();
         }
 
+
+        offerDao.pauseOffersFromUser(kickedOutUser.getId());
         userAuthDao.kickoutUser(kickedOutUser.getId());
 
         messageSenderFacade.sendYouWereKickedOutBecause(kickedOutUser, comment);

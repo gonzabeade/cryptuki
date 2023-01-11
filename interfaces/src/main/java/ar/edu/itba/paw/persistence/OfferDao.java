@@ -24,4 +24,5 @@ public interface OfferDao {
      */
     Collection<LocationCountWrapper> getOfferCountByLocation();
 
+    void pauseOffersFromUser(int userId);
 }

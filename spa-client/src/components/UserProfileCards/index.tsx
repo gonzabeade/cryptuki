@@ -15,11 +15,11 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
         <div className="bg-white shadow rounded-lg py-1">
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">
-                    <div className="w-full text-sm leading-normal text-gray-400 flex justify-end items-center mt-1">
-                        <a href="/changePassword" className="mr-3 underline cursor-pointer">
-                            Change your password
-                        </a>
-                    </div>
+                    {/*<div className="w-full text-sm leading-normal text-gray-400 flex justify-end items-center mt-1">*/}
+                    {/*    <a href="/changePassword" className="mr-3 underline cursor-pointer">*/}
+                    {/*        Change your password*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
                         <img src={picture} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"}/>
                         {username}

@@ -22,6 +22,7 @@ const Receipt = () => {
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
 
+
     async function fetchTrade(tradeId:number){
         try{
             const resp = await tradeService.getTradeInformation(tradeId);
@@ -34,18 +35,23 @@ const Receipt = () => {
     useEffect(()=>{
         fetchTrade(Number(params.id));
     },[]);
+
     async function fetchBuyerOrSeller(){
         try{
             if(trade){
                 //trade.buyer get URI
+                let username:string;
+
                 if(trade.buyer === userService.getLoggedInUser()){
-                    // fetch seller
-                    // setCounterPart(trade.seller);
+                    username = userService.getUsernameFromURI(trade.buyer);
                     setIsBuyer(true);
                 }else{
-                    //fetch buyer
-                    setIsBuyer(false);
+                   username = userService.getUsernameFromURI(trade.seller);
+                   setIsBuyer(false);
                 }
+
+                const resp = await userService.getUser(username);
+                setCounterPart(resp);
             }
         }catch (e){
             toast.error("Error fetching buyer or seller");
@@ -55,19 +61,19 @@ const Receipt = () => {
 
     useEffect(()=>{
         fetchBuyerOrSeller();
-    }, [])
+    }, [trade])
 
     async function getOffer(){
         if (trade) {
-            //TODO get ID from trade.offer
-            const resp =  await offerService.getOfferInformation(Number(trade.offer));
+            const offerId = offerService.getOfferIdFromURI(trade.offer);
+            const resp =  await offerService.getOfferInformation(Number(offerId));
             setOffer(resp);
         }
     }
 
     useEffect(()=>{
         getOffer();
-    }, [])
+    }, [trade])
 
 
     return (
@@ -183,7 +189,7 @@ const Receipt = () => {
 
             <div className="flex flex-col w-2/5">
                 <div className="flex flex-col mx-10 items-center">
-                    <UserInfo username={counterPart?.username!} email={counterPart?.email!} phone_number={counterPart?.phoneNumber!} last_login={counterPart?.lastLogin.toString()!} trades_completed={counterPart?.ratingCount!} rating={counterPart?.rating!}/>
+                    {counterPart &&  <UserInfo username={counterPart.username} email={counterPart.email} phone_number={counterPart.phoneNumber} last_login={counterPart.lastLogin.toString()} trades_completed={counterPart.ratingCount} rating={counterPart.rating}/>}
                     <div className="flex flex-col mx-auto mt-10">
                         <RateYourCounterPart usernameRater={userService.getLoggedInUser()!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
                     </div>

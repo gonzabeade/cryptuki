@@ -13,6 +13,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
 
     const [alreadyRated, setAlreadyRated] = useState<boolean>(false);
     const [rating, setRating] = useState<number>();
+
     function hoverOnRating(number:number) {
         let element;
         for(let i = 1; i <= number; i++){
@@ -39,10 +40,6 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
 
     return (
         <>
-            {/*TODO esto es para sacar el warning, despues tengo que meter el switch el tradeId agregarlo al post de rating*/}
-            {usernameRater}
-            {tradeId}
-            {rating}
             {!alreadyRated &&
                 <div className="flex flex-col">
                     <h1 className="text-polard font-roboto font-bold text-center text-xl mx-auto">

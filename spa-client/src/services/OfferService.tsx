@@ -2,6 +2,7 @@ import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
+import qs from "qs";
 
 export class OfferService {
 
@@ -12,7 +13,7 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, exlude_username?:string, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
+    public async getOffers(page?: number, pageSize?: number, exlude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string, by_user?:string): Promise<OfferModel[]> {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: {
                 page:page,
@@ -20,11 +21,14 @@ export class OfferService {
                 cryptoCodes: cryptoCodes,
                 locations: locations,
                 orderBy: orderBy,
-                exclude_user:exlude_username
+                exclude_user:exlude_username,
+                by_user:by_user,
+                status:qs.stringify(status)
             }
         })
         return resp.data;
     }
+
     public async getOfferInformation(offerId:number):Promise<OfferModel>{
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
@@ -59,7 +63,7 @@ export class OfferService {
         })
         return resp.data;
     }
-    public async getOffersByStatus(status:string|undefined, page?:number){
+    public async getOffersByStatus(status:string|undefined,  username:string, page?:number){
 
         if(status === 'ALL'){
             status = undefined
@@ -68,7 +72,8 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:{
                 page:page,
-                status:status
+                status:status,
+                by_user:username
             }
         })
         return resp.data;

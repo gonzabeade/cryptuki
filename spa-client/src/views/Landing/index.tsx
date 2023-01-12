@@ -9,6 +9,7 @@ import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 import useUserService from "../../hooks/useUserService";
+import {OFFER_STATUS} from "../../common/constants";
 
 const Landing = () => {
 
@@ -21,11 +22,11 @@ const Landing = () => {
 
     async function getOffers(page?:number, pageSize?:number){
         try{
-            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()! );
-
+            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending]);
             setOffers(apiCall);
             setIsLoading(false);
-            //get Headers and set Actual and total pages
+
+
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }
@@ -73,7 +74,6 @@ const Landing = () => {
                                 <div>
                                     <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
                                 </div>
-
                             </div>
                             {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
                             {offers && offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}

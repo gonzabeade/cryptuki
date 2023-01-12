@@ -56,6 +56,9 @@ public class TradeServiceImpl implements TradeService {
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade rejectTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.REJECTED);
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.REJECTED);
     }
 
@@ -64,6 +67,8 @@ public class TradeServiceImpl implements TradeService {
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade sellTrade(int tradeId) {
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.ACCEPTED))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.SOLD);
         tradeDao.changeTradeStatus(tradeId, TradeStatus.SOLD);
         Offer offer = trade.getOffer();
         double newMaxInCrypto = offer.getMaxInCrypto() - trade.getQuantity() / offer.getUnitPrice();
@@ -86,6 +91,9 @@ public class TradeServiceImpl implements TradeService {
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserOwnerOfTrade(authentication.principal, #tradeId)")
     public Trade acceptTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.ACCEPTED);
         return tradeDao.changeTradeStatus(tradeId, TradeStatus.ACCEPTED);
     }
 
@@ -93,6 +101,9 @@ public class TradeServiceImpl implements TradeService {
     @Transactional
     @PreAuthorize("@customPreAuthorizer.isUserBuyerOfTrade(authentication.principal, #tradeId)")
     public void deleteTrade(int tradeId) {
+        Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
+        if (!trade.getStatus().equals(TradeStatus.PENDING))
+            throw new InvalidTradeStatusChange(tradeId,TradeStatus.DELETED);
         tradeDao.deleteTrade(tradeId);
     }
 
@@ -146,6 +157,8 @@ public class TradeServiceImpl implements TradeService {
             throw new IllegalArgumentException("Rating is out of bounds.");
 
         Trade trade = tradeDao.getTradeById(tradeId).orElseThrow(()->new NoSuchTradeException(tradeId));
+        if(!trade.getStatus().equals(TradeStatus.SOLD))
+            throw new NoRateableTradeException(tradeId);
 
         String buyerUsername = trade.getBuyer().getUserAuth().getUsername();
 

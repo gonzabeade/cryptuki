@@ -174,12 +174,13 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}/rating")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getTradeRating(@PathParam("tradeId") int tradeId){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
         return Response.ok(TradeRatingDTO.fromTrade(trade,uriInfo)).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{tradeId}/rating")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.APPLICATION_JSON})

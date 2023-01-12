@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -152,6 +151,14 @@ public class OfferHibernateDao implements OfferDao{
     public Collection<LocationCountWrapper> getOfferCountByLocation() {
         TypedQuery<LocationCountWrapper> query = em.createQuery("select new java.util.AbstractMap.SimpleImmutableEntry(location, count(location)) from Offer where offerStatus = 'APR' group by location order by count(location) desc", LocationCountWrapper.class);
         return query.getResultList();
+    }
+
+    @Override
+    public void pauseOffersFromUser(int userId){
+        String nativeQuery = "UPDATE offer SET status_code = 'PSU' where seller_id = :id";
+        Query query = em.createNativeQuery(nativeQuery);
+        query.setParameter("id",userId);
+        query.executeUpdate();
     }
 
 }

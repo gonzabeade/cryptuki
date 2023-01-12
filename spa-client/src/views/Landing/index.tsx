@@ -8,18 +8,23 @@ import CryptoFilters, {CryptoFormValues} from "../../components/CryptoFilters/in
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
+import useUserService from "../../hooks/useUserService";
 
 const Landing = () => {
 
-    const [offers, setOffers] = useState<OfferModel[]|null>([]);
+    const [offers, setOffers] = useState<OfferModel[]|null>();
     const offerService = useOfferService();
+    const userService = useUserService();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [actualPage, setActualPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
     async function getOffers(page?:number, pageSize?:number){
         try{
-            const apiCall = await offerService?.getOffers(page, pageSize);
+            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()! );
+
             setOffers(apiCall);
+            setIsLoading(false);
             //get Headers and set Actual and total pages
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
@@ -49,7 +54,7 @@ const Landing = () => {
                 </div>
 
 
-                    {offers ?
+                    {!isLoading ?
                         <>
                         <div className="flex flex-col w-2/3 mt-10">
                             <div className="flex flex-row mx-10 justify-between">
@@ -70,8 +75,9 @@ const Landing = () => {
                                 </div>
 
                             </div>
-                            {offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
+                            {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
+                            {offers && offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
+                            {!offers && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
 
                         </div>
                         </>
@@ -79,7 +85,6 @@ const Landing = () => {
                         <div className="flex flex-col w-2/3 mt-10">
                             <Loader/>
                         </div>
-
                     }
 
             </div>

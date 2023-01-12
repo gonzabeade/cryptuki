@@ -23,7 +23,7 @@ const ALERTS_MAP = new Map<string, TradeStatusAlertState>([
         ],
     ['REJECTED',  {
         icon: <FaceFrownIcon className="w-12 h-12 text-nredd"/>,
-        color: "#EBCB8B",
+        color: "#BF616A",
         accentColor: "#ad2b36",
         title: "This proposal has been rejected",
         subtitle: "Make a new trade proposal if you still want to buy from this seller",

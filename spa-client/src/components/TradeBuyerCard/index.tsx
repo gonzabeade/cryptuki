@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
+import {toast} from "react-toastify";
+import {TRADE_STATUS} from "../../common/constants";
 
 type TradeCardProp = {
     trade:TransactionModel,
@@ -10,13 +13,24 @@ type TradeCardProp = {
 const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
 
     const [offer, setOffer] = useState<OfferModel>();
+    const offerService = useOfferService();
 
     async function fetchOffer(){
         //fetch with uri
+        try{
+            if(trade){
+                const offerId = offerService.getOfferIdFromURI(trade?.offer);
+                const resp = await offerService.getOfferInformation(Number(offerId));
+                setOffer(resp);
+            }
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch offer");
+        }
+
     }
     useEffect(()=>{
         fetchOffer();
-    },[])
+    },[trade])
 
     return (
         <div className="shadow-xl flex rounded-lg  py-5 px-12 bg-[#FAFCFF] mt-3 justify-start">
@@ -49,9 +63,9 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
                 <div className="flex flex-col font-sans justify-center ">
                     <h1 className="font-sans">In exchange for: </h1>
                     <div className="flex">
-                        <h1 className="text-xl font-sans font-bold">{trade.buyingQuantity / (offer? offer.unitPrice: 1)} </h1>
-                        <h1 className="text-xl font-sans font-bold mx-2">{offer?.cryptoCode}</h1>
-                        <img src={'/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-7 h-7 mx-auto"/>
+                        <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer ? offer.unitPrice : 1))).toFixed(2)} </h1>
+                        <h1 className="font-sans font-semibold">{offer?.cryptoCode}</h1>
+                        <img src={'/images/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
                     </div>
                 </div>
 
@@ -60,22 +74,22 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
             <div className="w-1/4 flex flex-row">
                 <div className="flex my-auto ml-1">
                     {trade.status != 'SOLD' && trade.status != 'REJECTED' && trade.status !== 'DELETED' &&
-                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade?tradeId="+trade.tradeId}>
+                        <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+trade.tradeId}>
                         Resume trade
                         </a>
                     }
                     {trade.status === "SOLD" &&
-                        <a className="bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-16 justify-center rounded-md font-sans text-center w-40" href={"/trade/"+ trade.tradeId
+                        <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+ trade.tradeId
                         +"/receipt"}>
-                           Help
+                           See receipt
                         </a>
                     }
             </div>
 
             <div className="ml-4 flex flex-row  align-middle my-auto font-sans">
-                {unSeenMessages !== 0 &&
+                {unSeenMessages !== 0 && trade.status !== TRADE_STATUS.Sold &&
                     <>
-                        <a href={"/trade?tradeId" + trade.tradeId} className="flex flex-row">
+                        <a href={"/trade/" + trade.tradeId} className="flex flex-row cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round"

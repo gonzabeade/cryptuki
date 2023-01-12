@@ -67,7 +67,7 @@ const BuyerDashboard = () => {
                     {trades.length >0 && trades.map((trade)=>{
                         return (
                             //TODO unseenMessages
-                            <TradeBuyerCard trade={trade} unSeenMessages={1}/>
+                            <TradeBuyerCard trade={trade} unSeenMessages={1} key={trade.tradeId}/>
                         );
                     })}
                 </div>

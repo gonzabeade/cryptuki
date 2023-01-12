@@ -3,7 +3,6 @@ import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
-import {useLocation, useNavigate,  useSearchParams} from "react-router-dom";
 import CryptoFilters, {CryptoFormValues} from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
@@ -22,7 +21,7 @@ const Landing = () => {
 
     async function getOffers(page?:number, pageSize?:number){
         try{
-            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending]);
+            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending, OFFER_STATUS.Sold]);
             setOffers(apiCall);
             setIsLoading(false);
 

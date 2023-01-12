@@ -13,19 +13,43 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, exlude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string, by_user?:string): Promise<OfferModel[]> {
+    public async getOffers(page?: number, pageSize?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
+        let params = new URLSearchParams();
+
+        //TODO esto es nefasto, pero tengo pocas ganas de pensar ya
+        if(page){
+            params.append("page", page?.toString()!);
+        }
+        if(pageSize){
+            params.append("per_page", pageSize?.toString()!);
+        }
+        if(orderBy){
+            params.append("order_by", orderBy!);
+        }
+       if(exclude_username){
+           params.append("exclude_user", exclude_username!);
+       }
+
+        if(status){
+            status.map((s)=>{
+                params.append("status", s);
+            })
+        }
+        if(cryptoCodes){
+            cryptoCodes.map((c)=>{
+                params.append("crypto_code", c);
+            })
+        }
+        if(locations){
+            locations.map((l)=>{
+                params.append("locations", l);
+            })
+        }
+
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params: {
-                page:page,
-                per_page: pageSize ,
-                cryptoCodes: cryptoCodes,
-                locations: locations,
-                orderBy: orderBy,
-                exclude_user:exlude_username,
-                by_user:by_user,
-                status:qs.stringify(status)
-            }
+            params: params
         })
+
         return resp.data;
     }
 

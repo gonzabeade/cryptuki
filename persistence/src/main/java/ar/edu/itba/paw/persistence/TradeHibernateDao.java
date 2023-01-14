@@ -67,6 +67,8 @@ public class TradeHibernateDao implements TradeDao {
         updateQuery.executeUpdate();
     }
 
+
+
     @Override
     public Optional<Trade> getTradeById(int tradeId) {
         return Optional.ofNullable(em.find(Trade.class, tradeId));

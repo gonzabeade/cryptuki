@@ -3,24 +3,29 @@ import './styles.css';
 import CryptoCard from "../../components/CryptoCard";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
-import {useLocation, useNavigate,  useSearchParams} from "react-router-dom";
 import CryptoFilters, {CryptoFormValues} from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
+import useUserService from "../../hooks/useUserService";
+import {OFFER_STATUS} from "../../common/constants";
 
 const Landing = () => {
 
-    const [offers, setOffers] = useState<OfferModel[]|null>([]);
+    const [offers, setOffers] = useState<OfferModel[]|null>();
     const offerService = useOfferService();
+    const userService = useUserService();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [actualPage, setActualPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
     async function getOffers(page?:number, pageSize?:number){
         try{
-            const apiCall = await offerService?.getOffers(page, pageSize);
+            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending, OFFER_STATUS.Sold]);
             setOffers(apiCall);
-            //get Headers and set Actual and total pages
+            setIsLoading(false);
+
+
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }
@@ -49,7 +54,7 @@ const Landing = () => {
                 </div>
 
 
-                    {offers ?
+                    {!isLoading ?
                         <>
                         <div className="flex flex-col w-2/3 mt-10">
                             <div className="flex flex-row mx-10 justify-between">
@@ -68,10 +73,10 @@ const Landing = () => {
                                 <div>
                                     <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
                                 </div>
-
                             </div>
-                            {offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
+                            {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
+                            {offers && offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
+                            {!offers && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
 
                         </div>
                         </>
@@ -79,7 +84,6 @@ const Landing = () => {
                         <div className="flex flex-col w-2/3 mt-10">
                             <Loader/>
                         </div>
-
                     }
 
             </div>

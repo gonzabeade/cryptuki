@@ -42,6 +42,14 @@ public class User {
     @JoinColumn(name = "id")
     private Collection<Complain> complainCollection;
 
+    public Collection<Offer> getOfferCollection() {
+        return offerCollection;
+    }
+
+    public void setOfferCollection(Collection<Offer> offerCollection) {
+        this.offerCollection = offerCollection;
+    }
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private Collection<Offer> offerCollection;

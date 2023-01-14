@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
+import ar.edu.itba.paw.model.parameterObject.SolveComplainPO;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -19,8 +20,7 @@ public interface ComplainService {
     Optional<Complain> getComplainById(int id);
 
     /** Close a complain */
-    void closeComplainWithKickout(int complainId, String moderatorUsername, String comment, int kickedUserId);
-    void closeComplainWithDismiss(int complainId, String moderatorUsername, String comment);
+    void closeComplain(SolveComplainPO solveComplainPO);
 
     /** Get support for anonymous users*/
     void getSupportFor(String email, String description, Locale locale);

@@ -2,6 +2,7 @@ import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
+import qs from "qs";
 
 export class OfferService {
 
@@ -12,18 +13,46 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
+    public async getOffers(page?: number, pageSize?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
+        let params = new URLSearchParams();
+
+        //TODO esto es nefasto, pero tengo pocas ganas de pensar ya
+        if(page){
+            params.append("page", page?.toString()!);
+        }
+        if(pageSize){
+            params.append("per_page", pageSize?.toString()!);
+        }
+        if(orderBy){
+            params.append("order_by", orderBy!);
+        }
+       if(exclude_username){
+           params.append("exclude_user", exclude_username!);
+       }
+
+        if(status){
+            status.map((s)=>{
+                params.append("status", s);
+            })
+        }
+        if(cryptoCodes){
+            cryptoCodes.map((c)=>{
+                params.append("crypto_code", c);
+            })
+        }
+        if(locations){
+            locations.map((l)=>{
+                params.append("locations", l);
+            })
+        }
+
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params: {
-                page:page,
-                per_page: pageSize ,
-                cryptoCodes: cryptoCodes,
-                locations: locations,
-                orderBy: orderBy
-            }
+            params: params
         })
+
         return resp.data;
     }
+
     public async getOfferInformation(offerId:number):Promise<OfferModel>{
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
@@ -58,7 +87,7 @@ export class OfferService {
         })
         return resp.data;
     }
-    public async getOffersByStatus(status:string|undefined, page?:number){
+    public async getOffersByStatus(status:string|undefined,  username:string, page?:number){
 
         if(status === 'ALL'){
             status = undefined
@@ -67,7 +96,8 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:{
                 page:page,
-                status:status
+                status:status,
+                by_user:username
             }
         })
         return resp.data;

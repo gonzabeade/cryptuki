@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.cryptuki.config;
-import ar.edu.itba.paw.exception.BadMultipartFormatException;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -24,14 +24,11 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import javax.mail.PasswordAuthentication;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import javax.mail.PasswordAuthentication;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Properties;
 
 @EnableTransactionManagement

@@ -10,7 +10,6 @@ import ar.edu.itba.paw.exception.NoSuchComplainException;
 import ar.edu.itba.paw.model.Complain;
 import ar.edu.itba.paw.model.ComplainFilter;
 import ar.edu.itba.paw.model.ComplainStatus;
-import ar.edu.itba.paw.model.ComplaintResolution;
 import ar.edu.itba.paw.service.ComplainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,14 +88,8 @@ public class ComplainController {
             @PathParam("id") int id
     ) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-
         Complain complain = complainService.getComplainById(id).orElseThrow(() -> new NoSuchComplainException(id));
-        if (ComplaintResolution.DISMISS.equals(ComplaintResolution.valueOf(solveComplainForm.getResolution()))) {
-            complainService.closeComplainWithDismiss(id, username, solveComplainForm.getComments());
-        } else {
-            complainService.closeComplainWithKickout(id, username, solveComplainForm.getComments(), complain.getComplainer().getId());
-        }
+        complainService.closeComplain(solveComplainForm.toSolveComplainPO(username,id));
 
         final URI uri = uriInfo.getBaseUriBuilder()
                 .replacePath("/api/complaints")

@@ -73,7 +73,7 @@ const SellerDashboard = () => {
 
     async function fetchOffersWithStatus(status:string) {
         try{
-           const resp = await offerService.getOffersByStatus(status);
+           const resp = await offerService.getOffersByStatus(status, userService.getLoggedInUser()!);
            setOffers(resp);
         }catch (e) {
             toast.error("Connection error fetching offers with status "+ status)

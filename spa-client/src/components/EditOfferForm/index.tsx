@@ -76,7 +76,7 @@ const EditOfferForm = () => {
         try{
             const resp = offerService.modifyOffer(data);
             toast.success("Offer modified successfully");
-            sleep(1000);
+            sleep(1000);//TODO: is this ok?
             navigate('/offer'+ data.offerId);
         }catch (e) {
             toast.error("Connection error. Failed to modify offer");

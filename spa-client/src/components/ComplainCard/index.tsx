@@ -1,45 +1,44 @@
 import React from 'react';
+import {ComplainModel} from "../../types/ComplainModel";
 
-const Index = () => {
+type ComplainCardProfileProps = {
+    complain:ComplainModel
+}
+//TODO: FETCH ONLY PENDING COMPLAINTS. ?
+
+const ComplainCard: React.FC<ComplainCardProfileProps> = ({ complain}) => {
     return <div>
         <div className="flex flex-col">
             <div className="flex flex-col my-auto mx-7">
                 <h1 className="font-sans font-polard text-xl font-semibold">
                     Reclamo
                     <b>
-                        15
+                        #{complain.complainId}
                     </b>
                 </h1>
                 <h3 className="text-gray-300">
-                    Efectuado el
-                    15/12/15
+                    Efectuado el {complain.date.toDateString()}
                 </h3>
             </div>
             <div className="flex flex-col  my-auto mx-7">
                 <h1 className="font-sans font-polard text-lg font-semibold">
                     Usuario
                     : <b>
-                    Santiago
+                    {complain.complainer}
                 </b>
                 </h1>
                 <h3 className="text-gray-600 w-60 overflow-y-hidden truncate">
                     Comentario
-                    : El hombre no me deposito</h3>
+                    : {complain.comments}</h3>
             </div>
         </div>
-        {/*<c:if test="${param.complainStatus != 'CLOSED'}">*/}
-        {/*    <div className="flex flex-row my-3 mx-auto">*/}
-
-        {/*        {(if true)? }*/}
-        {/*        <if test="${param.complainStatus == 'PENDING'}">*/}
-        {/*            <a href="<c:url value="/admin/complaint/${param.complainId}"/>"*/}
-        {/*               className=" text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto">*/}
-        {/*                <messages:message code="see"/>*/}
-        {/*            </a>*/}
-        {/*        </if>*/}
-        {/*    </div>*/}
-        {/*</c:if>*/}
-    </div>;
+            <div className="flex flex-row my-3 mx-auto">
+                    <a href='/admin/complaint/${complain.complainId}'
+                       className=" text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto">
+                        Ver
+                    </a>
+            </div>
+    </div>
 };
 
-export default Index;
+export default ComplainCard;

@@ -6,7 +6,7 @@ import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import Paginator from "../../components/Paginator";
 
-const complaintHub = () => {
+const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
     const complainService = useComplainService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,6 +19,7 @@ const complaintHub = () => {
             setComplaints(apiCall);
             setIsLoading(false);
         }catch (e){
+            console.log(e);
             toast.error("Connection error. Failed to fetch complaints")
         }
     }
@@ -30,11 +31,17 @@ const complaintHub = () => {
     return (<>
         <div>
             {!isLoading ? <>
-            <div>
-                {complaints && complaints.map(complaints=><ComplainCard complain={complaints}></ComplainCard>)}
-                {complaints && complaints.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
-                {!complaints && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
-            </div>
+
+                <div className="flex flex-col divide-x h-full">
+                        {complaints &&
+                            <div className="p-10 flex flex-wrap ">
+                              {complaints.map(complaints=><ComplainCard complain={complaints} key={complaints.complainId}></ComplainCard>)}
+                            </div>}
+                        {complaints && complaints.length > 0 &&
+                            <div className="flex flex-row mx-40 justify-center "><Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")
+                            }/></div>}
+                        {!complaints && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
+                </div>
             </>:
             <div className="flex flex-col w-2/3 mt-10">
                 <Loader/>
@@ -45,4 +52,4 @@ const complaintHub = () => {
     );
 };
 
-export default complaintHub;
+export default ComplaintHub;

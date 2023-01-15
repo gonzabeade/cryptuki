@@ -3,7 +3,6 @@ import {ComplainService} from "../services/ComplainService";
 
 const useComplainService = () => {
     const axiosInstance = useAxios();
-    withNoAuthorization();
     return new ComplainService(axiosInstance);
 }
 

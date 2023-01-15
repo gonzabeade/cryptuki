@@ -1,7 +1,6 @@
 import { paths } from "../common/constants";
 import { AxiosInstance } from "axios";
 import {ComplainModel} from "../types/ComplainModel";
-import OfferModel from "../types/OfferModel";
 import {ComplainResolutionForm, CreateComplainForm} from "../components/CreateComplaintForm";
 
 export class ComplainService{

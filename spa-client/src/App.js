@@ -21,6 +21,7 @@ const Receipt = lazy(()=>import("./views/Receipt/index"));
 const SellerTrade = lazy(()=>import("./views/SellerTrade/index"));
 const SellerOfferDashboard = lazy(()=>import("./views/SellerOfferDashboard/index"));
 const UploadAd = lazy(()=>import("./views/UploadAd/index"));
+const UploadKyc = lazy(()=>import("./views/UploadKyc/index"));
 const EditOffer = lazy(()=>import("./views/EditOffer/index"));
 const Verify = lazy(()=>import("./views/Verify/index"));
 
@@ -47,6 +48,7 @@ function App() {
                       <Route path="/chat/:id" element={<LoggedGate><SellerTrade/></LoggedGate>}/>
                       <Route path="/seller/offer/:id" element={<LoggedGate><SellerOfferDashboard/></LoggedGate>}/>
                       <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
+                      <Route path="/kyc/upload" element={<LoggedGate><UploadKyc/></LoggedGate>}/>
                       <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
                       <Route path="/verify" element={<Verify/>}/>
                       <Route path="/" element={<Landing/>}/>

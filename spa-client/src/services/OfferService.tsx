@@ -14,36 +14,9 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<PaginatedResults<OfferModel>> {
-        let params = new URLSearchParams();
-        params.append("per_page", "1");
-        if(page){
-            params.append("page", page?.toString()!);
-        }
+    public async getOffers(params?:URLSearchParams): Promise<PaginatedResults<OfferModel>> {
 
-        if(orderBy){
-            params.append("order_by", orderBy!);
-        }
-       if(exclude_username){
-           params.append("exclude_user", exclude_username!);
-       }
-
-        if(status){
-            status.map((s)=>{
-                params.append("status", s);
-            })
-        }
-        if(cryptoCodes){
-            cryptoCodes.map((c)=>{
-                params.append("crypto_code", c);
-            })
-        }
-        if(locations){
-            locations.map((l)=>{
-                params.append("locations", l);
-            })
-        }
-
+        params?.append('per_page', "1");
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
         });
@@ -55,22 +28,8 @@ export class OfferService {
         }
         return {
             items: resp.data,
-            paginatorProps: getPaginatorProps(linkHeaders)
-        };
-
-    }
-
-    public async getPaginatedOffers(uri:string): Promise<PaginatedResults<OfferModel>>{
-        const resp = await this.axiosInstance().get<OfferModel[]>(uri);
-
-        const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-        if(resp.status != 200){
-            throw new Error("Error fetching offers");
-        }
-
-        return {
-            items: resp.data,
-            paginatorProps: getPaginatorProps(linkHeaders)
+            paginatorProps: getPaginatorProps(linkHeaders),
+            params: params!
         };
 
     }
@@ -100,15 +59,6 @@ export class OfferService {
         })
         return resp.data;
     }
-    public async getOrderedOffers(page?:number, orderBy?:string):Promise<OfferModel[]>{
-        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params:{
-                page:page,
-                orderBy:orderBy
-            }
-        })
-        return resp.data;
-    }
     public async getOffersByStatus(status:string|undefined,  username:string, page?:number){
 
         if(status === 'ALL'){
@@ -128,6 +78,11 @@ export class OfferService {
     public getOfferIdFromURI(uri:string):string{
         const n = uri.lastIndexOf('/');
         return uri.substring(n + 1);
+    }
+    public getSearchParamsFromURI(uri:string):URLSearchParams{
+        console.log(uri);
+        const n = uri.lastIndexOf('?');
+        return new URLSearchParams(uri.substring(n + 1));
     }
 
 }

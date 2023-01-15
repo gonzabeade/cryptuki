@@ -8,8 +8,8 @@ export const paths = {
     LOCATIONS: '/locations/',
     CRYPTOCURRENCIES: '/cryptocurrencies',
 }
-export const NEIGHBORHOODS =[
-'Balvanera'
+export const NEIGHBORHOODS = [
+'ALMAGRO'
 ]
 export const sleep = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
 export enum OFFER_STATUS {

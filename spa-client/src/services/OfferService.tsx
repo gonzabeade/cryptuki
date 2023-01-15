@@ -14,17 +14,14 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<PaginatedResults<OfferModel>> {
+    public async getOffers(page?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<PaginatedResults<OfferModel>> {
         let params = new URLSearchParams();
-
+        params.append("per_page", "1");
         if(page){
             params.append("page", page?.toString()!);
         }
-        params.append("page", "1");
-        params.append("per_page", "1");
-        if(pageSize){
-             params.append("per_page", pageSize?.toString()!);
-        }
+
+
         if(orderBy){
             params.append("order_by", orderBy!);
         }
@@ -54,6 +51,20 @@ export class OfferService {
 
         const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
 
+        if(resp.status != 200){
+            throw new Error("Error fetching offers");
+        }
+        return {
+            items: resp.data,
+            paginatorProps: getPaginatorProps(linkHeaders)
+        };
+
+    }
+
+    public async getPaginatedOffers(uri:string): Promise<PaginatedResults<OfferModel>>{
+        const resp = await this.axiosInstance().get<OfferModel[]>(uri);
+
+        const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
         if(resp.status != 200){
             throw new Error("Error fetching offers");
         }

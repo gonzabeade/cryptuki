@@ -28,22 +28,29 @@ const Landing = () => {
     );
 
 
-    async function getOffers(page?:number, pageSize?:number){
+    async function getOffers(page?:number){
         try{
-            const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending, OFFER_STATUS.Sold]);
-
+            const apiCall = await offerService?.getOffers(page, userService.getLoggedInUser()!, [OFFER_STATUS.Pending, OFFER_STATUS.Sold]);
             setOffers(apiCall.items);
             setPaginatorProps(apiCall.paginatorProps);
-
             setIsLoading(false);
-
-
         }catch (e){
-            console.log(e);
             toast.error("Connection error. Failed to fetch offers")
         }
-
     }
+
+    async function getPaginatedOffers(uri:string){
+        console.log(uri)
+        try{
+            const apiCall = await offerService?.getPaginatedOffers(uri);
+            setOffers(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps);
+            setIsLoading(false);
+        }catch (e){
+            toast.error("Connection error. Failed to fetch offers")
+        }
+    }
+
     async function orderOffers(order_by:string){
         try{
             const apiCall = await offerService?.getOrderedOffers(paginatorProps.actualPage, order_by );
@@ -88,7 +95,7 @@ const Landing = () => {
                                 </div>
                             </div>
                             {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers && offers.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={() => console.log("called")}/>}
+                            {offers && offers.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedOffers}/>}
                             {!offers && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
 
                         </div>

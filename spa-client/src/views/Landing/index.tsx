@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 import useUserService from "../../hooks/useUserService";
 import {OFFER_STATUS} from "../../common/constants";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 const Landing = () => {
 
@@ -16,13 +17,24 @@ const Landing = () => {
     const offerService = useOfferService();
     const userService = useUserService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [actualPage, setActualPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
+
+
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+        actualPage: 1,
+        totalPages: 1,
+        nextUri:'',
+        prevUri:''
+        }
+    );
+
 
     async function getOffers(page?:number, pageSize?:number){
         try{
             const apiCall = await offerService?.getOffers(page, pageSize, userService.getLoggedInUser()!, [OFFER_STATUS.Pending, OFFER_STATUS.Sold]);
-            setOffers(apiCall);
+
+            setOffers(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps);
+
             setIsLoading(false);
 
 
@@ -33,7 +45,7 @@ const Landing = () => {
     }
     async function orderOffers(order_by:string){
         try{
-            const apiCall = await offerService?.getOrderedOffers(actualPage, order_by );
+            const apiCall = await offerService?.getOrderedOffers(paginatorProps.actualPage, order_by );
             setOffers(apiCall);
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers")
@@ -75,7 +87,7 @@ const Landing = () => {
                                 </div>
                             </div>
                             {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers && offers.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}
+                            {offers && offers.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={() => console.log("called")}/>}
                             {!offers && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
 
                         </div>

@@ -2,7 +2,8 @@ import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
-import qs from "qs";
+import {PaginatedResults} from "../types/PaginatedResults";
+import {getLinkHeaders, getPaginatorProps, Link} from "../common/utils/utils";
 
 export class OfferService {
 
@@ -13,15 +14,15 @@ export class OfferService {
         this.axiosInstance = axiosInstance; 
     }
 
-    public async getOffers(page?: number, pageSize?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<OfferModel[]> {
+    public async getOffers(page?: number, pageSize?: number, exclude_username?:string, status?:string[] , cryptoCodes?:string[], locations?:string[], orderBy?:string): Promise<PaginatedResults<OfferModel>> {
         let params = new URLSearchParams();
 
-        //TODO esto es nefasto, pero tengo pocas ganas de pensar ya
         if(page){
             params.append("page", page?.toString()!);
         }
+        params.append("per_page", "1");
         if(pageSize){
-            params.append("per_page", pageSize?.toString()!);
+             params.append("per_page", pageSize?.toString()!);
         }
         if(orderBy){
             params.append("order_by", orderBy!);
@@ -48,9 +49,20 @@ export class OfferService {
 
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
-        })
+        });
 
-        return resp.data;
+        const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+
+        if(resp.status != 200){
+            throw new Error("Error fetching offers");
+        }
+        console.log(getPaginatorProps(linkHeaders))
+
+        return {
+            items: resp.data,
+            paginatorProps: getPaginatorProps(linkHeaders)
+        };
+
     }
 
     public async getOfferInformation(offerId:number):Promise<OfferModel>{

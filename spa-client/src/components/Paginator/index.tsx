@@ -1,24 +1,24 @@
 import React, {useState} from 'react';
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 
 type PaginatorProps =  {
-    totalPages:number,
-    actualPage:number,
-    callback:Function
+    paginatorProps:PaginatorPropsValues,
+    callback:Function,
 }
 
-const Paginator:React.FC<PaginatorProps> = ({totalPages, actualPage, callback}) => {
+const Paginator:React.FC<PaginatorProps> = ({paginatorProps, callback }) => {
 
-    let [pageActive, setPageActive] = useState<number>(actualPage);
+    let [pageActive, setPageActive] = useState<number>(paginatorProps.actualPage);
 
     async function prevPage(){
         //throw event to get new offers
-        await callback(pageActive - 1);
+        await callback(paginatorProps.prevUri);
         setPageActive(pageActive - 1);
 
     }
     async function nextPage(){
-        await callback(pageActive + 1);
+        await callback(paginatorProps.nextUri);
         setPageActive(pageActive + 1)
     }
 
@@ -29,11 +29,11 @@ const Paginator:React.FC<PaginatorProps> = ({totalPages, actualPage, callback}) 
             <div className="flex my-auto mx-3 justify-evenly">
                 <h4 className="mx-1 font-bold">{pageActive}</h4>
                 <h4 className="mx-1">of</h4>
-                <h4 className="mx-1 font-bold"> {totalPages}</h4>
+                <h4 className="mx-1 font-bold"> {paginatorProps.totalPages}</h4>
             </div>
 
-            {pageActive === totalPages && <button disabled className="cursor-not-allowed  bg-gray-200 p-3 rounded-lg font-roboto font-bold w-25">Next</button> }
-            {pageActive !== totalPages && <button onClick={nextPage} className="bg-gray-200 p-3 rounded-lg font-roboto font-bold w-25">Next</button> }
+            {pageActive === paginatorProps.totalPages && <button disabled className="cursor-not-allowed  bg-gray-200 p-3 rounded-lg font-roboto font-bold w-25">Next</button> }
+            {pageActive !== paginatorProps.totalPages && <button onClick={nextPage} className="bg-gray-200 p-3 rounded-lg font-roboto font-bold w-25">Next</button> }
         </div>
     );
 };

@@ -76,7 +76,7 @@ const BuyerDashboard = () => {
                         available</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
-                        <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("change page")}/>
+                        {/*<Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("change page")}/>*/}
                     </div>}
 
             </div>

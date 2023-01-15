@@ -137,7 +137,7 @@ const SellerDashboard = () => {
                                 <OfferCardProfile offer={offer} key={offer.offerId}/>
                             );
                         })}
-                        <Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>
+                        {/*<Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>*/}
                     </div>
 
                     }

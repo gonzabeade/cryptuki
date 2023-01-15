@@ -124,7 +124,7 @@ const SellerOfferDashboard = () => {
 
                         <h1 className="mx-auto text-center">
                             {/*TODO callback*/}
-                            {trades.length>0 ?  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
+                            {/*{trades.length>0 ?  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}*/}
 
                         </h1>
                     </div>

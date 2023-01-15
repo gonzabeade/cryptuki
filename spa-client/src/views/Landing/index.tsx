@@ -41,11 +41,12 @@ const Landing = () => {
 
     async function getPaginatedOffers(uri:string){
         try{
+            setIsLoading(true);
             const apiCall = await offerService?.getPaginatedOffers(uri);
-            console.log(apiCall.paginatorProps);
             setOffers(apiCall.items);
             setPaginatorProps(apiCall.paginatorProps);
             setIsLoading(false);
+
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }

@@ -21,7 +21,6 @@ export class OfferService {
             params.append("page", page?.toString()!);
         }
 
-
         if(orderBy){
             params.append("order_by", orderBy!);
         }

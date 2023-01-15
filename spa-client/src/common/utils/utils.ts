@@ -99,10 +99,10 @@ export function getPaginatorProps(link:Link[]):PaginatorPropsValues {
         }
     } else {
         return {
-            actualPage: link[2].page + 1,
+            actualPage: link[3].page + 1,
             totalPages: link[1].page,
-            nextUri: link[3].href,
-            prevUri: link[2].href
+            nextUri: link[2].href,
+            prevUri: link[3].href
         }
     }
 }

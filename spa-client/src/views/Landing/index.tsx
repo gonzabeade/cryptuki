@@ -40,9 +40,9 @@ const Landing = () => {
     }
 
     async function getPaginatedOffers(uri:string){
-        console.log(uri)
         try{
             const apiCall = await offerService?.getPaginatedOffers(uri);
+            console.log(apiCall.paginatorProps);
             setOffers(apiCall.items);
             setPaginatorProps(apiCall.paginatorProps);
             setIsLoading(false);

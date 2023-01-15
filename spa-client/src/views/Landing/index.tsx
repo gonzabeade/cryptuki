@@ -49,7 +49,7 @@ const Landing = () => {
             toast.error("Connection error. Failed to fetch offers")
         }
     }
-
+    //Callback from Paginator component
     async function getPaginatedOffers(uri:string){
         try{
             const params = offerService.getSearchParamsFromURI(uri);
@@ -111,6 +111,7 @@ const Landing = () => {
             setPaginatorProps(apiCall.paginatorProps);
             setOfferParams(params);
             setIsLoading(false);
+
         }catch (e){
             toast.error("Connection error. Failed to fetch offers")
         }

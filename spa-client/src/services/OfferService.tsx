@@ -2,8 +2,8 @@ import { paths } from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
-import {PaginatedResults} from "../types/PaginatedResults";
-import {getLinkHeaders, getPaginatorProps, Link} from "../common/utils/utils";
+import {Link, PaginatedResults} from "../types/PaginatedResults";
+import {getLinkHeaders, getPaginatorProps} from "../common/utils/utils";
 
 export class OfferService {
 

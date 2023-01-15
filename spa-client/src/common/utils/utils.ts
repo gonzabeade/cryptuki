@@ -1,10 +1,6 @@
-import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import {Link, PaginatorPropsValues} from "../../types/PaginatedResults";
 
-export type Link = {
-    rel: string;
-    href: string;
-    page: number;
-}
+
 
 /**
  * first and last are always present

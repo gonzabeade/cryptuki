@@ -1,5 +1,3 @@
-import {Link} from "../common/utils/utils";
-
 export interface PaginatedResults<T> {
     items: T[];
     paginatorProps: PaginatorPropsValues;
@@ -11,4 +9,9 @@ export type PaginatorPropsValues = {
     totalPages:number,
     nextUri:string,
     prevUri:string
+}
+export type Link = {
+    rel: string;
+    href: string;
+    page: number;
 }

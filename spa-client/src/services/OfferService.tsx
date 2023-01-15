@@ -20,6 +20,7 @@ export class OfferService {
         if(page){
             params.append("page", page?.toString()!);
         }
+        params.append("page", "1");
         params.append("per_page", "1");
         if(pageSize){
              params.append("per_page", pageSize?.toString()!);
@@ -56,7 +57,6 @@ export class OfferService {
         if(resp.status != 200){
             throw new Error("Error fetching offers");
         }
-        console.log(getPaginatorProps(linkHeaders))
 
         return {
             items: resp.data,

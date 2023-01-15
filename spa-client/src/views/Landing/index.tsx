@@ -39,6 +39,7 @@ const Landing = () => {
 
 
         }catch (e){
+            console.log(e);
             toast.error("Connection error. Failed to fetch offers")
         }
 

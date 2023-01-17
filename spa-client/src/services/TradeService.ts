@@ -1,6 +1,7 @@
 import { paths } from "../common/constants";
 import { AxiosInstance} from "axios";
 import TransactionModel from "../types/TransactionModel";
+import {TradeModel} from "../types/TradeModel";
 
 
 export class TradeService {
@@ -15,6 +16,12 @@ export class TradeService {
             const resp = await this.axiosInstance().get<TransactionModel>(this.basePath + tradeId);
             return resp.data;
     }
+
+    public async getTradeInformationByUrl(url:string):Promise<TradeModel> {
+        const resp = await this.axiosInstance().get<TradeModel>(url);
+        return resp.data;
+    }
+
     public async getLastTransactions(username:string|null):Promise<TransactionModel[]>{
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {

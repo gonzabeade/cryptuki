@@ -57,6 +57,12 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
+
+    public async  getOfferInformationByUrl(offerUrl:string):Promise<OfferModel>{
+        const resp = await this.axiosInstance().get<OfferModel>(offerUrl);
+        return resp.data;
+    }
+
     public async getOffersByOwner(username:string, page?:number):Promise<OfferModel[]>{
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:{

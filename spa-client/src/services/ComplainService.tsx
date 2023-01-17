@@ -2,6 +2,7 @@ import { paths } from "../common/constants";
 import { AxiosInstance } from "axios";
 import {ComplainModel} from "../types/ComplainModel";
 import {ComplainResolutionForm, CreateComplainForm} from "../components/CreateComplaintForm";
+import solveComplaintForm, {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveComplaintForm";
 
 export class ComplainService{
 
@@ -33,10 +34,10 @@ export class ComplainService{
         return resp.data;
     }
 
-    public async createComplainResolution(newComplainResolution:ComplainResolutionForm){
-        const resp = await this.axiosInstance().put<ComplainModel>(this.basePath , {
-            resolution: newComplainResolution.resolution,
-            comments: newComplainResolution.comments,
+    public async createComplainResolution(SolveComplaintFormModel:SolveComplaintFormModel){
+        const resp = await this.axiosInstance().post<ComplainModel>(this.basePath + SolveComplaintFormModel.complainId + '/resolution', {
+            resolution: SolveComplaintFormModel.resolution,
+            comments: SolveComplaintFormModel.comments,
         })
         return resp.data;
     }

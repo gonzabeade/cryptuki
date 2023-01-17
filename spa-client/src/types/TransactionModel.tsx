@@ -12,3 +12,4 @@ export default interface TransactionModel {
     messages:string
     self:string
 }
+

@@ -27,6 +27,12 @@ export class UserService {
         return resp.data;
     }
 
+    public async  getUserByUrl(url:string):Promise<UserModel>{
+        const resp = await this.axiosInstance().get<UserModel>(url);
+        return resp.data;
+    }
+
+
 
     public getUsernameFromURI(uri:string):string{
         const n = uri.lastIndexOf('/');

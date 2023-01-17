@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import LoggedGate from "./components/LoggedGate";
 import ComplaintHub from "./views/ComplaintsLanding/complaintHub";
+import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));
@@ -51,6 +52,7 @@ function App() {
                       <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
                       <Route path="/verify" element={<Verify/>}/>
                       <Route path="/admin" element={<ComplaintHub/>}/>
+                      <Route path="/admin/complaint/:id" element={<SolveComplaint/>}/>
                       <Route path="/" element={<Landing/>}/>
                       <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
                   </Routes>

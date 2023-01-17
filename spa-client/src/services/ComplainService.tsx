@@ -16,6 +16,7 @@ export class ComplainService{
     public async getComplaints(page?:number):Promise<ComplainModel[]>{
         let params= new URLSearchParams();
         if(page) params.append("page",page.toString()!);
+        params.append("status","PENDING");
         const resp = await this.axiosInstance().
             get<ComplainModel[]>(this.basePath,{ params:params });
         return resp.data;

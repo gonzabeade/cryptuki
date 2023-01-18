@@ -67,7 +67,7 @@ public class UserController {
         if(!KycStatus.valueOf(kyc_status).equals(KycStatus.PEN))
             throw new BadRequestException("Only pending kyc can be listed.");
         Collection<KycInformation> pendingKycRequests = this.kycService.getPendingKycRequests(page, pageSize);
-       Long pendingKycRequestsCount = this.kycService.getPendingKycRequestsCount();
+       long pendingKycRequestsCount = this.kycService.getPendingKycRequestsCount();
 
         if (pendingKycRequests.isEmpty())
             return Response.noContent().build();

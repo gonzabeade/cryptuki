@@ -8,7 +8,7 @@ export class KycService {
 
     private readonly axiosInstance : ()=>AxiosInstance;
     private readonly basePath = paths.BASE_URL + paths.USERS;
-    private readonly userPath = paths.BASE_URL + paths.USERS;
+    private readonly userPath = paths.BASE_URL + '/users';
 
     public constructor(axiosInstance: ()=>AxiosInstance) {
         this.axiosInstance = axiosInstance;
@@ -19,8 +19,8 @@ export class KycService {
        return resp.data;
     }
 
-    public async getPendingKycInformation(page?:number, pageSize?:number):Promise<UserModel>{
-        const resp = await this.axiosInstance().get<UserModel>(this.basePath + this.userPath,
+    public async getPendingKycInformation(page?:number, pageSize?:number):Promise<UserModel[]>{
+        const resp = await this.axiosInstance().get<UserModel[]>(this.userPath,
             {
                 params:{
                     page: page,

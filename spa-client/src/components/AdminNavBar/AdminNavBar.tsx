@@ -1,6 +1,9 @@
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 
 const AdminNavBar = () => {
+    const navigate = useNavigate();
+
     return (
         <nav className="w-60 bg-frostdr h-full flex flex-col fixed">
             <a href="/paw-2022a-01/admin">
@@ -47,6 +50,7 @@ const AdminNavBar = () => {
 ); function logout() {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
+        navigate("/");
     }
 };
 

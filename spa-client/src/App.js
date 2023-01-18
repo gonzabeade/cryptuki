@@ -1,4 +1,6 @@
 import Navbar from './components/Navbar';
+import AdminNavBar from './components/AdminNavBar/AdminNavBar';
+
 import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
@@ -36,7 +38,8 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <ToastContainer/>
-          <Navbar></Navbar>
+            <AdminNavBar/>
+          {/*<Navbar></Navbar>*/}
           <div className="content">
               <Suspense fallback={<Loader/>}>
                   <Routes>

@@ -42,7 +42,7 @@ const Landing = () => {
             const apiCall = await offerService?.getOffers(params);
 
             setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps);
+            setPaginatorProps(apiCall.paginatorProps!);
             setIsLoading(false);
 
         }catch (e){
@@ -59,11 +59,11 @@ const Landing = () => {
             const apiCall = await offerService?.getOffers(params);
 
             setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps);
+            setPaginatorProps(apiCall.paginatorProps!);
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch offers")
+            toast.error("Connection error. Failed to fetch paginated offers")
         }
     }
 
@@ -76,10 +76,10 @@ const Landing = () => {
 
             setIsLoading(false);
             setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps);
+            setPaginatorProps(apiCall.paginatorProps!);
 
         }catch (e) {
-            toast.error("Connection error. Failed to fetch offers")
+            toast.error("Connection error. Failed to fetch ordered offers")
         }
     }
 
@@ -108,7 +108,7 @@ const Landing = () => {
             const apiCall = await offerService?.getOffers(params);
 
             setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps);
+            setPaginatorProps(apiCall.paginatorProps!);
             setOfferParams(params);
             setIsLoading(false);
 
@@ -150,7 +150,7 @@ const Landing = () => {
                             </div>
                             {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
                             {offers && offers.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedOffers}/>}
-                            {!offers && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
+                            {(!offers || offers.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
 
                         </div>
                         </>

@@ -21,16 +21,23 @@ export class OfferService {
             params: params
         });
 
-        const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
 
-        if(resp.status != 200){
+        if(resp.status === 200){
+            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+                params: params!
+            };
+        }else if(resp.status === 204){
+            return {
+                items: [],
+                params: params!,
+            }
+        }else{
             throw new Error("Error fetching offers");
         }
-        return {
-            items: resp.data,
-            paginatorProps: getPaginatorProps(linkHeaders),
-            params: params!
-        };
+
 
     }
 

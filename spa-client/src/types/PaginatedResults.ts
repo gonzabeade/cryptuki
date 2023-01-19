@@ -1,7 +1,7 @@
 export interface PaginatedResults<T> {
     items: T[];
-    paginatorProps: PaginatorPropsValues;
-    params:URLSearchParams;
+    paginatorProps?: PaginatorPropsValues;
+    params?:URLSearchParams;
 }
 
 export type PaginatorPropsValues = {

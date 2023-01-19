@@ -9,9 +9,13 @@ export interface UploadKycValues {
     emissionCountry:string,
     documentNumber:number,
     idType:string,
-    idPicture:File,
-    facePicture:File
+    idPictures:FileList,
+    facePictures:FileList
 }
+
+//const fileSize = () => {
+//   return false;
+//};
 
 const KycForm = () => {
 
@@ -71,7 +75,7 @@ const KycForm = () => {
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
                                     Document Number
                                 </label>
-                                <input placeholder="e.g. 45089768" type="text" className="rounded-lg p-3" {...register("documentNumber", {required:"You must enter a document number"})}/>
+                                <input type="number" placeholder="e.g. 45089768" className="rounded-lg p-3" {...register("documentNumber", {required:"You must enter a document number"})}/>
                                 {errors && errors.documentNumber && <p className="text-red-600 mx-auto mt-2">{errors.documentNumber.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
@@ -88,7 +92,15 @@ const KycForm = () => {
                             <label className="text-start text-xl font-bold font-sans text-polar my-2">
                                Passport/ID picture
                             </label>
-                            <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"/>
+                            <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
+                                   {...register("idPictures", {
+                                       validate:{
+                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null|| 'File should not be empty',
+                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || 'File should be smaller than 10 MB'
+                                       }}
+                                   )}
+                            />
+                            {errors && errors.idPictures && <p className="text-red-600 mx-auto mt-2">{errors.idPictures.message}</p> }
                         </div>
                         <h2 className="text-start text-2xl font-semibold font-sans text-polar underline mt-8">
                             Section 2: Face and Picture data validation
@@ -102,7 +114,15 @@ const KycForm = () => {
                                    <label className="text-center text-xl font-bold font-sans text-polar my-2">
                                        Upload picture
                                    </label>
-                                   <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"/>
+                                   <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
+                                   {...register("facePictures", {
+                                       validate:{
+                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null|| 'File should not be empty',
+                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || 'File should be smaller than 10 MB'
+                                       }}
+                                   )}
+                                  />
+                                   {errors && errors.facePictures && <p className="text-red-600 mx-auto mt-2">{errors.facePictures.message}</p>}
                                </div>
                            </div>
                         </div>

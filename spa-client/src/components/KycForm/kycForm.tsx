@@ -1,7 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {CryptocurrencyModel} from "../../types/Cryptocurrency";
-import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
-import {NEIGHBORHOODS} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {UploadFormValues} from "../UploadForm/uploadForm";
@@ -21,18 +18,17 @@ const KycForm = () => {
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadKycValues>();
 
-    function onSubmit(data:UploadFormValues) {
+    function onSubmit(data:UploadKycValues) {
         console.log(data);
     }
 
     //TODO HTML
-    //-Mirar como encontrar un valor para el texto entre xl y lg
     //-Mirar como hacer para que el form se expanda a toda la pantalla
     //-Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario
 
     return (
         <div className="flex flex-row mx-auto">
-            <form className="flex flex-col w-1/2 mt-20 mb-10 py-12 px-4 justify-start mx-auto rounded-lg bg-stormd/[0.9] border-2 border-polard">
+            <form className="flex flex-col w-1/2 mt-20 mb-10 py-12 px-4 justify-start mx-auto rounded-lg bg-stormd/[0.9] border-2 border-polard" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex">
                     <div className="flex flex-col mx-auto">
                         <h1 className="font-sans font-semibold text-polar text-2xl text-center">
@@ -53,15 +49,17 @@ const KycForm = () => {
                         <div className="flex flex-col mx-5 mt-4 items-start">
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Names</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Pedro Martin"/>
+                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Pedro Martin" {...register("names", {required:"You must enter a name"})}/>
+                                {errors && errors.names && <p className="text-red-600 mx-auto mt-2">{errors.names.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Surnames</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Juarez"/>
+                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Juarez" {...register("surnames", {required:"You must enter a surname"})}/>
+                                {errors && errors.surnames && <p className="text-red-600 mx-auto mt-2">{errors.surnames.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Emission country</label>
-                                <select className="rounded-lg p-3 bg-white">
+                                <select className="rounded-lg p-3 bg-white" {...register("emissionCountry")}>
                                     <option value="ARG">Argentina</option>
                                     <option value="CHL">Chile</option>
                                     <option value="URY">Uruguay</option>
@@ -73,13 +71,14 @@ const KycForm = () => {
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
                                     Document Number
                                 </label>
-                                <input placeholder="e.g. 45089768" type="text" className="rounded-lg p-3"/>
+                                <input placeholder="e.g. 45089768" type="text" className="rounded-lg p-3" {...register("documentNumber", {required:"You must enter a document number"})}/>
+                                {errors && errors.documentNumber && <p className="text-red-600 mx-auto mt-2">{errors.documentNumber.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
                                     Passport/ID Type
                                 </label>
-                                <select className="rounded-lg p-3 bg-white">
+                                <select className="rounded-lg p-3 bg-white" {...register("idType")}>
                                     <option value="ID">National Id</option>
                                     <option value="PASSPORT">Passport</option>
                                 </select>
@@ -108,7 +107,9 @@ const KycForm = () => {
                            </div>
                         </div>
                         <div className="flex flex-row w-full justify-center mt-10">
-                            <input type="submit" value="Send" className="w-1/5 rounded-lg bg-frostl py-3 px-5 text-white cursor-pointer shadow-lg"/>
+                            <button type="submit" className="w-1/5 rounded-lg bg-frostl py-3 px-5 text-white cursor-pointer shadow-lg">
+                                Send
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -13,10 +13,6 @@ export interface UploadKycValues {
     facePictures:FileList
 }
 
-//const fileSize = () => {
-//   return false;
-//};
-
 const KycForm = () => {
 
     //Form
@@ -53,12 +49,24 @@ const KycForm = () => {
                         <div className="flex flex-col mx-5 mt-4 items-start">
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Names</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Pedro Martin" {...register("names", {required:"You must enter a name"})}/>
+                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Pedro Martin"
+                                       {...register("names",{
+                                           required: "You must enter a name",
+                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
+                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                       })}
+                                />
                                 {errors && errors.names && <p className="text-red-600 mx-auto mt-2">{errors.names.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Surnames</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Juarez" {...register("surnames", {required:"You must enter a surname"})}/>
+                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Juarez"
+                                       {...register("surnames", {
+                                           required: "You must enter a surname",
+                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
+                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                       })}
+                                />
                                 {errors && errors.surnames && <p className="text-red-600 mx-auto mt-2">{errors.surnames.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
@@ -75,7 +83,13 @@ const KycForm = () => {
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
                                     Document Number
                                 </label>
-                                <input type="number" placeholder="e.g. 45089768" className="rounded-lg p-3" {...register("documentNumber", {required:"You must enter a document number"})}/>
+                                <input type="text" placeholder="e.g. 45089768" className="rounded-lg p-3"
+                                       {...register("documentNumber", {
+                                           required: "You must enter a passport/id number",
+                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
+                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                       })}
+                                />
                                 {errors && errors.documentNumber && <p className="text-red-600 mx-auto mt-2">{errors.documentNumber.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">

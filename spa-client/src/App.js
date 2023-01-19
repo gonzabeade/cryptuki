@@ -7,6 +7,7 @@ import Error from "./views/Error";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import LoggedGate from "./components/LoggedGate";
+import {AuthProvider} from "./contexts/AuthContext";
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));
@@ -30,37 +31,41 @@ const Verify = lazy(()=>import("./views/Verify/index"));
 function App() {
   return (
       <BrowserRouter>
-        <div className="App">
-          <ToastContainer/>
-          <Navbar></Navbar>
-          <div className="content">
-              <Suspense fallback={<Loader/>}>
-                  <Routes>
-                      <Route path="/register" element={<Register/>}/>
-                      <Route path="/login" element={<Login/>}/>
-                      <Route path="/offer/:id" element={<BuyOffer/>}/>
-                      <Route path="/trade/:id" element={<LoggedGate><Trade/></LoggedGate>}/>
-                      <Route path="/support" element={<Support/>}/>
-                      <Route path="/buyer/" element={<LoggedGate><BuyerDashboard/></LoggedGate>}/>
-                      <Route path="/seller/" element={<LoggedGate><SellerDashboard/></LoggedGate>}/>
-                      <Route path="/trade/:id/receipt" element={<LoggedGate><Receipt/></LoggedGate>}/>
-                      <Route path="/chat/:id" element={<LoggedGate><SellerTrade/></LoggedGate>}/>
-                      <Route path="/seller/offer/:id" element={<LoggedGate><SellerOfferDashboard/></LoggedGate>}/>
-                      <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
-                      <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
-                      <Route path="/verify" element={<Verify/>}/>
-                      <Route path="/" element={<Landing/>}/>
-                      <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
-                  </Routes>
-              </Suspense>
-          </div>
-            <div className="shape-blob"></div>
-            <div className="shape-blob one"></div>
-            <div className="shape-blob two"></div>
-            <div className="shape-blob left-[50%]"></div>
-            <div className="shape-blob left-[5%] top-[80%]"></div>
-        </div>
+          <AuthProvider>
+              <div className="App">
+                  <ToastContainer/>
+                  <Navbar></Navbar>
+                  <div className="content">
+                      <Suspense fallback={<Loader/>}>
+                          <Routes>
+                              <Route path="/register" element={<Register/>}/>
+                              <Route path="/login" element={<Login/>}/>
+                              <Route path="/offer/:id" element={<BuyOffer/>}/>
+                              <Route path="/trade/:id" element={<LoggedGate><Trade/></LoggedGate>}/>
+                              <Route path="/support" element={<Support/>}/>
+                              <Route path="/buyer/" element={<LoggedGate><BuyerDashboard/></LoggedGate>}/>
+                              <Route path="/seller/" element={<LoggedGate><SellerDashboard/></LoggedGate>}/>
+                              <Route path="/trade/:id/receipt" element={<LoggedGate><Receipt/></LoggedGate>}/>
+                              <Route path="/chat/:id" element={<LoggedGate><SellerTrade/></LoggedGate>}/>
+                              <Route path="/seller/offer/:id"
+                                     element={<LoggedGate><SellerOfferDashboard/></LoggedGate>}/>
+                              <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
+                              <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
+                              <Route path="/verify" element={<Verify/>}/>
+                              <Route path="/" element={<Landing/>}/>
+                              <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
+                          </Routes>
+                      </Suspense>
+                  </div>
+                  <div className="shape-blob"></div>
+                  <div className="shape-blob one"></div>
+                  <div className="shape-blob two"></div>
+                  <div className="shape-blob left-[50%]"></div>
+                  <div className="shape-blob left-[5%] top-[80%]"></div>
+              </div>
+          </AuthProvider>
       </BrowserRouter>
+
   );
 }
 

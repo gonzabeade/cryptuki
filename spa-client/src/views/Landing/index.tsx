@@ -127,7 +127,6 @@ const Landing = () => {
                     <CryptoFilters callback={getOffersWithFilters}/>
                 </div>
 
-
                     {!isLoading ?
                         <>
                         <div className="flex flex-col w-2/3 mt-10">

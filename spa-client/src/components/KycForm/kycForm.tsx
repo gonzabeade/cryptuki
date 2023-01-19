@@ -49,7 +49,7 @@ const KycForm = () => {
                         <div className="flex flex-col mx-5 mt-4 items-start">
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Names</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Pedro Martin"
+                                <input className="p-3 rounded-lg shadow" placeholder="e.g. Pedro Martin"
                                        {...register("names",{
                                            required: "You must enter a name",
                                            minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
@@ -60,7 +60,7 @@ const KycForm = () => {
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">Surnames</label>
-                                <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="e.g. Juarez"
+                                <input className="p-3 rounded-lg shadow" placeholder="e.g. Juarez"
                                        {...register("surnames", {
                                            required: "You must enter a surname",
                                            minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
@@ -116,10 +116,10 @@ const KycForm = () => {
                             />
                             {errors && errors.idPictures && <p className="text-red-600 mx-auto mt-2">{errors.idPictures.message}</p> }
                         </div>
-                        <h2 className="text-start text-2xl font-semibold font-sans text-polar underline mt-8">
+                        <h2 className="text-start text-xl font-semibold font-sans text-polar underline mt-8">
                             Section 2: Face and Picture data validation
                         </h2>
-                        <h2 className="text-start text-xl font-semibold font-sans text-polar mt-2">
+                        <h2 className="text-start text-lg font-semibold font-sans text-polar mt-2">
                             For safety purposes, to validate you're using your password,  we require you to have a picture taken of yourself, showing half of your body and complete face holding your document.
                         </h2>
                         <div className="flex flex-row mx-5 mt-4 items-center">

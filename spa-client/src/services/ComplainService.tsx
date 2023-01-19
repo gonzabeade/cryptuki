@@ -23,7 +23,7 @@ export class ComplainService{
     }
 
     public async getComplaintById(complainId:number):Promise<ComplainModel>{
-        const resp = await this.axiosInstance().get<ComplainModel>(this.basePath + complainId);
+        const resp = await this.axiosInstance().get<ComplainModel>(this.basePath + '/' + complainId);
         return resp.data;
     }
 
@@ -36,7 +36,7 @@ export class ComplainService{
     }
 
     public async createComplainResolution(SolveComplaintFormModel:SolveComplaintFormModel){
-        const resp = await this.axiosInstance().post<ComplainModel>(this.basePath + SolveComplaintFormModel.complainId + '/resolution', {
+        const resp = await this.axiosInstance().post<ComplainModel>(this.basePath + '/' + SolveComplaintFormModel.complainId + '/resolution', {
             resolution: SolveComplaintFormModel.resolution,
             comments: SolveComplaintFormModel.comments,
         })

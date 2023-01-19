@@ -39,8 +39,9 @@ function App() {
         <div className="App">
           <ToastContainer/>
             <AdminNavBar/>
-          {/*<Navbar></Navbar>*/}
+          {/*<Navbar/>*/}
           <div className="content">
+
               <Suspense fallback={<Loader/>}>
                   <Routes>
                       <Route path="/register" element={<Register/>}/>

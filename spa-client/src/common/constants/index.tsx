@@ -4,7 +4,7 @@ export const paths = {
     OFFERS: '/offers/',
     TRADE: '/trades/',
     USERS: '/users/',
-    COMPLAINTS: '/complaints/',
+    COMPLAINTS: '/complaints',
     LOCATIONS: '/locations/',
     CRYPTOCURRENCIES: '/cryptocurrencies',
 }

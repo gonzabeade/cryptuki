@@ -2,26 +2,29 @@ import React, {useState} from 'react';
 import {KycInformationModel} from "../../types/KycInformationModel";
 import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
+import Popup from "reactjs-popup";
+import {QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
+import AdviceOnP2P from "../AdviceOnP2P";
+import RejectKycForm from "../RejectKycForm/RejectKycForm";
 
 type KycCardProp = {
     kyc:KycInformationModel,
     username: string
 }
-
-export interface SolveKycForm {
-    status: string
+export type SolveKycForm = {
+    comments: string,
+    status:string
 }
 
+
 const KycInformation = ({kyc,username}:KycCardProp) => {
-    const { register, handleSubmit } = useForm<SolveKycForm>();
     const kycService = useKycService();
-    const [rejected, setRejected] = useState<boolean | null>(null);
 
-    function onSubmit(data:SolveKycForm) {
-        kycService.solveKyc(data,username);
+    function acceptKyc() {
+        kycService.solveKyc(
+            {status:"APR",comments:"Bienvenido a cryptuki."}
+            ,username);
     }
-
-
 
     return (
         <div className="flex flex-col w-1/3 mx-auto">
@@ -52,25 +55,18 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
 
                 </div>
             </div>
-            {/*<div className="flex flex-row mx-auto mt-10">*/}
-            {/*    {rejected==true && <h1>You are rejecting</h1>}*/}
-            {/*    {rejected==false && <h1>You are approving</h1>}*/}
-            {/*        <div>*/}
-            {/*            <button className="bg-ngreen rounded-lg text-white p-3 mr-10" onClick={()=>setRejected(false)}>Aprobar</button>*/}
-            {/*            <div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*        <div>*/}
-            {/*            <button className="bg-nred rounded-lg text-white p-3" onClick={()=>setRejected(true)}>Rechazar</button>*/}
-            {/*            <div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*        <form onSubmit={handleSubmit(onSubmit)}>*/}
-            {/*            {rejected==true && <input type="hidden" value={"REJ"} {...register("status")}/>}*/}
-            {/*            {rejected==false && <input type="hidden" value={"APR"} {...register("status")}/>}*/}
-            {/*            <button className="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3" type="submit">Confirmar</button>*/}
-            {/*        </form>*/}
-         {/*</div>*/}
+            <div className="flex flex-row mx-auto mt-10">
+                    <div>
+                        <button className="bg-ngreen rounded-lg text-white p-3 mr-10" onClick={()=>acceptKyc()}>Aprobar</button>
+                        <div>
+                        </div>
+                    </div>
+                        <Popup  contentStyle={{borderRadius: "0.5rem" , padding:"1rem"}} trigger={<button className="bg-nred rounded-lg text-white p-3">
+                            <p>Rechazar solicitud.</p>
+                        </button>} position="center center" modal>
+                            <RejectKycForm username={username}/>
+                        </Popup>
+         </div>
         </div>
     );
 };

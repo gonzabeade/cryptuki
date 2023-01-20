@@ -12,13 +12,13 @@ type ContactFormValues = {
 //TODO errors and tradeId param?
 const Support= () => {
 
-    const userService = useUserService();
+    const {user} = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>({defaultValues: async () => getDefaultValues()} );
     const [searchParams]= useSearchParams();
 
     function getDefaultValues(): ContactFormValues{
         return {
-            email: userService.getLoggedInUser()!,
+            email: user?.email!,
             message: null
         }
     }

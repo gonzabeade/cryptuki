@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import useChatService from "../../hooks/useChatService";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
+import {useAuth} from "../../contexts/AuthContext";
 
 type ChatButtonProps ={
     tradeId:number
@@ -11,10 +12,11 @@ const ChatButton:React.FC<ChatButtonProps> = ({tradeId}) => {
     const [qUnseenMessagesSeller, setqUnseenMessagesSeller] = useState<number>(0);
     const chatService = useChatService();
     const userService = useUserService();
+    const {user} = useAuth();
 
     async function fetchUnseenMessages(){
         try{
-            const resp = await chatService.getUnseenMessagesCount(tradeId, userService.getLoggedInUser());
+            const resp = await chatService.getUnseenMessagesCount(tradeId, user?.username!);
                 setqUnseenMessagesSeller(resp);
         }catch (e) {
             toast.error("Connection error. Failed to fetch chats");

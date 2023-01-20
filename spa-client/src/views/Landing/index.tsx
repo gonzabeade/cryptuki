@@ -10,6 +10,7 @@ import Loader from "../../components/Loader";
 import useUserService from "../../hooks/useUserService";
 import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import {useAuth} from "../../contexts/AuthContext";
 
 const Landing = () => {
 
@@ -18,6 +19,7 @@ const Landing = () => {
     const userService = useUserService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [offerParams, setOfferParams] = useState<URLSearchParams>(new URLSearchParams());
+    const {user} = useAuth();
 
     const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
         actualPage: 0,
@@ -37,7 +39,7 @@ const Landing = () => {
             params.append('page', paginatorProps.actualPage.toString());
             params.append('status', OFFER_STATUS.Pending);
             params.append('status', OFFER_STATUS.Sold);
-            params.append('exclude_user', userService.getLoggedInUser()!);
+            params.append('exclude_user', user?.username!);
 
             const apiCall = await offerService?.getOffers(params);
 
@@ -90,7 +92,7 @@ const Landing = () => {
             const params =  new URLSearchParams();
             params.append('status', OFFER_STATUS.Pending);
             params.append('status', OFFER_STATUS.Sold);
-            params.append('exclude_user', userService.getLoggedInUser()!);
+            params.append('exclude_user', user?.username!);
 
             data.cryptos?.forEach((crypto) => {
                 params.append('crypto_code', crypto);

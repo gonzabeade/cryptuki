@@ -8,18 +8,19 @@ import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import TradeBuyerCard from "../../components/TradeBuyerCard";
 import UserModel from "../../types/UserModel";
+import {useAuth} from "../../contexts/AuthContext";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const tradeService = useTradeService();
-    const userService= useUserService();
-    const [user, setUser] = useState<UserModel>();
+    const {user} = useAuth();
+
     const [actualPage, setActualPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
     async function fetchTradesBuyerProfile(){
         try {
-            const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser());
+            const resp = await tradeService.getRelatedTrades(user?.username!);
             setTrades(resp);
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
@@ -36,19 +37,6 @@ const BuyerDashboard = () => {
 
     useEffect(()=>{
         fetchTradesBuyerProfile();
-    },[]);
-
-    async function fetchUserData(){
-        try{
-            const resp = await userService.getUser(userService.getLoggedInUser()!);
-            setUser(resp);
-        }catch (e) {
-            toast.error("Connection error. Failed to fetch user data");
-        }
-    }
-
-    useEffect(()=>{
-        fetchUserData();
     },[]);
 
     return (

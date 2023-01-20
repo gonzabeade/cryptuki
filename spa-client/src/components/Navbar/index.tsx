@@ -6,9 +6,6 @@ import {useEffect, useState} from 'react';
 import {useAuth} from "../../contexts/AuthContext";
 const Navbar = () => {
 
-    const userService = useUserService();
-
-    const [username, setUsername] = useState<string | null>(userService.getLoggedInUser());
     const {user, signout} = useAuth();
     const navigate = useNavigate();
 
@@ -18,7 +15,6 @@ const Navbar = () => {
     },[]);
 
     useEffect(()=>{
-
     },[user]);
 
 
@@ -83,9 +79,6 @@ const Navbar = () => {
                         </Link>
                         <Link
                             className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"
-                            onClick={() => {
-                                setUsername(userService.getLoggedInUser())
-                            }}
                             to="/buyer/">
                             <div className={"flex flex-row"}>
                                 {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
@@ -144,7 +137,6 @@ const Navbar = () => {
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
                                               to="/buyer/"
                                               onClick={() => {
-                                                  setUsername(userService.getLoggedInUser())
                                                   closeMobileMenu()
                                               }}>
                                             Mi perfil
@@ -170,7 +162,7 @@ const Navbar = () => {
                             <div className="pt-6">
                                 <Link
                                     className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                    to="/" onClick={()=> {signout(()=>{navigate('/')});closeMobileMenu();}}>Sign out</Link>
+                                    to="/" onClick={()=> {closeMobileMenu();signout(()=>{navigate('/')});}}>Sign out</Link>
                             </div>
                         }
 
@@ -180,10 +172,6 @@ const Navbar = () => {
         </>
 
     );
-    function logout() {
-
-        setUsername(null);
-    }
 };
 
 

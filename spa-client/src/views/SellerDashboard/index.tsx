@@ -12,6 +12,7 @@ import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
+import {useAuth} from "../../contexts/AuthContext";
 
 
 const SellerDashboard = () => {
@@ -24,27 +25,12 @@ const SellerDashboard = () => {
     const offerService = useOfferService();
     const tradeService = useTradeService();
     const userService = useUserService();
-
-    const [user, setUser] = useState<UserModel>();
-
-    async function fetchUserData(){
-        try{
-            const apiCall = await userService?.getUser(userService.getLoggedInUser()!);
-            setUser(apiCall);
-        }catch (e){
-            toast.error("Connection error. Failed to fetch user data")
-        }
-
-    }
-
-    useEffect(()=>{
-        fetchUserData();
-    },[])
+    const {user} = useAuth();
 
 
     async function getOffers(){
         try{
-            const resp = await offerService.getOffersByOwner(userService.getLoggedInUser()!);
+            const resp = await offerService.getOffersByOwner(user?.username!);
             setOffers(resp)
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
@@ -53,7 +39,7 @@ const SellerDashboard = () => {
 
     async function getLastTransactions(){
         try{
-            const resp = await tradeService.getLastTransactions(userService.getLoggedInUser());
+            const resp = await tradeService.getLastTransactions(user?.username!);
             if(resp){
                 setLastTransactions(resp)
             }
@@ -73,7 +59,7 @@ const SellerDashboard = () => {
 
     async function fetchOffersWithStatus(status:string) {
         try{
-           const resp = await offerService.getOffersByStatus(status, userService.getLoggedInUser()!);
+           const resp = await offerService.getOffersByStatus(status, user?.username!);
            setOffers(resp);
         }catch (e) {
             toast.error("Connection error fetching offers with status "+ status)

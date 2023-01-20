@@ -9,6 +9,7 @@ import useUserService from "../../hooks/useUserService";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
+import {useAuth} from "../../contexts/AuthContext";
 
 
 const Receipt = () => {
@@ -21,6 +22,7 @@ const Receipt = () => {
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
+    const {user} = useAuth();
 
 
     async function fetchTrade(tradeId:number){
@@ -41,8 +43,8 @@ const Receipt = () => {
             if(trade){
                 //trade.buyer get URI
                 let username:string;
-
-                if(trade.buyer === userService.getLoggedInUser()){
+                //todo trade buyerURI split
+                if(trade.buyer === user?.username){
                     username = userService.getUsernameFromURI(trade.buyer);
                     setIsBuyer(true);
                 }else{
@@ -191,7 +193,7 @@ const Receipt = () => {
                 <div className="flex flex-col mx-10 items-center">
                     {counterPart &&  <UserInfo username={counterPart.username} email={counterPart.email} phone_number={counterPart.phoneNumber} last_login={counterPart.lastLogin.toString()} trades_completed={counterPart.ratingCount} rating={counterPart.rating}/>}
                     <div className="flex flex-col mx-auto mt-10">
-                        <RateYourCounterPart usernameRater={userService.getLoggedInUser()!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
+                        <RateYourCounterPart usernameRater={user?.username!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
                     </div>
                 </div>
             </div>

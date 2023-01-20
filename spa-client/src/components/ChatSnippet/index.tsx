@@ -83,6 +83,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                                     {
                                         messages.map((message, key)=>{
                                             return (
+                                                //todo aca hay que splitear el link
                                                 <Message key={key} content={message.content} left={message.senderURI !== userService.getLoggedInUser() }/>
                                             );
                                         })

@@ -2,6 +2,7 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {useSearchParams} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
 
 type ContactFormValues = {
     email:string|null,
@@ -14,13 +15,15 @@ const Support= () => {
     const userService = useUserService();
     const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>(/*{defaultValues: async () => getDefaultValues()} */);
     const [searchParams]= useSearchParams();
+    const {user} = useAuth();
+
     // TODO BOCA
     console.log(errors)
     console.log(getDefaultValues())
 
     function getDefaultValues(): ContactFormValues{
         return {
-            email: userService.getLoggedInUser(),
+            email: user?.username!,
             message: null
         }
     }

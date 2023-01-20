@@ -1,10 +1,12 @@
 import {AxiosInstance} from "axios";
+import useUserService from "../hooks/useUserService";
 import {paths} from "../common/constants";
 
 export class KycService {
 
     //TODO mirar como armar el path
-    private readonly basePath = paths.BASE_URL;
+    private readonly currentUser = useUserService().getLoggedInUser();
+    private readonly basePath = paths.BASE_URL + paths.USERS + this.currentUser + "/kyc";
     private readonly axiosInstance : ()=>AxiosInstance;
 
     public constructor(axiosInstance: ()=>AxiosInstance) {
@@ -20,6 +22,7 @@ export class KycService {
         idPictures:FileList,
         facePictures:FileList
     ){
+        console.log(this.basePath);
         let formData = new FormData();
 
         formData.append('kyc-information',
@@ -36,7 +39,7 @@ export class KycService {
 
         await this.axiosInstance().post(this.basePath, formData,{
             headers: {
-                'content-type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data'
             }
         });
     }

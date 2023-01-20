@@ -26,13 +26,14 @@ export class KycService {
         let formData = new FormData();
 
         formData.append('kyc-information',
-            JSON.stringify({
+            new Blob([JSON.stringify({
                 'givenNames':names,
                 'surnames':surnames,
                 'emissionCountry':emissionCountry,
                 'idCode':documentCode,
                 'idType':idType
-            }));
+            })],
+        {type: "application/json"}));
 
         formData.append('id-photo', idPictures[0]);
         formData.append('validation-photo', facePictures[0]);

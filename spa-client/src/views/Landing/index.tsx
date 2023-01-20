@@ -40,7 +40,6 @@ const Landing = () => {
                 params.append('page', paginatorProps.actualPage.toString());
             }
             params.append('status', OFFER_STATUS.Pending);
-            params.append('status', OFFER_STATUS.Sold);
             params.append('exclude_user', userService.getLoggedInUser()!);
 
             const apiCall = await offerService?.getOffers(params);
@@ -93,7 +92,6 @@ const Landing = () => {
 
             const params =  new URLSearchParams();
             params.append('status', OFFER_STATUS.Pending);
-            params.append('status', OFFER_STATUS.Sold);
             params.append('exclude_user', userService.getLoggedInUser()!);
 
             data.cryptos?.forEach((crypto) => {

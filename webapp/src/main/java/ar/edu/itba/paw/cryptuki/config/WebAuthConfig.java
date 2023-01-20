@@ -56,7 +56,7 @@ public class WebAuthConfig {
         configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("x-access-token", "authorization", "x-refresh-token", "link"));
+        configuration.setExposedHeaders(Arrays.asList("x-access-token", "authorization", "x-refresh-token", "link", "location"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

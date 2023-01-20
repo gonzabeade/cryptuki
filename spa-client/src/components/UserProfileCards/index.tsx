@@ -15,22 +15,12 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
         <div className="bg-white shadow rounded-lg py-1">
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">
-                    {/*<div className="w-full text-sm leading-normal text-gray-400 flex justify-end items-center mt-1">*/}
-                    {/*    <a href="/changePassword" className="mr-3 underline cursor-pointer">*/}
-                    {/*        Change your password*/}
-                    {/*    </a>*/}
-                    {/*</div>*/}
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
                         <img src={picture} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"}/>
                         {username}
                     </div>
                 </div>
                 <div className="flex flex-col justify-start ml-3 my-2">
-                    {/*<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"*/}
-                    {/*          fill="none" stroke-linecap="round" stroke-linejoin="round">*/}
-                    {/*    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>*/}
-                    {/*    <circle cx="12" cy="10" r="3"></circle>*/}
-                    {/*</svg>*/}
                     <div className="text-sm leading-normal text-gray-400 flex justify-start items-center mt-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              className="bi bi-telephone" viewBox="0 0 16 16">

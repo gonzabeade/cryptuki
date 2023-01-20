@@ -25,8 +25,13 @@ const BuyerDashboard = () => {
 
     async function fetchTradesBuyerProfile(){
         try {
-            const resp = await tradeService.getRelatedTrades(user?.username!);
-            setTrades(resp);
+            if(user){
+                const resp = await tradeService.getRelatedTrades(user?.username!);
+                if(resp.paginatorProps){
+                    setPaginatorProps(resp.paginatorProps);
+                }
+                setTrades(resp.items);
+            }
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
         }
@@ -34,9 +39,12 @@ const BuyerDashboard = () => {
 
     async function fetchTradesWithStatus(status:string){
         try {
-            //todo paginator response
-            const resp = await tradeService.getRelatedTrades(status, user?.username!);
-            setTrades(resp);
+
+            const resp = await tradeService.getRelatedTrades( user?.username!, status);
+            if(resp.paginatorProps){
+                setPaginatorProps(resp.paginatorProps);
+            }
+            setTrades(resp.items);
         }catch (e) {
             toast.error("Couldn't fethc trades with status " + status);
         }
@@ -44,7 +52,7 @@ const BuyerDashboard = () => {
 
     useEffect(()=>{
         fetchTradesBuyerProfile();
-    },[]);
+    },[user]);
 
     return (
         <div className="flex h-full w-full px-20 my-10">

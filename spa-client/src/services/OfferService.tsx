@@ -1,4 +1,4 @@
-import { paths } from "../common/constants";
+import {OFFER_STATUS, paths} from "../common/constants";
 import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
@@ -49,7 +49,8 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:{
                 page:page,
-                by_user: username
+                by_user: username,
+                status:OFFER_STATUS.Pending
             }
         })
         return resp.data;

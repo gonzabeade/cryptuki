@@ -28,8 +28,6 @@ const Support= () => {
         if(searchParams && searchParams.get("tradeId")){
 
         }
-
-
     }
 
     return (

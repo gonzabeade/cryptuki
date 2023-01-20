@@ -1,7 +1,5 @@
 import {AxiosInstance} from "axios";
-import {KycModel} from "../types/KycModel";
 import {paths} from "../common/constants";
-import KycForm from "../components/KycForm/kycForm";
 
 export class KycService {
 
@@ -36,8 +34,8 @@ export class KycService {
         formData.append('id-photo', idPictures[0]);
         formData.append('validation-photo', facePictures[0]);
 
-        await this.axiosInstance().post(this.basePath,formData,{
-            headers:{
+        await this.axiosInstance().post(this.basePath, formData,{
+            headers: {
                 'content-type': 'multipart/form-data'
             }
         });

@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import {paths, sleep} from "../../common/constants";
+import {Link, useNavigate} from "react-router-dom";
+import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
-import {UploadFormValues} from "../UploadForm/uploadForm";
+import useKycService from "../../hooks/useKycService";
+import axios from "axios";
 
 export interface UploadKycValues {
     names:string,
@@ -17,9 +21,29 @@ const KycForm = () => {
 
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadKycValues>();
+    const kycService = useKycService();
+    const navigate = useNavigate();
 
-    function onSubmit(data:UploadKycValues) {
+    async function onSubmit(data:UploadKycValues) {
         console.log(data);
+        try {
+            const resp = kycService.uploadKyc(
+                data.names,
+                data.surnames,
+                data.emissionCountry,
+                data.documentCode,
+                data.idType,
+                data.idPictures,
+                data.facePictures
+            );
+            toast.success("Successfully registered!");
+            await sleep(1000);
+            //TODO: mirar bien a donde te navega
+            navigate('/');
+        }
+        catch (e) {
+            toast.error("Connection error. Please try again later");
+        }
     }
 
     // TODO Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario

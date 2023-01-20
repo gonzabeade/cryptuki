@@ -36,7 +36,9 @@ const Landing = () => {
             setIsLoading(true);
 
             const params =  new URLSearchParams();
-            params.append('page', paginatorProps.actualPage.toString());
+            if(paginatorProps){
+                params.append('page', paginatorProps.actualPage.toString());
+            }
             params.append('status', OFFER_STATUS.Pending);
             params.append('status', OFFER_STATUS.Sold);
             params.append('exclude_user', userService.getLoggedInUser()!);
@@ -92,7 +94,7 @@ const Landing = () => {
             const params =  new URLSearchParams();
             params.append('status', OFFER_STATUS.Pending);
             params.append('status', OFFER_STATUS.Sold);
-            params.append('exclude_user', user?.username!);
+            params.append('exclude_user', userService.getLoggedInUser()!);
 
             data.cryptos?.forEach((crypto) => {
                 params.append('crypto_code', crypto);

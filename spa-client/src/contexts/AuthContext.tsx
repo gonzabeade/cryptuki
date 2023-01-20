@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import UserModel from "../types/UserModel";
 import {internalAuthProvider} from "../scripts/auth";
+import useUserService from "../hooks/useUserService";
 
 interface AuthContextType {
     user: UserModel | null;
@@ -15,7 +16,22 @@ interface AuthContextType {
 const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const userService = useUserService();
     let [user, setUser] = React.useState<UserModel | null>(null);
+
+    function fetchUser(){
+        const username = userService.getLoggedInUser();
+        if(username){
+            userService.getUser(username).then((user) => {
+                setUser(user);
+            });
+        }
+    }
+
+    useEffect(() => {
+      fetchUser();
+    },[]);
+
 
     let signin = (
         newUser: UserModel,

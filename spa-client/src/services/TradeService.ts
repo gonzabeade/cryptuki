@@ -24,6 +24,7 @@ export class TradeService {
         return resp.data;
     }
     public async getRelatedTrades(username:string|null, status?:string):Promise<TransactionModel[]>{
+        //todo paginator
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {
                 buyer: username,
@@ -49,15 +50,6 @@ export class TradeService {
     public async changeTradeStatus(tradeId:number, status:string):Promise<TransactionModel>{
         const resp = await this.axiosInstance().patch(paths.BASE_URL + paths.TRADE + tradeId , {
                 newStatus: status
-        });
-        return resp.data;
-    }
-    public async getTradesWithStatus(status:string, username:string){
-        const resp = await this.axiosInstance().get(paths.BASE_URL + paths.TRADE  , {
-            params: {
-                buyer: username,
-                status: status
-            }
         });
         return resp.data;
     }

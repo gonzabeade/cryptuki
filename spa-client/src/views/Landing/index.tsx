@@ -16,10 +16,10 @@ const Landing = () => {
 
     const [offers, setOffers] = useState<OfferModel[]|null>();
     const offerService = useOfferService();
-    const userService = useUserService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [offerParams, setOfferParams] = useState<URLSearchParams>(new URLSearchParams());
     const {user} = useAuth();
+    const userService = useUserService();
 
     const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
         actualPage: 0,
@@ -39,7 +39,7 @@ const Landing = () => {
             params.append('page', paginatorProps.actualPage.toString());
             params.append('status', OFFER_STATUS.Pending);
             params.append('status', OFFER_STATUS.Sold);
-            params.append('exclude_user', user?.username!);
+            params.append('exclude_user', userService.getLoggedInUser()!);
 
             const apiCall = await offerService?.getOffers(params);
 
@@ -121,7 +121,7 @@ const Landing = () => {
 
     useEffect(() => {
         getOffers();
-    }, []);
+    }, [user]);
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">
@@ -135,7 +135,6 @@ const Landing = () => {
                             <div className="flex flex-row mx-10 justify-between">
                                 <div className="flex flex-row">
                                     <h3 className="font-bold mx-2 my-auto">Order by</h3>
-                                    <form>
                                         <select className="p-2 rounded-lg" onChange={(e)=>{orderOffers(e.target.value)} }>
                                             <option value={"PRICE_LOWER"}>Lowest Price</option>
                                             <option value={"DATE"}>Most recent</option>
@@ -143,7 +142,6 @@ const Landing = () => {
                                             <option value={"PRICE_UPPER"}>Higher price</option>
                                             <option value={"LAST_LOGIN"}>Seller Last login</option>
                                         </select>
-                                    </form>
                                 </div>
                                 <div>
                                     <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>

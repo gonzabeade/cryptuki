@@ -8,6 +8,8 @@ const Navbar = () => {
 
     const {user, signout} = useAuth();
     const navigate = useNavigate();
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+    const userService = useUserService();
 
 
     useEffect(()=>{
@@ -15,7 +17,8 @@ const Navbar = () => {
     },[]);
 
     useEffect(()=>{
-    },[user]);
+        userService.getLoggedInUser() ? setIsLogged(true) : setIsLogged(false);
+    })
 
 
 
@@ -62,7 +65,7 @@ const Navbar = () => {
                     {/*    <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/support">Contact</Link>*/}
                     {/*</li>*/}
                 </ul>
-                {!user &&
+                {!isLogged &&
                     <>
                         <Link
                             className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-frostdr font-bold  hover:cursor-pointer rounded-lg transition duration-200"
@@ -72,7 +75,7 @@ const Navbar = () => {
                             to="/register">Sign up</Link>
                     </>
                 }
-                {user &&
+                {isLogged &&
                     <div className="hidden lg:flex lg:flex-row">
                         <Link to="/seller/" className="mx-2">
                             <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">Panel de vendedor</button>
@@ -125,7 +128,7 @@ const Navbar = () => {
                             {/*    <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"*/}
                             {/*       to="/support" onClick={closeMobileMenu}>Contact</Link>*/}
                             {/*</li>*/}
-                            {user &&
+                            {isLogged &&
                                 <>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
@@ -148,7 +151,7 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className="mt-auto">
-                        {!user && <div className="pt-6">
+                        {!isLogged && <div className="pt-6">
 
                             <Link
                                 className=" text-frostdr block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg "
@@ -158,7 +161,7 @@ const Navbar = () => {
                                 to="/register" onClick={closeMobileMenu}>Sign Up</Link>
                         </div>
                         }
-                        {user &&
+                        {isLogged &&
                             <div className="pt-6">
                                 <Link
                                     className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"

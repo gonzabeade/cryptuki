@@ -13,17 +13,12 @@ type ContactFormValues = {
 const Support= () => {
 
     const userService = useUserService();
-    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>(/*{defaultValues: async () => getDefaultValues()} */);
+    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>({defaultValues: async () => getDefaultValues()} );
     const [searchParams]= useSearchParams();
-    const {user} = useAuth();
-
-    // TODO BOCA
-    console.log(errors)
-    console.log(getDefaultValues())
 
     function getDefaultValues(): ContactFormValues{
         return {
-            email: user?.username!,
+            email: userService.getLoggedInUser()!,
             message: null
         }
     }

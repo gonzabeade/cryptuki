@@ -9,14 +9,19 @@ import {toast} from "react-toastify";
 import TradeBuyerCard from "../../components/TradeBuyerCard";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const tradeService = useTradeService();
     const {user} = useAuth();
-
-    const [actualPage, setActualPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+            actualPage: 0,
+            totalPages: 0,
+            nextUri:'',
+            prevUri:''
+        }
+    );
 
     async function fetchTradesBuyerProfile(){
         try {
@@ -26,9 +31,11 @@ const BuyerDashboard = () => {
             toast.error("Connection error. Failed to fetch trades");
         }
     }
+
     async function fetchTradesWithStatus(status:string){
         try {
-            const resp = await tradeService.getTradesWithStatus(status, user?.username!);
+            //todo paginator response
+            const resp = await tradeService.getRelatedTrades(status, user?.username!);
             setTrades(resp);
         }catch (e) {
             toast.error("Couldn't fethc trades with status " + status);
@@ -64,7 +71,7 @@ const BuyerDashboard = () => {
                         available</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
-                        {/*<Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("change page")}/>*/}
+                        <Paginator paginatorProps={paginatorProps} callback={() => console.log("change page")}/>
                     </div>}
 
             </div>

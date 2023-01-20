@@ -30,8 +30,8 @@ const Verify = lazy(()=>import("./views/Verify/index"));
 
 function App() {
   return (
+      <AuthProvider>
       <BrowserRouter>
-          <AuthProvider>
               <div className="App">
                   <ToastContainer/>
                   <Navbar></Navbar>
@@ -63,8 +63,8 @@ function App() {
                   <div className="shape-blob left-[50%]"></div>
                   <div className="shape-blob left-[5%] top-[80%]"></div>
               </div>
-          </AuthProvider>
       </BrowserRouter>
+      </AuthProvider>
 
   );
 }

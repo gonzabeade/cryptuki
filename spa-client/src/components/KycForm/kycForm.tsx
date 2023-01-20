@@ -7,7 +7,7 @@ export interface UploadKycValues {
     names:string,
     surnames:string,
     emissionCountry:string,
-    documentNumber:number,
+    documentCode:string,
     idType:string,
     idPictures:FileList,
     facePictures:FileList
@@ -22,9 +22,7 @@ const KycForm = () => {
         console.log(data);
     }
 
-    //TODO HTML
-    //-Mirar como hacer para que el form se expanda a toda la pantalla
-    //-Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario
+    // TODO Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario
 
     return (
         <div className="flex flex-row mx-auto">
@@ -84,13 +82,13 @@ const KycForm = () => {
                                     Document Number
                                 </label>
                                 <input type="text" placeholder="e.g. 45089768" className="rounded-lg p-3"
-                                       {...register("documentNumber", {
+                                       {...register("documentCode", {
                                            required: "You must enter a passport/id number",
                                            minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
                                            maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
                                        })}
                                 />
-                                {errors && errors.documentNumber && <p className="text-red-600 mx-auto mt-2">{errors.documentNumber.message}</p> }
+                                {errors && errors.documentCode && <p className="text-red-600 mx-auto mt-2">{errors.documentCode.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">

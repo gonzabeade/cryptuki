@@ -29,8 +29,11 @@ export class UserService {
 
 
     public getUsernameFromURI(uri:string):string{
-        const n = uri.lastIndexOf('/');
-        return uri.substring(n + 1);
+        if(uri){
+            const n = uri.lastIndexOf('/');
+            return uri.substring(n + 1);
+        }
+        return '';
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){

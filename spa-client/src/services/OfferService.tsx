@@ -3,7 +3,7 @@ import OfferModel from "../types/OfferModel";
 import { AxiosInstance } from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
 import {Link, PaginatedResults} from "../types/PaginatedResults";
-import {getLinkHeaders, getPaginatorProps} from "../common/utils/utils";
+import {getLinkHeaders, getPaginatorProps, processPaginatedResults} from "../common/utils/utils";
 
 export class OfferService {
 
@@ -19,24 +19,8 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
         });
-        //todo modularizar esto, esta en todas las requests
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-                params: params!
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-                params: params!,
-            }
-        }else{
-            throw new Error("Error fetching offers");
-        }
 
-
+        return processPaginatedResults(resp, params!);
     }
 
     public async getOfferInformation(offerId:number):Promise<OfferModel>{
@@ -56,21 +40,7 @@ export class OfferService {
             params:params
         })
 
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-                params: params!
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-                params: params!,
-            }
-        }else{
-            throw new Error("Error fetching offers");
-        }
+        return processPaginatedResults(resp, params);
     }
 
     public async modifyOffer(offer:ModifyFormValues, status?:OFFER_STATUS){
@@ -104,21 +74,7 @@ export class OfferService {
             params: params
         })
 
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-                params: params!
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-                params: params!,
-            }
-        }else{
-            throw new Error("Error fetching offers");
-        }
+       return processPaginatedResults(resp, params);
     }
 
     public getOfferIdFromURI(uri:string):string{

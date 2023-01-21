@@ -2,7 +2,7 @@ import {paths, TRADE_STATUS} from "../common/constants";
 import {AxiosInstance} from "axios";
 import TransactionModel from "../types/TransactionModel";
 import {Link, PaginatedResults} from "../types/PaginatedResults";
-import {getLinkHeaders, getPaginatorProps} from "../common/utils/utils";
+import {getLinkHeaders, getPaginatorProps, processPaginatedResults} from "../common/utils/utils";
 
 
 export class TradeService {
@@ -26,26 +26,15 @@ export class TradeService {
         return resp.data;
     }
     public async getRelatedTrades(username:string|null, status?:string):Promise<PaginatedResults<TransactionModel>>{
-        const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
-            params: {
-                buyer: username,
-                status: status
-            }
-        });
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-            }
-        }else{
-            throw new Error("Error fetching offers");
+        const params = new URLSearchParams();
+        params.append("buyer", username!);
+        if(status) {
+            params.append("status", status);
         }
+        const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
+            params: params
+        });
+        return processPaginatedResults(resp,params);
     }
     public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS, page?:number ):Promise<PaginatedResults<TransactionModel>>{
         if(status === TRADE_STATUS.All){
@@ -88,6 +77,7 @@ export class TradeService {
 
     public async getPaginatedTrades(uri:string):Promise<PaginatedResults<TransactionModel>>{
         const resp = await this.axiosInstance().get(uri);
+
         if(resp.status === 200){
             const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
             return {

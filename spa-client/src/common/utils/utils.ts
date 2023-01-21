@@ -1,4 +1,5 @@
-import {Link, PaginatorPropsValues} from "../../types/PaginatedResults";
+import {Link, PaginatedResults, PaginatorPropsValues} from "../../types/PaginatedResults";
+import {AxiosResponse} from "axios";
 
 
 
@@ -102,3 +103,24 @@ export function getPaginatorProps(link:Link[]):PaginatorPropsValues {
         }
     }
 }
+
+export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchParams){
+    //todo with or without params
+    if(resp.status === 200){
+        const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+
+        return {
+            items: resp.data,
+            paginatorProps: getPaginatorProps(linkHeaders),
+            params: params
+        };
+    }else if(resp.status === 204){
+        return {
+            items: [],
+            params: params,
+        }
+    }else{
+        throw new Error("Error in network. Please try again");
+    }
+}
+

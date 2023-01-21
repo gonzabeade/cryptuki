@@ -82,16 +82,16 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                     offer.offerStatus !== 'DEL' && offer.offerStatus !== 'PSE' && offer.offerStatus !== 'SOL' &&
                     <div className={"mx-3 w-full"}>
                         <div className="flex flex-row justify-between my-2">
-                                <button type="submit" className=" rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2 font-semibold text-white z-20" onClick={()=>navigate("/offer/"+offer.offerId+"/edit")}>
+                                <button type="submit" className=" rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2 font-semibold text-white z-50" onClick={()=>navigate("/offer/"+offer.offerId+"/edit")}>
                                     Edit
                                 </button>
-                            <div className="rounded-lg text-center bg-nred hover:bg-nred/[0.7] text-white w-1/2 p-2 ml-2 z-30 text-white">
+                            <div className="rounded-lg text-center bg-nred hover:bg-nred/[0.7] text-white w-1/2 p-2 ml-2 z-50 text-white">
                                 <button type="submit"  className="font-semibold text-white" onClick={()=>deleteOffer()/* post to delete method in Service */}>
                                     Delete
                                 </button>
                             </div>
                         </div>
-                        <div className="rounded-lg bg-nyellow hover:bg-nyellow/[0.6] py-3 px-5 text-l font-sans text-center cursor-pointer">
+                        <div className=" z-50 rounded-lg bg-nyellow hover:bg-nyellow/[0.6] py-3 px-5 text-l font-sans text-center cursor-pointer">
                             <button className="font-semibold text-white" onClick={pauseOffer}>
                                 Pause offer
                             </button>

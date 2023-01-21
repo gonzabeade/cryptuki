@@ -31,6 +31,7 @@ const SellerOfferDashboard = () => {
     async function fetchTradesAssociatedWithOfferWithStatus(status:TRADE_STATUS, page?:number){
         try{
             const resp = await tradeService.getTradesWithOfferId(Number(params.id), status, page);
+
             setTrades(resp.items);
             setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
@@ -43,6 +44,7 @@ const SellerOfferDashboard = () => {
         try {
             if (params.id) {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
+                console.log(resp.items)
                 setTrades(resp.items);
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);

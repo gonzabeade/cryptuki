@@ -16,7 +16,6 @@ export class OfferService {
 
     public async getOffers(params?:URLSearchParams): Promise<PaginatedResults<OfferModel>> {
 
-        params?.append('per_page', "1");
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
         });

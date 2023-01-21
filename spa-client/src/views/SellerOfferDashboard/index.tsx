@@ -8,10 +8,11 @@ import useTradeService from "../../hooks/useTradeService";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import useOfferService from "../../hooks/useOfferService";
+import {OFFER_STATUS} from "../../common/constants";
 
 const SellerOfferDashboard = () => {
 
-    const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+    const [selectedStatus, setSelectedStatus] = useState<string>(OFFER_STATUS.All);
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const [offer, setOffer] = useState<OfferModel>();
     const params = useParams();
@@ -19,10 +20,6 @@ const SellerOfferDashboard = () => {
     const offerService = useOfferService();
     const navigate = useNavigate();
 
-
-
-    const [actualPage, setActualPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
     async function fetchTradesAssociatedWithOffer(){
         try {
             if (params.id) {
@@ -46,7 +43,7 @@ const SellerOfferDashboard = () => {
         fetchTradesAssociatedWithOffer();
     }, [])
 
-
+    //todo falta un fetch por estados
     function changeStatus(status:string){
         //TODO fetch to our service that asks for trades in specific state
         setSelectedStatus(status);
@@ -62,7 +59,7 @@ const SellerOfferDashboard = () => {
                         </h1>
                     </div>
                     <div className="flex mx-auto">
-                        {offer && <OfferCardProfile offer={offer}/>}
+                        {offer && <OfferCardProfile offer={offer} renewOffers={fetchTradesAssociatedWithOffer}/>}
                     </div>
 
                     <button onClick={()=>navigate(-1)}

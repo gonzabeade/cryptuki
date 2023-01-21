@@ -27,6 +27,7 @@ const SellerDashboard = () => {
     const tradeService = useTradeService();
     const userService = useUserService();
     const {user} = useAuth();
+    const [selectedStatus, setSelectedStatus] = useState<OFFER_STATUS>(OFFER_STATUS.Pending);
 
 
     async function getOffers(){
@@ -59,10 +60,11 @@ const SellerDashboard = () => {
        getLastTransactions();
     },[])
 
-    async function fetchOffersWithStatus(status:string) {
+    async function fetchOffersWithStatus(status:OFFER_STATUS) {
         try{
            const resp = await offerService.getOffersByStatus(status, user?.username!);
            setOffers(resp);
+           setSelectedStatus(status);
         }catch (e) {
             toast.error("Connection error fetching offers with status "+ status)
         }
@@ -114,14 +116,14 @@ const SellerDashboard = () => {
                 </div>
                 <div className="flex flex-col w-full mt-2">
                     <div className="flex w-full mx-auto ">
-                        <StatusCardsSeller  active={OFFER_STATUS.Pending} callback={fetchOffersWithStatus}/>
+                        <StatusCardsSeller  active={selectedStatus} callback={fetchOffersWithStatus}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}
 
                         {offers.length >= 1 && offers.map((offer) => {
                                     return (
-                                        <OfferCardProfile offer={offer} key={offer.offerId}/>
+                                        <OfferCardProfile offer={offer} key={offer.offerId} renewOffers={fetchOffersWithStatus}/>
                                     );
                                 })
                         }

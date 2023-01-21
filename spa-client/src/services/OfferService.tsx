@@ -55,14 +55,15 @@ export class OfferService {
         return resp.data;
     }
 
-    public async modifyOffer(offer:ModifyFormValues){
+    public async modifyOffer(offer:ModifyFormValues, status?:OFFER_STATUS){
         const resp = await this.axiosInstance().put<OfferModel[]>(this.basePath + offer.offerId, {
             cryptoCode: offer.cryptoCode,
             location: offer.location,
             minInCrypto: offer.minInCrypto,
             maxInCrypto: offer.maxInCrypto,
             unitPrice: offer.unitPrice,
-            comments: offer.comments
+            comments: offer.comments,
+            offerStatus: status
         })
         return resp.data;
     }
@@ -101,6 +102,38 @@ export class OfferService {
             firstChat:firstChat
         });
     }
-
+    public async pauseOffer(offer:OfferModel){
+        return this.modifyOffer({
+            offerId: offer.offerId,
+            cryptoCode: offer.cryptoCode,
+            location: offer.location,
+            minInCrypto: offer.minInCrypto,
+            maxInCrypto: offer.maxInCrypto,
+            unitPrice: offer.unitPrice,
+            comments: offer.comments
+            }, OFFER_STATUS.PausedBySeller);
+    }
+    public async deleteOffer(offer:OfferModel){
+        return this.modifyOffer({
+            offerId: offer.offerId,
+            cryptoCode: offer.cryptoCode,
+            location: offer.location,
+            minInCrypto: offer.minInCrypto,
+            maxInCrypto: offer.maxInCrypto,
+            unitPrice: offer.unitPrice,
+            comments: offer.comments
+        }, OFFER_STATUS.Deleted);
+    }
+    public async resumeOffer(offer:OfferModel){
+        return this.modifyOffer({
+            offerId: offer.offerId,
+            cryptoCode: offer.cryptoCode,
+            location: offer.location,
+            minInCrypto: offer.minInCrypto,
+            maxInCrypto: offer.maxInCrypto,
+            unitPrice: offer.unitPrice,
+            comments: offer.comments
+        }, OFFER_STATUS.Pending);
+    }
 }
 

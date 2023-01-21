@@ -77,10 +77,10 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                 </div>
 
             </a>
-            <div className={"flex -mt-3  mb-2 z-50 "}>
+            <div className={"flex z-50 my-auto "}>
                 {
                     offer.offerStatus !== 'DEL' && offer.offerStatus !== 'PSE' && offer.offerStatus !== 'SOL' &&
-                    <div className={"mx-3 w-full"}>
+                    <div className={"mx-3 w-full mb-2"}>
                         <div className="flex flex-row justify-between my-2">
                                 <button type="submit" className=" rounded-lg text-center bg-frostdr hover:bg-frostdr/[0.7] w-1/2 p-2 mr-2 font-semibold text-white z-50" onClick={()=>navigate("/offer/"+offer.offerId+"/edit")}>
                                     Edit
@@ -105,7 +105,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                         </button>
                 }
                 {
-                    offer.offerStatus === 'DEL' && <div className="bg-nred my-auto p-2 text-white text-center mx-auto">
+                    offer.offerStatus === 'DEL' && <div className="bg-nred p-2 text-white text-center mx-auto mb-2">
                         Offer deleted
                     </div>
                 }

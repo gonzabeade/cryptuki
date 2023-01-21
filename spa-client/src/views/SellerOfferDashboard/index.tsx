@@ -54,6 +54,15 @@ const SellerOfferDashboard = () => {
             toast.error("Connection error. Failed to fetch trades");
         }
     }
+    async function getPaginatedTrades(uri:string){
+        try{
+            const resp = await tradeService.getPaginatedTrades(uri);
+            setTrades(resp.items);
+            setPaginatorProps(resp.paginatorProps!);
+        }catch (e) {
+            toast.error("Connection  error. Failed to fetch trades");
+        }
+    }
 
 
     useEffect(()=>{
@@ -140,8 +149,7 @@ const SellerOfferDashboard = () => {
                         </div>
 
                         <h1 className="mx-auto">
-                            {/*//todo callback update trades*/}
-                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={()=>{console.log("a")}}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
+                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={getPaginatedTrades}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
                         </h1>
                     </div>

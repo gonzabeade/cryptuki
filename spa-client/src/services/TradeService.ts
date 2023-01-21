@@ -85,4 +85,22 @@ export class TradeService {
         });
         return resp.data;
     }
+
+    public async getPaginatedTrades(uri:string):Promise<PaginatedResults<TransactionModel>>{
+        const resp = await this.axiosInstance().get(uri);
+        if(resp.status === 200){
+            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+            };
+        }else if(resp.status === 204){
+            return {
+                items: [],
+            }
+        }else{
+            throw new Error("Error fetching trades");
+        }
+
+    }
 }

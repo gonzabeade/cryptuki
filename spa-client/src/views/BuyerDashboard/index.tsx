@@ -49,6 +49,17 @@ const BuyerDashboard = () => {
             toast.error("Couldn't fethc trades with status " + status);
         }
     }
+    async function fetchPage(uri:string){
+        try{
+            const resp = await tradeService.getPaginatedTrades(uri);
+            if(resp.paginatorProps){
+                setPaginatorProps(resp.paginatorProps);
+            }
+            setTrades(resp.items);
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch trades")
+        }
+    }
 
     useEffect(()=>{
         fetchTradesBuyerProfile();
@@ -79,8 +90,7 @@ const BuyerDashboard = () => {
                         available</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
-                        {/*todo callback para actualizar los trades*/}
-                        <Paginator paginatorProps={paginatorProps} callback={()=>{console.log("a")}}/>
+                        <Paginator paginatorProps={paginatorProps} callback={fetchPage}/>
                     </div>}
 
             </div>

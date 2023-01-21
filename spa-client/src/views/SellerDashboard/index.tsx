@@ -60,6 +60,18 @@ const SellerDashboard = () => {
             toast.error("Connection error. Failed to fetch lasts transactions");
         }
     }
+    async function getPagginatedOffers(uri:string){
+        try{
+
+            const params = offerService.getSearchParamsFromURI(uri);
+            const apiCall = await offerService?.getOffers(params);
+            setOffers(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps!);
+
+        }catch (e){
+            toast.error("Connection error. Failed to fetch paginated offers")
+        }
+    }
 
     useEffect(()=>{
        getOffers();
@@ -139,7 +151,7 @@ const SellerDashboard = () => {
                                     );
                                 })
                         }
-                        <Paginator paginatorProps={paginatorProps} callback={() => console.log("messi")}/>
+                        <Paginator paginatorProps={paginatorProps} callback={getPagginatedOffers}/>
 
                     </div>
                 </div>

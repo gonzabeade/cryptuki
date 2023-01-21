@@ -33,7 +33,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
                 <div className="flex flex-row text-gray-400 text-center">
                     <div className="bold text-polar">{seller?.username }</div>
                     {seller?.ratingCount === 0 || !seller?.rating ?
-                        <div className="light">Usuario nuevo</div> : <div className=" text-polar text-xs items-center ml-1 mt-0.5">({ seller.ratingCount} trades completed)</div>
+                        <div className="light ml-2">Usuario nuevo</div> : <div className=" text-polar text-xs items-center ml-1 mt-0.5">({ seller.ratingCount} trades completed)</div>
                     }
                 </div>
                 {seller?.ratingCount !== 0 && seller?.rating && <RatingStars rating={seller.rating/2}/>}

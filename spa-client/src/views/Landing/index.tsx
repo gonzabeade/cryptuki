@@ -72,9 +72,11 @@ const Landing = () => {
 
     async function orderOffers(order_by:string){
         try{
-
             setIsLoading(true);
+
             offerParams.append('order_by', order_by);
+            offerParams.append("exclude_user", userService.getLoggedInUser()!);
+
             const apiCall = await offerService?.getOffers(offerParams);
 
             setIsLoading(false);
@@ -128,37 +130,41 @@ const Landing = () => {
                 <div className="flex w-1/3">
                     <CryptoFilters callback={getOffersWithFilters}/>
                 </div>
-
-                    {!isLoading ?
                         <>
-                        <div className="flex flex-col w-2/3 mt-10">
-                            <div className="flex flex-row mx-10 justify-between">
-                                <div className="flex flex-row">
-                                    <h3 className="font-bold mx-2 my-auto">Order by</h3>
-                                        <select className="p-2 rounded-lg" onChange={(e)=>{orderOffers(e.target.value)} }>
+                            <div className="flex flex-col w-2/3 mt-10">
+                                <div className="flex flex-row mx-10 justify-between">
+                                    <div className="flex flex-row">
+                                        <h3 className="font-bold mx-2 my-auto">Order by</h3>
+                                        <select className="p-2 rounded-lg" onChange={(e) => {
+                                            orderOffers(e.target.value)
+                                        }}>
                                             <option value={"PRICE_LOWER"}>Lowest Price</option>
                                             <option value={"DATE"}>Most recent</option>
                                             <option value={"RATE"}>Best Rated user</option>
                                             <option value={"PRICE_UPPER"}>Higher price</option>
                                             <option value={"LAST_LOGIN"}>Seller Last login</option>
                                         </select>
+                                    </div>
+                                    {!isLoading &&
+                                        <div>
+                                            <h3 className="text-gray-400">You got {offers ? offers.length : 0} results</h3>
+                                        </div>
+                                    }
                                 </div>
-                                <div>
-                                    <h3 className="text-gray-400">You got {offers? offers.length: 0} results</h3>
+                                {!isLoading && offers && offers.map((offer => <CryptoCard offer={offer}
+                                                                            key={offer.offerId}></CryptoCard>))}
+                                { !isLoading &&  offers && offers.length > 0 &&
+                                    <Paginator paginatorProps={paginatorProps} callback={getPaginatedOffers}/>}
+                                {!isLoading &&  (!offers || offers.length === 0) &&
+                                    <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available
+                                        at this moment</h1>}
+                                {isLoading &&
+                                    <div className="flex flex-col w-2/3 mt-10 mx-auto">
+                                    <Loader/>
                                 </div>
+                                }
                             </div>
-                            {offers && offers.map((offer => <CryptoCard offer={offer} key={offer.offerId}></CryptoCard>))}
-                            {offers && offers.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedOffers}/>}
-                            {(!offers || offers.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available at this moment</h1>}
-
-                        </div>
                         </>
-                        :
-                        <div className="flex flex-col w-2/3 mt-10">
-                            <Loader/>
-                        </div>
-                    }
-
             </div>
     </>
 

@@ -20,7 +20,7 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
         });
-
+        //todo modularizar esto, esta en todas las requests
         if(resp.status === 200){
             const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
             return {
@@ -44,15 +44,34 @@ export class OfferService {
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
-    public async getOffersByOwner(username:string, page?:number):Promise<OfferModel[]>{
+    public async getOffersByOwner(username:string, page?:number):Promise<PaginatedResults<OfferModel>>{
+
+        const params = new URLSearchParams();
+        params.append('by_user', username);
+        if(page) {
+            params.append('page', page.toString());
+        }
+        params.append("status", OFFER_STATUS.Pending);
+
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params:{
-                page:page,
-                by_user: username,
-                status:OFFER_STATUS.Pending
-            }
+            params:params
         })
-        return resp.data;
+
+        if(resp.status === 200){
+            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+                params: params!
+            };
+        }else if(resp.status === 204){
+            return {
+                items: [],
+                params: params!,
+            }
+        }else{
+            throw new Error("Error fetching offers");
+        }
     }
 
     public async modifyOffer(offer:ModifyFormValues, status?:OFFER_STATUS){
@@ -67,20 +86,40 @@ export class OfferService {
         })
         return resp.data;
     }
-    public async getOffersByStatus(status:string|undefined,  username:string, page?:number){
+    public async getOffersByStatus(status:string|undefined,  username:string, page?:number):Promise<PaginatedResults<OfferModel>>{
 
         if(status === 'ALL'){
             status = undefined
         }
+        const params = new URLSearchParams();
+        if(page) {
+            params.append('page', page.toString());
+        }
+        if(status){
+            params.append('status', status);
+        }
+        params.append('by_user', username);
 
+        //todo refactor esto, esta duplicado
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params:{
-                page:page,
-                status:status,
-                by_user:username
-            }
+            params: params
         })
-        return resp.data;
+
+        if(resp.status === 200){
+            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+                params: params!
+            };
+        }else if(resp.status === 204){
+            return {
+                items: [],
+                params: params!,
+            }
+        }else{
+            throw new Error("Error fetching offers");
+        }
     }
 
     public getOfferIdFromURI(uri:string):string{
@@ -88,7 +127,6 @@ export class OfferService {
         return uri.substring(n + 1);
     }
     public getSearchParamsFromURI(uri:string):URLSearchParams{
-        console.log(uri);
         const n = uri.lastIndexOf('?');
         return new URLSearchParams(uri.substring(n + 1));
     }

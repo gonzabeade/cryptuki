@@ -8,22 +8,31 @@ import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import useOfferService from "../../hooks/useOfferService";
 import {TRADE_STATUS} from "../../common/constants";
+import Paginator from "../../components/Paginator";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 const SellerOfferDashboard = () => {
 
     const [selectedStatus, setSelectedStatus] = useState<string>(TRADE_STATUS.All);
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const [offer, setOffer] = useState<OfferModel>();
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+        actualPage: 0,
+        totalPages: 0,
+        nextUri:'',
+        prevUri:''
+    })
     const params = useParams();
     const tradeService = useTradeService();
     const offerService = useOfferService();
     const navigate = useNavigate();
 
 
-    async function fetchTradesAssociatedWithOfferWithStatus(status:TRADE_STATUS){
+    async function fetchTradesAssociatedWithOfferWithStatus(status:TRADE_STATUS, page?:number){
         try{
-            const resp = await tradeService.getTradesWithOfferId(Number(params.id), status);
+            const resp = await tradeService.getTradesWithOfferId(Number(params.id), status, page);
             setTrades(resp.items);
+            setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
         }catch (e){
             toast.error("Connection error. Couldn't fetch trades");
@@ -131,8 +140,8 @@ const SellerOfferDashboard = () => {
                         </div>
 
                         <h1 className="mx-auto">
-                            {/*TODO callback*/}
-                            {/*{trades.length>0 ?  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("a")}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}*/}
+                            {/*//todo callback update trades*/}
+                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
                         </h1>
                     </div>

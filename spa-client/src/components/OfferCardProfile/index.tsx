@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
+import {Axios, AxiosError, AxiosResponse} from "axios";
 
 type OfferCardProfileProps = {
     offer:OfferModel,
@@ -29,8 +30,9 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             await offerService.deleteOffer(offer);
             toast.success("Offer deleted");
             renewOffers(OFFER_STATUS.Deleted);
-        }catch (e) {
-            toast.error("Connection error. Couldn't delete offer");
+        }catch (e:any) {
+            const error = e as AxiosError<{message:string}>;
+            toast.error(error.response?.data.message);
         }
     }
     async function resumeOffer(){

@@ -14,6 +14,7 @@ import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import {OFFER_STATUS} from "../../common/constants";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 
 const SellerDashboard = () => {
@@ -28,12 +29,21 @@ const SellerDashboard = () => {
     const userService = useUserService();
     const {user} = useAuth();
     const [selectedStatus, setSelectedStatus] = useState<OFFER_STATUS>(OFFER_STATUS.Pending);
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+        actualPage: 0,
+        totalPages: 0,
+        prevUri:'',
+        nextUri:''
+    });
 
 
     async function getOffers(){
         try{
             const resp = await offerService.getOffersByOwner(userService.getLoggedInUser()!);
-            setOffers(resp)
+            setOffers(resp.items);
+            if(resp.paginatorProps){
+                setPaginatorProps(resp.paginatorProps);
+            }
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
         }
@@ -45,9 +55,8 @@ const SellerDashboard = () => {
             if(resp){
                 setLastTransactions(resp)
             }
-            console.log(resp)
+
         }catch (e) {
-            console.log(e)
             toast.error("Connection error. Failed to fetch lasts transactions");
         }
     }
@@ -63,7 +72,10 @@ const SellerDashboard = () => {
     async function fetchOffersWithStatus(status:OFFER_STATUS) {
         try{
            const resp = await offerService.getOffersByStatus(status, user?.username!);
-           setOffers(resp);
+           setOffers(resp.items);
+           if(resp.paginatorProps){
+               setPaginatorProps(resp.paginatorProps);
+           }
            setSelectedStatus(status);
         }catch (e) {
             toast.error("Connection error fetching offers with status "+ status)
@@ -127,7 +139,7 @@ const SellerDashboard = () => {
                                     );
                                 })
                         }
-                        {/*<Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>*/}
+                        <Paginator paginatorProps={paginatorProps} callback={() => console.log("messi")}/>
 
                     </div>
                 </div>

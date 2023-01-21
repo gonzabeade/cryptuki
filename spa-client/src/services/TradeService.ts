@@ -47,14 +47,15 @@ export class TradeService {
             throw new Error("Error fetching offers");
         }
     }
-    public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS):Promise<PaginatedResults<TransactionModel>>{
+    public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS, page?:number ):Promise<PaginatedResults<TransactionModel>>{
         if(status === TRADE_STATUS.All){
             status = undefined;
         }
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {
                 from_offer: offerId,
-                status: status
+                status: status,
+                page: page
             }
         });
         if(resp.status === 200){

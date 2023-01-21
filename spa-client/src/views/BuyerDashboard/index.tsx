@@ -10,6 +10,7 @@ import TradeBuyerCard from "../../components/TradeBuyerCard";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import {TRADE_STATUS} from "../../common/constants";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -26,7 +27,7 @@ const BuyerDashboard = () => {
     async function fetchTradesBuyerProfile(){
         try {
             if(user){
-                const resp = await tradeService.getRelatedTrades(user?.username!);
+                const resp = await tradeService.getRelatedTrades(user?.username!, TRADE_STATUS.Pending);
                 if(resp.paginatorProps){
                     setPaginatorProps(resp.paginatorProps);
                 }
@@ -39,7 +40,6 @@ const BuyerDashboard = () => {
 
     async function fetchTradesWithStatus(status:string){
         try {
-
             const resp = await tradeService.getRelatedTrades( user?.username!, status);
             if(resp.paginatorProps){
                 setPaginatorProps(resp.paginatorProps);

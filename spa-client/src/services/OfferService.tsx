@@ -21,7 +21,6 @@ export class OfferService {
             params: params
         });
 
-
         if(resp.status === 200){
             const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
             return {
@@ -91,6 +90,16 @@ export class OfferService {
         console.log(uri);
         const n = uri.lastIndexOf('?');
         return new URLSearchParams(uri.substring(n + 1));
+    }
+    public async createOffer(minInCrypto:number, maxInCrypto:number, cryptoCode:string, location:string, unitPrice:number, firstChat?:string):Promise<void>{
+        await this.axiosInstance().post<OfferModel[]>(this.basePath, {
+            minInCrypto:minInCrypto,
+            maxInCrypto:maxInCrypto,
+            cryptoCode:cryptoCode,
+            location:location,
+            unitPrice:unitPrice,
+            firstChat:firstChat
+        });
     }
 
 }

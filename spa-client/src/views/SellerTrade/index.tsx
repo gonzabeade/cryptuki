@@ -55,7 +55,7 @@ const SellerTrade = () => {
                     Home
                 </Link>
             </div>
-        </div>
+            </div>
         </div>
 
     );

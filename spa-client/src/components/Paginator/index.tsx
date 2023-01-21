@@ -18,9 +18,6 @@ const Paginator:React.FC<PaginatorProps> = ({paginatorProps, callback }) => {
     async function nextPage(){
         await callback(paginatorProps.nextUri);
     }
-    useEffect(()=>{
-        console.log(paginatorProps);
-    }, [paginatorProps])
 
     return (
         <div className = {"flex mx-auto pt-4"}>

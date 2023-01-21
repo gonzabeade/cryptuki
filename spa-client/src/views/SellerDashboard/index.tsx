@@ -13,6 +13,7 @@ import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
+import {OFFER_STATUS} from "../../common/constants";
 
 
 const SellerDashboard = () => {
@@ -30,7 +31,7 @@ const SellerDashboard = () => {
 
     async function getOffers(){
         try{
-            const resp = await offerService.getOffersByOwner(user?.username!);
+            const resp = await offerService.getOffersByOwner(userService.getLoggedInUser()!);
             setOffers(resp)
         }catch (e) {
             toast.error("Connection error. Failed to fetch offers");
@@ -39,10 +40,11 @@ const SellerDashboard = () => {
 
     async function getLastTransactions(){
         try{
-            const resp = await tradeService.getLastTransactions(user?.username!);
+            const resp = await tradeService.getLastTransactions(userService.getLoggedInUser()!);
             if(resp){
                 setLastTransactions(resp)
             }
+            console.log(resp)
         }catch (e) {
             console.log(e)
             toast.error("Connection error. Failed to fetch lasts transactions");
@@ -112,21 +114,20 @@ const SellerDashboard = () => {
                 </div>
                 <div className="flex flex-col w-full mt-2">
                     <div className="flex w-full mx-auto ">
-                        <StatusCardsSeller  active={"PENDING"} callback={fetchOffersWithStatus}/>
+                        <StatusCardsSeller  active={OFFER_STATUS.Pending} callback={fetchOffersWithStatus}/>
                     </div>
                     <div className="flex flex-wrap w-full mx-auto justify-center mt-2">
                         {offers.length === 0 && <p className={"text-polar text-lg font-bold mt-10"}>No offers uploaded yet</p>}
-                    </div>
-                    {offers.length >= 1 && <div className="mx-auto">
-                        {offers.map((offer)=>{
-                            return(
-                                <OfferCardProfile offer={offer} key={offer.offerId}/>
-                            );
-                        })}
-                        {/*<Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>*/}
-                    </div>
 
-                    }
+                        {offers.length >= 1 && offers.map((offer) => {
+                                    return (
+                                        <OfferCardProfile offer={offer} key={offer.offerId}/>
+                                    );
+                                })
+                        }
+                        {/*<Paginator totalPages={10} actualPage={1} callback={() => console.log("messi")}/>*/}
+
+                    </div>
                 </div>
             </div>
         </div>

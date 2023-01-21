@@ -34,12 +34,11 @@ public class UserController {
     private final UserService userService;
 
     private final KycService kycService;
-    private final ValidatorFactory validatorFactory;
+
     @Autowired
-    public UserController(UserService userService, KycService kycService, ValidatorFactory validatorFactory) {
+    public UserController(UserService userService, KycService kycService) {
         this.userService = userService;
         this.kycService = kycService;
-        this.validatorFactory = validatorFactory;
     }
 
     @Context
@@ -48,7 +47,7 @@ public class UserController {
 
     @GET
     @Path("/{username}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.user+json")
     public Response getUser(@PathParam("username") String username) {
 
         UserDto userDto = userService.getUserByUsername(username)
@@ -59,8 +58,8 @@ public class UserController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getPendingKyc(@QueryParam("page") @DefaultValue("0") int page,
+    @Produces("application/vnd.cryptuki.v1.user-list+json")
+    public Response getUsers(@QueryParam("page") @DefaultValue("0") int page,
                                   @QueryParam("per_page") @DefaultValue("5") int pageSize,
                                   @QueryParam("kyc_status") @ValueOfEnum(enumClass = KycStatus.class)
                                       String kyc_status) {
@@ -83,24 +82,20 @@ public class UserController {
     }
 
 
-
-    public Response toUserNonce(String email) {
+    @POST
+    @Consumes("application/vnd.cryptuki.v1.user-nonce+json")
+    @Produces("application/vnd.cryptuki.v1.nonce-ack+json")
+    public Response toUserNonce(@QueryParam("email") String email) {
         userService.changePasswordAnonymously(email);
         return Response.ok(UserNonceDto.fromEmail(email)).build();
     }
 
-    public Response toNewUser(RegisterForm registerForm, Locale locale) {
-        if(registerForm == null)
-            throw new BadRequestException("User data must be provided.");
+    @POST
+    @Consumes("application/vnd.cryptuki.v1.user+json")
+    @Produces("application/vnd.cryptuki.v1.user+json")
+    public Response toNewUser(@Valid @NotNull(message = "Body required") RegisterForm registerForm,  @Context HttpServletRequest request) {
 
-
-        /* Manual validation - @Valid does not work on non-controller methods*/
-        Validator validator = validatorFactory.getValidator();
-        Set<ConstraintViolation<RegisterForm>> violations = validator.validate(registerForm);
-        if (!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        UserPO userPO = registerForm.toParameterObject().withLocale(locale);
+        UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());
         userService.registerUser(userPO);
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
@@ -109,19 +104,11 @@ public class UserController {
 
         return Response.created(uri).build();
     }
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response postUser(RegisterForm registerForm, @Context HttpServletRequest request, @QueryParam("email") String email) {
-        return email == null ? toNewUser(registerForm, request.getLocale()) : toUserNonce(email);
-    }
 
-
-    // TODO - How is the consumer of the api supposed to know the location of these endpoints?
 
     @PUT
     @Path("/{username}/password")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Consumes("application/vnd.cryptuki.v1.user-password+json")
     public Response changePassword(@NotNull @Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
         userService.changePassword(username, changePasswordForm.getPassword());
         return Response.noContent().build();
@@ -129,7 +116,7 @@ public class UserController {
 
     @POST
     @Path("/{username}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Consumes("application/vnd.cryptuki.v1.user-validation+json")
     public Response createValidation(
             @NotNull @Valid UserEmailValidationForm userEmailValidationForm,
             @PathParam("username") String username

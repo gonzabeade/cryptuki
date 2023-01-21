@@ -55,7 +55,7 @@ public class KycController {
     public UriInfo uriInfo;
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response getKyc(@PathParam("username") String username) {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
@@ -73,7 +73,7 @@ public class KycController {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response postKyc(
             @PathParam("username") String username,
             @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
@@ -106,8 +106,8 @@ public class KycController {
     }
 
     @PATCH
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.kyc+json")
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response putKyc(@PathParam("username") String username, @NotNull @Valid KycStatusForm kycStatusForm) {
 
         userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
@@ -151,7 +151,7 @@ public class KycController {
 
         KycInformation kycInformation = maybeKycInformation.get();
 
-        return Response // TODO - Are any headers missing? - Check
+        return Response
                 .ok(new ByteArrayInputStream(kycInformation.getIdPhoto()))
                 .type(kycInformation.getIdPhotoType())
                 .build();

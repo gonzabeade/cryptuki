@@ -30,7 +30,7 @@ public class CryptocurrencyController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.cryptocurrency+json")
     public Response getCryptocurrencies() {
 
         Collection<CryptocurrencyDto> cryptocurrencies = cryptocurrencyService.getAllCryptocurrencies().stream().map(CryptocurrencyDto::fromCryptocurrency).collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class CryptocurrencyController {
 
     @GET
     @Path("/{code}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.cryptocurrency+json")
     public Response getCryptocurrency(@PathParam("code") String code) {
         Cryptocurrency cryptocurrency = cryptocurrencyService.getCryptocurrency(code).orElseThrow(()->new NoSuchCryptocurrencyException(code));
         final Response.ResponseBuilder responseBuilder = Response.ok(CryptocurrencyDto.fromCryptocurrency(cryptocurrency));

@@ -47,7 +47,7 @@ public class OfferController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.offer-list+json")
     public Response listOffers(@Valid @BeanParam OfferBeanParam offerBeanParam) {
 
         OfferFilter filter = offerBeanParam.toOfferFilter();
@@ -65,15 +65,15 @@ public class OfferController {
 
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.offer+json")
     public Response getOffer(@PathParam("id") int id) {
         Offer offer = offerService.getOfferById(id).orElseThrow(() -> new NoSuchOfferException(id));
         return Response.ok(OfferDto.fromOffer(offer, uriInfo)).build();
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.offer+json")
+    @Produces("application/vnd.cryptuki.v1.offer+json")
     public Response createOffer(@Valid UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -90,8 +90,8 @@ public class OfferController {
 
     @PUT
     @Path("/{id}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.offer+json")
+    @Produces("application/vnd.cryptuki.v1.offer+json")
     public Response modifyOffer(@Valid ModifyOfferForm offerForm, @PathParam("id") int id) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -104,8 +104,8 @@ public class OfferController {
 
     @GET
     @Path("/{offerId}/trades")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrades(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+    @Produces("application/vnd.cryptuki.v1.trade-list+json")
+    public Response getTrades(@PathParam("offerId") int offerId) {
 
         final URI uri = uriInfo.getBaseUriBuilder()
                 .path("/api/trades")
@@ -117,8 +117,8 @@ public class OfferController {
 
     @POST
     @Path("/{offerId}/trades")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.trade+json")
+    @Produces("application/vnd.cryptuki.v1.trade+json")
     public Response createTrade(@NotNull @Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

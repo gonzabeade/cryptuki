@@ -140,7 +140,7 @@ const SellerOfferDashboard = () => {
 
                             {trades && trades.map((trade)=>{
                                 return(
-                                        <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId}/>
+                                        <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId} callback={fetchTradesAssociatedWithOfferWithStatus}/>
                                 );
                             })}
                             {!trades || trades.length === 0 && <div className="flex flex-col mx-auto">
@@ -148,10 +148,10 @@ const SellerOfferDashboard = () => {
                             </div>}
                         </div>
 
-                        <h1 className="mx-auto">
+                        <div className="mx-auto">
                             {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={getPaginatedTrades}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
-                        </h1>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+import {useAuth} from "../../contexts/AuthContext";
+import {AxiosError} from "axios";
 
 type BuyOfferFormValues = {
     amount:number
@@ -22,6 +24,7 @@ const BuyOffer = () => {
     const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
     const userService = useUserService();
+    const {user} = useAuth();
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -58,14 +61,18 @@ const BuyOffer = () => {
     }
     async function onSubmit(data:BuyOfferFormValues){
         try{
+            if(!user){
+                navigate('/login');
+                return;
+            }
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
             let tradeId = resp.match("\/([0-9]+)(?=[^\/]*$)");
             if(tradeId){
                 navigate('/trade/' +  tradeId[1]);
             }
+
         }catch (e){
-            console.log(e)
-            toast.error("Connection error. Failed to create trade");
+            toast.error("You need to be logged in to make a trade proposal");
         }
     }
 

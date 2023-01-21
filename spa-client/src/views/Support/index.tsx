@@ -9,7 +9,7 @@ type ContactFormValues = {
     message:string|null,
     tradeId?:number
 }
-//TODO errors and tradeId param?
+
 const Support= () => {
 
     const {user} = useAuth();
@@ -26,7 +26,7 @@ const Support= () => {
 
     function onSubmit(data:ContactFormValues){
         if(searchParams && searchParams.get("tradeId")){
-
+            //TODO Call endpoint
         }
     }
 

@@ -151,10 +151,9 @@ const SellerDashboard = () => {
                                     );
                                 })
                         }
-                        <Paginator paginatorProps={paginatorProps} callback={getPagginatedOffers}/>
-
                     </div>
                 </div>
+                <Paginator paginatorProps={paginatorProps} callback={getPagginatedOffers}/>
             </div>
         </div>
     );

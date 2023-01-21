@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import OfferCardProfile from "../../components/OfferCardProfile";
 import OfferModel from "../../types/OfferModel";
-import Paginator from "../../components/Paginator";
 import TransactionModel from "../../types/TransactionModel";
 import OfferInformationForSeller from "../../components/OfferInformationForSeller";
 import useTradeService from "../../hooks/useTradeService";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import useOfferService from "../../hooks/useOfferService";
-import {OFFER_STATUS} from "../../common/constants";
+import {TRADE_STATUS} from "../../common/constants";
 
 const SellerOfferDashboard = () => {
 
-    const [selectedStatus, setSelectedStatus] = useState<string>(OFFER_STATUS.All);
+    const [selectedStatus, setSelectedStatus] = useState<string>(TRADE_STATUS.All);
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const [offer, setOffer] = useState<OfferModel>();
     const params = useParams();
@@ -20,14 +19,24 @@ const SellerOfferDashboard = () => {
     const offerService = useOfferService();
     const navigate = useNavigate();
 
+
+    async function fetchTradesAssociatedWithOfferWithStatus(status:TRADE_STATUS){
+        try{
+            const resp = await tradeService.getTradesWithOfferId(Number(params.id), status);
+            setTrades(resp.items);
+            setSelectedStatus(status);
+        }catch (e){
+            toast.error("Connection error. Couldn't fetch trades");
+        }
+    }
+
     async function fetchTradesAssociatedWithOffer(){
         try {
             if (params.id) {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
-                setTrades(resp);
+                setTrades(resp.items);
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);
-                console.log("trades fetched")
             } else {
                 toast.error("No offer ID!");
             }
@@ -43,11 +52,6 @@ const SellerOfferDashboard = () => {
         fetchTradesAssociatedWithOffer();
     }, [])
 
-    //todo falta un fetch por estados
-    function changeStatus(status:string){
-        //TODO fetch to our service that asks for trades in specific state
-        setSelectedStatus(status);
-    }
 
 
     return (<>
@@ -71,44 +75,44 @@ const SellerOfferDashboard = () => {
                     <div className="flex flex-row  rounded-lg px-5 rounded-lg  justify-between">
                         <div
                             className="flex mr-5 bg-white rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button  className="my-auto mx-auto w-full " onClick={()=>changeStatus('all')}>
-                                <p className={`py-2 px-4 font-bold text-polar text-center ${selectedStatus === 'all' ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
+                            <button  className="my-auto mx-auto w-full " onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.All)}>
+                                <p className={`py-2 px-4 font-bold text-polar text-center ${selectedStatus === TRADE_STATUS.All ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
                                     All
                                 </p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button onClick={()=>{changeStatus('pending')}} className="my-auto mx-auto">
-                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === 'pending' ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
+                            <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Pending)} className="my-auto mx-auto">
+                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Pending? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
                                     Pending</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button onClick={()=>{changeStatus('accepted')}} className="my-auto mx-auto">
-                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === 'accepted' ? 'decoration-frostdr underline underline-offset-8' : 'text-l'}`}>
+                            <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Accepted)} className="my-auto mx-auto">
+                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Accepted ? 'decoration-frostdr underline underline-offset-8' : 'text-l'}`}>
                                     Ongoing</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button onClick={()=>changeStatus('rejected')} className="my-auto mx-auto">
-                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === 'rejected' ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
+                            <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Rejected)} className="my-auto mx-auto">
+                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Rejected ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
                                     Rejected by you</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button onClick={()=>changeStatus('sold')} className="my-auto mx-auto">
-                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === 'sold' ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
+                            <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Sold)} className="my-auto mx-auto">
+                                <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Sold ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
                                     Closed </p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
-                            <button onClick={()=>{changeStatus('deleted')}} className="my-auto mx-auto">
-                                <p className={`py-2  px-4 font-bold text-polar text-center ${selectedStatus === 'deleted' ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
+                            <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Deleted)} className="my-auto mx-auto">
+                                <p className={`py-2  px-4 font-bold text-polar text-center ${selectedStatus === TRADE_STATUS.Deleted? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
                                     Deleted by buyer</p>
                             </button>
                         </div>
@@ -121,6 +125,9 @@ const SellerOfferDashboard = () => {
                                         <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId}/>
                                 );
                             })}
+                            {!trades || trades.length === 0 && <div className="flex flex-col mx-auto">
+                                <h1 className="font-sans text-center text-xl font-bold text-polar">No trades available.</h1>
+                            </div>}
                         </div>
 
                         <h1 className="mx-auto">

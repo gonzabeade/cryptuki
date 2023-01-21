@@ -66,12 +66,9 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
     }
 
     return (
-        <div className="flex flex-col justify-center px-10">
-            <div
-                className="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3 text-polar">
-               Offer Information
-            </div>
-            <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12 ">
+
+
+            <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12  mx-2">
                 <div className="flex font-sans h-fit w-full mt-2">
                     {
                         tradeStatus === 'SOLD' &&
@@ -172,7 +169,6 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     chat && <ChatButton tradeId={trade?.tradeId} />
                 }
             </div>
-        </div>
 
     );
 };

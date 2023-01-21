@@ -1,5 +1,5 @@
-import { paths } from "../common/constants";
-import { AxiosInstance} from "axios";
+import {paths, TRADE_STATUS} from "../common/constants";
+import {AxiosInstance} from "axios";
 import TransactionModel from "../types/TransactionModel";
 import {Link, PaginatedResults} from "../types/PaginatedResults";
 import {getLinkHeaders, getPaginatorProps} from "../common/utils/utils";
@@ -47,13 +47,30 @@ export class TradeService {
             throw new Error("Error fetching offers");
         }
     }
-    public async getTradesWithOfferId(offerId:number):Promise<TransactionModel[]>{
+    public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS):Promise<PaginatedResults<TransactionModel>>{
+        if(status === TRADE_STATUS.All){
+            status = undefined;
+        }
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {
                 from_offer: offerId,
+                status: status
             }
         });
-        return resp.data;
+        if(resp.status === 200){
+            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+
+            };
+        }else if(resp.status === 204){
+            return {
+                items: [],
+            }
+        }else{
+            throw new Error("Error fetching trades");
+        }
     }
     public async createTrade(amount:number, offerId:number|undefined):Promise<string>{
         const resp = await this.axiosInstance().post(paths.BASE_URL + paths.OFFERS + offerId + paths.TRADE, {

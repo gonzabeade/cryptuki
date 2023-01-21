@@ -49,7 +49,14 @@ const SellerTrade = () => {
         <div className="flex flex-row mt-7">
             <ChatSnippet  counterPart={counterPart} tradeId={trade?.tradeId!}/>
             <div className="flex flex-col justify-center px-10">
-            <OfferInformationForSeller trade={trade!} chat={false}/>
+                <div className="flex flex-col justify-center px-10">
+                    <div
+                        className="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3 text-polar">
+                        Offer Information
+                    </div>
+                    <OfferInformationForSeller trade={trade!} chat={false}/>
+                </div>
+
             <div className="mx-auto">
                 <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
                     Home

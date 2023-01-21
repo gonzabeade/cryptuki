@@ -74,6 +74,6 @@ export enum TRADE_STATUS {
     "Rejected" ='REJECTED',
     "Sold" ='SOLD',
     "Deleted" ='DELETED',
-
+    "All" ='ALL'
 }
   

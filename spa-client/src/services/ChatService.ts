@@ -12,7 +12,7 @@ export class ChatService{
     }
 
     public async getMessages(tradeId:number):Promise<MessageModel[]>{
-       const resp = await this.axiosInstance().get<MessageModel[]>(this.basePath + tradeId + 'messages');
+       const resp = await this.axiosInstance().get<MessageModel[]>(this.basePath + tradeId + '/messages');
        return resp.data;
     }
 
@@ -20,9 +20,9 @@ export class ChatService{
        return 2;
     }
     public async sendMessage(tradeId:number, content:string):Promise<MessageModel>{
-        const resp = await this.axiosInstance().post(this.basePath + tradeId + 'messages', {body:{
+        const resp = await this.axiosInstance().post(this.basePath + tradeId + '/messages', {
                 message:content
-            }});
+            });
         return resp.data;
     }
 }

@@ -24,8 +24,10 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     async function getMessages(){
         try{
-            const resp = await chatService.getMessages(tradeId);
-            setMessages(resp);
+            if(tradeId){
+                const resp = await chatService.getMessages(tradeId);
+                setMessages(resp);
+            }
         }catch (e) {
             toast.error("Error fetching messages. Check your connection")
         }
@@ -33,8 +35,8 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     }
 
     useEffect(()=>{
-      // getMessages();
-    },[])
+      getMessages();
+    },[tradeId])
 
     async function sendMessage(data:ChatFormValues){
         try{

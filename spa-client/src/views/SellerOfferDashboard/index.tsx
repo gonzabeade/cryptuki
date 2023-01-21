@@ -141,7 +141,7 @@ const SellerOfferDashboard = () => {
 
                         <h1 className="mx-auto">
                             {/*//todo callback update trades*/}
-                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
+                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={()=>{console.log("a")}}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
 
                         </h1>
                     </div>

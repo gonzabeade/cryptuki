@@ -80,7 +80,7 @@ const BuyerDashboard = () => {
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
                         {/*todo callback para actualizar los trades*/}
-                        <Paginator paginatorProps={paginatorProps} callback={}/>
+                        <Paginator paginatorProps={paginatorProps} callback={()=>{console.log("a")}}/>
                     </div>}
 
             </div>

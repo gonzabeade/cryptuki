@@ -18,7 +18,7 @@ const Receipt = () => {
     const params = useParams();
     const tradeService = useTradeService();
     const userService = useUserService();
-    const [isBuyer, setIsBuyer] = useState<boolean>(true);
+    const [isBuyer, setIsBuyer] = useState<boolean>();
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
@@ -43,10 +43,10 @@ const Receipt = () => {
             if(trade){
                 let username:string;
                 if(userService.getUsernameFromURI(trade.buyer) === user?.username){
-                    username = userService.getUsernameFromURI(trade.buyer);
+                    username = userService.getUsernameFromURI(trade.seller);
                     setIsBuyer(true);
                 }else{
-                   username = userService.getUsernameFromURI(trade.seller);
+                   username = userService.getUsernameFromURI(trade.buyer);
                    setIsBuyer(false);
                 }
 
@@ -190,7 +190,7 @@ const Receipt = () => {
                 <div className="flex flex-col mx-10 items-center">
                     {counterPart &&  <UserInfo username={counterPart.username} email={counterPart.email} phone_number={counterPart.phoneNumber} last_login={counterPart.lastLogin.toString()} trades_completed={counterPart.ratingCount} rating={counterPart.rating}/>}
                     <div className="flex flex-col mx-auto mt-10">
-                        <RateYourCounterPart usernameRated={counterPart?.username!} tradeId={trade?.tradeId!} isBuyer={isBuyer}/>
+                        <RateYourCounterPart usernameRated={counterPart?.username!} tradeId={trade?.tradeId!} isBuyer={isBuyer!}/>
                     </div>
                 </div>
             </div>

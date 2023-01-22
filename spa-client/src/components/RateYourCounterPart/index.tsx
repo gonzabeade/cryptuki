@@ -22,16 +22,18 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
        try{
            if(tradeId){
                const resp = await tradeService.getRatingInfo(tradeId);
-               if(isBuyer && resp.data.buyer_rated ){
+
+               if (isBuyer && resp.data.seller_rated) {
                    setAlreadyRated(true);
-                   if(resp.data.buyer_rating){
-                       setRating(resp.data.buyer_rating);
+                   if (resp.data.seller_rating) {
+                       setRating(resp.data.seller_rating);
                    }
                }
-               if(!isBuyer && resp.data.seller_rated){
+
+               if (!isBuyer && resp.data.buyer_rated) {
                    setAlreadyRated(true);
-                   if(resp.data.seller_rating){
-                       setRating(resp.data.seller_rating);
+                   if (resp.data.buyer_rating) {
+                       setRating(resp.data.buyer_rating);
                    }
                }
            }
@@ -42,7 +44,8 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
 
     useEffect(()=>{
         getRateInfo();
-    }, [tradeId])
+    }, [ isBuyer])
+
 
     function hoverOnRating(number:number) {
         let element;
@@ -63,7 +66,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
     }
     async function setRatingAndSend(rating:number) {
         try{
-            await tradeService.rateCounterPart(tradeId, rating);
+            await tradeService.rateCounterPart(tradeId!, rating);
             setRating(rating * 2);
             setAlreadyRated(true);
         }catch (e) {
@@ -112,7 +115,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
             {alreadyRated &&
                 <div className=" flex flex-col mb-5 mt-5 mx-auto">
                     <ConfirmationToggle title={"Rating sent"}/>
-                    <h1 className="mx-auto">Rating submitted: {rating?rating/2:0}/5</h1>
+                    <h1 className="mx-auto">Rating submitted: {rating?rating:0}/5</h1>
                 </div>
 
             }

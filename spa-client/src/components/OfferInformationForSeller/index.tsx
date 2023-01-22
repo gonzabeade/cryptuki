@@ -23,6 +23,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
     const offerService = useOfferService();
     const userService = useUserService();
     const tradeService = useTradeService();
+    const [unSeenMessages, setUnseenMessages]= useState<number>(0);
 
     async function fetchBuyer(){
         try{
@@ -50,8 +51,18 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
             }
         }
     }
+    async function getUnseenMessages(){
+        if(trade){
+            if(userService.getUsernameFromURI(trade.buyer) === userService.getLoggedInUser()){
+                setUnseenMessages(trade.qUnseenMessagesBuyer);
+            }else{
+                setUnseenMessages(trade.qUnseenMessagesSeller)
+            }
+        }
+    }
     useEffect(()=>{
         fetchOffer();
+        getUnseenMessages();
         setTradeStatus(trade?.status);
     },[trade])
 
@@ -170,7 +181,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <div className="flex h-2/5 my-2"/>
                 }
                 {
-                    chat && <ChatButton tradeId={trade?.tradeId} />
+                    chat && <ChatButton tradeId={trade?.tradeId} unSeenMessages={unSeenMessages} />
                 }
             </div>
 

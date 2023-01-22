@@ -16,9 +16,7 @@ export class ChatService{
        return resp.data;
     }
 
-    public async getUnseenMessagesCount(tradeId:number, username:string | null):Promise<number>{
-       return 2;
-    }
+
     public async sendMessage(tradeId:number, content:string):Promise<MessageModel>{
         const resp = await this.axiosInstance().post(this.basePath + tradeId + '/messages', {
                 message:content

@@ -18,8 +18,7 @@ import {PaginatorPropsValues} from "../../types/PaginatedResults";
 
 
 const SellerDashboard = () => {
-    //TODO fetch this state
-    const [kyc, setKyc] = useState<KycModel>({status:'PEN'});
+    const [kyc, setKyc] = useState<KycModel>();
 
     const [lastTransactions, setLastTransactions] = useState<TransactionModel[]>([]);
     const [offers, setOffers] = useState<OfferModel[]>([]);
@@ -35,6 +34,20 @@ const SellerDashboard = () => {
         prevUri:'',
         nextUri:''
     });
+
+    async function fetchKycStatus(){
+        try{
+            const resp = await userService.getKYCStatus(userService.getLoggedInUser()!);
+            if(resp){
+                setKyc(resp);
+            }
+        }catch (e) {
+            toast.error("Connection failed. Couldn't fetch KYC status")
+        }
+    }
+    useEffect(()=>{
+        fetchKycStatus();
+    },[])
 
 
     async function getOffers(){
@@ -112,26 +125,27 @@ const SellerDashboard = () => {
                     </div>
                     <div className="mx-auto mt-8">
                         <a href="/kyc"
-                           className="py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">
+                           className="cursor-pointer py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">
                             Start KYC
                         </a>
                     </div>
-                </>}
+                </>
+                }
                 {
-                    kyc.status !== 'APR' ?
+                   kyc && kyc.status === 'PEN' &&
                         <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
                             <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc submitted"}/>
                             <p>Validation of identity submitted. Please wait </p>
-                        </div> : <TransactionList transactions={lastTransactions}/>
-
-                    //if not empty, render last transactions
+                        </div>
+                    // : <TransactionList transactions={lastTransactions}/> commented out
                 }
-
-                <div className="mx-auto mt-5">
+                {kyc && kyc.status === 'APR' &&
+                    <div className="mx-auto mt-5">
                     <a href="/offer/upload"
                        className="py-2 pr-4 pl-3 text-lg text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto cursor-pointer">Upload
                         Advertisment</a>
                 </div>
+                }
             </div>
 
             <div className="flex flex-col h-full mr-20 w-4/5">

@@ -32,7 +32,7 @@ const UploadForm = () => {
              toast.error("Connection error. Failed to fetch cryptocurrencies");
          }
     }
-    //TODO: This feels like a bad practice. Maybe useEffect on selected value?
+    //TODO: I think this is not working, IDK why
     function changeSuggestedPrice(){
         const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
         const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;

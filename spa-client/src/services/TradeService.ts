@@ -73,4 +73,9 @@ export class TradeService {
         const resp = await this.axiosInstance().get(uri);
         return processPaginatedResults(resp);
     }
+    public async rateCounterPart(tradeId:number, rating:number):Promise<void>{
+        await this.axiosInstance().patch(this.basePath + tradeId + '/rating', {
+            rating:rating
+        });
+    }
 }

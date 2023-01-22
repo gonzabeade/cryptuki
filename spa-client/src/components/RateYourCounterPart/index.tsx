@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
+import useTradeService from "../../hooks/useTradeService";
+import {toast} from "react-toastify";
 
 
 
@@ -13,6 +15,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
 
     const [alreadyRated, setAlreadyRated] = useState<boolean>(false);
     const [rating, setRating] = useState<number>();
+    const tradeService = useTradeService();
 
     function hoverOnRating(number:number) {
         let element;
@@ -31,11 +34,14 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
         }
 
     }
-    function setRatingAndSend(rating:number) {
-        setRating(rating * 2);
-        //TODO await call api to rate. If oK, then set Already rated to true
-        setAlreadyRated(true);
-
+    async function setRatingAndSend(rating:number) {
+        try{
+            await tradeService.rateCounterPart(tradeId, rating);
+            setRating(rating * 2);
+            setAlreadyRated(true);
+        }catch (e) {
+            toast.error("Connection Error, failed to rate your counterpart")
+        }
     }
 
     return (

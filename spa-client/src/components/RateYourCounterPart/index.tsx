@@ -22,11 +22,19 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
        try{
            if(tradeId){
                const resp = await tradeService.getRatingInfo(tradeId);
-               if(isBuyer && resp.buyer_rated || !isBuyer && resp.seller_rated){
+               if(isBuyer && resp.data.buyer_rated ){
                    setAlreadyRated(true);
+                   if(resp.data.buyer_rating){
+                       setRating(resp.data.buyer_rating);
+                   }
+               }
+               if(!isBuyer && resp.data.seller_rated){
+                   setAlreadyRated(true);
+                   if(resp.data.seller_rating){
+                       setRating(resp.data.seller_rating);
+                   }
                }
            }
-
        }catch (e) {
             toast.error("Connection failed. Failed to get rating info from Trade")
        }
@@ -34,7 +42,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
 
     useEffect(()=>{
         getRateInfo();
-    }, [isBuyer, tradeId])
+    }, [tradeId])
 
     function hoverOnRating(number:number) {
         let element;
@@ -102,9 +110,11 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                     </form>
                 </div>}
             {alreadyRated &&
-                <div className="mb-5 mt-5">
+                <div className=" flex flex-col mb-5 mt-5 mx-auto">
                     <ConfirmationToggle title={"Rating sent"}/>
+                    <h1 className="mx-auto">Rating submitted: {rating?rating/2:0}/5</h1>
                 </div>
+
             }
         </>
     );

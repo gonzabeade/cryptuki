@@ -112,7 +112,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                     </div>
                 }
                 {
-                    offer.offerStatus === 'SOL' &&  <div className="bg-gray-500 my-auto p-2 text-white text-center">
+                    offer.offerStatus === 'SOL' &&  <div className="bg-gray-500 my-auto p-2 text-white text-center mx-auto">
                         Offer Sold
                     </div>
                 }

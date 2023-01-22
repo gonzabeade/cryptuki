@@ -1,5 +1,5 @@
 import {paths, TRADE_STATUS} from "../common/constants";
-import {AxiosInstance} from "axios";
+import {AxiosInstance, AxiosResponse} from "axios";
 import TransactionModel from "../types/TransactionModel";
 import {Link, PaginatedResults} from "../types/PaginatedResults";
 import {getLinkHeaders, getPaginatorProps, processPaginatedResults} from "../common/utils/utils";
@@ -73,11 +73,7 @@ export class TradeService {
         const resp = await this.axiosInstance().get(uri);
         return processPaginatedResults(resp);
     }
-    public async getRatingInfo(tradeId:number):Promise<{
-        buyer_rated:boolean,
-        seller_rated:boolean,
-        trade:string
-    }> {
+    public async getRatingInfo(tradeId:number):Promise<AxiosResponse> {
         return await this.axiosInstance().get(this.basePath + tradeId + '/rating');
     }
     public async rateCounterPart(tradeId:number, rating:number):Promise<void>{

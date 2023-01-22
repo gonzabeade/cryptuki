@@ -105,20 +105,32 @@ export function getPaginatorProps(link:Link[]):PaginatorPropsValues {
 }
 
 export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchParams){
-    //todo with or without params
+
     if(resp.status === 200){
         const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-
+        if(params){
+            return {
+                items: resp.data,
+                paginatorProps: getPaginatorProps(linkHeaders),
+                params: params
+            };
+        }
         return {
             items: resp.data,
-            paginatorProps: getPaginatorProps(linkHeaders),
-            params: params
-        };
-    }else if(resp.status === 204){
-        return {
-            items: [],
-            params: params,
+            paginatorProps: getPaginatorProps(linkHeaders)
         }
+
+    }else if(resp.status === 204){
+        if(params){
+            return {
+                items: [],
+                params: params,
+            }
+        }
+        return {
+            items:[]
+        }
+
     }else{
         throw new Error("Error in network. Please try again");
     }

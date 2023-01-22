@@ -106,7 +106,6 @@ const BuyOffer = () => {
                         <h2 className="font-sans font-semibold text-polard text-2xl text-center">
                             You are about to buy
                         </h2>
-                        {/*TODO hacer como me dijo gonza con los icons */}
                         <img src={`/images/${offer? offer.cryptoCode + '.png':'404.png'}`} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
                         <h1 className="text-center text-3xl font-bold text-polar">
                             {offer? offer.cryptoCode: 'Loading...'}

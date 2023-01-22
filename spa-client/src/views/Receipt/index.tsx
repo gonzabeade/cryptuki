@@ -41,10 +41,8 @@ const Receipt = () => {
     async function fetchBuyerOrSeller(){
         try{
             if(trade){
-                //trade.buyer get URI
                 let username:string;
-                //todo trade buyerURI split
-                if(trade.buyer === user?.username){
+                if(userService.getUsernameFromURI(trade.buyer) === user?.username){
                     username = userService.getUsernameFromURI(trade.buyer);
                     setIsBuyer(true);
                 }else{
@@ -58,7 +56,6 @@ const Receipt = () => {
         }catch (e){
             toast.error("Error fetching buyer or seller");
         }
-
     }
 
     useEffect(()=>{

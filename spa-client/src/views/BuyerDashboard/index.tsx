@@ -80,8 +80,7 @@ const BuyerDashboard = () => {
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
                     {trades.length >0 && trades.map((trade)=>{
                         return (
-                            //TODO unseenMessages
-                            <TradeBuyerCard trade={trade} unSeenMessages={1} key={trade.tradeId}/>
+                            <TradeBuyerCard trade={trade}  key={trade.tradeId}/>
                         );
                     })}
                 </div>

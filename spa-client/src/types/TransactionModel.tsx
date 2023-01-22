@@ -10,5 +10,7 @@ export default interface TransactionModel {
     seller:string,
     offer:string
     messages:string
-    self:string
+    self:string,
+    qUnseenMessagesBuyer:number,
+    qUnseenMessagesSeller:number
 }

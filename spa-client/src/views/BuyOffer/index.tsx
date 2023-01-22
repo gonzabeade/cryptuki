@@ -131,11 +131,22 @@ const BuyOffer = () => {
                 </div>
                 <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
                     <label className="mx-auto text-center">Amount in ARS</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"  {...register("amount", {required:"You must input an amount"})} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
+                    <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"
+                           {...register("amount",
+                               {
+                                   required:"You must input an amount",
+                                   min:{
+                                       value: (offer?.minInCrypto! * offer?.unitPrice!),
+                                       message:"Amount must be greater to minimum"},
+                                   max:{
+                                       value:(offer?.minInCrypto! * offer?.unitPrice!),
+                                       message:"Amount must be less than maximum"
+                                   }
+                               })} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
                     {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}
                     <p className="mx-auto font-bold text-polar">or</p>
                     <label className="mx-auto text-center mt-3">Amount in crypto</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
+                    <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
                         <Link to="/" className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" >Cancel</Link>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>

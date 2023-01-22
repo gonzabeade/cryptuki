@@ -83,7 +83,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
                                 <ul className="space-y-2">
                                     {
-                                        messages.map((message, key)=>{
+                                        messages && messages.map((message, key)=>{
                                             return (
                                                 <Message key={key} content={message.content} senderURI={message.sender}/>
                                             );

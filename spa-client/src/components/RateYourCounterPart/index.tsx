@@ -20,10 +20,13 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
 
     async function getRateInfo(){
        try{
-           const resp = await tradeService.getRatingInfo(tradeId);
-           if(isBuyer && resp.buyer_rated || !isBuyer && resp.seller_rated){
-               setAlreadyRated(true);
+           if(tradeId){
+               const resp = await tradeService.getRatingInfo(tradeId);
+               if(isBuyer && resp.buyer_rated || !isBuyer && resp.seller_rated){
+                   setAlreadyRated(true);
+               }
            }
+
        }catch (e) {
             toast.error("Connection failed. Failed to get rating info from Trade")
        }
@@ -31,7 +34,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
 
     useEffect(()=>{
         getRateInfo();
-    }, [isBuyer])
+    }, [isBuyer, tradeId])
 
     function hoverOnRating(number:number) {
         let element;

@@ -143,8 +143,8 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                 {tradeStatus === TRADE_STATUS.Sold &&
                     <a className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
-                       href="/support">
-                        Help
+                       href={"/trade/" + trade.tradeId + "/receipt"}>
+                        Receipt
                     </a>
                 }
                 {tradeStatus === TRADE_STATUS.Pending &&

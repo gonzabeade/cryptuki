@@ -42,7 +42,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             <div className="column">
                 <div className="label">Precio:</div>
                 <div className="bold text-polar">{offer.unitPrice} ARS por {offer.cryptoCode}<img src={"/images/"+ offer.cryptoCode+".png"} alt={offer.cryptoCode}></img></div>
-                <div className="text-gray-400 font-medium">Min: {offer.minInCrypto} ARS - Máx: {offer.maxInCrypto} ARS</div>
+                <div className="text-gray-400 font-medium">Min: {offer.minInCrypto * offer.unitPrice} ARS - Máx: {offer.maxInCrypto * offer.unitPrice} ARS</div>
             </div>
             <div className="column">
                 <div className="label">Ubicación:</div>

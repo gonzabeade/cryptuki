@@ -1,9 +1,9 @@
 import {OFFER_STATUS, paths} from "../common/constants";
 import OfferModel from "../types/OfferModel";
-import { AxiosInstance } from "axios";
+import {AxiosInstance} from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
-import {Link, PaginatedResults} from "../types/PaginatedResults";
-import {getLinkHeaders, getPaginatorProps, processPaginatedResults} from "../common/utils/utils";
+import {PaginatedResults} from "../types/PaginatedResults";
+import {processPaginatedResults} from "../common/utils/utils";
 
 export class OfferService {
 
@@ -20,21 +20,26 @@ export class OfferService {
             params: params
         });
 
-        return processPaginatedResults(resp, params!);
+        return processPaginatedResults(resp, params);
     }
 
     public async getOfferInformation(offerId:number):Promise<OfferModel>{
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
-    public async getOffersByOwner(username:string, page?:number):Promise<PaginatedResults<OfferModel>>{
+    public async getOffersByOwner(username:string, status:OFFER_STATUS|undefined = OFFER_STATUS.Pending, page?:number):Promise<PaginatedResults<OfferModel>>{
 
         const params = new URLSearchParams();
+        if(status === 'ALL'){
+            status = undefined
+        }
         params.append('by_user', username);
         if(page) {
             params.append('page', page.toString());
         }
-        params.append("status", OFFER_STATUS.Pending);
+        if(status){
+            params.append("status", status);
+        }
 
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params:params
@@ -55,28 +60,6 @@ export class OfferService {
         })
         return resp.data;
     }
-    public async getOffersByStatus(status:string|undefined,  username:string, page?:number):Promise<PaginatedResults<OfferModel>>{
-
-        if(status === 'ALL'){
-            status = undefined
-        }
-        const params = new URLSearchParams();
-        if(page) {
-            params.append('page', page.toString());
-        }
-        if(status){
-            params.append('status', status);
-        }
-        params.append('by_user', username);
-
-        //todo refactor esto, esta duplicado
-        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params: params
-        })
-
-       return processPaginatedResults(resp, params);
-    }
-
     public getOfferIdFromURI(uri:string):string{
         const n = uri.lastIndexOf('/');
         return uri.substring(n + 1);

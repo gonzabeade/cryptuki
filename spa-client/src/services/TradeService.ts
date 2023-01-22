@@ -37,30 +37,24 @@ export class TradeService {
         return processPaginatedResults(resp,params);
     }
     public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS, page?:number ):Promise<PaginatedResults<TransactionModel>>{
+        const params = new URLSearchParams();
+
         if(status === TRADE_STATUS.All){
             status = undefined;
         }
-        const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
-            params: {
-                from_offer: offerId,
-                status: status,
-                page: page
-            }
-        });
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-            }
-        }else{
-            throw new Error("Error fetching trades");
+        if(status){
+            params.append("status", status);
         }
+        params.append("from_offer", offerId.toString());
+        if(page){
+            params.append("page", page.toString());
+        }
+
+        const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
+            params: params
+        });
+
+        return processPaginatedResults(resp);
     }
     public async createTrade(amount:number, offerId:number|undefined):Promise<string>{
         const resp = await this.axiosInstance().post(paths.BASE_URL + paths.OFFERS + offerId + paths.TRADE, {
@@ -77,20 +71,6 @@ export class TradeService {
 
     public async getPaginatedTrades(uri:string):Promise<PaginatedResults<TransactionModel>>{
         const resp = await this.axiosInstance().get(uri);
-
-        if(resp.status === 200){
-            const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
-            return {
-                items: resp.data,
-                paginatorProps: getPaginatorProps(linkHeaders),
-            };
-        }else if(resp.status === 204){
-            return {
-                items: [],
-            }
-        }else{
-            throw new Error("Error fetching trades");
-        }
-
+        return processPaginatedResults(resp);
     }
 }

@@ -83,7 +83,7 @@ const SellerDashboard = () => {
 
     async function fetchOffersWithStatus(status:OFFER_STATUS) {
         try{
-           const resp = await offerService.getOffersByStatus(status, user?.username!);
+           const resp = await offerService.getOffersByOwner(user?.username!, status);
            setOffers(resp.items);
            if(resp.paginatorProps){
                setPaginatorProps(resp.paginatorProps);

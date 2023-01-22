@@ -190,7 +190,7 @@ const Receipt = () => {
                 <div className="flex flex-col mx-10 items-center">
                     {counterPart &&  <UserInfo username={counterPart.username} email={counterPart.email} phone_number={counterPart.phoneNumber} last_login={counterPart.lastLogin.toString()} trades_completed={counterPart.ratingCount} rating={counterPart.rating}/>}
                     <div className="flex flex-col mx-auto mt-10">
-                        <RateYourCounterPart usernameRater={user?.username!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
+                        <RateYourCounterPart usernameRated={counterPart?.username!} tradeId={trade?.tradeId!} isBuyer={isBuyer}/>
                     </div>
                 </div>
             </div>

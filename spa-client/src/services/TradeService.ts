@@ -73,9 +73,17 @@ export class TradeService {
         const resp = await this.axiosInstance().get(uri);
         return processPaginatedResults(resp);
     }
+    public async getRatingInfo(tradeId:number):Promise<{
+        buyer_rated:boolean,
+        seller_rated:boolean,
+        trade:string
+    }> {
+        return await this.axiosInstance().get(this.basePath + tradeId + '/rating');
+    }
     public async rateCounterPart(tradeId:number, rating:number):Promise<void>{
         await this.axiosInstance().patch(this.basePath + tradeId + '/rating', {
             rating:rating
         });
     }
+
 }

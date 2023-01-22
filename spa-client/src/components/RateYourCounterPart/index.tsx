@@ -1,21 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
 import useTradeService from "../../hooks/useTradeService";
 import {toast} from "react-toastify";
+import trade from "../../views/Trade";
 
 
 
 type RateYourCounterPartProps = {
-    usernameRater:string,
-    usernameRated:string,
-    tradeId:number
+    isBuyer:boolean,
+    tradeId:number,
+    usernameRated:string
 }
 
-const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, usernameRater,  tradeId}) => {
+const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, usernameRated, tradeId}) => {
 
     const [alreadyRated, setAlreadyRated] = useState<boolean>(false);
     const [rating, setRating] = useState<number>();
     const tradeService = useTradeService();
+
+    async function getRateInfo(){
+       try{
+           const resp = await tradeService.getRatingInfo(tradeId);
+           if(isBuyer && resp.buyer_rated || !isBuyer && resp.seller_rated){
+               setAlreadyRated(true);
+           }
+       }catch (e) {
+            toast.error("Connection failed. Failed to get rating info from Trade")
+       }
+    }
+
+    useEffect(()=>{
+        getRateInfo();
+    }, [isBuyer])
 
     function hoverOnRating(number:number) {
         let element;

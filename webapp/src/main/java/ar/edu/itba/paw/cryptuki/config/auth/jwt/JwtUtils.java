@@ -64,12 +64,16 @@ public class JwtUtils { // Component that implements serializable?
     public static String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
+        if(userDetails.getAuthorities().stream().findFirst().isPresent())
+            claims.put("role",userDetails.getAuthorities().stream().findFirst().get().getAuthority());
         return doGenerateToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
     }
 
     public static String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "refresh");
+        if(userDetails.getAuthorities().stream().findFirst().isPresent())
+            claims.put("role",userDetails.getAuthorities().stream().findFirst().get().getAuthority());
         return doGenerateToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
     }
 

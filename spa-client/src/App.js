@@ -53,7 +53,7 @@ function App() {
                               <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
                               <Route path="/verify" element={<Verify/>}/>
                               <Route path="/" element={<Landing/>}/>
-                              <Route path="*" element={<Error message={"No page found"} illustration={"/404.png"}/>}/>
+                              <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
                           </Routes>
                       </Suspense>
                   </div>

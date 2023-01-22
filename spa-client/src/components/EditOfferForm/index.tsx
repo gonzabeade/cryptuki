@@ -33,10 +33,19 @@ const EditOfferForm = () => {
 
     }
    function changeSuggestedPrice(){
-        const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
-        const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
-        const price = document.getElementById("priceCrypto") as HTMLElement;
-        price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS': 'No price detected' ;
+       const selectCryptos: HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
+       const cryptoModel: CryptocurrencyModel = cryptocurrencies.find(cryptocurrency => cryptocurrency.code === selectCryptos.value)!;
+       const price = document.getElementById("priceCrypto") as HTMLElement;
+       price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected';
+       const minLabel = document.getElementById("minCoin");
+
+       if (minLabel)
+           minLabel.innerHTML = cryptoModel.code;
+
+       const maxLabel = document.getElementById("maxCoin");
+
+       if (maxLabel)
+           maxLabel.innerHTML = cryptoModel.code;
     }
     async function offerInitialValues(){
         //build form values with offer

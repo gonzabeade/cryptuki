@@ -1,5 +1,5 @@
 export type CryptocurrencyModel = {
     commercialName:string,
     code:string
-    price?:number
+    price?:number|undefined
 }

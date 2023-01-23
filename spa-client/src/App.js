@@ -42,7 +42,7 @@ function App() {
               <div className="App">
                   <ToastContainer/>
                   {/*<Navbar></Navbar>*/}
-                  {/*<AdminNavBar/>*/}
+                  <AdminNavBar/>
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>

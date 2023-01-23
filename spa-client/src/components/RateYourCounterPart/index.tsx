@@ -26,14 +26,14 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                if (isBuyer && resp.data.seller_rated) {
                    setAlreadyRated(true);
                    if (resp.data.seller_rating) {
-                       setRating(resp.data.seller_rating);
+                       setRating(resp.data.seller_rating * 2);
                    }
                }
 
                if (!isBuyer && resp.data.buyer_rated) {
                    setAlreadyRated(true);
                    if (resp.data.buyer_rating) {
-                       setRating(resp.data.buyer_rating);
+                       setRating(resp.data.buyer_rating * 2);
                    }
                }
            }
@@ -115,7 +115,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
             {alreadyRated &&
                 <div className=" flex flex-col mb-5 mt-5 mx-auto">
                     <ConfirmationToggle title={"Rating sent"}/>
-                    <h1 className="mx-auto">Rating submitted: {rating?rating:0}/5</h1>
+                    <h1 className="mx-auto">Rating submitted: {rating ?rating/2:0}/5</h1>
                 </div>
 
             }

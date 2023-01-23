@@ -27,7 +27,7 @@ const KycLanding = () => {
 
 
     return (
-        <div className="flex flex-col ml-80 my-10 h-screen w-screen">
+        <div className="flex flex-col ml-80 h-screen w-screen">
             <h1 className="font-sans text-4xl font-bold">Validar identidades</h1>
             <div className="flex flex-wrap w-full mt-3">
                 <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">

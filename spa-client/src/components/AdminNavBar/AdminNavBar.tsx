@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
 
 const AdminNavBar = () => {
     const navigate = useNavigate();
     const [activePage, setActivePage ] = useState<string>("pending");
+    const {signout} = useAuth();
     useEffect(()=>{
         const path = window.location.pathname;
         if(path.includes("kyc")){
@@ -43,7 +45,7 @@ const AdminNavBar = () => {
                         <h1 className="text-white text-center">Validar identidades</h1>
                     </li>
                 </a>
-                <a className="flex py-10 flex-col " onClick={logout} >
+                <a className="flex py-10 flex-col " onClick={()=>{signout(()=>navigate('/'))}} >
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto" fill="none"
                              viewBox="0 0 24 24" stroke="white" strokeWidth="2">
@@ -57,11 +59,7 @@ const AdminNavBar = () => {
             </ol>
         </nav>
 
-); function logout() {
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("accessToken");
-        navigate("/");
-    }
+);
 };
 
 export default AdminNavBar;

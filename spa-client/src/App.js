@@ -41,8 +41,8 @@ function App() {
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  {/*<Navbar></Navbar>*/}
-                  <AdminNavBar/>
+                  <Navbar></Navbar>
+                  {/*<AdminNavBar/>*/}
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>

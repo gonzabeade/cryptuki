@@ -1,9 +1,8 @@
 import {paths, TRADE_STATUS} from "../common/constants";
 import {AxiosInstance, AxiosResponse} from "axios";
 import TransactionModel from "../types/TransactionModel";
-import {Link, PaginatedResults} from "../types/PaginatedResults";
-import {getLinkHeaders, getPaginatorProps, processPaginatedResults} from "../common/utils/utils";
-
+import { PaginatedResults} from "../types/PaginatedResults";
+import {processPaginatedResults} from "../common/utils/utils";
 
 export class TradeService {
 
@@ -17,6 +16,12 @@ export class TradeService {
             const resp = await this.axiosInstance().get<TransactionModel>(this.basePath + tradeId);
             return resp.data;
     }
+
+    public async getTradeInformationByUrl(url:string):Promise<TransactionModel> {
+        const resp = await this.axiosInstance().get<TransactionModel>(url);
+        return resp.data;
+    }
+
     public async getLastTransactions(username:string|null):Promise<TransactionModel[]>{
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {

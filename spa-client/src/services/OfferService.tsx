@@ -8,13 +8,13 @@ import {processPaginatedResults} from "../common/utils/utils";
 export class OfferService {
 
     private readonly basePath = paths.BASE_URL + paths.OFFERS;
-    private readonly axiosInstance : ()=>AxiosInstance;
+    private readonly axiosInstance: () => AxiosInstance;
 
-    public constructor(axiosInstance: ()=>AxiosInstance) {
-        this.axiosInstance = axiosInstance; 
+    public constructor(axiosInstance: () => AxiosInstance) {
+        this.axiosInstance = axiosInstance;
     }
 
-    public async getOffers(params?:URLSearchParams): Promise<PaginatedResults<OfferModel>> {
+    public async getOffers(params?: URLSearchParams): Promise<PaginatedResults<OfferModel>> {
 
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
             params: params
@@ -23,32 +23,38 @@ export class OfferService {
         return processPaginatedResults(resp, params);
     }
 
-    public async getOfferInformation(offerId:number):Promise<OfferModel>{
+    public async getOfferInformation(offerId: number): Promise<OfferModel> {
         const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
         return resp.data;
     }
-    public async getOffersByOwner(username:string, status:OFFER_STATUS|undefined = OFFER_STATUS.Pending, page?:number):Promise<PaginatedResults<OfferModel>>{
+
+    public async getOffersByOwner(username: string, status: OFFER_STATUS | undefined = OFFER_STATUS.Pending, page?: number): Promise<PaginatedResults<OfferModel>> {
 
         const params = new URLSearchParams();
-        if(status === 'ALL'){
+        if (status === 'ALL') {
             status = undefined
         }
         params.append('by_user', username);
-        if(page) {
+        if (page) {
             params.append('page', page.toString());
         }
-        if(status){
+        if (status) {
             params.append("status", status);
         }
 
         const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params:params
+            params: params
         })
 
         return processPaginatedResults(resp, params);
     }
 
-    public async modifyOffer(offer:ModifyFormValues, status?:OFFER_STATUS){
+    public async getOfferInformationByUrl(offerUrl: string): Promise<OfferModel> {
+        const resp = await this.axiosInstance().get<OfferModel>(offerUrl);
+        return resp.data;
+    }
+
+    public async modifyOffer(offer: ModifyFormValues, status?: OFFER_STATUS) {
         const resp = await this.axiosInstance().put<OfferModel[]>(this.basePath + offer.offerId, {
             cryptoCode: offer.cryptoCode,
             location: offer.location,
@@ -60,25 +66,29 @@ export class OfferService {
         })
         return resp.data;
     }
-    public getOfferIdFromURI(uri:string):string{
+
+    public getOfferIdFromURI(uri: string): string {
         const n = uri.lastIndexOf('/');
         return uri.substring(n + 1);
     }
-    public getSearchParamsFromURI(uri:string):URLSearchParams{
+
+    public getSearchParamsFromURI(uri: string): URLSearchParams {
         const n = uri.lastIndexOf('?');
         return new URLSearchParams(uri.substring(n + 1));
     }
-    public async createOffer(minInCrypto:number, maxInCrypto:number, cryptoCode:string, location:string, unitPrice:number, firstChat?:string):Promise<void>{
+
+    public async createOffer(minInCrypto: number, maxInCrypto: number, cryptoCode: string, location: string, unitPrice: number, firstChat?: string): Promise<void> {
         await this.axiosInstance().post<OfferModel[]>(this.basePath, {
-            minInCrypto:minInCrypto,
-            maxInCrypto:maxInCrypto,
-            cryptoCode:cryptoCode,
-            location:location,
-            unitPrice:unitPrice,
-            firstChat:firstChat
+            minInCrypto: minInCrypto,
+            maxInCrypto: maxInCrypto,
+            cryptoCode: cryptoCode,
+            location: location,
+            unitPrice: unitPrice,
+            firstChat: firstChat
         });
     }
-    public async pauseOffer(offer:OfferModel){
+
+    public async pauseOffer(offer: OfferModel) {
         return this.modifyOffer({
             offerId: offer.offerId,
             cryptoCode: offer.cryptoCode,
@@ -87,9 +97,10 @@ export class OfferService {
             maxInCrypto: offer.maxInCrypto,
             unitPrice: offer.unitPrice,
             comments: offer.comments
-            }, OFFER_STATUS.PausedBySeller);
+        }, OFFER_STATUS.PausedBySeller);
     }
-    public async deleteOffer(offer:OfferModel){
+
+    public async deleteOffer(offer: OfferModel) {
         return this.modifyOffer({
             offerId: offer.offerId,
             cryptoCode: offer.cryptoCode,
@@ -100,7 +111,8 @@ export class OfferService {
             comments: offer.comments
         }, OFFER_STATUS.Deleted);
     }
-    public async resumeOffer(offer:OfferModel){
+
+    public async resumeOffer(offer: OfferModel) {
         return this.modifyOffer({
             offerId: offer.offerId,
             cryptoCode: offer.cryptoCode,

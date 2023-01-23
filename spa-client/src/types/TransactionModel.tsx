@@ -8,8 +8,8 @@ export default interface TransactionModel {
     lastModified:Date,
     buyer:string,
     seller:string,
-    offer:string
-    messages:string
+    offer:string,
+    messages:string,
     self:string,
     qUnseenMessagesBuyer:number,
     qUnseenMessagesSeller:number

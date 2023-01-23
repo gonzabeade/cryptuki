@@ -1,4 +1,6 @@
 import Navbar from './components/Navbar';
+import AdminNavBar from './components/AdminNavBar/AdminNavBar';
+
 import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
@@ -8,6 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import LoggedGate from "./components/LoggedGate";
 import {AuthProvider} from "./contexts/AuthContext";
+import ComplaintHub from "./views/ComplaintsLanding/complaintHub";
+import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
+import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
+import KycLanding from "./views/KycLanding/KycLanding";
+
 
 //import all pages with lazy import
 const Landing = lazy(()=>import("./views/Landing/index"));
@@ -34,7 +41,8 @@ function App() {
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  <Navbar></Navbar>
+                  {/*<Navbar></Navbar>*/}
+                  {/*<AdminNavBar/>*/}
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>
@@ -52,6 +60,10 @@ function App() {
                               <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
                               <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
                               <Route path="/verify" element={<Verify/>}/>
+                              <Route path="/admin" element={<ComplaintHub/>}/>
+                              <Route path="/admin/complaint/:id" element={<SolveComplaint/>}/>
+                              <Route path="/admin/kyc" element={<KycLanding/>}/>
+                              <Route path="/admin/kyc/:username" element={<SolveKycAdmin/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
                           </Routes>

@@ -109,6 +109,12 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                             Accepted
                         </div>
                     }
+                    {
+                        tradeStatus === TRADE_STATUS.Deleted &&
+                        <div className=" font-semibold bg-blue-400  w-full text-white  text-center p-2 rounded-lg">
+                            Deleted
+                        </div>
+                    }
                 </div>
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">

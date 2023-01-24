@@ -3,6 +3,8 @@ import { AxiosInstance } from "axios";
 import {ComplainModel} from "../types/ComplainModel";
 import {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveComplaintForm";
 import {CreateComplainForm} from "../views/Support";
+import {PaginatedResults} from "../types/PaginatedResults";
+import {processPaginatedResults} from "../common/utils/utils";
 
 export class ComplainService{
 
@@ -13,13 +15,21 @@ export class ComplainService{
         this.axiosInstance = axiosInstance;
     }
 
-    public async getComplaints(page?:number):Promise<ComplainModel[]>{
+    public async getComplaintsByUrl(url:string):Promise<PaginatedResults<ComplainModel>>{
         let params= new URLSearchParams();
-        if(page) params.append("page",page.toString()!);
+        params.append("status","PENDING");
+        const resp = await this.axiosInstance().
+        get<ComplainModel[]>(url,{ params:params });
+        return processPaginatedResults(resp);
+
+    }
+
+    public async getComplaints():Promise<PaginatedResults<ComplainModel>>{
+        let params= new URLSearchParams();
         params.append("status","PENDING");
         const resp = await this.axiosInstance().
             get<ComplainModel[]>(this.basePath,{ params:params });
-        return resp.data;
+        return processPaginatedResults(resp);
     }
 
     public async getComplaintById(complainId:number):Promise<ComplainModel>{

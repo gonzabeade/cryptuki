@@ -6,7 +6,6 @@ import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
-import paginator from "../../components/Paginator";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();

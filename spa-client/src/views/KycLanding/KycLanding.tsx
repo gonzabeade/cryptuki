@@ -4,40 +4,68 @@ import {toast} from "react-toastify";
 import useKycService from "../../hooks/useKycService";
 import UserModel from "../../types/UserModel";
 import Paginator from "../../components/Paginator";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import Loader from "../../components/Loader";
 
 const KycLanding = () => {
     const kycService = useKycService();
     const [pendingKyc, setPendingKyc] = useState<UserModel[]|null>();
-    const [actualPage, setActualPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+            actualPage: 0,
+            totalPages: 0,
+            nextUri:'',
+            prevUri:''
+        }
+    );
 
-    async function getPendingKycRequests(page?:number, pageSize?:number){
+    async function getPendingKycRequests(){
         try{
-            const apiCall = await kycService?.getPendingKycInformation(page, pageSize);
-            setPendingKyc(apiCall);
+            const apiCall = await kycService?.getPendingKycInformation();
+            setPendingKyc(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps!);
+            setLoading(false);
         }catch (e){
             toast.error("Connection error. Failed to fetch pending kyc requests")
         }
 
     }
+    async function getPaginatedKyc(url:string){
+        try{
+            setLoading(true);
+            const apiCall = await kycService?.getPendingKycInformationByUrl(url);
+            setPendingKyc(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps!);
+            setLoading(false);
+        }catch (e){
+            toast.error("Connection error. Failed to fetch pending kyc requests")
+        }
+    }
+
 
     useEffect(  ()=>{
         getPendingKycRequests();
     }, []);
 
 
-    return (
+    return ( <>
+        <div>
+            {loading ?
+                <div className="flex flex-col w-2/3 mt-10">
+                    <Loader/>
+                </div> :
         <div className="flex flex-col ml-80 h-screen w-screen">
             <h1 className="font-sans text-4xl font-bold">Validar identidades</h1>
             <div className="flex flex-wrap w-full mt-3">
                 <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">
-                      {pendingKyc && pendingKyc.map((user => <KycPreview username={user.username} last_login={user.lastLogin}/>))}
-                      {/*{pendingKyc && pendingKyc.length > 0 &&  <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>}*/}
-                      {/*TODO PAGINATOR*/}
+                      {pendingKyc && pendingKyc.map((user => <KycPreview key={user.userId} username={user.username} last_login={user.lastLogin}/>))}
+                      {pendingKyc && pendingKyc.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedKyc}/>}
                       {!pendingKyc && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No hay peticiones pendientes.</h1>}
                 </div>
             </div>
+                </div>}
         </div>
+        </>
     );
 };
 

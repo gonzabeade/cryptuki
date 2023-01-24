@@ -16,17 +16,14 @@ export class ComplainService{
     }
 
     public async getComplaintsByUrl(url:string):Promise<PaginatedResults<ComplainModel>>{
-        let params= new URLSearchParams();
-        params.append("status","PENDING");
-        const resp = await this.axiosInstance().
-        get<ComplainModel[]>(url,{ params:params });
+        const resp = await this.axiosInstance().get<ComplainModel[]>(url);
         return processPaginatedResults(resp);
-
     }
 
     public async getComplaints():Promise<PaginatedResults<ComplainModel>>{
         let params= new URLSearchParams();
         params.append("status","PENDING");
+        params.append("per_page",String(5));
         const resp = await this.axiosInstance().
             get<ComplainModel[]>(this.basePath,{ params:params });
         return processPaginatedResults(resp);

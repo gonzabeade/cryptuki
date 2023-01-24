@@ -41,8 +41,8 @@ function App() {
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  {/*<Navbar></Navbar>*/}
-                  <AdminNavBar/>
+                  <Navbar></Navbar>
+                  {/*<AdminNavBar/>*/}
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>
@@ -50,7 +50,7 @@ function App() {
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
                               <Route path="/trade/:id" element={<LoggedGate><Trade/></LoggedGate>}/>
-                              <Route path="/support" element={<Support/>}/>
+                              <Route path="/trade/:id/support" element={<Support/>}/>
                               <Route path="/buyer/" element={<LoggedGate><BuyerDashboard/></LoggedGate>}/>
                               <Route path="/seller/" element={<LoggedGate><SellerDashboard/></LoggedGate>}/>
                               <Route path="/trade/:id/receipt" element={<LoggedGate><Receipt/></LoggedGate>}/>

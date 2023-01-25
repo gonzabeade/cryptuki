@@ -9,18 +9,21 @@ import {set} from "react-hook-form";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 import useTradeService from "../../hooks/useTradeService";
+import {TRADE_STATUS} from "../../common/constants";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
-    chat:boolean
+    chat:boolean,
+    callback?:Function
 }
-const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade, chat}) => {
+const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({trade, chat, callback}) => {
     const [tradeStatus, setTradeStatus] = useState<string>();
     const [offer, setOffer] = useState<OfferModel>();
     const [buyer, setBuyer] = useState<UserModel>();
     const offerService = useOfferService();
     const userService = useUserService();
     const tradeService = useTradeService();
+    const [unSeenMessages, setUnseenMessages]= useState<number>(0);
 
     async function fetchBuyer(){
         try{
@@ -48,8 +51,18 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
             }
         }
     }
+    async function getUnseenMessages(){
+        if(trade){
+            if(userService.getUsernameFromURI(trade.buyer) === userService.getLoggedInUser()){
+                setUnseenMessages(trade.qUnseenMessagesBuyer);
+            }else{
+                setUnseenMessages(trade.qUnseenMessagesSeller)
+            }
+        }
+    }
     useEffect(()=>{
         fetchOffer();
+        getUnseenMessages();
         setTradeStatus(trade?.status);
     },[trade])
 
@@ -59,42 +72,47 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
         try{
             const resp = await tradeService.changeTradeStatus(tradeId, status);
             setTradeStatus(status);
+            if(callback){
+                callback(status);
+            }
         }catch (e) {
-            console.log(e);
             toast.error("Connection error. Couldn't change trade status");
         }
     }
 
     return (
-        <div className="flex flex-col justify-center px-10">
-            <div
-                className="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3 text-polar">
-               Offer Information
-            </div>
-            <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12 ">
+
+
+            <div className="bg-[#FAFCFF] p-4 shadow-xl flex flex-col rounded-lg justify-between mb-12  mx-2">
                 <div className="flex font-sans h-fit w-full mt-2">
                     {
-                        tradeStatus === 'SOLD' &&
+                        tradeStatus === TRADE_STATUS.Sold &&
                         <div className="font-semibold bg-gray-400 w-full text-white text-center p-2 rounded-lg">
                            Sold
                         </div>
                     }
                     {
-                        tradeStatus === 'PENDING' &&
+                        tradeStatus === TRADE_STATUS.Pending &&
                         <div className=" font-semibold bg-nyellow  w-full text-white text-center p-2 rounded-lg">
                             Pending
                         </div>
                     }
                     {
-                        tradeStatus === 'REJECTED' &&
+                        tradeStatus === TRADE_STATUS.Rejected &&
                         <div className=" font-semibold bg-nred/[0.6] w-full text-white  text-center p-2 rounded-lg">
                             Rejected
                         </div>
                     }
                     {
-                        tradeStatus === 'ACCEPTED' &&
+                        tradeStatus === TRADE_STATUS.Accepted &&
                         <div className=" font-semibold bg-ngreen  w-full text-white  text-center p-2 rounded-lg">
                             Accepted
+                        </div>
+                    }
+                    {
+                        tradeStatus === TRADE_STATUS.Deleted &&
+                        <div className=" font-semibold bg-blue-400  w-full text-white  text-center p-2 rounded-lg">
+                            Deleted
                         </div>
                     }
                 </div>
@@ -129,24 +147,24 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                 </div>
 
-                {tradeStatus === 'SOLD' &&
+                {tradeStatus === TRADE_STATUS.Sold &&
                     <a className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
-                       href="/support">
-                        Help
+                       href={"/trade/" + trade.tradeId + "/receipt"}>
+                        Receipt
                     </a>
                 }
-                {tradeStatus === 'PENDING' &&
+                {tradeStatus === TRADE_STATUS.Pending &&
                     <div className="flex flex-row">
                         <div className="flex justify-center mx-auto my-3">
                             <button
-                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus('REJECTED', trade?.tradeId!)}>
+                                    className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus(TRADE_STATUS.Rejected, trade?.tradeId!)}>
                                 Reject
                             </button>
                         </div>
 
                         <div className="flex justify-center mx-auto my-3">
                             <button
-                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus('ACCEPTED', trade?.tradeId!)}>
+                                    className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus(TRADE_STATUS.Accepted, trade?.tradeId!)}>
                                 Accept
                             </button>
                         </div>
@@ -154,25 +172,24 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 }
 
                 {
-                    tradeStatus === 'ACCEPTED' &&
+                    tradeStatus === TRADE_STATUS.Accepted &&
 
 
                     <form className="flex justify-center mx-auto my-3">
                         <button type="submit"
-                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus('SOLD', trade?.tradeId)}>
+                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus(TRADE_STATUS.Sold, trade?.tradeId)}>
                             Mark as sold
                         </button>
                     </form>
                 }
                 {
-                    tradeStatus !== 'ACCEPTED' && tradeStatus !== 'PENDING' &&
+                    tradeStatus !== TRADE_STATUS.Accepted && tradeStatus !== TRADE_STATUS.Pending &&
                     <div className="flex h-2/5 my-2"/>
                 }
                 {
-                    chat && <ChatButton tradeId={trade?.tradeId} />
+                    chat && <ChatButton tradeId={trade?.tradeId} unSeenMessages={unSeenMessages} />
                 }
             </div>
-        </div>
 
     );
 };

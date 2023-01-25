@@ -33,10 +33,19 @@ const EditOfferForm = () => {
 
     }
    function changeSuggestedPrice(){
-        const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
-        const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
-        const price = document.getElementById("priceCrypto") as HTMLElement;
-        price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS': 'No price detected' ;
+       const selectCryptos: HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
+       const cryptoModel: CryptocurrencyModel = cryptocurrencies.find(cryptocurrency => cryptocurrency.code === selectCryptos.value)!;
+       const price = document.getElementById("priceCrypto") as HTMLElement;
+       price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected';
+       const minLabel = document.getElementById("minCoin");
+
+       if (minLabel)
+           minLabel.innerHTML = cryptoModel.code;
+
+       const maxLabel = document.getElementById("maxCoin");
+
+       if (maxLabel)
+           maxLabel.innerHTML = cryptoModel.code;
     }
     async function offerInitialValues(){
         //build form values with offer
@@ -77,7 +86,7 @@ const EditOfferForm = () => {
             const resp = offerService.modifyOffer(data);
             toast.success("Offer modified successfully");
             sleep(1000);
-            navigate('/offer'+ data.offerId);
+            navigate('/seller');
         }catch (e) {
             toast.error("Connection error. Failed to modify offer");
         }
@@ -210,9 +219,9 @@ const EditOfferForm = () => {
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
-                    <a className=" font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-                       href="/">Cancel
-                    </a>
+                    <button className=" font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
+                       onClick={(event)=> {event.preventDefault();navigate(-1);}}>Cancel
+                    </button>
                     <button type="submit"
                             className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
                         Submit

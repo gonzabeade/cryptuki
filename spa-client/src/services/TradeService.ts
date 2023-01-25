@@ -1,7 +1,8 @@
-import { paths } from "../common/constants";
-import { AxiosInstance} from "axios";
+import {paths, TRADE_STATUS} from "../common/constants";
+import {AxiosInstance, AxiosResponse} from "axios";
 import TransactionModel from "../types/TransactionModel";
-
+import { PaginatedResults} from "../types/PaginatedResults";
+import {processPaginatedResults} from "../common/utils/utils";
 
 export class TradeService {
 
@@ -15,6 +16,12 @@ export class TradeService {
             const resp = await this.axiosInstance().get<TransactionModel>(this.basePath + tradeId);
             return resp.data;
     }
+
+    public async getTradeInformationByUrl(url:string):Promise<TransactionModel> {
+        const resp = await this.axiosInstance().get<TransactionModel>(url);
+        return resp.data;
+    }
+
     public async getLastTransactions(username:string|null):Promise<TransactionModel[]>{
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
             params: {
@@ -23,28 +30,42 @@ export class TradeService {
         });
         return resp.data;
     }
-    public async getRelatedTrades(username:string|null, status?:string):Promise<TransactionModel[]>{
+    public async getRelatedTrades(username:string|null, status?:string):Promise<PaginatedResults<TransactionModel>>{
+        const params = new URLSearchParams();
+        params.append("buyer", username!);
+        if(status) {
+            params.append("status", status);
+        }
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
-            params: {
-                buyer: username,
-                status: status
-            }
+            params: params
         });
-        return resp.data;
+        return processPaginatedResults(resp,params);
     }
-    public async getTradesWithOfferId(offerId:number):Promise<TransactionModel[]>{
+    public async getTradesWithOfferId(offerId:number, status?:TRADE_STATUS, page?:number ):Promise<PaginatedResults<TransactionModel>>{
+        const params = new URLSearchParams();
+
+        if(status === TRADE_STATUS.All){
+            status = undefined;
+        }
+        if(status){
+            params.append("status", status);
+        }
+        params.append("from_offer", offerId.toString());
+        if(page){
+            params.append("page", page.toString());
+        }
+
         const resp = await this.axiosInstance().get<TransactionModel[]>(this.basePath, {
-            params: {
-                from_offer: offerId,
-            }
+            params: params
         });
-        return resp.data;
+
+        return processPaginatedResults(resp);
     }
     public async createTrade(amount:number, offerId:number|undefined):Promise<string>{
         const resp = await this.axiosInstance().post(paths.BASE_URL + paths.OFFERS + offerId + paths.TRADE, {
                  quantity: amount
         });
-        return resp.headers["Location"]!;
+        return resp.headers["location"]!;
     }
     public async changeTradeStatus(tradeId:number, status:string):Promise<TransactionModel>{
         const resp = await this.axiosInstance().patch(paths.BASE_URL + paths.TRADE + tradeId , {
@@ -52,13 +73,18 @@ export class TradeService {
         });
         return resp.data;
     }
-    public async getTradesWithStatus(status:string, username:string){
-        const resp = await this.axiosInstance().get(paths.BASE_URL + paths.TRADE  , {
-            params: {
-                buyer: username,
-                status: status
-            }
-        });
-        return resp.data;
+
+    public async getPaginatedTrades(uri:string):Promise<PaginatedResults<TransactionModel>>{
+        const resp = await this.axiosInstance().get(uri);
+        return processPaginatedResults(resp);
     }
+    public async getRatingInfo(tradeId:number):Promise<AxiosResponse> {
+        return await this.axiosInstance().get(this.basePath + tradeId + '/rating');
+    }
+    public async rateCounterPart(tradeId:number, rating:number):Promise<void>{
+        await this.axiosInstance().patch(this.basePath + tradeId + '/rating', {
+            rating:rating
+        });
+    }
+
 }

@@ -9,6 +9,7 @@ import useUserService from "../../hooks/useUserService";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
+import {useAuth} from "../../contexts/AuthContext";
 
 
 const Receipt = () => {
@@ -17,10 +18,11 @@ const Receipt = () => {
     const params = useParams();
     const tradeService = useTradeService();
     const userService = useUserService();
-    const [isBuyer, setIsBuyer] = useState<boolean>(true);
+    const [isBuyer, setIsBuyer] = useState<boolean>();
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
+    const {user} = useAuth();
 
 
     async function fetchTrade(tradeId:number){
@@ -39,14 +41,12 @@ const Receipt = () => {
     async function fetchBuyerOrSeller(){
         try{
             if(trade){
-                //trade.buyer get URI
                 let username:string;
-
-                if(trade.buyer === userService.getLoggedInUser()){
-                    username = userService.getUsernameFromURI(trade.buyer);
+                if(userService.getUsernameFromURI(trade.buyer) === user?.username){
+                    username = userService.getUsernameFromURI(trade.seller);
                     setIsBuyer(true);
                 }else{
-                   username = userService.getUsernameFromURI(trade.seller);
+                   username = userService.getUsernameFromURI(trade.buyer);
                    setIsBuyer(false);
                 }
 
@@ -56,7 +56,6 @@ const Receipt = () => {
         }catch (e){
             toast.error("Error fetching buyer or seller");
         }
-
     }
 
     useEffect(()=>{
@@ -109,7 +108,7 @@ const Receipt = () => {
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    {offer && trade && offer?.unitPrice! * trade?.buyingQuantity!}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS
@@ -118,10 +117,10 @@ const Receipt = () => {
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade?.buyingQuantity}
+                                                    {trade && trade?.buyingQuantity}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
-                                                    {offer?.cryptoCode}
+                                                    {offer && offer?.cryptoCode}
                                                 </h1>
                                             </>
                                            }
@@ -142,16 +141,16 @@ const Receipt = () => {
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade?.buyingQuantity}
+                                                    {trade && trade?.buyingQuantity}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
-                                                    {offer?.cryptoCode}
+                                                    {offer && offer?.cryptoCode}
                                                 </h1>
                                             </>
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    { offer && trade&& offer?.unitPrice! * trade?.buyingQuantity!}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS
@@ -191,7 +190,7 @@ const Receipt = () => {
                 <div className="flex flex-col mx-10 items-center">
                     {counterPart &&  <UserInfo username={counterPart.username} email={counterPart.email} phone_number={counterPart.phoneNumber} last_login={counterPart.lastLogin.toString()} trades_completed={counterPart.ratingCount} rating={counterPart.rating}/>}
                     <div className="flex flex-col mx-auto mt-10">
-                        <RateYourCounterPart usernameRater={userService.getLoggedInUser()!} usernameRated={counterPart?.username!} tradeId={trade?.tradeId!}/>
+                        <RateYourCounterPart usernameRated={counterPart?.username!} tradeId={trade?.tradeId!} isBuyer={isBuyer!}/>
                     </div>
                 </div>
             </div>

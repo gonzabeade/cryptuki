@@ -1,19 +1,25 @@
 import './styles.css';
 
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import useUserService from '../../hooks/useUserService';
 import {useEffect, useState} from 'react';
+import {useAuth} from "../../contexts/AuthContext";
 const Navbar = () => {
 
+    const {user, signout} = useAuth();
+    const navigate = useNavigate();
+    const [isLogged, setIsLogged] = useState<boolean>(false);
     const userService = useUserService();
-
-    const [username, setUsername] = useState<string | null>(userService.getLoggedInUser());
 
 
     useEffect(()=>{
         menuListeners();
     },[]);
-    //TODO aca falta un useEffect para ver si esta logeado o no
+
+    useEffect(()=>{
+        userService.getLoggedInUser() ? setIsLogged(true) : setIsLogged(false);
+    })
+
 
 
     function menuListeners(){
@@ -59,7 +65,7 @@ const Navbar = () => {
                     {/*    <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/support">Contact</Link>*/}
                     {/*</li>*/}
                 </ul>
-                {!username &&
+                {!isLogged &&
                     <>
                         <Link
                             className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-frostdr font-bold  hover:cursor-pointer rounded-lg transition duration-200"
@@ -69,16 +75,13 @@ const Navbar = () => {
                             to="/register">Sign up</Link>
                     </>
                 }
-                {username &&
+                {isLogged &&
                     <div className="hidden lg:flex lg:flex-row">
                         <Link to="/seller/" className="mx-2">
                             <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">Panel de vendedor</button>
                         </Link>
                         <Link
                             className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"
-                            onClick={() => {
-                                setUsername(userService.getLoggedInUser())
-                            }}
                             to="/buyer/">
                             <div className={"flex flex-row"}>
                                 {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
@@ -86,7 +89,7 @@ const Navbar = () => {
                                 <p className="mx-3 font-roboto text-white font-semibold">Mi perfil</p>
                             </div>
                         </Link>
-                        <div onClick={logout} className=" pt-1.5 hover:cursor-pointer">
+                        <div onClick={()=>{signout(()=>{ navigate('/')})}} className=" pt-1.5 hover:cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#5E81AC" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -125,7 +128,7 @@ const Navbar = () => {
                             {/*    <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"*/}
                             {/*       to="/support" onClick={closeMobileMenu}>Contact</Link>*/}
                             {/*</li>*/}
-                            {username &&
+                            {isLogged &&
                                 <>
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
@@ -137,7 +140,6 @@ const Navbar = () => {
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
                                               to="/buyer/"
                                               onClick={() => {
-                                                  setUsername(userService.getLoggedInUser())
                                                   closeMobileMenu()
                                               }}>
                                             Mi perfil
@@ -149,7 +151,7 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className="mt-auto">
-                        {!username && <div className="pt-6">
+                        {!isLogged && <div className="pt-6">
 
                             <Link
                                 className=" text-frostdr block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg "
@@ -159,11 +161,11 @@ const Navbar = () => {
                                 to="/register" onClick={closeMobileMenu}>Sign Up</Link>
                         </div>
                         }
-                        {username &&
+                        {isLogged &&
                             <div className="pt-6">
                                 <Link
                                     className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                    to="/" onClick={()=> {logout(); closeMobileMenu();}}>Sign out</Link>
+                                    to="/" onClick={()=> {closeMobileMenu();signout(()=>{navigate('/')});}}>Sign out</Link>
                             </div>
                         }
 
@@ -173,11 +175,6 @@ const Navbar = () => {
         </>
 
     );
-    function logout() {
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("accessToken");
-        setUsername(null);
-    }
 };
 
 

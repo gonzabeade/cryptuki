@@ -2,25 +2,23 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {useSearchParams} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
 
 type ContactFormValues = {
     email:string|null,
     message:string|null,
     tradeId?:number
 }
-//TODO errors and tradeId param?
+
 const Support= () => {
 
-    const userService = useUserService();
-    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>(/*{defaultValues: async () => getDefaultValues()} */);
+    const {user} = useAuth();
+    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>({defaultValues: async () => getDefaultValues()} );
     const [searchParams]= useSearchParams();
-    // TODO BOCA
-    console.log(errors)
-    console.log(getDefaultValues())
 
     function getDefaultValues(): ContactFormValues{
         return {
-            email: userService.getLoggedInUser(),
+            email: user?.email!,
             message: null
         }
     }
@@ -28,10 +26,8 @@ const Support= () => {
 
     function onSubmit(data:ContactFormValues){
         if(searchParams && searchParams.get("tradeId")){
-
+            //TODO Call endpoint
         }
-
-
     }
 
     return (

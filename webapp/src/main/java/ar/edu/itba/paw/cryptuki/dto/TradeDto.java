@@ -14,13 +14,13 @@ public class TradeDto {
     private TradeStatus status;
     private double buyingQuantity;
     private LocalDateTime lastModified;
-
+    private int qUnseenMessagesBuyer;
+    private int qUnseenMessagesSeller;
     private URI self;
     private URI offer;
     private URI seller;
     private URI buyer;
     private URI messages;
-
     private URI rating;
 
 
@@ -32,6 +32,8 @@ public class TradeDto {
         dto.lastModified = trade.getLastModified();
         dto.status = trade.getStatus();
         dto.tradeId = trade.getTradeId();
+        dto.qUnseenMessagesBuyer = trade.getqUnseenMessagesBuyer();
+        dto.qUnseenMessagesSeller =  trade.getqUnseenMessagesSeller();
 
         dto.self = uriInfo.getBaseUriBuilder()
                         .path("/api/trades")
@@ -145,5 +147,21 @@ public class TradeDto {
 
     public void setRating(URI rating) {
         this.rating = rating;
+    }
+
+    public int getqUnseenMessagesBuyer() {
+        return qUnseenMessagesBuyer;
+    }
+
+    public void setqUnseenMessagesBuyer(int qUnseenMessagesBuyer) {
+        this.qUnseenMessagesBuyer = qUnseenMessagesBuyer;
+    }
+
+    public int getqUnseenMessagesSeller() {
+        return qUnseenMessagesSeller;
+    }
+
+    public void setqUnseenMessagesSeller(int qUnseenMessagesSeller) {
+        this.qUnseenMessagesSeller = qUnseenMessagesSeller;
     }
 }

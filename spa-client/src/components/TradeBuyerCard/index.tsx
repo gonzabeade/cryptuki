@@ -4,16 +4,27 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {TRADE_STATUS} from "../../common/constants";
+import useUserService from "../../hooks/useUserService";
 
 type TradeCardProp = {
-    trade:TransactionModel,
-    unSeenMessages:number
+    trade:TransactionModel
 }
 
-const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
+const TradeBuyerCard = ({trade}:TradeCardProp) => {
 
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
+    const [unseenMessages, setUnseenMessages] = useState<number>();
+    const userService = useUserService();
+    useEffect(()=>{
+        if(trade){
+            if(userService.getUsernameFromURI(trade.buyer) === userService.getLoggedInUser()){
+                setUnseenMessages(trade.qUnseenMessagesBuyer);
+            }else{
+                setUnseenMessages(trade.qUnseenMessagesSeller);
+            }
+        }
+    },[trade]);
 
     async function fetchOffer(){
         //fetch with uri
@@ -87,7 +98,7 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
             </div>
 
             <div className="ml-4 flex flex-row  align-middle my-auto font-sans">
-                {unSeenMessages !== 0 && trade.status !== TRADE_STATUS.Sold &&
+                {unseenMessages !== 0 && trade.status !== TRADE_STATUS.Sold &&
                     <>
                         <a href={"/trade/" + trade.tradeId} className="flex flex-row cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto" fill="none"
@@ -100,7 +111,7 @@ const TradeBuyerCard = ({trade, unSeenMessages}:TradeCardProp) => {
                         <div
                             className="-ml-4 w-6 h-5 bg-frostl border-2 font-sans rounded-full flex justify-center items-center">
                             <p className="text-xs">
-                                {unSeenMessages}
+                                {unseenMessages}
                             </p>
                         </div>
                     </>

@@ -18,14 +18,15 @@ type ChatFormValues ={
 const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
     const [messages, setMessages] = useState<MessageModel[]>([]);
-    const userService = useUserService();
     const chatService = useChatService();
-    const { register, handleSubmit, formState: { errors } } = useForm<ChatFormValues>();
+    const { register, handleSubmit, formState: { errors } , reset} = useForm<ChatFormValues>();
 
     async function getMessages(){
         try{
-            const resp = await chatService.getMessages(tradeId);
-            setMessages(resp);
+            if(tradeId){
+                const resp = await chatService.getMessages(tradeId);
+                setMessages(resp);
+            }
         }catch (e) {
             toast.error("Error fetching messages. Check your connection")
         }
@@ -33,13 +34,14 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
     }
 
     useEffect(()=>{
-      // getMessages();
-    },[])
+      getMessages();
+    },[tradeId])
 
     async function sendMessage(data:ChatFormValues){
         try{
             const resp = await chatService.sendMessage(tradeId, data.message);
-            setMessages(messages.concat(resp));
+            reset();
+            getMessages();
         }catch (e) {
          toast.error("Connection error. Failed to send message");
         }
@@ -81,9 +83,9 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
                                 <ul className="space-y-2">
                                     {
-                                        messages.map((message, key)=>{
+                                        messages && messages.map((message, key)=>{
                                             return (
-                                                <Message key={key} content={message.content} left={message.senderURI !== userService.getLoggedInUser() }/>
+                                                <Message key={key} content={message.content} senderURI={message.sender}/>
                                             );
                                         })
                                     }

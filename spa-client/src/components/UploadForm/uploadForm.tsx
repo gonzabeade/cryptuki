@@ -4,6 +4,8 @@ import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {NEIGHBORHOODS} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
+import useOfferService from "../../hooks/useOfferService";
+import {useNavigate} from "react-router-dom";
 
 export interface UploadFormValues {
     minInCrypto:number,
@@ -19,6 +21,8 @@ const UploadForm = () => {
     //State
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
+    const offerService = useOfferService();
+    const navigate = useNavigate();
 
      async function fetchCryptocurrencies(){
          try{
@@ -28,12 +32,23 @@ const UploadForm = () => {
              toast.error("Connection error. Failed to fetch cryptocurrencies");
          }
     }
-    //TODO: This feels like a bad practice. Maybe useEffect on selected value?
+
     function changeSuggestedPrice(){
         const selectCryptos:HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
         const cryptoModel:CryptocurrencyModel = cryptocurrencies.find(cryptocurrency=> cryptocurrency.code ===  selectCryptos.value)!;
         const price = document.getElementById("priceCrypto") as HTMLElement;
         price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS': 'No price detected' ;
+
+        const minLabel = document.getElementById("minCoin");
+
+        if(minLabel)
+            minLabel.innerHTML= cryptoModel.code;
+
+        const maxLabel = document.getElementById("maxCoin");
+
+        if(maxLabel)
+            maxLabel.innerHTML= cryptoModel.code;
+
     }
 
     useEffect(()=>{
@@ -43,8 +58,15 @@ const UploadForm = () => {
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadFormValues>();
 
-    function onSubmit(data:UploadFormValues) {
-        console.log(data);
+    async function onSubmit(data:UploadFormValues) {
+        try{
+            const offer = await offerService.createOffer(data.minInCrypto, data.maxInCrypto, data.cryptoCode, data.location, data.unitPrice, data.comments);
+            toast.success("Offer created");
+            navigate('/seller');
+        }catch (e) {
+            console.log(e)
+            toast.error("Check your connection. Creation of offer failed.")
+        }
     }
 
     return (

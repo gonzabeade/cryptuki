@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
 
@@ -14,6 +14,9 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, callback}) => {
             await callback(status);
             setActiveStatus(status);
     }
+    useEffect(()=>{
+        setActiveStatus(active);
+    }, [active])
     return (
         <nav className="border-gray-200 py-3 h-20 mx-auto">
             <div className="container mx-auto my-auto px-20 h-full">

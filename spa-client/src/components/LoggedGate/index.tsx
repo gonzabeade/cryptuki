@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
+import useUserService from "../../hooks/useUserService";
 
 type LoggedGateProps = {
     children: React.ReactNode
@@ -7,17 +9,17 @@ type LoggedGateProps = {
 const LoggedGate = ({children}:LoggedGateProps) => {
     const navigate = useNavigate();
     const location = useLocation();
-    //TODO hay que hacer un auth context para detectar cuando cambia el isLogged
+    const userService = useUserService();
+    const {user} = useAuth();
     useEffect(()=>{
-        //if not authenticated , redirect to login and save url in state
-        if(!localStorage.getItem("accessToken") && !localStorage.getItem("refreshToken")){
+        if(!userService.getLoggedInUser()){
             navigate('/login', {
                 state: {
                     url: location.pathname
                 }
             })
         }
-    }, [navigate, location.pathname]);
+    }, [user]);
 
     return (
         <>

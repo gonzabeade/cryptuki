@@ -22,15 +22,34 @@ export class UserService {
         return null; 
     }
 
+    public getRole(): string | null {
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (refreshToken) {
+            const tok: any = jwtDecode(refreshToken);
+            return tok.role;
+        }
+        return null;
+    }
+
     public async  getUser(username:string):Promise<UserModel>{
         const resp = await this.axiosInstance().get<UserModel>(this.basePath + username);
         return resp.data;
     }
 
+    public async  getUserByUrl(url:string):Promise<UserModel>{
+        const resp = await this.axiosInstance().get<UserModel>(url);
+        return resp.data;
+    }
+
+
 
     public getUsernameFromURI(uri:string):string{
-        const n = uri.lastIndexOf('/');
-        return uri.substring(n + 1);
+        if(uri){
+            const n = uri.lastIndexOf('/');
+            return uri.substring(n + 1);
+        }
+        return '';
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
@@ -47,5 +66,14 @@ export class UserService {
            code:code
         });
     }
+    public async getKYCStatus(username:string){
+        const resp = await this.axiosInstance().post(this.basePath + username + '/kyc');
+        if(resp.status === 204){
+            return null;
+        }else{
+            return resp.data;
+        }
+    }
+
 
 }

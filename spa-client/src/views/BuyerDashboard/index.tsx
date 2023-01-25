@@ -8,48 +8,62 @@ import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import TradeBuyerCard from "../../components/TradeBuyerCard";
 import UserModel from "../../types/UserModel";
+import {useAuth} from "../../contexts/AuthContext";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import {TRADE_STATUS} from "../../common/constants";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const tradeService = useTradeService();
-    const userService= useUserService();
-    const [user, setUser] = useState<UserModel>();
-    const [actualPage, setActualPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const {user} = useAuth();
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+            actualPage: 0,
+            totalPages: 0,
+            nextUri:'',
+            prevUri:''
+        }
+    );
 
     async function fetchTradesBuyerProfile(){
         try {
-            const resp = await tradeService.getRelatedTrades(userService.getLoggedInUser());
-            setTrades(resp);
+            if(user){
+                const resp = await tradeService.getRelatedTrades(user?.username!, TRADE_STATUS.Pending);
+                if(resp.paginatorProps){
+                    setPaginatorProps(resp.paginatorProps);
+                }
+                setTrades(resp.items);
+            }
         }catch (e){
             toast.error("Connection error. Failed to fetch trades");
         }
     }
+
     async function fetchTradesWithStatus(status:string){
         try {
-            const resp = await tradeService.getTradesWithStatus(status, user?.username!);
-            setTrades(resp);
+            const resp = await tradeService.getRelatedTrades( user?.username!, status);
+            if(resp.paginatorProps){
+                setPaginatorProps(resp.paginatorProps);
+            }
+            setTrades(resp.items);
         }catch (e) {
             toast.error("Couldn't fethc trades with status " + status);
+        }
+    }
+    async function fetchPage(uri:string){
+        try{
+            const resp = await tradeService.getPaginatedTrades(uri);
+            if(resp.paginatorProps){
+                setPaginatorProps(resp.paginatorProps);
+            }
+            setTrades(resp.items);
+        }catch (e) {
+            toast.error("Connection error. Couldn't fetch trades")
         }
     }
 
     useEffect(()=>{
         fetchTradesBuyerProfile();
-    },[]);
-
-    async function fetchUserData(){
-        try{
-            const resp = await userService.getUser(userService.getLoggedInUser()!);
-            setUser(resp);
-        }catch (e) {
-            toast.error("Connection error. Failed to fetch user data");
-        }
-    }
-
-    useEffect(()=>{
-        fetchUserData();
-    },[]);
+    },[user]);
 
     return (
         <div className="flex h-full w-full px-20 my-10">
@@ -66,8 +80,7 @@ const BuyerDashboard = () => {
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
                     {trades.length >0 && trades.map((trade)=>{
                         return (
-                            //TODO unseenMessages
-                            <TradeBuyerCard trade={trade} unSeenMessages={1} key={trade.tradeId}/>
+                            <TradeBuyerCard trade={trade}  key={trade.tradeId}/>
                         );
                     })}
                 </div>
@@ -76,7 +89,7 @@ const BuyerDashboard = () => {
                         available</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
-                        <Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("change page")}/>
+                        <Paginator paginatorProps={paginatorProps} callback={fetchPage}/>
                     </div>}
 
             </div>

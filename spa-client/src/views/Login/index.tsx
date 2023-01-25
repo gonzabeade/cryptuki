@@ -6,6 +6,7 @@ import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import {useEffect} from "react";
+import {useAuth} from "../../contexts/AuthContext";
 
 
 type LoginFormValues = {
@@ -19,19 +20,14 @@ const Login = () => {
     const tradeService = useTradeService();
     const navigate = useNavigate();
     const location = useLocation();
+    const {user, signin} = useAuth();
+    const userService = useUserService();
 
-    //TODO por favor hacer un auth context esto es nefasto
-    useEffect(()=>{
-
-        if(localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")){
-            if(location.state && location.state.url) {
-                navigate(location.state.url);
-            }else{
-                navigate("/")
-            }
-        }
-    },[navigate, location.state, localStorage.getItem("accessToken") || localStorage.getItem("refreshToken") ]);
-
+   useEffect(()=>{
+       if(user){
+           navigate('/');
+       }
+   }, []);
 
     async function onSubmit(data:LoginFormValues){
         withBasicAuthorization(data.username, data.password);
@@ -39,9 +35,15 @@ const Login = () => {
             // dummy call to get the token
             const resp = await tradeService.getLastTransactions(data.username);
             toast.success("Successfully logged in!");
-            await sleep(1000);
+            signin(await userService.getUser(data.username), ()=>{
+                if(location.state && location.state.url) {
+                    navigate(location.state.url);
+                }else{
+                    navigate("/")
+                }
+            });
+            await sleep(500);
         }catch (e){
-            console.log(e)
             toast.error("Invalid credentials");
         }
 

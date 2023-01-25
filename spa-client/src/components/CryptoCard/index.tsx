@@ -33,7 +33,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
                 <div className="flex flex-row text-gray-400 text-center">
                     <div className="bold text-polar">{seller?.username }</div>
                     {seller?.ratingCount === 0 || !seller?.rating ?
-                        <div className="light">Usuario nuevo</div> : <div className=" text-polar text-xs items-center ml-1 mt-0.5">({ seller.ratingCount} trades completed)</div>
+                        <div className="light ml-2">Usuario nuevo</div> : <div className=" text-polar text-xs items-center ml-1 mt-0.5">({ seller.ratingCount} trades completed)</div>
                     }
                 </div>
                 {seller?.ratingCount !== 0 && seller?.rating && <RatingStars rating={seller.rating/2}/>}
@@ -42,7 +42,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             <div className="column">
                 <div className="label">Precio:</div>
                 <div className="bold text-polar">{offer.unitPrice} ARS por {offer.cryptoCode}<img src={"/images/"+ offer.cryptoCode+".png"} alt={offer.cryptoCode}></img></div>
-                <div className="text-gray-400 font-medium">Min: {offer.minInCrypto} ARS - Máx: {offer.maxInCrypto} ARS</div>
+                <div className="text-gray-400 font-medium">Min: {offer.minInCrypto * offer.unitPrice} ARS - Máx: {offer.maxInCrypto * offer.unitPrice} ARS</div>
             </div>
             <div className="column">
                 <div className="label">Ubicación:</div>

@@ -23,11 +23,13 @@ const KycForm = () => {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadKycValues>();
     const kycService = useKycService();
     const navigate = useNavigate();
+    const username = useUserService().getLoggedInUser();
 
     async function onSubmit(data:UploadKycValues) {
         console.log(data);
         try {
             const resp = kycService.uploadKyc(
+                username as string,
                 data.names,
                 data.surnames,
                 data.emissionCountry,

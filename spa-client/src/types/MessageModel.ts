@@ -1,5 +1,5 @@
 export type MessageModel = {
     content:string,
-    senderURI:string,
+    sender:string,
     timestamp:Date
 }

@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+import {useAuth} from "../../contexts/AuthContext";
+import {AxiosError} from "axios";
 
 type BuyOfferFormValues = {
     amount:number
@@ -22,6 +24,7 @@ const BuyOffer = () => {
     const [seller, setSeller] = useState<UserModel>();
     const tradeService = useTradeService();
     const userService = useUserService();
+    const {user} = useAuth();
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -58,13 +61,18 @@ const BuyOffer = () => {
     }
     async function onSubmit(data:BuyOfferFormValues){
         try{
+            if(!user){
+                navigate('/login');
+                return;
+            }
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
+            let tradeId = resp.match("\/([0-9]+)(?=[^\/]*$)");
+            if(tradeId){
+                navigate('/trade/' +  tradeId[1]);
+            }
 
-            //TODO getTradeId from URL
-
-            navigate('/trade/' + resp);
         }catch (e){
-            toast.error("Connection error. Failed to create trade");
+            toast.error("You need to be logged in to make a trade proposal");
         }
     }
 
@@ -98,7 +106,6 @@ const BuyOffer = () => {
                         <h2 className="font-sans font-semibold text-polard text-2xl text-center">
                             You are about to buy
                         </h2>
-                        {/*TODO hacer como me dijo gonza con los icons */}
                         <img src={`/images/${offer? offer.cryptoCode + '.png':'404.png'}`} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
                         <h1 className="text-center text-3xl font-bold text-polar">
                             {offer? offer.cryptoCode: 'Loading...'}
@@ -124,11 +131,22 @@ const BuyOffer = () => {
                 </div>
                 <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
                     <label className="mx-auto text-center">Amount in ARS</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"  {...register("amount", {required:"You must input an amount"})} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
+                    <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"
+                           {...register("amount",
+                               {
+                                   required:"You must input an amount",
+                                   min:{
+                                       value: (offer?.minInCrypto! * offer?.unitPrice!),
+                                       message:"Amount must be greater to minimum"},
+                                   max:{
+                                       value:(offer?.minInCrypto! * offer?.unitPrice!),
+                                       message:"Amount must be less than maximum"
+                                   }
+                               })} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
                     {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}
                     <p className="mx-auto font-bold text-polar">or</p>
                     <label className="mx-auto text-center mt-3">Amount in crypto</label>
-                    <input className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
+                    <input type="number" step="0.000000000001" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
                         <Link to="/" className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" >Cancel</Link>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>

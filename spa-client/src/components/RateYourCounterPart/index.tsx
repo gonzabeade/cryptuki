@@ -1,18 +1,51 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
+import useTradeService from "../../hooks/useTradeService";
+import {toast} from "react-toastify";
+import trade from "../../views/Trade";
 
 
 
 type RateYourCounterPartProps = {
-    usernameRater:string,
-    usernameRated:string,
-    tradeId:number
+    isBuyer:boolean,
+    tradeId:number,
+    usernameRated:string
 }
 
-const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, usernameRater,  tradeId}) => {
+const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, usernameRated, tradeId}) => {
 
     const [alreadyRated, setAlreadyRated] = useState<boolean>(false);
     const [rating, setRating] = useState<number>();
+    const tradeService = useTradeService();
+
+    async function getRateInfo(){
+       try{
+           if(tradeId){
+               const resp = await tradeService.getRatingInfo(tradeId);
+
+               if (isBuyer && resp.data.seller_rated) {
+                   setAlreadyRated(true);
+                   if (resp.data.seller_rating) {
+                       setRating(resp.data.seller_rating * 2);
+                   }
+               }
+
+               if (!isBuyer && resp.data.buyer_rated) {
+                   setAlreadyRated(true);
+                   if (resp.data.buyer_rating) {
+                       setRating(resp.data.buyer_rating * 2);
+                   }
+               }
+           }
+       }catch (e) {
+            toast.error("Connection failed. Failed to get rating info from Trade")
+       }
+    }
+
+    useEffect(()=>{
+        getRateInfo();
+    }, [ isBuyer])
+
 
     function hoverOnRating(number:number) {
         let element;
@@ -31,11 +64,14 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
         }
 
     }
-    function setRatingAndSend(rating:number) {
-        setRating(rating * 2);
-        //await call api to rate. If oK, then set Already rated to true
-        setAlreadyRated(true);
-
+    async function setRatingAndSend(rating:number) {
+        try{
+            await tradeService.rateCounterPart(tradeId!, rating);
+            setRating(rating * 2);
+            setAlreadyRated(true);
+        }catch (e) {
+            toast.error("Connection Error, failed to rate your counterpart")
+        }
     }
 
     return (
@@ -77,9 +113,11 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({usernameRated, u
                     </form>
                 </div>}
             {alreadyRated &&
-                <div className="mb-5 mt-5">
+                <div className=" flex flex-col mb-5 mt-5 mx-auto">
                     <ConfirmationToggle title={"Rating sent"}/>
+                    <h1 className="mx-auto">Rating submitted: {rating ?rating/2:0}/5</h1>
                 </div>
+
             }
         </>
     );

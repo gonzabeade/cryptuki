@@ -29,6 +29,7 @@ export class KycService {
     public async getPendingKycInformation():Promise<PaginatedResults<UserModel>>{
         let params = new URLSearchParams();
         params.append("kyc_status","PEN");
+        params.append("per_page", "2");
         const resp = await this.axiosInstance().get<UserModel[]>(
             this.userPath,{ params:params });
         return processPaginatedResults(resp);

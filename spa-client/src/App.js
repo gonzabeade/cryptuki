@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import LoggedGate from "./components/LoggedGate";
 import {AuthProvider} from "./contexts/AuthContext";
-import ComplaintHub from "./views/ComplaintsLanding/complaintHub";
+import ComplaintHub from "./views/ComplaintsLanding/ComplaintHub";
 import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
 import KycLanding from "./views/KycLanding/KycLanding";
@@ -41,7 +41,7 @@ function App() {
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  <Navbar></Navbar>
+                  {/*<Navbar></Navbar>*/}
                   {/*<AdminNavBar/>*/}
                   <div className="content">
                       <Suspense fallback={<Loader/>}>

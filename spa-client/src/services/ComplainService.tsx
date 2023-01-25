@@ -23,7 +23,6 @@ export class ComplainService{
     public async getComplaints():Promise<PaginatedResults<ComplainModel>>{
         let params= new URLSearchParams();
         params.append("status","PENDING");
-        params.append("per_page",String(5));
         const resp = await this.axiosInstance().
             get<ComplainModel[]>(this.basePath,{ params:params });
         return processPaginatedResults(resp);

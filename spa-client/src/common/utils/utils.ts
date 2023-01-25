@@ -16,7 +16,7 @@ export function getLinkHeaders(link:string):Link[] {
     const links:string[] = link.split(',');
     const linkHeaders:Link[] = [];
 
-
+    console.log(links)
     if(links.length >= 2){
 
         linkHeaders.push({
@@ -63,7 +63,8 @@ export function getLinkHeaders(link:string):Link[] {
 }
 
 function getPage(link:string):string|null{
-  return new URLSearchParams(link).get("page");
+    const new_link = link.substring(link.indexOf("<") + 1, link.indexOf(">"));
+    return new URLSearchParams(new URL(new_link).search).get("page");
 }
 
 export function getPaginatorProps(link:Link[]):PaginatorPropsValues {
@@ -108,6 +109,7 @@ export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchPa
 
     if(resp.status === 200){
         const linkHeaders:Link[] = getLinkHeaders(resp.headers["link"]!);
+        console.log(linkHeaders)
         if(params){
             return {
                 items: resp.data,

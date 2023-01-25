@@ -23,9 +23,11 @@ const ComplaintHub = () => {
         try{
             const apiCall = await complainService?.getComplaints();
             setComplaints(apiCall.items);
+            if(apiCall.paginatorProps)
             setPaginatorProps(apiCall.paginatorProps!);
             setIsLoading(false);
            }catch (e){
+            console.log(e)
             toast.error("Connection error. Failed to fetch complaints")
         }
     }
@@ -38,7 +40,7 @@ const ComplaintHub = () => {
         <div>
             {!isLoading ? <>
 
-                <div className="flex flex-col divide-x h-full">
+                <div className="flex flex-col divide-x h-full ">
                         {complaints &&
                             <div className="p-10 flex flex-wrap ">
                               {complaints.map(complaints=><ComplainCard complain={complaints} key={complaints.complainId}></ComplainCard>)}
@@ -48,7 +50,7 @@ const ComplaintHub = () => {
                                 <Paginator paginatorProps={paginatorProps} callback={getPaginatedComplaints}/>
 
                             </div>}
-                        {!complaints && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
+                        {(!complaints || complaints.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
                 </div>
             </>:
             <div className="flex flex-col w-2/3 mt-10">

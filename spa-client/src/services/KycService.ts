@@ -3,6 +3,7 @@ import {paths} from "../common/constants";
 import {KycInformationModel} from "../types/KycInformationModel";
 import {SolveKycForm} from "../components/KycAdminInformation/KycInformation";
 import UserModel from "../types/UserModel";
+import useUserService from "../hooks/useUserService";
 
 export class KycService {
 
@@ -37,5 +38,37 @@ export class KycService {
                 status: KycForm.status
             });
         return resp.data;
+    }
+
+    public async uploadKyc(
+        username:string,
+        names:string,
+        surnames:string,
+        emissionCountry:string,
+        documentCode:string,
+        idType:string,
+        idPictures:FileList,
+        facePictures:FileList
+    ){
+        let formData = new FormData();
+
+        formData.append('kyc-information',
+            new Blob([JSON.stringify({
+                    'givenNames':names,
+                    'surnames':surnames,
+                    'emissionCountry':emissionCountry,
+                    'idCode':documentCode,
+                    'idType':idType
+                })],
+                {type: "application/json"}));
+
+        formData.append('id-photo', idPictures[0]);
+        formData.append('validation-photo', facePictures[0]);
+
+        await this.axiosInstance().post(this.basePath + username + '/kyc', formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 }

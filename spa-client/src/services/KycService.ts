@@ -32,10 +32,10 @@ export class KycService {
     }
 
     public async solveKyc(KycForm:SolveKycForm, username:string){
-        const resp = await this.axiosInstance().put(this.basePath + username + '/kyc', {body:{
-                status:KycForm.status,
-                comments:KycForm.comments
-            }});
+        const resp = await this.axiosInstance().patch(this.basePath + username + '/kyc', {
+                comments:KycForm.comments,
+                status: KycForm.status
+            });
         return resp.data;
     }
 }

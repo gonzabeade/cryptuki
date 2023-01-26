@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import useKycService from "../../hooks/useKycService";
 import {KycInformationModel} from "../../types/KycInformationModel";
 import {useParams} from "react-router-dom";
-import {OFFER_STATUS} from "../../common/constants";
 import {toast} from "react-toastify";
 import KycInformation from "../../components/KycAdminInformation/KycInformation";
 
@@ -11,6 +10,8 @@ const SolveKycAdmin = () => {
     const [kyc,setKyc] = useState<KycInformationModel | null>();
     const params = useParams();
     const [idPhoto, setIdPhoto] = useState<boolean|null>(true);
+    const [activeIdPhoto, setActiveIdPhoto ] = useState<string>("idPhoto");
+
 
     useEffect(()=>{
         if(params.username)
@@ -32,14 +33,14 @@ const SolveKycAdmin = () => {
                 <div className="flex flex-row w-full h-[60px]">
                     <div className="w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300 cursor-pointer"
                          onClick={()=>{setIdPhoto(true); }}>
-                        <h2 id="idphotoText"
-                            className="underline-offset-2 font-sans text-xl font-bold text-center mt-4 underline">Foto
+                        <h2 id="idphotoText" onClick={()=>setActiveIdPhoto("idPhoto")}
+                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "idPhoto" ? " underline ":""}`} >Foto
                             del frente del documento </h2>
                     </div>
                     <div className="underline-offset-2 w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300 cursor-pointer"
                          onClick={()=>{setIdPhoto(false)}}>
-                        <h2 id="validationphotoText"
-                            className="underline-offset-2 font-sans text-xl font-bold text-center mt-4">Foto validatoria
+                        <h2 id="validationphotoText" onClick={()=>setActiveIdPhoto("validationPhoto")}
+                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "validationPhoto" ? " underline ":""}`}>Foto validatoria
                             con el documento </h2>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import useKycService from "../../hooks/useKycService";
 import {useForm} from "react-hook-form";
 import register from "../../views/Register";
 import {SolveKycForm} from "../KycAdminInformation/KycInformation";
+import {useNavigate} from "react-router-dom";
 
 
 type SolveKycFormProps = {
@@ -15,9 +16,10 @@ const RejectKycForm = ({username}:SolveKycFormProps) => {
     const kycService = useKycService();
     const { register, handleSubmit , formState:{errors}} = useForm<SolveKycForm>();
     const [showPopup, setShowPopup] = useState<boolean>(true);
+    const navigate = useNavigate();
 
     function onSubmit(data:SolveKycForm) {
-        kycService.solveKyc(data,username);
+        kycService.solveKyc(data,username).then(()=> navigate(-1));
     }
 
 

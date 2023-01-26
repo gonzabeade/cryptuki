@@ -6,6 +6,7 @@ import Popup from "reactjs-popup";
 import {QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import AdviceOnP2P from "../AdviceOnP2P";
 import RejectKycForm from "../RejectKycForm/RejectKycForm";
+import {useNavigate} from "react-router-dom";
 
 type KycCardProp = {
     kyc:KycInformationModel,
@@ -19,11 +20,12 @@ export type SolveKycForm = {
 
 const KycInformation = ({kyc,username}:KycCardProp) => {
     const kycService = useKycService();
+    const navigate = useNavigate();
 
     function acceptKyc() {
         kycService.solveKyc(
             {status:"APR",comments:"Bienvenido a cryptuki."}
-            ,username);
+            ,username).then( ()=>navigate(-1) );
     }
 
     return (

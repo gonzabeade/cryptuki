@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
@@ -9,6 +9,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import OfferModel from "../../types/OfferModel";
 import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
+import {useAuth} from "../../contexts/AuthContext";
+import useUserService from "../../hooks/useUserService";
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -22,6 +24,8 @@ const EditOfferForm = () => {
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
     const navigate = useNavigate();
+    const {user} = useAuth();
+    const userService = useUserService();
 
     async function fetchCryptocurrencies(){
         try{

@@ -9,14 +9,12 @@ import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
-import {AxiosError} from "axios";
 
 type BuyOfferFormValues = {
     amount:number
 }
 const BuyOffer = () => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<BuyOfferFormValues>();
-
     const params = useParams();
     const offerService = useOfferService();
     const navigate = useNavigate();
@@ -30,8 +28,10 @@ const BuyOffer = () => {
     async function  retrieveOfferInformation(offerId:number){
         try{
             const resp = await  offerService.getOfferInformation(offerId);
+            const seller =  userService.getUsernameFromURI(resp.seller)
+            if( seller === user?.username) //TODO: check cors
+                navigate("/seller/offer/"+ offerId);
             setOffer(resp);
-
         }catch (e) {
             toast.error("Connection error. Couldn't fetch offer");
         }
@@ -76,12 +76,6 @@ const BuyOffer = () => {
         }
     }
 
-    useEffect(()=>{
-        if(params.id){
-           retrieveOfferInformation(Number(params.id));
-        }
-    },[])
-
     async function fetchSeller(username:string){
         try{
             setSeller(await userService.getUser(username));
@@ -89,6 +83,14 @@ const BuyOffer = () => {
             toast.error("Connection error. Couldn't fetch seller");
         }
     }
+
+    useEffect(()=>{
+        if(params.id){
+           retrieveOfferInformation(Number(params.id));
+        }
+    },[])
+
+
     useEffect(()=>{
             //fetch offer seller model
         if(offer){

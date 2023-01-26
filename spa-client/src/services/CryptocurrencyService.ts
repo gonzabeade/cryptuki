@@ -24,7 +24,8 @@ export class CryptocurrencyService {
 
         for (let i = 0; i < coins.length; i++) {
             const value = apiCall[coins[i].code + '_ARS'];
-            coins[i].price = (Number(value.buy) + Number(value.sell)) / 2;
+            if(value != undefined && value!=null)
+               coins[i].price = (Number(value.buy) + Number(value.sell)) / 2;
         }
         return coins;
 

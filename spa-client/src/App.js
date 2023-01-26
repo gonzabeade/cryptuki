@@ -66,6 +66,7 @@ function App() {
                               <Route path="/admin/complaint/:id" element={<SolveComplaint/>}/>
                               <Route path="/admin/kyc" element={<KycLanding/>}/>
                               <Route path="/admin/kyc/:username" element={<SolveKycAdmin/>}/>
+                              <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
                           </Routes>

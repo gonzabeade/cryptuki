@@ -128,7 +128,7 @@ const SellerDashboard = () => {
                         </p>
                     </div>
                     <div className="mx-auto mt-8">
-                        <a href="/kyc"
+                        <a href="/kyc/upload"
                            className="cursor-pointer py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">
                             Start KYC
                         </a>

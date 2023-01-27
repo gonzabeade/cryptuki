@@ -29,7 +29,7 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
     }
 
     return (
-        <div className="flex flex-col w-1/3 mx-auto">
+        <div className="flex flex-col w-1/3 mx-auto mt-10">
             <div
                 className="flex flex-col shadow-xl rounded-lg py-10 bg-[#FAFCFF] px-5 flex justify-center mx-auto w-3/4">
                 <div className="flex flex-col">

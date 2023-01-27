@@ -28,8 +28,8 @@ const SolveKycAdmin = () => {
     }
 
     return (
-        <div className="flex w-full my-10 z-10">
-            <div className="flex flex-col w-3/5">
+        <div className="ml-72 flex  flex-wrap z-10">
+            <div className="flex flex-col w-3/5 mt-10">
                 <div className="flex flex-row w-full h-[60px]">
                     <div className="w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300 cursor-pointer"
                          onClick={()=>{setIdPhoto(true); }}>
@@ -44,12 +44,12 @@ const SolveKycAdmin = () => {
                             con el documento </h2>
                     </div>
                 </div>
-                {kyc && <div className="w-full h-4/5 mt-5">
+                {kyc && <div className="w-full h-4/5 mt-10">
                     {idPhoto && <div id="idphoto" className="border-2 border-gray-400">
-                        <img src={kyc.idPhoto} className=" w-full mx-auto"/>
+                        <img src={kyc.idPhoto} className=" w-[500px] mx-auto"/>
                     </div> }
                     {!idPhoto && <div id="validationphoto" className="border-2 border-gray-400 hidden">
-                        <img src={kyc.validationPhoto} className="w-full mx-auto"/>
+                        <img src={kyc.validationPhoto} className="w-[500px] mx-auto"/>
                     </div>}
                 </div> }
             </div>

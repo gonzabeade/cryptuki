@@ -28,7 +28,7 @@ const KycLanding = () => {
 
     return (
         <div className="flex flex-col ml-80 h-screen w-screen">
-            <h1 className="font-sans text-4xl font-bold">Validar identidades</h1>
+            <h1 className="font-sans text-3xl font-bold text-polar mt-10">Validar identidades</h1>
             <div className="flex flex-wrap w-full mt-3">
                 <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">
                       {pendingKyc && pendingKyc.map((user => <KycPreview username={user.username} last_login={user.lastLogin}/>))}

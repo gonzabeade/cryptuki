@@ -18,7 +18,7 @@ type TradeAndComplaintProps = {
 const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complainer}:TradeAndComplaintProps) => {
 
     return (
-        <div className="w-1/4">
+        <div>
             <div className="flex flex-col">
                 <div
                     className="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">

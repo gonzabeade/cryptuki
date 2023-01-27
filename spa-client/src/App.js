@@ -1,7 +1,7 @@
 import Navbar from './components/Navbar';
 import AdminNavBar from './components/AdminNavBar/AdminNavBar';
 
-import React, {Suspense, lazy} from "react";
+import React, {Suspense, lazy, useState} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
 import './index.css'
@@ -15,6 +15,7 @@ import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
 import KycLanding from "./views/KycLanding/KycLanding";
 import useUserService from "./hooks/useUserService";
+import NavbarAll from "./components/NavbarAll";
 
 
 //import all pages with lazy import
@@ -44,8 +45,7 @@ function App() {
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  {userService.getRole() && userService.getRole() === "ROLE_ADMIN" && <AdminNavBar/>}
-                  {(!userService.getLoggedInUser() || userService.getRole() === "ROLE_USER")&& <Navbar/>}
+                  <NavbarAll/>
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>

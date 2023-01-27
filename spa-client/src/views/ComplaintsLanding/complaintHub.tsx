@@ -45,9 +45,10 @@ const ComplaintHub = () => {
                         {!complaints && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
                 </div>
             </>:
-            <div className="flex flex-col w-2/3 mt-10">
-                <Loader/>
-            </div>
+            // <div className="flex flex-col w-2/3 mt-10">
+            //     <Loader/>
+            // </div>
+                <></>
             }
         </div>
         </>

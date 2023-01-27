@@ -38,8 +38,10 @@ const Login = () => {
             signin(await userService.getUser(data.username), ()=>{
                 if(location.state && location.state.url) {
                     navigate(location.state.url);
+                }else if( userService.getRole() === "ROLE_ADMIN"){
+                    navigate("/admin")
                 }else{
-                    navigate("/")
+                    navigate('/')
                 }
             });
             await sleep(500);

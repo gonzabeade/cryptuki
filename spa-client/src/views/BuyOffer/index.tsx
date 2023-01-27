@@ -25,6 +25,8 @@ const BuyOffer = () => {
     const tradeService = useTradeService();
     const userService = useUserService();
     const {user} = useAuth();
+    const [min, setMin] = useState<number>(0);
+    const [max, setMax] = useState<number>(0);
 
 
     async function  retrieveOfferInformation(offerId:number){
@@ -34,6 +36,8 @@ const BuyOffer = () => {
             if( seller === user?.username) //TODO: check cors
                 navigate("/seller/offer/"+ offerId);
             setOffer(resp);
+            setMin(resp.minInCrypto * resp.unitPrice);
+            setMax(resp.maxInCrypto * resp.unitPrice);
         }catch (e) {
             attendError("Connection error. Couldn't fetch offer",e);
         }
@@ -140,10 +144,10 @@ const BuyOffer = () => {
                                {
                                    required:"You must input an amount",
                                    min:{
-                                       value: (offer?.minInCrypto! * offer?.unitPrice!),
+                                       value: min,
                                        message:"Amount must be greater to minimum"},
                                    max:{
-                                       value:(offer?.minInCrypto! * offer?.unitPrice!),
+                                       value: max,
                                        message:"Amount must be less than maximum"
                                    }
                                })} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>

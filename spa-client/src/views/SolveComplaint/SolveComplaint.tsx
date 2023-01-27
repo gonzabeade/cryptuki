@@ -137,9 +137,9 @@ const SolveComplaint = () => {
                 {offer && trade && complaint && buyer && seller && complainer &&
                     <TradeAndComplaintInformation offer={offer} trade={trade} complain={complaint} buyer={buyer} complainer={complainer} seller={seller} />
                 }
-                {/*{seller && trade && trade.tradeId && buyer &&*/}
-                {/*        <ChatMessagesForAdmin seller={seller} tradeId={trade.tradeId} buyer={buyer}/>*/}
-                {/*  }*/}
+                {seller && trade && trade.tradeId && buyer &&
+                        <ChatMessagesForAdmin seller={seller} tradeId={trade.tradeId} buyer={buyer}/>
+                  }
                 <div className="flex flex-col w-1/3 h-full justify-center ">
                     <div className="w-full rounded-lg bg-[#FAFCFF] mx-auto py-3 mb-5 text-center border-2 border-polard">
                         <p className="font-sans font-semibold font-polard text-xl">

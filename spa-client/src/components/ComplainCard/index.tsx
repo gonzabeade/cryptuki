@@ -36,7 +36,7 @@ const ComplainCard: React.FC<ComplainCardProfileProps> = ({ complain}) => {
             </div>
             <div className="flex flex-row my-3 mx-auto">
                 <a href={`/admin/complaint/${complain.complainId}`}
-                   className=" text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto">
+                   className=" cursor-pointer text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto">
                     Ver
                 </a>
             </div>

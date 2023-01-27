@@ -4,22 +4,30 @@ import useComplainService from "../../hooks/useComplainService";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
+import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
     const complainService = useComplainService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [actualPage, setActualPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
+    const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
+            actualPage: 0,
+            totalPages: 0,
+            nextUri:'',
+            prevUri:''
+        }
+    );
 
-    async function getComplaints(page?:number, pageSize?:number){
+    async function getComplaints(){
         try{
-            const apiCall = await complainService?.getComplaints(page);
-            setComplaints(apiCall);
+            const apiCall = await complainService?.getComplaints();
+            setComplaints(apiCall.items);
+            if(apiCall.paginatorProps)
+            setPaginatorProps(apiCall.paginatorProps!);
             setIsLoading(false);
-        }catch (e){
-            console.log(e);
+           }catch (e){
+            console.log(e)
             toast.error("Connection error. Failed to fetch complaints")
         }
     }
@@ -33,17 +41,17 @@ const ComplaintHub = () => {
             <h1 className="font-sans text-3xl font-bold text-polar pt-10 pl-10 ">Atender reclamos</h1>
             {!isLoading ? <>
 
-                <div className="flex flex-col divide-x h-full">
+                <div className="flex flex-col divide-x h-full ">
                         {complaints &&
                             <div className="p-10 flex flex-wrap ">
                               {complaints.map(complaints=><ComplainCard complain={complaints} key={complaints.complainId}></ComplainCard>)}
                             </div>}
                         {complaints && complaints.length > 0 &&
                             <div className="flex flex-row mx-40 justify-center ">
-                                {/*<Paginator totalPages={totalPages} actualPage={actualPage} callback={() => console.log("called")}/>*/}
-                                {/*TODO PAGINATOR*/}
+                                <Paginator paginatorProps={paginatorProps} callback={getPaginatedComplaints}/>
+
                             </div>}
-                        {!complaints && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
+                        {(!complaints || complaints.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
                 </div>
             </>:
             <div className="flex flex-col ml-56">
@@ -53,6 +61,21 @@ const ComplaintHub = () => {
         </div>
         </>
     );
+
+    //Callback from Paginator component
+    async function getPaginatedComplaints(uri:string){
+        try{
+            setIsLoading(true);
+
+            const apiCall = await complainService?.getComplaintsByUrl(uri);
+            setComplaints(apiCall.items);
+            setPaginatorProps(apiCall.paginatorProps!);
+            setIsLoading(false);
+
+        }catch (e){
+            toast.error("Connection error. Failed to fetch paginated offers")
+        }
+    }
 };
 
 export default ComplaintHub;

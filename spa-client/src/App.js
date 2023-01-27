@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import LoggedGate from "./components/LoggedGate";
 import {AuthProvider} from "./contexts/AuthContext";
-import ComplaintHub from "./views/ComplaintsLanding/complaintHub";
+import ComplaintHub from "./views/ComplaintsLanding/ComplaintHub";
 import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
 import KycLanding from "./views/KycLanding/KycLanding";
@@ -53,7 +53,7 @@ function App() {
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
                               <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>
-                              <Route path="/support" element={<Support/>}/>
+                                <Route path="/trade/:id/support" element={<Support/>}/>
                               <Route path="/buyer/" element={<LoggedGate children={<BuyerDashboard/>} />}/>
                               <Route path="/seller/" element={<LoggedGate children={<SellerDashboard/>}/>}/>
                               <Route path="/trade/:id/receipt" element={<LoggedGate children={<Receipt/>}/>}/>

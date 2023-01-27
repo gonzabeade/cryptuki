@@ -16,7 +16,6 @@ export function getLinkHeaders(link:string):Link[] {
     const links:string[] = link.split(',');
     const linkHeaders:Link[] = [];
 
-
     if(links.length >= 2){
 
         linkHeaders.push({
@@ -63,7 +62,8 @@ export function getLinkHeaders(link:string):Link[] {
 }
 
 function getPage(link:string):string|null{
-  return new URLSearchParams(link).get("page");
+    const new_link = link.substring(link.indexOf("<") + 1, link.indexOf(">"));
+    return new URLSearchParams(new URL(new_link).search).get("page");
 }
 
 export function getPaginatorProps(link:Link[]):PaginatorPropsValues {

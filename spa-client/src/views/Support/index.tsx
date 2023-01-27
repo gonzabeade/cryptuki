@@ -1,33 +1,27 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
-import useUserService from "../../hooks/useUserService";
-import {useSearchParams} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
+import useComplainService from "../../hooks/useComplainService";
+import {useParams} from "react-router-dom";
 
-type ContactFormValues = {
-    email:string|null,
-    message:string|null,
-    tradeId?:number
+export interface CreateComplainForm {
+    email: string,
+    tradeId:number,
+    message:string
 }
 
-const Support= () => {
+type ContactFormProps = {
+    tradeId: number
+}
 
-    const {user} = useAuth();
-    const { register, handleSubmit, formState: { errors } } = useForm<ContactFormValues>({defaultValues: async () => getDefaultValues()} );
-    const [searchParams]= useSearchParams();
+const Support= ({tradeId}:ContactFormProps) => {
 
-    function getDefaultValues(): ContactFormValues{
-        return {
-            email: user?.email!,
-            message: null
-        }
-    }
+    const { register, handleSubmit, formState: { errors } } = useForm<CreateComplainForm>( );
+    const complainService = useComplainService();
+    const params = useParams();
 
 
-    function onSubmit(data:ContactFormValues){
-        if(searchParams && searchParams.get("tradeId")){
-            //TODO Call endpoint
-        }
+    function onSubmit(data:CreateComplainForm){
+        complainService.createComplain(data);
     }
 
     return (
@@ -47,14 +41,17 @@ const Support= () => {
             </div>
             <div className="flex justify-center">
                 <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
+                    <input type="hidden" value={params.id} {...register("tradeId")}/>
                     <div className="flex flex-col p-5 justify-center">
                         <div className="flex-row justify-center">
-                            <input type="email" className="min-w-full h-10 justify-center rounded-lg p-2" placeholder="Email" {...register("email", {required:true})}/>
+                            <input type="email" className="min-w-full h-10 justify-center rounded-lg p-2" placeholder="Email" {...register("email", {required:"Email is required."})}/>
+                            {errors && errors.email && <span className="text-red-500">{errors.email.message}</span>}
                         </div>
                     </div>
                     <div className="flex flex-col p-5 ">
                         <div className="flex-row justify-center">
-                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder="Message" {...register("message", {required:true})}/>
+                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder="Message" {...register("message", {required:"Message is required."})}/>
+                            {errors && errors.message && <span className="text-red-500">{errors.message.message}</span>}
                         </div>
                     </div>
                     <div className="flex flex-row p-5">

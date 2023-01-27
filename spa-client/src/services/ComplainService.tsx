@@ -1,8 +1,10 @@
 import { paths } from "../common/constants";
 import { AxiosInstance } from "axios";
 import {ComplainModel} from "../types/ComplainModel";
-import {ComplainResolutionForm, CreateComplainForm} from "../components/CreateComplaintForm";
-import solveComplaintForm, {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveComplaintForm";
+import {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveComplaintForm";
+import {CreateComplainForm} from "../views/Support";
+import {PaginatedResults} from "../types/PaginatedResults";
+import {processPaginatedResults} from "../common/utils/utils";
 
 export class ComplainService{
 
@@ -13,13 +15,17 @@ export class ComplainService{
         this.axiosInstance = axiosInstance;
     }
 
-    public async getComplaints(page?:number):Promise<ComplainModel[]>{
+    public async getComplaintsByUrl(url:string):Promise<PaginatedResults<ComplainModel>>{
+        const resp = await this.axiosInstance().get<ComplainModel[]>(url);
+        return processPaginatedResults(resp);
+    }
+
+    public async getComplaints():Promise<PaginatedResults<ComplainModel>>{
         let params= new URLSearchParams();
-        if(page) params.append("page",page.toString()!);
         params.append("status","PENDING");
         const resp = await this.axiosInstance().
             get<ComplainModel[]>(this.basePath,{ params:params });
-        return resp.data;
+        return processPaginatedResults(resp);
     }
 
     public async getComplaintById(complainId:number):Promise<ComplainModel>{
@@ -28,7 +34,7 @@ export class ComplainService{
     }
 
     public async createComplain(newComplain:CreateComplainForm){
-        const resp = await this.axiosInstance().put<ComplainModel>(this.basePath , {
+        const resp = await this.axiosInstance().post<ComplainModel>(this.basePath , {
             tradeId: newComplain.tradeId,
             message: newComplain.message,
         })

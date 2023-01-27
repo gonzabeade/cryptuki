@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
@@ -11,6 +11,7 @@ import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
 import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
+import {AttendError} from "../../common/utils/utils";
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -32,7 +33,7 @@ const EditOfferForm = () => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch cryptocurrencies");
+            AttendError("Connection error. Failed to fetch cryptocurrencies",e);
         }
 
     }
@@ -77,7 +78,7 @@ const EditOfferForm = () => {
                 return resp;
             }
         }catch (e){
-            toast.error("Connection error. Failed to fetch offer");
+            AttendError("Connection error. Failed to fetch offer",e);
         }
 
     }
@@ -92,7 +93,7 @@ const EditOfferForm = () => {
             sleep(1000);
             navigate('/seller');
         }catch (e) {
-            toast.error("Connection error. Failed to modify offer");
+            AttendError("Connection error. Failed to modify offer",e);
         }
     }
 

@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import Message from "../Message";
 import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
-import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
-import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
+import {AttendError} from "../../common/utils/utils";
 
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
@@ -28,7 +27,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                 setMessages(resp);
             }
         }catch (e) {
-            toast.error("Error fetching messages. Check your connection")
+            AttendError("Error fetching messages. Check your connection",e)
         }
 
     }
@@ -43,7 +42,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
             reset();
             getMessages();
         }catch (e) {
-         toast.error("Connection error. Failed to send message");
+         AttendError("Connection error. Failed to send message",e);
         }
 
     }

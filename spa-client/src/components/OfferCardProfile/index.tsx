@@ -5,6 +5,7 @@ import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
 import {Axios, AxiosError, AxiosResponse} from "axios";
+import {AttendError} from "../../common/utils/utils";
 
 type OfferCardProfileProps = {
     offer:OfferModel,
@@ -21,7 +22,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer paused");
             renewOffers(OFFER_STATUS.PausedBySeller);
         }catch (e) {
-            toast.error("Connection error. Couldn't pause offer");
+            AttendError("Connection error. Couldn't pause offer",e);
         }
     }
 
@@ -31,8 +32,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer deleted");
             renewOffers(OFFER_STATUS.Deleted);
         }catch (e:any) {
-            const error = e as AxiosError<{message:string}>;
-            toast.error(error.response?.data.message);
+            AttendError("An error occurred when deleting the offer.",e);
         }
     }
     async function resumeOffer(){
@@ -41,7 +41,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer resumed");
             renewOffers(OFFER_STATUS.Pending);
         }catch (e) {
-            toast.error("Connection error. Couldn't resume offer");
+            AttendError("Connection error. Couldn't resume offer",e);
         }
     }
 

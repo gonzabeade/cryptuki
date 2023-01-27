@@ -2,9 +2,8 @@ import React, {useEffect, useState} from 'react';
 import Message from "../Message";
 import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
-import useUserService from "../../hooks/useUserService";
 import useChatService from "../../hooks/useChatService";
-import {toast} from "react-toastify";
+import {AttendError} from "../../common/utils/utils";
 
 type ChatSnippetProps = {
     buyer: UserModel ,
@@ -22,7 +21,7 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
             const resp = await chatService.getMessages(tradeId);
             setMessages(resp);
         }catch (e) {
-            toast.error("Error fetching messages. Check your connection")
+            AttendError("Error fetching messages. Check your connection",e)
         }
 
     }

@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import useKycService from "../../hooks/useKycService";
 import UserModel from "../../types/UserModel";
 import Paginator from "../../components/Paginator";
+import {AttendError} from "../../common/utils/utils";
 
 const KycLanding = () => {
     const kycService = useKycService();
@@ -16,7 +17,7 @@ const KycLanding = () => {
             const apiCall = await kycService?.getPendingKycInformation(page, pageSize);
             setPendingKyc(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch pending kyc requests")
+            AttendError("Connection error. Failed to fetch pending kyc requests",e)
         }
 
     }

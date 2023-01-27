@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import Paginator from "../../components/Paginator";
+import {AttendError} from "../../common/utils/utils";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
@@ -19,8 +20,7 @@ const ComplaintHub = () => {
             setComplaints(apiCall);
             setIsLoading(false);
         }catch (e){
-            console.log(e);
-            toast.error("Connection error. Failed to fetch complaints")
+            AttendError("Connection error. Failed to fetch complaints",e)
         }
     }
 

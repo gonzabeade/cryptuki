@@ -9,6 +9,8 @@ import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
+import {AxiosError} from "axios";
+import {AttendError} from "../../common/utils/utils";
 
 type BuyOfferFormValues = {
     amount:number
@@ -33,7 +35,7 @@ const BuyOffer = () => {
                 navigate("/seller/offer/"+ offerId);
             setOffer(resp);
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch offer");
+            AttendError("Connection error. Couldn't fetch offer",e);
         }
 
     }
@@ -72,7 +74,7 @@ const BuyOffer = () => {
             }
 
         }catch (e){
-            toast.error("You need to be logged in to make a trade proposal");
+            AttendError("You need to be logged in to make a trade proposal",e);
         }
     }
 
@@ -80,7 +82,7 @@ const BuyOffer = () => {
         try{
             setSeller(await userService.getUser(username));
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch seller");
+           AttendError("Connection error. Couldn't fetch seller",e);
         }
     }
 
@@ -183,6 +185,8 @@ const BuyOffer = () => {
             </div>
         </div>
     );
+
+
 };
 
 export default BuyOffer;

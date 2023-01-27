@@ -4,6 +4,7 @@ import {KycInformationModel} from "../../types/KycInformationModel";
 import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import KycInformation from "../../components/KycAdminInformation/KycInformation";
+import {AttendError} from "../../common/utils/utils";
 
 const SolveKycAdmin = () => {
     const kycService = useKycService();
@@ -23,7 +24,7 @@ const SolveKycAdmin = () => {
             const apiCall = await kycService?.getKycInformation(username);
             setKyc(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch kyc information")
+            AttendError("Connection error. Failed to fetch kyc information",e)
         }
     }
 

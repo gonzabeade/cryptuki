@@ -11,6 +11,7 @@ import useUserService from "../../hooks/useUserService";
 import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {useAuth} from "../../contexts/AuthContext";
+import {AttendError} from "../../common/utils/utils";
 
 const Landing = () => {
 
@@ -49,7 +50,7 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch offers")
+            AttendError("Connection error. Failed to fetch offers",e)
         }
     }
     //Callback from Paginator component
@@ -66,7 +67,7 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch paginated offers")
+            AttendError("Connection error. Failed to fetch paginated offers",e)
         }
     }
 
@@ -84,7 +85,7 @@ const Landing = () => {
             setPaginatorProps(apiCall.paginatorProps!);
 
         }catch (e) {
-            toast.error("Connection error. Failed to fetch ordered offers")
+            AttendError("Connection error. Failed to fetch ordered offers",e)
         }
     }
 
@@ -117,7 +118,7 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch offers")
+            AttendError("Connection error. Failed to fetch offers",e)
         }
     }
 

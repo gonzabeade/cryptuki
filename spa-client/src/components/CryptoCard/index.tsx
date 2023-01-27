@@ -7,6 +7,7 @@ import RatingStars from "../RatingStars";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
+import {AttendError} from "../../common/utils/utils";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();
     const [seller, setSeller] = React.useState<UserModel>();
@@ -17,7 +18,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             const resp = await userService.getUser(username);
             setSeller(resp);
         }catch (e) {
-            toast.error("Connection error. Failed to fetch user data");
+            AttendError("Connection error. Failed to fetch user data",e);
         }
     }
 

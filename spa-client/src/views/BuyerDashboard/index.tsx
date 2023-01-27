@@ -4,13 +4,11 @@ import StatusCards from "../../components/StatusCards/StatusCards";
 import Paginator from "../../components/Paginator";
 import TransactionModel from "../../types/TransactionModel";
 import useTradeService from "../../hooks/useTradeService";
-import useUserService from "../../hooks/useUserService";
-import {toast} from "react-toastify";
 import TradeBuyerCard from "../../components/TradeBuyerCard";
-import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {TRADE_STATUS} from "../../common/constants";
+import {AttendError} from "../../common/utils/utils";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -34,7 +32,7 @@ const BuyerDashboard = () => {
                 setTrades(resp.items);
             }
         }catch (e){
-            toast.error("Connection error. Failed to fetch trades");
+            AttendError("Connection error. Failed to fetch trades",e);
         }
     }
 
@@ -46,7 +44,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            toast.error("Couldn't fethc trades with status " + status);
+            AttendError("Couldn't fethc trades with status " + status,e);
         }
     }
     async function fetchPage(uri:string){
@@ -57,7 +55,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch trades")
+            AttendError("Connection error. Couldn't fetch trades",e)
         }
     }
 

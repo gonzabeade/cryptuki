@@ -14,6 +14,7 @@ import ComplaintHub from "./views/ComplaintsLanding/complaintHub";
 import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
 import KycLanding from "./views/KycLanding/KycLanding";
+import useUserService from "./hooks/useUserService";
 
 
 //import all pages with lazy import
@@ -37,35 +38,36 @@ const Verify = lazy(()=>import("./views/Verify/index"));
 
 
 function App() {
+    const userService = useUserService();
   return (
       <AuthProvider>
       <BrowserRouter>
               <div className="App">
                   <ToastContainer/>
-                  <Navbar></Navbar>
-                  {/*<AdminNavBar/>*/}
+                  {userService.getRole() && userService.getRole() === "ROLE_ADMIN" && <AdminNavBar/>}
+                  {(!userService.getLoggedInUser() || userService.getRole() === "ROLE_USER")&& <Navbar/>}
                   <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>
                               <Route path="/register" element={<Register/>}/>
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
-                              <Route path="/trade/:id" element={<LoggedGate><Trade/></LoggedGate>}/>
+                              <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>
                               <Route path="/support" element={<Support/>}/>
-                              <Route path="/buyer/" element={<LoggedGate><BuyerDashboard/></LoggedGate>}/>
-                              <Route path="/seller/" element={<LoggedGate><SellerDashboard/></LoggedGate>}/>
-                              <Route path="/trade/:id/receipt" element={<LoggedGate><Receipt/></LoggedGate>}/>
-                              <Route path="/chat/:id" element={<LoggedGate><SellerTrade/></LoggedGate>}/>
+                              <Route path="/buyer/" element={<LoggedGate children={<BuyerDashboard/>} />}/>
+                              <Route path="/seller/" element={<LoggedGate children={<SellerDashboard/>}/>}/>
+                              <Route path="/trade/:id/receipt" element={<LoggedGate children={<Receipt/>}/>}/>
+                              <Route path="/chat/:id" element={<LoggedGate children={<SellerTrade/>}/>}/>
                               <Route path="/seller/offer/:id"
-                                     element={<LoggedGate><SellerOfferDashboard/></LoggedGate>}/>
-                              <Route path="/offer/upload" element={<LoggedGate><UploadAd/></LoggedGate>}/>
-                              <Route path="/kyc/upload" element={<LoggedGate><UploadKyc/></LoggedGate>}/>
-                              <Route path="/offer/:id/edit" element={<LoggedGate><EditOffer/></LoggedGate>}/>
+                                     element={<LoggedGate children={<SellerOfferDashboard/>}/>}/>
+                              <Route path="/offer/upload" element={<LoggedGate children={<UploadAd/>}/>}/>
+                              <Route path="/kyc/upload" element={<LoggedGate children={<UploadKyc/>}/>}/>
+                              <Route path="/offer/:id/edit" element={<LoggedGate children={<EditOffer/>}/>}/>
                               <Route path="/verify" element={<Verify/>}/>
-                              <Route path="/admin" element={<ComplaintHub/>}/>
-                              <Route path="/admin/complaint/:id" element={<SolveComplaint/>}/>
-                              <Route path="/admin/kyc" element={<KycLanding/>}/>
-                              <Route path="/admin/kyc/:username" element={<SolveKycAdmin/>}/>
+                              <Route path="/admin" element={<LoggedGate children={<ComplaintHub/>} admin={true} />} />
+                              <Route path="/admin/complaint/:id" element={<LoggedGate children={<SolveComplaint/>} admin={true}/>}/>
+                              <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
+                              <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
                               <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>

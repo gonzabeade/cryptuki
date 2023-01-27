@@ -13,6 +13,7 @@ import useUserService from "../../hooks/useUserService";
 import SolveComplaintForm from "../../components/SolveComplaintForm/SolveComplaintForm";
 import {XCircleIcon} from "@heroicons/react/24/outline";
 import TransactionModel from "../../types/TransactionModel";
+import {AttendError} from "../../common/utils/utils";
 
 
 const SolveComplaint = () => {
@@ -46,7 +47,7 @@ const SolveComplaint = () => {
                 else setOther(seller);
             }
         }catch (e){
-            toast.error("Connection error. Failed to fetch Trade members")
+            AttendError("Connection error. Failed to fetch Trade members",e)
         }
     }
 
@@ -57,7 +58,7 @@ const SolveComplaint = () => {
                 setOffer(resp);
                 return resp;
         }catch (e){
-            toast.error("Connection error. Failed to fetch offer");
+            AttendError("Connection error. Failed to fetch offer",e);
         }
 
     }
@@ -68,7 +69,7 @@ const SolveComplaint = () => {
             setComplaint(resp);
             return resp;
         }catch (e){
-            toast.error("Connection error. Failed to fetch complaint");
+            AttendError("Connection error. Failed to fetch complaint",e);
         }
 
     }
@@ -78,7 +79,7 @@ const SolveComplaint = () => {
             setTrade(resp);
             return resp;
         }catch (e){
-            toast.error("Connection error. Failed to fetch Trade");
+            AttendError("Connection error. Failed to fetch Trade",e);
         }
 
     }
@@ -88,7 +89,7 @@ const SolveComplaint = () => {
             const seller = await userService?.getUserByUrl(sellerUrl);
             setSeller(seller);
         }catch (e){
-            toast.error("Connection error. Failed to fetch seller")
+            AttendError("Connection error. Failed to fetch seller",e)
         }
     }
 

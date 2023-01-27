@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import {useEffect} from "react";
 import {useAuth} from "../../contexts/AuthContext";
+import {AttendError} from "../../common/utils/utils";
 
 
 type LoginFormValues = {
@@ -46,7 +47,7 @@ const Login = () => {
             });
             await sleep(500);
         }catch (e){
-            toast.error("Invalid credentials");
+            AttendError("Invalid credentials",e);
         }
 
     }

@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useOfferService from "../../hooks/useOfferService";
 import {useNavigate} from "react-router-dom";
+import {AttendError} from "../../common/utils/utils";
 
 export interface UploadFormValues {
     minInCrypto:number,
@@ -29,8 +30,7 @@ const UploadForm = () => {
              const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
              setCryptoCurrencies(apiCall);
          }catch (e) {
-             console.log(e)
-             toast.error("Connection error. Failed to fetch cryptocurrencies");
+             AttendError("Connection error. Failed to fetch cryptocurrencies",e);
          }
     }
 
@@ -66,7 +66,7 @@ const UploadForm = () => {
             navigate('/seller');
         }catch (e) {
             console.log(e)
-            toast.error("Check your connection. Creation of offer failed.")
+            AttendError("Check your connection. Creation of offer failed.",e)
         }
     }
 

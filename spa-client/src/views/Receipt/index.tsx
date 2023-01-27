@@ -10,6 +10,7 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
+import {AttendError} from "../../common/utils/utils";
 
 
 const Receipt = () => {
@@ -30,7 +31,7 @@ const Receipt = () => {
             const resp = await tradeService.getTradeInformation(tradeId);
             setTrade(resp);
         }catch (e){
-            toast.error("Error fetching trade");
+            AttendError("Error fetching trade",e);
         }
     }
 
@@ -54,7 +55,7 @@ const Receipt = () => {
                 setCounterPart(resp);
             }
         }catch (e){
-            toast.error("Error fetching buyer or seller");
+            AttendError("Error fetching buyer or seller",e);
         }
     }
 

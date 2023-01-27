@@ -14,8 +14,10 @@ import ComplaintHub from "./views/ComplaintsLanding/ComplaintHub";
 import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
 import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
 import KycLanding from "./views/KycLanding/KycLanding";
-import useUserService from "./hooks/useUserService";
 import NavbarAll from "./components/NavbarAll";
+
+import ApiError from "./views/ApiError";
+
 
 
 //import all pages with lazy import
@@ -69,6 +71,7 @@ function App() {
                               <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
                               <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
+                              <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
                           </Routes>

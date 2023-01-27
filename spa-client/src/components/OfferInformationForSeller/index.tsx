@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 import useTradeService from "../../hooks/useTradeService";
 import {TRADE_STATUS} from "../../common/constants";
+import {AttendError} from "../../common/utils/utils";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
@@ -32,7 +33,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 setBuyer(resp);
             }
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch buyer");
+            AttendError("Connection error. Couldn't fetch buyer",e);
         }
     }
 
@@ -47,7 +48,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 const resp = await offerService.getOfferInformation(Number(offerId));
                 setOffer(resp);
             }catch (e) {
-                toast.error("Connection error. Couldn't fetch offer");
+                AttendError("Connection error. Couldn't fetch offer",e);
             }
         }
     }
@@ -76,7 +77,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 callback(status);
             }
         }catch (e) {
-            toast.error("Connection error. Couldn't change trade status");
+            AttendError("Connection error. Couldn't change trade status",e);
         }
     }
 

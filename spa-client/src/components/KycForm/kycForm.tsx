@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
 import axios from "axios";
+import {AttendError} from "../../common/utils/utils";
 
 export interface UploadKycValues {
     names:string,
@@ -44,7 +45,7 @@ const KycForm = () => {
             navigate('/');
         }
         catch (e) {
-            toast.error("Connection error. Please try again later");
+            AttendError("Connection error. Please try again later",e);
         }
     }
 

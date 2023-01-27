@@ -6,6 +6,7 @@ import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
+import {AttendError} from "../../common/utils/utils";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
@@ -26,9 +27,9 @@ const ComplaintHub = () => {
             if(apiCall.paginatorProps)
             setPaginatorProps(apiCall.paginatorProps!);
             setIsLoading(false);
-           }catch (e){
-            console.log(e)
-            toast.error("Connection error. Failed to fetch complaints")
+
+        }catch (e){
+            AttendError("Connection error. Failed to fetch complaints",e)
         }
     }
 

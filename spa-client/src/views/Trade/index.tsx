@@ -14,6 +14,7 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+import {AttendError} from "../../common/utils/utils";
 
 const Trade =  () => {
 
@@ -51,7 +52,7 @@ const Trade =  () => {
                 setTrade(resp);
             }
         }catch (e) {
-            toast.error("Connection error. Failed to fetch trade");
+            AttendError("Connection error. Failed to fetch trade",e);
         }
 
     }
@@ -60,7 +61,7 @@ const Trade =  () => {
             const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
-            toast.error("Connection error. Failed to take back proposal");
+            AttendError("Connection error. Failed to take back proposal",e);
         }
     }
 
@@ -71,7 +72,7 @@ const Trade =  () => {
                 setSeller(resp);
             }
         }catch (e) {
-                toast.error("Connection error. Failed to fetch seller")
+                AttendError("Connection error. Failed to fetch seller",e)
         }
 
     }
@@ -84,7 +85,7 @@ const Trade =  () => {
             }
         }catch (e) {
             console.log(e)
-            toast.error("Connection error. Could not fetch offer");
+            AttendError("Connection error. Could not fetch offer",e);
         }
     }
 

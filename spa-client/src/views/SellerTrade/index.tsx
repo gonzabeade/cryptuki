@@ -6,7 +6,7 @@ import useTradeService from "../../hooks/useTradeService";
 import TransactionModel from "../../types/TransactionModel";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
-import {toast} from "react-toastify";
+import {AttendError} from "../../common/utils/utils";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();
@@ -23,7 +23,7 @@ const SellerTrade = () => {
             const resp = await tradeService.getTradeInformation(Number(tradeId));
             setTrade(resp);
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch trade");
+            AttendError("Connection error. Couldn't fetch trade",e);
         }
     }
     async function fetchCounterPart(){
@@ -33,7 +33,7 @@ const SellerTrade = () => {
                 setCounterPart(resp);
 
             }catch (e) {
-                toast.error("Connection error. Couldn't fetch counterpart");
+                AttendError("Connection error. Couldn't fetch counterpart",e);
             }
         }
     }

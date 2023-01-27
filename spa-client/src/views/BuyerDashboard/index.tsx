@@ -8,7 +8,7 @@ import TradeBuyerCard from "../../components/TradeBuyerCard";
 import {useAuth} from "../../contexts/AuthContext";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {TRADE_STATUS} from "../../common/constants";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -32,7 +32,7 @@ const BuyerDashboard = () => {
                 setTrades(resp.items);
             }
         }catch (e){
-            AttendError("Connection error. Failed to fetch trades",e);
+            attendError("Connection error. Failed to fetch trades",e);
         }
     }
 
@@ -44,7 +44,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            AttendError("Couldn't fethc trades with status " + status,e);
+            attendError("Couldn't fethc trades with status " + status,e);
         }
     }
     async function fetchPage(uri:string){
@@ -55,7 +55,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            AttendError("Connection error. Couldn't fetch trades",e)
+            attendError("Connection error. Couldn't fetch trades",e)
         }
     }
 

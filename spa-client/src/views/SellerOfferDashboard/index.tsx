@@ -10,7 +10,7 @@ import useOfferService from "../../hooks/useOfferService";
 import {TRADE_STATUS} from "../../common/constants";
 import Paginator from "../../components/Paginator";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 const SellerOfferDashboard = () => {
 
@@ -37,7 +37,7 @@ const SellerOfferDashboard = () => {
             setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
         }catch (e){
-            AttendError("Connection error. Couldn't fetch trades",e);
+            attendError("Connection error. Couldn't fetch trades",e);
         }
     }
 
@@ -54,7 +54,7 @@ const SellerOfferDashboard = () => {
             }
 
         } catch (e) {
-            AttendError("Connection error. Failed to fetch trades",e);
+            attendError("Connection error. Failed to fetch trades",e);
         }
     }
     async function getPaginatedTrades(uri:string){
@@ -63,7 +63,7 @@ const SellerOfferDashboard = () => {
             setTrades(resp.items);
             setPaginatorProps(resp.paginatorProps!);
         }catch (e) {
-            AttendError("Connection  error. Failed to fetch trades",e);
+            attendError("Connection  error. Failed to fetch trades",e);
         }
     }
 

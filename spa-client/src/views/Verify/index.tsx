@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 type VerifyFormValues ={
     code:number
 }
@@ -19,7 +19,7 @@ const Verify = () => {
             await userService.verifyUser(data.code, searchParams.get("user")!);
             toast.success("Successfully verified!");
         }catch (e){
-            AttendError("Connection error. Please try again later",e);
+            attendError("Connection error. Please try again later",e);
         }
 
     }

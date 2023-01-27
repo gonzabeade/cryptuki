@@ -11,7 +11,7 @@ import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
 import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -33,7 +33,7 @@ const EditOfferForm = () => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            AttendError("Connection error. Failed to fetch cryptocurrencies",e);
+            attendError("Connection error. Failed to fetch cryptocurrencies",e);
         }
 
     }
@@ -78,7 +78,7 @@ const EditOfferForm = () => {
                 return resp;
             }
         }catch (e){
-            AttendError("Connection error. Failed to fetch offer",e);
+            attendError("Connection error. Failed to fetch offer",e);
         }
 
     }
@@ -93,7 +93,7 @@ const EditOfferForm = () => {
             sleep(1000);
             navigate('/seller');
         }catch (e) {
-            AttendError("Connection error. Failed to modify offer",e);
+            attendError("Connection error. Failed to modify offer",e);
         }
     }
 

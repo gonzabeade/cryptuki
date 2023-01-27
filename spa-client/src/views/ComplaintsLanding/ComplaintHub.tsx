@@ -6,7 +6,7 @@ import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
@@ -29,7 +29,7 @@ const ComplaintHub = () => {
             setIsLoading(false);
 
         }catch (e){
-            AttendError("Connection error. Failed to fetch complaints",e)
+            attendError("Connection error. Failed to fetch complaints",e)
         }
     }
 

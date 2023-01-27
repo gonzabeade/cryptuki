@@ -3,7 +3,7 @@ import Message from "../Message";
 import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 type ChatSnippetProps = {
     buyer: UserModel ,
@@ -21,7 +21,7 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
             const resp = await chatService.getMessages(tradeId);
             setMessages(resp);
         }catch (e) {
-            AttendError("Error fetching messages. Check your connection",e)
+            attendError("Error fetching messages. Check your connection",e)
         }
 
     }

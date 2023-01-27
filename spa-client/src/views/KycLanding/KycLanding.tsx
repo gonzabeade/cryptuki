@@ -6,7 +6,7 @@ import UserModel from "../../types/UserModel";
 import Paginator from "../../components/Paginator";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Loader from "../../components/Loader";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 const KycLanding = () => {
     const kycService = useKycService();
@@ -27,7 +27,7 @@ const KycLanding = () => {
             setPaginatorProps(apiCall.paginatorProps!);
             setLoading(false);
         }catch (e){
-            AttendError("Connection error. Failed to fetch pending kyc requests",e)
+            attendError("Connection error. Failed to fetch pending kyc requests",e)
         }
 
     }

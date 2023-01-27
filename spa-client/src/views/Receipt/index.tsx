@@ -10,7 +10,7 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 
 const Receipt = () => {
@@ -31,7 +31,7 @@ const Receipt = () => {
             const resp = await tradeService.getTradeInformation(tradeId);
             setTrade(resp);
         }catch (e){
-            AttendError("Error fetching trade",e);
+            attendError("Error fetching trade",e);
         }
     }
 
@@ -55,7 +55,7 @@ const Receipt = () => {
                 setCounterPart(resp);
             }
         }catch (e){
-            AttendError("Error fetching buyer or seller",e);
+            attendError("Error fetching buyer or seller",e);
         }
     }
 

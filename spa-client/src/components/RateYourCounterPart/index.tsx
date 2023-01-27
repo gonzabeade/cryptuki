@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
 import useTradeService from "../../hooks/useTradeService";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 
 type RateYourCounterPartProps = {
@@ -36,7 +36,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                }
            }
        }catch (e) {
-            AttendError("Connection failed. Failed to get rating info from Trade",e)
+            attendError("Connection failed. Failed to get rating info from Trade",e)
        }
     }
 
@@ -68,7 +68,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
             setRating(rating * 2);
             setAlreadyRated(true);
         }catch (e) {
-            AttendError("Connection Error, failed to rate your counterpart",e)
+            attendError("Connection Error, failed to rate your counterpart",e)
         }
     }
 

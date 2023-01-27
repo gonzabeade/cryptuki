@@ -15,7 +15,7 @@ import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 
 const SellerDashboard = () => {
@@ -43,7 +43,7 @@ const SellerDashboard = () => {
                 setKyc(resp);
             }
         }catch (e) {
-            AttendError("Connection failed. Couldn't fetch KYC status",e)
+            attendError("Connection failed. Couldn't fetch KYC status",e)
         }
     }
     useEffect(()=>{
@@ -59,7 +59,7 @@ const SellerDashboard = () => {
                 setPaginatorProps(resp.paginatorProps);
             }
         }catch (e) {
-            AttendError("Connection error. Failed to fetch offers",e);
+            attendError("Connection error. Failed to fetch offers",e);
         }
     }
 
@@ -71,7 +71,7 @@ const SellerDashboard = () => {
             }
 
         }catch (e) {
-            AttendError("Connection error. Failed to fetch lasts transactions",e);
+            attendError("Connection error. Failed to fetch lasts transactions",e);
         }
     }
     async function getPagginatedOffers(uri:string){
@@ -83,7 +83,7 @@ const SellerDashboard = () => {
             setPaginatorProps(apiCall.paginatorProps!);
 
         }catch (e){
-            AttendError("Connection error. Failed to fetch paginated offers",e)
+            attendError("Connection error. Failed to fetch paginated offers",e)
         }
     }
 
@@ -104,7 +104,7 @@ const SellerDashboard = () => {
            }
            setSelectedStatus(status);
         }catch (e) {
-            AttendError("Connection error fetching offers with status "+ status,e)
+            attendError("Connection error fetching offers with status "+ status,e)
         }
 
     }

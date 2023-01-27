@@ -4,7 +4,7 @@ import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
 import {useForm} from "react-hook-form";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
@@ -27,7 +27,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                 setMessages(resp);
             }
         }catch (e) {
-            AttendError("Error fetching messages. Check your connection",e)
+            attendError("Error fetching messages. Check your connection",e)
         }
 
     }
@@ -42,7 +42,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
             reset();
             getMessages();
         }catch (e) {
-         AttendError("Connection error. Failed to send message",e);
+         attendError("Connection error. Failed to send message",e);
         }
 
     }

@@ -138,7 +138,7 @@ export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchPa
     }
 }
 
-export function AttendError(message:string, error:any){
+export function attendError(message:string, error:any){
     if( error instanceof AxiosError && (error.response !== undefined || error.message !== undefined))
     {
         const errorMsg =  error.response !== undefined ? error.response.data.message : error.message;

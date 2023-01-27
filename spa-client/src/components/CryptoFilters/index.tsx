@@ -5,7 +5,7 @@ import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 export type CryptoFormValues = {
 
@@ -29,7 +29,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            AttendError("Connection error. Failed to fetch cryptocurrencies",e)
+            attendError("Connection error. Failed to fetch cryptocurrencies",e)
 
         }
 

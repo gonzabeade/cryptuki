@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -29,7 +29,7 @@ const Register = () => {
             await sleep(1000);
             navigate('/verify?user='+data.username);
         }catch (e) {
-            AttendError("Connection error. Please try again later",e);
+            attendError("Connection error. Please try again later",e);
         }
 
     }

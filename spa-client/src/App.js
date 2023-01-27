@@ -41,7 +41,6 @@ const Verify = lazy(()=>import("./views/Verify/index"));
 
 
 function App() {
-    const userService = useUserService();
   return (
       <AuthProvider>
       <BrowserRouter>

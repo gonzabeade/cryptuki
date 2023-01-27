@@ -5,7 +5,7 @@ import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {TRADE_STATUS} from "../../common/constants";
 import useUserService from "../../hooks/useUserService";
-import {AttendError} from "../../common/utils/utils";
+import {attendError} from "../../common/utils/utils";
 
 type TradeCardProp = {
     trade:TransactionModel
@@ -36,7 +36,7 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                 setOffer(resp);
             }
         }catch (e) {
-            AttendError("Connection error. Couldn't fetch offer",e);
+            attendError("Connection error. Couldn't fetch offer",e);
         }
 
     }

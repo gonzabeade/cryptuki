@@ -67,7 +67,7 @@ export class UserService {
         });
     }
     public async getKYCStatus(username:string){
-        const resp = await this.axiosInstance().post(this.basePath + username + '/kyc');
+        const resp = await this.axiosInstance().get(this.basePath + username + '/kyc');
         if(resp.status === 204){
             return null;
         }else{

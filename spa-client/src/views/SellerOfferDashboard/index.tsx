@@ -45,7 +45,6 @@ const SellerOfferDashboard = () => {
         try {
             if (params.id) {
                 const resp = await tradeService.getTradesWithOfferId(Number(params.id));
-                console.log(resp.items)
                 setTrades(resp.items);
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);

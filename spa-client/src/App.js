@@ -5,6 +5,9 @@ import React, {Suspense, lazy, useState} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
 import './index.css'
+// import i18n (needs to be bundled ;))
+import './i18n';
+
 import Error from "./views/Error";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';

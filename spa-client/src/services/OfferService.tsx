@@ -128,7 +128,6 @@ export class OfferService {
     public getSearchParamsFromFilters(filters: CryptoFormValues|undefined,  orderCriteria?:string, username?:string|null): URLSearchParams{
         const params = new URLSearchParams();
         if(filters){
-            console.log("a")
             if(filters.cryptos){
                 for(let crypto of filters.cryptos){
                     params.append('crypto_code', crypto);
@@ -142,17 +141,14 @@ export class OfferService {
         }
 
         if(orderCriteria){
-            console.log("b")
             params.append('order_by', orderCriteria);
         }
 
         params.append('status', OFFER_STATUS.Pending);
 
         if(username){
-            console.log("c")
             params.append('exclude_user', username);
         }
-        console.log(params)
         return params;
     }
 }

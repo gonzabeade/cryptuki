@@ -18,7 +18,7 @@ public class OfferFilter {
 
     /* Attributes that determine paging */
     private int page = 0;
-    private int pageSize = 1;
+    private int pageSize = 10;
 
     /* Attributes that order offers*/
     private OfferOrderCriteria orderCriteria = OfferOrderCriteria.DATE;

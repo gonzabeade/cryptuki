@@ -4,6 +4,7 @@ import {AxiosInstance} from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
 import {PaginatedResults} from "../types/PaginatedResults";
 import {processPaginatedResults} from "../common/utils/utils";
+import {CryptoFormValues} from "../components/CryptoFilters";
 
 export class OfferService {
 
@@ -122,6 +123,37 @@ export class OfferService {
             unitPrice: offer.unitPrice,
             comments: offer.comments
         }, OFFER_STATUS.Pending);
+    }
+
+    public getSearchParamsFromFilters(filters: CryptoFormValues|undefined,  orderCriteria?:string, username?:string|null): URLSearchParams{
+        const params = new URLSearchParams();
+        if(filters){
+            console.log("a")
+            if(filters.cryptos){
+                for(let crypto of filters.cryptos){
+                    params.append('crypto_code', crypto);
+                }
+            }
+            if(filters.locations){
+                for(let location of filters.locations){
+                    params.append('location', location);
+                }
+            }
+        }
+
+        if(orderCriteria){
+            console.log("b")
+            params.append('order_by', orderCriteria);
+        }
+
+        params.append('status', OFFER_STATUS.Pending);
+
+        if(username){
+            console.log("c")
+            params.append('exclude_user', username);
+        }
+        console.log(params)
+        return params;
     }
 }
 

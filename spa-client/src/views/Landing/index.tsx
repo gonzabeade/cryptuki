@@ -18,7 +18,10 @@ const Landing = () => {
     const [offers, setOffers] = useState<OfferModel[]|null>();
     const offerService = useOfferService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [offerParams, setOfferParams] = useState<URLSearchParams>(new URLSearchParams());
+
+    const [filters, setFilters] = useState<CryptoFormValues>();
+    const [orderCriteria, setOrderCriteria] = useState<string>();
+
     const {user} = useAuth();
     const userService = useUserService();
 
@@ -36,12 +39,7 @@ const Landing = () => {
 
             setIsLoading(true);
 
-            const params =  new URLSearchParams();
-            if(paginatorProps){
-                params.append('page', paginatorProps.actualPage.toString());
-            }
-            params.append('status', OFFER_STATUS.Pending);
-            params.append('exclude_user', userService.getLoggedInUser()!);
+            const params =  offerService.getSearchParamsFromFilters(filters, orderCriteria, userService.getLoggedInUser());
 
             const apiCall = await offerService?.getOffers(params);
 
@@ -53,19 +51,18 @@ const Landing = () => {
             attendError("Connection error. Failed to fetch offers",e)
         }
     }
+
     //Callback from Paginator component
     async function getPaginatedOffers(uri:string){
         try{
             const params = offerService.getSearchParamsFromURI(uri);
-
             setIsLoading(true);
 
             const apiCall = await offerService?.getOffers(params);
-
             setOffers(apiCall.items);
             setPaginatorProps(apiCall.paginatorProps!);
-            setIsLoading(false);
 
+            setIsLoading(false);
         }catch (e){
             attendError("Connection error. Failed to fetch paginated offers",e)
         }
@@ -73,50 +70,16 @@ const Landing = () => {
 
     async function orderOffers(order_by:string){
         try{
-            setIsLoading(true);
-
-            offerParams.append('order_by', order_by);
-            offerParams.append("exclude_user", userService.getLoggedInUser()!);
-
-            const apiCall = await offerService?.getOffers(offerParams);
-
-            setIsLoading(false);
-            setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps!);
-
+            setOrderCriteria(order_by);
         }catch (e) {
             attendError("Connection error. Failed to fetch ordered offers",e)
         }
     }
 
+
     async function getOffersWithFilters(data:CryptoFormValues){
         try{
-            setIsLoading(true);
-
-            const params =  new URLSearchParams();
-            params.append('status', OFFER_STATUS.Pending);
-            params.append('exclude_user', userService.getLoggedInUser()!);
-
-            data.cryptos?.forEach((crypto) => {
-                params.append('crypto_code', crypto);
-            });
-
-            data.locations?.forEach((location) => {
-                params.append('location', location);
-            });
-
-           if(data.amount && data.amountCurrency){
-               params.append('amount', data.amount.toString());
-               params.append('amountCurrency', data.amountCurrency);
-           }
-
-            const apiCall = await offerService?.getOffers(params);
-
-            setOffers(apiCall.items);
-            setPaginatorProps(apiCall.paginatorProps!);
-            setOfferParams(params);
-            setIsLoading(false);
-
+            setFilters(data);
         }catch (e){
             attendError("Connection error. Failed to fetch offers",e)
         }
@@ -124,7 +87,7 @@ const Landing = () => {
 
     useEffect(() => {
         getOffers();
-    }, [user]);
+    }, [user, orderCriteria, filters]);
 
     return (<>
             <div className="flex flex-wrap w-full h-full justify-between">

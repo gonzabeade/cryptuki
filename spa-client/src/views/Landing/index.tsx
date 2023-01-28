@@ -102,8 +102,8 @@ const Landing = () => {
                                         <select className="p-2 rounded-lg" onChange={(e) => {
                                             orderOffers(e.target.value)
                                         }}>
-                                            <option value={"PRICE_LOWER"}>Lowest Price</option>
                                             <option value={"DATE"}>Most recent</option>
+                                            <option value={"PRICE_LOWER"}>Lowest Price</option>
                                             <option value={"RATE"}>Best Rated user</option>
                                             <option value={"PRICE_UPPER"}>Higher price</option>
                                             <option value={"LAST_LOGIN"}>Seller Last login</option>

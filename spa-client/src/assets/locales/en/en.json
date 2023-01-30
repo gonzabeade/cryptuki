@@ -53,7 +53,6 @@
   "help": "See details",
   "resumeTrade": "Resume trade",
   "buyerInformation": "Buyer's information",
-
   "tradeQuantity": "Trades completed",
   "lastLogin": "last login",
   "firstChat": "Automatic response",
@@ -164,7 +163,7 @@
   "OPEN": "Open",
   "CLOSED": "Close",
   "sell": "Sell",
-  "priceLowToHigh": "Lowest price to highest",
+  "priceLowToHigh": "Lowest price",
   "priceHighToLow": "Higher price to lowest",
   "buyOrder": "Open trade",
   "online": "Online",

@@ -27,9 +27,6 @@ i18n
             es:{
                 translation: spanishJSON
             }
-        },
-        react: {
-            useSuspense: false
         }
     });
 

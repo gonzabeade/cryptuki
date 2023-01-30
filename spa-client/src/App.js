@@ -50,7 +50,6 @@ function App() {
               <div className="App">
                   <ToastContainer/>
                   <NavbarAll/>
-                  <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>
                               <Route path="/register" element={<Register/>}/>
@@ -84,7 +83,6 @@ function App() {
                   <div className="shape-blob two"></div>
                   <div className="shape-blob left-[50%]"></div>
                   <div className="shape-blob left-[5%] top-[80%]"></div>
-              </div>
       </BrowserRouter>
       </AuthProvider>
 

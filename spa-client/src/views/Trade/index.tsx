@@ -133,7 +133,7 @@ const Trade =  () => {
                     <div className="flex justify-center mt-5">
                         <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate('/')}>Return to Home</button>
 
-                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate('/support')}>I had a problem</button>
+                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate("/trade/"+trade?.tradeId+"/support")}>I had a problem</button>
                         {
                             trade?.status === 'PENDING' &&
                             <form className="flex">

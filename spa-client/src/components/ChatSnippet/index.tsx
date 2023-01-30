@@ -40,11 +40,10 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
         try{
             const resp = await chatService.sendMessage(tradeId, data.message);
             reset();
-            getMessages();
+            await getMessages();
         }catch (e) {
          attendError("Connection error. Failed to send message",e);
         }
-
     }
 
     return (

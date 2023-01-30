@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
@@ -24,7 +24,6 @@ const Receipt = () => {
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
     const {user} = useAuth();
-
 
     async function fetchTrade(tradeId:number){
         try{
@@ -181,7 +180,7 @@ const Receipt = () => {
                             Home
                         </Link>
                         <Link className=" cursor-pointer font-semibold bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center"
-                           to="/support">
+                           to={"/trade/"+trade?.tradeId+"/support"} >
                             I had a problem
                         </Link>
                     </div>

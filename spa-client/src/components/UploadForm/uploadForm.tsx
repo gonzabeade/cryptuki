@@ -65,7 +65,6 @@ const UploadForm = () => {
             toast.success("Offer created");
             navigate('/seller');
         }catch (e) {
-            console.log(e)
             attendError("Check your connection. Creation of offer failed.",e)
         }
     }

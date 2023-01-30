@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import useComplainService from "../../hooks/useComplainService";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {toast} from "react-toastify";
+import {attendError} from "../../common/utils/utils";
 
 export interface CreateComplainForm {
     email: string,
@@ -18,15 +20,22 @@ const Support= ({tradeId}:ContactFormProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateComplainForm>( );
     const complainService = useComplainService();
     const params = useParams();
+    const [backButton, setBackButton] = useState<boolean>(false);
+    const navigate = useNavigate();
 
-
-    function onSubmit(data:CreateComplainForm){
-        complainService.createComplain(data);
+    async function onSubmit(data:CreateComplainForm){
+        try {
+            await complainService.createComplain(data);
+            toast("Your complaint was saved. As short as possible, we will have an answer.")
+            setBackButton(true);
+        }catch (e){
+            attendError("The complaint could not be saved",e );
+        }
     }
 
     return (
         <>
-            <div className=" flex  flex-col justify-center mx-10">
+            {!backButton && <div className=" flex  flex-col justify-center mx-10">
                 <div className="flex flex-col mt-10 mb-10 ">
                     <h1 className="text-center text-4xl font-semibold font-sans text-polar">
                         Need help?
@@ -38,9 +47,9 @@ const Support= ({tradeId}:ContactFormProps) => {
                         We can help!
                     </h3>
                 </div>
-            </div>
+            </div>}
             <div className="flex justify-center">
-                <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
+                {!backButton && <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                     <input type="hidden" value={params.id} {...register("tradeId")}/>
                     <div className="flex flex-col p-5 justify-center">
                         <div className="flex-row justify-center">
@@ -59,7 +68,25 @@ const Support= ({tradeId}:ContactFormProps) => {
                             Submit
                         </button>
                     </div>
-                </form>
+                </form>}
+                {backButton && <div>
+                    <div className="flex flex-col mt-10 mb-10 ">
+                        <h1 className="text-center text-4xl font-semibold font-sans text-polar">
+                            Our team is working to solve your issue.
+                        </h1>
+                        <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
+                            Remember, we know our sellers.
+                        </h3>
+                        <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
+                            Don't worry!
+                        </h3>
+                    </div>
+                    <div className="flex flex-row p-5">
+                        <button onClick={()=>navigate("/")} className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                            Go home
+                        </button>
+                    </div>
+                </div>}
             </div>
         </>
 

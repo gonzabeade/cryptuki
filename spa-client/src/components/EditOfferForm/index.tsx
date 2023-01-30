@@ -93,7 +93,6 @@ const EditOfferForm = () => {
         try{
             await offerService.modifyOffer(data,OFFER_STATUS.Pending);
             toast.success("Offer modified successfully");
-            await sleep(500);
             navigate('/seller/offer/' + offer?.offerId);
         }catch (e) {
             attendError("Connection error. Failed to modify offer",e);

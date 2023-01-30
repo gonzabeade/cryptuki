@@ -4,6 +4,8 @@ import {useForm} from "react-hook-form";
 import register from "../../views/Register";
 import {SolveKycForm} from "../KycAdminInformation/KycInformation";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {attendError} from "../../common/utils/utils";
 
 
 type SolveKycFormProps = {
@@ -18,8 +20,14 @@ const RejectKycForm = ({username}:SolveKycFormProps) => {
     const [showPopup, setShowPopup] = useState<boolean>(true);
     const navigate = useNavigate();
 
-    function onSubmit(data:SolveKycForm) {
-        kycService.solveKyc(data,username).then(()=> navigate(-1));
+    async function onSubmit(data:SolveKycForm) {
+        try {
+           await kycService.solveKyc(data,username);
+           toast.success("This request was rejected.")
+           navigate("/admin/kyc")
+        }catch (e){
+            attendError("Error! The request could not be rejected",e);
+        }
     }
 
 

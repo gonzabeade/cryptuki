@@ -7,6 +7,8 @@ import {QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import AdviceOnP2P from "../AdviceOnP2P";
 import RejectKycForm from "../RejectKycForm/RejectKycForm";
 import {useNavigate} from "react-router-dom";
+import {attendError} from "../../common/utils/utils";
+import {toast} from "react-toastify";
 
 type KycCardProp = {
     kyc:KycInformationModel,
@@ -22,10 +24,17 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
     const kycService = useKycService();
     const navigate = useNavigate();
 
-    function acceptKyc() {
-        kycService.solveKyc(
-            {status:"APR",comments:"Bienvenido a cryptuki."}
-            ,username).then( ()=>navigate(-1) );
+    async function acceptKyc() {
+        try {
+            await kycService.solveKyc(
+                {status:"APR",comments:"Bienvenido a cryptuki."}
+                ,username);
+            toast.success("Kyc request was successfully attended")
+            navigate("/admin/kyc")
+        }catch (e ){
+            attendError("Error! You cannot attend this kyc request.",e)
+        }
+
     }
 
     return (

@@ -7,6 +7,7 @@ import {useForm} from "react-hook-form";
 import useOfferService from "../../hooks/useOfferService";
 import {useNavigate} from "react-router-dom";
 import {attendError} from "../../common/utils/utils";
+import OfferModel from "../../types/OfferModel";
 
 export interface UploadFormValues {
     minInCrypto:number,
@@ -63,7 +64,7 @@ const UploadForm = () => {
         try{
             const offer = await offerService.createOffer(data.minInCrypto, data.maxInCrypto, data.cryptoCode, data.location, data.unitPrice, data.comments);
             toast.success("Offer created");
-            navigate('/seller');
+            navigate('/seller/offer/'+offer.offerId);
         }catch (e) {
             attendError("Check your connection. Creation of offer failed.",e)
         }

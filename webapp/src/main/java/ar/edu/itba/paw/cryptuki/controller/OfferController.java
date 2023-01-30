@@ -85,7 +85,7 @@ public class OfferController {
                 .path(String.valueOf(offer.getOfferId()))
                 .build();
 
-        return Response.created(uri).build();
+        return Response.ok(OfferDto.fromOffer(offer,uriInfo)).header("Location",uri).build();
     }
 
     @PUT

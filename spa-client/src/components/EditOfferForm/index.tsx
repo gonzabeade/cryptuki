@@ -12,6 +12,9 @@ import useOfferService from "../../hooks/useOfferService";
 import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
+import {Simulate} from "react-dom/test-utils";
+import select = Simulate.select;
+import Loader from "../Loader";
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -27,6 +30,10 @@ const EditOfferForm = () => {
     const navigate = useNavigate();
     const {user} = useAuth();
     const userService = useUserService();
+    const [suggestedPrice,setSuggestedPrice] = useState<string|null>();
+    const [loading,setLoading] = useState<boolean>(true);
+    const [cryptoModel,setCryptoModel] = useState<CryptocurrencyModel|null>(null);
+
 
     async function fetchCryptocurrencies(){
         try{
@@ -37,21 +44,11 @@ const EditOfferForm = () => {
         }
 
     }
-   function changeSuggestedPrice(){
-       const selectCryptos: HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
-       const cryptoModel: CryptocurrencyModel = cryptocurrencies.find(cryptocurrency => cryptocurrency.code === selectCryptos.value)!;
-       const price = document.getElementById("priceCrypto") as HTMLElement;
-       price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected';
-       const minLabel = document.getElementById("minCoin");
-
-       if (minLabel)
-           minLabel.innerHTML = cryptoModel.code;
-
-       const maxLabel = document.getElementById("maxCoin");
-
-       if (maxLabel)
-           maxLabel.innerHTML = cryptoModel.code;
+   function changeSuggestedPrice(cryptoCode:string){
+       setCryptoModel(cryptocurrencies.find(cryptocurrency => cryptocurrency.code === cryptoCode)!);
+       setSuggestedPrice(cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected');
     }
+
     async function offerInitialValues(){
         //build form values with offer
         const offerRetrieved = await getOffer();
@@ -67,8 +64,14 @@ const EditOfferForm = () => {
     }
 
     useEffect(()=>{
-        fetchCryptocurrencies();
-    },[])
+        fetchCryptocurrencies().
+            then(
+                ()=>{
+                    changeSuggestedPrice(offer?.cryptoCode || 'BTC');
+                    setLoading(false);
+                }
+        )
+    },[offer,cryptoModel])
 
     async function getOffer(){
         try{
@@ -86,19 +89,22 @@ const EditOfferForm = () => {
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<ModifyFormValues>({defaultValues: async () => offerInitialValues()});
 
-    function onSubmit(data:ModifyFormValues) {
+    async function onSubmit(data:ModifyFormValues) {
         try{
-            const resp = offerService.modifyOffer(data);
+            await offerService.modifyOffer(data);
             toast.success("Offer modified successfully");
-            sleep(1000);
-            navigate('/seller');
+            await sleep(500);
+            navigate('/seller/offer/' + offer?.offerId);
         }catch (e) {
             attendError("Connection error. Failed to modify offer",e);
         }
     }
 
-    return (
-        <div className="flex flex-row mx-auto">
+    return (<>
+    {loading ?
+        <div className="flex flex-col w-2/3 mt-10">
+            <Loader/>
+        </div> : <div className="flex flex-row mx-auto">
             <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-row divide-x">
                     <div className="flex flex-col mx-5 w-1/3">
@@ -108,10 +114,8 @@ const EditOfferForm = () => {
                             <label
                                 className="text-lg font-sans text-polard  mb-3 mt-2 text-center">Cryptocurrency*</label>
                             <div className="flex flex-col justify-center mx-auto">
-                                <select className="rounded-lg p-3" id="cryptoSelected"
-                                        {...register("cryptoCode",{required:"You must choose a cryptocurrency to sell", validate:{
-                                                notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
-                                            }, onChange:changeSuggestedPrice})} defaultValue="DEFAULT">
+                                <select className="rounded-lg p-3"  disabled id="cryptoSelected" value={offer?.cryptoCode}
+                                        {...register("cryptoCode")} >
                                     <option disabled value="DEFAULT">Choose an option</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{
@@ -127,7 +131,7 @@ const EditOfferForm = () => {
                             </div>
                             <h1 className="flex flex-row mx-auto mt-4">
                                 <p className="text-sm text-gray-400 mr-2">*Suggested Price </p>
-                                <p className="text-sm text-gray-400" id="priceCrypto">Select a coin </p>
+                                <p className="text-sm text-gray-400" id="priceCrypto">{suggestedPrice}</p>
                             </h1>
                         </div>
                         <div className="flex flex-col mt-4">
@@ -225,7 +229,7 @@ const EditOfferForm = () => {
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
                     <button className=" font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-                       onClick={(event)=> {event.preventDefault();navigate(-1);}}>Cancel
+                            onClick={(event)=> {event.preventDefault();navigate(-1);}}>Cancel
                     </button>
                     <button type="submit"
                             className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
@@ -233,8 +237,9 @@ const EditOfferForm = () => {
                     </button>
                 </div>
             </form>
-        </div>
-    );
+        </div>}
+
+    </>);
 };
 
 export default EditOfferForm;

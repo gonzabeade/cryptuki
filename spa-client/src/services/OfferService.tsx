@@ -62,7 +62,7 @@ export class OfferService {
             minInCrypto: offer.minInCrypto,
             maxInCrypto: offer.maxInCrypto,
             unitPrice: offer.unitPrice,
-            comments: offer.comments,
+            firstChat: offer.comments,
             offerStatus: status
         })
         return resp.data;

@@ -53,10 +53,9 @@ export class UserService {
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
-        await this.axiosInstance().post(this.basePath + "register", {
+        await this.axiosInstance().post(paths.BASE_URL + "/users", {
             username: username,
             password: password,
-            repeatPassword: repeatPassword,
             phoneNumber: phoneNumber,
             email: email
         });

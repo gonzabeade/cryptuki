@@ -7,7 +7,8 @@ import {toast} from "react-toastify";
 import {attendError} from "../../common/utils/utils";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z]).{8,24}$/;
 
 type RegisterFormValues = {
     username: string;
@@ -24,9 +25,8 @@ const Register = () => {
 
     async function onSubmit(data:RegisterFormValues){
         try{
-            const resp = userService.register(data.username, data.password, data.repeatPassword, data.phoneNumber, data.email);
+            await userService.register(data.username, data.password, data.repeatPassword, data.phoneNumber, data.email);
             toast.success("Successfully registered!");
-            await sleep(1000);
             navigate('/verify?user='+data.username);
         }catch (e) {
             attendError("Connection error. Please try again later",e);

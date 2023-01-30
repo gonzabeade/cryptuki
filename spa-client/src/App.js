@@ -20,6 +20,7 @@ import KycLanding from "./views/KycLanding/KycLanding";
 import NavbarAll from "./components/NavbarAll";
 
 import ApiError from "./views/ApiError";
+import i18n from "./i18n";
 
 
 
@@ -53,10 +54,11 @@ function App() {
                       <Suspense fallback={<Loader/>}>
                           <Routes>
                               <Route path="/register" element={<Register/>}/>
+                              {/*Hasta aca llegue desde abajo traduciendo*/}
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
                               <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>
-                                <Route path="/trade/:id/support" element={<Support/>}/>
+                              <Route path="/trade/:id/support" element={<Support/>}/>
                               <Route path="/buyer/" element={<LoggedGate children={<BuyerDashboard/>} />}/>
                               <Route path="/seller/" element={<LoggedGate children={<SellerDashboard/>}/>}/>
                               <Route path="/trade/:id/receipt" element={<LoggedGate children={<Receipt/>}/>}/>
@@ -71,10 +73,10 @@ function App() {
                               <Route path="/admin/complaint/:id" element={<LoggedGate children={<SolveComplaint/>} admin={true}/>}/>
                               <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
-                              <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
+                              <Route path="/forbidden" element={<Error message={i18n.t('error.403')} illustration={"/images/403.png"}/>}/>
                               <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
-                              <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
+                              <Route path="*" element={<Error message={i18n.t('error.404')} illustration={"/images/404.png"}/>}/>
                           </Routes>
                       </Suspense>
                   </div>

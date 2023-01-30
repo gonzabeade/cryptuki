@@ -14,6 +14,7 @@ import SolveComplaintForm from "../../components/SolveComplaintForm/SolveComplai
 import {XCircleIcon} from "@heroicons/react/24/outline";
 import TransactionModel from "../../types/TransactionModel";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 
 const SolveComplaint = () => {
@@ -125,10 +126,10 @@ const SolveComplaint = () => {
                 <div className="flex">
                     <div className="flex flex-col mt-10">
                         <h2 className="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-polar">
-                            Reclamo # {complaint && complaint.complainId}
+                            {i18n.t('claim')} # {complaint && complaint.complainId}
                         </h2>
                         <h2 className="font-sans font-medium text-polard text-2xl">
-                            Efectuado el: {complaint && complaint.date.toString()}
+                            {i18n.t('carriedOutOn')}: {complaint && complaint.date.toString()}
                         </h2>
                     </div>
                 </div>
@@ -143,12 +144,12 @@ const SolveComplaint = () => {
                 <div className="flex flex-col w-1/3 h-full justify-center ">
                     <div className="w-full rounded-lg bg-[#FAFCFF] mx-auto py-3 mb-5 text-center border-2 border-polard">
                         <p className="font-sans font-semibold font-polard text-xl">
-                            Responde al reclamo de {complainer?.username}
+                            {i18n.t('whatShouldWeDo')} {complainer?.username}
                         </p>
                     </div>
                     <div className="flex flex-row mx-auto w-full text-center justify-around ">
-                        <button id="dismissButton" onClick={()=>{setDismissing(true); setBanning(false);}} className="bg-ngreen rounded-lg text-white p-3"> Desestimar Reclamo</button>
-                        <button id="kickoutButton" onClick={()=>{setBanning(true); setDismissing(false);}} className="bg-nred rounded-lg text-white p-3"> Banear a {other?.username}</button>
+                        <button id="dismissButton" onClick={()=>{setDismissing(true); setBanning(false);}} className="bg-ngreen rounded-lg text-white p-3"> {i18n.t('dismissClaim')}</button>
+                        <button id="kickoutButton" onClick={()=>{setBanning(true); setDismissing(false);}} className="bg-nred rounded-lg text-white p-3"> {i18n.t('banUser')} {other?.username}</button>
                     </div>
                     {banning && <div>
                         <div className="w-full flex justify-end py-2 cursor-pointer">

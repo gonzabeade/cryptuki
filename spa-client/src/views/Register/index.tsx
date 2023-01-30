@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -40,7 +41,7 @@ const Register = () => {
             flex-col mx-auto mt-24 w-[600px]
             bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-14
             border-frostdr border-t-8">
-                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar mb-4">Create your account</h1>
+                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar mb-4">{i18n.t('createAccount')}</h1>
                 <input
                     placeholder="Username"
                     type="text"
@@ -83,10 +84,10 @@ const Register = () => {
                     {...register("phoneNumber",{required: "Phone number is required"})}
                 />
                 {errors && errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber.message}</span>}
-                <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">Sign Up</button>
-                <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">Already registered?</p>
+                <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">{i18n.t('signup')}</button>
+                <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">{i18n.t('alreadyRegistered')}</p>
                     <p className=" hover:cursor-pointer  hover:text-blue-400 font-bold text-polar mx-auto text-xs font-lato">
-                        <Link to="/login">Sign in</Link>
+                        <Link to="/login">{i18n.t('signin')}</Link>
                     </p>
             </form>
         </div>

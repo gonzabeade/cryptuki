@@ -5,6 +5,7 @@ import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import KycInformation from "../../components/KycAdminInformation/KycInformation";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const SolveKycAdmin = () => {
     const kycService = useKycService();
@@ -35,14 +36,15 @@ const SolveKycAdmin = () => {
                     <div className="w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300 cursor-pointer"
                          onClick={()=>{setIdPhoto(true); }}>
                         <h2 id="idphotoText" onClick={()=>setActiveIdPhoto("idPhoto")}
-                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "idPhoto" ? " underline ":""}`} >Foto
-                            del frente del documento </h2>
+                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "idPhoto" ? " underline ":""}`} >
+                            {i18n.t('pictureOfId') }</h2>
                     </div>
                     <div className="underline-offset-2 w-1/2 h-full mx-2 shadow-l rounded-lg bg-[#FAFCFF] hover:bg-gray-300 cursor-pointer"
                          onClick={()=>{setIdPhoto(false)}}>
                         <h2 id="validationphotoText" onClick={()=>setActiveIdPhoto("validationPhoto")}
-                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "validationPhoto" ? " underline ":""}`}>Foto validatoria
-                            con el documento </h2>
+                            className={`underline-offset-2 font-sans text-xl font-bold text-center mt-4 ${activeIdPhoto === "validationPhoto" ? " underline ":""}`}>
+                            {i18n.t('pictureWithFace')}
+                        </h2>
                     </div>
                 </div>
                 {kyc && <div className="w-full h-4/5 mt-10">

@@ -9,6 +9,7 @@ import {useAuth} from "../../contexts/AuthContext";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {TRADE_STATUS} from "../../common/constants";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -72,7 +73,7 @@ const BuyerDashboard = () => {
             <div className="flex flex-col h-full mr-20 w-3/5">
                 <div
                     className="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
-                    <h1 className="text-center text-2xl font-bold font-sans text-polar">Trade Proposals</h1>
+                    <h1 className="text-center text-2xl font-bold font-sans text-polar">{i18n.t('buyOrdersCreated')}</h1>
                 </div>
                 <StatusCards active={"PENDING"}  callback={fetchTradesWithStatus}/>
                 <div className="flex flex-col justify-center w-full mx-auto mt-10">
@@ -83,8 +84,7 @@ const BuyerDashboard = () => {
                     })}
                 </div>
                 {trades.length === 0 &&
-                    <h2 className="text-center text-xl font-semibold font-sans text-polar mt-4">No transactions
-                        available</h2>}
+                    <h2 className="text-center text-xl font-semibold font-sans text-polar mt-4">{i18n.t('noResults')}</h2>}
                 {trades.length !== 0 &&
                     <div className="flex flex-col mt-3">
                         <Paginator paginatorProps={paginatorProps} callback={fetchPage}/>

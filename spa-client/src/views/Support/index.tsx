@@ -2,6 +2,7 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import useComplainService from "../../hooks/useComplainService";
 import {useParams} from "react-router-dom";
+import i18n from "../../i18n";
 
 export interface CreateComplainForm {
     email: string,
@@ -29,13 +30,10 @@ const Support= ({tradeId}:ContactFormProps) => {
             <div className=" flex  flex-col justify-center mx-10">
                 <div className="flex flex-col mt-10 mb-10 ">
                     <h1 className="text-center text-4xl font-semibold font-sans text-polar">
-                        Need help?
+                        {i18n.t('needHelp')}
                     </h1>
                     <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
-                        In case of any inconvenience, contact us.
-                    </h3>
-                    <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
-                        We can help!
+                        {i18n.t('contactUs')}
                     </h3>
                 </div>
             </div>
@@ -56,7 +54,7 @@ const Support= ({tradeId}:ContactFormProps) => {
                     </div>
                     <div className="flex flex-row p-5">
                         <button type="submit" className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
-                            Submit
+                            {i18n.t('send')}
                         </button>
                     </div>
                 </form>

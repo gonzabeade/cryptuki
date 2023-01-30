@@ -8,6 +8,7 @@ import useTradeService from "../../hooks/useTradeService";
 import {useEffect} from "react";
 import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 
 type LoginFormValues = {
@@ -58,8 +59,8 @@ const Login = () => {
             flex-col mx-auto mt-24 w-[600px]
             bg-whitesmoke shadow-lg rounded-lg px-24 pt-10  pb-16
             border-frostdr border-t-8">
-                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar">Sign in </h1>
-                <h4 className="text-center font-lato text-black/[.4] text-sm mb-4">Welcome to Cryptuki</h4>
+                <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar">{i18n.t('signin')} </h1>
+                <h4 className="text-center font-lato text-black/[.4] text-sm mb-4">{i18n.t('welcome')}</h4>
                 <input
                     placeholder="Username"
                     type="text"
@@ -90,9 +91,9 @@ const Login = () => {
 
                 
                 <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold hover:bg-polar">Sign in</button>
-                <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">No account? No problem<br/></p>
+                <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">{i18n.t('noAccount')}<br/></p>
                 <p className=" hover:cursor-pointer text-polar hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">{/*put router link here*/}<Link
-                    to="/register">Create your account</Link>
+                    to="/register">{i18n.t('createAccount')}</Link>
                 </p>
 
             </form>

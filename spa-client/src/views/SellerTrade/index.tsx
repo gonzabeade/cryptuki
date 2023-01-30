@@ -7,6 +7,7 @@ import TransactionModel from "../../types/TransactionModel";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();
@@ -53,7 +54,7 @@ const SellerTrade = () => {
                 <div className="flex flex-col justify-center px-10">
                     <div
                         className="bg-[#FAFCFF] text-center font-sans text-xl font-bold p-4 shadow-xl flex flex-col rounded-lg justify-between w-full mb-3 text-polar">
-                        Offer Information
+                        {i18n.t('aboutTheOffer')}
                     </div>
                     <OfferInformationForSeller trade={trade!} chat={false}/>
                 </div>
@@ -61,10 +62,10 @@ const SellerTrade = () => {
             <div className="flex flex-row mx-auto">
 
                 <button  onClick={()=>{navigate(-1)}} className=" cursor-pointer  font-bold bg-gray-300 mx-2 px-6 py-3  rounded-lg text-white">
-                    Back
+                    {i18n.t('back')}
                 </button>
                 <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
-                    Home
+                    {i18n.t('home')}
                 </Link>
 
             </div>

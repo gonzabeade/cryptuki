@@ -1,8 +1,10 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
-import { XCircleIcon, InformationCircleIcon} from "@heroicons/react/24/outline";
+import { InformationCircleIcon} from "@heroicons/react/24/outline";
 import useComplainService from "../../hooks/useComplainService";
 import {useNavigate} from "react-router-dom"
+import {toast} from "react-toastify";
+import {attendError} from "../../common/utils/utils";
 
 export interface SolveComplaintFormModel {
     comments:string,
@@ -23,9 +25,15 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<SolveComplaintFormModel>();
 
 
-    function onSubmit(data:SolveComplaintFormModel) {
-        //TODO: ver el codigo de retorno del post y ver si se posteo o no.
-        complainService.createComplainResolution(data).then(r => navigate("/admin") );
+    async function onSubmit(data:SolveComplaintFormModel) {
+        try {
+            await complainService.createComplainResolution(data);
+            toast.success("The complaint was solved.");
+            navigate("/admin");
+        }catch (e){
+            attendError("Failed to answer the complaint",e);
+        }
+
     }
 
     return (

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {KycModel} from "../../types/KycModel";
-import TransactionList from "../../components/TransactionList";
 import TransactionModel from "../../types/TransactionModel";
 import OfferModel from "../../types/OfferModel";
 import Paginator from "../../components/Paginator";
@@ -14,12 +13,12 @@ import {useAuth} from "../../contexts/AuthContext";
 import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {attendError} from "../../common/utils/utils";
+import TransactionList from "../../components/TransactionList";
 
 
 const SellerDashboard = () => {
-    const [kyc, setKyc] = useState<KycModel>();
-
-    const [lastTransactions, setLastTransactions] = useState<TransactionModel[]>([]);
+    const [kyc, setKyc] = useState<KycModel|null>(null);
+    const [kycAccepted, setKycAccepted] = useState(false);
     const [offers, setOffers] = useState<OfferModel[]>([]);
 
     const offerService = useOfferService();
@@ -37,9 +36,12 @@ const SellerDashboard = () => {
     async function fetchKycStatus(){
         try{
             const resp = await userService.getKYCStatus(userService.getLoggedInUser()!);
-            if(resp){
+            if(resp){ //pending
                 setKyc(resp);
+            }else if(userService.hasKyc()){
+                setKycAccepted(true);
             }
+
         }catch (e) {
             attendError("Connection failed. Couldn't fetch KYC status",e)
         }
@@ -61,17 +63,7 @@ const SellerDashboard = () => {
         }
     }
 
-    async function getLastTransactions(){
-        try{
-            const resp = await tradeService.getLastTransactions(userService.getLoggedInUser()!);
-            if(resp){
-                setLastTransactions(resp)
-            }
 
-        }catch (e) {
-            attendError("Connection error. Failed to fetch lasts transactions",e);
-        }
-    }
     async function getPagginatedOffers(uri:string){
         try{
 
@@ -89,9 +81,7 @@ const SellerDashboard = () => {
        getOffers();
     },[])
 
-    useEffect(()=>{
-       getLastTransactions();
-    },[])
+
 
     async function fetchOffersWithStatus(status:OFFER_STATUS) {
         try{
@@ -115,7 +105,7 @@ const SellerDashboard = () => {
                 <div>
                   <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber: "Loading"} email={user? user.email: "loading"} rating={user? user.rating:0} tradeQuantity={user? user.ratingCount : 0} picture={user?.picture!}/>
                 </div>
-                {!kyc && <>
+                {!kyc && !kycAccepted && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                              stroke="currentColor" className="w-12 h-12">
@@ -135,22 +125,22 @@ const SellerDashboard = () => {
                 </>
                 }
                 {
-                   kyc && kyc.status === 'PEN' &&
+                   kyc &&  !kycAccepted &&
+                    <div>
                         <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-3 font-sans font-bold">
                             <img className="w-5 h-5 mr-4 my-auto " src="attention" alt={"kyc submitted"}/>
                             <p>Validation of identity submitted. Please wait </p>
                         </div>
-                    // : <TransactionList transactions={lastTransactions}/> commented out
+                    </div>
                 }
-                {kyc && kyc.status === 'APR' &&
+                {!kyc && kycAccepted &&
                     <div className="mx-auto mt-5">
                     <a href="/offer/upload"
                        className="py-2 pr-4 pl-3 text-lg text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto cursor-pointer">Upload
-                        Advertisment</a>
-                </div>
+                        Advertisement</a>
+                    </div>
                 }
             </div>
-
             <div className="flex flex-col h-full mr-20 w-4/5">
                 <div className="shadow-xl w-full h-1/8 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start">
                     <h1 className="text-center text-2xl font-bold font-sans text-polar">Uploaded offers</h1>

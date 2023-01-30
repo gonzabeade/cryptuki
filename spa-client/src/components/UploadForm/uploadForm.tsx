@@ -198,7 +198,7 @@ const UploadForm = () => {
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
                     <a className="font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-                       href="/">Cancel
+                       onClick={()=>navigate(-1)}>Cancel
                     </a>
                     <button type="submit"
                             className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">

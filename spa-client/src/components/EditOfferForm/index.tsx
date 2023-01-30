@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
-import {NEIGHBORHOODS, sleep} from "../../common/constants";
+import {NEIGHBORHOODS, OFFER_STATUS, sleep} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {useNavigate, useParams} from "react-router-dom";
@@ -13,8 +13,8 @@ import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
 import {Simulate} from "react-dom/test-utils";
-import select = Simulate.select;
 import Loader from "../Loader";
+import select = Simulate.select;
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -91,7 +91,7 @@ const EditOfferForm = () => {
 
     async function onSubmit(data:ModifyFormValues) {
         try{
-            await offerService.modifyOffer(data);
+            await offerService.modifyOffer(data,OFFER_STATUS.Pending);
             toast.success("Offer modified successfully");
             await sleep(500);
             navigate('/seller/offer/' + offer?.offerId);

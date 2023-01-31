@@ -4,13 +4,16 @@ import * as utils from "../common/utils/utils";
 import {paths} from "../common/constants";
 import {CreateComplainForm} from "../views/Support";
 import {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveComplaintForm";
-import {ChatService} from "../services/ChatService";
 
 jest.mock('axios')
 
+beforeEach(() => {
+    axios.get = jest.fn().mockResolvedValue({data: []})
+    axios.post = jest.fn().mockResolvedValue({data: []})
+})
+
 test("get complaints by URL", () => {
     const complainService = new ComplainService(() => axios)
-    axios.get = jest.fn().mockResolvedValue({data: []})
     jest.spyOn(utils, 'processPaginatedResults').mockReturnThis();
     const test_url = "test_url"
 
@@ -22,7 +25,6 @@ test("get complaints by URL", () => {
 
 test("get complaints", () => {
     const complainService = new ComplainService(() => axios)
-    axios.get = jest.fn().mockResolvedValue({data: []})
     jest.spyOn(utils, 'processPaginatedResults').mockReturnThis();
 
     const params = new URLSearchParams()
@@ -46,7 +48,6 @@ test("get complaints by id", () => {
 
 test("create complaint", () => {
     const complaintService = new ComplainService(() => axios)
-    axios.post = jest.fn().mockResolvedValue({data: []})
     const complainForm : CreateComplainForm = {
         email : "scastagnino@itba.edu.ar",
         tradeId : 1,
@@ -67,7 +68,6 @@ test("create complaint", () => {
 
 test("create complaint resolution", () => {
     const complaintService = new ComplainService(() => axios)
-    axios.post = jest.fn().mockResolvedValue({data: []})
     const resolutionForm : SolveComplaintFormModel = {
         comments : "These are comments",
         resolution : "This es a resolution",

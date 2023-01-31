@@ -48,7 +48,7 @@ const Login = () => {
             });
             await sleep(500);
         }catch (e){
-            attendError("Invalid credentials",e);
+            toast.error("Invalid credentials",e);
         }
 
     }

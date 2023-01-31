@@ -12,6 +12,7 @@ import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 
 const Landing = () => {
@@ -48,7 +49,7 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            attendError("Connection error. Failed to fetch offers",e)
+            toast.error("Connection error. Failed to fetch offers" + e)
         }
     }
 
@@ -64,7 +65,7 @@ const Landing = () => {
 
             setIsLoading(false);
         }catch (e){
-            attendError("Connection error. Failed to fetch paginated offers",e)
+            toast.error("Connection error. Failed to fetch paginated offers "+e)
         }
     }
 
@@ -72,7 +73,7 @@ const Landing = () => {
         try{
             setOrderCriteria(order_by);
         }catch (e) {
-            attendError("Connection error. Failed to fetch ordered offers",e)
+            toast.error("Connection error. Failed to fetch ordered offers "+ e)
         }
     }
 
@@ -81,7 +82,7 @@ const Landing = () => {
         try{
             setFilters(data);
         }catch (e){
-            attendError("Connection error. Failed to fetch offers",e)
+            toast.error("Connection error. Failed to fetch offers"+ e)
         }
     }
 

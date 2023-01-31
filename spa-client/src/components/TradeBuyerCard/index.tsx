@@ -37,7 +37,7 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                 setOffer(resp);
             }
         }catch (e) {
-            attendError("Connection error. Couldn't fetch offer",e);
+            toast.error("Connection error. Couldn't fetch offer");
         }
 
     }

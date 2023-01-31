@@ -30,7 +30,7 @@ const Register = () => {
             await sleep(1000);
             navigate('/verify?user='+data.username);
         }catch (e) {
-            attendError("Connection error. Please try again later",e);
+            toast.error("Connection error. Please try again later " + e);
         }
 
     }

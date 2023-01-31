@@ -10,6 +10,7 @@ import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {TRADE_STATUS} from "../../common/constants";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {toast} from "react-toastify";
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
@@ -45,7 +46,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            attendError("Couldn't fethc trades with status " + status,e);
+            toast.error("Couldn't fetch trades with status " + status + " " +e);
         }
     }
     async function fetchPage(uri:string){

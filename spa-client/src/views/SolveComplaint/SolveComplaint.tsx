@@ -7,7 +7,7 @@ import useOfferService from "../../hooks/useOfferService";
 import useComplainService from "../../hooks/useComplainService";
 import useTradeService from "../../hooks/useTradeService";
 import TradeAndComplaintInformation from "../../components/TradeAndComplaitInformation/TradeAndComplaintInformation";
-import ChatMessagesForAdmin from "../../components/ChatMessagesForAdmin/ChatMessagesForAdmin";
+import ChatMessagesForAdmin from "../../components/ChatMessagesForAdmin";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import SolveComplaintForm from "../../components/SolveComplaintForm/SolveComplaintForm";
@@ -59,9 +59,8 @@ const SolveComplaint = () => {
                 setOffer(resp);
                 return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch offer",e);
+            toast.error("Connection error. Failed to fetch offer"+e);
         }
-
     }
 
     async function getComplaint(complainId:number){
@@ -80,7 +79,7 @@ const SolveComplaint = () => {
             setTrade(resp);
             return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch Trade",e);
+            toast.error("Connection error. Failed to fetch Trade "+ e);
         }
 
     }

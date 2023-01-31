@@ -20,7 +20,7 @@ const Verify = () => {
             await userService.verifyUser(data.code, searchParams.get("user")!);
             toast.success("Successfully verified!");
         }catch (e){
-            attendError("Connection error. Please try again later",e);
+            toast.error("Connection error. Please try again later "+ e);
         }
 
     }

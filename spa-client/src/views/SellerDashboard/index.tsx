@@ -15,6 +15,7 @@ import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {toast} from "react-toastify";
 
 
 const SellerDashboard = () => {
@@ -42,7 +43,7 @@ const SellerDashboard = () => {
                 setKyc(resp);
             }
         }catch (e) {
-            attendError("Connection failed. Couldn't fetch KYC status",e)
+            toast.error("Connection failed. Couldn't fetch KYC status " + e)
         }
     }
     useEffect(()=>{
@@ -58,7 +59,7 @@ const SellerDashboard = () => {
                 setPaginatorProps(resp.paginatorProps);
             }
         }catch (e) {
-            attendError("Connection error. Failed to fetch offers",e);
+            toast.error("Connection error. Failed to fetch offers" + e);
         }
     }
 
@@ -70,7 +71,7 @@ const SellerDashboard = () => {
             }
 
         }catch (e) {
-            attendError("Connection error. Failed to fetch lasts transactions",e);
+            toast.error("Connection error. Failed to fetch lasts transactions "+ e);
         }
     }
     async function getPagginatedOffers(uri:string){
@@ -82,7 +83,7 @@ const SellerDashboard = () => {
             setPaginatorProps(apiCall.paginatorProps!);
 
         }catch (e){
-            attendError("Connection error. Failed to fetch paginated offers",e)
+            toast.error("Connection error. Failed to fetch paginated offers" + e)
         }
     }
 
@@ -103,7 +104,7 @@ const SellerDashboard = () => {
            }
            setSelectedStatus(status);
         }catch (e) {
-            attendError("Connection error fetching offers with status "+ status,e)
+            toast.error("Connection error fetching offers with status " + status + " " +e)
         }
 
     }

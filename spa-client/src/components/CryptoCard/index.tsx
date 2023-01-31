@@ -19,7 +19,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             const resp = await userService.getUser(username);
             setSeller(resp);
         }catch (e) {
-            attendError("Connection error. Failed to fetch user data",e);
+            toast.error("Connection error. Failed to fetch user data",e);
         }
     }
 

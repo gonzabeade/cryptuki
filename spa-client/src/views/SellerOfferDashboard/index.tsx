@@ -38,7 +38,7 @@ const SellerOfferDashboard = () => {
             setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
         }catch (e){
-            attendError("Connection error. Couldn't fetch trades",e);
+            toast.error("Connection error. Couldn't fetch trades "+ e);
         }
     }
 
@@ -54,7 +54,7 @@ const SellerOfferDashboard = () => {
             }
 
         } catch (e) {
-            attendError("Connection error. Failed to fetch trades",e);
+            toast.error("Connection error. Failed to fetch trades"+ e);
         }
     }
     async function getPaginatedTrades(uri:string){
@@ -63,7 +63,7 @@ const SellerOfferDashboard = () => {
             setTrades(resp.items);
             setPaginatorProps(resp.paginatorProps!);
         }catch (e) {
-            attendError("Connection  error. Failed to fetch trades",e);
+            toast.error("Connection  error. Failed to fetch trades "+ e);
         }
     }
 

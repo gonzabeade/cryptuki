@@ -8,6 +8,7 @@ import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {toast} from "react-toastify";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();
@@ -34,7 +35,7 @@ const SellerTrade = () => {
                 setCounterPart(resp);
 
             }catch (e) {
-                attendError("Connection error. Couldn't fetch counterpart",e);
+                toast.error("Connection error. Couldn't fetch counterpart" + e);
             }
         }
     }

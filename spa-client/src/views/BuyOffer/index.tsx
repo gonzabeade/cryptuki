@@ -79,7 +79,7 @@ const BuyOffer = () => {
             }
 
         }catch (e){
-            attendError("You need to be logged in to make a trade proposal",e);
+            toast.error("You need to be logged in to make a trade proposal"+ e);
         }
     }
 

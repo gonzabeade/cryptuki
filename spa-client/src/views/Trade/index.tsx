@@ -85,7 +85,7 @@ const Trade =  () => {
             const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
-            attendError("Connection error. Failed to take back proposal",e);
+            toast.error("Connection error. Failed to take back proposal",e);
         }
     }
 
@@ -96,7 +96,7 @@ const Trade =  () => {
                 setSeller(resp);
             }
         }catch (e) {
-                attendError("Connection error. Failed to fetch seller",e)
+                toast.error("Connection error. Failed to fetch seller",e)
         }
 
     }
@@ -108,8 +108,7 @@ const Trade =  () => {
                 setOffer(resp);
             }
         }catch (e) {
-            console.log(e)
-            attendError("Connection error. Could not fetch offer",e);
+            toast.error("Connection error. Could not fetch offer",e);
         }
     }
 

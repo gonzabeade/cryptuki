@@ -34,7 +34,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 setBuyer(resp);
             }
         }catch (e) {
-            attendError("Connection error. Couldn't fetch buyer",e);
+            toast.error("Connection error. Couldn't fetch buyer " + e);
         }
     }
 
@@ -49,7 +49,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 const resp = await offerService.getOfferInformation(Number(offerId));
                 setOffer(resp);
             }catch (e) {
-                attendError("Connection error. Couldn't fetch offer",e);
+                toast.error("Connection error. Couldn't fetch offer "+e);
             }
         }
     }
@@ -78,7 +78,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 callback(status);
             }
         }catch (e) {
-            attendError("Connection error. Couldn't change trade status",e);
+            toast.error("Connection error. Couldn't change trade status" + e);
         }
     }
 

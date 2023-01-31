@@ -101,6 +101,7 @@
   "proposalPending": "Tu orden de compra se envió al vendedor!",
   "proposalRejected": "El vendedor rechazó tu orden de compra.",
   "proposalAccepted": "El vendedor aceptó tu orden de compra",
+  "proposalTakenBack": "Retiraste tu orden de compra",
   "proposalDone": "Intercambio Finalizado!",
   "pendingTrade": "Orden Pendiente",
   "acceptedTrade": "Orden Aceptada",
@@ -368,5 +369,12 @@
   "signup": "Registrate",
   "welcome": "Bienvenido a Cryptuki",
   "createAccount": "Crea una cuenta",
-  "alreadyRegistered": "Ya tienes cuenta?"
+  "alreadyRegistered": "Ya tienes cuenta?",
+  "counterPart": "Contraparte",
+  "tradeRejectedDetail": "Crea una nueva orden de compra si quieres seguir comprando de esta oferta",
+  "tradeDeletedDetail": "Lamentamos la situación. Explora el mercado para otras ofertas",
+  "out of": "de",
+  "ofPages": "de",
+  "myProfile": "Mi perfil",
+  "signout": "Salir"
 }

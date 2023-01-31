@@ -3,6 +3,7 @@ import OfferModel from "../../types/OfferModel";
 import {ComplainModel} from "../../types/ComplainModel";
 import UserModel from "../../types/UserModel";
 import TransactionModel from "../../types/TransactionModel";
+import i18n from "../../i18n";
 
 
 type TradeAndComplaintProps = {
@@ -23,20 +24,20 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                 <div
                     className="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard">
                     <h1 className="font-sans font-semibold font-polard text-2xl text-start ">
-                        Detalles del trade
+                        {i18n.t('tradeDetails')}
                     </h1>
                     <h1 className="w-full font-sans font-medium text-polard text-xl text-start ">
-                        Trade #
+                        {i18n.t('trade')} #
                         {trade.tradeId}
                     </h1>
                     <h1 className="w-full font-sans font-medium text-polard text-xl text-start ">
-                        Asociado al anuncio
+                        {i18n.t('carriedOutOverOffer')}
                         #
                         {offer.offerId}
                     </h1>
                     <div className="w-full flex flex-row mx-auto mt-3">
                         <h2 className="font-sans font-semibold font-polard text-xl text-start mr-3">
-                           Criptomoneda
+                            {i18n.t('cryptocurrency')}
                             :
                         </h2>
                         <h3 className="font-sans font-medium text-polard text-xl text-start ">
@@ -45,7 +46,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                     </div>
                     <div className="w-full flex flex-row mx-auto mt-3">
                         <h2 className="font-sans font-semibold font-polard text-xl text-start mr-3">
-                            Ubicaciòn
+                            {i18n.t('location')}
                             :
                         </h2>
                         <h3 className="font-sans font-medium text-polard text-xl text-start ">
@@ -54,35 +55,35 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                     </div>
                     <div className="w-full  flex flex-col mx-auto mt-5">
                         <h2 className="font-sans font-polard font-semibold text-xl mb-3 text-start">
-                            Participantes
+                            {i18n.t('participants')}
                         </h2>
                         <li className="font-sans font-polard"><b>
-                            Comprador :
+                            {i18n.t('buyer')} :
                         </b>
                             {buyer?.username}
                         </li>
                         <li className="font-sans font-polard"><b>
-                            Vendedor :
+                            {i18n.t('seller')} :
                         </b>
                             {seller?.username}
                         </li>
                     </div>
                     <div className="w-full flex flex-row mx-auto mt-3">
                         <h2 className="font-sans font-semibold font-polard text-xl text-start mr-3">
-                            Monto
+                            {i18n.t('offeredAmount')}
                             :
                         </h2>
                         <h3 className="font-sans font-medium text-polard text-xl text-start ">
                             {trade?.buyingQuantity}
                             ARS (
-                            Por cada moneda
+                            {i18n.t('of')}
                             {offer.unitPrice}
                             ARS)
                         </h3>
                     </div>
                     <div className="w-full  flex flex-row mx-auto mt-3">
                         <h2 className="font-sans font-semibold font-polard text-xl text-start mr-3">
-                            Estado del trade
+                            {i18n.t('tradeState')}
                             :
                         </h2>
                         <h3 className="font-sans font-medium text-polard text-xl text-start ">
@@ -93,7 +94,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
             </div>
             <div className="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard mt-5">
                 <h1 className="font-sans font-semibold font-polard text-2xl text-start ">
-                    Descripcion del reclamo
+                    {i18n.t('claimDescription')}
                 </h1>
                 <p className="font-sans text-start mt-2 italic">
                     {complain.comments}
@@ -101,7 +102,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
             </div>
             <div className="w-full py-5 px-5 rounded-lg bg-stormd/[0.9] flex flex-col justify-start mx-auto border-2 border-polard mt-5">
                 <h1 className="font-sans font-semibold font-polard text-2xl text-start ">
-                    Usuario del reclamo
+                    {i18n.t('claimUser')}
                 </h1>
                 {(complainer && complainer.username) ?
                    <div>
@@ -109,7 +110,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                         {complainer.username}
                         </h1>
                         <p className="rounded-lg text-gray-400">
-                        Ultima vez activo
+                            {i18n.t('lastTimeActive')}
                         : {complainer.lastLogin.toString()}</p>
                    </div>
                     :

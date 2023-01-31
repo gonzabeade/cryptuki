@@ -1,5 +1,6 @@
 import React from 'react';
 import RatingStars from "../RatingStars";
+import i18n from "../../i18n";
 
 type  UserProfileCardsProps = {
     username:string|null,
@@ -46,7 +47,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
             <div className="flex justify-center items-center gap-2 my-3">
                 <div className="font-semibold text-center ">
                     <p className="text-black">{tradeQuantity}</p>
-                    <span className="text-gray-400">Cantidad de trades</span>
+                    <span className="text-gray-400">{i18n.t('tradeQuantity')}</span>
                 </div>
                 <div className="flex flex-wrap">
                     {tradeQuantity > 0 ?

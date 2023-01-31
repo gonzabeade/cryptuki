@@ -5,6 +5,7 @@ import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
 import {useForm} from "react-hook-form";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
@@ -62,7 +63,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                                         {counterPart ? 
                                             <>
                                             <span className="font-sans text-gray-400 text-sm text-justify ">
-                                                Ultimo login
+                                                {i18n.t('lastLogin')}
                                             </span>
                                                 <span
                                                     className="text-left text-xs text-justify text-gray-400 ">{counterPart ? counterPart.lastLogin.toString().substring(0, 10) : "Loading"}
@@ -75,7 +76,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                                 {counterPart? Date.parse(counterPart.lastLogin.toString()) === Date.now() &&  <span className="absolute w-3 h-3 bg-green-600 rounded-full left-7  top-6 "></span>:"Loading"}
 
                                 <h1 className="text-right font-sans font-bold justify-self-end">
-                                  Trade proposal # {tradeId}
+                                    {i18n.t('trade')} # {tradeId}
                                 </h1>
                             </div>
                             <div className="relative w-full p-6 overflow-y-auto h-[25rem]">

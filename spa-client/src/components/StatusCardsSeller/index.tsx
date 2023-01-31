@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
+import i18n from "../../i18n";
 
 type StatusCardsProps = {
     active:string,
@@ -24,35 +25,35 @@ const StatusCardsSeller:React.FC<StatusCardsProps> = ({active, callback}) => {
                     <li className="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchOffers('ALL')}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === 'ALL'? 'decoration-frostdr underline underline-offset-8':' '}`}>
-                                All
+                                {i18n.t('all')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchOffers(OFFER_STATUS.Pending)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.Pending ?'decoration-frostdr underline underline-offset-8':' '} `}>
-                                Active
+                                {i18n.t('activeOffers')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchOffers(OFFER_STATUS.PausedBySeller)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.PausedBySeller ?'decoration-frostdr underline underline-offset-8':' '}`}>
-                                Paused
+                                {i18n.t('pausedOffers')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchOffers(OFFER_STATUS.Deleted)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === OFFER_STATUS.Deleted?'decoration-frostdr underline underline-offset-8':' '} `}>
-                                Deleted
+                                {i18n.t('deletedOffers')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-gray-200 rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchOffers(OFFER_STATUS.Sold)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === OFFER_STATUS.Sold? 'decoration-frostdr underline underline-offset-8':' '}`}>
-                                Completed
+                                {i18n.t('soldOffers')}
                             </p>
                         </button>
                     </li>

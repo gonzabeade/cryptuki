@@ -101,6 +101,7 @@
   "proposalPending": "Your trade proposal was sent to the seller",
   "proposalRejected": "Seller rejected your proposal.",
   "proposalAccepted": "Seller accepted your proposal.",
+  "proposalTakenBack": "You took back your offer",
   "proposalDone": "Exchange finalized!",
   "pendingTrade": "Pending trade",
   "acceptedTrade": "Accepted trade",
@@ -275,7 +276,7 @@
     "PASSPORT": "Passport",
     "ID": "National ID"
   },
-  "verifyYourIdentity": "Verufy your identity",
+  "verifyYourIdentity": "Verify your identity",
   "youNeedToBeVerified": "For you to be able to upload offers, your identity should be verified. Once you submit this short form, we will review your information and get back to you as soon as possible.",
   "validate": "Validate",
   "firstSection": "Section 1: National ID data",
@@ -366,6 +367,12 @@
   "signup": "Sign up",
   "welcome": "Welcome to Cryptuki",
   "createAccount": "Create an account",
-  "alreadyRegistered": "Already registered?"
-
+  "alreadyRegistered": "Already registered?",
+  "counterPart": "Counterpart",
+  "tradeRejectedDetail": "Make a new trade proposal if you still want to buy from this seller",
+  "tradeDeletedDetail": "Sorry to see that. Explore the marketplace for more offers",
+  "out of": "out of",
+  "ofPages": "of",
+  "myProfile": "My profile",
+  "signout": "Sign out"
 }

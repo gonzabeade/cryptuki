@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {CheckCircleIcon, FaceFrownIcon, InformationCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
+import i18n from "../../i18n";
 
 type TradeStatusAlertProps = {
         status:string
@@ -18,30 +19,30 @@ const ALERTS_MAP = new Map<string, TradeStatusAlertState>(
             icon: <InformationCircleIcon className="w-12 h-12 text-nyellowd"/>,
             color: "#EBCB8B",
             accentColor: "#936f26",
-            title: "Your trade proposal was sent to the seller!",
-            subtitle: "Wait for the seller to accept your trade proposal",
+            title: i18n.t('proposalPending'),
+            subtitle: i18n.t('waitForTheSeller'),
         }
         ],
         ['REJECTED', {
             icon: <FaceFrownIcon className="w-12 h-12 text-nredd"/>,
             color: "#BF616A",
             accentColor: "#ad2b36",
-            title: "This proposal has been rejected",
-            subtitle: "Make a new trade proposal if you still want to buy from this seller",
+            title: i18n.t('proposalRejected'),
+            subtitle: i18n.t('tradeRejectedDetail'),
         }],
         ['ACCEPTED', {
             icon: <CheckCircleIcon className="w-12 h-12 text-ngreend"/>,
             color: "#A3BE8C",
             accentColor: "#47523e",
-            title: "The seller accepted your trade proposal",
-            subtitle: "Meet the seller to make the trade",
+            title: i18n.t('proposalAccepted'),
+            subtitle: i18n.t('offerAccepted'),
         }],
         ['DELETED', {
             icon: <TrashIcon className="w-12 h-12 text-frostdr"/>,
             color: "#88C0D0",
             accentColor: "#5E81AC",
-            title: "You took back your offer",
-            subtitle: "Sorry to see that. Explore the marketplace for more offers",
+            title: i18n.t('proposalTakenBack'),
+            subtitle: i18n.t('tradeDeletedDetail')
         }]
     ]
 );

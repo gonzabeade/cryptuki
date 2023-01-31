@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {TRADE_STATUS} from "../../common/constants";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 type TradeCardProp = {
     trade:TransactionModel
@@ -49,31 +50,31 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
             <div className="w-3/4 flex flex-row">
                 <div className="flex flex-col font-sans my-auto mr-5">
                     {trade.status === "PENDING" &&
-                        <div className="bg-nyellow  w-40 text-white  text-center p-2">Pending</div>}
+                        <div className="bg-nyellow  w-40 text-white  text-center p-2">{i18n.t('PENDING')}</div>}
                     {trade.status === "REJECTED" &&
-                        <div className="bg-nred/[0.6] w-40 text-white  text-center p-2">Rejected</div>}
-                    {trade.status === "ACCEPTED" &&  <div className="bg-ngreen w-40 text-white text-center p-2">Accepted</div>
+                        <div className="bg-nred/[0.6] w-40 text-white  text-center p-2">{i18n.t('REJECTED')}</div>}
+                    {trade.status === "ACCEPTED" &&  <div className="bg-ngreen w-40 text-white text-center p-2">{i18n.t('ACCEPTED')}</div>
                     }
                     {
-                        trade.status === "SOLD" && <div className="bg-gray-400 w-40 text-white text-center p-2">Sold </div>
+                        trade.status === "SOLD" && <div className="bg-gray-400 w-40 text-white text-center p-2">{i18n.t('SOLD')} </div>
                     }
                     {
-                        trade.status === "DELETED" &&     <div className="bg-blue-400 w-40 text-white text-center p-2">Deleted</div>
+                        trade.status === "DELETED" &&     <div className="bg-blue-400 w-40 text-white text-center p-2">{i18n.t('DELETED')}</div>
                     }
                 </div>
 
                 <div className=" flex flex-col font-sans justify-center mr-5">
                     {
-                        trade.status === "SOLD" &&  <h1 className="font-sans">You bought for: </h1>
+                        trade.status === "SOLD" &&  <h1 className="font-sans">{i18n.t('youBoughtFor')}: </h1>
                     }
                     {
-                        trade.status !== "SOLD" &&  <h1 className="font-sans">You would pay: </h1>
+                        trade.status !== "SOLD" &&  <h1 className="font-sans">{i18n.t('youWouldPay')}: </h1>
                     }
                     <h3 className="font-sans font-semibold">{trade.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</h3>
                 </div>
 
                 <div className="flex flex-col font-sans justify-center ">
-                    <h1 className="font-sans">In exchange for: </h1>
+                    <h1 className="font-sans">{i18n.t('onExchangeOf')}: </h1>
                     <div className="flex">
                         <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer ? offer.unitPrice : 1))).toFixed(2)} </h1>
                         <h1 className="font-sans font-semibold">{offer?.cryptoCode}</h1>
@@ -87,13 +88,13 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                 <div className="flex my-auto ml-1">
                     {trade.status != 'SOLD' && trade.status != 'REJECTED' && trade.status !== 'DELETED' &&
                         <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+trade.tradeId}>
-                        Resume trade
+                            {i18n.t('resumeTrade')}
                         </a>
                     }
                     {trade.status === "SOLD" &&
                         <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+ trade.tradeId
                         +"/receipt"}>
-                           See receipt
+                            {i18n.t('seeMore')}
                         </a>
                     }
             </div>

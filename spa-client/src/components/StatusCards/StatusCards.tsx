@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {TRADE_STATUS} from "../../common/constants";
+import i18n from "../../i18n";
 
 
 type StatusCardsProps = {
@@ -22,28 +23,28 @@ const StatusCards:React.FC<StatusCardsProps> = ({active,  callback}) => {
                     <li className="bg-nyellow rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchTrades(TRADE_STATUS.Pending)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === TRADE_STATUS.Pending ?'decoration-frostdr underline underline-offset-8':' '}`}>
-                                Pending
+                                {i18n.t('PENDING')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-ngreen rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchTrades(TRADE_STATUS.Accepted)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === TRADE_STATUS.Accepted ?'decoration-frostdr underline underline-offset-8':' '} `}>
-                                Accepted
+                                {i18n.t('ACCEPTED')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-nred rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchTrades(TRADE_STATUS.Rejected)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${activeStatus === TRADE_STATUS.Rejected ?'decoration-frostdr underline underline-offset-8':' '} `}>
-                                Rejected
+                                {i18n.t('REJECTED')}
                             </p>
                         </button>
                     </li>
                     <li className="bg-[#FAFCFF] rounded-lg shadow-md p-1 mx-5 hover:-translate-y-1 hover:scale-110 duration-200 hover:cursor-pointer">
                         <button onClick={()=>fetchTrades(TRADE_STATUS.Sold)}>
                             <p className={`py-2 pr-4 pl-3 font-bold text-polar ${ activeStatus === TRADE_STATUS.Sold ? 'decoration-frostdr underline underline-offset-8':' '}`}>
-                                Completed
+                                {i18n.t('SOLD')}
                             </p>
                         </button>
                     </li>

@@ -11,6 +11,7 @@ import useUserService from "../../hooks/useUserService";
 import useTradeService from "../../hooks/useTradeService";
 import {TRADE_STATUS} from "../../common/constants";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
@@ -89,31 +90,31 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     {
                         tradeStatus === TRADE_STATUS.Sold &&
                         <div className="font-semibold bg-gray-400 w-full text-white text-center p-2 rounded-lg">
-                           Sold
+                            {i18n.t('SOLD')}
                         </div>
                     }
                     {
                         tradeStatus === TRADE_STATUS.Pending &&
                         <div className=" font-semibold bg-nyellow  w-full text-white text-center p-2 rounded-lg">
-                            Pending
+                            {i18n.t('PENDING')}
                         </div>
                     }
                     {
                         tradeStatus === TRADE_STATUS.Rejected &&
                         <div className=" font-semibold bg-nred/[0.6] w-full text-white  text-center p-2 rounded-lg">
-                            Rejected
+                            {i18n.t('REJECTED')}
                         </div>
                     }
                     {
                         tradeStatus === TRADE_STATUS.Accepted &&
                         <div className=" font-semibold bg-ngreen  w-full text-white  text-center p-2 rounded-lg">
-                            Accepted
+                            {i18n.t('ACCEPTED')}
                         </div>
                     }
                     {
                         tradeStatus === TRADE_STATUS.Deleted &&
                         <div className=" font-semibold bg-blue-400  w-full text-white  text-center p-2 rounded-lg">
-                            Deleted
+                            {i18n.t('DELETED')}
                         </div>
                     }
                 </div>
@@ -128,7 +129,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 </div>
 
                 <div className="flex flex-col my-2">
-                    <h1 className="font-bold font-roboto text-polar mx-auto text-center">Buyer:</h1>
+                    <h1 className="font-bold font-roboto text-polar mx-auto text-center">{i18n.t('buyer')}:</h1>
                     <div className="flex mx-auto">
                         <h1 className=" text-lg font-sans text-center text-polar">
                             {buyer?.username}
@@ -151,7 +152,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 {tradeStatus === TRADE_STATUS.Sold &&
                     <a className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
                        href={"/trade/" + trade.tradeId + "/receipt"}>
-                        Receipt
+                        {i18n.t('seeMore')}
                     </a>
                 }
                 {tradeStatus === TRADE_STATUS.Pending &&
@@ -159,14 +160,14 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                         <div className="flex justify-center mx-auto my-3">
                             <button
                                     className="font-bold bg-red-400 text-white p-3  rounded-lg font-sans mr-4" onClick={()=>changeStatus(TRADE_STATUS.Rejected, trade?.tradeId!)}>
-                                Reject
+                                {i18n.t('rejectTrade')}
                             </button>
                         </div>
 
                         <div className="flex justify-center mx-auto my-3">
                             <button
                                     className="font-bold bg-ngreen text-white p-3 rounded-lg font-sans " onClick={()=>changeStatus(TRADE_STATUS.Accepted, trade?.tradeId!)}>
-                                Accept
+                                {i18n.t('acceptTrade')}
                             </button>
                         </div>
                     </div>
@@ -179,7 +180,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                     <form className="flex justify-center mx-auto my-3">
                         <button type="submit"
                                 className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus(TRADE_STATUS.Sold, trade?.tradeId)}>
-                            Mark as sold
+                            {i18n.t('markAsSold')}
                         </button>
                     </form>
                 }

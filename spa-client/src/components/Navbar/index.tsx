@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import useUserService from '../../hooks/useUserService';
 import {useEffect, useState} from 'react';
 import {useAuth} from "../../contexts/AuthContext";
+import i18n from "../../i18n";
 const Navbar = () => {
 
     const {user, signout} = useAuth();
@@ -69,10 +70,10 @@ const Navbar = () => {
                     <>
                         <Link
                             className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-frostdr font-bold  hover:cursor-pointer rounded-lg transition duration-200"
-                            to="/login">Sign In</Link>
+                            to="/login">{i18n.t('signin')}</Link>
                         <Link
                             className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-polar text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"
-                            to="/register">Sign up</Link>
+                            to="/register">{i18n.t('signup')}</Link>
                     </>
                 }
                 {isLogged &&
@@ -86,7 +87,7 @@ const Navbar = () => {
                             <div className={"flex flex-row"}>
                                 {/*<UserCircleIcon height={30} width={30} color="white"/>*/}
                                 {/*<p className="mx-3 font-roboto text-white font-semibold">{username}</p>*/}
-                                <p className="mx-3 font-roboto text-white font-semibold">Mi perfil</p>
+                                <p className="mx-3 font-roboto text-white font-semibold">{i18n.t('myProfile')}</p>
                             </div>
                         </Link>
                         <div onClick={()=>{signout(()=>{ navigate('/')})}} className=" pt-1.5 hover:cursor-pointer">
@@ -122,7 +123,7 @@ const Navbar = () => {
                         <ul>
                             <li className="mb-1">
                                 <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-roboto"
-                                   to="/" onClick={closeMobileMenu}>Marketplace P2P</Link>
+                                   to="/" onClick={closeMobileMenu}>{i18n.t('explore')}</Link>
                             </li>
                             {/*<li className="mb-1">*/}
                             {/*    <Link className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded"*/}
@@ -133,7 +134,7 @@ const Navbar = () => {
                                     <li>
                                         <Link className="block p-4 text-sm  text-gray-400 hover:bg-blue-50 hover:text-polar  hover:cursor-pointer rounded font-semibold"
                                               to="/seller/" onClick={closeMobileMenu}>
-                                            Panel de vendedor
+                                            {i18n.t('switchSeller')}
                                         </Link>
                                     </li>
                                     <li>
@@ -142,7 +143,7 @@ const Navbar = () => {
                                               onClick={() => {
                                                   closeMobileMenu()
                                               }}>
-                                            Mi perfil
+                                            {i18n.t('myProfile')}
                                         </Link>
                                     </li>
                                 </>
@@ -155,17 +156,17 @@ const Navbar = () => {
 
                             <Link
                                 className=" text-frostdr block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100  hover:cursor-pointer rounded-lg "
-                                to="/login" onClick={closeMobileMenu}>Sign in</Link>
+                                to="/login" onClick={closeMobileMenu}>{i18n.t('signin')}</Link>
                             <Link
                                 className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                to="/register" onClick={closeMobileMenu}>Sign Up</Link>
+                                to="/register" onClick={closeMobileMenu}>{i18n.t('signup')}</Link>
                         </div>
                         }
                         {isLogged &&
                             <div className="pt-6">
                                 <Link
                                     className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-frostdr hover:bg-blue-700  hover:cursor-pointer rounded-lg"
-                                    to="/" onClick={()=> {closeMobileMenu();signout(()=>{navigate('/')});}}>Sign out</Link>
+                                    to="/" onClick={()=> {closeMobileMenu();signout(()=>{navigate('/')});}}>{i18n.t('signout')}</Link>
                             </div>
                         }
 

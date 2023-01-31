@@ -165,7 +165,7 @@ const Receipt = () => {
                                     Transaction confirmation time
                                 </h4>
                                 <h2 className="text-lg font-roboto text-polar text-center my-auto ">
-                                    {trade? trade.lastModified.toString(): 'No date provided'}
+                                    {trade? trade.lastModified.toString().substring(0,10): 'No date provided'}
                                 </h2>
                             </div>
                         </div>

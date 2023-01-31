@@ -70,7 +70,7 @@ function App() {
                               <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
                               <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
-                              <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
+                              <Route path="/error/:message" element={<ApiError illustration={"/images/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
                           </Routes>

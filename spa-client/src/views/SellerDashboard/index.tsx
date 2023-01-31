@@ -103,7 +103,7 @@ const SellerDashboard = () => {
             {/*// Left Panel: chat and seller stats*/}
             <div className="flex flex-col h-full mx-10 px-10 w-1/3">
                 <div>
-                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber: "Loading"} email={user? user.email: "loading"} rating={user? user.rating:0} tradeQuantity={user? user.ratingCount : 0} picture={user?.picture!}/>
+                    {user && <UserProfileCards username={ user.username} phoneNumber={user.phoneNumber} email={user.email} rating={user.rating} tradeQuantity={user.ratingCount } picture={user.picture}/> }
                 </div>
                 {!kyc && !kycAccepted && <>
                     <div className="flex flex-row bg-white shadow rounded-lg p-3 mt-6 font-sans font-bold">

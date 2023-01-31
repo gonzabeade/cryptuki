@@ -85,7 +85,7 @@ const BuyerDashboard = () => {
     return (
         <div className="flex h-full w-full px-20 my-10">
             <div className="flex flex-col h-full mx-20 w-1/5">
-                  <UserProfileCards username={user? user.username: "Loading"} phoneNumber={user? user.phoneNumber : "Loading"} email={user? user.email:"loading"} rating={user? user.rating: 0} tradeQuantity={user? user.ratingCount:0} picture={user?.picture!}/>
+                {user && <UserProfileCards username={user.username} phoneNumber={user.phoneNumber} email={user.email} rating={user.rating} tradeQuantity={user.ratingCount} picture={user.picture}/>}
                 {/*<TransactionList transactions={lastTransactions}/>*/}
             </div>
             {/*//  Middle Panel: trade */}

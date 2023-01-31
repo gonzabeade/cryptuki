@@ -86,4 +86,24 @@ export class UserService {
     }
 
 
+    public async getProfilePictureByUrl(url:string):Promise<string|null>{
+        const resp = await this.axiosInstance().get<Blob>(url,{responseType:'arraybuffer'});
+        if(resp.status === 204 ){
+            return null;
+        }
+        return this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    convertBlobToBase64 = async (blob: Blob) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+        });
+    };
+
+
 }

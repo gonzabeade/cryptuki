@@ -36,6 +36,24 @@ export class KycService {
         return processPaginatedResults(resp);
     }
 
+    public async getPicturesByUrl(url:string):Promise<string>{
+        const resp = await this.axiosInstance().get<Blob>(url,{responseType:'arraybuffer'});
+        return await this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    convertBlobToBase64 = async (blob: Blob) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+        });
+    };
+
+
+
     public async solveKyc(KycForm:SolveKycForm, username:string){
         const resp = await this.axiosInstance().patch(this.basePath + username + '/kyc', {
                 comments:KycForm.comments,

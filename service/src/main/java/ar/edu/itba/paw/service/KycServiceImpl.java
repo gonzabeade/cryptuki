@@ -48,6 +48,14 @@ public class KycServiceImpl implements KycService {
     }
 
     @Override
+    public Optional<KycInformation> getKycRequest(String username) {
+        Optional<KycInformation> pendingKycInformation = getPendingKycRequest(username);
+        if (pendingKycInformation.isPresent())
+            return pendingKycInformation;
+        return kycDao.getKycRequestsByStatus(username, KycStatus.APR).stream().findFirst();
+    }
+
+    @Override
     @Transactional
     @Secured("ROLE_ADMIN")
     public Collection<KycInformation> getPendingKycRequests(int page, int pageSize) {

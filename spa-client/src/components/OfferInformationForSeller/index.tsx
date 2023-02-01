@@ -121,9 +121,9 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                 <div className="flex flex font-sans my-3  w-56 mx-auto text-semibold">
                     <h1 className="mx-auto my-auto flex flex-row justify-around">
-                        <p className={"text-polar text-lg font-bold"}>   {trade?.buyingQuantity + ' ' + offer?.cryptoCode}</p>
+                        {offer &&  <p className={"text-polar text-lg font-bold"}>   {(trade?.buyingQuantity / offer?.unitPrice) + ' ' + offer?.cryptoCode}</p>}
                         <p className={"mx-2"}>⟶</p>
-                        <p  className={"text-polar text-lg font-bold"}>  {trade?.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</p>
+                        <p  className={"text-polar text-lg font-bold"}>  {trade?.buyingQuantity} ARS</p>
 
                     </h1>
                 </div>

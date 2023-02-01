@@ -109,7 +109,7 @@ const Receipt = () => {
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {offer && trade && offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    {offer && trade && trade?.buyingQuantity!}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS
@@ -118,7 +118,7 @@ const Receipt = () => {
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade && trade?.buyingQuantity}
+                                                    {trade && offer && (trade?.buyingQuantity/offer.unitPrice)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     {offer && offer?.cryptoCode}
@@ -142,7 +142,7 @@ const Receipt = () => {
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade && trade?.buyingQuantity}
+                                                    {trade && (trade?.buyingQuantity / offer?.unitPrice!)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     {offer && offer?.cryptoCode}
@@ -151,7 +151,7 @@ const Receipt = () => {
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    { offer && trade&& offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    { offer && trade && trade?.buyingQuantity!}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS

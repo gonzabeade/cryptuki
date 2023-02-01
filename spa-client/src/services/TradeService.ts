@@ -83,7 +83,7 @@ export class TradeService {
     }
     public async rateCounterPart(tradeId:number, rating:number):Promise<void>{
         await this.axiosInstance().patch(this.basePath + tradeId + '/rating', {
-            rating:rating
+            rating:rating*2
         });
     }
 

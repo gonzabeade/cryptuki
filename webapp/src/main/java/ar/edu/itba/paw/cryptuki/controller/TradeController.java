@@ -135,6 +135,12 @@ public class TradeController {
         User buyer = trade.getBuyer();
         List<MessageDto> messageDtos = trade.getMessageCollection().stream().map( m -> MessageDto.fromMessage(m, uriInfo, seller, buyer)).collect(Collectors.toList());
 
+        String senderUname = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (senderUname.equals(trade.getBuyer().getUsername()))
+            chatService.markBuyerMessagesAsSeen(trade.getTradeId());
+        else
+            chatService.markSellerMessagesAsSeen(trade.getTradeId());
+
         if (messageDtos.isEmpty())
             return Response.noContent().build();
         return Response.ok(new GenericEntity<Collection<MessageDto>>(messageDtos) {}).build();
@@ -143,7 +149,7 @@ public class TradeController {
     @POST
     @Path("/{tradeId}/messages")
     @Consumes("application/vnd.cryptuki.v1.message+json")
-    // @Produces not needed, because it returns no content
+    // @Produces not needed, because it returns no content. Valid according to RFC2616
     public Response postNewMessage(@NotNull @Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
 
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -156,7 +162,7 @@ public class TradeController {
     @PATCH
     @Path("/{tradeId}")
     @Consumes("application/vnd.cryptuki.v1.trade-status+json")
-    // @Produces not needed, because it returns no content
+    // @Produces not needed, because it returns no content. Valid according to RFC5789
     public Response modifyTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid TradeStatusForm tradeStatusForm) {
         switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
             case ACCEPTED:

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessH
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAccessDeniedHandler;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
+import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -70,6 +71,9 @@ public class WebAuthConfig {
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
 
         @Autowired
+        private UserService userService;
+
+        @Autowired
         private NonceUserDetailsService nonceUserDetailsService;
 
         @Autowired
@@ -115,7 +119,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(passwordUserDetailsService, authenticationManagerBean());
+            return new JwtFilter(userService,passwordUserDetailsService, authenticationManagerBean());
         }
     }
 
@@ -138,6 +142,8 @@ public class WebAuthConfig {
 
         @Autowired
         private PasswordEncoder passwordEncoder;
+        @Autowired
+        private UserService userService;
 
         @Override
         public void configure(final WebSecurity webSecurity) {
@@ -219,7 +225,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userDetailsService, authenticationManagerBean());
+            return new JwtFilter(userService,userDetailsService, authenticationManagerBean());
         }
 
         @Bean

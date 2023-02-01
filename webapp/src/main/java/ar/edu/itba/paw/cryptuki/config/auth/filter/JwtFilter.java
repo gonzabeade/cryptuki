@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.cryptuki.config.auth.filter;
 
 import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtUtils;
+import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,12 +28,15 @@ import java.util.Base64;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
+    private final UserService userService ;
+
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public JwtFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
+    public JwtFilter(UserService userService , @Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @Override
@@ -68,6 +73,8 @@ public class JwtFilter extends OncePerRequestFilter {
             username = credentials[0].trim();
             password = credentials[1].trim();
 
+            User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+
             try {
                 userDetails = userDetailsService.loadUserByUsername(username);
             } catch (UsernameNotFoundException e) {
@@ -85,8 +92,8 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
 
-            httpServletResponse.setHeader("X-Refresh-Token", JwtUtils.generateRefreshToken(userDetails));
-            httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
+            httpServletResponse.setHeader("X-Refresh-Token", JwtUtils.generateRefreshToken(userDetails,user.getKyc().isPresent()));
+            httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails,user.getKyc().isPresent()));
 
         } else if (header.startsWith("Bearer ")){
 
@@ -102,6 +109,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             username = JwtUtils.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
+            User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
@@ -111,7 +120,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
+                httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails,user.getKyc().isPresent()));
             }
 
         }

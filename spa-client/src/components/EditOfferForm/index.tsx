@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 
-import {NEIGHBORHOODS, sleep} from "../../common/constants";
+import {NEIGHBORHOODS, OFFER_STATUS, sleep} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {useNavigate, useParams} from "react-router-dom";
@@ -13,6 +13,8 @@ import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import Loader from "../Loader";
+
 
 export interface ModifyFormValues extends UploadFormValues {
    offerId:number
@@ -28,31 +30,25 @@ const EditOfferForm = () => {
     const navigate = useNavigate();
     const {user} = useAuth();
     const userService = useUserService();
+    const [suggestedPrice,setSuggestedPrice] = useState<string|null>();
+    const [loading,setLoading] = useState<boolean>(true);
+    const [cryptoModel,setCryptoModel] = useState<CryptocurrencyModel|null>(null);
+
 
     async function fetchCryptocurrencies(){
         try{
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch cryptocurrencies",e);
+            toast.error("Connection error. Failed to fetch cryptocurrencies " + e);
         }
 
     }
-   function changeSuggestedPrice(){
-       const selectCryptos: HTMLSelectElement = document.getElementById("cryptoSelected")! as HTMLSelectElement;
-       const cryptoModel: CryptocurrencyModel = cryptocurrencies.find(cryptocurrency => cryptocurrency.code === selectCryptos.value)!;
-       const price = document.getElementById("priceCrypto") as HTMLElement;
-       price.innerHTML = cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected';
-       const minLabel = document.getElementById("minCoin");
-
-       if (minLabel)
-           minLabel.innerHTML = cryptoModel.code;
-
-       const maxLabel = document.getElementById("maxCoin");
-
-       if (maxLabel)
-           maxLabel.innerHTML = cryptoModel.code;
+   function changeSuggestedPrice(cryptoCode:string){
+       setCryptoModel(cryptocurrencies.find(cryptocurrency => cryptocurrency.code === cryptoCode)!);
+       setSuggestedPrice(cryptoModel?.price ? cryptoModel?.price.toString() + ' ARS' : 'No price detected');
     }
+
     async function offerInitialValues(){
         //build form values with offer
         const offerRetrieved = await getOffer();
@@ -68,8 +64,14 @@ const EditOfferForm = () => {
     }
 
     useEffect(()=>{
-        fetchCryptocurrencies();
-    },[])
+        fetchCryptocurrencies().
+            then(
+                ()=>{
+                    changeSuggestedPrice(offer?.cryptoCode || 'BTC');
+                    setLoading(false);
+                }
+        )
+    },[offer,cryptoModel])
 
     async function getOffer(){
         try{
@@ -87,19 +89,21 @@ const EditOfferForm = () => {
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<ModifyFormValues>({defaultValues: async () => offerInitialValues()});
 
-    function onSubmit(data:ModifyFormValues) {
+    async function onSubmit(data:ModifyFormValues) {
         try{
-            const resp = offerService.modifyOffer(data);
+            await offerService.modifyOffer(data,OFFER_STATUS.Pending);
             toast.success("Offer modified successfully");
-            sleep(1000);
-            navigate('/seller');
+            navigate('/seller/offer/' + offer?.offerId);
         }catch (e) {
             attendError("Connection error. Failed to modify offer",e);
         }
     }
 
-    return (
-        <div className="flex flex-row mx-auto">
+    return (<>
+    {loading ?
+        <div className="flex flex-col w-2/3 mt-10">
+            <Loader/>
+        </div> : <div className="flex flex-row mx-auto">
             <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-row divide-x">
                     <div className="flex flex-col mx-5 w-1/3">
@@ -108,10 +112,9 @@ const EditOfferForm = () => {
                             <label
                                 className="text-lg font-sans text-polard  mb-3 mt-2 text-center">{i18n.t('cryptocurrency')}*</label>
                             <div className="flex flex-col justify-center mx-auto">
-                                <select className="rounded-lg p-3" id="cryptoSelected"
-                                        {...register("cryptoCode",{required:"You must choose a cryptocurrency to sell", validate:{
-                                                notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
-                                            }, onChange:changeSuggestedPrice})} defaultValue="DEFAULT">
+
+                                <select className="rounded-lg p-3" id="cryptoSelected" value={offer?.cryptoCode}
+                                        {...register("cryptoCode")} disabled>
                                     <option disabled value="DEFAULT">{i18n.t('chooseAnOption')}</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{
@@ -126,8 +129,8 @@ const EditOfferForm = () => {
                                 {errors && errors.cryptoCode && <p className="text-red-600 mx-auto mt-2">{errors.cryptoCode.message}</p> }
                             </div>
                             <h1 className="flex flex-row mx-auto mt-4">
-                                <p className="text-sm text-gray-400 mr-2">*{i18n.t('suggestedPrice')} </p>
-                                <p className="text-sm text-gray-400" id="priceCrypto">{i18n.t('selectACoin')} </p>
+                                <p className="text-sm text-gray-400 mr-2">*{i18n.t('suggestedPrice')}  </p>
+                                <p className="text-sm text-gray-400" id="priceCrypto">{suggestedPrice}</p>
                             </h1>
                         </div>
                         <div className="flex flex-col mt-4">
@@ -231,8 +234,9 @@ const EditOfferForm = () => {
                     </button>
                 </div>
             </form>
-        </div>
-    );
+        </div>}
+
+    </>);
 };
 
 export default EditOfferForm;

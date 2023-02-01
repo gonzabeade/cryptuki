@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
@@ -25,7 +25,6 @@ const Receipt = () => {
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
     const {user} = useAuth();
-
 
     async function fetchTrade(tradeId:number){
         try{
@@ -167,7 +166,7 @@ const Receipt = () => {
                                     {i18n.t('transactionDate')}
                                 </h4>
                                 <h2 className="text-lg font-roboto text-polar text-center my-auto ">
-                                    {trade? trade.lastModified.toString(): 'No date provided'}
+                                    {trade? trade.lastModified.toString().substring(0,10): 'No date provided'}
                                 </h2>
                             </div>
                         </div>
@@ -182,7 +181,7 @@ const Receipt = () => {
                             {i18n.t('home')}
                         </Link>
                         <Link className=" cursor-pointer font-semibold bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center"
-                           to="/support">
+                           to={"/trade/"+trade?.tradeId+"/support"}>
                             {i18n.t('iHadAProblema')}
                         </Link>
                     </div>

@@ -115,6 +115,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    @PreAuthorize("#username == authentication.principal")
     public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
         return tradeDao.getMostRecentTradesAsSeller(username, quantity);
     }

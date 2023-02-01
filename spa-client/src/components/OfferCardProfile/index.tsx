@@ -48,7 +48,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
 
     return (
         <div className={"flex flex-col bg-[#FAFCFF] my-3 rounded-lg mx-1"}>
-            <a href={offer.offerStatus !== 'DEL' && offer.offerStatus !== 'SOL'? "/seller/offer/"+offer.offerId : "/seller/#"} className={`shadow-lg cursor-pointer z-10 flex flex-col p-3 rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus !== 'DEL' && offer.offerStatus !== 'SOL' ? '' : 'cursor-not-allowed' }`} >
+            <a href={offer.offerStatus !== 'DEL' ? "/seller/offer/"+offer.offerId : "/seller/#"} className={`shadow-lg cursor-pointer z-10 flex flex-col p-3 rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus !== 'DEL' ? '' : 'cursor-not-allowed' }`} >
                 <h1 className=" text-polar text-center text-xl font-bold ">
                     {i18n.t('offer')}
                     #{offer.offerId}

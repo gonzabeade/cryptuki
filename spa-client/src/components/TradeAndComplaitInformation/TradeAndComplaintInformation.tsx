@@ -111,7 +111,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                         </h1>
                         <p className="rounded-lg text-gray-400">
                             {i18n.t('lastTimeActive')}
-                        : {complainer.lastLogin.toString()}</p>
+                        : {complainer.lastLogin.toString().substring(0,10)}</p>
                    </div>
                     :
                     <p className="rounded-lg text-lg">

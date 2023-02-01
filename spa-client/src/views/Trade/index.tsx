@@ -4,7 +4,7 @@ import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
 import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
-import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
@@ -85,7 +85,7 @@ const Trade =  () => {
             const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
-            toast.error("Connection error. Failed to take back proposal",e);
+            toast.error("Connection error. Failed to take back proposal " + e);
         }
     }
 
@@ -96,7 +96,7 @@ const Trade =  () => {
                 setSeller(resp);
             }
         }catch (e) {
-                toast.error("Connection error. Failed to fetch seller",e)
+                toast.error("Connection error. Failed to fetch seller "+e)
         }
 
     }
@@ -108,7 +108,7 @@ const Trade =  () => {
                 setOffer(resp);
             }
         }catch (e) {
-            toast.error("Connection error. Could not fetch offer",e);
+            toast.error("Connection error. Could not fetch offer "+ e);
         }
     }
 
@@ -155,8 +155,8 @@ const Trade =  () => {
                     </div>
                     <div className="flex justify-center mt-5">
                         <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate('/')}>{i18n.t('home')}</button>
+                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate("/trade/"+trade?.tradeId+"/support")}>{i18n.t('iHadAProblema')}</button>
 
-                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate('/support')}>{i18n.t('iHadAProblema')}</button>
                         {
                             trade?.status === 'PENDING' &&
                             <form className="flex">

@@ -64,7 +64,7 @@ const UploadForm = () => {
         try{
             const offer = await offerService.createOffer(data.minInCrypto, data.maxInCrypto, data.cryptoCode, data.location, data.unitPrice, data.comments);
             toast.success("Offer created");
-            navigate('/seller');
+            navigate('/seller/offer/'+offer.offerId);
         }catch (e) {
             toast.error("Check your connection. Creation of offer failed. " + e)
         }
@@ -195,9 +195,9 @@ const UploadForm = () => {
                     </div>
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
-                    <a className="font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-                       href="/">{i18n.t('cancel')}
-                    </a>
+                    <div className="font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
+                       onClick={()=>navigate(-1)}>{i18n.t('cancel')}
+                    </div>
                     <button type="submit"
                             className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
                         {i18n.t('send')}

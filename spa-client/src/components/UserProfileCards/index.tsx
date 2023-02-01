@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import RatingStars from "../RatingStars";
 import i18n from "../../i18n";
+import useUserService from "../../hooks/useUserService";
+import {toast} from "react-toastify";
 
 type  UserProfileCardsProps = {
     username:string|null,
@@ -12,12 +14,32 @@ type  UserProfileCardsProps = {
 }
 
 const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumber, email, rating, tradeQuantity, picture}) => {
+    const userService = useUserService();
+    const [defaultPicture, setDefaultPicture] = useState<boolean>(false);
+    const [pictureBase64, setPictureBase64] = useState<string>();
+    async function getProfilePicture(){
+        try {
+
+            const photo:string|null = await userService.getProfilePictureByUrl(picture);
+            if(photo === null)
+                setDefaultPicture(true);
+            else setPictureBase64(photo);
+        }catch (e){
+            toast.error("Failed to fetch profile picture")
+        }
+    }
+
+    useEffect(()=>{
+        getProfilePicture();
+    },[]);
+
     return (
         <div className="bg-white shadow rounded-lg py-1">
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
-                        <img src={picture} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"}/>
+                        {!defaultPicture && <img src={pictureBase64} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
+                        {defaultPicture && <img src={"/images/default-profile-picture.png"} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
                         {username}
                     </div>
                 </div>

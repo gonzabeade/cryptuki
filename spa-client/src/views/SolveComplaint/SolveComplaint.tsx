@@ -128,7 +128,7 @@ const SolveComplaint = () => {
                             {i18n.t('claim')} # {complaint && complaint.complainId}
                         </h2>
                         <h2 className="font-sans font-medium text-polard text-2xl">
-                            {i18n.t('carriedOutOn')}: {complaint && complaint.date.toString()}
+                            {i18n.t('carriedOutOn')}: {complaint && complaint.date.toString().substring(0,10)}
                         </h2>
                     </div>
                 </div>

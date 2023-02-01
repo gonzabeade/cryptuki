@@ -62,7 +62,7 @@ export class OfferService {
             minInCrypto: offer.minInCrypto,
             maxInCrypto: offer.maxInCrypto,
             unitPrice: offer.unitPrice,
-            comments: offer.comments,
+            firstChat: offer.comments,
             offerStatus: status
         })
         return resp.data;
@@ -78,8 +78,8 @@ export class OfferService {
         return new URLSearchParams(uri.substring(n + 1));
     }
 
-    public async createOffer(minInCrypto: number, maxInCrypto: number, cryptoCode: string, location: string, unitPrice: number, firstChat?: string): Promise<void> {
-        await this.axiosInstance().post<OfferModel[]>(this.basePath, {
+    public async createOffer(minInCrypto: number, maxInCrypto: number, cryptoCode: string, location: string, unitPrice: number, firstChat?: string): Promise<OfferModel> {
+        const offer = await this.axiosInstance().post<OfferModel>(this.basePath, {
             minInCrypto: minInCrypto,
             maxInCrypto: maxInCrypto,
             cryptoCode: cryptoCode,
@@ -87,6 +87,7 @@ export class OfferService {
             unitPrice: unitPrice,
             firstChat: firstChat
         });
+        return offer.data;
     }
 
     public async pauseOffer(offer: OfferModel) {

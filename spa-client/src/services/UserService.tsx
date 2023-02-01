@@ -17,7 +17,7 @@ export class UserService {
 
         if (refreshToken) {
             const tok : any = jwtDecode(refreshToken);
-            return tok.sub; 
+            return tok.sub;
         } 
         return null; 
     }
@@ -31,6 +31,17 @@ export class UserService {
         }
         return null;
     }
+
+    public hasKyc(): boolean {
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (refreshToken) {
+            const tok: any = jwtDecode(refreshToken);
+            return tok.kyc;
+        }
+        return false;
+    }
+
 
     public async  getUser(username:string):Promise<UserModel>{
         const resp = await this.axiosInstance().get<UserModel>(this.basePath + username);
@@ -53,10 +64,9 @@ export class UserService {
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
-        await this.axiosInstance().post(this.basePath + "register", {
+        await this.axiosInstance().post(paths.BASE_URL + "/users", {
             username: username,
             password: password,
-            repeatPassword: repeatPassword,
             phoneNumber: phoneNumber,
             email: email
         });
@@ -74,6 +84,26 @@ export class UserService {
             return resp.data;
         }
     }
+
+
+    public async getProfilePictureByUrl(url:string):Promise<string|null>{
+        const resp = await this.axiosInstance().get<Blob>(url,{responseType:'arraybuffer'});
+        if(resp.status === 204 ){
+            return null;
+        }
+        return this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    convertBlobToBase64 = async (blob: Blob) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+        });
+    };
 
 
 }

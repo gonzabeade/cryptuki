@@ -1,7 +1,7 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
@@ -13,12 +13,13 @@ const Verify = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<VerifyFormValues>();
     const userService = useUserService();
     const [searchParams]= useSearchParams();
-
+    const navigate = useNavigate();
 
     async function onSubmit(data:VerifyFormValues){
         try{
             await userService.verifyUser(data.code, searchParams.get("user")!);
             toast.success("Successfully verified!");
+            navigate("/");
         }catch (e){
             toast.error("Connection error. Please try again later "+ e);
         }

@@ -21,7 +21,7 @@ const ComplainCard: React.FC<ComplainCardProfileProps> = ({ complain}) => {
                     </b>
                 </h1>
                 <h3 className="text-gray-500">
-                    {i18n.t('carriedOutOn')} {complain.date.toString()}
+                    {i18n.t('carriedOutOn')} {complain.date.toString().substring(0, 10)}
                 </h3>
             </div>
             <div className="flex flex-col  my-auto mx-7">

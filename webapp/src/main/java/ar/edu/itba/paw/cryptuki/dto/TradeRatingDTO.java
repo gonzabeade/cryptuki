@@ -10,18 +10,12 @@ public class TradeRatingDTO {
     private Integer buyer_rating;
     private boolean buyer_rated;
     private boolean seller_rated;
-    private URI trade;
-
     public static TradeRatingDTO fromTrade(Trade trade, final UriInfo uriInfo){
         TradeRatingDTO tradeRatingDTO = new TradeRatingDTO();
         tradeRatingDTO.seller_rated = trade.isSellerRated();
         tradeRatingDTO.buyer_rated = trade.isBuyerRated();
         tradeRatingDTO.seller_rating = trade.getSeller_rating();
         tradeRatingDTO.buyer_rating = trade.getBuyer_rating();
-        tradeRatingDTO.trade = uriInfo.getBaseUriBuilder()
-                .path("/api/trades")
-                .path(String.valueOf(trade.getTradeId()))
-                .build();
         return tradeRatingDTO;
     }
 
@@ -57,11 +51,4 @@ public class TradeRatingDTO {
         this.seller_rated = seller_rated;
     }
 
-    public URI getTrade() {
-        return trade;
-    }
-
-    public void setTrade(URI trade) {
-        this.trade = trade;
-    }
 }

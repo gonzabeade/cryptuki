@@ -21,7 +21,6 @@ public class KycDto {
     private URI idPhoto;
     private URI validationPhoto;
 
-    private URI user;
     private URI self;
 
     public static KycDto fromKycInformation(KycInformation kycInformation, UriInfo uriInfo) {
@@ -45,11 +44,6 @@ public class KycDto {
 
         dto.idPhoto = uriInfo.getAbsolutePathBuilder()
                 .path("idPhoto")
-                .build();
-
-        dto.user = uriInfo.getBaseUriBuilder()
-                .path(UserController.class)
-                .path(username)
                 .build();
 
         return dto;
@@ -109,14 +103,6 @@ public class KycDto {
 
     public void setValidationPhoto(URI validationPhoto) {
         this.validationPhoto = validationPhoto;
-    }
-
-    public URI getUser() {
-        return user;
-    }
-
-    public void setUser(URI user) {
-        this.user = user;
     }
 
     public URI getSelf() {

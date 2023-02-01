@@ -78,7 +78,7 @@ const SolveKycAdmin = () => {
                     {idPhoto && <div id="idPhoto" className="border-2 border-gray-400">
                         <img  src={idPhotoBase64} alt={"idPhoto"} className=" w-[500px] mx-auto"/>
                     </div> }
-                    {!idPhoto && <div id="validationPhoto" className="border-2 border-gray-400 hidden">
+                    {!idPhoto && <div id="validationPhoto" className="border-2 border-gray-400">
                         <img src={validationPhotoBase64} alt={"validationPhoto"} className="w-[500px] mx-auto"/>
                     </div>}
                 </div> }

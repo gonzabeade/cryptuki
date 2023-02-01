@@ -67,7 +67,6 @@
   "transactionDate": "Exchange date",
   "transactionInformation": "Trade information",
   "offer": "Offer",
-  "myProfile": "My profile",
   "myTransactions": "My trades",
   "price": "Price",
   "furtherInstructionsRejected": "Create a new trade if you want to keep buying",
@@ -374,5 +373,11 @@
   "out of": "out of",
   "ofPages": "of",
   "myProfile": "My profile",
-  "signout": "Sign out"
+  "signout": "Sign out",
+  "makeTradeProposal": "Make trade proposal",
+  "all": "All",
+  "marketplace": "Marketplace P2P",
+  "DontWorry": "¡No te preocupes!",
+  "RememberSeller": "Recuerda que conocemos a nuestros vendedores.",
+  "teamWorking": "Nuestro equipo está trabajando para soluciones el inconveniente"
 }

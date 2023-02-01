@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import UserInfo from "../../components/UserInfo/index";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
 import { useForm} from "react-hook-form";
@@ -9,7 +9,6 @@ import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
-import {AxiosError} from "axios";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
@@ -157,8 +156,8 @@ const BuyOffer = () => {
                     <label className="mx-auto text-center mt-3">{i18n.t('cryptoQuantity')}</label>
                     <input type="number" step="0.000000000001" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
-                        <Link to="/" className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" >Cancel</Link>
-                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>
+                        <div onClick={()=>navigate(-1)} className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" > {i18n.t('back')}</div>
+                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">{i18n.t('makeTradeProposal')}</button>
                     </div>
                 </form>
 

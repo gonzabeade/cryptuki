@@ -1,10 +1,8 @@
-import { useState, useEffect, FormEvent } from "react";
-import {paths, sleep} from "../../common/constants";
+
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -81,7 +79,7 @@ const Register = () => {
                     id="phoneNumber"
                     placeholder="Phone number"
                     className="p-2 m-2 rounded-lg"
-                    {...register("phoneNumber",{required: "Phone number is required"})}
+                    {...register("phoneNumber",{required:"Phone number is required"})}
                 />
                 {errors && errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber.message}</span>}
                 <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">{i18n.t('signup')}</button>

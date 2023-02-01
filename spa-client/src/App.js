@@ -1,25 +1,15 @@
-import Navbar from './components/Navbar';
-import AdminNavBar from './components/AdminNavBar/AdminNavBar';
 
-import React, {Suspense, lazy, useState} from "react";
+
+import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
 import './index.css'
 // import i18n (needs to be bundled ;))
 import './i18n';
 
-import Error from "./views/Error";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import LoggedGate from "./components/LoggedGate";
 import {AuthProvider} from "./contexts/AuthContext";
-import ComplaintHub from "./views/ComplaintsLanding/ComplaintHub";
-import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
-import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
-import KycLanding from "./views/KycLanding/KycLanding";
-import NavbarAll from "./components/NavbarAll";
-
-import ApiError from "./views/ApiError";
 import i18n from "./i18n";
 
 
@@ -40,7 +30,14 @@ const UploadAd = lazy(()=>import("./views/UploadAd/index"));
 const UploadKyc = lazy(()=>import("./views/UploadKyc/index"));
 const EditOffer = lazy(()=>import("./views/EditOffer/index"));
 const Verify = lazy(()=>import("./views/Verify/index"));
-
+const Error = lazy (()=>import("./views/Error"));
+const LoggedGate = lazy (()=>import("./components/LoggedGate"));
+const ComplaintHub = lazy (()=>import("./views/ComplaintsLanding/ComplaintHub"));
+const SolveComplaint = lazy (()=>import("./views/SolveComplaint/SolveComplaint"));
+const SolveKycAdmin = lazy (()=>import("./views/SolveKycAdmin/SolveKycAdmin"));
+const KycLanding = lazy (()=>import("./views/KycLanding/KycLanding"));
+const NavbarAll = lazy (()=>import("./components/NavbarAll"));
+const ApiError = lazy (()=>import("./views/ApiError"));
 
 
 

@@ -154,7 +154,7 @@ const Trade =  () => {
                         </div>
                     </div>
                     <div className="flex justify-center mt-5">
-                        <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate('/')}>{i18n.t('home')}</button>
+                        <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate(-1)}>{i18n.t('back')}</button>
                         <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate("/trade/"+trade?.tradeId+"/support")}>{i18n.t('iHadAProblema')}</button>
 
                         {

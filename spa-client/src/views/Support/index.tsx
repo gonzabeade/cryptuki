@@ -70,18 +70,18 @@ const Support= ({tradeId}:ContactFormProps) => {
                 {backButton && <div>
                     <div className="flex flex-col mt-10 mb-10 ">
                         <h1 className="text-center text-4xl font-semibold font-sans text-polar">
-                            Our team is working to solve your issue.
+                            {i18n.t('teamWorking')}
                         </h1>
                         <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
-                            Remember, we know our sellers.
+                            {i18n.t('RememberSeller')}
                         </h3>
                         <h3 className="text-center text-lg font-regular font-sans mx-10 mt-3 mb-3">
-                            Don't worry!
+                            {i18n.t('DontWorry')}
                         </h3>
                     </div>
                     <div className="flex flex-row p-5">
-                        <button onClick={()=>navigate("/")} className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
-                            Go home
+                        <button onClick={()=>navigate(-1)} className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                            {i18n.t('back')}
                         </button>
                     </div>
                 </div>}

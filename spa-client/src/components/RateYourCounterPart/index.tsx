@@ -114,7 +114,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                 </div>}
             {alreadyRated &&
                 <div className=" flex flex-col mb-5 mt-5 mx-auto">
-                    <ConfirmationToggle title={i18n.t('rating sent')}/>
+                    <ConfirmationToggle title={i18n.t('ratingSent')}/>
                     <h1 className="mx-auto">{i18n.t('ratingSent')}: {rating ?rating/2:0}/5</h1>
                 </div>
 

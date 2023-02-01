@@ -60,7 +60,7 @@ const Navbar = () => {
                 </div>
                 <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
                     <li>
-                        <Link to="/" className="text-sm text-gray-400 hover:text-gray-500 hover:cursor-pointer font-semibold">Marketplace P2P</Link>
+                        <Link to="/" className="text-sm text-gray-400 hover:text-gray-500 hover:cursor-pointer font-semibold">{i18n.t('marketplace')}</Link>
                     </li>
                     {/*<li>*/}
                     {/*    <Link className="text-sm text-gray-400 hover:cursor-pointer hover:text-gray-500 font-semibold"   to="/support">Contact</Link>*/}
@@ -79,7 +79,7 @@ const Navbar = () => {
                 {isLogged &&
                     <div className="hidden lg:flex lg:flex-row">
                         <Link to="/seller/" className="mx-2">
-                            <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">Panel de vendedor</button>
+                            <button  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  hover:cursor-pointer rounded-lg transition duration-200">{i18n.t('switchSeller')}</button>
                         </Link>
                         <Link
                             className="hidden lg:inline-block py-2 px-6 bg-frostdr hover:bg-blue-600 text-sm text-white font-bold rounded-lg transition duration-200 hover:cursor-pointer"

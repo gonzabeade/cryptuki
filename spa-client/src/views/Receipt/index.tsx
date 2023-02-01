@@ -4,7 +4,6 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
-import { toast } from 'react-toastify';
 import useUserService from "../../hooks/useUserService";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
@@ -25,6 +24,7 @@ const Receipt = () => {
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
     const {user} = useAuth();
+    const navigate = useNavigate();
 
     async function fetchTrade(tradeId:number){
         try{
@@ -176,10 +176,11 @@ const Receipt = () => {
                     <div className="flex flex-row mt-10">
 
 
-                        <Link className="cursor-pointer font-semibold bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center"
-                           to="/">
-                            {i18n.t('home')}
-                        </Link>
+                        <div className="cursor-pointer font-semibold bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center"
+                           onClick={()=>navigate(-1)}
+                              >
+                            {i18n.t('back')}
+                        </div>
                         <Link className=" cursor-pointer font-semibold bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center"
                            to={"/trade/"+trade?.tradeId+"/support"}>
                             {i18n.t('iHadAProblema')}

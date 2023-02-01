@@ -67,7 +67,6 @@
   "trasactionDate": "Fecha del intercambio",
   "transactionInformation": "Datos de la transacción",
   "offer": "Anuncio",
-  "myProfile": "Mi perfil",
   "myTransactions": "Mis transacciones",
   "price": "Precio",
   "furtherInstructionsRejected": "Realizá una nueva orden de compra si querés seguir comprando",
@@ -145,7 +144,7 @@
   "uploadAdvertisement": "Subir anuncio",
   "recoverPassword": "Recupera tu contraseña",
   "recoverPasswrodFromEmail": "Recupérala de tu bandeja de entrada",
-  "returnHome": "Volver al Home",
+  "returnHome": "Volver al Inicio",
   "home": "Inicio",
   "uploadOffer": "Subí tu anuncio",
   "openTrade": "Abrir trade",
@@ -376,5 +375,12 @@
   "out of": "de",
   "ofPages": "de",
   "myProfile": "Mi perfil",
-  "signout": "Salir"
+  "signout": "Salir",
+  "makeTradeProposal": "Realizar orden de compra",
+  "all": "Todos",
+  "transactionDate": "Fecha de intercambio",
+  "marketplace": "Mercado P2P",
+  "DontWorry": "Don't worry!",
+  "RememberSeller": "Remember we know our sellers.",
+  "teamWorking": "Our team is working to solve your issue."
 }

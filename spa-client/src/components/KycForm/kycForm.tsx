@@ -46,7 +46,7 @@ const KycForm = () => {
             navigate('/');
         }
         catch (e) {
-            toast.error("Connection error. Please try again later",e);
+            toast.error("Connection error. Please try again later" + e);
         }
     }
 

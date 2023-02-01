@@ -44,7 +44,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
             reset();
             await getMessages();
         }catch (e) {
-         toast.error("Connection error. Failed to send message",e);
+         toast.error("Connection error. Failed to send message " + e);
         }
     }
 

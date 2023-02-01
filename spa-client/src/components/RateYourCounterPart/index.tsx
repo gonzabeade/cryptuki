@@ -26,14 +26,14 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                if (isBuyer && resp.data.seller_rated) {
                    setAlreadyRated(true);
                    if (resp.data.seller_rating) {
-                       setRating(resp.data.seller_rating * 2);
+                       setRating(resp.data.seller_rating);
                    }
                }
 
                if (!isBuyer && resp.data.buyer_rated) {
                    setAlreadyRated(true);
                    if (resp.data.buyer_rating) {
-                       setRating(resp.data.buyer_rating * 2);
+                       setRating(resp.data.buyer_rating);
                    }
                }
            }
@@ -67,7 +67,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
     async function setRatingAndSend(rating:number) {
         try{
             await tradeService.rateCounterPart(tradeId!, rating);
-            setRating(rating * 2);
+            setRating(rating);
             setAlreadyRated(true);
         }catch (e) {
             toast.error("Connection Error, failed to rate your counterpart " + e)

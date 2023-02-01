@@ -56,7 +56,7 @@ public class TradeController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.trade-list+json")
     public Response listTrades(
             @QueryParam("page") @DefaultValue("0") final int page,
             @QueryParam("per_page") @DefaultValue("5") final int pageSize,
@@ -120,7 +120,7 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.trade+json")
     public Response listTrade(@PathParam("tradeId") int tradeId) {
         Trade trade = getTrade(tradeId);
         return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
@@ -128,7 +128,7 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}/messages")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.message-list+json")
     public Response getTradeMessages(@PathParam("tradeId") int tradeId) {
         Trade trade = getTrade(tradeId);
         User seller = trade.getOffer().getSeller();
@@ -142,8 +142,8 @@ public class TradeController {
 
     @POST
     @Path("/{tradeId}/messages")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.message+json")
+    // @Produces not needed, because it returns no content
     public Response postNewMessage(@NotNull @Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
 
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -155,8 +155,8 @@ public class TradeController {
 
     @PATCH
     @Path("/{tradeId}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.trade-status+json")
+    // @Produces not needed, because it returns no content
     public Response modifyTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid TradeStatusForm tradeStatusForm) {
         switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
             case ACCEPTED:
@@ -174,7 +174,7 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}/rating")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.rating+json")
     public Response getTradeRating(@PathParam("tradeId") int tradeId){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
         return Response.ok(TradeRatingDTO.fromTrade(trade,uriInfo)).build();
@@ -182,8 +182,8 @@ public class TradeController {
 
     @PATCH
     @Path("/{tradeId}/rating")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.rating+json")
+    // @Produces not needed, because it returns no content
     public Response rateTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid RatingForm ratingForm){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         tradeService.rateCounterPartUserRegardingTrade(username,ratingForm.getRating(),tradeId);

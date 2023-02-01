@@ -30,7 +30,7 @@ public class LocationController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.location-list+json")
     // TODO: Check if it can be done better from the persistence layer. The implementation uses the methods defined in TP2
     public Response getLocations() {
         Collection<LocationCountWrapper> collection = offerService.getOfferCountByLocation(); 

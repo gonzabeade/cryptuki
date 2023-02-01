@@ -38,8 +38,8 @@ public class ComplainController {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.complaint+json")
+    @Produces("application/vnd.cryptuki.v1.complaint+json")
     public Response createComplaint(@NotNull @Valid TradeComplainSupportForm tradeComplainSupportForm) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -55,7 +55,7 @@ public class ComplainController {
 
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.complaint-list+json")
     public Response getComplaints(@BeanParam ComplainBeanParam complainBeanParam) {
         ComplainFilter complainFilter = complainBeanParam.toComplainFilter();
         Collection<ComplainDto> complains = complainService.getComplainsBy(complainFilter)
@@ -73,7 +73,7 @@ public class ComplainController {
 
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.complaint+json")
     public Response getComplaint(@PathParam("id") int id) {
         Complain complain = complainService.getComplainById(id).orElseThrow(() -> new NoSuchComplainException(id));
         return Response.ok(ComplainDto.fromComplain(complain, uriInfo)).build();
@@ -81,8 +81,8 @@ public class ComplainController {
 
     @POST
     @Path("/{id}/resolution")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.complaint-resolution+json")
+    @Produces("application/vnd.cryptuki.v1.complaint-resolution+json")
     public Response createComplaintResolution(
             @NotNull @Valid SolveComplainForm solveComplainForm,
             @PathParam("id") int id
@@ -103,8 +103,7 @@ public class ComplainController {
 
     @GET
     @Path("/{id}/resolution")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.complaint-resolution+json")
     public Response getComplaintResolution(@PathParam("id") int id) {
         Complain complain = complainService.getComplainById(id).
                 orElseThrow(() -> new NoSuchComplainException(id));

@@ -7,6 +7,12 @@ import {CryptoFormValues} from "../components/CryptoFilters";
 
 jest.mock('axios')
 
+const order_by = "locations"
+const username = "salvaCasta"
+const status = OFFER_STATUS.PausedBySeller
+const page = 4
+const test_url = "test_url"
+
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
     axios.post = jest.fn().mockResolvedValue({data: []})
@@ -60,9 +66,6 @@ test("get offers by owner", () => {
     const offerService = new OfferService(() => axios)
     jest.spyOn(utils, 'processPaginatedResults').mockReturnThis();
 
-    const username = "salvaCasta"
-    const status = OFFER_STATUS.PausedBySeller
-    const page = 4
 
     let params = new URLSearchParams
     params.append('by_user', username)
@@ -77,7 +80,6 @@ test("get offers by owner", () => {
 
 test("get offer information by url", () => {
     const offerService = new OfferService(() => axios)
-    const test_url = "test_url"
 
     offerService.getOfferInformationByUrl(test_url)
 
@@ -155,8 +157,6 @@ test("create offer", () => {
 
 test("get search params from filters", () => {
     const offerService = new OfferService(() => axios)
-    const order_by = "locations"
-    const username = "salvaCasta"
 
     let params = new URLSearchParams()
     if(cryptoFormValues.cryptos)

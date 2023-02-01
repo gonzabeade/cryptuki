@@ -7,6 +7,18 @@ import {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveCom
 
 jest.mock('axios')
 
+const test_url = "test_url"
+const complainForm : CreateComplainForm = {
+    email : "scastagnino@itba.edu.ar",
+    tradeId : 1,
+    message : "This is a new complaint"
+}
+const resolutionForm : SolveComplaintFormModel = {
+    comments : "These are comments",
+    resolution : "This es a resolution",
+    complainId : 1
+}
+
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
     axios.post = jest.fn().mockResolvedValue({data: []})
@@ -15,7 +27,6 @@ beforeEach(() => {
 test("get complaints by URL", () => {
     const complainService = new ComplainService(() => axios)
     jest.spyOn(utils, 'processPaginatedResults').mockReturnThis();
-    const test_url = "test_url"
 
     complainService.getComplaintsByUrl(test_url)
 
@@ -48,11 +59,6 @@ test("get complaints by id", () => {
 
 test("create complaint", () => {
     const complaintService = new ComplainService(() => axios)
-    const complainForm : CreateComplainForm = {
-        email : "scastagnino@itba.edu.ar",
-        tradeId : 1,
-        message : "This is a new complaint"
-    }
 
     complaintService.createComplain(complainForm)
 
@@ -68,11 +74,6 @@ test("create complaint", () => {
 
 test("create complaint resolution", () => {
     const complaintService = new ComplainService(() => axios)
-    const resolutionForm : SolveComplaintFormModel = {
-        comments : "These are comments",
-        resolution : "This es a resolution",
-        complainId : 1
-    }
 
     complaintService.createComplainResolution(resolutionForm)
 

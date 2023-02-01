@@ -6,6 +6,8 @@ import * as utils from "../common/utils/utils";
 
 jest.mock('axios')
 
+const username = "salvaCasta"
+
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
     axios.post = jest.fn().mockResolvedValue({data: []})
@@ -19,7 +21,6 @@ const solvedKyc = {
 
 test("get kyc information", () =>{
     const kycService = new KycService(() => axios)
-    const username = "salvaCasta"
 
     kycService.getKycInformation(username)
 
@@ -53,7 +54,6 @@ test("get kyc pending information", () =>{
 
 test("solve kyc", () => {
     const kycService = new KycService(() => axios)
-    const username = "salvaCasta"
 
     kycService.solveKyc(solvedKyc, username)
 

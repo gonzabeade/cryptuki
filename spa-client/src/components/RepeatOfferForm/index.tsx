@@ -5,10 +5,12 @@ import {NEIGHBORHOODS} from "../../common/constants";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useOfferService from "../../hooks/useOfferService";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import i18n from "../../i18n";
+import {attendError} from "../../common/utils/utils";
+import OfferModel from "../../types/OfferModel";
 
-export interface UploadFormValues {
+export interface RepeatOfferFormValues {
     minInCrypto:number,
     maxInCrypto:number,
     location:string,
@@ -17,21 +19,23 @@ export interface UploadFormValues {
     comments?:string
 }
 
-const UploadForm = () => {
+const RepeatOfferForm = () => {
 
     //State
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
     const cryptocurrencyService = useCryptocurrencyService();
     const offerService = useOfferService();
     const navigate = useNavigate();
+    const [oldOffer, setOldOffer] = useState<OfferModel>();
+    const params = useParams();
 
-     async function fetchCryptocurrencies(){
-         try{
-             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
-             setCryptoCurrencies(apiCall);
-         }catch (e) {
-             toast.error("Connection error. Failed to fetch cryptocurrencies " + e);
-         }
+    async function fetchCryptocurrencies(){
+        try{
+            const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
+            setCryptoCurrencies(apiCall);
+        }catch (e) {
+            toast.error("Connection error. Failed to fetch cryptocurrencies " + e);
+        }
     }
 
     function changeSuggestedPrice(){
@@ -52,14 +56,26 @@ const UploadForm = () => {
 
     }
 
+    async function getOffer(id:number) {
+        try {
+            const resp = await offerService.getOfferInformation(id);
+            setOldOffer(resp);
+        } catch (e) {
+            attendError("Connection error. Failed to fetch offer", e);
+        }
+    }
+
+
+
     useEffect(()=>{
-        fetchCryptocurrencies();
+        if(params.id)
+            fetchCryptocurrencies().then(()=>getOffer(Number(params.id)));
     },[])
 
     //Form
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadFormValues>();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm<RepeatOfferFormValues>();
 
-    async function onSubmit(data:UploadFormValues) {
+    async function onSubmit(data:RepeatOfferFormValues) {
         try{
             const offer = await offerService.createOffer(data.minInCrypto, data.maxInCrypto, data.cryptoCode, data.location, data.unitPrice, data.comments);
             toast.success("Offer created");
@@ -81,16 +97,16 @@ const UploadForm = () => {
                             <div className="flex flex-col justify-center mx-auto">
                                 <select className="rounded-lg p-3" id="cryptoSelected"
                                         {...register("cryptoCode",{required:"You must choose a cryptocurrency to sell", validate:{
-                                            notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
+                                                notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
                                             }, onChange:changeSuggestedPrice})} defaultValue="DEFAULT">
                                     <option disabled value="DEFAULT">{i18n.t('chooseAnOption')}</option>
                                     {
                                         cryptocurrencies.map((cryptocurrency)=>{
-                                           return (
-                                               <option value={cryptocurrency.code} key={cryptocurrency.code}>
-                                                   {cryptocurrency.commercialName}
-                                               </option>
-                                           );
+                                            return (
+                                                <option value={cryptocurrency.code} key={cryptocurrency.code}>
+                                                    {cryptocurrency.commercialName}
+                                                </option>
+                                            );
                                         })
                                     }
                                 </select>
@@ -195,7 +211,7 @@ const UploadForm = () => {
                 </div>
                 <div className="flex flex-row p-5 mx-auto">
                     <div className="font-bold cursor-pointer bg-polarlr/[0.6] text-white text-center mt-4 p-3 rounded-md font-sans mx-5 w-32"
-                       onClick={()=>navigate(-1)}>{i18n.t('cancel')}
+                         onClick={()=>navigate(-1)}>{i18n.t('cancel')}
                     </div>
                     <button type="submit"
                             className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
@@ -207,4 +223,4 @@ const UploadForm = () => {
     );
 };
 
-export default UploadForm;
+export default RepeatOfferForm;

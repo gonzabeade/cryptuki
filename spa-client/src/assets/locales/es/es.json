@@ -324,7 +324,7 @@
   "soldTrades": "Cerradas",
   "rejectedTrades": "Rechazadas por ti",
   "acceptedTrades": "En curso",
-  "deletedByUserTrades": "Eliminadas por el usuario",
+  "deletedByUserTrades": "Eliminadas por el comprador",
   "selectAll": "Seleccionar todas",
   "clearSelection": "Limpiar filtro",
   "unknownLocation": "Desconocido",

@@ -322,7 +322,7 @@
   "soldTrades": "Closed",
   "rejectedTrades": "Rejected by you",
   "acceptedTrades": "Ongoing",
-  "deletedByUserTrades": "Deleted by user",
+  "deletedByUserTrades": "Deleted by buyer",
   "selectAll": "Select all",
   "clearSelection": "Clean filters",
   "unknownLocation": "Unknown",

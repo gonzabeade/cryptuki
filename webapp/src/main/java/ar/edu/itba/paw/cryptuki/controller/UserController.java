@@ -116,17 +116,16 @@ public class UserController {
 
     @POST
     @Path("/{username}")
-    @Consumes("application/vnd.cryptuki.v1.user-validation+json")
     public Response createValidation(
-            @NotNull @Valid UserEmailValidationForm userEmailValidationForm,
+            @NotNull @QueryParam("code") Integer code,
             @PathParam("username") String username
     ){
 
-        if (!userService.verifyUser(username, userEmailValidationForm.getCode()))
+        if (!userService.verifyUser(username, code))
             throw new BadRequestException("Bad request");
 
         final URI uri = uriInfo.getAbsolutePathBuilder().build();
-        return Response.created(uri).build();
+        return Response.seeOther(uri).build();
     }
 
 }

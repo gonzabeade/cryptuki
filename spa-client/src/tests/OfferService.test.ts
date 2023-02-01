@@ -64,7 +64,7 @@ test("get offers by owner", () => {
     const status = OFFER_STATUS.PausedBySeller
     const page = 4
 
-    const params = new URLSearchParams
+    let params = new URLSearchParams
     params.append('by_user', username)
     params.append('page', page.toString())
     params.append('status', status)
@@ -95,7 +95,7 @@ test("get offer id from uri", () => {
 
 test("get search params from uri", () => {
     const offerService = new OfferService(() => axios)
-    const params = "param1=2&param2=1"
+    let params = "param1=2&param2=1"
 
     const testedParams = offerService.getSearchParamsFromURI(paths.BASE_URL + paths.OFFERS + "?" + params)
 
@@ -158,7 +158,7 @@ test("get search params from filters", () => {
     const order_by = "locations"
     const username = "salvaCasta"
 
-    const params = new URLSearchParams()
+    let params = new URLSearchParams()
     if(cryptoFormValues.cryptos)
         params.append('crypto_code', cryptoFormValues.cryptos[0])
     if(cryptoFormValues.locations)

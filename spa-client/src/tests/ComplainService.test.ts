@@ -27,7 +27,7 @@ test("get complaints", () => {
     const complainService = new ComplainService(() => axios)
     jest.spyOn(utils, 'processPaginatedResults').mockReturnThis();
 
-    const params = new URLSearchParams()
+    let params = new URLSearchParams()
     params.append("status","PENDING");
 
     complainService.getComplaints()

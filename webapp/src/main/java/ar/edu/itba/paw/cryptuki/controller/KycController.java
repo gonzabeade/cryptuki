@@ -76,12 +76,12 @@ public class KycController {
     @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response postKyc(
             @PathParam("username") String username,
-            @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
+            @NotNull @Valid @FormDataParam("kyc-information") KycForm kycForm,
              @FormDataParam("id-photo") FormDataBodyPart idPhoto,
              @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
     ) throws IOException {
 
-        if (idPhoto == null || validationPhoto == null || kycInformation == null )
+        if (idPhoto == null || validationPhoto == null || kycForm == null )
             throw new BadMultipartFormatException(kycMultipartFormat);
 
         byte[] idPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
@@ -93,16 +93,16 @@ public class KycController {
         if (idPhotoBytes.length > MAX_SIZE || validationPhotoBytes.length > MAX_SIZE)
             throw new IllegalArgumentException(String.format("Uploaded files have a max size of %d bytes", MAX_SIZE));
 
-        KycInformationPO kycInformationPO = kycInformation.toParameterObject(username)
+        KycInformationPO kycInformationPO = kycForm.toParameterObject(username)
                 .withIdPhoto(idPhotoBytes)
                 .withIdPhotoType(idPhoto.getMediaType().getSubtype())
                 .withValidationPhoto(validationPhotoBytes)
                 .withValidationPhotoType(validationPhoto.getMediaType().getSubtype());
 
-        kycService.newKycRequest(kycInformationPO);
+        KycInformation kycInformation = kycService.newKycRequest(kycInformationPO);
         final URI uri = uriInfo.getRequestUri();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(KycDto.fromKycInformation(kycInformation, uriInfo)).build();
     }
 
     @PATCH

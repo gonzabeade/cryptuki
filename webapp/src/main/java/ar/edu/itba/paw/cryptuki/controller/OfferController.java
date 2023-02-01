@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
+import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
 import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
@@ -85,7 +86,7 @@ public class OfferController {
                 .path(String.valueOf(offer.getOfferId()))
                 .build();
 
-        return Response.ok(OfferDto.fromOffer(offer,uriInfo)).header("Location",uri).build();
+        return Response.created(uri).entity(OfferDto.fromOffer(offer,uriInfo)).build();
     }
 
     @PUT
@@ -98,7 +99,7 @@ public class OfferController {
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
         offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
 
@@ -131,7 +132,7 @@ public class OfferController {
                 .path(String.valueOf(trade.getTradeId()))
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(TradeDto.fromTrade(trade, uriInfo)).build();
     }
 
 

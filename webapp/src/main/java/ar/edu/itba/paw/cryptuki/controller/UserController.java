@@ -10,6 +10,7 @@ import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.UserService;
@@ -96,13 +97,13 @@ public class UserController {
     public Response toNewUser(@Valid @NotNull(message = "Body required") RegisterForm registerForm,  @Context HttpServletRequest request) {
 
         UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());
-        userService.registerUser(userPO);
+        User newUser = userService.registerUser(userPO);
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
                 .path(userPO.getUsername())
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(UserDto.fromUser(newUser, uriInfo)).build();
     }
 
 

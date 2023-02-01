@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserAuth;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 
 import java.util.Locale;
@@ -9,8 +8,12 @@ import java.util.Optional;
 
 public interface UserService {
 
-    /** User creation */
-    void registerUser(UserPO userPO);
+    /**
+     * User creation
+     *
+     * @return
+     */
+    User registerUser(UserPO userPO);
 
     /** User getters - both email and usernames are unique */
     Optional<User> getUserByEmail(String email);

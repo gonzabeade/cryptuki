@@ -58,7 +58,7 @@ public class UserProfilePictureController {
         profilePicService.uploadProfilePicture(username, pictureBytes, picture.getContentDisposition().getType());
 
         URI uri = uriInfo.getRequestUri();
-        return profilePicture.isPresent() ? Response.noContent().build() : Response.created(uri).build();
+        return Response.noContent().build();
     }
     @GET
     public Response getProfilePic(@PathParam("username") String username) {

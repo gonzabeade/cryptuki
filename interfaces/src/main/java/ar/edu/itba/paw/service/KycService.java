@@ -10,8 +10,12 @@ import java.util.Optional;
 
 public interface KycService {
 
-    /** Kyc Request creation */
-    void newKycRequest(KycInformationPO kycInformationPO);
+    /**
+     * Kyc Request creation
+     *
+     * @return
+     */
+    KycInformation newKycRequest(KycInformationPO kycInformationPO);
 
     /** Kyc Request manipulation */
     void validateKycRequest(int kycId);

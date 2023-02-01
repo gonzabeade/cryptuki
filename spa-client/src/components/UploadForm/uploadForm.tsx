@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useOfferService from "../../hooks/useOfferService";
 import {useNavigate} from "react-router-dom";
+import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
 export interface UploadFormValues {

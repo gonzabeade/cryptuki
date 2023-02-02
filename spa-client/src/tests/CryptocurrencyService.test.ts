@@ -1,6 +1,5 @@
 import {CryptocurrencyService} from "../services/CryptocurrencyService";
 import axios from "axios";
-import {paths} from "../common/constants";
 
 jest.mock('axios')
 

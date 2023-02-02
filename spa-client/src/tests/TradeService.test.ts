@@ -1,8 +1,6 @@
 import {TradeService} from "../services/TradeService";
 import axios from "axios";
 import * as utils from "../common/utils/utils";
-import exp from "constants";
-import {CryptoFormValues} from "../components/CryptoFilters";
 import {TRADE_STATUS, paths} from "../common/constants";
 
 jest.mock('axios')

@@ -2,7 +2,6 @@ import {OfferService} from "../services/OfferService";
 import axios from "axios";
 import * as utils from "../common/utils/utils";
 import {OFFER_STATUS, paths} from "../common/constants";
-import exp from "constants";
 import {CryptoFormValues} from "../components/CryptoFilters";
 
 jest.mock('axios')

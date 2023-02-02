@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class InternalServerErrorExceptionMapper extends GenericMapper<InternalServerErrorException> {
+public class InternalServerErrorExceptionMapper extends GenericMapper<Exception> {
 
     private static final String MESSAGE = "Internal server error - Cause unknown";
 

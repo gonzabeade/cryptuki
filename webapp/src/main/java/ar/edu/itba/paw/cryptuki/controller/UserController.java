@@ -63,8 +63,8 @@ public class UserController {
     public Response getUsers(@QueryParam("page") @DefaultValue("0") int page,
                                   @QueryParam("per_page") @DefaultValue("5") int pageSize,
                                   @QueryParam("kyc_status") @ValueOfEnum(enumClass = KycStatus.class)
-                                      String kyc_status) {
-        if(!KycStatus.valueOf(kyc_status).equals(KycStatus.PEN))
+                                      String kycStatus) {
+        if( kycStatus == null || !KycStatus.PEN.equals(KycStatus.valueOf(kycStatus)))
             throw new BadRequestException("Only pending kyc can be listed.");
         Collection<KycInformation> pendingKycRequests = this.kycService.getPendingKycRequests(page, pageSize);
        long pendingKycRequestsCount = this.kycService.getPendingKycRequestsCount();

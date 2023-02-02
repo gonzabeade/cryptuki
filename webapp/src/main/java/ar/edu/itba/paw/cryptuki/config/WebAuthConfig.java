@@ -194,6 +194,7 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.POST, "/api/complaints/*/resolution").hasRole("ADMIN")
 
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                     .antMatchers(HttpMethod.GET, "/api/users/*").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/users/*").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/*/secrets").authenticated()

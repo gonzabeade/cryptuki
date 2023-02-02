@@ -86,7 +86,7 @@ public class UserController {
     @POST
     @Consumes("application/vnd.cryptuki.v1.user-nonce")
     @Produces("application/vnd.cryptuki.v1.nonce-ack+json")
-    public Response toUserNonce(@QueryParam("email") String email) {
+    public Response toUserNonce(@NotNull @QueryParam("email") String email) {
         userService.changePasswordAnonymously(email);
         return Response.ok(UserNonceDto.fromEmail(email)).build();
     }

@@ -4,7 +4,7 @@ import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
+import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.support;
+package ar.edu.itba.paw.cryptuki.form;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;

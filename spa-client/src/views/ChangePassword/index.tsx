@@ -19,7 +19,7 @@ export type changePasswordForm = {
 
 
 const ChangePassword = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<changePasswordForm>();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm<changePasswordForm>();
     const userService = useUserService();
     const [username, setUsername] = useState<string|null>();
     const [code, setCode] = useState<string|null>();
@@ -109,9 +109,15 @@ const ChangePassword = () => {
                             id="confirm_pwd"
                             placeholder="Repeat new password"
                             className="rounded-lg p-3  w-full"
-                            {...register("repeatPassword",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                            {...register("repeatPassword",
+                                {required: true,
+                                    validate:checkEquals,
+                                    pattern: {value: PWD_REGEX,
+                                        message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}
+                                    })}
                         />
                         {errors && errors.repeatPassword && <span className="text-red-500">{errors.repeatPassword.message}</span>}
+                        {errors && errors.repeatPassword?.type === "validate" && <span className="text-red-500">{i18n.t('passwordDontMatch')}</span>}
                     </div>
 
                 </div>
@@ -126,6 +132,10 @@ const ChangePassword = () => {
             </form>
         </div>
     );
+    function checkEquals(repeatPassword:string){
+        return repeatPassword === getValues().password ;
+    }
+
 };
 
 export default ChangePassword;

@@ -395,5 +395,6 @@
   "confirm": "Confirmar",
   "changePassword": "Cambia tu contraseña",
   "password": "Contraseña",
-  "repeatPassword": "Repetir contraseña"
+  "repeatPassword": "Repetir contraseña",
+  "passwordDontMatch" : "Las contraseñas no coinciden"
 }

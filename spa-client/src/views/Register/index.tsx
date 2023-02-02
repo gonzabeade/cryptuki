@@ -4,6 +4,7 @@ import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import i18n from "../../i18n";
+import React from "react";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -18,7 +19,7 @@ type RegisterFormValues = {
 }
 const Register = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm<RegisterFormValues>();
     const userService = useUserService();
     const navigate = useNavigate();
 
@@ -63,9 +64,10 @@ const Register = () => {
                     id="confirm_pwd"
                     placeholder="Repeat new password"
                     className="p-2 m-2 rounded-lg"
-                    {...register("repeatPassword",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                    {...register("repeatPassword",{required: true, validate:checkEquals, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
                 />
                 {errors && errors.repeatPassword && <span className="text-red-500">{errors.repeatPassword.message}</span>}
+                {errors && errors.repeatPassword?.type === "validate" && <span className="text-red-500">{i18n.t('passwordDontMatch')}</span>}
                 <input
                     type="email"
                     id="email"
@@ -90,6 +92,9 @@ const Register = () => {
             </form>
         </div>
     )
+    function checkEquals(repeatPassword:string){
+        return repeatPassword === getValues().password ;
+    }
 }
 
 export default Register; 

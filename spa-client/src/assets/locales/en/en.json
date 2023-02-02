@@ -392,7 +392,8 @@
   "confirm": "Confirm",
   "changePassword": "Change your password",
   "password": "Password",
-  "repeatPassword": "Repeat password"
+  "repeatPassword": "Repeat password",
+  "passwordDontMatch" : "Passwords don't match"
 
 
 }

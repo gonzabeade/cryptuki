@@ -9,6 +9,8 @@ import ar.edu.itba.paw.cryptuki.form.MessageForm;
 import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
+import ar.edu.itba.paw.cryptuki.utils.TradeBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -57,43 +59,37 @@ public class TradeController {
 
     @GET
     @Produces("application/vnd.cryptuki.v1.trade-list+json")
-    public Response listTrades(
-            @QueryParam("page") @DefaultValue("0") final int page,
-            @QueryParam("per_page") @DefaultValue("5") final int pageSize,
-            @QueryParam("status") @CollectionOfEnum(enumClass = TradeStatus.class) final List<String> status,
-            @QueryParam("from_offer") final Integer offerId,
-            @QueryParam("buyer") final String buyerUsername
-    ) {
+    public Response listTrades(@Valid @BeanParam TradeBeanParam tradeBeanParam) {
 
         // Do not allow queries on these QueryParams simultaneously
-        boolean isBuyerPresent = buyerUsername != null;
-        boolean isOfferIdPresent = offerId != null;
+        boolean isBuyerPresent = tradeBeanParam.getBuyer() != null;
+        boolean isOfferIdPresent = tradeBeanParam.getOffer() != null;
 
-        if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
-            throw new IllegalArgumentException("Exactly one of the following filters must be provided: `from_offer`, `buyer`");
+//        if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
+//            throw new IllegalArgumentException("Exactly one of the following filters must be provided: `from_offer`, `buyer`");
 
         // If status collection is empty, then no filtering is intended
         // Use every status in query
-        Set<TradeStatus> statusSet = status.stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
+        Set<TradeStatus> statusSet = tradeBeanParam.getStatus().stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
         if (statusSet.isEmpty())
             statusSet.addAll(Arrays.asList(TradeStatus.values()));
 
         Collection<Trade> trades;
         long tradeCount;
         if (isBuyerPresent) {
-            trades = tradeService.getTradesAsBuyer(buyerUsername, page, pageSize, statusSet);
-            tradeCount = tradeService.getTradesAsBuyerCount(buyerUsername, statusSet);
+            trades = tradeService.getTradesAsBuyer(tradeBeanParam.getBuyer(), tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet);
+            tradeCount = tradeService.getTradesAsBuyerCount(tradeBeanParam.getBuyer(), statusSet);
         } else {
-            Offer offer = offerService.getOfferById(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
+            Offer offer = offerService.getOfferById(tradeBeanParam.getOffer()).orElseThrow(()-> new NoSuchOfferException(tradeBeanParam.getOffer()));
             String username = offer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
 
             // If access is denied, hide 403 response status under a 404,
             // to prevent making information public
             try {
-                trades = tradeService.getTradesAsSeller(username, page, pageSize, statusSet, offerId);
-                tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, offerId);
+                trades = tradeService.getTradesAsSeller(username, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet, tradeBeanParam.getOffer());
+                tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, tradeBeanParam.getOffer());
             } catch (AccessDeniedException ade) {
-                throw new NoSuchOfferException(offerId, ade);
+                throw new NoSuchOfferException(tradeBeanParam.getOffer(), ade);
             }
 
         }
@@ -103,7 +99,7 @@ public class TradeController {
 
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
-        ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount);
+        ResponseHelper.genLinks(rb, uriInfo, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), tradeCount);
         return rb.build();
     }
 

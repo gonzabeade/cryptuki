@@ -383,5 +383,7 @@
   "DontWorry": "Don't worry!",
   "RememberSeller": "Remember we know our sellers.",
   "teamWorking": "Our team is working to solve your issue.",
-  "RepeatOffer": "Repeat offer"
+  "RepeatOffer": "Repeat offer",
+  "idType.PASSPORT": "Passport",
+  "idType.ID": "ID"
 }

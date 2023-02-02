@@ -1,12 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {paths, sleep} from "../../common/constants";
-import {Link, useNavigate} from "react-router-dom";
+import React from 'react';
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
-import axios from "axios";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
 export interface UploadKycValues {
@@ -22,15 +18,13 @@ export interface UploadKycValues {
 const KycForm = () => {
 
     //Form
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadKycValues>();
+    const { register, handleSubmit, formState: { errors }} = useForm<UploadKycValues>();
     const kycService = useKycService();
-    const navigate = useNavigate();
     const username = useUserService().getLoggedInUser();
 
     async function onSubmit(data:UploadKycValues) {
-        console.log(data);
         try {
-            const resp = kycService.uploadKyc(
+            await kycService.uploadKyc(
                 username as string,
                 data.names,
                 data.surnames,
@@ -40,17 +34,12 @@ const KycForm = () => {
                 data.idPictures,
                 data.facePictures
             );
-            toast.success("Successfully registered!");
-            await sleep(1000);
-            //TODO: mirar bien a donde te navega
-            navigate('/');
+            toast.success("Kyc information successfully sent.");
         }
         catch (e) {
             toast.error("Connection error. Please try again later" + e);
         }
     }
-
-    // TODO Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario
 
     return (
         <div className="flex flex-row mx-auto">

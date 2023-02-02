@@ -380,5 +380,7 @@
   "DontWorry": "¡No te preocupes!",
   "RememberSeller": "Recuerda que conocemos a nuestros vendedores.",
   "teamWorking": "Nuestro equipo está trabajando para soluciones el inconveniente",
-  "RepeatOffer": "Repetir oferta"
+  "RepeatOffer": "Repetir oferta",
+  "idType.PASSPORT": "Pasaporte",
+  "idType.ID": "DNI"
 }

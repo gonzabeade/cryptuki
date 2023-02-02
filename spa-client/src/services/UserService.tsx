@@ -3,6 +3,7 @@ import jwtDecode from "jwt-decode";
 import UserModel from "../types/UserModel";
 import {paths} from "../common/constants";
 import {recoverPasswordForm} from "../views/RecoverPassword";
+import {changePasswordForm} from "../views/ChangePassword";
 
 export class UserService {
 
@@ -130,5 +131,15 @@ export class UserService {
         });
     };
 
+    public async changePassword(data:changePasswordForm, username:string, code?:string){
+        await this.axiosInstance().put(paths.BASE_URL + "/users/" + username + "/password", {
+            password:data.password
+        }, {
+            headers:{
+                'Content-Type':'application/vnd.cryptuki.v1.user-password+json',
+            }
+        });
+
+    }
 
 }

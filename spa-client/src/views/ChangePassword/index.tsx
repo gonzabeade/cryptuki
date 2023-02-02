@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import i18n from "../../i18n";
+import {withBasicAuthorizationWithCode} from "../../hooks/useAxios";
+import {toast} from "react-toastify";
 
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z]).{8,24}$/;
@@ -16,17 +18,36 @@ export type changePasswordForm = {
 const ChangePassword = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<changePasswordForm>();
     const userService = useUserService();
+    const [username, setUsername] = useState<string|null>();
+    const [code, setCode] = useState<string|null>();
     const navigate = useNavigate();
+    const [searchParams]= useSearchParams();
 
     async function onSubmit(data:changePasswordForm){
-        try{
-            console.log(data)
-        }catch (e) {
-
+        if(!username){
+            toast.error("Failed to update the password.")
+            return;
         }
-
+        try{
+            if(username && code){
+                withBasicAuthorizationWithCode(username, code)
+            }
+            await userService.changePassword(data,username)
+            toast.success("Password successfully updated.")
+            if(username && code)
+                navigate("/");
+            else navigate(-1);
+        }catch (e) {
+            toast.error("Failed to update the password.")
+        }
     }
 
+    useEffect(()=>{
+        const username = searchParams.get("username") !== null ? searchParams.get("username"):userService.getLoggedInUser();
+        setUsername(username)
+        if(searchParams.get("code") && searchParams.get("code") !== null)
+            setCode(searchParams.get("code"))
+    },[])
 
     return (
         <div className="flex mt-10 mb-10">

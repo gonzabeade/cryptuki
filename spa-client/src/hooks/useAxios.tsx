@@ -6,6 +6,11 @@ const withBasicAuthorization = (username: string, password: string) => {
     axiosService.useBasicAuthentication(username, password); 
 }
 
+const withBasicAuthorizationWithCode = (username: string, code: string) => {
+    const axiosService = AxiosService.getInstance();
+    axiosService.useBasicAuthentication(username, code);
+}
+
 const withNoAuthorization = () => {
     const axiosService = AxiosService.getInstance(); 
     axiosService.useNoAuthentication(); 
@@ -20,4 +25,4 @@ const useAxios = ():()=>AxiosInstance => {
     return AxiosService.getAxiosInstance;
 }
 
-export {withBasicAuthorization, withBearerAuthorization, withNoAuthorization, useAxios}; 
+export {withBasicAuthorization, withBearerAuthorization, withNoAuthorization,withBasicAuthorizationWithCode, useAxios};

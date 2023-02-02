@@ -95,9 +95,9 @@ public class KycController {
 
         KycInformationPO kycInformationPO = kycForm.toParameterObject(username)
                 .withIdPhoto(idPhotoBytes)
-                .withIdPhotoType(idPhoto.getMediaType().getSubtype())
+                .withIdPhotoType(idPhoto.getMediaType().toString())
                 .withValidationPhoto(validationPhotoBytes)
-                .withValidationPhotoType(validationPhoto.getMediaType().getSubtype());
+                .withValidationPhotoType(validationPhoto.getMediaType().toString());
 
         KycInformation kycInformation = kycService.newKycRequest(kycInformationPO);
         final URI uri = uriInfo.getRequestUri();

@@ -102,6 +102,7 @@ public class TradeController {
         if (trades.isEmpty())
             return Response.noContent().build();
 
+
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
         ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount);

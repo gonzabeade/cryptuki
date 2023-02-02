@@ -82,21 +82,21 @@ public class TradeController {
 
         // If status collection is empty, then no filtering is intended
         // Use every status in query
-        Set<TradeStatus> statusSet = tradeBeanParam.getStatus().stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
+        Set<TradeStatus> statusSet = status.stream().map(TradeStatus::valueOf).collect(Collectors.toSet());
         if (statusSet.isEmpty())
             statusSet.addAll(Arrays.asList(TradeStatus.values()));
 
         Collection<Trade> trades;
         long tradeCount;
 
-        if (buyer == null) {
-            trades = tradeService.getTradesAsBuyer(tradeBeanParam.getBuyer(), tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet);
-            tradeCount = tradeService.getTradesAsBuyerCount(tradeBeanParam.getBuyer(), statusSet);
+        if (buyer != null) {
+            trades = tradeService.getTradesAsBuyer(buyer, page, pageSize, statusSet);
+            tradeCount = tradeService.getTradesAsBuyerCount(buyer, statusSet);
         } else {
-            Offer tradeOffer = offerService.getOfferById(tradeBeanParam.getOffer()).orElseThrow(()-> new NoSuchOfferException(tradeBeanParam.getOffer()));
+            Offer tradeOffer = offerService.getOfferById(offer).orElseThrow(()-> new NoSuchOfferException(offer));
             String username = tradeOffer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
-            trades = tradeService.getTradesAsSeller(username, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet, tradeBeanParam.getOffer());
-            tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, tradeBeanParam.getOffer());
+            trades = tradeService.getTradesAsSeller(username, page, pageSize, statusSet, offer);
+            tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, offer);
         }
 
         if (trades.isEmpty())
@@ -104,7 +104,7 @@ public class TradeController {
 
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
-        ResponseHelper.genLinks(rb, uriInfo, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), tradeCount);
+        ResponseHelper.genLinks(rb, uriInfo, page, pageSize, tradeCount);
         return rb.build();
     }
 

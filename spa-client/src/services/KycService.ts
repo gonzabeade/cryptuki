@@ -18,12 +18,23 @@ export class KycService {
     }
 
     public async getKycInformation(username:string):Promise<KycInformationModel>{
-       const resp = await this.axiosInstance().get<KycInformationModel>(this.basePath + username + '/kyc');
+       const resp = await this.axiosInstance()
+           .get<KycInformationModel>(this.basePath + username + '/kyc',
+               {
+                   headers:{
+                       'Accept':'application/vnd.cryptuki.v1.kyc+json'
+                   }
+               });
        return resp.data;
     }
 
     public async getPendingKycInformationByUrl(url:string):Promise<PaginatedResults<UserModel>>{
-        const resp = await this.axiosInstance().get<UserModel[]>(url);
+        const resp = await this.axiosInstance().get<UserModel[]>(url,
+            {
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.user-list+json'
+                }
+            });
         return processPaginatedResults(resp);
     }
 
@@ -32,7 +43,11 @@ export class KycService {
         params.append("kyc_status","PEN");
         params.append("per_page", "2");
         const resp = await this.axiosInstance().get<UserModel[]>(
-            this.userPath,{ params:params });
+            this.userPath,{ params:params ,
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user-list+json'
+            }
+            });
         return processPaginatedResults(resp);
     }
 
@@ -58,7 +73,12 @@ export class KycService {
         const resp = await this.axiosInstance().patch(this.basePath + username + '/kyc', {
                 comments:KycForm.comments,
                 status: KycForm.status
-            });
+            },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.kyc+json',
+                'Content-Type': 'application/vnd.cryptuki.v1.kyc+json'
+            }
+        });
         return resp.data;
     }
 
@@ -89,7 +109,8 @@ export class KycService {
 
         await this.axiosInstance().post(this.basePath + username + '/kyc', formData,{
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'Accept':'application/vnd.cryptuki.v1.kyc+json'
             }
         });
     }

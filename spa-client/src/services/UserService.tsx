@@ -44,12 +44,21 @@ export class UserService {
 
 
     public async  getUser(username:string):Promise<UserModel>{
-        const resp = await this.axiosInstance().get<UserModel>(this.basePath + username);
+        const resp = await this.axiosInstance()
+            .get<UserModel>(this.basePath + username,{
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.user+json'
+                }
+            });
         return resp.data;
     }
 
     public async  getUserByUrl(url:string):Promise<UserModel>{
-        const resp = await this.axiosInstance().get<UserModel>(url);
+        const resp = await this.axiosInstance().get<UserModel>(url,{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user+json'
+            }
+        });
         return resp.data;
     }
 
@@ -69,15 +78,30 @@ export class UserService {
             password: password,
             phoneNumber: phoneNumber,
             email: email
+        },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user+json',
+                'Content-Type':'application/vnd.cryptuki.v1.user+json'
+            }
         });
     }
     public async verifyUser(code:number, username:string){
         await this.axiosInstance().post(this.basePath + username, {
            code:code
+        },{
+            headers:{
+                'Content-Type':'application/vnd.cryptuki.v1.user-validation+json'
+            }
         });
     }
+
     public async getKYCStatus(username:string){
-        const resp = await this.axiosInstance().get(this.basePath + username + '/kyc');
+        const resp = await this.axiosInstance().get(this.basePath + username + '/kyc',
+            {
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.kyc+json'
+                }
+            });
         if(resp.status === 204){
             return null;
         }else{

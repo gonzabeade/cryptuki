@@ -1,6 +1,6 @@
 import {OFFER_STATUS, paths} from "../common/constants";
 import OfferModel from "../types/OfferModel";
-import {AxiosInstance} from "axios";
+import {AxiosHeaders, AxiosInstance} from "axios";
 import {ModifyFormValues} from "../components/EditOfferForm";
 import {PaginatedResults} from "../types/PaginatedResults";
 import {processPaginatedResults} from "../common/utils/utils";
@@ -11,21 +11,30 @@ export class OfferService {
     private readonly basePath = paths.BASE_URL + paths.OFFERS;
     private readonly axiosInstance: () => AxiosInstance;
 
+
     public constructor(axiosInstance: () => AxiosInstance) {
         this.axiosInstance = axiosInstance;
     }
 
     public async getOffers(params?: URLSearchParams): Promise<PaginatedResults<OfferModel>> {
 
-        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params: params
-        });
+        const resp = await this.axiosInstance().get<OfferModel[]>(paths.BASE_URL+ "/offers", {
+            params: params,
+            headers: {
+                'Accept': 'application/vnd.cryptuki.v1.offer-list+json'
+            }
+        },);
 
         return processPaginatedResults(resp, params);
     }
 
     public async getOfferInformation(offerId: number): Promise<OfferModel> {
-        const resp = await this.axiosInstance().get<OfferModel>(this.basePath + offerId);
+        const resp = await this.axiosInstance()
+            .get<OfferModel>(this.basePath + offerId,{
+                headers: {
+                    'Accept': 'application/vnd.cryptuki.v1.offer+json'
+                }
+            });
         return resp.data;
     }
 
@@ -43,15 +52,22 @@ export class OfferService {
             params.append("status", status);
         }
 
-        const resp = await this.axiosInstance().get<OfferModel[]>(this.basePath, {
-            params: params
+        const resp = await this.axiosInstance().get<OfferModel[]>(paths.BASE_URL+ "/offers", {
+            params: params,
+            headers: {
+                'Accept': 'application/vnd.cryptuki.v1.offer-list+json'
+            }
         })
 
         return processPaginatedResults(resp, params);
     }
 
     public async getOfferInformationByUrl(offerUrl: string): Promise<OfferModel> {
-        const resp = await this.axiosInstance().get<OfferModel>(offerUrl);
+        const resp = await this.axiosInstance().get<OfferModel>(offerUrl,
+            {
+                headers: {
+                    'Accept': 'application/vnd.cryptuki.v1.offer+json'
+                }});
         return resp.data;
     }
 
@@ -64,6 +80,11 @@ export class OfferService {
             unitPrice: offer.unitPrice,
             firstChat: offer.comments,
             offerStatus: status
+        },{
+            headers: {
+                'Accept': 'application/vnd.cryptuki.v1.offer+json',
+                'Content-Type': 'application/vnd.cryptuki.v1.offer+json'
+            }
         })
         return resp.data;
     }
@@ -79,14 +100,18 @@ export class OfferService {
     }
 
     public async createOffer(minInCrypto: number, maxInCrypto: number, cryptoCode: string, location: string, unitPrice: number, firstChat?: string): Promise<OfferModel> {
-        const offer = await this.axiosInstance().post<OfferModel>(this.basePath, {
+        const offer = await this.axiosInstance().post<OfferModel>(paths.BASE_URL+ "/offers", {
             minInCrypto: minInCrypto,
             maxInCrypto: maxInCrypto,
             cryptoCode: cryptoCode,
             location: location,
             unitPrice: unitPrice,
             firstChat: firstChat
-        });
+        },{
+            headers: {
+                'Accept': 'application/vnd.cryptuki.v1.offer+json',
+                'Content-Type': 'application/vnd.cryptuki.v1.offer+json'
+            }});
         return offer.data;
     }
 

@@ -377,10 +377,17 @@
   "makeTradeProposal": "Make trade proposal",
   "all": "All",
   "marketplace": "Marketplace P2P",
-  "DontWorry": "¡No te preocupes!",
-  "RememberSeller": "Recuerda que conocemos a nuestros vendedores.",
-  "teamWorking": "Nuestro equipo está trabajando para soluciones el inconveniente",
-  "RepeatOffer": "Repetir oferta",
-  "idType.PASSPORT": "Pasaporte",
-  "idType.ID": "DNI"
+  "DontWorry": "Don't worry!",
+  "RememberSeller": "Remember we know our sellers.",
+  "teamWorking": "Our team is working to solve your issue.",
+  "RepeatOffer": "Repeat offer",
+  "idType.PASSPORT": "Passport",
+  "idType.ID": "ID",
+  "WillSendMail": "We will send you a link to recover your account",
+  "EmailInput": "Enter your email",
+  "CheckEmail": "Check yor email",
+  "InstructionsSent": "We sent you instructions to recover your account",
+  "SignIn": "Sign in",
+  "ForgotPassword" : "Forgot your password?"
+
 }

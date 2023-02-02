@@ -6,6 +6,7 @@ import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
 import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
+import ar.edu.itba.paw.cryptuki.form.legacy.auth.EmailForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
@@ -86,9 +87,9 @@ public class UserController {
     @POST
     @Consumes("application/vnd.cryptuki.v1.user-nonce+json")
     @Produces("application/vnd.cryptuki.v1.nonce-ack+json")
-    public Response toUserNonce(@QueryParam("email") String email) {
-        userService.changePasswordAnonymously(email);
-        return Response.ok(UserNonceDto.fromEmail(email)).build();
+    public Response toUserNonce(@Valid @NotNull EmailForm form) {
+        userService.changePasswordAnonymously(form.getEmail());
+        return Response.ok(UserNonceDto.fromEmail(form.getEmail())).build();
     }
 
     @POST

@@ -90,11 +90,15 @@ const Login = () => {
                 {errors && errors.password && <span className="text-red-500">{errors.password.message}</span>}
 
                 
-                <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold hover:bg-polar">Sign in</button>
+                <button type="submit" className="bg-frostdr text-white mx-auto mb-auto mt-6 py-2 px-4 rounded-lg font-lato font-bold hover:bg-polar">{i18n.t('SignIn')}</button>
                 <p className="font-lato font-light mx-auto text-xs mt-2 text-black/[.4]">{i18n.t('noAccount')}<br/></p>
                 <p className=" hover:cursor-pointer text-polar hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">{/*put router link here*/}<Link
                     to="/register">{i18n.t('createAccount')}</Link>
                 </p>
+                <p className=" hover:cursor-pointer text-polar hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">{/*put router link here*/}<Link
+                    to="/recoverPassword">{i18n.t('ForgotPassword')}</Link>
+                </p>
+
 
             </form>
         </div>

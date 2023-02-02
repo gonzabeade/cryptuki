@@ -380,10 +380,16 @@
   "all": "Todos",
   "transactionDate": "Fecha de intercambio",
   "marketplace": "Mercado P2P",
-  "DontWorry": "Don't worry!",
-  "RememberSeller": "Remember we know our sellers.",
-  "teamWorking": "Our team is working to solve your issue.",
-  "RepeatOffer": "Repeat offer",
-  "idType.PASSPORT": "Passport",
-  "idType.ID": "ID"
+  "DontWorry": "¡No te preocupes!",
+  "RememberSeller": "Recuerda que conocemos a nuestros vendedores.",
+  "teamWorking": "Nuestro equipo está trabajando para soluciones el inconveniente",
+  "RepeatOffer": "Repetir oferta",
+  "idType.PASSPORT": "Pasaporte",
+  "idType.ID": "DNI",
+  "WillSendMail": "Te enviaremos un link para que recuperes la contraseña",
+  "EmailInput": "Ingresa tu correo electrónico",
+  "CheckEmail": "Chequea tu correo electrónico",
+  "InstructionsSent": "Te enviamos un correo electrónico con instrucciones para poder cambiar tu contraseña. "
+  ,"SignIn": "Inicia sesión",
+  "ForgotPassword": "¿Olvidaste tu contraseña?"
 }

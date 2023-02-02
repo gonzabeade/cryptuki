@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios";
 import jwtDecode from "jwt-decode";
 import UserModel from "../types/UserModel";
 import {paths} from "../common/constants";
+import {recoverPasswordForm} from "../views/RecoverPassword";
 
 export class UserService {
 
@@ -105,6 +106,17 @@ export class UserService {
             return null;
         }
         return this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    public async RecoverPassword(data:recoverPasswordForm){
+        await this.axiosInstance().post(paths.BASE_URL + "/users", {
+            email:data.email
+        },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.nonce-ack+json',
+                    'Content-Type':'application/vnd.cryptuki.v1.user-nonce+json'
+            }
+        });
     }
 
     convertBlobToBase64 = async (blob: Blob) => {

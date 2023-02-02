@@ -7,6 +7,8 @@ import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import NeighborhoodModel from "../../types/NeighborhoodModel";
+import useNeighborhoodsService from "../../hooks/useNeighborhoodsService";
 
 export type CryptoFormValues = {
 
@@ -23,6 +25,8 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<CryptoFormValues>();
     const [cryptocurrencies, setCryptoCurrencies] = useState<CryptocurrencyModel[]>([]);
+    const [neighborhoods,setNeighborhoods] = useState<NeighborhoodModel[]>();
+    const neighborhoodsService = useNeighborhoodsService();
     const cryptocurrencyService = useCryptocurrencyService();
 
     async function fetchCryptocurrencies(){
@@ -31,13 +35,22 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
             setCryptoCurrencies(apiCall);
         }catch (e){
             toast.error("Connection error. Failed to fetch cryptocurrencies " + e)
-
         }
-
     }
 
+    async function fetchLocations(){
+        try{
+            const apiCall:NeighborhoodModel[] = await neighborhoodsService.getNeighborhoods();
+            const orderApiCall = apiCall.sort((a,b) => b.offerCount - a.offerCount)
+            setNeighborhoods(orderApiCall);
+        }catch (e){
+            toast.error("Connection error. Failed to fetch locations " + e)
+        }
+    }
+
+
     useEffect(()=>{
-        fetchCryptocurrencies();
+        fetchCryptocurrencies().then(()=>fetchLocations());
     },[]);
 
 
@@ -72,10 +85,11 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                <div className="flex flex-col px-6 pb-3">
                    <h2 className="font-semibold text-polar mx-auto text-lg">{i18n.t('location')}</h2>
                    <select multiple className="p-2 m-2 rounded-lg shadow"  {...register("locations")}>
-                       { NEIGHBORHOODS.map((neighborhood)=>{
+                       { neighborhoods && neighborhoods.map((neighborhood)=>{
+                          if(neighborhood.offerCount > 0)
                            return (
-                               <option value={neighborhood} key={neighborhood}>
-                                   {neighborhood}
+                               <option value={neighborhood.locationCode} key={neighborhood.locationCode}>
+                                   {neighborhood.locationCode} ({neighborhood.offerCount})
                                </option>
                            );
                        })}

@@ -1,6 +1,7 @@
 import {AxiosInstance} from "axios";
 import {paths} from "../common/constants";
 import {KycInformationModel} from "../types/KycInformationModel";
+import NeighborhoodModel from "../types/NeighborhoodModel";
 
 export class NeighborhoodsService{
     private readonly axiosInstance : ()=>AxiosInstance;
@@ -10,9 +11,9 @@ export class NeighborhoodsService{
         this.axiosInstance = axiosInstance;
     }
 
-    public async getNeighborhoods():Promise<NeighborhoodsService[]>{
+    public async getNeighborhoods():Promise<NeighborhoodModel[]>{
         const resp = await this.axiosInstance()
-            .get<NeighborhoodsService[]>(this.basePath);
+            .get<NeighborhoodModel[]>(this.basePath);
         return resp.data;
     }
 

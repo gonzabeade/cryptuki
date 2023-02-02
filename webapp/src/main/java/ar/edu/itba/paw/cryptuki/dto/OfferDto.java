@@ -46,7 +46,7 @@ public class OfferDto {
                 .build();
 
         dto.seller = uriInfo.getBaseUriBuilder()
-                .replacePath("/api/users")
+                .path("/api/users")
                 .path(offer.getSeller().getUsername().get())
                 .build();
 

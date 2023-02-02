@@ -111,6 +111,7 @@ public class UserController {
     @Path("/{username}/password")
     @Consumes("application/vnd.cryptuki.v1.user-password+json")
     public Response changePassword(@NotNull @Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
+
         userService.changePassword(username, changePasswordForm.getPassword());
         return Response.noContent().build();
     }

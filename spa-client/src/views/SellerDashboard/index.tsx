@@ -40,9 +40,9 @@ const SellerDashboard = () => {
     async function fetchKycStatus(){
         try{
             const resp = await userService.getKYCStatus(userService.getLoggedInUser()!);
-            if(resp){ //pending
+            if(resp.status === 'PEN'){ //pending
                 setKyc(resp);
-            }else if(userService.hasKyc()){
+            }else if(resp.status === 'APR'){
                 setKycAccepted(true);
             }
 

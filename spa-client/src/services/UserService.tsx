@@ -32,17 +32,6 @@ export class UserService {
         return null;
     }
 
-    public hasKyc(): boolean {
-        const refreshToken = localStorage.getItem("refreshToken");
-
-        if (refreshToken) {
-            const tok: any = jwtDecode(refreshToken);
-            return tok.kyc;
-        }
-        return false;
-    }
-
-
     public async  getUser(username:string):Promise<UserModel>{
         const resp = await this.axiosInstance()
             .get<UserModel>(this.basePath + username,{

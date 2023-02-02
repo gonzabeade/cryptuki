@@ -109,12 +109,12 @@ export class UserService {
     }
 
     public async RecoverPassword(data:recoverPasswordForm){
-        await this.axiosInstance().post(paths.BASE_URL + "/users", {
-            email:data.email
-        },{
-            headers:{
+        const params = new URLSearchParams();
+        params.append("email",data.email)
+        await this.axiosInstance().post(paths.BASE_URL + "/users",null, {
+            params:params
+            ,headers:{
                 'Accept':'application/vnd.cryptuki.v1.nonce-ack+json',
-                    'Content-Type':'application/vnd.cryptuki.v1.user-nonce+json'
             }
         });
     }

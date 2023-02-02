@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import i18n from "../../i18n";
-import {withBasicAuthorizationWithCode} from "../../hooks/useAxios";
+import {withBasicAuthorization, withBasicAuthorizationWithCode} from "../../hooks/useAxios";
 import {toast} from "react-toastify";
+import {sleep} from "../../common/constants";
+import useTradeService from "../../hooks/useTradeService";
+import {useAuth} from "../../contexts/AuthContext";
 
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z]).{8,24}$/;
@@ -22,6 +25,9 @@ const ChangePassword = () => {
     const [code, setCode] = useState<string|null>();
     const navigate = useNavigate();
     const [searchParams]= useSearchParams();
+    const tradeService = useTradeService();
+    const {signin} = useAuth();
+    const location = useLocation();
 
     async function onSubmit(data:changePasswordForm){
         if(!username){
@@ -34,13 +40,35 @@ const ChangePassword = () => {
             }
             await userService.changePassword(data,username)
             toast.success("Password successfully updated.")
-            if(username && code)
+            if(username && code) {
+                await login(username,data.password);
                 navigate("/");
-            else navigate(-1);
+            }else navigate(-1);
         }catch (e) {
             toast.error("Failed to update the password.")
         }
     }
+
+    async function login(username:string, password:string){
+        withBasicAuthorization(username, password);
+        try{
+            // dummy call to get the token
+            const resp = await tradeService.getLastTransactions(username);
+            signin(await userService.getUser(username), ()=>{
+                if(location.state && location.state.url) {
+                    navigate(location.state.url);
+                }else if( userService.getRole() === "ROLE_ADMIN"){
+                    navigate("/admin")
+                }else{
+                    navigate('/')
+                }
+            });
+            await sleep(500);
+        }catch (e){
+            toast.error("Unable to log in.")
+        }
+    }
+
 
     useEffect(()=>{
         const username = searchParams.get("username") !== null ? searchParams.get("username"):userService.getLoggedInUser();

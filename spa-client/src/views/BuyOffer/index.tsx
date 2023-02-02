@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import UserInfo from "../../components/UserInfo/index";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import OfferModel from "../../types/OfferModel";
 import { useForm} from "react-hook-form";
@@ -9,8 +9,8 @@ import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
-import {AxiosError} from "axios";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 type BuyOfferFormValues = {
     amount:number
@@ -78,13 +78,13 @@ const BuyOffer = () => {
             }
 
         }catch (e){
-            attendError("You need to be logged in to make a trade proposal",e);
+            toast.error("You need to be logged in to make a trade proposal"+ e);
         }
     }
 
-    async function fetchSeller(username:string){
+    async function fetchSeller(url:string){
         try{
-            setSeller(await userService.getUser(username));
+            setSeller(await userService.getUserByUrl(url));
         }catch (e) {
            attendError("Connection error. Couldn't fetch seller",e);
         }
@@ -98,13 +98,17 @@ const BuyOffer = () => {
 
 
     useEffect(()=>{
-            //fetch offer seller model
+        //fetch offer seller model
         if(offer){
-            fetchSeller(userService.getUsernameFromURI(offer.seller));
+            fetchSeller(offer.seller);
         }
-
     },[offer]);
 
+
+    useEffect(()=>{
+        if(offer && seller && seller?.username === userService.getLoggedInUser())
+            navigate("/seller/offer/"+offer.offerId)
+    },[offer,seller])
 
     return (
         <div className="flex flex-wrap mt-10 mx-5">
@@ -112,7 +116,7 @@ const BuyOffer = () => {
                 <div className="flex">
                     <div className="flex flex-col mx-auto mt-10">
                         <h2 className="font-sans font-semibold text-polard text-2xl text-center">
-                            You are about to buy
+                            {i18n.t('aboutToBuy')}
                         </h2>
                         <img src={`/images/${offer? offer.cryptoCode + '.png':'404.png'}`} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
                         <h1 className="text-center text-3xl font-bold text-polar">
@@ -125,20 +129,20 @@ const BuyOffer = () => {
                         </h2>
                         <div className="flex flex-row mt-3 font-sans ">
                             <h2 className="font-sans mx-2"><b className="text-polar">
-                                Minimum acceptable offer:</b> {offer? offer.minInCrypto * offer.unitPrice  + ' ARS': 'Loading...' }
+                                {i18n.t('minimum')}:</b> {offer? offer.minInCrypto * offer.unitPrice  + ' ARS': 'Loading...' }
                             </h2>
                             <h2 className="font-sans"><b className="text-polar">
-                                Maximum acceptable offer: </b>{offer? offer.maxInCrypto * offer.unitPrice + ' ARS': 'Loading...' }
+                                {i18n.t('maximum')}: </b>{offer? offer.maxInCrypto * offer.unitPrice + ' ARS': 'Loading...' }
                             </h2>
                         </div>
                         <h2 className="pt-2 font-sans text-center"><b className="text-polar">
-                            Location: </b>
+                            {i18n.t('location')}: </b>
                             {offer? offer.location : 'Loading...' }
                         </h2>
                     </div>
                 </div>
                 <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
-                    <label className="mx-auto text-center">Amount in ARS</label>
+                    <label className="mx-auto text-center">{i18n.t('quantity')}</label>
                     <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"
                            {...register("amount",
                                {
@@ -153,11 +157,11 @@ const BuyOffer = () => {
                                })} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
                     {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}
                     <p className="mx-auto font-bold text-polar">or</p>
-                    <label className="mx-auto text-center mt-3">Amount in crypto</label>
+                    <label className="mx-auto text-center mt-3">{i18n.t('cryptoQuantity')}</label>
                     <input type="number" step="0.000000000001" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
-                        <Link to="/" className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" >Cancel</Link>
-                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">Make trade proposal</button>
+                        <div onClick={()=>navigate(-1)} className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" > {i18n.t('back')}</div>
+                        <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">{i18n.t('makeTradeProposal')}</button>
                     </div>
                 </form>
 
@@ -172,7 +176,7 @@ const BuyOffer = () => {
                 rating={seller? seller.rating: 0}/>
 
                     <h1 className="font-sans font-bold text-2xl mx-auto text-polar mt-6 mb-2">
-                        Location
+                        {i18n.t('location')}
                     </h1>
                 { offer?.location ? <iframe
                     title={"google maps"}

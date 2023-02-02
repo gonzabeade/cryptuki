@@ -14,6 +14,11 @@ const location = "Boedo"
 const trade_url = "trade_url"
 const rating = 3
 
+const trade_mime = "application/vnd.cryptuki.v1.trade+json"
+const rating_mime = "application/vnd.cryptuki.v1.rating+json"
+const trade_list_mime = "application/vnd.cryptuki.v1.trade-list+json"
+const trade_status_mime = "application/vnd.cryptuki.v1.trade-status+json"
+
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
     axios.post = jest.fn().mockResolvedValue({headers: new Headers({"location": location})})
@@ -26,7 +31,11 @@ test("get trade information", () => {
 
     tradeService.getTradeInformation(1)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.TRADE + "1")
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.TRADE + "1", {
+        "headers": {
+            "Accept": trade_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -35,7 +44,11 @@ test("get trade information by url", () => {
 
     tradeService.getTradeInformationByUrl(trade_url)
 
-    expect(axios.get).toHaveBeenCalledWith(trade_url)
+    expect(axios.get).toHaveBeenCalledWith(trade_url, {
+        "headers": {
+            "Accept": trade_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -45,8 +58,11 @@ test("get last transactions", () => {
 
     tradeService.getLastTransactions(username)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.TRADE, {
-        params : {
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/trades", {
+        "headers": {
+            "Accept": trade_list_mime
+        },
+        "params" : {
             buyer : username
         }
     })
@@ -63,8 +79,11 @@ test("get related trades", () => {
 
     tradeService.getRelatedTrades(username, status)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.TRADE, {
-        params : params
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/trades", {
+        "headers": {
+            "Accept": trade_list_mime
+        },
+        "params" : params
     })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
@@ -80,8 +99,11 @@ test("get trades with offer id", () => {
 
     tradeService.getTradesWithOfferId(tradeId, status, page)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.TRADE, {
-        params : params
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/trades", {
+        "headers": {
+            "Accept": trade_list_mime
+        },
+        "params" : params
     })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
@@ -95,8 +117,13 @@ test("create trade", () => {
         paths.BASE_URL +
         paths.OFFERS +
         tradeId.toString() +
-        paths.TRADE,{
+        "/trades", {
             quantity: amount
+        },{
+            "headers": {
+                "Accept": trade_mime,
+                "Content-Type": trade_mime
+            }
         })
     expect(axios.post).toHaveBeenCalledTimes(1)
 })
@@ -111,6 +138,11 @@ test("change trade status", () => {
         paths.TRADE +
         tradeId.toString(), {
             newStatus: status
+        }, {
+            "headers": {
+                "Accept": trade_status_mime,
+                "Content-Type": trade_status_mime
+            }
         }
     )
     expect(axios.patch).toHaveBeenCalledTimes(1)
@@ -122,7 +154,11 @@ test("get paginated trades", () => {
 
     tradeService.getPaginatedTrades(trade_url)
 
-    expect(axios.get).toHaveBeenCalledWith(trade_url)
+    expect(axios.get).toHaveBeenCalledWith(trade_url, {
+        "headers": {
+            "Accept": trade_list_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -135,7 +171,11 @@ test("get rating info", () => {
         paths.BASE_URL +
         paths.TRADE +
         tradeId.toString() +
-        "/rating"
+        "/rating", {
+            "headers": {
+                "Accept": rating_mime
+            }
+        }
     )
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
@@ -150,7 +190,11 @@ test("rate counterpart", () => {
         paths.TRADE +
         tradeId.toString() +
         "/rating", {
-            rating: rating
+            rating: rating*2
+        }, {
+            "headers": {
+                "Accept": rating_mime
+            }
         }
     )
 })

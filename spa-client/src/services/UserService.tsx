@@ -2,6 +2,8 @@ import { AxiosInstance } from "axios";
 import jwtDecode from "jwt-decode";
 import UserModel from "../types/UserModel";
 import {paths} from "../common/constants";
+import {recoverPasswordForm} from "../views/RecoverPassword";
+import {changePasswordForm} from "../views/ChangePassword";
 
 export class UserService {
 
@@ -17,7 +19,7 @@ export class UserService {
 
         if (refreshToken) {
             const tok : any = jwtDecode(refreshToken);
-            return tok.sub; 
+            return tok.sub;
         } 
         return null; 
     }
@@ -33,12 +35,21 @@ export class UserService {
     }
 
     public async  getUser(username:string):Promise<UserModel>{
-        const resp = await this.axiosInstance().get<UserModel>(this.basePath + username);
+        const resp = await this.axiosInstance()
+            .get<UserModel>(this.basePath + username,{
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.user+json'
+                }
+            });
         return resp.data;
     }
 
     public async  getUserByUrl(url:string):Promise<UserModel>{
-        const resp = await this.axiosInstance().get<UserModel>(url);
+        const resp = await this.axiosInstance().get<UserModel>(url,{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user+json'
+            }
+        });
         return resp.data;
     }
 
@@ -53,21 +64,35 @@ export class UserService {
     }
 
     public async register(username:string, password:string, repeatPassword:string, phoneNumber:string, email:string){
-        await this.axiosInstance().post(this.basePath + "register", {
+        await this.axiosInstance().post(paths.BASE_URL + "/users", {
             username: username,
             password: password,
-            repeatPassword: repeatPassword,
             phoneNumber: phoneNumber,
             email: email
+        },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user+json',
+                'Content-Type':'application/vnd.cryptuki.v1.user+json'
+            }
         });
     }
     public async verifyUser(code:number, username:string){
         await this.axiosInstance().post(this.basePath + username, {
            code:code
+        },{
+            headers:{
+                'Content-Type':'application/vnd.cryptuki.v1.user-validation+json'
+            }
         });
     }
+
     public async getKYCStatus(username:string){
-        const resp = await this.axiosInstance().get(this.basePath + username + '/kyc');
+        const resp = await this.axiosInstance().get(this.basePath + username + '/kyc',
+            {
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.kyc+json'
+                }
+            });
         if(resp.status === 204){
             return null;
         }else{
@@ -75,5 +100,46 @@ export class UserService {
         }
     }
 
+
+    public async getProfilePictureByUrl(url:string):Promise<string|null>{
+        const resp = await this.axiosInstance().get<Blob>(url,{responseType:'arraybuffer'});
+        if(resp.status === 204 ){
+            return null;
+        }
+        return this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    public async RecoverPassword(data:recoverPasswordForm){
+        const params = new URLSearchParams();
+        params.append("email",data.email)
+        await this.axiosInstance().post(paths.BASE_URL + "/users",null, {
+            params:params
+            ,headers:{
+                'Accept':'application/vnd.cryptuki.v1.nonce-ack+json',
+            }
+        });
+    }
+
+    convertBlobToBase64 = async (blob: Blob) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+        });
+    };
+
+    public async changePassword(data:changePasswordForm, username:string, code?:string){
+        await this.axiosInstance().put(paths.BASE_URL + "/users/" + username + "/password", {
+            password:data.password
+        }, {
+            headers:{
+                'Content-Type':'application/vnd.cryptuki.v1.user-password+json',
+            }
+        });
+
+    }
 
 }

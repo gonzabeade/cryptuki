@@ -12,6 +12,9 @@ const status = OFFER_STATUS.PausedBySeller
 const page = 4
 const test_url = "test_url"
 
+const offer_mime = "application/vnd.cryptuki.v1.offer+json"
+const offer_list_mime = "application/vnd.cryptuki.v1.offer-list+json"
+
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
     axios.post = jest.fn().mockResolvedValue({data: []})
@@ -48,7 +51,12 @@ test("get offers", () => {
 
     offerService.getOffers(params)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.OFFERS, {params})
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/offers", {
+        "headers": {
+            "Accept": offer_list_mime
+        },
+        "params": params
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -57,7 +65,11 @@ test("get offer information", () => {
 
     offerService.getOfferInformation(2)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.OFFERS + "2")
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.OFFERS + "2", {
+        "headers": {
+            "Accept": offer_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -73,7 +85,12 @@ test("get offers by owner", () => {
 
     offerService.getOffersByOwner(username, status, page)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.OFFERS, {params})
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/offers", {
+        "headers": {
+            "Accept": offer_list_mime
+        },
+        "params": params
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -82,7 +99,11 @@ test("get offer information by url", () => {
 
     offerService.getOfferInformationByUrl(test_url)
 
-    expect(axios.get).toHaveBeenCalledWith(test_url)
+    expect(axios.get).toHaveBeenCalledWith(test_url, {
+        "headers": {
+            "Accept": offer_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -98,7 +119,7 @@ test("get search params from uri", () => {
     const offerService = new OfferService(() => axios)
     let params = "param1=2&param2=1"
 
-    const testedParams = offerService.getSearchParamsFromURI(paths.BASE_URL + paths.OFFERS + "?" + params)
+    const testedParams = offerService.getSearchParamsFromURI(paths.BASE_URL + "/offers" + "?" + params)
 
     expect(testedParams.toString()).toMatch(params)
 })
@@ -122,8 +143,13 @@ test("modify offer", () => {
         location: basicOffer.location,
         unitPrice: basicOffer.unitPrice,
         cryptoCode: basicOffer.cryptoCode,
-        comments: basicOffer.comments,
+        firstChat: basicOffer.comments,
         offerStatus: offerStatus
+    }, {
+        "headers": {
+            "Accept": offer_mime,
+            "Content-Type": offer_mime
+        }
     })
 
     expect(axios.put).toHaveBeenCalledTimes(1)
@@ -142,13 +168,18 @@ test("create offer", () => {
         firstChat
         )
 
-    expect(axios.post).toHaveBeenCalledWith(paths.BASE_URL + paths.OFFERS, {
+    expect(axios.post).toHaveBeenCalledWith(paths.BASE_URL + "/offers", {
         minInCrypto: basicOffer.minInCrypto,
         maxInCrypto: basicOffer.maxInCrypto,
         cryptoCode: basicOffer.cryptoCode,
         location: basicOffer.location,
         unitPrice: basicOffer.unitPrice,
         firstChat: firstChat
+    }, {
+        "headers": {
+            "Accept": offer_mime,
+            "Content-Type": offer_mime
+        }
     })
 
     expect(axios.post).toHaveBeenCalledTimes(1)

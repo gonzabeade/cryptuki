@@ -7,6 +7,8 @@ import * as utils from "../common/utils/utils";
 jest.mock('axios')
 
 const username = "salvaCasta"
+const kyc_mime = "application/vnd.cryptuki.v1.kyc+json"
+const user_list_mime = "application/vnd.cryptuki.v1.user-list+json"
 
 beforeEach(() => {
     axios.get = jest.fn().mockResolvedValue({data: []})
@@ -24,7 +26,11 @@ test("get kyc information", () =>{
 
     kycService.getKycInformation(username)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.USERS + username + "/kyc")
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.USERS + username + "/kyc", {
+        "headers": {
+            "Accept": kyc_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -35,7 +41,11 @@ test("get kyc pending information by url", () =>{
 
     kycService.getPendingKycInformationByUrl(test_url)
 
-    expect(axios.get).toHaveBeenCalledWith(test_url)
+    expect(axios.get).toHaveBeenCalledWith(test_url, {
+        "headers": {
+            "Accept": user_list_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -48,7 +58,12 @@ test("get kyc pending information", () =>{
 
     kycService.getPendingKycInformation()
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/users", {params})
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + "/users", {
+        "headers": {
+            "Accept": user_list_mime
+        },
+        "params": params
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -57,6 +72,11 @@ test("solve kyc", () => {
 
     kycService.solveKyc(solvedKyc, username)
 
-    expect(axios.patch).toHaveBeenCalledWith(paths.BASE_URL + paths.USERS + username + "/kyc", solvedKyc)
+    expect(axios.patch).toHaveBeenCalledWith(paths.BASE_URL + paths.USERS + username + "/kyc", solvedKyc, {
+        "headers": {
+            "Accept": kyc_mime,
+            "Content-Type": kyc_mime
+        }
+    })
     expect(axios.patch).toHaveBeenCalledTimes(1)
 })

@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
         min="minInCrypto",
         max="maxInCrypto"
 )
+@NotNull
 abstract public class OfferDataForm {
 
     private Integer sellerId;

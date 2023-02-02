@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import OfferModel from "../../types/OfferModel";
 import {ComplainModel} from "../../types/ComplainModel";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import useOfferService from "../../hooks/useOfferService";
 import useComplainService from "../../hooks/useComplainService";
 import useTradeService from "../../hooks/useTradeService";
 import TradeAndComplaintInformation from "../../components/TradeAndComplaitInformation/TradeAndComplaintInformation";
-import ChatMessagesForAdmin from "../../components/ChatMessagesForAdmin/ChatMessagesForAdmin";
+import ChatMessagesForAdmin from "../../components/ChatMessagesForAdmin";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import SolveComplaintForm from "../../components/SolveComplaintForm/SolveComplaintForm";
 import {XCircleIcon} from "@heroicons/react/24/outline";
 import TransactionModel from "../../types/TransactionModel";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 
 const SolveComplaint = () => {
@@ -31,6 +32,7 @@ const SolveComplaint = () => {
     const userService = useUserService();
     const [banning,setBanning] = useState<boolean|null>(false);
     const [dismissing, setDismissing] = useState<boolean|null>(false);
+    const navigate = useNavigate();
 
 
     async function getTradeMembers(){
@@ -58,9 +60,8 @@ const SolveComplaint = () => {
                 setOffer(resp);
                 return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch offer",e);
+            toast.error("Connection error. Failed to fetch offer"+e);
         }
-
     }
 
     async function getComplaint(complainId:number){
@@ -79,7 +80,7 @@ const SolveComplaint = () => {
             setTrade(resp);
             return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch Trade",e);
+            toast.error("Connection error. Failed to fetch Trade "+ e);
         }
 
     }
@@ -125,10 +126,10 @@ const SolveComplaint = () => {
                 <div className="flex">
                     <div className="flex flex-col mt-10">
                         <h2 className="font-sans text-4xl font-boldfont-sans font-semibold text-5xl text-polar">
-                            Reclamo # {complaint && complaint.complainId}
+                            {i18n.t('claim')} # {complaint && complaint.complainId}
                         </h2>
                         <h2 className="font-sans font-medium text-polard text-2xl">
-                            Efectuado el: {complaint && complaint.date.toString()}
+                            {i18n.t('carriedOutOn')}: {complaint && complaint.date.toString().substring(0,10)}
                         </h2>
                     </div>
                 </div>
@@ -143,12 +144,13 @@ const SolveComplaint = () => {
                 <div className="flex flex-col w-1/3 h-full justify-center ">
                     <div className="w-full rounded-lg bg-[#FAFCFF] mx-auto py-3 mb-5 text-center border-2 border-polard">
                         <p className="font-sans font-semibold font-polard text-xl">
-                            Responde al reclamo de {complainer?.username}
+                            {i18n.t('whatShouldWeDo')} {complainer?.username}
                         </p>
                     </div>
                     <div className="flex flex-row mx-auto w-full text-center justify-around ">
-                        <button id="dismissButton" onClick={()=>{setDismissing(true); setBanning(false);}} className="bg-ngreen rounded-lg text-white p-3"> Desestimar Reclamo</button>
-                        <button id="kickoutButton" onClick={()=>{setBanning(true); setDismissing(false);}} className="bg-nred rounded-lg text-white p-3"> Banear a {other?.username}</button>
+                        <button onClick={()=>{navigate(-1)}} className="bg-frostdr rounded-lg text-white p-3" >{i18n.t('back')}</button>
+                        <button id="dismissButton" onClick={()=>{setDismissing(true); setBanning(false);}} className="bg-ngreen rounded-lg text-white p-3"> {i18n.t('dismissClaim')}</button>
+                        <button id="kickoutButton" onClick={()=>{setBanning(true); setDismissing(false);}} className="bg-nred rounded-lg text-white p-3"> {i18n.t('banUser')} {other?.username}</button>
                     </div>
                     {banning && <div>
                         <div className="w-full flex justify-end py-2 cursor-pointer">

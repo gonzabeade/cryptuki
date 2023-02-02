@@ -3,6 +3,7 @@ package ar.edu.itba.paw.cryptuki.dto;
 import ar.edu.itba.paw.cryptuki.controller.UserController;
 import ar.edu.itba.paw.model.IdType;
 import ar.edu.itba.paw.model.KycInformation;
+import ar.edu.itba.paw.model.KycStatus;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -15,11 +16,11 @@ public class KycDto {
     private String emissionCountry;
     private String idCode;
     private IdType idType;
+    private KycStatus status;
 
     private URI idPhoto;
     private URI validationPhoto;
 
-    private URI user;
     private URI self;
 
     public static KycDto fromKycInformation(KycInformation kycInformation, UriInfo uriInfo) {
@@ -30,6 +31,7 @@ public class KycDto {
         dto.idCode = kycInformation.getIdCode();
         dto.surnames = kycInformation.getSurnames();
         dto.idType = kycInformation.getIdType();
+        dto.status = kycInformation.getStatus();
 
 
         String username = kycInformation.getUser().getUsername().get();
@@ -42,11 +44,6 @@ public class KycDto {
 
         dto.idPhoto = uriInfo.getAbsolutePathBuilder()
                 .path("idPhoto")
-                .build();
-
-        dto.user = uriInfo.getBaseUriBuilder()
-                .path(UserController.class)
-                .path(username)
                 .build();
 
         return dto;
@@ -108,19 +105,19 @@ public class KycDto {
         this.validationPhoto = validationPhoto;
     }
 
-    public URI getUser() {
-        return user;
-    }
-
-    public void setUser(URI user) {
-        this.user = user;
-    }
-
     public URI getSelf() {
         return self;
     }
 
     public void setSelf(URI self) {
         this.self = self;
+    }
+
+    public KycStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(KycStatus status) {
+        this.status = status;
     }
 }

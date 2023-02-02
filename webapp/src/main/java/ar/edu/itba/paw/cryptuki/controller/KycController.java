@@ -5,7 +5,8 @@ import ar.edu.itba.paw.cryptuki.dto.KycDto;
 import ar.edu.itba.paw.cryptuki.dto.ValidationErrorDto;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.cryptuki.form.KycStatusForm;
-import ar.edu.itba.paw.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.helper.MultipartDescriptor;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
@@ -37,17 +38,16 @@ public class KycController {
     private static final long MAX_SIZE = 1 << 21;
     private final UserService userService;
     private final KycService kycService;
-
-    private final Collection<BadMultipartFormatException.MultipartDescriptor> kycMultipartFormat;
+    private final Collection<MultipartDescriptor> kycMultipartFormat;
 
     @Autowired
     public KycController(UserService userService, KycService kycService) {
         this.userService = userService;
         this.kycService = kycService;
         this.kycMultipartFormat = Arrays.asList(
-                new BadMultipartFormatException.MultipartDescriptor("application/json", "kyc-information"),
-                new BadMultipartFormatException.MultipartDescriptor("image/*", "id-photo"),
-                new BadMultipartFormatException.MultipartDescriptor("image/*", "validation-photo")
+                new MultipartDescriptor("application/vnd.cryptuki.v1.kyc+json", "kyc-information"),
+                new MultipartDescriptor("image/*", "id-photo"),
+                new MultipartDescriptor("image/*", "validation-photo")
         );
     }
 
@@ -55,13 +55,13 @@ public class KycController {
     public UriInfo uriInfo;
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response getKyc(@PathParam("username") String username) {
 
         User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
 
         Optional<KycInformation> maybeKycInformation = kycService
-                .getPendingKycRequest(user.getUsername().orElseThrow(()->new NoSuchUserException(username)));
+                .getKycRequest(user.getUsername().orElseThrow(()->new NoSuchUserException(username)));
 
         if (!maybeKycInformation.isPresent())
             return Response.noContent().build();
@@ -73,15 +73,15 @@ public class KycController {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response postKyc(
             @PathParam("username") String username,
-            @NotNull @Valid @FormDataParam("kyc-information") KycForm kycInformation,
-             @FormDataParam("id-photo") FormDataBodyPart idPhoto,
-             @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
+            @Valid @FormDataParam("kyc-information") KycForm kycForm,
+            @FormDataParam("id-photo") FormDataBodyPart idPhoto,
+            @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
     ) throws IOException {
 
-        if (idPhoto == null || validationPhoto == null || kycInformation == null )
+        if (idPhoto == null || validationPhoto == null || kycForm == null )
             throw new BadMultipartFormatException(kycMultipartFormat);
 
         byte[] idPhotoBytes = IOUtils.toByteArray(idPhoto.getValueAs(InputStream.class));
@@ -93,21 +93,21 @@ public class KycController {
         if (idPhotoBytes.length > MAX_SIZE || validationPhotoBytes.length > MAX_SIZE)
             throw new IllegalArgumentException(String.format("Uploaded files have a max size of %d bytes", MAX_SIZE));
 
-        KycInformationPO kycInformationPO = kycInformation.toParameterObject(username)
+        KycInformationPO kycInformationPO = kycForm.toParameterObject(username)
                 .withIdPhoto(idPhotoBytes)
-                .withIdPhotoType(idPhoto.getMediaType().getSubtype())
+                .withIdPhotoType(idPhoto.getMediaType().toString())
                 .withValidationPhoto(validationPhotoBytes)
-                .withValidationPhotoType(validationPhoto.getMediaType().getSubtype());
+                .withValidationPhotoType(validationPhoto.getMediaType().toString());
 
-        kycService.newKycRequest(kycInformationPO);
+        KycInformation kycInformation = kycService.newKycRequest(kycInformationPO);
         final URI uri = uriInfo.getRequestUri();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(KycDto.fromKycInformation(kycInformation, uriInfo)).build();
     }
 
     @PATCH
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.kyc+json")
+    @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response putKyc(@PathParam("username") String username, @NotNull @Valid KycStatusForm kycStatusForm) {
 
         userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
@@ -151,7 +151,7 @@ public class KycController {
 
         KycInformation kycInformation = maybeKycInformation.get();
 
-        return Response // TODO - Are any headers missing? - Check
+        return Response
                 .ok(new ByteArrayInputStream(kycInformation.getIdPhoto()))
                 .type(kycInformation.getIdPhotoType())
                 .build();

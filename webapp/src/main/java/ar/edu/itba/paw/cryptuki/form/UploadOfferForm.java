@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.parameterObject.OfferPO;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class UploadOfferForm extends OfferDataForm{
+public class UploadOfferForm extends OfferDataForm {
 
     @Size(min=2, max=30)
     @NotNull

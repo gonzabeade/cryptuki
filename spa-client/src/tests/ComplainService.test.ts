@@ -8,6 +8,11 @@ import {SolveComplaintFormModel} from "../components/SolveComplaintForm/SolveCom
 jest.mock('axios')
 
 const test_url = "test_url"
+
+const complaint_resolution_mime = "application/vnd.cryptuki.v1.complaint-resolution+json"
+const complaint_mime = "application/vnd.cryptuki.v1.complaint+json"
+const complaint_list_mime = "application/vnd.cryptuki.v1.complaint-list+json"
+
 const complainForm : CreateComplainForm = {
     email : "scastagnino@itba.edu.ar",
     tradeId : 1,
@@ -30,7 +35,11 @@ test("get complaints by URL", () => {
 
     complainService.getComplaintsByUrl(test_url)
 
-    expect(axios.get).toHaveBeenCalledWith(test_url)
+    expect(axios.get).toHaveBeenCalledWith(test_url, {
+        "headers": {
+            "Accept": complaint_list_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -43,7 +52,12 @@ test("get complaints", () => {
 
     complainService.getComplaints()
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.COMPLAINTS, {"params": params})
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.COMPLAINTS, {
+        "headers": {
+            "Accept": complaint_list_mime
+        },
+        "params": params
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -53,7 +67,11 @@ test("get complaints by id", () => {
 
     complainService.getComplaintById(1)
 
-    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.COMPLAINTS + "/1")
+    expect(axios.get).toHaveBeenCalledWith(paths.BASE_URL + paths.COMPLAINTS + "/1", {
+        "headers": {
+            "Accept": complaint_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -67,6 +85,12 @@ test("create complaint", () => {
         {
             tradeId : complainForm.tradeId,
             message : complainForm.message
+        },
+        {
+            "headers": {
+                "Accept": complaint_mime,
+                "Content-Type": complaint_mime
+            }
         }
     )
     expect(axios.post).toHaveBeenCalledTimes(1)
@@ -82,6 +106,11 @@ test("create complaint resolution", () => {
         {
             resolution : resolutionForm.resolution,
             comments : resolutionForm.comments
+        },{
+            "headers": {
+                "Accept": complaint_resolution_mime,
+                "Content-Type": complaint_resolution_mime
+            }
         }
     )
     expect(axios.post).toHaveBeenCalledTimes(1)

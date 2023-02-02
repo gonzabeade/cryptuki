@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.cryptuki.config;
 
+import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -44,6 +45,9 @@ public class WebConfig {
 
     @Value("${webappBaseUrl}")
     private String webappBaseUrl;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Bean
     public CommonsMultipartResolver multipartResolver() {
@@ -91,6 +95,11 @@ public class WebConfig {
     @Bean(name="baseUrl")
     public String baseUrl() {
         return webappBaseUrl;
+    }
+
+    @Bean
+    public JwtManager jwtManager() {
+        return new JwtManager(jwtSecret);
     }
 
 

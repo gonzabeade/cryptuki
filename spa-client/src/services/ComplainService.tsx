@@ -16,7 +16,9 @@ export class ComplainService{
     }
 
     public async getComplaintsByUrl(url:string):Promise<PaginatedResults<ComplainModel>>{
-        const resp = await this.axiosInstance().get<ComplainModel[]>(url);
+        const resp = await this.axiosInstance().get<ComplainModel[]>(url,{
+            headers:{'Accept':'application/vnd.cryptuki.v1.complaint-list+json'}
+        });
         return processPaginatedResults(resp);
     }
 
@@ -24,12 +26,18 @@ export class ComplainService{
         let params= new URLSearchParams();
         params.append("status","PENDING");
         const resp = await this.axiosInstance().
-            get<ComplainModel[]>(this.basePath,{ params:params });
+            get<ComplainModel[]>(this.basePath,{ params:params ,
+            headers:{'Accept':'application/vnd.cryptuki.v1.complaint-list+json'}
+            });
         return processPaginatedResults(resp);
     }
 
     public async getComplaintById(complainId:number):Promise<ComplainModel>{
-        const resp = await this.axiosInstance().get<ComplainModel>(this.basePath + '/' + complainId);
+        const resp = await this.axiosInstance()
+            .get<ComplainModel>(this.basePath + '/' + complainId,
+                {
+                    headers:{'Accept':'application/vnd.cryptuki.v1.complaint+json'}
+                });
         return resp.data;
     }
 
@@ -37,6 +45,11 @@ export class ComplainService{
         const resp = await this.axiosInstance().post<ComplainModel>(this.basePath , {
             tradeId: newComplain.tradeId,
             message: newComplain.message,
+        },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.complaint+json',
+                'Content-Type':'application/vnd.cryptuki.v1.complaint+json'
+            }
         })
         return resp.data;
     }
@@ -45,6 +58,11 @@ export class ComplainService{
         const resp = await this.axiosInstance().post<ComplainModel>(this.basePath + '/' + SolveComplaintFormModel.complainId + '/resolution', {
             resolution: SolveComplaintFormModel.resolution,
             comments: SolveComplaintFormModel.comments,
+        },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.complaint-resolution+json',
+                'Content-Type':'application/vnd.cryptuki.v1.complaint-resolution+json'
+            }
         })
         return resp.data;
     }

@@ -3,6 +3,8 @@ import TransactionModel from "../../types/TransactionModel";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import UserModel from "../../types/UserModel";
 import OfferModel from "../../types/OfferModel";
+import useOfferService from "../../hooks/useOfferService";
+import useUserService from "../../hooks/useUserService";
 
 type TransactionListProps = {
     transactions:TransactionModel[],
@@ -16,6 +18,9 @@ const TRADE_STATUS = new Map([
 const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
     const [buyer, setBuyer] = useState<UserModel>();
     const [offer, setOffer] = useState<OfferModel>();
+    const offerService = useOfferService();
+    const userService = useUserService();
+
 
     async  function fetchOffer(){
 
@@ -29,7 +34,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
     }
     useEffect(()=>{
         fetchBuyer()
-    },[])
+    },[offer])
     return (
         <div className="mt-5">
             <div className="py-4 bg-white rounded-lg shadow-md">
@@ -39,7 +44,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                 <div className="px-4">
                     <ul className="divide-y divide-gray-200">
                         {transactions.map(transaction => (
-                            <li className="py-2">
+                            <li className="py-2" key={transaction.tradeId}>
                                 <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
                                    href={"/chat/"+transaction.tradeId}>
                                     <div className="flex-shrink-0">

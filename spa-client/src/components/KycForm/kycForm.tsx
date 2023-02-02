@@ -1,12 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {paths, sleep} from "../../common/constants";
-import {Link, useNavigate} from "react-router-dom";
+import React from 'react';
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
-import axios from "axios";
-import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 export interface UploadKycValues {
     names:string,
@@ -21,15 +18,13 @@ export interface UploadKycValues {
 const KycForm = () => {
 
     //Form
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm<UploadKycValues>();
+    const { register, handleSubmit, formState: { errors }} = useForm<UploadKycValues>();
     const kycService = useKycService();
-    const navigate = useNavigate();
     const username = useUserService().getLoggedInUser();
 
     async function onSubmit(data:UploadKycValues) {
-        console.log(data);
         try {
-            const resp = kycService.uploadKyc(
+            await kycService.uploadKyc(
                 username as string,
                 data.names,
                 data.surnames,
@@ -39,17 +34,12 @@ const KycForm = () => {
                 data.idPictures,
                 data.facePictures
             );
-            toast.success("Successfully registered!");
-            await sleep(1000);
-            //TODO: mirar bien a donde te navega
-            navigate('/');
+            toast.success("Kyc information successfully sent.");
         }
         catch (e) {
-            attendError("Connection error. Please try again later",e);
+            toast.error("Connection error. Please try again later" + e);
         }
     }
-
-    // TODO Mirar como poner el enctype="multipart/form-data" en los inputs de archivos y si es necesario
 
     return (
         <div className="flex flex-row mx-auto">
@@ -57,23 +47,23 @@ const KycForm = () => {
                 <div className="flex">
                     <div className="flex flex-col mx-auto">
                         <h1 className="font-sans font-semibold text-polar text-2xl text-center">
-                            Verify your Identity
+                            {i18n.t('verifyYourIdentity')}
                         </h1>
                         <h2 className="text-start text-lg font-semibold font-sans text-polar mt-8">
-                            Each seller must verify it's identity. We will get back to you by mail after verifying the information in this form
+                            {i18n.t('youNeedToBeVerified')}
                         </h2>
                         <h2 className="text-start text-xl font-semibold font-sans text-polar underline mt-8">
-                            Section 1 : Passport/ID information
+                            {i18n.t('firstSection')}
                         </h2>
                         <h2 className="text-start text-lg font-semibold font-sans text-polar mt-2">
-                            Input the personal data regarding this passport/id.
+                            {i18n.t('writeYourPassportData')}
                         </h2>
                         <h2 className="text-start text-lg font-semibold font-sans text-polar mt-2">
-                            If your country is not present on this list, we can't verify your information yet!
+                            {i18n.t('notSupportedCountry')}
                         </h2>
                         <div className="flex flex-col mx-5 mt-4 items-start">
                             <div className="flex flex-col mr-10 my-4 w-1/2">
-                                <label className="text-start text-xl font-bold font-sans text-polar my-2">Names</label>
+                                <label className="text-start text-xl font-bold font-sans text-polar my-2">{i18n.t('names')}</label>
                                 <input className="p-3 rounded-lg shadow" placeholder="e.g. Pedro Martin"
                                        {...register("names",{
                                            required: "You must enter a name",
@@ -84,7 +74,7 @@ const KycForm = () => {
                                 {errors && errors.names && <p className="text-red-600 mx-auto mt-2">{errors.names.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
-                                <label className="text-start text-xl font-bold font-sans text-polar my-2">Surnames</label>
+                                <label className="text-start text-xl font-bold font-sans text-polar my-2">{i18n.t('surnames')}</label>
                                 <input className="p-3 rounded-lg shadow" placeholder="e.g. Juarez"
                                        {...register("surnames", {
                                            required: "You must enter a surname",
@@ -95,7 +85,7 @@ const KycForm = () => {
                                 {errors && errors.surnames && <p className="text-red-600 mx-auto mt-2">{errors.surnames.message}</p> }
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
-                                <label className="text-start text-xl font-bold font-sans text-polar my-2">Emission country</label>
+                                <label className="text-start text-xl font-bold font-sans text-polar my-2">{i18n.t('countryOfEmission')}</label>
                                 <select className="rounded-lg p-3 bg-white" {...register("emissionCountry")}>
                                     <option value="ARG">Argentina</option>
                                     <option value="CHL">Chile</option>
@@ -106,7 +96,7 @@ const KycForm = () => {
                         <div className="flex flex-row mx-5 mt-4 items-end">
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
-                                    Document Number
+                                    {i18n.t('idNumber')}
                                 </label>
                                 <input type="text" placeholder="e.g. 45089768" className="rounded-lg p-3"
                                        {...register("documentCode", {
@@ -119,17 +109,17 @@ const KycForm = () => {
                             </div>
                             <div className="flex flex-col mr-10 my-4 w-1/2">
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">
-                                    Passport/ID Type
+                                    {i18n.t('typeOfDoc')}
                                 </label>
                                 <select className="rounded-lg p-3 bg-white" {...register("idType")}>
-                                    <option value="ID">National Id</option>
-                                    <option value="PASSPORT">Passport</option>
+                                    <option value="ID">{i18n.t('idType.ID')}</option>
+                                    <option value="PASSPORT">{i18n.t('idType.PASSPORT')}</option>
                                 </select>
                             </div>
                         </div>
                         <div className="flex flex-col mr-18 my-4 w-1/2">
                             <label className="text-start text-xl font-bold font-sans text-polar my-2">
-                               Passport/ID picture
+                                {i18n.t('pictureOfId')}
                             </label>
                             <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
                                    {...register("idPictures", {
@@ -142,17 +132,14 @@ const KycForm = () => {
                             {errors && errors.idPictures && <p className="text-red-600 mx-auto mt-2">{errors.idPictures.message}</p> }
                         </div>
                         <h2 className="text-start text-xl font-semibold font-sans text-polar underline mt-8">
-                            Section 2: Face and Picture data validation
+                            {i18n.t('secondSection')}
                         </h2>
                         <h2 className="text-start text-lg font-semibold font-sans text-polar mt-2">
-                            For safety purposes, to validate you're using your password,  we require you to have a picture taken of yourself, showing half of your body and complete face holding your document.
+                            {i18n.t('pictureKYC')}
                         </h2>
                         <div className="flex flex-row mx-5 mt-4 items-center">
                            <div className="flex flex-col my-10 mx-auto">
                                <div className="flex flex-col mx-5 my-4 px-16">
-                                   <label className="text-center text-xl font-bold font-sans text-polar my-2">
-                                       Upload picture
-                                   </label>
                                    <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
                                    {...register("facePictures", {
                                        validate:{
@@ -167,7 +154,7 @@ const KycForm = () => {
                         </div>
                         <div className="flex flex-row w-full justify-center mt-10">
                             <button type="submit" className="w-1/5 rounded-lg bg-frostl py-3 px-5 text-white cursor-pointer shadow-lg">
-                                Send
+                                {i18n.t('send')}
                             </button>
                         </div>
                     </div>

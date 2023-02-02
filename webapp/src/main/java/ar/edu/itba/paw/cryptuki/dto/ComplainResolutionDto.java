@@ -14,7 +14,6 @@ public class ComplainResolutionDto {
     private ComplaintResolution resolution;
     private String comments;
     private URI self;
-    private URI complaint;
     private URI moderator;
 
     public static ComplainResolutionDto fromComplain(final Complain complain, final UriInfo uriInfo) {
@@ -26,7 +25,6 @@ public class ComplainResolutionDto {
                 .path("/api/complaints")
                 .path(String.valueOf(complain.getComplainId()));
 
-        dto.complaint = complaintUriBuilder.build();
         dto.self = complaintUriBuilder.path("resolution").build();
 
         dto.moderator = uriInfo.getBaseUriBuilder()
@@ -61,14 +59,6 @@ public class ComplainResolutionDto {
 
     public void setSelf(URI self) {
         this.self = self;
-    }
-
-    public URI getComplaint() {
-        return complaint;
-    }
-
-    public void setComplaint(URI complaint) {
-        this.complaint = complaint;
     }
 
     public URI getModerator() {

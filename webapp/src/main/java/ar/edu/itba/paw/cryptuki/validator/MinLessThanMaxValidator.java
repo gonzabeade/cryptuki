@@ -11,10 +11,6 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 public class MinLessThanMaxValidator implements ConstraintValidator<MinLessThanMax, Object> {
-
-    @Autowired
-    private OfferService offerService;
-
     private String min;
     private String max;
 

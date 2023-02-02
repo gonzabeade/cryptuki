@@ -11,6 +11,7 @@ import {TRADE_STATUS} from "../../common/constants";
 import Paginator from "../../components/Paginator";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const SellerOfferDashboard = () => {
 
@@ -37,7 +38,7 @@ const SellerOfferDashboard = () => {
             setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
         }catch (e){
-            attendError("Connection error. Couldn't fetch trades",e);
+            toast.error("Connection error. Couldn't fetch trades "+ e);
         }
     }
 
@@ -53,7 +54,7 @@ const SellerOfferDashboard = () => {
             }
 
         } catch (e) {
-            attendError("Connection error. Failed to fetch trades",e);
+            toast.error("Connection error. Failed to fetch trades"+ e);
         }
     }
     async function getPaginatedTrades(uri:string){
@@ -62,7 +63,7 @@ const SellerOfferDashboard = () => {
             setTrades(resp.items);
             setPaginatorProps(resp.paginatorProps!);
         }catch (e) {
-            attendError("Connection  error. Failed to fetch trades",e);
+            toast.error("Connection  error. Failed to fetch trades "+ e);
         }
     }
 
@@ -79,7 +80,7 @@ const SellerOfferDashboard = () => {
                 <div className="flex flex-col h-3/5 w-2/5 pr-2 ">
                     <div className="flex flex-col py-3 rounded-lg px-5 pt-4 rounded-lg bg-[#FAFCFF] w-60 mx-auto ">
                         <h1 className="font-sans w-full mx-auto text-center text-xl font-bold text-polar">
-                            Trade proposals received
+                            {i18n.t('offersReceived')}
                         </h1>
                     </div>
                     <div className="flex mx-auto">
@@ -88,7 +89,7 @@ const SellerOfferDashboard = () => {
 
                     <button onClick={()=>navigate(-1)}
                        className=" mt-2 font-bold rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg mx-auto">
-                        Back
+                        {i18n.t('back')}
                     </button>
                 </div>
                 <div className="flex flex-col w-4/5">
@@ -97,7 +98,7 @@ const SellerOfferDashboard = () => {
                             className="flex mr-5 bg-white rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button  className="my-auto mx-auto w-full " onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.All)}>
                                 <p className={`py-2 px-4 font-bold text-polar text-center ${selectedStatus === TRADE_STATUS.All ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
-                                    All
+                                    {i18n.t('allTrades')}
                                 </p>
                             </button>
                         </div>
@@ -105,35 +106,35 @@ const SellerOfferDashboard = () => {
                             className=" flex mr-5 bg-nyellow rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Pending)} className="my-auto mx-auto">
                                 <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Pending? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
-                                    Pending</p>
+                                    {i18n.t('pendingTrades')}</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-ngreen rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Accepted)} className="my-auto mx-auto">
                                 <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Accepted ? 'decoration-frostdr underline underline-offset-8' : 'text-l'}`}>
-                                    Ongoing</p>
+                                    {i18n.t('acceptedTrades')}</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-nred rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Rejected)} className="my-auto mx-auto">
                                 <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Rejected ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
-                                    Rejected by you</p>
+                                    {i18n.t('rejectedTrades')}</p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-gray-200 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Sold)} className="my-auto mx-auto">
                                 <p className={`py-2 px-4 font-bold text-polar  text-center ${selectedStatus === TRADE_STATUS.Sold ? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
-                                    Closed </p>
+                                    {i18n.t('soldTrades')} </p>
                             </button>
                         </div>
                         <div
                             className=" flex mr-5 bg-blue-400 rounded-lg shadow-md py-1 w-full hover:-translate-y-1 hover:scale-110 duration-200 h-16">
                             <button onClick={()=>fetchTradesAssociatedWithOfferWithStatus(TRADE_STATUS.Deleted)} className="my-auto mx-auto">
                                 <p className={`py-2  px-4 font-bold text-polar text-center ${selectedStatus === TRADE_STATUS.Deleted? 'decoration-frostdr underline underline-offset-8' : 'text-l '}`}>
-                                    Deleted by buyer</p>
+                                    {i18n.t('deletedByUserTrades')}</p>
                             </button>
                         </div>
                     </div>
@@ -146,12 +147,12 @@ const SellerOfferDashboard = () => {
                                 );
                             })}
                             {!trades || trades.length === 0 && <div className="flex flex-col mx-auto">
-                                <h1 className="font-sans text-center text-xl font-bold text-polar">No trades available.</h1>
+                                <h1 className="font-sans text-center text-xl font-bold text-polar">{i18n.t('noResults')}</h1>
                             </div>}
                         </div>
 
                         <div className="mx-auto">
-                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={getPaginatedTrades}/>: <h1 className="text-polar font-bold"> No trade proposals related to this offer</h1>}
+                            {trades && trades.length > 0 ?  <Paginator paginatorProps={paginatorProps}  callback={getPaginatedTrades}/>: <h1 className="text-polar font-bold"> {i18n.t('noAssociatedTransaction')}</h1>}
 
                         </div>
                     </div>

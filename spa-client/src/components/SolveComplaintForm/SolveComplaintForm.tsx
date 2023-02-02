@@ -1,8 +1,11 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
-import { XCircleIcon, InformationCircleIcon} from "@heroicons/react/24/outline";
+import { InformationCircleIcon} from "@heroicons/react/24/outline";
 import useComplainService from "../../hooks/useComplainService";
 import {useNavigate} from "react-router-dom"
+import i18n from "../../i18n";
+import {toast} from "react-toastify";
+import {attendError} from "../../common/utils/utils";
 
 export interface SolveComplaintFormModel {
     comments:string,
@@ -23,9 +26,15 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<SolveComplaintFormModel>();
 
 
-    function onSubmit(data:SolveComplaintFormModel) {
-        //TODO: ver el codigo de retorno del post y ver si se posteo o no.
-        complainService.createComplainResolution(data).then(r => navigate("/admin") );
+    async function onSubmit(data:SolveComplaintFormModel) {
+        try {
+            await complainService.createComplainResolution(data);
+            toast.success("The complaint was solved.");
+            navigate("/admin");
+        }catch (e){
+            attendError("Failed to answer the complaint",e);
+        }
+
     }
 
     return (
@@ -36,7 +45,7 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
                     <p>
                         {resolution==="DISMISS" && ` Estás por desestimar la denuncia de ${other}. `}
                         {resolution==="KICK" && ` Estás por banear a ${other}. ` }
-                        Recuerda que el veredicto no es reversible, debes estar seguro de la decisión.  </p>
+                        {i18n.t('irreversibleAction')} </p>
                 </div>
                 <input type="string" className="min-w-full h-32 rounded-lg mx-auto p-5 mt-5"
                        step=".01"
@@ -46,7 +55,7 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
                 <input type="hidden"  value={resolution} {...register("resolution")} />
                 <input type="hidden"  value={complainId} {...register("complainId")} />
                 <button type="submit" className="mt-3 w-1/5 mx-auto bg-frost rounded-lg text-white p-3">
-                    Enviar
+                    {i18n.t('send')}
                 </button>
             </form>
         </div>

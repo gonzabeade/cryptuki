@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.cryptuki.config.auth.filter;
 
-import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtUtils;
+import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtManager;
+import ar.edu.itba.paw.exception.NoSuchUserException;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,17 +23,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Optional;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
+    private final JwtManager jwtManager;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public JwtFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
+    public JwtFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtManager jwtManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
+        this.jwtManager = jwtManager;
     }
 
     @Override
@@ -85,8 +90,8 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
 
-            httpServletResponse.setHeader("X-Refresh-Token", JwtUtils.generateRefreshToken(userDetails));
-            httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
+            httpServletResponse.setHeader("X-Refresh-Token", jwtManager.generateRefreshToken(userDetails));
+            httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails));
 
         } else if (header.startsWith("Bearer ")){
 
@@ -94,13 +99,13 @@ public class JwtFilter extends OncePerRequestFilter {
             final String token = header.split(" ")[1].trim();
 
             //Validate that token was signed by server and that is hasn't expired
-            if (!JwtUtils.isTokenValid(token)) {
+            if (!jwtManager.isTokenValid(token)) {
                 httpServletResponse.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
 
-            username = JwtUtils.getUsernameFromToken(token);
+            username = jwtManager.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -110,8 +115,8 @@ public class JwtFilter extends OncePerRequestFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-            if( JwtUtils.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.setHeader("X-Access-Token", JwtUtils.generateAccessToken(userDetails));
+            if( jwtManager.getTypeFromToken(token).equals("refresh") ) {
+                httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails));
             }
 
         }

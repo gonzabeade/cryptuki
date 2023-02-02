@@ -15,7 +15,8 @@ public abstract class GenericMapper<T extends Throwable> implements ExceptionMap
         this.exception = t;
         this.exceptionMessage = t.getMessage();
         GenericErrorDto dto = GenericErrorDto.fromMessage(getMessage());
-        return Response.status(getStatus()).entity(dto).build();    }
+        return Response.status(getStatus()).entity(dto).build();
+    }
 
     public abstract String getMessage();
     public abstract Response.Status getStatus();

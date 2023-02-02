@@ -44,6 +44,9 @@ public class TradeServiceImpl implements TradeService {
         if (offer.getSeller().getUsername().get().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
             throw new IllegalArgumentException("Cannot create trade on own offer");
 
+        if (quantity > offer.getMaxInCrypto()*offer.getUnitPrice() || quantity < offer.getMinInCrypto()*offer.getUnitPrice())
+            throw new IllegalArgumentException("Trade quantity is out of bounds");
+
         Trade newTrade =  tradeDao.makeTrade(offerId, buyerId, quantity);
         String firstChat = newTrade.getOffer().getComments();
         if (firstChat != null && !firstChat.equals(""))
@@ -115,6 +118,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    @PreAuthorize("#username == authentication.principal")
     public Collection<Trade> getMostRecentTradesAsSeller(String username, int quantity) {
         return tradeDao.getMostRecentTradesAsSeller(username, quantity);
     }

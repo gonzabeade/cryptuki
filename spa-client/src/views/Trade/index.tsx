@@ -4,7 +4,7 @@ import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
 import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
-import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
 import AdviceOnP2P from "../../components/AdviceOnP2P";
 import 'reactjs-popup/dist/index.css';
@@ -15,6 +15,7 @@ import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const Trade =  () => {
 
@@ -26,10 +27,33 @@ const Trade =  () => {
     const tradeService = useTradeService();
     const offerService = useOfferService();
     const userService = useUserService();
+    const [stepperState, setStepperState] = useState(0);
 
     useEffect(()=>{
         fetchSeller();
     },[trade])
+
+    useEffect(()=>{
+        updateStepperState();
+    },[trade])
+
+    function updateStepperState(){
+        if(trade){
+            switch (trade.status) {
+                case 'PENDING':
+                    setStepperState(0);
+                    break;
+                case 'ACCEPTED':
+                    setStepperState(1);
+                    break;
+                case 'SOLD':
+                    setStepperState(2);
+                    break;
+                default:
+                    setStepperState(0);
+            }
+        }
+    }
 
 
 
@@ -61,7 +85,7 @@ const Trade =  () => {
             const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
-            attendError("Connection error. Failed to take back proposal",e);
+            toast.error("Connection error. Failed to take back proposal " + e);
         }
     }
 
@@ -72,7 +96,7 @@ const Trade =  () => {
                 setSeller(resp);
             }
         }catch (e) {
-                attendError("Connection error. Failed to fetch seller",e)
+                toast.error("Connection error. Failed to fetch seller "+e)
         }
 
     }
@@ -84,8 +108,7 @@ const Trade =  () => {
                 setOffer(resp);
             }
         }catch (e) {
-            console.log(e)
-            attendError("Connection error. Could not fetch offer",e);
+            toast.error("Connection error. Could not fetch offer "+ e);
         }
     }
 
@@ -95,27 +118,27 @@ const Trade =  () => {
         <div className="flex flex-row mx-5">
             <div className="w-3/5 flex flex-col justify-center">
                 <TradeStatusAlert status={trade?.status!}/>
-                <h1 className="text-polar text-xl text-center mx-auto my-1 font-lato font-bold">Buying process</h1>
-                <Stepper active={0}/>
+                <h1 className="text-polar text-xl text-center mx-auto my-1 font-lato font-bold">{i18n.t('BuyingProcess')}</h1>
+                <Stepper active={stepperState}/>
                 <hr className="mt-4 mb-2"/>
                 { trade && trade.status === 'ACCEPTED' && <Popup  contentStyle={{borderRadius: "0.5rem" , padding:"1rem"}} trigger={<button className="p-3 bg-frostdr text-white font-roboto font-bold mx-auto rounded-lg my-2 flex flex-row">
                     <QuestionMarkCircleIcon className={"text-white h-6 w-6 my-auto mr-1"}/>
-                    <p>Advice on P2P trading</p>
+                    <p>{i18n.t('adviceOnP2P')}</p>
                 </button>} position="center center" modal>
                     <AdviceOnP2P/>
                 </Popup>}
 
                 <div className="flex flex-col shadow-2xl p-3 rounded-r-lg border-frostdr border-l-8 ">
-                    <h1 className="text-xl text-polar mx-auto font-bold font-lato">Offer Information</h1>
-                    <h1 className="text-lg text-polar mx-auto font-bold font-lato">Location</h1>
+                    <h1 className="text-xl text-polar mx-auto font-bold font-lato">{i18n.t('offerInformation')}</h1>
+                    <h1 className="text-lg text-polar mx-auto font-bold font-lato">{i18n.t('location')}</h1>
                     <h3 className="text-polar text-md mx-auto">{offer?.location}</h3>
 
                     <div className="flex flex-row justify-center mt-3 mx-auto my-auto">
                         <div className="flex flex-col mx-10 order-1" id="left">
                             <h1 className="text-center text-lg">
-                               You pay
+                                {i18n.t('youPay')}
                             </h1>
-                            <h1 className="text-center text-xl font-semibold text-polar">{trade?.buyingQuantity + ' '} ARS</h1>
+                            <h1 className="text-center text-xl font-semibold text-polar">{(trade?.buyingQuantity)?.toFixed(2) + ' '} ARS</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 my-5 order-2 mx-10" fill="none"
                              viewBox="0 0 24 24" stroke="black" strokeWidth="2">
@@ -123,22 +146,22 @@ const Trade =  () => {
                         </svg>
                         <div className="flex flex-col mx-10 order-3" id="right">
                             <h1 className="text-center text-lg">
-                                You receive
+                                {i18n.t('youReceive')}
                             </h1>
                             <h1 className="text-center text-xl font-semibold text-polar">
-                                { trade && offer ? trade.buyingQuantity / (offer.unitPrice) + ' '  + offer.cryptoCode: 'Loading' }
+                                { trade && offer ? (trade.buyingQuantity / (offer.unitPrice)).toFixed(14) + ' '  + offer.cryptoCode: 'Loading' }
                             </h1>
                         </div>
                     </div>
                     <div className="flex justify-center mt-5">
-                        <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate('/')}>Return to Home</button>
+                        <button className="h-fit bg-frost text-white p-3 font-sans rounded-lg w-40 text-center hover:bg-frostdr font-bold"  onClick={()=>navigate(-1)}>{i18n.t('back')}</button>
+                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate("/trade/"+trade?.tradeId+"/support")}>{i18n.t('iHadAProblema')}</button>
 
-                        <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate('/support')}>I had a problem</button>
                         {
                             trade?.status === 'PENDING' &&
                             <form className="flex">
                                 <button type="submit" className=" bg-nred hover:bg-nredd  text-white  p-3 h-12 justify-center rounded-lg font-sans text-center font-bold" onClick={takeBackProposal}>
-                                    Take back trade proposal
+                                    {i18n.t('removeTrade')}
                                 </button>
                             </form>
                         }

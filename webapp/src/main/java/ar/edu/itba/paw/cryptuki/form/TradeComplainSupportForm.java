@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.cryptuki.form.legacy.support;
+package ar.edu.itba.paw.cryptuki.form;
 
 import ar.edu.itba.paw.model.parameterObject.ComplainPO;
 

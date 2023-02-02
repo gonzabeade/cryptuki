@@ -7,6 +7,7 @@ import ComplainCard from "../../components/ComplainCard";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
@@ -39,7 +40,7 @@ const ComplaintHub = () => {
 
     return (<>
         <div className={"ml-72"}>
-            <h1 className="font-sans text-3xl font-bold text-polar pt-10 pl-10 ">Atender reclamos</h1>
+            <h1 className="font-sans text-3xl font-bold text-polar pt-10 pl-10 ">{i18n.t('pendingClaims')}</h1>
             {!isLoading ? <>
 
                 <div className="flex flex-col divide-x h-full ">
@@ -52,7 +53,7 @@ const ComplaintHub = () => {
                                 <Paginator paginatorProps={paginatorProps} callback={getPaginatedComplaints}/>
 
                             </div>}
-                        {(!complaints || complaints.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> There are no pending complaints.</h1>}
+                        {(!complaints || complaints.length === 0) && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noComplaints')}</h1>}
                 </div>
             </>:
             <div className="flex flex-col ml-56">

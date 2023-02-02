@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import RateYourCounterPart from "../../components/RateYourCounterPart";
 import UserInfo from "../../components/UserInfo";
 import useTradeService from "../../hooks/useTradeService";
-import { toast } from 'react-toastify';
 import useUserService from "../../hooks/useUserService";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
 
 
 const Receipt = () => {
@@ -24,7 +24,7 @@ const Receipt = () => {
     const offerService = useOfferService();
     const [counterPart, setCounterPart] = useState<UserModel>();
     const {user} = useAuth();
-
+    const navigate = useNavigate();
 
     async function fetchTrade(tradeId:number){
         try{
@@ -87,29 +87,29 @@ const Receipt = () => {
                                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         <h1 className="p-4 text-polard font-bold text-2xl font-sans mx-5 text-center ">
-                            The exchange was successful.
+                            {i18n.t("exchangeSuccessful")}
                         </h1>
                         <h3 className="mx-auto text-polard text-center text-lg text-gray-500">
-                            Thanks for using Cryptuki
+                            {i18n.t('thankForUsingCryptuki')}
                         </h3>
                     </div>
                     <div className="flex flex-col">
                         <h1 className="mx-auto text-polard font-bold text-xl mt-10 mb-5">
-                            Transaction Data
+                            {i18n.t('tradeDetails')}
                         </h1>
                         <div
                             className="py-5 px-14 mx-auto rounded-lg bg-white shadow flex  flex-col">
                             <div className="flex flex-row px-30">
                                 <div className="flex flex-col">
                                     <h1 className=" text-center text-lg  font-lato text-polar font-bold text-lh">
-                                        You paid
+                                        {i18n.t('youPaid')}
                                     </h1>
 
                                     <div className="flex flex-row">
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {offer && trade && offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    {offer && trade && (trade?.buyingQuantity!).toFixed(2)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS
@@ -118,7 +118,7 @@ const Receipt = () => {
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade && trade?.buyingQuantity}
+                                                    {trade && offer && (trade?.buyingQuantity/offer.unitPrice).toFixed(14)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     {offer && offer?.cryptoCode}
@@ -135,14 +135,14 @@ const Receipt = () => {
                                 </div>
                                 <div className="flex flex-col">
                                     <h1 className="text-polar font-lato font-bold text-lg text-center">
-                                        You received
+                                        {i18n.t('youReceived')}
                                     </h1>
 
                                     <div className="flex flex-row">
                                         {isBuyer ?
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    {trade && trade?.buyingQuantity}
+                                                    {trade && (trade?.buyingQuantity / offer?.unitPrice!).toFixed(14)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     {offer && offer?.cryptoCode}
@@ -151,7 +151,7 @@ const Receipt = () => {
                                             :
                                             <>
                                                 <h2 className="text-lg  font-lato text-polar text-left my-auto">
-                                                    { offer && trade&& offer?.unitPrice! * trade?.buyingQuantity!}
+                                                    { offer && trade && (trade?.buyingQuantity!).toFixed(2)}
                                                 </h2>
                                                 <h1 className="text-lg  font-lato text-polar text-left my-auto ml-2">
                                                     ARS
@@ -163,10 +163,10 @@ const Receipt = () => {
                             </div>
                             <div className="flex flex-col my-10 px-30">
                                 <h4 className="text-md text-polar font-bold mx-auto">
-                                    Transaction confirmation time
+                                    {i18n.t('transactionDate')}
                                 </h4>
                                 <h2 className="text-lg font-roboto text-polar text-center my-auto ">
-                                    {trade? trade.lastModified.toString(): 'No date provided'}
+                                    {trade? trade.lastModified.toString().substring(0,10): 'No date provided'}
                                 </h2>
                             </div>
                         </div>
@@ -176,13 +176,14 @@ const Receipt = () => {
                     <div className="flex flex-row mt-10">
 
 
-                        <Link className="cursor-pointer font-semibold bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center"
-                           to="/">
-                            Home
-                        </Link>
+                        <div className="cursor-pointer font-semibold bg-frost text-white p-3 font-sans rounded-lg mx-auto  w-40 text-center"
+                           onClick={()=>navigate(-1)}
+                              >
+                            {i18n.t('back')}
+                        </div>
                         <Link className=" cursor-pointer font-semibold bg-nred text-white p-3 font-sans rounded-lg mx-auto w-40 text-center"
-                           to="/support">
-                            I had a problem
+                           to={"/trade/"+trade?.tradeId+"/support"}>
+                            {i18n.t('iHadAProblema')}
                         </Link>
                     </div>
                 </div>

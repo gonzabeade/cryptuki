@@ -1,4 +1,5 @@
 import React from 'react';
+import i18n from "../../i18n";
 
 type RatingStarsProps = {
     rating:number
@@ -6,7 +7,7 @@ type RatingStarsProps = {
 
 const RatingStars : React.FC<RatingStarsProps> = ({rating}) => {
     return (
-        <div className="flex items-center flex-wrap ">
+        <div className="flex items-center flex-col ">
             <div className=" flex flex-row">
             { [...Array(Math.trunc(rating))].map((element, key)=>{
                 return (
@@ -23,7 +24,7 @@ const RatingStars : React.FC<RatingStarsProps> = ({rating}) => {
             }
             </div>
 
-            <p className="ml-2 text-xs font-medium text-gray-400 text-center">{rating} out of 5</p>
+            <p className="ml-2 text-xs font-medium text-gray-400 text-center">{rating} {i18n.t('outOf')} 5</p>
         </div>
     );
 };

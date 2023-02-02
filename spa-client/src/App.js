@@ -1,22 +1,16 @@
-import Navbar from './components/Navbar';
-import AdminNavBar from './components/AdminNavBar/AdminNavBar';
 
-import React, {Suspense, lazy, useState} from "react";
+
+import React, {Suspense, lazy} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Loader from "./components/Loader";
 import './index.css'
-import Error from "./views/Error";
+// import i18n (needs to be bundled ;))
+import './i18n';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import LoggedGate from "./components/LoggedGate";
 import {AuthProvider} from "./contexts/AuthContext";
-import ComplaintHub from "./views/ComplaintsLanding/ComplaintHub";
-import SolveComplaint from "./views/SolveComplaint/SolveComplaint";
-import SolveKycAdmin from "./views/SolveKycAdmin/SolveKycAdmin";
-import KycLanding from "./views/KycLanding/KycLanding";
-import NavbarAll from "./components/NavbarAll";
-
-import ApiError from "./views/ApiError";
+import i18n from "./i18n";
 
 
 
@@ -36,9 +30,17 @@ const UploadAd = lazy(()=>import("./views/UploadAd/index"));
 const UploadKyc = lazy(()=>import("./views/UploadKyc/index"));
 const EditOffer = lazy(()=>import("./views/EditOffer/index"));
 const Verify = lazy(()=>import("./views/Verify/index"));
-
-
-
+const Error = lazy (()=>import("./views/Error"));
+const LoggedGate = lazy (()=>import("./components/LoggedGate"));
+const ComplaintHub = lazy (()=>import("./views/ComplaintsLanding/ComplaintHub"));
+const SolveComplaint = lazy (()=>import("./views/SolveComplaint/SolveComplaint"));
+const SolveKycAdmin = lazy (()=>import("./views/SolveKycAdmin/SolveKycAdmin"));
+const KycLanding = lazy (()=>import("./views/KycLanding/KycLanding"));
+const NavbarAll = lazy (()=>import("./components/NavbarAll"));
+const ApiError = lazy (()=>import("./views/ApiError"));
+const RepeatOffer = lazy(()=> import("./views/RepeatOffer"));
+const RecoverPassword = lazy(()=> import("./views/RecoverPassword"))
+const ChangePassword = lazy(()=>import("./views/ChangePassword"))
 
 function App() {
   return (
@@ -47,14 +49,14 @@ function App() {
               <div className="App">
                   <ToastContainer/>
                   <NavbarAll/>
-                  <div className="content">
                       <Suspense fallback={<Loader/>}>
                           <Routes>
                               <Route path="/register" element={<Register/>}/>
+                              {/*Hasta aca llegue desde abajo traduciendo*/}
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
                               <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>
-                                <Route path="/trade/:id/support" element={<Support/>}/>
+                              <Route path="/trade/:id/support" element={<Support/>}/>
                               <Route path="/buyer/" element={<LoggedGate children={<BuyerDashboard/>} />}/>
                               <Route path="/seller/" element={<LoggedGate children={<SellerDashboard/>}/>}/>
                               <Route path="/trade/:id/receipt" element={<LoggedGate children={<Receipt/>}/>}/>
@@ -64,15 +66,18 @@ function App() {
                               <Route path="/offer/upload" element={<LoggedGate children={<UploadAd/>}/>}/>
                               <Route path="/kyc/upload" element={<LoggedGate children={<UploadKyc/>}/>}/>
                               <Route path="/offer/:id/edit" element={<LoggedGate children={<EditOffer/>}/>}/>
+                              <Route path="/offer/:id/repeat" element={<LoggedGate children={<RepeatOffer/>}/>}/>
                               <Route path="/verify" element={<Verify/>}/>
                               <Route path="/admin" element={<LoggedGate children={<ComplaintHub/>} admin={true} />} />
                               <Route path="/admin/complaint/:id" element={<LoggedGate children={<SolveComplaint/>} admin={true}/>}/>
                               <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
-                              <Route path="/forbidden" element={<Error message={"Forbidden action"} illustration={"/images/403.png"}/>}/>
+                              <Route path="/forbidden" element={<Error message={i18n.t('error.403')} illustration={"/images/403.png"}/>}/>
+                              <Route path="/recoverPassword" element={<RecoverPassword/>}/>
+                              <Route path="/changePassword" element={<ChangePassword/>}/>
                               <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
-                              <Route path="*" element={<Error message={"No page found"} illustration={"/images/404.png"}/>}/>
+                              <Route path="*" element={<Error message={i18n.t('error.404')} illustration={"/images/404.png"}/>}/>
                           </Routes>
                       </Suspense>
                   </div>
@@ -81,7 +86,6 @@ function App() {
                   <div className="shape-blob two"></div>
                   <div className="shape-blob left-[50%]"></div>
                   <div className="shape-blob left-[5%] top-[80%]"></div>
-              </div>
       </BrowserRouter>
       </AuthProvider>
 

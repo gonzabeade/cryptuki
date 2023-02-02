@@ -9,6 +9,8 @@ import ar.edu.itba.paw.cryptuki.form.MessageForm;
 import ar.edu.itba.paw.cryptuki.form.RatingForm;
 import ar.edu.itba.paw.cryptuki.form.TradeStatusForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
+import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
+import ar.edu.itba.paw.cryptuki.utils.TradeBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
 import ar.edu.itba.paw.exception.NoSuchTradeException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
@@ -56,21 +58,27 @@ public class TradeController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response listTrades(
-            @QueryParam("page") @DefaultValue("0") final int page,
-            @QueryParam("per_page") @DefaultValue("5") final int pageSize,
-            @QueryParam("status") @CollectionOfEnum(enumClass = TradeStatus.class) final List<String> status,
-            @QueryParam("from_offer") final Integer offerId,
-            @QueryParam("buyer") final String buyerUsername
-    ) {
+    @Produces("application/vnd.cryptuki.v1.trade-list+json")
+    public Response listTrades(@Valid @BeanParam TradeBeanParam tradeBeanParam) {
 
-        // Do not allow queries on these QueryParams simultaneously
-        boolean isBuyerPresent = buyerUsername != null;
-        boolean isOfferIdPresent = offerId != null;
+        /**
+            This method is for getting a list of trades.
+            A query to get a list of trades only makes sense if:
+                - We want to get all trades for a given offer.
+                    - In that case, set from_offer=N
+                OR
+                - We want to get all trades for a given buyer
+                    - In that case, set buyer=uname
 
-        if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
-            throw new IllegalArgumentException("Exactly one of the following filters must be provided: `from_offer`, `buyer`");
+                It does not make sense to ask for a list of offers in any other scenario
+                This is why this method validates this and bifurcates
+         */
+
+        int page = tradeBeanParam.getPage();
+        int pageSize = tradeBeanParam.getPageSize();
+        List<String> status = tradeBeanParam.getStatus();
+        Integer offer = tradeBeanParam.getOffer();
+        String buyer = tradeBeanParam.getBuyer();
 
         // If status collection is empty, then no filtering is intended
         // Use every status in query
@@ -80,26 +88,20 @@ public class TradeController {
 
         Collection<Trade> trades;
         long tradeCount;
-        if (isBuyerPresent) {
-            trades = tradeService.getTradesAsBuyer(buyerUsername, page, pageSize, statusSet);
-            tradeCount = tradeService.getTradesAsBuyerCount(buyerUsername, statusSet);
+
+        if (buyer != null) {
+            trades = tradeService.getTradesAsBuyer(buyer, page, pageSize, statusSet);
+            tradeCount = tradeService.getTradesAsBuyerCount(buyer, statusSet);
         } else {
-            Offer offer = offerService.getOfferById(offerId).orElseThrow(()-> new NoSuchOfferException(offerId));
-            String username = offer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
-
-            // If access is denied, hide 403 response status under a 404,
-            // to prevent making information public
-            try {
-                trades = tradeService.getTradesAsSeller(username, page, pageSize, statusSet, offerId);
-                tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, offerId);
-            } catch (AccessDeniedException ade) {
-                throw new NoSuchOfferException(offerId, ade);
-            }
-
+            Offer tradeOffer = offerService.getOfferById(offer).orElseThrow(()-> new NoSuchOfferException(offer));
+            String username = tradeOffer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
+            trades = tradeService.getTradesAsSeller(username, page, pageSize, statusSet, offer);
+            tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, offer);
         }
 
         if (trades.isEmpty())
             return Response.noContent().build();
+
 
         Collection<TradeDto> tradesDto = trades.stream().map(t -> TradeDto.fromTrade(t, uriInfo)).collect(Collectors.toList());
         Response.ResponseBuilder rb = Response.ok(new GenericEntity<Collection<TradeDto>>(tradesDto) {});
@@ -120,7 +122,7 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.trade+json")
     public Response listTrade(@PathParam("tradeId") int tradeId) {
         Trade trade = getTrade(tradeId);
         return Response.ok(TradeDto.fromTrade(trade, uriInfo)).build();
@@ -128,12 +130,18 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}/messages")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.message-list+json")
     public Response getTradeMessages(@PathParam("tradeId") int tradeId) {
         Trade trade = getTrade(tradeId);
         User seller = trade.getOffer().getSeller();
         User buyer = trade.getBuyer();
         List<MessageDto> messageDtos = trade.getMessageCollection().stream().map( m -> MessageDto.fromMessage(m, uriInfo, seller, buyer)).collect(Collectors.toList());
+
+        String senderUname = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (senderUname.equals(trade.getBuyer().getUsername()))
+            chatService.markBuyerMessagesAsSeen(trade.getTradeId());
+        else
+            chatService.markSellerMessagesAsSeen(trade.getTradeId());
 
         if (messageDtos.isEmpty())
             return Response.noContent().build();
@@ -142,8 +150,8 @@ public class TradeController {
 
     @POST
     @Path("/{tradeId}/messages")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.message+json")
+    // @Produces not needed, because it returns no content. Valid according to RFC2616
     public Response postNewMessage(@NotNull @Valid MessageForm messageForm, @PathParam("tradeId") int tradeId) {
 
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -155,8 +163,8 @@ public class TradeController {
 
     @PATCH
     @Path("/{tradeId}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.trade-status+json")
+    // @Produces not needed, because it returns no content. Valid according to RFC5789
     public Response modifyTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid TradeStatusForm tradeStatusForm) {
         switch (TradeStatus.valueOf(tradeStatusForm.getNewStatus())){
             case ACCEPTED:
@@ -174,7 +182,7 @@ public class TradeController {
 
     @GET
     @Path("/{tradeId}/rating")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.rating+json")
     public Response getTradeRating(@PathParam("tradeId") int tradeId){
         Trade trade = tradeService.getTradeById(tradeId).orElseThrow(()-> new NoSuchTradeException(tradeId));
         return Response.ok(TradeRatingDTO.fromTrade(trade,uriInfo)).build();
@@ -182,8 +190,8 @@ public class TradeController {
 
     @PATCH
     @Path("/{tradeId}/rating")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.rating+json")
+    // @Produces not needed, because it returns no content
     public Response rateTrade(@PathParam("tradeId") int tradeId, @NotNull @Valid RatingForm ratingForm){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         tradeService.rateCounterPartUserRegardingTrade(username,ratingForm.getRating(),tradeId);

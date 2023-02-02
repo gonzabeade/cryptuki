@@ -5,16 +5,17 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import CryptoFilters, {CryptoFormValues} from "../../components/CryptoFilters/index";
 import Paginator from "../../components/Paginator";
-import {toast} from "react-toastify";
 import Loader from "../../components/Loader";
 import useUserService from "../../hooks/useUserService";
-import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
+import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
+
 
 const Landing = () => {
-
     const [offers, setOffers] = useState<OfferModel[]|null>();
     const offerService = useOfferService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -48,7 +49,7 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            attendError("Connection error. Failed to fetch offers",e)
+            toast.error("Connection error. Failed to fetch offers" + e)
         }
     }
 
@@ -64,7 +65,7 @@ const Landing = () => {
 
             setIsLoading(false);
         }catch (e){
-            attendError("Connection error. Failed to fetch paginated offers",e)
+            toast.error("Connection error. Failed to fetch paginated offers "+e)
         }
     }
 
@@ -72,7 +73,7 @@ const Landing = () => {
         try{
             setOrderCriteria(order_by);
         }catch (e) {
-            attendError("Connection error. Failed to fetch ordered offers",e)
+            toast.error("Connection error. Failed to fetch ordered offers "+ e)
         }
     }
 
@@ -81,7 +82,7 @@ const Landing = () => {
         try{
             setFilters(data);
         }catch (e){
-            attendError("Connection error. Failed to fetch offers",e)
+            toast.error("Connection error. Failed to fetch offers"+ e)
         }
     }
 
@@ -98,20 +99,20 @@ const Landing = () => {
                             <div className="flex flex-col w-2/3 mt-10">
                                 <div className="flex flex-row mx-10 justify-between">
                                     <div className="flex flex-row">
-                                        <h3 className="font-bold mx-2 my-auto">Order by</h3>
+                                        <h3 className="font-bold mx-2 my-auto">{i18n.t('orderBy')}</h3>
                                         <select className="p-2 rounded-lg" onChange={(e) => {
                                             orderOffers(e.target.value)
                                         }}>
-                                            <option value={"DATE"}>Most recent</option>
-                                            <option value={"PRICE_LOWER"}>Lowest Price</option>
-                                            <option value={"RATE"}>Best Rated user</option>
-                                            <option value={"PRICE_UPPER"}>Higher price</option>
-                                            <option value={"LAST_LOGIN"}>Seller Last login</option>
+                                            <option value={"DATE"}>{i18n.t('dateOrder')}</option>
+                                            <option value={"PRICE_LOWER"}>{i18n.t('priceLowToHigh')}</option>
+                                            <option value={"RATE"}>{i18n.t('ratingFilter')}</option>
+                                            <option value={"PRICE_UPPER"}>{i18n.t('priceHighToLow')}</option>
+                                            <option value={"LAST_LOGIN"}>{i18n.t('loginOrder')}</option>
                                         </select>
                                     </div>
                                     {!isLoading &&
                                         <div>
-                                            <h3 className="text-gray-400">You got {offers ? offers.length : 0} results</h3>
+                                            <h3 className="text-gray-400">{i18n.t('youGot')} {offers ? offers.length : 0} {i18n.t('results')}</h3>
                                         </div>
                                     }
                                 </div>
@@ -120,8 +121,7 @@ const Landing = () => {
                                 { !isLoading &&  offers && offers.length > 0 &&
                                     <Paginator paginatorProps={paginatorProps} callback={getPaginatedOffers}/>}
                                 {!isLoading &&  (!offers || offers.length === 0) &&
-                                    <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> No offers available
-                                        at this moment</h1>}
+                                    <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noResults')}</h1>}
                                 {isLoading &&
                                     <div className="flex flex-col w-2/3 mt-10 mx-auto">
                                     <Loader/>

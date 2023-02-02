@@ -18,12 +18,23 @@ export class KycService {
     }
 
     public async getKycInformation(username:string):Promise<KycInformationModel>{
-       const resp = await this.axiosInstance().get<KycInformationModel>(this.basePath + username + '/kyc');
+       const resp = await this.axiosInstance()
+           .get<KycInformationModel>(this.basePath + username + '/kyc',
+               {
+                   headers:{
+                       'Accept':'application/vnd.cryptuki.v1.kyc+json'
+                   }
+               });
        return resp.data;
     }
 
     public async getPendingKycInformationByUrl(url:string):Promise<PaginatedResults<UserModel>>{
-        const resp = await this.axiosInstance().get<UserModel[]>(url);
+        const resp = await this.axiosInstance().get<UserModel[]>(url,
+            {
+                headers:{
+                    'Accept':'application/vnd.cryptuki.v1.user-list+json'
+                }
+            });
         return processPaginatedResults(resp);
     }
 
@@ -32,15 +43,42 @@ export class KycService {
         params.append("kyc_status","PEN");
         params.append("per_page", "2");
         const resp = await this.axiosInstance().get<UserModel[]>(
-            this.userPath,{ params:params });
+            this.userPath,{ params:params ,
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.user-list+json'
+            }
+            });
         return processPaginatedResults(resp);
     }
+
+    public async getPicturesByUrl(url:string):Promise<string>{
+        const resp = await this.axiosInstance().get<Blob>(url,{responseType:'arraybuffer'});
+        return await this.convertBlobToBase64(new Blob([resp.data]))
+    }
+
+    convertBlobToBase64 = async (blob: Blob) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+        });
+    };
+
+
 
     public async solveKyc(KycForm:SolveKycForm, username:string){
         const resp = await this.axiosInstance().patch(this.basePath + username + '/kyc', {
                 comments:KycForm.comments,
                 status: KycForm.status
-            });
+            },{
+            headers:{
+                'Accept':'application/vnd.cryptuki.v1.kyc+json',
+                'Content-Type': 'application/vnd.cryptuki.v1.kyc+json'
+            }
+        });
         return resp.data;
     }
 
@@ -71,7 +109,8 @@ export class KycService {
 
         await this.axiosInstance().post(this.basePath + username + '/kyc', formData,{
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'Accept':'application/vnd.cryptuki.v1.kyc+json'
             }
         });
     }

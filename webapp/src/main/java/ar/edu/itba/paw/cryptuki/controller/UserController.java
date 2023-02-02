@@ -5,27 +5,27 @@ import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
-import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
 import ar.edu.itba.paw.model.KycStatus;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.parameterObject.UserPO;
 import ar.edu.itba.paw.service.KycService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Path;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/api/users")
@@ -34,12 +34,11 @@ public class UserController {
     private final UserService userService;
 
     private final KycService kycService;
-    private final ValidatorFactory validatorFactory;
+
     @Autowired
-    public UserController(UserService userService, KycService kycService, ValidatorFactory validatorFactory) {
+    public UserController(UserService userService, KycService kycService) {
         this.userService = userService;
         this.kycService = kycService;
-        this.validatorFactory = validatorFactory;
     }
 
     @Context
@@ -48,7 +47,7 @@ public class UserController {
 
     @GET
     @Path("/{username}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.user+json")
     public Response getUser(@PathParam("username") String username) {
 
         UserDto userDto = userService.getUserByUsername(username)
@@ -59,12 +58,12 @@ public class UserController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getPendingKyc(@QueryParam("page") @DefaultValue("0") int page,
+    @Produces("application/vnd.cryptuki.v1.user-list+json")
+    public Response getUsers(@QueryParam("page") @DefaultValue("0") int page,
                                   @QueryParam("per_page") @DefaultValue("5") int pageSize,
                                   @QueryParam("kyc_status") @ValueOfEnum(enumClass = KycStatus.class)
-                                      String kyc_status) {
-        if(!KycStatus.valueOf(kyc_status).equals(KycStatus.PEN))
+                                      String kycStatus) {
+        if( kycStatus == null || !KycStatus.PEN.equals(KycStatus.valueOf(kycStatus)))
             throw new BadRequestException("Only pending kyc can be listed.");
         Collection<KycInformation> pendingKycRequests = this.kycService.getPendingKycRequests(page, pageSize);
        long pendingKycRequestsCount = this.kycService.getPendingKycRequestsCount();
@@ -83,63 +82,50 @@ public class UserController {
     }
 
 
-
-    public Response toUserNonce(String email) {
+    @POST
+    @Produces("application/vnd.cryptuki.v1.nonce-ack+json")
+    public Response toUserNonce(@NotNull @QueryParam("email") String email) {
         userService.changePasswordAnonymously(email);
         return Response.ok(UserNonceDto.fromEmail(email)).build();
     }
 
-    public Response toNewUser(RegisterForm registerForm, Locale locale) {
-        if(registerForm == null)
-            throw new BadRequestException("User data must be provided.");
+    @POST
+    @Consumes("application/vnd.cryptuki.v1.user+json")
+    @Produces("application/vnd.cryptuki.v1.user+json")
+    public Response toNewUser(@Valid @NotNull(message = "Body required") RegisterForm registerForm,  @Context HttpServletRequest request) {
 
-
-        /* Manual validation - @Valid does not work on non-controller methods*/
-        Validator validator = validatorFactory.getValidator();
-        Set<ConstraintViolation<RegisterForm>> violations = validator.validate(registerForm);
-        if (!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        UserPO userPO = registerForm.toParameterObject().withLocale(locale);
-        userService.registerUser(userPO);
+        UserPO userPO = registerForm.toParameterObject().withLocale(request.getLocale());
+        User newUser = userService.registerUser(userPO);
 
         final URI uri = uriInfo.getAbsolutePathBuilder()
                 .path(userPO.getUsername())
                 .build();
 
-        return Response.created(uri).build();
-    }
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response postUser(RegisterForm registerForm, @Context HttpServletRequest request, @QueryParam("email") String email) {
-        return email == null ? toNewUser(registerForm, request.getLocale()) : toUserNonce(email);
+        return Response.created(uri).entity(UserDto.fromUser(newUser, uriInfo)).build();
     }
 
-
-    // TODO - How is the consumer of the api supposed to know the location of these endpoints?
 
     @PUT
     @Path("/{username}/password")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    @Consumes("application/vnd.cryptuki.v1.user-password+json")
     public Response changePassword(@NotNull @Valid ChangePasswordForm changePasswordForm, @PathParam("username") String username){
+
         userService.changePassword(username, changePasswordForm.getPassword());
         return Response.noContent().build();
     }
 
     @POST
     @Path("/{username}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
     public Response createValidation(
-            @NotNull @Valid UserEmailValidationForm userEmailValidationForm,
+            @NotNull @QueryParam("code") Integer code,
             @PathParam("username") String username
     ){
 
-        if (!userService.verifyUser(username, userEmailValidationForm.getCode()))
+        if (!userService.verifyUser(username, code))
             throw new BadRequestException("Bad request");
 
         final URI uri = uriInfo.getAbsolutePathBuilder().build();
-        return Response.created(uri).build();
+        return Response.noContent().build();
     }
 
 }

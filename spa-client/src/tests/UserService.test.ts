@@ -12,7 +12,6 @@ const code = 1234
 const user = {
     username: "salvaCasta",
     password: "castaSalva",
-    repeatPassword: "castaSalva",
     phoneNumber: "12345678",
     email: "scastagnino@itba.edu.ar"
 }
@@ -23,6 +22,10 @@ const data = {
     role: "Admin"
 }
 const token = sign(data, secret)
+
+const user_mime = "application/vnd.cryptuki.v1.user+json"
+const kyc_mime = "application/vnd.cryptuki.v1.kyc+json"
+const user_validation_mime = "application/vnd.cryptuki.v1.user-validation+json"
 
 
 beforeEach(() => {
@@ -82,7 +85,11 @@ test("get user", () => {
     expect(axios.get).toHaveBeenCalledWith(
         paths.BASE_URL +
         paths.USERS +
-        user.username
+        user.username, {
+            "headers": {
+                "Accept": user_mime
+            }
+        }
     )
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
@@ -92,7 +99,11 @@ test("get user by url", () => {
 
     userService.getUserByUrl(test_url)
 
-    expect(axios.get).toHaveBeenCalledWith(test_url)
+    expect(axios.get).toHaveBeenCalledWith(test_url, {
+        "headers": {
+            "Accept": user_mime
+        }
+    })
     expect(axios.get).toHaveBeenCalledTimes(1)
 })
 
@@ -110,15 +121,19 @@ test("register new user", () => {
     userService.register(
         user.username,
         user.password,
-        user.repeatPassword,
+        user.password,
         user.phoneNumber,
         user.email
     )
 
     expect(axios.post).toHaveBeenCalledWith(
         paths.BASE_URL +
-        paths.USERS +
-        "register", user
+        "/users", user, {
+            "headers": {
+                "Accept": user_mime,
+                "Content-Type": user_mime
+            }
+        }
     )
     expect(axios.post).toHaveBeenCalledTimes(1)
 })
@@ -133,6 +148,10 @@ test("verify user", () => {
         paths.USERS +
         user.username, {
             code: code
+        }, {
+            "headers": {
+                "Content-Type": user_validation_mime
+            }
         }
     )
     expect(axios.post).toHaveBeenCalledTimes(1)
@@ -147,7 +166,12 @@ test("get KYC status", () => {
         paths.BASE_URL +
         paths.USERS +
         user.username +
-        "/kyc"
+        "/kyc",
+        {
+            "headers": {
+                "Accept": kyc_mime
+            }
+        }
     )
 
     expect(axios.get).toHaveBeenCalledTimes(1)

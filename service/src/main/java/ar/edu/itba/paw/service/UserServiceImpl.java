@@ -38,12 +38,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-    public void registerUser(UserPO userPO){
+    public User registerUser(UserPO userPO){
         User user = userDao.createUser(userPO.getEmail(), userPO.getPhoneNumber(), userPO.getLocale());
         String hashedPassword = passwordEncoder.encode(userPO.getPlainPassword());
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
-        userAuthDao.createUserAuth(user, userPO.getUsername(),  hashedPassword, verifyCode);
+        UserAuth auth = userAuthDao.createUserAuth(user, userPO.getUsername(),  hashedPassword, verifyCode);
         messageSenderFacade.sendWelcomeMessage(user, verifyCode);
+        return auth.getUser();
     }
 
     @Override
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("#username == authentication.principal")
+//    @PreAuthorize("#username == authentication.principal")
     public boolean changePassword(String username, String newPassword) {
 
         if (newPassword == null)

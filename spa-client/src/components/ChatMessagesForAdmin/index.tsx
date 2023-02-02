@@ -4,6 +4,8 @@ import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
+import {toast} from "react-toastify";
 
 type ChatSnippetProps = {
     buyer: UserModel ,
@@ -21,7 +23,7 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
             const resp = await chatService.getMessages(tradeId);
             setMessages(resp);
         }catch (e) {
-            attendError("Error fetching messages. Check your connection",e)
+            toast.error("Error fetching messages. Check your connection" + e)
         }
 
     }
@@ -34,7 +36,7 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
     return (
         <div className=" flex flex-col w-1/3 h-full">
             <h1 className="font-sans font-bold text-polard text-center mb-3">
-                Historial del chat
+                {i18n.t('chatHistory')}
             </h1>
             <div className="flex flex-row h-full w-full justify-around ">
             <div className="container mx-10 h-4/5 F border-gray-200">

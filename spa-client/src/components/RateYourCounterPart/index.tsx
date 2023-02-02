@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import ConfirmationToggle from "../ConfirmationToggle";
 import useTradeService from "../../hooks/useTradeService";
 import {attendError} from "../../common/utils/utils";
+import i18n from "../../i18n";
+import {toast} from "react-toastify";
 
 
 type RateYourCounterPartProps = {
@@ -24,19 +26,19 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                if (isBuyer && resp.data.seller_rated) {
                    setAlreadyRated(true);
                    if (resp.data.seller_rating) {
-                       setRating(resp.data.seller_rating * 2);
+                       setRating(resp.data.seller_rating);
                    }
                }
 
                if (!isBuyer && resp.data.buyer_rated) {
                    setAlreadyRated(true);
                    if (resp.data.buyer_rating) {
-                       setRating(resp.data.buyer_rating * 2);
+                       setRating(resp.data.buyer_rating);
                    }
                }
            }
        }catch (e) {
-            attendError("Connection failed. Failed to get rating info from Trade",e)
+            toast.error("Connection failed. Failed to get rating info from Trade " + e)
        }
     }
 
@@ -65,10 +67,10 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
     async function setRatingAndSend(rating:number) {
         try{
             await tradeService.rateCounterPart(tradeId!, rating);
-            setRating(rating * 2);
+            setRating(rating);
             setAlreadyRated(true);
         }catch (e) {
-            attendError("Connection Error, failed to rate your counterpart",e)
+            toast.error("Connection Error, failed to rate your counterpart " + e)
         }
     }
 
@@ -77,7 +79,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
             {!alreadyRated &&
                 <div className="flex flex-col">
                     <h1 className="text-polard font-roboto font-bold text-center text-xl mx-auto">
-                        Rate {usernameRated}
+                        {i18n.t('rate')} {usernameRated}
                     </h1>
                     <form>
                         <div className="flex flex-col">
@@ -103,7 +105,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                                 <input type="hidden" value="0" /> {/*rating*/}
                                 <button type="submit" id="sendRating"
                                         className="bg-frostdr text-white  mt-4 p-3 rounded-md font-sans min-w-[25%] mx-auto active:cursor-progress hidden">
-                                   Send
+                                    {i18n.t('send')}
                                 </button>
                             </div>
                         </div>
@@ -112,8 +114,8 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                 </div>}
             {alreadyRated &&
                 <div className=" flex flex-col mb-5 mt-5 mx-auto">
-                    <ConfirmationToggle title={"Rating sent"}/>
-                    <h1 className="mx-auto">Rating submitted: {rating ?rating/2:0}/5</h1>
+                    <ConfirmationToggle title={i18n.t('ratingSent')}/>
+                    <h1 className="mx-auto">{i18n.t('ratingSent')}: {rating ?rating/2:0}/5</h1>
                 </div>
 
             }

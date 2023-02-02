@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles.css';
+import i18n from "../../i18n";
 type StepperProps = {
     active:number
 }
@@ -10,13 +11,13 @@ const Stepper:React.FC<StepperProps> = ({active}) => {
                 <div className="wrapper-progressBar">
                     <ul className="progressBar">
                         <li className={`${active >= 0  ? 'active': 'text-gray-400'}`}>
-                            Trade proposal sent! Now wait for the seller
+                            {i18n.t('tradeProposalSent') + ' ' + i18n.t('waitForTheSeller')}
                         </li>
                         <li className={`${active >= 1  ? 'active': 'text-gray-400'}`}>
-                            The seller accepted your trade proposal. Meet him/her and buy the crypto.
+                            {i18n.t('proposalAccepted')} {i18n.t('furtherInstructions')}
                         </li>
                         <li className={`${active >= 2  ? 'active': 'text-gray-400'}`}>
-                            Exchange successful!
+                            {i18n.t('exchangeSuccessful')}!
                         </li>
                     </ul>
                 </div>

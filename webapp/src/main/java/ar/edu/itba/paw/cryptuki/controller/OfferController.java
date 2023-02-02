@@ -1,9 +1,10 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.OfferDto;
+import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
+import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
@@ -47,7 +48,7 @@ public class OfferController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.offer-list+json")
     public Response listOffers(@Valid @BeanParam OfferBeanParam offerBeanParam) {
 
         OfferFilter filter = offerBeanParam.toOfferFilter();
@@ -65,16 +66,16 @@ public class OfferController {
 
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces("application/vnd.cryptuki.v1.offer+json")
     public Response getOffer(@PathParam("id") int id) {
         Offer offer = offerService.getOfferById(id).orElseThrow(() -> new NoSuchOfferException(id));
         return Response.ok(OfferDto.fromOffer(offer, uriInfo)).build();
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response createOffer(@Valid UploadOfferForm offerForm) {
+    @Consumes("application/vnd.cryptuki.v1.offer+json")
+    @Produces("application/vnd.cryptuki.v1.offer+json")
+    public Response createOffer(@Valid @NotNull UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
@@ -85,27 +86,27 @@ public class OfferController {
                 .path(String.valueOf(offer.getOfferId()))
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(OfferDto.fromOffer(offer,uriInfo)).build();
     }
 
     @PUT
     @Path("/{id}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.offer+json")
+    @Produces("application/vnd.cryptuki.v1.offer+json")
     public Response modifyOffer(@Valid ModifyOfferForm offerForm, @PathParam("id") int id) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));
         offerForm.setSellerId(user.getId());
         offerService.modifyOffer(offerForm.toOfferParameterObject().withOfferId(id));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
 
     @GET
     @Path("/{offerId}/trades")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getTrades(@Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
+    @Produces("application/vnd.cryptuki.v1.trade-list+json")
+    public Response getTrades(@PathParam("offerId") int offerId) {
 
         final URI uri = uriInfo.getBaseUriBuilder()
                 .path("/api/trades")
@@ -117,8 +118,8 @@ public class OfferController {
 
     @POST
     @Path("/{offerId}/trades")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes("application/vnd.cryptuki.v1.trade+json")
+    @Produces("application/vnd.cryptuki.v1.trade+json")
     public Response createTrade(@NotNull @Valid TradeForm tradeForm, @PathParam("offerId") int offerId) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -131,7 +132,7 @@ public class OfferController {
                 .path(String.valueOf(trade.getTradeId()))
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(TradeDto.fromTrade(trade, uriInfo)).build();
     }
 
 

@@ -2,8 +2,8 @@ package ar.edu.itba.paw.cryptuki.controller;
 
 import ar.edu.itba.paw.cryptuki.dto.ComplainDto;
 import ar.edu.itba.paw.cryptuki.dto.ComplainResolutionDto;
-import ar.edu.itba.paw.cryptuki.form.legacy.admin.SolveComplainForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.support.TradeComplainSupportForm;
+import ar.edu.itba.paw.cryptuki.form.SolveComplainForm;
+import ar.edu.itba.paw.cryptuki.form.TradeComplainSupportForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.cryptuki.utils.ComplainBeanParam;
 import ar.edu.itba.paw.exception.NoSuchComplainException;

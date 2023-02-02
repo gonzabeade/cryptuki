@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAccessDeniedHandler;
+import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtManager;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
 import ar.edu.itba.paw.service.UserService;
@@ -69,12 +70,11 @@ public class WebAuthConfig {
     @Configuration
     @ComponentScan
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
-
-        @Autowired
-        private UserService userService;
-
         @Autowired
         private NonceUserDetailsService nonceUserDetailsService;
+
+        @Autowired
+        private JwtManager jwtManager;
 
         @Autowired
         private PasswordUserDetailsService passwordUserDetailsService;
@@ -119,7 +119,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,passwordUserDetailsService, authenticationManagerBean());
+            return new JwtFilter(passwordUserDetailsService, authenticationManagerBean(), jwtManager);
         }
     }
 
@@ -138,12 +138,10 @@ public class WebAuthConfig {
         private UserDetailsService userDetailsService;
 
         @Autowired
-        private DummyBearerFilter dummyBearerFilter;
+        private JwtManager jwtManager;
 
         @Autowired
         private PasswordEncoder passwordEncoder;
-        @Autowired
-        private UserService userService;
 
         @Override
         public void configure(final WebSecurity webSecurity) {
@@ -190,6 +188,7 @@ public class WebAuthConfig {
                     .antMatchers(HttpMethod.POST, "/api/complaints/*/resolution").hasRole("ADMIN")
 
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                     .antMatchers(HttpMethod.GET, "/api/users/*").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/users/*").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/*/secrets").authenticated()
@@ -225,7 +224,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,userDetailsService, authenticationManagerBean());
+            return new JwtFilter(userDetailsService, authenticationManagerBean(), jwtManager);
         }
 
         @Bean

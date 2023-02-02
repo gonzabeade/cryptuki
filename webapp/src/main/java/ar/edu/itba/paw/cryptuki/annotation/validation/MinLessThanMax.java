@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MinLessThanMax {
     //error message
-    public String message() default "The value in minInCrypto must be smaller than that in manInCrypto";
+    public String message() default "The value in minInCrypto must be smaller than that in maxInCrypto";
     //represents group of constraints
     public Class<?>[] groups() default {};
     //represents additional information about annotation

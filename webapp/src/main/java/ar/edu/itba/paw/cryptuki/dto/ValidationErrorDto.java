@@ -13,7 +13,7 @@ public class ValidationErrorDto {
 
     public static ValidationErrorDto fromValidationException(final ConstraintViolation violation) {
         final ValidationErrorDto dto = new ValidationErrorDto();
-        dto.message = violation.getMessageTemplate();
+        dto.message = violation.getMessage();
         Path.Node leaf = null;
         for (Path.Node p: violation.getPropertyPath())
             leaf = p;

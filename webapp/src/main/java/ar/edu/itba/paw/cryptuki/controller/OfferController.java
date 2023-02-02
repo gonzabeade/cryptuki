@@ -4,7 +4,7 @@ import ar.edu.itba.paw.cryptuki.dto.OfferDto;
 import ar.edu.itba.paw.cryptuki.dto.TradeDto;
 import ar.edu.itba.paw.cryptuki.form.TradeForm;
 import ar.edu.itba.paw.cryptuki.form.UploadOfferForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.ModifyOfferForm;
+import ar.edu.itba.paw.cryptuki.form.ModifyOfferForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.cryptuki.utils.OfferBeanParam;
 import ar.edu.itba.paw.exception.NoSuchOfferException;
@@ -75,7 +75,7 @@ public class OfferController {
     @POST
     @Consumes("application/vnd.cryptuki.v1.offer+json")
     @Produces("application/vnd.cryptuki.v1.offer+json")
-    public Response createOffer(@Valid UploadOfferForm offerForm) {
+    public Response createOffer(@Valid @NotNull UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));

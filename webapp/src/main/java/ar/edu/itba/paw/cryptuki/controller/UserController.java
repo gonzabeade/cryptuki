@@ -5,8 +5,6 @@ import ar.edu.itba.paw.cryptuki.dto.UserDto;
 import ar.edu.itba.paw.cryptuki.dto.UserNonceDto;
 import ar.edu.itba.paw.cryptuki.form.ChangePasswordForm;
 import ar.edu.itba.paw.cryptuki.form.RegisterForm;
-import ar.edu.itba.paw.cryptuki.form.UserEmailValidationForm;
-import ar.edu.itba.paw.cryptuki.form.legacy.auth.EmailForm;
 import ar.edu.itba.paw.cryptuki.helper.ResponseHelper;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
@@ -18,16 +16,16 @@ import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Path;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/api/users")
@@ -64,8 +62,8 @@ public class UserController {
     public Response getUsers(@QueryParam("page") @DefaultValue("0") int page,
                                   @QueryParam("per_page") @DefaultValue("5") int pageSize,
                                   @QueryParam("kyc_status") @ValueOfEnum(enumClass = KycStatus.class)
-                                      String kyc_status) {
-        if(!KycStatus.valueOf(kyc_status).equals(KycStatus.PEN))
+                                      String kycStatus) {
+        if( kycStatus == null || !KycStatus.PEN.equals(KycStatus.valueOf(kycStatus)))
             throw new BadRequestException("Only pending kyc can be listed.");
         Collection<KycInformation> pendingKycRequests = this.kycService.getPendingKycRequests(page, pageSize);
        long pendingKycRequestsCount = this.kycService.getPendingKycRequestsCount();
@@ -85,11 +83,10 @@ public class UserController {
 
 
     @POST
-    @Consumes("application/vnd.cryptuki.v1.user-nonce+json")
     @Produces("application/vnd.cryptuki.v1.nonce-ack+json")
-    public Response toUserNonce(@Valid @NotNull EmailForm form) {
-        userService.changePasswordAnonymously(form.getEmail());
-        return Response.ok(UserNonceDto.fromEmail(form.getEmail())).build();
+    public Response toUserNonce(@NotNull @QueryParam("email") String email) {
+        userService.changePasswordAnonymously(email);
+        return Response.ok(UserNonceDto.fromEmail(email)).build();
     }
 
     @POST

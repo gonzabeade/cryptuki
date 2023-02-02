@@ -11,7 +11,6 @@ import java.net.URL;
 
 public class OfferDto {
 
-
     private int offerId;
     private double unitPrice;
     private double minInCrypto;

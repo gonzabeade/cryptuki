@@ -5,7 +5,8 @@ import ar.edu.itba.paw.cryptuki.dto.KycDto;
 import ar.edu.itba.paw.cryptuki.dto.ValidationErrorDto;
 import ar.edu.itba.paw.cryptuki.form.KycForm;
 import ar.edu.itba.paw.cryptuki.form.KycStatusForm;
-import ar.edu.itba.paw.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.helper.MultipartDescriptor;
 import ar.edu.itba.paw.exception.NoSuchKycException;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.KycInformation;
@@ -37,17 +38,16 @@ public class KycController {
     private static final long MAX_SIZE = 1 << 21;
     private final UserService userService;
     private final KycService kycService;
-
-    private final Collection<BadMultipartFormatException.MultipartDescriptor> kycMultipartFormat;
+    private final Collection<MultipartDescriptor> kycMultipartFormat;
 
     @Autowired
     public KycController(UserService userService, KycService kycService) {
         this.userService = userService;
         this.kycService = kycService;
         this.kycMultipartFormat = Arrays.asList(
-                new BadMultipartFormatException.MultipartDescriptor("application/json", "kyc-information"),
-                new BadMultipartFormatException.MultipartDescriptor("image/*", "id-photo"),
-                new BadMultipartFormatException.MultipartDescriptor("image/*", "validation-photo")
+                new MultipartDescriptor("application/vnd.cryptuki.v1.kyc+json", "kyc-information"),
+                new MultipartDescriptor("image/*", "id-photo"),
+                new MultipartDescriptor("image/*", "validation-photo")
         );
     }
 
@@ -76,9 +76,9 @@ public class KycController {
     @Produces("application/vnd.cryptuki.v1.kyc+json")
     public Response postKyc(
             @PathParam("username") String username,
-            @NotNull @Valid @FormDataParam("kyc-information") KycForm kycForm,
-             @FormDataParam("id-photo") FormDataBodyPart idPhoto,
-             @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
+            @Valid @FormDataParam("kyc-information") KycForm kycForm,
+            @FormDataParam("id-photo") FormDataBodyPart idPhoto,
+            @FormDataParam("validation-photo") FormDataBodyPart validationPhoto
     ) throws IOException {
 
         if (idPhoto == null || validationPhoto == null || kycForm == null )

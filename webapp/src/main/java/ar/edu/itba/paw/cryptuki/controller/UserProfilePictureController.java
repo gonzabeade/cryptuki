@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.cryptuki.controller;
 
-import ar.edu.itba.paw.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.exception.BadMultipartFormatException;
+import ar.edu.itba.paw.cryptuki.helper.MultipartDescriptor;
 import ar.edu.itba.paw.exception.NoSuchUserException;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.service.ProfilePicService;
@@ -28,7 +29,7 @@ public class UserProfilePictureController {
 
     private final UserService userService;
     private final ProfilePicService profilePicService;
-    private final Collection<BadMultipartFormatException.MultipartDescriptor> pictureMultipartFormat;
+    private final Collection<MultipartDescriptor> pictureMultipartFormat;
 
     @Context
     public UriInfo uriInfo;
@@ -38,7 +39,7 @@ public class UserProfilePictureController {
         this.userService = userService;
         this.profilePicService = profilePicService;
         this.pictureMultipartFormat =  Arrays.asList(
-                new BadMultipartFormatException.MultipartDescriptor("image/*", "picture")
+                new MultipartDescriptor("image/*", "picture")
         );
     }
 

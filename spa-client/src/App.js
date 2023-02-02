@@ -38,7 +38,7 @@ const SolveKycAdmin = lazy (()=>import("./views/SolveKycAdmin/SolveKycAdmin"));
 const KycLanding = lazy (()=>import("./views/KycLanding/KycLanding"));
 const NavbarAll = lazy (()=>import("./components/NavbarAll"));
 const ApiError = lazy (()=>import("./views/ApiError"));
-
+const RepeatOffer = lazy(()=> import("./views/RepeatOffer"));
 
 
 function App() {
@@ -65,6 +65,7 @@ function App() {
                               <Route path="/offer/upload" element={<LoggedGate children={<UploadAd/>}/>}/>
                               <Route path="/kyc/upload" element={<LoggedGate children={<UploadKyc/>}/>}/>
                               <Route path="/offer/:id/edit" element={<LoggedGate children={<EditOffer/>}/>}/>
+                              <Route path="/offer/:id/repeat" element={<LoggedGate children={<RepeatOffer/>}/>}/>
                               <Route path="/verify" element={<Verify/>}/>
                               <Route path="/admin" element={<LoggedGate children={<ComplaintHub/>} admin={true} />} />
                               <Route path="/admin/complaint/:id" element={<LoggedGate children={<SolveComplaint/>} admin={true}/>}/>

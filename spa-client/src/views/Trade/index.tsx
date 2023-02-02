@@ -138,7 +138,7 @@ const Trade =  () => {
                             <h1 className="text-center text-lg">
                                 {i18n.t('youPay')}
                             </h1>
-                            <h1 className="text-center text-xl font-semibold text-polar">{trade?.buyingQuantity + ' '} ARS</h1>
+                            <h1 className="text-center text-xl font-semibold text-polar">{(trade?.buyingQuantity)?.toFixed(2) + ' '} ARS</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 my-5 order-2 mx-10" fill="none"
                              viewBox="0 0 24 24" stroke="black" strokeWidth="2">
@@ -149,7 +149,7 @@ const Trade =  () => {
                                 {i18n.t('youReceive')}
                             </h1>
                             <h1 className="text-center text-xl font-semibold text-polar">
-                                { trade && offer ? trade.buyingQuantity / (offer.unitPrice) + ' '  + offer.cryptoCode: 'Loading' }
+                                { trade && offer ? (trade.buyingQuantity / (offer.unitPrice)).toFixed(14) + ' '  + offer.cryptoCode: 'Loading' }
                             </h1>
                         </div>
                     </div>

@@ -68,16 +68,17 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
                 </div>
             </div>
             <div className="flex flex-row mx-auto mt-10">
-                    <div>
-                        <button className="bg-ngreen rounded-lg text-white p-3 mr-10" onClick={()=>acceptKyc()}>{i18n.t('approve')}</button>
-                        <div>
-                        </div>
-                    </div>
-                        <Popup  contentStyle={{borderRadius: "0.5rem" , padding:"1rem"}} trigger={<button className="bg-nred rounded-lg text-white p-3">
-                            <p>{i18n.t('reject')}</p>
-                        </button>} position="center center" modal>
-                            <RejectKycForm username={username}/>
-                        </Popup>
+                <div>
+                    <button className="bg-ngreen rounded-lg text-white p-3 mr-10"
+                            onClick={() => acceptKyc()}>{i18n.t('approve')}</button>
+                </div>
+                <button className="bg-frostdr rounded-lg text-white p-3 mr-10" onClick={()=>navigate(-1)}>{i18n.t('back')}</button>
+                <Popup contentStyle={{borderRadius: "0.5rem", padding: "1rem"}}
+                       trigger={<button className="bg-nred rounded-lg text-white p-3">
+                           <p>{i18n.t('reject')}</p>
+                       </button>} position="center center" modal>
+                    <RejectKycForm username={username}/>
+                </Popup>
          </div>
         </div>
     );

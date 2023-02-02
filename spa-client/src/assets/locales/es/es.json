@@ -372,7 +372,7 @@
   "counterPart": "Contraparte",
   "tradeRejectedDetail": "Crea una nueva orden de compra si quieres seguir comprando de esta oferta",
   "tradeDeletedDetail": "Lamentamos la situación. Explora el mercado para otras ofertas",
-  "out of": "de",
+  "outOf": "de",
   "ofPages": "de",
   "myProfile": "Mi perfil",
   "signout": "Salir",
@@ -397,4 +397,5 @@
   "password": "Contraseña",
   "repeatPassword": "Repetir contraseña",
   "passwordDontMatch" : "Las contraseñas no coinciden"
+
 }

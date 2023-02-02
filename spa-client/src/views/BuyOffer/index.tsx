@@ -82,9 +82,9 @@ const BuyOffer = () => {
         }
     }
 
-    async function fetchSeller(username:string){
+    async function fetchSeller(url:string){
         try{
-            setSeller(await userService.getUser(username));
+            setSeller(await userService.getUserByUrl(url));
         }catch (e) {
            attendError("Connection error. Couldn't fetch seller",e);
         }
@@ -98,13 +98,17 @@ const BuyOffer = () => {
 
 
     useEffect(()=>{
-            //fetch offer seller model
+        //fetch offer seller model
         if(offer){
-            fetchSeller(userService.getUsernameFromURI(offer.seller));
+            fetchSeller(offer.seller);
         }
-
     },[offer]);
 
+
+    useEffect(()=>{
+        if(offer && seller && seller?.username === userService.getLoggedInUser())
+            navigate("/seller/offer/"+offer.offerId)
+    },[offer,seller])
 
     return (
         <div className="flex flex-wrap mt-10 mx-5">

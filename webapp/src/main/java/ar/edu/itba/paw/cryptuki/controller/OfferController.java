@@ -75,7 +75,7 @@ public class OfferController {
     @POST
     @Consumes("application/vnd.cryptuki.v1.offer+json")
     @Produces("application/vnd.cryptuki.v1.offer+json")
-    public Response createOffer(@Valid UploadOfferForm offerForm) {
+    public Response createOffer(@Valid @NotNull UploadOfferForm offerForm) {
 
         String who = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(who).orElseThrow(() -> new NoSuchUserException(who));

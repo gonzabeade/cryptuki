@@ -61,12 +61,24 @@ public class TradeController {
     @Produces("application/vnd.cryptuki.v1.trade-list+json")
     public Response listTrades(@Valid @BeanParam TradeBeanParam tradeBeanParam) {
 
-        // Do not allow queries on these QueryParams simultaneously
-        boolean isBuyerPresent = tradeBeanParam.getBuyer() != null;
-        boolean isOfferIdPresent = tradeBeanParam.getOffer() != null;
+        /**
+            This method is for getting a list of trades.
+            A query to get a list of trades only makes sense if:
+                - We want to get all trades for a given offer.
+                    - In that case, set from_offer=N
+                OR
+                - We want to get all trades for a given buyer
+                    - In that case, set buyer=uname
 
-//        if ((isBuyerPresent && isOfferIdPresent) || !(isBuyerPresent || isOfferIdPresent))
-//            throw new IllegalArgumentException("Exactly one of the following filters must be provided: `from_offer`, `buyer`");
+                It does not make sense to ask for a list of offers in any other scenario
+                This is why this method validates this and bifurcates
+         */
+
+        int page = tradeBeanParam.getPage();
+        int pageSize = tradeBeanParam.getPageSize();
+        List<String> status = tradeBeanParam.getStatus();
+        Integer offer = tradeBeanParam.getOffer();
+        String buyer = tradeBeanParam.getBuyer();
 
         // If status collection is empty, then no filtering is intended
         // Use every status in query
@@ -76,22 +88,15 @@ public class TradeController {
 
         Collection<Trade> trades;
         long tradeCount;
-        if (isBuyerPresent) {
+
+        if (buyer == null) {
             trades = tradeService.getTradesAsBuyer(tradeBeanParam.getBuyer(), tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet);
             tradeCount = tradeService.getTradesAsBuyerCount(tradeBeanParam.getBuyer(), statusSet);
         } else {
-            Offer offer = offerService.getOfferById(tradeBeanParam.getOffer()).orElseThrow(()-> new NoSuchOfferException(tradeBeanParam.getOffer()));
-            String username = offer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
-
-            // If access is denied, hide 403 response status under a 404,
-            // to prevent making information public
-            try {
-                trades = tradeService.getTradesAsSeller(username, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet, tradeBeanParam.getOffer());
-                tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, tradeBeanParam.getOffer());
-            } catch (AccessDeniedException ade) {
-                throw new NoSuchOfferException(tradeBeanParam.getOffer(), ade);
-            }
-
+            Offer tradeOffer = offerService.getOfferById(tradeBeanParam.getOffer()).orElseThrow(()-> new NoSuchOfferException(tradeBeanParam.getOffer()));
+            String username = tradeOffer.getSeller().getUsername().orElseThrow(InternalServerErrorException::new); // Legacy - From 1st Sprint, when users may not have usernames
+            trades = tradeService.getTradesAsSeller(username, tradeBeanParam.getPage(), tradeBeanParam.getPageSize(), statusSet, tradeBeanParam.getOffer());
+            tradeCount = tradeService.getTradesAsSellerCount(username, statusSet, tradeBeanParam.getOffer());
         }
 
         if (trades.isEmpty())

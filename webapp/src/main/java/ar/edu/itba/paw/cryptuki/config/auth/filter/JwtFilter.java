@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Optional;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -74,7 +75,14 @@ public class JwtFilter extends OncePerRequestFilter {
             username = credentials[0].trim();
             password = credentials[1].trim();
 
-            User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+            Optional<User> maybeUser = userService.getUserByUsername(username);
+
+            if (!maybeUser.isPresent()) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
+
+            User user = maybeUser.get();
 
             try {
                 userDetails = userDetailsService.loadUserByUsername(username);
@@ -110,8 +118,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
             username = jwtManager.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
-            User user = userService.getUserByUsername(username).orElseThrow(()->new NoSuchUserException(username));
+            Optional<User> maybeUser = userService.getUserByUsername(username);
 
+            if (!maybeUser.isPresent()) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
+
+            User user = maybeUser.get();
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),

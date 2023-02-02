@@ -10,8 +10,12 @@ import java.util.Optional;
 
 public interface KycService {
 
-    /** Kyc Request creation */
-    void newKycRequest(KycInformationPO kycInformationPO);
+    /**
+     * Kyc Request creation
+     *
+     * @return
+     */
+    KycInformation newKycRequest(KycInformationPO kycInformationPO);
 
     /** Kyc Request manipulation */
     void validateKycRequest(int kycId);
@@ -19,6 +23,7 @@ public interface KycService {
 
     /** Kyc Request getters */
     Optional<KycInformation> getPendingKycRequest(String username);
+    Optional<KycInformation> getKycRequest(String username);
     Collection<KycInformation> getPendingKycRequests(int page, int pageSize);
     long getPendingKycRequestsCount();
 

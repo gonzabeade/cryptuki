@@ -199,7 +199,7 @@ public class WebAuthConfig {
 
                     .antMatchers(HttpMethod.GET, "/api/users/*/kyc").authenticated()
                     .antMatchers(HttpMethod.PATCH, "/api/users/*/kyc").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc").authenticated()
+                    .antMatchers(HttpMethod.POST, "/api/users/*/kyc").hasRole("USER")
                     .antMatchers(HttpMethod.GET, "/api/users/*/kyc/validationPhoto").hasRole("ADMIN")
                     .antMatchers(HttpMethod.GET, "/api/users/*/kyc/idPhoto").hasRole("ADMIN")
 

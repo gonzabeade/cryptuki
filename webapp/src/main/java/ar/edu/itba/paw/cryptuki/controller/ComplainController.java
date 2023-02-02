@@ -50,7 +50,7 @@ public class ComplainController {
                 .path(String.valueOf(complain.getComplainId()))
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(ComplainDto.fromComplain(complain, uriInfo)).build();
     }
 
 
@@ -97,7 +97,7 @@ public class ComplainController {
                 .path("resolution")
                 .build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(ComplainResolutionDto.fromComplain(complain, uriInfo)).build();
     }
 
 

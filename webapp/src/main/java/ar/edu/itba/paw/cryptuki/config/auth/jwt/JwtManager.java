@@ -62,21 +62,19 @@ public class JwtManager { // Component that implements serializable?
         return false;
     }
 
-    public String generateAccessToken(UserDetails userDetails, boolean hasKyc) {
+    public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
         if(userDetails.getAuthorities().stream().findFirst().isPresent())
             claims.put("role",userDetails.getAuthorities().stream().findFirst().get().getAuthority());
-        if(hasKyc) claims.put("kyc",true); else claims.put("kyc",false);
         return doGenerateToken(claims, userDetails.getUsername(), ACCESS_TOKEN_VALIDITY);
     }
 
-    public String generateRefreshToken(UserDetails userDetails, boolean hasKyc) {
+    public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "refresh");
         if(userDetails.getAuthorities().stream().findFirst().isPresent())
             claims.put("role",userDetails.getAuthorities().stream().findFirst().get().getAuthority());
-        if(hasKyc) claims.put("kyc",true); else claims.put("kyc",false);
         return doGenerateToken(claims, userDetails.getUsername(), REFRESH_TOKEN_VALIDITY);
     }
 

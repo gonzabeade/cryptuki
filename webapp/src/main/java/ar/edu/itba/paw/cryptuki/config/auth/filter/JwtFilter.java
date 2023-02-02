@@ -29,15 +29,13 @@ import java.util.Optional;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
-    private final UserService userService ;
     private final JwtManager jwtManager;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public JwtFilter(UserService userService , @Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtManager jwtManager) {
+    public JwtFilter(@Qualifier("passwordUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtManager jwtManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
         this.jwtManager = jwtManager;
     }
 
@@ -75,15 +73,6 @@ public class JwtFilter extends OncePerRequestFilter {
             username = credentials[0].trim();
             password = credentials[1].trim();
 
-            Optional<User> maybeUser = userService.getUserByUsername(username);
-
-            if (!maybeUser.isPresent()) {
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
-                return;
-            }
-
-            User user = maybeUser.get();
-
             try {
                 userDetails = userDetailsService.loadUserByUsername(username);
             } catch (UsernameNotFoundException e) {
@@ -101,8 +90,8 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
 
-            httpServletResponse.setHeader("X-Refresh-Token", jwtManager.generateRefreshToken(userDetails,user.getKyc().isPresent()));
-            httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails,user.getKyc().isPresent()));
+            httpServletResponse.setHeader("X-Refresh-Token", jwtManager.generateRefreshToken(userDetails));
+            httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails));
 
         } else if (header.startsWith("Bearer ")){
 
@@ -118,14 +107,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             username = jwtManager.getUsernameFromToken(token);
             userDetails = userDetailsService.loadUserByUsername(username);
-            Optional<User> maybeUser = userService.getUserByUsername(username);
-
-            if (!maybeUser.isPresent()) {
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
-                return;
-            }
-
-            User user = maybeUser.get();
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
@@ -135,7 +116,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             if( jwtManager.getTypeFromToken(token).equals("refresh") ) {
-                httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails,user.getKyc().isPresent()));
+                httpServletResponse.setHeader("X-Access-Token", jwtManager.generateAccessToken(userDetails));
             }
 
         }

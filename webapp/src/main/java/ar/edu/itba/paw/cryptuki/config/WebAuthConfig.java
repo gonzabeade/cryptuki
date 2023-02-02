@@ -70,10 +70,6 @@ public class WebAuthConfig {
     @Configuration
     @ComponentScan
     public static class NonceConfiguration extends WebSecurityConfigurerAdapter {
-
-        @Autowired
-        private UserService userService;
-
         @Autowired
         private NonceUserDetailsService nonceUserDetailsService;
 
@@ -123,7 +119,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,passwordUserDetailsService, authenticationManagerBean(), jwtManager);
+            return new JwtFilter(passwordUserDetailsService, authenticationManagerBean(), jwtManager);
         }
     }
 
@@ -146,8 +142,6 @@ public class WebAuthConfig {
 
         @Autowired
         private PasswordEncoder passwordEncoder;
-        @Autowired
-        private UserService userService;
 
         @Override
         public void configure(final WebSecurity webSecurity) {
@@ -230,7 +224,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,userDetailsService, authenticationManagerBean(), jwtManager);
+            return new JwtFilter(userDetailsService, authenticationManagerBean(), jwtManager);
         }
 
         @Bean

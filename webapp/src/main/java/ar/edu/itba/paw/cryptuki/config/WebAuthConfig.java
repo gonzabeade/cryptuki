@@ -5,6 +5,7 @@ import ar.edu.itba.paw.cryptuki.config.auth.filter.JwtFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.filter.NonceBasicFilter;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAuthenticationSuccessHandler;
 import ar.edu.itba.paw.cryptuki.config.auth.handler.CustomAccessDeniedHandler;
+import ar.edu.itba.paw.cryptuki.config.auth.jwt.JwtManager;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.NonceUserDetailsService;
 import ar.edu.itba.paw.cryptuki.config.auth.userDetailsService.PasswordUserDetailsService;
 import ar.edu.itba.paw.service.UserService;
@@ -77,6 +78,9 @@ public class WebAuthConfig {
         private NonceUserDetailsService nonceUserDetailsService;
 
         @Autowired
+        private JwtManager jwtManager;
+
+        @Autowired
         private PasswordUserDetailsService passwordUserDetailsService;
 
         @Autowired
@@ -119,7 +123,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,passwordUserDetailsService, authenticationManagerBean());
+            return new JwtFilter(userService,passwordUserDetailsService, authenticationManagerBean(), jwtManager);
         }
     }
 
@@ -138,7 +142,7 @@ public class WebAuthConfig {
         private UserDetailsService userDetailsService;
 
         @Autowired
-        private DummyBearerFilter dummyBearerFilter;
+        private JwtManager jwtManager;
 
         @Autowired
         private PasswordEncoder passwordEncoder;
@@ -225,7 +229,7 @@ public class WebAuthConfig {
         }
 
         public JwtFilter jwtFilter() throws Exception {
-            return new JwtFilter(userService,userDetailsService, authenticationManagerBean());
+            return new JwtFilter(userService,userDetailsService, authenticationManagerBean(), jwtManager);
         }
 
         @Bean

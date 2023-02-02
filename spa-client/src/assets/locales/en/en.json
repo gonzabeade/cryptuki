@@ -388,6 +388,11 @@
   "CheckEmail": "Check yor email",
   "InstructionsSent": "We sent you instructions to recover your account",
   "SignIn": "Sign in",
-  "ForgotPassword" : "Forgot your password?"
+  "ForgotPassword" : "Forgot your password?",
+  "confirm": "Confirm",
+  "changePassword": "Change your password",
+  "password": "Password",
+  "repeatPassword": "Repeat password"
+
 
 }

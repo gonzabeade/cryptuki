@@ -391,5 +391,9 @@
   "CheckEmail": "Chequea tu correo electrónico",
   "InstructionsSent": "Te enviamos un correo electrónico con instrucciones para poder cambiar tu contraseña. "
   ,"SignIn": "Inicia sesión",
-  "ForgotPassword": "¿Olvidaste tu contraseña?"
+  "ForgotPassword": "¿Olvidaste tu contraseña?",
+  "confirm": "Confirmar",
+  "changePassword": "Cambia tu contraseña",
+  "password": "Contraseña",
+  "repeatPassword": "Repetir contraseña"
 }

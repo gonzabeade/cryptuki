@@ -40,7 +40,7 @@ const NavbarAll = lazy (()=>import("./components/NavbarAll"));
 const ApiError = lazy (()=>import("./views/ApiError"));
 const RepeatOffer = lazy(()=> import("./views/RepeatOffer"));
 const RecoverPassword = lazy(()=> import("./views/RecoverPassword"))
-
+const ChangePassword = lazy(()=>import("./views/ChangePassword"))
 
 function App() {
   return (
@@ -74,6 +74,7 @@ function App() {
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
                               <Route path="/forbidden" element={<Error message={i18n.t('error.403')} illustration={"/images/403.png"}/>}/>
                               <Route path="/recoverPassword" element={<RecoverPassword/>}/>
+                              <Route path="/changePassword" element={<ChangePassword/>}/>
                               <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
                               <Route path="*" element={<Error message={i18n.t('error.404')} illustration={"/images/404.png"}/>}/>

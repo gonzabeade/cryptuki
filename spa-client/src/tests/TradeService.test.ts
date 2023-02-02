@@ -193,7 +193,7 @@ test("rate counterpart", () => {
             rating: rating*2
         }, {
             "headers": {
-                "Accept": rating_mime
+                "Content-Type": rating_mime
             }
         }
     )

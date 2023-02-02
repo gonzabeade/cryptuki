@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import OfferModel from "../../types/OfferModel";
 import {ComplainModel} from "../../types/ComplainModel";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import useOfferService from "../../hooks/useOfferService";
 import useComplainService from "../../hooks/useComplainService";
@@ -32,6 +32,7 @@ const SolveComplaint = () => {
     const userService = useUserService();
     const [banning,setBanning] = useState<boolean|null>(false);
     const [dismissing, setDismissing] = useState<boolean|null>(false);
+    const navigate = useNavigate();
 
 
     async function getTradeMembers(){
@@ -147,6 +148,7 @@ const SolveComplaint = () => {
                         </p>
                     </div>
                     <div className="flex flex-row mx-auto w-full text-center justify-around ">
+                        <button onClick={()=>{navigate(-1)}} className="bg-frostdr rounded-lg text-white p-3" >{i18n.t('back')}</button>
                         <button id="dismissButton" onClick={()=>{setDismissing(true); setBanning(false);}} className="bg-ngreen rounded-lg text-white p-3"> {i18n.t('dismissClaim')}</button>
                         <button id="kickoutButton" onClick={()=>{setBanning(true); setDismissing(false);}} className="bg-nred rounded-lg text-white p-3"> {i18n.t('banUser')} {other?.username}</button>
                     </div>

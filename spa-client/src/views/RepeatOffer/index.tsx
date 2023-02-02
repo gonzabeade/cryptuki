@@ -10,8 +10,8 @@ const RepeatOffer = () => {
         <div className="flex flex-row divide-x w-full">
             <div className="flex flex-col w-full">
                 <div className="flex">
-                    <h1 className="mx-auto my-10 text-2xl font-semibold font-sans text-polar">
-                        {i18n.t('uploadAdvertisement')}
+                    <h1 className="p-3 bg-frostdr text-white font-roboto font-bold mx-auto rounded-lg my-2 flex flex-row">
+                        {i18n.t('repeatOffer')}
                     </h1>
                 </div>
                 <div className="flex items-center justify-center">

@@ -9,6 +9,8 @@ import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";
 import {attendError} from "../../common/utils/utils";
 import OfferModel from "../../types/OfferModel";
+import UserModel from "../../types/UserModel";
+import useUserService from "../../hooks/useUserService";
 
 export interface RepeatOfferFormValues {
     minInCrypto:number,
@@ -30,6 +32,8 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
     const offerService = useOfferService();
     const navigate = useNavigate();
     const [offer,setOffer] = useState<OfferModel>();
+    const [seller, setSeller] = useState<UserModel>();
+    const userService = useUserService();
 
     async function fetchCryptocurrencies(){
         try{
@@ -72,6 +76,24 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
     useEffect(()=>{
         fetchCryptocurrencies();
     },[])
+
+    async function fetchSeller(url:string){
+        try{
+            setSeller(await userService.getUserByUrl(url));
+        }catch (e) {
+            attendError("Connection error. Couldn't fetch seller",e);
+        }
+    }
+
+    useEffect(()=>{
+        if(offer)
+            fetchSeller(offer.seller);
+    },[offer]);
+
+    useEffect(()=>{
+        if(offer && seller && seller.username !== userService.getLoggedInUser())
+            navigate("/offer/"+offer.offerId)
+    },[offer,seller])
 
     async function offerInitialValues(){
         //build form values with offer

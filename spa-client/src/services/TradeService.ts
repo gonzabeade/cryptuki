@@ -110,7 +110,7 @@ export class TradeService {
         await this.axiosInstance().patch(this.basePath + tradeId + '/rating', {
             rating:rating*2
         },{
-            headers:{'Accept':'application/vnd.cryptuki.v1.rating+json'}
+            headers:{'Content-Type':'application/vnd.cryptuki.v1.rating+json'}
         });
     }
 

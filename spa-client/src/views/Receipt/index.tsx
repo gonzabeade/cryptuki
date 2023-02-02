@@ -30,6 +30,8 @@ const Receipt = () => {
         try{
             const resp = await tradeService.getTradeInformation(tradeId);
             setTrade(resp);
+            if(resp.status !== 'SOLD')
+                navigate("/trade/"+resp.tradeId)
         }catch (e){
             attendError("Error fetching trade",e);
         }

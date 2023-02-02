@@ -14,6 +14,7 @@ import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import Loader from "../Loader";
+import UserModel from "../../types/UserModel";
 
 
 export interface ModifyFormValues extends UploadFormValues {
@@ -28,6 +29,7 @@ const EditOfferForm = () => {
     const [offer, setOffer] = useState<OfferModel>();
     const offerService = useOfferService();
     const navigate = useNavigate();
+    const [seller, setSeller] = useState<UserModel>();
     const {user} = useAuth();
     const userService = useUserService();
     const [suggestedPrice,setSuggestedPrice] = useState<string|null>();
@@ -83,8 +85,25 @@ const EditOfferForm = () => {
         }catch (e){
             attendError("Connection error. Failed to fetch offer",e);
         }
-
     }
+    async function fetchSeller(url:string){
+        try{
+            setSeller(await userService.getUserByUrl(url));
+        }catch (e) {
+            attendError("Connection error. Couldn't fetch seller",e);
+        }
+    }
+
+    useEffect(()=>{
+        if(offer)
+            fetchSeller(offer.seller);
+    },[offer]);
+
+    useEffect(()=>{
+        if(offer && seller && seller.username !== userService.getLoggedInUser())
+            navigate("/offer/"+offer.offerId)
+    },[offer,seller])
+
 
     //Form
     const { register, handleSubmit, formState: { errors }, getValues } = useForm<ModifyFormValues>({defaultValues: async () => offerInitialValues()});

@@ -5,6 +5,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {useAuth} from "../../contexts/AuthContext";
 type VerifyFormValues ={
     code:number
 }
@@ -14,6 +15,7 @@ const Verify = () => {
     const userService = useUserService();
     const [searchParams]= useSearchParams();
     const navigate = useNavigate();
+    const {signin} = useAuth();
 
     useEffect(()=>{
         automaticPost();
@@ -24,6 +26,7 @@ const Verify = () => {
             if(searchParams.get("code") && searchParams.get("username")){
                 await userService.verifyUser(Number(searchParams.get("code")), searchParams.get("username")!);
                 toast.success("Successfully verified!");
+                //todo CHECK token
                 navigate("/");
             }
         }catch (e){

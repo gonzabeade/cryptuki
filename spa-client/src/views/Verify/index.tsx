@@ -26,7 +26,6 @@ const Verify = () => {
             if(searchParams.get("code") && searchParams.get("username")){
                 await userService.verifyUser(Number(searchParams.get("code")), searchParams.get("username")!);
                 toast.success("Successfully verified!");
-                //todo CHECK token
                 navigate("/");
             }
         }catch (e){

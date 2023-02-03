@@ -40,7 +40,6 @@ const BuyOffer = () => {
             setMax(resp.maxInCrypto * resp.unitPrice);
         }catch (e) {
             attendError("Connection error. Couldn't fetch seller",e);
-            console.log(e)
         }
 
     }

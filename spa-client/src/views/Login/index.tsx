@@ -9,6 +9,7 @@ import {useEffect} from "react";
 import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError, AxiosResponse} from "axios";
 
 
 type LoginFormValues = {
@@ -48,7 +49,8 @@ const Login = () => {
             });
             await sleep(500);
         }catch (e){
-            toast.error("Invalid credentials " + e);
+            const error:AxiosError = e as AxiosError;
+            toast.error(i18n.t(`${error.code} `));
         }
 
     }
@@ -98,8 +100,6 @@ const Login = () => {
                 <p className=" hover:cursor-pointer text-polar hover:text-blue-400 font-bold font-frostdr  mx-auto text-xs font-lato">{/*put router link here*/}<Link
                     to="/recoverPassword">{i18n.t('ForgotPassword')}</Link>
                 </p>
-
-
             </form>
         </div>
     )

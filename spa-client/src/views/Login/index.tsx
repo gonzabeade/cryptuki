@@ -57,7 +57,6 @@ const Login = () => {
                 toast.error(i18n.t(`${error.code}`))
             }
         }
-
     }
 
     return (

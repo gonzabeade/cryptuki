@@ -114,15 +114,15 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                 }
                 {
                     offer.offerStatus === 'SOL' &&
+                    <div className={"flex flex-col justify-center mx-auto my-5"}>
                         <div className="flex bg-gray-500 my-auto p-2 text-white text-center mx-auto">
                             {i18n.t('offerSold')}
                         </div>
-                }
-                {offer.offerStatus === 'SOL' &&
-                    <button onClick={()=>navigate("/offer/"+offer.offerId+"/repeat")}
-                            className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
-                        {i18n.t('RepeatOffer')}
-                    </button>
+                        <button onClick={()=>navigate("/offer/"+offer.offerId+"/repeat")}
+                                className=" font-bold bg-frostdr text-white  mt-4 p-3 rounded-md font-sans  w-32 mx-5 active:cursor-progress">
+                            {i18n.t('RepeatOffer')}
+                        </button>
+                    </div>
                 }
             </div>
 

@@ -83,7 +83,6 @@ function App() {
                   </div>
                   <div className="shape-blob"></div>
                   <div className="shape-blob one"></div>
-                  <div className="shape-blob two"></div>
                   <div className="shape-blob left-[50%]"></div>
                   <div className="shape-blob left-[5%] top-[80%]"></div>
       </BrowserRouter>

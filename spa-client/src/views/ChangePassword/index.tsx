@@ -29,6 +29,7 @@ const ChangePassword = () => {
     const {signin} = useAuth();
     const location = useLocation();
 
+
     async function onSubmit(data:changePasswordForm){
         if(!username){
             toast.error("Failed to update the password.")
@@ -38,7 +39,7 @@ const ChangePassword = () => {
             if(username && code){
                 withBasicAuthorizationWithCode(username, code)
             }
-            await userService.changePassword(data,username)
+            await userService.changePassword(data,username, searchParams.get("nonce")!)
             toast.success("Password successfully updated.")
             if(username && code) {
                 await login(username,data.password);

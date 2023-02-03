@@ -109,7 +109,7 @@ export class UserService {
         return this.convertBlobToBase64(new Blob([resp.data]))
     }
 
-    public async RecoverPassword(data:recoverPasswordForm){
+    public async recoverPassword(data:recoverPasswordForm){
         const params = new URLSearchParams();
         params.append("email",data.email)
         await this.axiosInstance().post(paths.BASE_URL + "/users",null, {
@@ -119,7 +119,6 @@ export class UserService {
             }
         });
     }
-
     convertBlobToBase64 = async (blob: Blob) => {
         return new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -131,7 +130,7 @@ export class UserService {
         });
     };
 
-    public async changePassword(data:changePasswordForm, username:string, code?:string){
+    public async changePassword(data:changePasswordForm, username:string, nonce?:string){
         await this.axiosInstance().put(paths.BASE_URL + "/users/" + username + "/password", {
             password:data.password
         }, {

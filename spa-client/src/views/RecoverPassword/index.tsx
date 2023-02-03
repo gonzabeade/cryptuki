@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import i18n from "../../i18n";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export type recoverPasswordForm={
     email:string
@@ -19,7 +20,7 @@ const Index = () => {
 
     async function onSubmit(data:recoverPasswordForm){
         try {
-            await useService.RecoverPassword(data)
+            await useService.recoverPassword(data)
             setSent(true)
         }catch (e){
             console.log(e)

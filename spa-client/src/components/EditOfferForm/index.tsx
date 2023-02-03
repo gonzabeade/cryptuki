@@ -15,6 +15,7 @@ import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import Loader from "../Loader";
 import UserModel from "../../types/UserModel";
+import {AxiosError} from "axios";
 
 
 export interface ModifyFormValues extends UploadFormValues {
@@ -114,7 +115,13 @@ const EditOfferForm = () => {
             toast.success("Offer modified successfully");
             navigate('/seller/offer/' + offer?.offerId);
         }catch (e) {
-            attendError("Connection error. Failed to modify offer",e);
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error( i18n.t('couldntModifyOffer')+ ` ${data.message}`);
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
     }
 
@@ -234,7 +241,7 @@ const EditOfferForm = () => {
                         </div>
                     </div>
                     <div className="flex flex-col px-10 w-1/3">
-                        <label className="text-xl font-sans text-polar font-bold mb-3 text-center ">3. {i18n.t('automaticResponse')}</label>
+                        <label className="text-xl font-sans text-polar font-bold mb-3 text-center ">3. {i18n.t('firstChat')}</label>
                         <h2 className="text-justify">{i18n.t('automaticResponseDetail')} </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
                             <textarea className="w-full h-36 rounded-lg mx-auto p-5"

@@ -23,7 +23,13 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer paused");
             renewOffers(OFFER_STATUS.PausedBySeller);
         }catch (e) {
-            toast.error("Couldn't pause offer " + e);
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error( i18n.t('couldntPauseOffer')+ ` ${data.message}`);
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
     }
 

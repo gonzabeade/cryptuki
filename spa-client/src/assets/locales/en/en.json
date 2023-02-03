@@ -137,7 +137,6 @@
   "logIn": "Login",
   "register": "Register",
   "createAccountForPublishing": "Create your account to publish offers",
-  "repeatPassword": "Repeat pasword",
   "logInWithExistingAccount": "Already have an account? Login",
   "chooseAnOption": "Select an option",
   "verifyYourAccount": "Verify your account",
@@ -174,7 +173,6 @@
   "rating": "Rating",
   "ratingFilter": "Best rated users",
   "continue": "Continue",
-  "changePassword": "Change password",
   "fiveMins": "Less than 5 minutes ago",
   "thirtyMins": "less than 30 minutes ago",
   "oneHr": "Less than 1hr ago",
@@ -391,7 +389,6 @@
   "ForgotPassword" : "Forgot your password?",
   "confirm": "Confirm",
   "changePassword": "Change your password",
-  "password": "Password",
   "repeatPassword": "Repeat password",
   "passwordDontMatch" : "Passwords don't match",
   "ERR_FR_TOO_MANY_REDIRECTS": "Too many redirects",
@@ -406,7 +403,10 @@
   "ERR_CANCELED": "Connection canceled",
   "ECONNABORTED": "Connection aborted",
   "ETIMEDOUT": "Check your connection. Request timed out.",
-  "Unauthorized": "Incorrect email or password "
+  "Unauthorized": "Incorrect email or password ",
+  "couldntPauseOffer": "Couldn't pause offer",
+  "couldntModifyOffer": "Couldn't modify offer"
+
 
 
 

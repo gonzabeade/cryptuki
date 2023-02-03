@@ -174,7 +174,6 @@
   "rating": "Valoración",
   "ratingFilter": "Usuarios mejor valorados",
   "continue": "Continuar",
-  "changePassword": "Cambiar contraseña",
   "fiveMins": "Hace menos de 5 minutos",
   "thirtyMins": "Hace menos de 30 minutos",
   "oneHr": "Hace menos de 1 hr",
@@ -394,8 +393,6 @@
   "ForgotPassword": "¿Olvidaste tu contraseña?",
   "confirm": "Confirmar",
   "changePassword": "Cambia tu contraseña",
-  "password": "Contraseña",
-  "repeatPassword": "Repetir contraseña",
   "passwordDontMatch" : "Las contraseñas no coinciden",
   "ERR_FR_TOO_MANY_REDIRECTS": "Demasiadas redirecciones",
   "ERR_BAD_OPTION_VALUE": "Error inesperado(ERR_BAD_OPTION_VALUE)",
@@ -409,7 +406,10 @@
   "ERR_CANCELED": "Conexión cancelada",
   "ECONNABORTED": "Conexión abortada",
   "ETIMEDOUT": "Chequea tu conexión. Tu petición excedió el tiempo límite",
-  "Unauthorized": "Email o contraseña incorrecta"
+  "Unauthorized": "Email o contraseña incorrecta",
+  "couldntPauseOffer": "No puedes pausar tu oferta",
+  "couldntModifyOffer": "No puedes modificar tu oferta"
+
 
 
 }

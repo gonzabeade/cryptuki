@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
 import i18n from "../../i18n";
+import {AxiosError} from "axios";
 
 export interface UploadKycValues {
     names:string,
@@ -37,7 +38,13 @@ const KycForm = () => {
             toast.success("Kyc information successfully sent.");
         }
         catch (e) {
-            toast.error("Connection error. Please try again later" + e);
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error( "Error"+ ` ${data.message}`);
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
     }
 

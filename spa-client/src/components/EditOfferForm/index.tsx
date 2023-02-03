@@ -43,7 +43,7 @@ const EditOfferForm = () => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch cryptocurrencies " + e);
+            toast.error("Connection error. Failed to fetch cryptocurrencies ");
         }
 
     }

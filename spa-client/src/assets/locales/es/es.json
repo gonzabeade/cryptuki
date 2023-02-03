@@ -396,6 +396,19 @@
   "changePassword": "Cambia tu contraseña",
   "password": "Contraseña",
   "repeatPassword": "Repetir contraseña",
-  "passwordDontMatch" : "Las contraseñas no coinciden"
+  "passwordDontMatch" : "Las contraseñas no coinciden",
+  "ERR_FR_TOO_MANY_REDIRECTS": "Demasiadas redirecciones",
+  "ERR_BAD_OPTION_VALUE": "Error inesperado(ERR_BAD_OPTION_VALUE)",
+  "ERR_BAD_OPTION": "Error inesperado(ERR_BAD_OPTION) ",
+  "ERR_NETWORK":"Chequea tu conexión. Estás sin internet",
+  "ERR_DEPRECATED": "Error inesperado(ERR_DEPRECATED)",
+  "ERR_BAD_RESPONSE": "¡Oops! Hubo un problema con tu respuesta ",
+  "ERR_BAD_REQUEST": "¡Oops! Hubo un problema con tu petición.",
+  "ERR_NOT_SUPPORT": "Acción no soportada.",
+  "ERR_INVALID_URL":  "URL inválido",
+  "ERR_CANCELED": "Conexión cancelada",
+  "ECONNABORTED": "Conexión abortada",
+  "ETIMEDOUT": "Chequea tu conexión. Tu petición excedió el tiempo límite"
+
 
 }

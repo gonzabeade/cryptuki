@@ -393,7 +393,23 @@
   "changePassword": "Change your password",
   "password": "Password",
   "repeatPassword": "Repeat password",
-  "passwordDontMatch" : "Passwords don't match"
+  "passwordDontMatch" : "Passwords don't match",
+  "ERR_FR_TOO_MANY_REDIRECTS": "Too many redirects",
+  "ERR_BAD_OPTION_VALUE": "Bad option value",
+  "ERR_BAD_OPTION": "Bad option",
+  "ERR_NETWORK":"Check your connection. It seems you are offline",
+  "ERR_DEPRECATED": "Deprecated error",
+  "ERR_BAD_RESPONSE": "Oops! There is a problem with your response.",
+  "ERR_BAD_REQUEST": "Oops! There is a problem with your request.",
+  "ERR_NOT_SUPPORT": "Action not supported.",
+  "ERR_INVALID_URL": "Invalid URL",
+  "ERR_CANCELED": "Connection canceled",
+  "ECONNABORTED": "Connection aborted",
+  "ETIMEDOUT": "Check your connection. Request timed out."
+
+
+
+
 
 
 }

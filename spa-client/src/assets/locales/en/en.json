@@ -405,7 +405,8 @@
   "ERR_INVALID_URL": "Invalid URL",
   "ERR_CANCELED": "Connection canceled",
   "ECONNABORTED": "Connection aborted",
-  "ETIMEDOUT": "Check your connection. Request timed out."
+  "ETIMEDOUT": "Check your connection. Request timed out.",
+  "Unauthorized": "Incorrect email or password "
 
 
 

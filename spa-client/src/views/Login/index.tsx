@@ -50,7 +50,12 @@ const Login = () => {
             await sleep(500);
         }catch (e){
             const error:AxiosError = e as AxiosError;
-            toast.error(i18n.t(`${error.code} `));
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error(i18n.t(`${data.message}`));
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
 
     }

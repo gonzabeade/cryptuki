@@ -29,7 +29,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "test:watch": "jest --watch",
     "eject": "react-scripts eject",
     "lint": "eslint . "
   },

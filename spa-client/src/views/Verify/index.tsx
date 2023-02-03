@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -15,9 +15,25 @@ const Verify = () => {
     const [searchParams]= useSearchParams();
     const navigate = useNavigate();
 
+    useEffect(()=>{
+        automaticPost();
+    }, [])
+
+    async function automaticPost(){
+        try{
+            if(searchParams.get("code") && searchParams.get("username")){
+                await userService.verifyUser(Number(searchParams.get("code")), searchParams.get("username")!);
+                toast.success("Successfully verified!");
+                navigate("/");
+            }
+        }catch (e){
+            toast.error("Connection error. Please try again later "+ e);
+        }
+    }
+
     async function onSubmit(data:VerifyFormValues){
         try{
-            await userService.verifyUser(data.code, searchParams.get("user")!);
+            await userService.verifyUser(data.code, searchParams.get("username")!);
             toast.success("Successfully verified!");
             navigate("/");
         }catch (e){

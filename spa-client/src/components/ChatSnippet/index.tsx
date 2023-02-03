@@ -57,7 +57,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                         <div className=" flex flex-col w-full px-3">
                             <div className="flex relative items-center py-3 border-b border-gray-300 justify-between">
                                 <div className={"flex"}>
-                                    {defaultPicture && <img alt={"default"} src={"/images/default-profile-picture.png"} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
+                                    {defaultPicture && <img alt={"default"} src={"/images/default-profile-picture.png"} className={"my-auto w-10 h-10 rounded-full border-frostdr border-2 shadow-lg"} /> }
                                     {!defaultPicture && <img className="object-cover w-10 h-10 my-auto rounded-full"
                                          src={counterPart?.picture} alt={counterPart?.username}/>}
                                     <div className="flex flex-col ml-4">

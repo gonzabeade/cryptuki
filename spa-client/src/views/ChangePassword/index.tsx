@@ -39,7 +39,7 @@ const ChangePassword = () => {
             if(username && code){
                 withBasicAuthorizationWithCode(username, code)
             }
-            await userService.changePassword(data,username, searchParams.get("nonce")!)
+            await userService.changePassword(data,username)
             toast.success("Password successfully updated.")
             if(username && code) {
                 await login(username,data.password);

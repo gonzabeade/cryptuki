@@ -130,7 +130,7 @@ export class UserService {
         });
     };
 
-    public async changePassword(data:changePasswordForm, username:string, nonce?:string){
+    public async changePassword(data:changePasswordForm, username:string){
         await this.axiosInstance().put(paths.BASE_URL + "/users/" + username + "/password", {
             password:data.password
         }, {

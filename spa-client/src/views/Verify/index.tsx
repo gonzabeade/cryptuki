@@ -37,7 +37,7 @@ const Verify = () => {
         try{
             await userService.verifyUser(data.code, searchParams.get("username")!);
             toast.success("Successfully verified!");
-            navigate("/");
+            navigate("/buyer/");
         }catch (e){
             toast.error("Connection error. Please try again later "+ e);
         }

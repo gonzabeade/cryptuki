@@ -47,6 +47,8 @@ Thumbs.db
 *.mov
 *.wmv
 
+webapp/src/main/webapp/images
+
 *.classpath
 *.project
 webapp/src/main/resources/application.properties

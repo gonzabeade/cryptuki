@@ -36,6 +36,7 @@ public class ChatServiceImpl implements ChatService {
             trade.setqUnseenMessagesSeller(trade.getqUnseenMessagesSeller()+1);
         else
             trade.setqUnseenMessagesBuyer(trade.getqUnseenMessagesBuyer()+1);
+
     }
 
     @Override

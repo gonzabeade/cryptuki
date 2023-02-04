@@ -138,7 +138,7 @@ public class TradeController {
         List<MessageDto> messageDtos = trade.getMessageCollection().stream().map( m -> MessageDto.fromMessage(m, uriInfo, seller, buyer)).collect(Collectors.toList());
 
         String senderUname = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (senderUname.equals(trade.getBuyer().getUsername()))
+        if (senderUname.equals(trade.getBuyer().getUsername().get()))
             chatService.markBuyerMessagesAsSeen(trade.getTradeId());
         else
             chatService.markSellerMessagesAsSeen(trade.getTradeId());

@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         int verifyCode = (int)(Math.random()*Integer.MAX_VALUE);
         UserAuth auth = userAuthDao.createUserAuth(user, userPO.getUsername(),  hashedPassword, verifyCode);
         messageSenderFacade.sendWelcomeMessage(user, verifyCode);
-        return auth.getUser();
+        return user;
     }
 
     @Override

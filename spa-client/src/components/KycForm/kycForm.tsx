@@ -41,7 +41,7 @@ const KycForm = () => {
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;
-                toast.error( "Error"+ ` ${data.message}`);
+                toast.error( "Error: "+ ` ${data.message}`);
             }else{
                 toast.error(i18n.t(`${error.code}`))
             }

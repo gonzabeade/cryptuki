@@ -5,8 +5,9 @@ import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import i18n from "../../i18n";
 import React from "react";
+import {AxiosError} from "axios";
 
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const USER_REGEX = /^[A-z][A-z0-9-_]{6,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 type RegisterFormValues = {
@@ -28,7 +29,15 @@ const Register = () => {
             toast.success("Successfully registered!");
             navigate('/verify?user='+data.username);
         }catch (e) {
-            toast.error("Connection error. Please try again later " + e);
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const errors = error.response.data as { message:string, path:string }[];
+                errors.map((error) =>
+                    toast.error("Error in field  " + i18n.t(`${error.path}`) + ": " + `${error.message}`)
+                );
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
 
     }
@@ -47,7 +56,8 @@ const Register = () => {
                     autoComplete="off"
                     required
                     className="p-2 m-2 rounded-lg"
-                    {...register("username", {required: true, pattern: {value:USER_REGEX, message: "Invalid username"}})}
+                    {...register("username", {required: true, pattern: {value:USER_REGEX,
+                            message: "Invalid username. Must have more than 6 characters "}})}
                 />
                 {errors && errors.username && <span className="text-red-500">{errors.username.message}</span>}
                 <input

@@ -3,6 +3,7 @@ import RatingStars from "../RatingStars";
 import i18n from "../../i18n";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
+import {Link} from "react-router-dom";
 
 type  UserProfileCardsProps = {
     username:string|null,
@@ -36,7 +37,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
     return (
         <div className="bg-white shadow rounded-lg py-1">
             <div className="w-full text-sm leading-normal text-gray-400 flex justify-end items-center mt-1">
-                <a href="/changePassword" className="mr-3 underline">{i18n.t('changePassword')}</a>
+                <Link to="/changePassword" className="mr-3 underline">{i18n.t('changePassword')}</Link>
             </div>
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">

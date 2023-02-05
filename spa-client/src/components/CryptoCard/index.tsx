@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import './styles.css';
 import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";

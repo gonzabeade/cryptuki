@@ -18,6 +18,7 @@ import i18n from "../../i18n";
 import {toast} from "react-toastify";
 
 import Loader from "../../components/Loader";
+import {Link} from "react-router-dom";
 
 
 const SellerDashboard = () => {
@@ -125,10 +126,10 @@ const SellerDashboard = () => {
                                 </p>
                             </div>
                             <div className="mx-auto mt-8">
-                                <a href="/kyc/upload"
+                                <Link to="/kyc/upload"
                                    className="cursor-pointer py-2 pr-4 pl-3 text-xl text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto">
                                     {i18n.t('startKyc')}
-                                </a>
+                                </Link>
                             </div>
                         </>
                         }
@@ -143,10 +144,10 @@ const SellerDashboard = () => {
                         }
                         {!kyc && kycAccepted &&
                             <div className="mx-auto mt-5">
-                                <a href="/offer/upload"
+                                <Link to="/offer/upload"
                                    className="py-2 pr-4 pl-3 text-lg text-white font-bold rounded-lg bg-frost border-2 border-white my-auto mx-auto cursor-pointer">
                                     {i18n.t('uploadOffer')}
-                                </a>
+                                </Link>
                             </div>
                         }
                     </div>

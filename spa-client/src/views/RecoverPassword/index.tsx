@@ -3,7 +3,7 @@ import i18n from "../../i18n";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 
 export type recoverPasswordForm={
@@ -70,12 +70,12 @@ const Index = () => {
                     {i18n.t('CheckEmail')}</h1>
                 <h2 className="mt-10 text-center text-xl font-sans text-polar">{i18n.t('InstructionsSent')}</h2>
 
-                <a className="flex w-full justify-center mt-5 mb-10" onClick={()=>navigate("/")}>
+                <Link className="flex w-full justify-center mt-5 mb-10" to={'/'}>
                     <div
                         className="w-1/7 rounded-lg bg-frost py-3 px-5 text-l font-sans text-center text-white cursor-pointer shadow-lg">
                         {i18n.t('home')}
                     </div>
-                </a>
+                </Link>
             </div>
         }
     </>

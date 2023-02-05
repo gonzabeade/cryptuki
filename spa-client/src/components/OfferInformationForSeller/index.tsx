@@ -12,6 +12,7 @@ import useTradeService from "../../hooks/useTradeService";
 import {TRADE_STATUS} from "../../common/constants";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {Link} from "react-router-dom";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
@@ -150,10 +151,10 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 </div>
 
                 {tradeStatus === TRADE_STATUS.Sold &&
-                    <a className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
-                       href={"/trade/" + trade.tradeId + "/receipt"}>
+                    <Link className="mx-auto bg-gray-200  font-bold cursor-pointer text-polard hover:border-polard hover: border-2 p-3 h-12 justify-center rounded-md font-sans text-center w-40"
+                       to={"/trade/" + trade.tradeId + "/receipt"}>
                         {i18n.t('seeMore')}
-                    </a>
+                    </Link>
                 }
                 {tradeStatus === TRADE_STATUS.Pending &&
                     <div className="flex flex-row">

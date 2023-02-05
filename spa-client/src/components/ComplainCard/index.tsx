@@ -2,6 +2,7 @@ import React from 'react';
 import {ComplainModel} from "../../types/ComplainModel";
 import useUserService from "../../hooks/useUserService";
 import i18n from "../../i18n";
+import {Link} from "react-router-dom";
 
 type ComplainCardProfileProps = {
     complain:ComplainModel
@@ -36,10 +37,10 @@ const ComplainCard: React.FC<ComplainCardProfileProps> = ({ complain}) => {
                     : {complain.comments}</h3>
             </div>
             <div className="flex flex-row my-3 mx-auto">
-                <a href={`/admin/complaint/${complain.complainId}`}
+                <Link to={`/admin/complaint/${complain.complainId}`}
                    className=" cursor-pointer text-center pb-2 px-5 pt-2 rounded-lg bg-stormd max-h-14 text-polard my-auto">
                     {i18n.t('see')}
-                </a>
+                </Link>
             </div>
     </div>
 };

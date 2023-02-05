@@ -1,6 +1,6 @@
 import React from 'react';
 import OfferModel from "../../types/OfferModel";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
@@ -54,7 +54,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
 
     return (
         <div className={"flex flex-col bg-[#FAFCFF] my-3 rounded-lg mx-1"}>
-            <a href={offer.offerStatus !== 'DEL' ? "/seller/offer/"+offer.offerId : "/seller/#"} className={`shadow-lg cursor-pointer z-10 flex flex-col p-3 rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus !== 'DEL' ? '' : 'cursor-not-allowed' }`} >
+            <Link to={offer.offerStatus !== 'DEL' ? "/seller/offer/"+offer.offerId : "/seller/#"} className={`shadow-lg cursor-pointer z-10 flex flex-col p-3 rounded-lg w-60 my-5 mx-auto ${ offer.offerStatus !== 'DEL' ? '' : 'cursor-not-allowed' }`} >
                 <h1 className=" text-polar text-center text-xl font-bold ">
                     {i18n.t('offer')}
                     #{offer.offerId}
@@ -85,7 +85,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                     </p>
                 </div>
 
-            </a>
+            </Link>
             <div className={"flex z-50 my-auto "}>
                 {
                     offer.offerStatus !== 'DEL' && offer.offerStatus !== 'PSE' && offer.offerStatus !== 'SOL' &&

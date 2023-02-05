@@ -7,6 +7,7 @@ import {TRADE_STATUS} from "../../common/constants";
 import useUserService from "../../hooks/useUserService";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {Link} from "react-router-dom";
 
 type TradeCardProp = {
     trade:TransactionModel
@@ -87,29 +88,29 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
             <div className="w-1/4 flex flex-row">
                 <div className="flex my-auto ml-1">
                     {trade.status != 'SOLD' && trade.status != 'REJECTED' && trade.status !== 'DELETED' &&
-                        <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+trade.tradeId}>
+                        <Link className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" to={"/trade/"+trade.tradeId}>
                             {i18n.t('resumeTrade')}
-                        </a>
+                        </Link>
                     }
                     {trade.status === "SOLD" &&
-                        <a className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" href={"/trade/"+ trade.tradeId
+                        <Link className=" cursor-pointer bg-gray-200 text-polard hover:border-polard hover: border-2 p-2 h-8 justify-center rounded-md font-sans text-center w-36 my-auto" to={"/trade/"+ trade.tradeId
                         +"/receipt"}>
                             {i18n.t('seeMore')}
-                        </a>
+                        </Link>
                     }
             </div>
 
             <div className="ml-4 flex flex-row  align-middle my-auto font-sans">
                 {unseenMessages !== 0 && trade.status !== TRADE_STATUS.Sold &&
                     <>
-                        <a href={"/trade/" + trade.tradeId} className="flex flex-row cursor-pointer">
+                        <Link to={"/trade/" + trade.tradeId} className="flex flex-row cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round"
                                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
                             <div className="text-frost align-middle bg-frost rounded-full w-2 h-2"></div>
-                        </a>
+                        </Link>
                         <div
                             className="-ml-4 w-6 h-5 bg-frostl border-2 font-sans rounded-full flex justify-center items-center">
                             <p className="text-xs">

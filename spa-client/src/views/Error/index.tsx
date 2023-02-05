@@ -1,5 +1,6 @@
 import React from 'react';
 import useUserService from "../../hooks/useUserService";
+import {Link} from "react-router-dom";
 
 
 type ErrorProps = {
@@ -12,10 +13,10 @@ const Error = ({message, illustration}:ErrorProps) => {
     return (
         <>
             <div className="flex w-full my-2">
-                <a className="mx-auto mt-10" href="/">
+                <Link className="mx-auto mt-10" to="/">
                     <img className='object-contain mx-auto w-52' src={illustration}
                          alt="logo"/>
-                </a>
+                </Link>
             </div>
             <div className=" flex flex-col justify-center mx-20 my-10">
                 <h1 className="text-2xl text-polard font-bold font-sans text-center">{message}</h1>

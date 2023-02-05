@@ -25,7 +25,7 @@ const AdminNavBar = () => {
             </Link>
             <ol className="flex flex-col divide-y mt-10">
                 <li></li>
-                <a className={`flex py-10 flex-col cursor-pointer ${activePage === "pending" ? " font-extrabold text-xl ":""}`} href="/admin/">
+                <Link className={`flex py-10 flex-col cursor-pointer ${activePage === "pending" ? " font-extrabold text-xl ":""}`} to="/admin/">
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto font-extrabold" fill="none"
                              viewBox="0 0 24 24" stroke="white" strokeWidth="2">
@@ -35,8 +35,8 @@ const AdminNavBar = () => {
                         <h1 className="text-white text-center">{i18n.t('pendingClaims')}</h1>
 
                     </li>
-                </a>
-                <a className={`flex py-10 flex-col  cursor-pointer ${activePage === "kyc" ? " font-extrabold text-xl ":""}`}   href="/admin/kyc">
+                </Link>
+                <Link className={`flex py-10 flex-col  cursor-pointer ${activePage === "kyc" ? " font-extrabold text-xl ":""}`}   to="/admin/kyc">
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto" fill="none"
                              viewBox="0 0 24 24" stroke="white" strokeWidth="1">
@@ -45,8 +45,8 @@ const AdminNavBar = () => {
                         </svg>
                         <h1 className="text-white text-center">{i18n.t('kyccheck')}</h1>
                     </li>
-                </a>
-                <a className="flex py-10 flex-col cursor-pointer" onClick={()=>{signout(()=>navigate('/'))}} >
+                </Link>
+                <Link className="flex py-10 flex-col cursor-pointer" onClick={()=>{signout(()=>navigate('/'))}} to={'/'} >
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto" fill="none"
                              viewBox="0 0 24 24" stroke="white" strokeWidth="2">
@@ -55,7 +55,7 @@ const AdminNavBar = () => {
                         </svg>
                         <h1 className="text-white text-center">{i18n.t('logout')}</h1>
                     </li>
-                </a>
+                </Link>
                 <li></li>
             </ol>
         </nav>

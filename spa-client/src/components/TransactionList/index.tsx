@@ -5,6 +5,7 @@ import UserModel from "../../types/UserModel";
 import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import useUserService from "../../hooks/useUserService";
+import {Link} from "react-router-dom";
 
 type TransactionListProps = {
     transactions:TransactionModel[],
@@ -45,8 +46,8 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                     <ul className="divide-y divide-gray-200">
                         {transactions.map(transaction => (
                             <li className="py-2" key={transaction.tradeId}>
-                                <a className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
-                                   href={"/chat/"+transaction.tradeId}>
+                                <Link className="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-1 cursor-pointer"
+                                   to={"/chat/"+transaction.tradeId}>
                                     <div className="flex-shrink-0">
                                         {TRADE_STATUS.get(transaction.status as string)?.icon}
                                     </div>
@@ -58,7 +59,7 @@ const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
                                         <p className="text-sm text-gray-500 truncate">{TRADE_STATUS.get(transaction.status as string)?.subtitle }
                                         </p>
                                     </div>
-                                </a>
+                                </Link>
                             </li>
                         ))
                         }

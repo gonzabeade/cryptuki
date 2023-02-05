@@ -342,21 +342,21 @@
             </execution>
 
 <!--             Delete this for execution in production. It is for intellij's smartTomcat-->
-            <execution>
-              <id>copy-resources-intellij</id>
-              <phase>process-classes</phase>
-              <goals>
-                <goal>copy-resources</goal>
-              </goals>
-              <configuration>
-                <outputDirectory>../webapp/src/main/webapp</outputDirectory>
-                <resources>
-                  <resource>
-                    <directory>build</directory>
-                  </resource>
-                </resources>
-              </configuration>
-            </execution>
+<!--            <execution>-->
+<!--              <id>copy-resources-intellij</id>-->
+<!--              <phase>process-classes</phase>-->
+<!--              <goals>-->
+<!--                <goal>copy-resources</goal>-->
+<!--              </goals>-->
+<!--              <configuration>-->
+<!--                <outputDirectory>../webapp/src/main/webapp</outputDirectory>-->
+<!--                <resources>-->
+<!--                  <resource>-->
+<!--                    <directory>build</directory>-->
+<!--                  </resource>-->
+<!--                </resources>-->
+<!--              </configuration>-->
+<!--            </execution>-->
           </executions>
         </plugin>
       </plugins>

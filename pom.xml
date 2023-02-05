@@ -34,8 +34,8 @@
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
     <jersey.version>3.0-SNAPSHOT</jersey.version>
     <jjwt.version>0.7.0</jjwt.version>
-    <node.version>v14.17.0</node.version>
-    <npm.version>v8.15.0</npm.version>
+    <node.version>v18.9.0</node.version>
+    <npm.version>v8.19.1</npm.version>
   </properties>
 
   <repositories>

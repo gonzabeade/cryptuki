@@ -1,5 +1,5 @@
 export const paths = {
-    BASE_URL: 'http://localhost:8080/webapp/api',
+    BASE_URL: 'http://localhost:8080/api',
     HOME:'/',
     OFFERS: '/offers/',
     TRADE: '/trades/',

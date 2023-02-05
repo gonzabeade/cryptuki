@@ -45,7 +45,7 @@ const ChangePassword = lazy(()=>import("./views/ChangePassword"))
 function App() {
   return (
       <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
               <div className="App">
                   <ToastContainer/>
                   <NavbarAll/>

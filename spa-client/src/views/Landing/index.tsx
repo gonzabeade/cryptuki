@@ -11,7 +11,6 @@ import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {useAuth} from "../../contexts/AuthContext";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
-import {useTranslation} from "react-i18next";
 import {toast} from "react-toastify";
 
 

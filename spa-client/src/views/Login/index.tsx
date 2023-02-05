@@ -68,7 +68,7 @@ const Login = () => {
                 <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar">{i18n.t('signin')} </h1>
                 <h4 className="text-center font-lato text-black/[.4] text-sm mb-4">{i18n.t('welcome')}</h4>
                 <input
-                    placeholder="Username"
+                    placeholder={i18n.t('username')!}
                     type="text"
                     id="username"
                     autoComplete="off"
@@ -83,7 +83,7 @@ const Login = () => {
                 />
                 {errors && errors.username && <span className="text-red-500">{errors.username.message}</span>}
                 <input
-                    placeholder="Password"
+                    placeholder={i18n.t('password')!}
                     type="password"
                     id="password"
                     {...register("password",{required: true, minLength: {value: 6, message: "Password must contain at least 6 characters."

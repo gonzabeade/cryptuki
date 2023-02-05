@@ -405,10 +405,6 @@
   "ETIMEDOUT": "Check your connection. Request timed out.",
   "Unauthorized": "Incorrect email or password ",
   "couldntPauseOffer": "Couldn't pause offer",
-  "couldntModifyOffer": "Couldn't modify offer"
-
-
-
-
-
+  "couldntModifyOffer": "Couldn't modify offer",
+  "amount": "Amount"
 }

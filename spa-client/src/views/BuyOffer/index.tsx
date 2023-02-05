@@ -144,7 +144,7 @@ const BuyOffer = () => {
                 </div>
                 <form className="flex flex-col mt-5" onSubmit={handleSubmit(onSubmit)}>
                     <label className="mx-auto text-center">{i18n.t('quantity')}</label>
-                    <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder="Amount in ARS"
+                    <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={i18n.t('quantity')!}
                            {...register("amount",
                                {
                                    required:"You must input an amount",

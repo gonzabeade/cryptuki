@@ -65,7 +65,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                <div className="flex flex-col  px-6 py-3 mt-2">
                    <h2 className="font-semibold text-polar mx-auto text-lg">{i18n.t('offeredAmount')}</h2>
                    <div className="flex flex-row mx-auto">
-                       <input type="number" placeholder="Amount" className="p-2 m-2 rounded-lg shadow" step="0.000001"
+                       <input type="number" placeholder={i18n.t('amount')!} className="p-2 m-2 rounded-lg shadow" step="0.000001"
                            {...register("amount", {min:{value:0, message:"Amount must be greater than 0"}})} />
                        <select className="p-2 m-2 rounded-lg shadow"  {...register("amountCurrency")}>
                            <option>ARS</option>

@@ -97,7 +97,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
 
                             <div className="flex justify-end w-full p-3  border-gray-300">
                                 <form className="flex flex-row w-full" onSubmit={handleSubmit(sendMessage)}>
-                                    <input type="text" placeholder="Message"
+                                    <input type="text" placeholder={i18n.t('message')!}
                                            className="block w-full py-2 pl-4 mr-3 bg-gray-100 rounded-lg outline-none focus:text-gray-700"
                                            required
                                             {...register("message", { required: true })}

@@ -92,7 +92,7 @@ const ChangePassword = () => {
 
                     <div className="flex flex-col">
                         <input
-                            placeholder="Password"
+                            placeholder={i18n.t('password')!}
                             type="password"
                             id="password"
                             className="rounded-lg p-3 w-full"
@@ -108,7 +108,7 @@ const ChangePassword = () => {
                         <input
                             type="password"
                             id="confirm_pwd"
-                            placeholder="Repeat new password"
+                            placeholder={i18n.t('repeatPassword')!}
                             className="rounded-lg p-3  w-full"
                             {...register("repeatPassword",
                                 {required: true,

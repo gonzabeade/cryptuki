@@ -408,7 +408,8 @@
   "ETIMEDOUT": "Chequea tu conexión. Tu petición excedió el tiempo límite",
   "Unauthorized": "Email o contraseña incorrecta",
   "couldntPauseOffer": "No puedes pausar tu oferta",
-  "couldntModifyOffer": "No puedes modificar tu oferta"
+  "couldntModifyOffer": "No puedes modificar tu oferta",
+  "amount": "Cantidad"
 
 
 

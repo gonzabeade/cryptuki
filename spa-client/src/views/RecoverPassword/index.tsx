@@ -46,7 +46,7 @@ const Index = () => {
                                 <input
                                     type="email"
                                     id="email"
-                                    placeholder="email"
+                                    placeholder={i18n.t('email')!}
                                     className="p-2 m-2 rounded-lg"
                                     {...register("email",{required: true})}
                                 />

@@ -50,7 +50,7 @@ const Register = () => {
             border-frostdr border-t-8">
                 <h1 className="font-sans font-roboto font-bold text-xl mx-auto text-polar mb-4">{i18n.t('createAccount')}</h1>
                 <input
-                    placeholder="Username"
+                    placeholder={i18n.t('username')!}
                     type="text"
                     id="username"
                     autoComplete="off"
@@ -61,7 +61,7 @@ const Register = () => {
                 />
                 {errors && errors.username && <span className="text-red-500">{errors.username.message}</span>}
                 <input
-                    placeholder="Password"
+                    placeholder={i18n.t('password')!}
                     type="password"
                     id="password"
                     className="p-2 m-2 rounded-lg"
@@ -71,7 +71,7 @@ const Register = () => {
                 <input
                     type="password"
                     id="confirm_pwd"
-                    placeholder="Repeat new password"
+                    placeholder={i18n.t('repeatPassword')!}
                     className="p-2 m-2 rounded-lg"
                     {...register("repeatPassword",{required: true, validate:checkEquals, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
                 />
@@ -80,7 +80,7 @@ const Register = () => {
                 <input
                     type="email"
                     id="email"
-                    placeholder="Email"
+                    placeholder={i18n.t('email')!}
                     className="p-2 m-2 rounded-lg"
                     {...register("email",{required: true})}
                 />
@@ -88,7 +88,7 @@ const Register = () => {
                 <input
                     type="number"
                     id="phoneNumber"
-                    placeholder="Phone number"
+                    placeholder={i18n.t('phoneNumber')!}
                     className="p-2 m-2 rounded-lg"
                     {...register("phoneNumber",{required:"Phone number is required"})}
                 />

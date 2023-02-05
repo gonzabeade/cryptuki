@@ -111,7 +111,7 @@ public class ComplainHibernateDaoTest {
 
         // Validations
         Assert.assertNotNull(testedComplains);
-        Assert.assertEquals(1, testedComplains.size());
+        Assert.assertEquals(rows, testedComplains.size());
     }
 
     @Test
@@ -128,7 +128,7 @@ public class ComplainHibernateDaoTest {
         long testedCount = complainHibernateDao.getComplainCount(filter);
 
         // Validations
-        Assert.assertEquals(1, testedCount);
+        Assert.assertEquals(complains.size(), testedCount);
     }
 
     @Test

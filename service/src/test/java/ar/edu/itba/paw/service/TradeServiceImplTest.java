@@ -39,6 +39,7 @@ public class TradeServiceImplTest {
 
     private Offer offer = new Offer.Builder(10, 50,100).withSeller(seller).build();
     private Trade greaterTrade = new Trade(offer, buyer, 3000);
+
     private Trade smallerTrade = new Trade(offer, buyer, 10);
 
 
@@ -47,8 +48,10 @@ public class TradeServiceImplTest {
 
     @Test
     public void testSellOfferWithGreaterNewMax(){
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
-        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(greaterTrade);
+        Trade acceptedTrade = greaterTrade;
+        acceptedTrade.setStatus(TradeStatus.ACCEPTED);
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(acceptedTrade));
+        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(acceptedTrade);
         when(offerDao.modifyOffer(Mockito.any(Offer.class))).thenReturn(offer);
 
         Trade testedTrade = tradeService.sellTrade(0);
@@ -59,21 +62,25 @@ public class TradeServiceImplTest {
 
     @Test
     public void testSellOfferWithSmallerNewMax(){
+        Trade acceptedTrade = smallerTrade;
+        acceptedTrade.setStatus(TradeStatus.ACCEPTED);
         double oldMax = offer.getMaxInCrypto();
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(smallerTrade));
-        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(smallerTrade);
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(acceptedTrade));
+        when(tradeDao.changeTradeStatus(anyInt(), Mockito.any(TradeStatus.class))).thenReturn(acceptedTrade);
         when(offerDao.modifyOffer(Mockito.any(Offer.class))).thenReturn(offer);
 
         Trade testedTrade = tradeService.sellTrade(0);
 
-        Assert.assertEquals(oldMax - smallerTrade.getQuantity()/ offer.getUnitPrice(), offer.getMaxInCrypto(), DELTA);
+        Assert.assertEquals(oldMax - acceptedTrade.getQuantity()/ offer.getUnitPrice(), offer.getMaxInCrypto(), DELTA);
     }
 
     @Test
     public void testRateCounterpartAsBuyer(){
+        Trade soldTrade = greaterTrade;
+        soldTrade.setStatus(TradeStatus.SOLD);
         buyer.setUserAuth(buyerAuth);
         seller.setUserAuth(sellerAuth);
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(soldTrade));
         doNothing().when(userService).updateRatingBy(anyString(), anyInt());
 
         tradeService.rateCounterPartUserRegardingTrade(buyerAuth.getUsername(), 8, 0);
@@ -83,9 +90,11 @@ public class TradeServiceImplTest {
 
     @Test
     public void testRateCounterpartAsSeller(){
+        Trade soldTrade = greaterTrade;
+        soldTrade.setStatus(TradeStatus.SOLD);
         buyer.setUserAuth(buyerAuth);
         seller.setUserAuth(sellerAuth);
-        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(greaterTrade));
+        when(tradeDao.getTradeById(anyInt())).thenReturn(Optional.of(soldTrade));
         doNothing().when(userService).updateRatingBy(anyString(), anyInt());
 
         tradeService.rateCounterPartUserRegardingTrade(sellerAuth.getUsername(), 8, 0);

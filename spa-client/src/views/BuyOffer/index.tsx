@@ -11,6 +11,7 @@ import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
 import i18n from "../../i18n";
 import {AxiosError} from "axios";
+import icons from "../../assets";
 
 type BuyOfferFormValues = {
     amount:number
@@ -132,7 +133,7 @@ const BuyOffer = () => {
                         <h2 className="font-sans font-semibold text-polard text-2xl text-center">
                             {i18n.t('aboutToBuy')}
                         </h2>
-                        <img src={`/images/${offer? offer.cryptoCode + '.png':'404.png'}`} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
+                        <img src={offer? require('/src/assets/cryptos/'+ offer.cryptoCode + '.png') :icons["404"]} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
                         <h1 className="text-center text-3xl font-bold text-polar">
                             {offer? offer.cryptoCode: 'Loading...'}
                         </h1>

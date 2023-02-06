@@ -78,7 +78,7 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                     <div className="flex">
                         {offer &&  <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer.unitPrice))).toFixed(10)} </h1>}
                         <h1 className="font-sans font-semibold">{offer?.cryptoCode}</h1>
-                        <img src={'/images/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
+                        <img src={offer ? require('/src/assets/cryptos/'+ offer.cryptoCode + '.png'): ''} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
                     </div>
                 </div>
 

@@ -71,13 +71,13 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                     {
                         trade.status !== "SOLD" &&  <h1 className="font-sans">{i18n.t('youWouldPay')}: </h1>
                     }
-                    <h3 className="font-sans font-semibold">{trade.buyingQuantity * (offer? offer.unitPrice: 1)} ARS</h3>
+                    {offer && <h3 className="font-sans font-semibold">{trade.buyingQuantity} ARS</h3>}
                 </div>
 
                 <div className="flex flex-col font-sans justify-center ">
                     <h1 className="font-sans">{i18n.t('onExchangeOf')}: </h1>
                     <div className="flex">
-                        <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer ? offer.unitPrice : 1))).toFixed(2)} </h1>
+                        {offer &&  <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer.unitPrice))).toFixed(10)} </h1>}
                         <h1 className="font-sans font-semibold">{offer?.cryptoCode}</h1>
                         <img src={'/images/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
                     </div>

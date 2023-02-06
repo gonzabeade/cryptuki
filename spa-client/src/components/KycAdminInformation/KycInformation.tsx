@@ -9,8 +9,8 @@ import RejectKycForm from "../RejectKycForm/RejectKycForm";
 import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";
 
-import {attendError} from "../../common/utils/utils";
 import {toast} from "react-toastify";
+import {AxiosError} from "axios/index";
 
 type KycCardProp = {
     kyc:KycInformationModel,
@@ -33,8 +33,15 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
                 ,username);
             toast.success("Kyc request was successfully attended")
             navigate("/admin/kyc")
-        }catch (e ){
-            attendError("Error! You cannot attend this kyc request.",e)
+        }catch (e){
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

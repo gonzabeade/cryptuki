@@ -9,8 +9,9 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios/index";
+import {toast} from "react-toastify";
 
 
 const Receipt = () => {
@@ -33,7 +34,14 @@ const Receipt = () => {
             if(resp.status !== 'SOLD')
                 navigate("/trade/"+resp.tradeId)
         }catch (e){
-            attendError("Error fetching trade",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -57,7 +65,14 @@ const Receipt = () => {
                 setCounterPart(resp);
             }
         }catch (e){
-            attendError("Error fetching buyer or seller",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

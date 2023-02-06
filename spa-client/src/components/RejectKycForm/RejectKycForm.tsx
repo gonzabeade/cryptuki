@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";
 
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
+import {AxiosError} from "axios/index";
 
 
 type SolveKycFormProps = {
@@ -29,7 +29,14 @@ const RejectKycForm = ({username}:SolveKycFormProps) => {
            toast.success("This request was rejected.")
            navigate("/admin/kyc")
         }catch (e){
-            attendError("Error! The request could not be rejected",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

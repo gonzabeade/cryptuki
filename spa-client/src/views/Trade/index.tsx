@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TransactionModel from "../../types/TransactionModel";
 import ChatSnippet from "../../components/ChatSnippet";
 import TradeStatusAlert from "../../components/TradeStatusAlert";
-import { QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
+import {QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import Stepper from "../../components/Stepper";
 import {useNavigate, useParams} from "react-router-dom";
 import Popup from 'reactjs-popup';
@@ -14,8 +14,8 @@ import OfferModel from "../../types/OfferModel";
 import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios/index";
 
 const Trade =  () => {
 
@@ -76,7 +76,14 @@ const Trade =  () => {
                 setTrade(resp);
             }
         }catch (e) {
-            attendError("Connection error. Failed to fetch trade",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
 
     }

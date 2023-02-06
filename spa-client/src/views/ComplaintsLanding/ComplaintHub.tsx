@@ -6,8 +6,9 @@ import Loader from "../../components/Loader";
 import ComplainCard from "../../components/ComplainCard";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Paginator from "../../components/Paginator";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios/index";
+import {useNavigate} from "react-router-dom";
 
 const ComplaintHub = () => {
     const [complaints, setComplaints] = useState<ComplainModel[]|null>();
@@ -20,7 +21,7 @@ const ComplaintHub = () => {
             prevUri:''
         }
     );
-
+    const navigate = useNavigate();
     async function getComplaints(){
         try{
             const apiCall = await complainService?.getComplaints();
@@ -30,7 +31,14 @@ const ComplaintHub = () => {
             setIsLoading(false);
 
         }catch (e){
-            attendError("Connection error. Failed to fetch complaints",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

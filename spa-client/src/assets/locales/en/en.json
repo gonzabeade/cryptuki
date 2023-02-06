@@ -209,11 +209,11 @@
   "DELETED": "Deleted",
   "mainTitle": "¿Crypto? Tuki.",
   "error": {
-    "BAD_REQUEST": "400 - Bad Request. The request was not understood by the server.",
-    "FORBIDDEN": "403 - Forbidden. You don't have the permissions to access this resource.",
-    "NOT_FOUND": " 404 - Not found",
-    "METHOD_NOT_SUPPORTED": "405 - Method not supported",
-    "INTERNAL_SERVER_ERROR": "500 - Server problems. Our fault. We'll fix it asap.!"
+    "400": "400 - Bad Request. The request was not understood by the server.",
+    "403": "403 - Forbidden. You don't have the permissions to access this resource.",
+    "404": " 404 - Not found",
+    "405": "405 - Method not supported",
+    "500": "500 - Server problems. Our fault. We'll fix it asap.!"
   },
   "errorOccurred": "An error occurred",
   "closedComplaintState": "Closed",

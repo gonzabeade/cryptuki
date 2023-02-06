@@ -212,11 +212,11 @@
   "DELETED": "Eliminada",
   "mainTitle": "¿Crypto? Tuki.",
   "error": {
-    "BAD_REQUEST": "400 - Solicitud incorrecta. Algún dato que has ingresado es inválido.",
-    "FORBIDDEN": "403 - Prohibido. No tienes permiso para ejecutar esta accion.",
-    "NOT_FOUND": " 404 - No encontrado. Un recurso al cual has querido acceder no fue encontrado.",
-    "METHOD_NOT_SUPPORTED": "405 - Método no soportado.",
-    "INTERNAL_SERVER_ERROR": "500 - Problemas internos del servidor. Lo arreglaremos cuanto antes!"
+    "400": "400 - Solicitud incorrecta. Algún dato que has ingresado es inválido.",
+    "403": "403 - Prohibido. No tienes permiso para ejecutar esta accion.",
+    "404": "404 - No encontrado. Un recurso al cual has querido acceder no fue encontrado.",
+    "405": "405 - Método no soportado.",
+    "500": "500 - Problemas internos del servidor. Lo arreglaremos cuanto antes!"
   },
   "errorOccurred": "Ocurrió un error",
   "closedComplaintState": "CERRADA",

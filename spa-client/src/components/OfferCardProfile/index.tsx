@@ -5,7 +5,6 @@ import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
 import {Axios, AxiosError, AxiosResponse} from "axios";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
 type OfferCardProfileProps = {

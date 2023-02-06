@@ -10,7 +10,7 @@ import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
 import i18n from "../../i18n";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 type BuyOfferFormValues = {
     amount:number

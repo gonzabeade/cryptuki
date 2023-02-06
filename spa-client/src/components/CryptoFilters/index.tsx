@@ -5,7 +5,6 @@ import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import NeighborhoodModel from "../../types/NeighborhoodModel";
 import useNeighborhoodsService from "../../hooks/useNeighborhoodsService";

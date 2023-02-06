@@ -7,7 +7,6 @@ import RatingStars from "../RatingStars";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 const CryptoCard = ({offer}: {offer: OfferModel}) => {
     const navigate = useNavigate();

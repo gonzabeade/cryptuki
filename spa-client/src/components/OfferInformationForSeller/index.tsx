@@ -10,7 +10,6 @@ import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
 import useTradeService from "../../hooks/useTradeService";
 import {TRADE_STATUS} from "../../common/constants";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {Link} from "react-router-dom";
 

@@ -10,7 +10,7 @@ import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import {useAuth} from "../../contexts/AuthContext";
 import i18n from "../../i18n";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 import {toast} from "react-toastify";
 
 

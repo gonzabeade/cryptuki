@@ -7,7 +7,7 @@ import Paginator from "../../components/Paginator";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import Loader from "../../components/Loader";
 import i18n from "../../i18n";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 import {useNavigate} from "react-router-dom";
 
 const KycLanding = () => {

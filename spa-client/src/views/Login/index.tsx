@@ -1,5 +1,5 @@
-import {Link, useLocation, useNavigate, useNavigation} from "react-router-dom";
-import {paths, sleep} from "../../common/constants";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {sleep} from "../../common/constants";
 import {withBasicAuthorization} from "../../hooks/useAxios";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
@@ -7,9 +7,8 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import {useEffect} from "react";
 import {useAuth} from "../../contexts/AuthContext";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
-import {AxiosError, AxiosResponse} from "axios";
+import {AxiosError} from "axios";
 
 
 type LoginFormValues = {

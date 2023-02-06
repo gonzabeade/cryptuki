@@ -8,7 +8,7 @@ import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();

@@ -5,7 +5,6 @@ import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {OFFER_STATUS} from "../../common/constants";
 import {Axios, AxiosError, AxiosResponse} from "axios";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 
 type OfferCardProfileProps = {
@@ -81,7 +80,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                         {i18n.t('location')}
                     </h1>
                     <p className="text-center">
-                        {offer.location}
+                        {i18n.t(offer.location)}
                     </p>
                 </div>
 

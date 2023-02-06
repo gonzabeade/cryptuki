@@ -14,6 +14,10 @@ import {useNavigate} from "react-router-dom";
  */
 
 
+interface Dictionary {
+    [key: string]: string;
+}
+
 export function getLinkHeaders(link:string):Link[] {
     const links:string[] = link.split(',');
     const linkHeaders:Link[] = [];
@@ -147,4 +151,6 @@ export function attendError(message:string, error:any){
     }
     else toast.error(message);
 }
+
+
 

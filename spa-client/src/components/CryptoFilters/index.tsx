@@ -5,7 +5,6 @@ import {CryptocurrencyModel} from "../../types/Cryptocurrency";
 
 import useCryptocurrencyService from "../../hooks/useCryptocurrencyService";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import NeighborhoodModel from "../../types/NeighborhoodModel";
 import useNeighborhoodsService from "../../hooks/useNeighborhoodsService";
@@ -89,7 +88,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                           if(neighborhood.offerCount > 0)
                            return (
                                <option value={neighborhood.locationCode} key={neighborhood.locationCode}>
-                                   {neighborhood.locationCode} ({neighborhood.offerCount})
+                                   {i18n.t(neighborhood.locationCode)} ({neighborhood.offerCount})
                                </option>
                            );
                        })}

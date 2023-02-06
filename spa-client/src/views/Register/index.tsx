@@ -27,7 +27,7 @@ const Register = () => {
         try{
             await userService.register(data.username, data.password, data.repeatPassword, data.phoneNumber, data.email);
             toast.success("Successfully registered!");
-            navigate('/verify?user='+data.username);
+            navigate('/verify?username='+data.username);
         }catch (e) {
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){

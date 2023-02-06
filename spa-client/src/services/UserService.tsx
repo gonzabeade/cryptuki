@@ -77,12 +77,10 @@ export class UserService {
         });
     }
     public async verifyUser(code:number, username:string){
-        await this.axiosInstance().post(this.basePath + username, {
-           code:code
-        },{
-            headers:{
-                'Content-Type':'application/vnd.cryptuki.v1.user-validation+json'
-            }
+        const params = new URLSearchParams();
+        params.append("code",String(code))
+        await this.axiosInstance().post(this.basePath + username, {},{
+            params:params,
         });
     }
 

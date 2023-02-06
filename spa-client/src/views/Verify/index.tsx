@@ -22,6 +22,8 @@ const Verify = () => {
     }, [])
 
     async function automaticPost(){
+        if(!searchParams.get("username") || !searchParams.get("code"))
+            return;
         try{
             if(searchParams.get("code") && searchParams.get("username")){
                 await userService.verifyUser(Number(searchParams.get("code")), searchParams.get("username")!);
@@ -34,10 +36,12 @@ const Verify = () => {
     }
 
     async function onSubmit(data:VerifyFormValues){
+        if(!searchParams.get("username"))
+            return;
         try{
             await userService.verifyUser(data.code, searchParams.get("username")!);
             toast.success("Successfully verified!");
-            navigate("/buyer/");
+            navigate("/");
         }catch (e){
             toast.error("Connection error. Please try again later "+ e);
         }

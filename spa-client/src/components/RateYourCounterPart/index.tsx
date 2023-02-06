@@ -66,7 +66,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
     async function setRatingAndSend(rating:number) {
         try{
             await tradeService.rateCounterPart(tradeId!, rating);
-            setRating(rating);
+            setRating(rating*2);
             setAlreadyRated(true);
         }catch (e) {
             toast.error("Connection Error, failed to rate your counterpart " + e)

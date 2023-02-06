@@ -30,8 +30,7 @@ const ComplaintHub = () => {
             setIsLoading(false);
 
         }catch (e){
-            console.log(e)
-            // attendError("Connection error. Failed to fetch complaints",e)
+            attendError("Connection error. Failed to fetch complaints",e)
         }
     }
 

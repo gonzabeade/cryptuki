@@ -61,11 +61,20 @@ const Support= ({tradeId}:ContactFormProps) => {
                             {errors && errors.message && <span className="text-red-500">{errors.message.message}</span>}
                         </div>
                     </div>
-                    <div className="flex flex-row p-5">
-                        <button type="submit" className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
-                            {i18n.t('send')}
-                        </button>
+                    <div className={"flex flex-row mx-auto"}>
+                        <div className="flex flex-row p-5">
+                            <button onClick={()=>navigate(-1)} className=" font-bold bg-gray-500 text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                                {i18n.t('back')}
+                            </button>
+                        </div>
+                        <div className="flex flex-row p-5">
+                            <button type="submit" className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                                {i18n.t('send')}
+                            </button>
+                        </div>
+
                     </div>
+
                 </form>}
                 {backButton && <div>
                     <div className="flex flex-col mt-10 mb-10 ">
@@ -80,7 +89,7 @@ const Support= ({tradeId}:ContactFormProps) => {
                         </h3>
                     </div>
                     <div className="flex flex-row p-5">
-                        <button onClick={()=>navigate(-1)} className=" font-bold bg-frost text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
+                        <button onClick={()=>navigate(-1)} className=" font-bold bg-gray-500 text-white  mt-4 mb-4 p-3 rounded-md font-sans min-w-[25%] mx-auto">
                             {i18n.t('back')}
                         </button>
                     </div>

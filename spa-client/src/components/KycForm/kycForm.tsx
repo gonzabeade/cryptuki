@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
 import i18n from "../../i18n";
 import {AxiosError} from "axios";
+import {useNavigate} from "react-router-dom";
 
 export interface UploadKycValues {
     names:string,
@@ -22,6 +23,7 @@ const KycForm = () => {
     const { register, handleSubmit, formState: { errors }} = useForm<UploadKycValues>();
     const kycService = useKycService();
     const username = useUserService().getLoggedInUser();
+    const navigate = useNavigate();
 
     async function onSubmit(data:UploadKycValues) {
         try {
@@ -36,6 +38,7 @@ const KycForm = () => {
                 data.facePictures
             );
             toast.success("Kyc information successfully sent.");
+            navigate(-1);
         }
         catch (e) {
             const error: AxiosError =  e as AxiosError;

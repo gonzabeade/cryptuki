@@ -11,6 +11,10 @@ import {AxiosResponse} from "axios";
  */
 
 
+interface Dictionary {
+    [key: string]: string;
+}
+
 export function getLinkHeaders(link:string):Link[] {
     const links:string[] = link.split(',');
     const linkHeaders:Link[] = [];
@@ -134,3 +138,4 @@ export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchPa
         throw new Error("Error in network. Please try again");
     }
 }
+

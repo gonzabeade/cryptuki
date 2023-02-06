@@ -47,7 +47,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             </div>
             <div className="column">
                 <div className="label">{i18n.t('location')}:</div>
-                <a  target="_blank" rel="noreferrer" className="bold text-polar hover:cursor-pointer hover:text-blue-600 hover:underline" href={`https://www.google.com/maps/search/?api=1&query=${offer.location}`}>{offer.location}</a>
+                <a  target="_blank" rel="noreferrer" className="bold text-polar hover:cursor-pointer hover:text-blue-600 hover:underline" href={`https://www.google.com/maps/search/?api=1&query=${offer.location}`}>{i18n.t(offer.location)}</a>
             </div>
             <div className="column">
                 <button className="my-auto rounded-lg bg-frost px-6 py-3 text-white font-bold hover:bg-frostd"

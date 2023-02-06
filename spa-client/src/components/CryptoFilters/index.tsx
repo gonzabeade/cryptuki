@@ -88,7 +88,7 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
                           if(neighborhood.offerCount > 0)
                            return (
                                <option value={neighborhood.locationCode} key={neighborhood.locationCode}>
-                                   {neighborhood.locationCode} ({neighborhood.offerCount})
+                                   {i18n.t(neighborhood.locationCode)} ({neighborhood.offerCount})
                                </option>
                            );
                        })}

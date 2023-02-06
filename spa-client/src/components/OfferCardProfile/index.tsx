@@ -80,7 +80,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
                         {i18n.t('location')}
                     </h1>
                     <p className="text-center">
-                        {offer.location}
+                        {i18n.t(offer.location)}
                     </p>
                 </div>
 

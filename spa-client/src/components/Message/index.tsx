@@ -10,7 +10,6 @@ const Message = ({senderURI, content}:MessageProps) => {
     const userService = useUserService();
 
     useEffect(()=>{
-        console.log(senderURI)
         if(senderURI){
             if(userService.getLoggedInUser() != userService.getUsernameFromURI(senderURI)){
                 setLeft(true);

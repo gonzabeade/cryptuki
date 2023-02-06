@@ -6,6 +6,7 @@ import useChatService from "../../hooks/useChatService";
 import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
+import AdminMessage from "../AdminMessage";
 
 type ChatSnippetProps = {
     buyer: UserModel ,
@@ -62,7 +63,7 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
                                     {
                                          messages && messages.map((message, key)=>{
                                             return (
-                                                <Message key={key} content={message.content} senderURI={message.sender}/>
+                                                <AdminMessage key={key} content={message.content} sender={message.sender} seller={seller.self} />
                                             );
                                         })
                                     }

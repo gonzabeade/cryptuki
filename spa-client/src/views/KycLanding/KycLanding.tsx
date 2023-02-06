@@ -46,27 +46,27 @@ const KycLanding = () => {
 
 
     useEffect(  ()=>{
-        getPendingKycRequests();
+        getPendingKycRequests().then(()=>setLoading(false));
     }, []);
 
 
     return ( <>
-        <div>
-            {loading ?
-                <div className="flex flex-col w-2/3 mt-10">
-                    <Loader/>
-                </div> :
-        <div className="flex flex-col ml-80 h-screen w-screen">
-            <h1 className="font-sans text-3xl font-bold text-polar mt-10">{i18n.t('kyccheck')}</h1>
-            <div className="flex flex-wrap w-full mt-3">
-                <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">
-                      {pendingKyc && pendingKyc.map((user => <KycPreview key={user.userId} username={user.username} last_login={user.lastLogin}/>))}
-                      {pendingKyc && pendingKyc.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedKyc}/>}
-                      {!pendingKyc && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noKycPending')}</h1>}
-                </div>
-            </div>
+
+            <div className="flex flex-col ml-80 h-screen w-screen">
+                <h1 className="font-sans text-3xl font-bold text-polar mt-10">{i18n.t('kyccheck')}</h1>
+                {loading ?
+                    <div className="flex flex-col ml-80">
+                        <Loader/>
+                    </div> :
+                <div className="flex flex-wrap w-full mt-3">
+                    <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">
+                        {pendingKyc && pendingKyc.map((user => <KycPreview key={user.userId} username={user.username} last_login={user.lastLogin}/>))}
+                        {pendingKyc && pendingKyc.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedKyc}/>}
+                        {!pendingKyc && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noKycPending')}</h1>}
+                    </div>
                 </div>}
-        </div>
+            </div>
+
         </>
     );
 };

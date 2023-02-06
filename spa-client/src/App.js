@@ -52,7 +52,6 @@ function App() {
                       <Suspense fallback={<Loader/>}>
                           <Routes>
                               <Route path="/register" element={<Register/>}/>
-                              {/*Hasta aca llegue desde abajo traduciendo*/}
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<BuyOffer/>}/>
                               <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>

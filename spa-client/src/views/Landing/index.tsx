@@ -9,7 +9,6 @@ import Loader from "../../components/Loader";
 import useUserService from "../../hooks/useUserService";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {useAuth} from "../../contexts/AuthContext";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
 

@@ -7,7 +7,6 @@ import {toast} from "react-toastify";
 import useTradeService from "../../hooks/useTradeService";
 import {useEffect} from "react";
 import {useAuth} from "../../contexts/AuthContext";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {AxiosError, AxiosResponse} from "axios";
 

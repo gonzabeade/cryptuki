@@ -151,7 +151,7 @@ const BuyOffer = () => {
                         </div>
                         <h2 className="pt-2 font-sans text-center"><b className="text-polar">
                             {i18n.t('location')}: </b>
-                            {offer? offer.location : 'Loading...' }
+                            {offer? i18n.t(offer.location) : 'Loading...' }
                         </h2>
                     </div>
                 </div>

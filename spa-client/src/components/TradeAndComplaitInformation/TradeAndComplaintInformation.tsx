@@ -6,6 +6,7 @@ import TransactionModel from "../../types/TransactionModel";
 import i18n from "../../i18n";
 
 
+
 type TradeAndComplaintProps = {
     offer:OfferModel,
     trade:TransactionModel,
@@ -50,7 +51,7 @@ const TradeAndComplaintInformation = ({trade,offer,complain,buyer,seller,complai
                             :
                         </h2>
                         <h3 className="font-sans font-medium text-polard text-xl text-start ">
-                            {offer.location}
+                            {i18n.t(offer.location)}
                         </h3>
                     </div>
                     <div className="w-full  flex flex-col mx-auto mt-5">

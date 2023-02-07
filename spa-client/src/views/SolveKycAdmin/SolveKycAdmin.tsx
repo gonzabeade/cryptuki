@@ -36,7 +36,6 @@ const SolveKycAdmin = () => {
             setValidationPhotoBase64(
                 await kycService?.getPicturesByUrl(kyc.validationPhoto)) ;
         }catch (e){
-            //todo aca devuelve mensaje?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -53,7 +52,6 @@ const SolveKycAdmin = () => {
         try{
             setIdPhotoBase64(await kycService?.getPicturesByUrl(kyc.idPhoto)) ;
         }catch (e){
-            //todo aca vuelve mensaje?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -70,7 +68,6 @@ const SolveKycAdmin = () => {
             const apiCall = await kycService?.getKycInformation(username);
             setKyc(apiCall);
         }catch (e){
-            //todo aca devuelve mensaje?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;

@@ -23,7 +23,6 @@ const ChatMessagesForAdmin= ({ seller, tradeId ,buyer}:ChatSnippetProps) => {
             const resp = await chatService.getMessages(tradeId);
             setMessages(resp);
         }catch (e) {
-            //todo check api error
             toast.error(i18n.t('connectionError'));
         }
 

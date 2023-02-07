@@ -32,10 +32,10 @@ const Verify = () => {
                 navigate("/");
             }
         }catch (e){
-            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            if( e instanceof AxiosError && (e.response !== undefined))
             {
-                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
-                toast.error(errorMsg);
+                if(e.response.status === 400 )
+                    toast.error(i18n.t('userOrCodeInvalid'));
             }else{
                 toast.error(i18n.t('connectionError') );
             }
@@ -47,13 +47,13 @@ const Verify = () => {
             return;
         try{
             await userService.verifyUser(data.code, searchParams.get("username")!);
-            toast.success("Successfully verified!");
+            toast.success(i18n.t('successfullyVerified'));
             navigate("/");
         }catch (e){
-            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            if( e instanceof AxiosError && (e.response !== undefined))
             {
-                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
-                toast.error(errorMsg);
+                if(e.response.status === 400 )
+                    toast.error(i18n.t('userOrCodeInvalid'));
             }else{
                 toast.error(i18n.t('connectionError') );
             }

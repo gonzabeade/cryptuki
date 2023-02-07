@@ -37,7 +37,6 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                 setOffer(resp);
             }
         }catch (e) {
-            //todo check api for errors
             toast.error(i18n.t('connectionError'));
         }
 

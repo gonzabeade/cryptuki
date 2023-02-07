@@ -25,7 +25,6 @@ const SellerTrade = () => {
             const resp = await tradeService.getTradeInformation(Number(tradeId));
             setTrade(resp);
         }catch (e) {
-            //todo aca vuelve mensaje?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;

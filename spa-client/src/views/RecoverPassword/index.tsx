@@ -22,7 +22,6 @@ const Index = () => {
             await useService.recoverPassword(data)
             setSent(true)
         }catch (e){
-            //todo aca vuelve error?
            toast.error(i18n.t('connectionError'));
        }
     }

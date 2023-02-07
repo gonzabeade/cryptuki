@@ -55,7 +55,6 @@ const BuyerDashboard = () => {
                 setTrades(resp.items);
             }
         }catch (e){
-            //todo check api
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -75,7 +74,6 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            //todo check api
             toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
@@ -87,7 +85,6 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            //todo check api
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;

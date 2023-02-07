@@ -56,7 +56,6 @@ const SolveComplaint = () => {
                 else setOther(seller);
             }
         }catch (e){
-            //todo aca vuelve mensaje
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;

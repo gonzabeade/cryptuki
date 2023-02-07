@@ -34,13 +34,12 @@ const BuyOffer = () => {
         try{
             const resp = await  offerService.getOfferInformation(offerId);
             const seller =  userService.getUsernameFromURI(resp.seller)
-            if( seller === user?.username) //TODO: check cors
+            if( seller === user?.username)
                 navigate("/seller/offer/"+ offerId);
             setOffer(resp);
             setMin(resp.minInCrypto * resp.unitPrice);
             setMax(resp.maxInCrypto * resp.unitPrice);
         }catch (e) {
-            //todo check messages from API
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;

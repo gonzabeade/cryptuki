@@ -48,7 +48,6 @@ const Login = () => {
             });
             await sleep(500);
         }catch (e){
-            //todo chequear mensaje
             const error:AxiosError = e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;

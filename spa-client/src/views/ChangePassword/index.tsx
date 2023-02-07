@@ -46,7 +46,6 @@ const ChangePassword = () => {
                 navigate("/");
             }else navigate(-1);
         }catch (e) {
-            //todo check messages
             toast.error(i18n.t('failedToUpdatePassword'))
         }
     }

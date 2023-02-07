@@ -38,7 +38,13 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer deleted");
             renewOffers(OFFER_STATUS.Deleted);
         }catch (e:any) {
-            toast.error("An error occurred when deleting the offer. " + e);
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error( i18n.t('couldntDeleteOffer')+ ` ${data.message}`);
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
     }
     async function resumeOffer(){
@@ -47,7 +53,13 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             toast.success("Offer resumed");
             renewOffers(OFFER_STATUS.Pending);
         }catch (e) {
-            toast.error("Connection error. Couldn't resume offer + e");
+            const error: AxiosError =  e as AxiosError;
+            if(error.response?.data){
+                const data = error.response.data as {message:string} ;
+                toast.error( i18n.t('couldntResumeOffer')+ ` ${data.message}`);
+            }else{
+                toast.error(i18n.t(`${error.code}`))
+            }
         }
     }
 

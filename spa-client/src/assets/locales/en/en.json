@@ -404,8 +404,10 @@
   "ECONNABORTED": "Connection aborted",
   "ETIMEDOUT": "Check your connection. Request timed out.",
   "Unauthorized": "Incorrect email or password ",
+  "couldntResumeOffer": "Couldn't resume offer",
   "couldntPauseOffer": "Couldn't pause offer",
   "couldntModifyOffer": "Couldn't modify offer",
+  "couldntDeleteOffer": "Couldn't delete offer",
   "amount": "Amount",
   "AGRONOMIA":"Agronomia",
   "ALMAGRO":"Almagro",
@@ -467,5 +469,7 @@
   "failedToFetch": "Failed to fetch",
   "offers": "Offers",
   "profilePicture": "Profile picture",
-  "kycStatus": "KYC status"
+  "kycStatus": "KYC status",
+  "userOrCodeInvalid": "The code or the username given are invalid"
+
 }

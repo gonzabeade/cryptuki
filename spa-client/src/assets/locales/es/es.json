@@ -469,5 +469,8 @@
   "failedToFetch": "No se pudo obtener la información de los ",
   "offers": "Anuncios",
   "profilePicture": "Foto de perfil",
-  "kycStatus": "Estado de KYC"
+  "kycStatus": "Estado de KYC",
+  "userOrCodeInvalid": "El código o el nombre de usuario son inválidos",
+  "couldntDeleteOffer": "No puedes borrar tu oferta",
+  "couldntResumeOffer": "No puedes resumir tu oferta"
 }

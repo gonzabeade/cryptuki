@@ -34,14 +34,14 @@ const Receipt = () => {
             if(resp.status !== 'SOLD')
                 navigate("/trade/"+resp.tradeId)
         }catch (e){
-            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
-            {
-                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
-                toast.error(errorMsg);
-                navigate('/error/'+errorMsg);
-
-            }
-            else toast.error("Connection error");
+        //     if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+        //     {
+        //         const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+        //         toast.error(errorMsg);
+        //         navigate('/error/'+errorMsg);
+        //
+        //     }
+        //     else toast.error("Connection error");
         }
     }
 
@@ -65,15 +65,12 @@ const Receipt = () => {
                 setCounterPart(resp);
             }
         }catch (e){
-            //TODO: handle error message
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
-                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
-                toast.error(errorMsg);
-                navigate('/error/'+errorMsg);
-
+                if(e.status === 404)
+                    navigate('/404');
+                else toast.error(i18n.t("connectionError") + i18n.t('failedToFetch') + i18n.t('seller'));
             }
-            else toast.error(i18n.t("connectionError") + i18n.t('failedToFetch') + i18n.t('seller'));
         }
     }
 

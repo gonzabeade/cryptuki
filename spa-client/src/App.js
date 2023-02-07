@@ -55,7 +55,7 @@ function App() {
                               <Route path="/login" element={<Login/>}/>
                               <Route path="/offer/:id" element={<LoggedGate><BuyOffer/></LoggedGate>}/>
                               <Route path="/trade/:id" element={<LoggedGate children={<Trade/>}/>}/>
-                              <Route path="/trade/:id/support" element={<Support/>}/>
+                              <Route path="/trade/:id/support" element={<LoggedGate children={<Support/>} />}/>
                               <Route path="/buyer/" element={<LoggedGate children={<BuyerDashboard/>} />}/>
                               <Route path="/seller/" element={<LoggedGate children={<SellerDashboard/>}/>}/>
                               <Route path="/trade/:id/receipt" element={<LoggedGate children={<Receipt/>}/>}/>

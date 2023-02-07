@@ -18,7 +18,7 @@ type ContactFormProps = {
 
 const Support= ({tradeId}:ContactFormProps) => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateComplainForm>( );
+    const { register, handleSubmit, formState: { errors } } = useForm<CreateComplainForm>();
     const complainService = useComplainService();
     const params = useParams();
     const [backButton, setBackButton] = useState<boolean>(false);
@@ -56,12 +56,6 @@ const Support= ({tradeId}:ContactFormProps) => {
             <div className="flex justify-center">
                 {!backButton && <form className="flex flex-col min-w-[50%]" onSubmit={handleSubmit(onSubmit)}>
                     <input type="hidden" value={params.id} {...register("tradeId")}/>
-                    <div className="flex flex-col p-5 justify-center">
-                        <div className="flex-row justify-center">
-                            <input type="email" className="min-w-full h-10 justify-center rounded-lg p-2" placeholder={i18n.t('email')!} {...register("email", {required:"Email is required."})}/>
-                            {errors && errors.email && <span className="text-red-500">{errors.email.message}</span>}
-                        </div>
-                    </div>
                     <div className="flex flex-col p-5 ">
                         <div className="flex-row justify-center">
                             <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder={i18n.t('message')!} {...register("message", {required:"Message is required."})}/>
@@ -106,6 +100,7 @@ const Support= ({tradeId}:ContactFormProps) => {
 
 
 );
+
 };
 
 export default Support;

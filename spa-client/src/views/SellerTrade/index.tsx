@@ -72,9 +72,8 @@ const SellerTrade = () => {
                 <button  onClick={()=>{navigate(-1)}} className=" cursor-pointer  font-bold bg-gray-300 mx-2 px-6 py-3  rounded-lg text-white">
                     {i18n.t('back')}
                 </button>
-                <Link to="/" className=" cursor-pointer  font-bold bg-frost px-6 py-3  rounded-lg text-white">
-                    {i18n.t('home')}
-                </Link>
+                <button className="bg-gray-200 hover:bg-gray-300 text-polard p-3 font-sans rounded-lg mx-2 font-bold" onClick={()=>navigate("/trade/"+trade?.tradeId+"/support")}>{i18n.t('iHadAProblema')}</button>
+
 
             </div>
             </div>

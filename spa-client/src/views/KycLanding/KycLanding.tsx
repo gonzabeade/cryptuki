@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import useKycService from "../../hooks/useKycService";
 import UserModel from "../../types/UserModel";
 import Paginator from "../../components/Paginator";
-import {PaginatorPropsValues} from "../../types/PaginatedResults";
+import {PaginatedResults, PaginatorPropsValues} from "../../types/PaginatedResults";
 import Loader from "../../components/Loader";
 import i18n from "../../i18n";
 import {AxiosError} from "axios";
@@ -25,7 +25,7 @@ const KycLanding = () => {
 
     async function getPendingKycRequests(){
         try{
-            const apiCall = await kycService?.getPendingKycInformation();
+            const apiCall:PaginatedResults<UserModel> = await kycService?.getPendingKycInformation();
             setPendingKyc(apiCall.items);
             setPaginatorProps(apiCall.paginatorProps!);
             setLoading(false);
@@ -72,7 +72,7 @@ const KycLanding = () => {
                     <div className="flex flex-col bg-white shadow rounded-lg p-3 m-5 font-sans font-bold">
                         {pendingKyc && pendingKyc.map((user => <KycPreview key={user.userId} username={user.username} last_login={user.lastLogin}/>))}
                         {pendingKyc && pendingKyc.length > 0 &&  <Paginator paginatorProps={paginatorProps} callback={getPaginatedKyc}/>}
-                        {!pendingKyc && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noKycPending')}</h1>}
+                        {pendingKyc && pendingKyc.length === 0 && <h1 className={"text-xl font-bold text-polar mx-auto my-auto"}> {i18n.t('noKycPending')}</h1>}
                     </div>
                 </div>}
             </div>

@@ -58,7 +58,7 @@ const Register = () => {
                     required
                     className="p-2 m-2 rounded-lg"
                     {...register("username", {required: true, pattern: {value:USER_REGEX,
-                            message: "Invalid username. Must have more than 6 characters "}})}
+                            message: i18n.t('usernameValidation')}})}
                 />
                 {errors && errors.username && <span className="text-red-500">{errors.username.message}</span>}
                 <input
@@ -66,7 +66,7 @@ const Register = () => {
                     type="password"
                     id="password"
                     className="p-2 m-2 rounded-lg"
-                    {...register("password",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                    {...register("password",{required: true, pattern: {value: PWD_REGEX, message: i18n.t('passwordValidation')}})}
                 />
                 {errors && errors.password && <span className="text-red-500">{errors.password.message}</span>}
                 <input
@@ -74,7 +74,7 @@ const Register = () => {
                     id="confirm_pwd"
                     placeholder={i18n.t('repeatPassword')!}
                     className="p-2 m-2 rounded-lg"
-                    {...register("repeatPassword",{required: true, validate:checkEquals, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                    {...register("repeatPassword",{required: true, validate:checkEquals})}
                 />
                 {errors && errors.repeatPassword && <span className="text-red-500">{errors.repeatPassword.message}</span>}
                 {errors && errors.repeatPassword?.type === "validate" && <span className="text-red-500">{i18n.t('passwordDontMatch')}</span>}
@@ -91,7 +91,7 @@ const Register = () => {
                     id="phoneNumber"
                     placeholder={i18n.t('phoneNumber')!}
                     className="p-2 m-2 rounded-lg"
-                    {...register("phoneNumber",{required:"Phone number is required"})}
+                    {...register("phoneNumber",{required: i18n.t('requiredField')!})}
                 />
                 {errors && errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber.message}</span>}
                 <button  className="bg-frostdr text-white mx-auto mb-auto mt-8 py-2 px-4 rounded-lg font-lato font-bold hover:bg-blue-700">{i18n.t('signup')}</button>

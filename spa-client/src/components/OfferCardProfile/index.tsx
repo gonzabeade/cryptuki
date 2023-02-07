@@ -25,7 +25,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;
-                toast.error( i18n.t('couldntPauseOffer')+ ` ${data.message}`);
+                toast.error( i18n.t('couldntPauseOffer'));
             }else{
                 toast.error(i18n.t(`${error.code}`))
             }
@@ -41,7 +41,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;
-                toast.error( i18n.t('couldntDeleteOffer')+ ` ${data.message}`);
+                toast.error( i18n.t('couldntDeleteOffer'));
             }else{
                 toast.error(i18n.t(`${error.code}`))
             }
@@ -56,7 +56,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;
-                toast.error( i18n.t('couldntResumeOffer')+ ` ${data.message}`);
+                toast.error( i18n.t('couldntResumeOffer'));
             }else{
                 toast.error(i18n.t(`${error.code}`))
             }

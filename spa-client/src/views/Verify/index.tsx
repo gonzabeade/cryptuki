@@ -71,8 +71,9 @@ const Verify = () => {
                     <label htmlFor="code"
                            className="text-center text-xl font-bold font-sans text-polar my-2">{i18n.t('code')}</label>
                     <input id="code" className="rounded-lg p-3 mx-auto" type="number"
-                           {...register("code", {required: true})}
+                           {...register("code", {required: i18n.t('codeRequired')!})}
                     />
+                    {errors && errors.code && <p className="text-red-600 mx-auto my-2">{errors.code.message} </p>}
                 </div>
                 <div className="flex mx-auto mt-10">
                     <button type="submit"

@@ -4,7 +4,7 @@ import {KycInformationModel} from "../../types/KycInformationModel";
 import {useNavigate, useParams} from "react-router-dom";
 import KycInformation from "../../components/KycAdminInformation/KycInformation";
 import i18n from "../../i18n";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 import {toast} from "react-toastify";
 
 const SolveKycAdmin = () => {

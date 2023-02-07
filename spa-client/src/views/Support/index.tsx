@@ -4,7 +4,7 @@ import useComplainService from "../../hooks/useComplainService";
 import i18n from "../../i18n";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 export interface CreateComplainForm {
     email: string,

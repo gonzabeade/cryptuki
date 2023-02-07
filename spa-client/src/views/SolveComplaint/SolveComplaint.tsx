@@ -15,7 +15,7 @@ import {XCircleIcon} from "@heroicons/react/24/outline";
 import TransactionModel from "../../types/TransactionModel";
 import i18n from "../../i18n";
 import Loader from "../../components/Loader";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 
 const SolveComplaint = () => {

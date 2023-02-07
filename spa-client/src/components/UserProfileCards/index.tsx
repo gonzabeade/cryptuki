@@ -4,6 +4,7 @@ import i18n from "../../i18n";
 import useUserService from "../../hooks/useUserService";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
+import icons from "../../assets";
 
 type  UserProfileCardsProps = {
     username:string|null,
@@ -43,7 +44,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                 <div className="flex flex-col gap-1 items-center">
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
                         {!defaultPicture && <img src={pictureBase64} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
-                        {defaultPicture && <img src={"/images/default-profile-picture.png"} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
+                        {defaultPicture && <img src={icons.profile} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
                         {username}
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";
 
 import {toast} from "react-toastify";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 type KycCardProp = {
     kyc:KycInformationModel,

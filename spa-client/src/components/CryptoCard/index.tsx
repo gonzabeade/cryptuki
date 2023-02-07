@@ -42,7 +42,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             </div>
             <div className="column">
                 <div className="label">{i18n.t('price')}:</div>
-                <div className="bold text-polar">{offer.unitPrice} ARS {i18n.t('for')} {offer.cryptoCode}<img src={"/images/"+ offer.cryptoCode+".png"} alt={offer.cryptoCode}></img></div>
+                <div className="bold text-polar">{offer.unitPrice} ARS {i18n.t('for')} {offer.cryptoCode}<img src={require('/src/assets/cryptos/'+ offer.cryptoCode + '.png')} alt={offer.cryptoCode}></img></div>
                 <div className="text-gray-400 font-medium">Min: {offer.minInCrypto * offer.unitPrice} ARS - Máx: {offer.maxInCrypto * offer.unitPrice} ARS</div>
             </div>
             <div className="column">

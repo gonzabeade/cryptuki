@@ -11,7 +11,7 @@ import {TRADE_STATUS} from "../../common/constants";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 import {useNavigate} from "react-router-dom";
 
 

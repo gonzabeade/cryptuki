@@ -3,7 +3,6 @@ import Message from "../Message";
 import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
 import AdminMessage from "../AdminMessage";

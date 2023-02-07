@@ -15,7 +15,7 @@ import useOfferService from "../../hooks/useOfferService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import i18n from "../../i18n";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 const Trade =  () => {
 

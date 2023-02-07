@@ -5,7 +5,6 @@ import useOfferService from "../../hooks/useOfferService";
 import {toast} from "react-toastify";
 import {TRADE_STATUS} from "../../common/constants";
 import useUserService from "../../hooks/useUserService";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {Link} from "react-router-dom";
 
@@ -79,7 +78,7 @@ const TradeBuyerCard = ({trade}:TradeCardProp) => {
                     <div className="flex">
                         {offer &&  <h1 className="font-sans font-semibold mr-2">{parseFloat(String(trade.buyingQuantity / (offer.unitPrice))).toFixed(10)} </h1>}
                         <h1 className="font-sans font-semibold">{offer?.cryptoCode}</h1>
-                        <img src={'/images/'+offer?.cryptoCode+'.png'} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
+                        <img src={offer ? require('/src/assets/cryptos/'+ offer.cryptoCode + '.png'): ''} alt={offer?.cryptoCode} className="w-6 h-6 mx-auto"/>
                     </div>
                 </div>
 

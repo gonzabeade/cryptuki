@@ -461,7 +461,7 @@
   "connectionError":"Connection error. Please try again later ",
   "successfullyRegistered": "Successfully registered",
   "successfullyLoggedIn": "Successfully signed in",
-  "errorForm": "Data incorrect. Please check the field",
+  "errorForm": "Data incorrect. Please check the field : ",
   "failedToUpdatePassword": "Failed to update password",
   "passwordUpdated":"Password successfully updated",
   "unableToSignIn": "Unable to sign in",

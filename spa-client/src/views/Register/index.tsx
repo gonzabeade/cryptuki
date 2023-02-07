@@ -32,8 +32,9 @@ const Register = () => {
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const errors = error.response.data as { message:string, path:string }[];
+                console.log(errors)
                 errors.map((error) =>
-                    toast.error(i18n.t('errorForm')+ i18n.t(`${error.path}`) + ": " + `${error.message}`)
+                    toast.error(i18n.t('errorForm')+ i18n.t(`${error.path}`))
                 );
             }else{
                 toast.error(i18n.t(`${error.code}`))

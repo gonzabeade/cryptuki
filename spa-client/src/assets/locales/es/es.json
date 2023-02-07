@@ -461,7 +461,7 @@
   "connectionError":"Error de conexión. Intente más tarde ",
   "successfullyRegistered": "Registrado con éxito",
   "successfullyLoggedIn": "Iniciaste sesión con éxito",
-  "errorForm": "Los datos que enviaste tienen un error.",
+  "errorForm": "Los datos que enviaste tienen un error en : ",
   "failedToUpdatePassword": "No se pudo actualizar la contraseña",
   "passwordUpdated":"Contraseña actualizada",
   "unableToSignIn": "No se pudo iniciar sesión",

@@ -6,8 +6,9 @@ import UserModel from "../../types/UserModel";
 import Paginator from "../../components/Paginator";
 import {PaginatedResults, PaginatorPropsValues} from "../../types/PaginatedResults";
 import Loader from "../../components/Loader";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios";
+import {useNavigate} from "react-router-dom";
 
 const KycLanding = () => {
     const kycService = useKycService();
@@ -20,6 +21,7 @@ const KycLanding = () => {
             prevUri:''
         }
     );
+    const navigate = useNavigate();
 
     async function getPendingKycRequests(){
         try{
@@ -28,7 +30,14 @@ const KycLanding = () => {
             setPaginatorProps(apiCall.paginatorProps!);
             setLoading(false);
         }catch (e){
-            attendError("Connection error. Failed to fetch pending kyc requests",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
 
     }

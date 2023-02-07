@@ -1,8 +1,5 @@
-import {Link, PaginatedResults, PaginatorPropsValues} from "../../types/PaginatedResults";
-import {AxiosError, AxiosResponse} from "axios";
-import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
-
+import {Link, PaginatorPropsValues} from "../../types/PaginatedResults";
+import {AxiosResponse} from "axios";
 
 
 /**
@@ -141,16 +138,4 @@ export function processPaginatedResults(resp: AxiosResponse, params?:URLSearchPa
         throw new Error("Error in network. Please try again");
     }
 }
-
-export function attendError(message:string, error:any){
-    if( error instanceof AxiosError && (error.response !== undefined || error.message !== undefined))
-    {
-        const errorMsg =  error.response !== undefined ? error.response.data.message : error.message;
-        toast.error(errorMsg)
-        window.location.replace("/error/"+errorMsg) ;
-    }
-    else toast.error(message);
-}
-
-
 

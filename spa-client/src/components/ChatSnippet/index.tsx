@@ -4,9 +4,9 @@ import UserModel from "../../types/UserModel";
 import {MessageModel} from "../../types/MessageModel";
 import useChatService from "../../hooks/useChatService";
 import {useForm} from "react-hook-form";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
+import icons from "../../assets";
 
 type ChatSnippetProps = {
     counterPart:UserModel | undefined,
@@ -57,7 +57,7 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                         <div className=" flex flex-col w-full px-3">
                             <div className="flex relative items-center py-3 border-b border-gray-300 justify-between">
                                 <div className={"flex"}>
-                                    {defaultPicture && <img alt={"default"} src={"/images/default-profile-picture.png"} className={"my-auto w-10 h-10 rounded-full border-frostdr border-2 shadow-lg"} /> }
+                                    {defaultPicture && <img alt={"default"} src={icons.profile} className={"my-auto w-10 h-10 rounded-full border-frostdr border-2 shadow-lg"} /> }
                                     {!defaultPicture && <img className="object-cover w-10 h-10 my-auto rounded-full"
                                          src={counterPart?.picture} alt={counterPart?.username}/>}
                                     <div className="flex flex-col ml-4">

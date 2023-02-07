@@ -6,9 +6,9 @@ import useTradeService from "../../hooks/useTradeService";
 import TransactionModel from "../../types/TransactionModel";
 import useUserService from "../../hooks/useUserService";
 import UserModel from "../../types/UserModel";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
+import {AxiosError} from "axios";
 
 const SellerTrade = () => {
     const tradeService = useTradeService();
@@ -25,7 +25,14 @@ const SellerTrade = () => {
             const resp = await tradeService.getTradeInformation(Number(tradeId));
             setTrade(resp);
         }catch (e) {
-            attendError("Connection error. Couldn't fetch trade",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
     async function fetchCounterPart(){

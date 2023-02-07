@@ -8,16 +8,18 @@ import TradeBuyerCard from "../../components/TradeBuyerCard";
 import {useAuth} from "../../contexts/AuthContext";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
 import {TRADE_STATUS} from "../../common/constants";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {toast} from "react-toastify";
 import useUserService from "../../hooks/useUserService";
+import {AxiosError} from "axios";
+import {useNavigate} from "react-router-dom";
 
 
 const BuyerDashboard = () => {
     const [trades, setTrades] = useState<TransactionModel[]>([]);
     const tradeService = useTradeService();
     const {user} = useAuth();
+    const navigate = useNavigate();
     const userService = useUserService();
     const [paginatorProps, setPaginatorProps] = useState<PaginatorPropsValues>({
             actualPage: 0,
@@ -53,7 +55,14 @@ const BuyerDashboard = () => {
                 setTrades(resp.items);
             }
         }catch (e){
-            attendError("Connection error. Failed to fetch trades",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -76,7 +85,14 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            attendError("Connection error. Couldn't fetch trades",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

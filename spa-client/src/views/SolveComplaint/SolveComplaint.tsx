@@ -13,9 +13,9 @@ import useUserService from "../../hooks/useUserService";
 import SolveComplaintForm from "../../components/SolveComplaintForm/SolveComplaintForm";
 import {XCircleIcon} from "@heroicons/react/24/outline";
 import TransactionModel from "../../types/TransactionModel";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import Loader from "../../components/Loader";
+import {AxiosError} from "axios";
 
 
 const SolveComplaint = () => {
@@ -56,7 +56,14 @@ const SolveComplaint = () => {
                 else setOther(seller);
             }
         }catch (e){
-            attendError("Connection error. Failed to fetch Trade members",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -77,7 +84,14 @@ const SolveComplaint = () => {
             setComplaint(resp);
             return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch complaint",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
 
     }
@@ -97,7 +111,14 @@ const SolveComplaint = () => {
             const seller = await userService?.getUserByUrl(sellerUrl);
             setSeller(seller);
         }catch (e){
-            attendError("Connection error. Failed to fetch seller",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

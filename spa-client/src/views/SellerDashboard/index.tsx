@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {KycModel} from "../../types/KycModel";
-import TransactionModel from "../../types/TransactionModel";
 import OfferModel from "../../types/OfferModel";
 import Paginator from "../../components/Paginator";
 import UserProfileCards from "../../components/UserProfileCards";
@@ -12,7 +11,6 @@ import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
 import {OFFER_STATUS} from "../../common/constants";
 import {PaginatorPropsValues} from "../../types/PaginatedResults";
-import {attendError} from "../../common/utils/utils";
 
 import i18n from "../../i18n";
 import {toast} from "react-toastify";

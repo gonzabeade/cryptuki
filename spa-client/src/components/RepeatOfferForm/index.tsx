@@ -7,10 +7,10 @@ import {useForm} from "react-hook-form";
 import useOfferService from "../../hooks/useOfferService";
 import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";
-import {attendError} from "../../common/utils/utils";
 import OfferModel from "../../types/OfferModel";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
+import {AxiosError} from "axios";
 
 export interface RepeatOfferFormValues {
     minInCrypto:number,
@@ -68,7 +68,14 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                 setOffer(resp);
                 return resp;
         }catch (e){
-            attendError("Connection error. Failed to fetch offer",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -81,7 +88,14 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
         try{
             setSeller(await userService.getUserByUrl(url));
         }catch (e) {
-            attendError("Connection error. Couldn't fetch seller",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

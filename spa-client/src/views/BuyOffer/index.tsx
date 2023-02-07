@@ -9,8 +9,9 @@ import useTradeService from "../../hooks/useTradeService";
 import UserModel from "../../types/UserModel";
 import useUserService from "../../hooks/useUserService";
 import {useAuth} from "../../contexts/AuthContext";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios";
+import icons from "../../assets";
 
 type BuyOfferFormValues = {
     amount:number
@@ -39,7 +40,14 @@ const BuyOffer = () => {
             setMin(resp.minInCrypto * resp.unitPrice);
             setMax(resp.maxInCrypto * resp.unitPrice);
         }catch (e) {
-            attendError("Connection error. Couldn't fetch seller",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
 
     }
@@ -86,8 +94,14 @@ const BuyOffer = () => {
         try{
             setSeller(await userService.getUserByUrl(url));
         }catch (e) {
-           attendError("Connection error. Couldn't fetch seller",e);
-            console.log(e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -119,7 +133,7 @@ const BuyOffer = () => {
                         <h2 className="font-sans font-semibold text-polard text-2xl text-center">
                             {i18n.t('aboutToBuy')}
                         </h2>
-                        <img src={`/images/${offer? offer.cryptoCode + '.png':'404.png'}`} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
+                        <img src={offer? require('/src/assets/cryptos/'+ offer.cryptoCode + '.png') :icons["404"]} alt={offer?.cryptoCode} className="w-20 h-20 mx-auto"/>
                         <h1 className="text-center text-3xl font-bold text-polar">
                             {offer? offer.cryptoCode: 'Loading...'}
                         </h1>

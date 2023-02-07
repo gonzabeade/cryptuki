@@ -3,9 +3,9 @@ import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import {useAuth} from "../../contexts/AuthContext";
+
 type VerifyFormValues ={
     code:number
 }

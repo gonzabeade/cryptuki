@@ -11,7 +11,6 @@ import {UploadFormValues} from "../UploadForm/uploadForm";
 import useOfferService from "../../hooks/useOfferService";
 import {useAuth} from "../../contexts/AuthContext";
 import useUserService from "../../hooks/useUserService";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
 import Loader from "../Loader";
 import UserModel from "../../types/UserModel";
@@ -84,14 +83,28 @@ const EditOfferForm = () => {
                 return resp;
             }
         }catch (e){
-            attendError("Connection error. Failed to fetch offer",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
     async function fetchSeller(url:string){
         try{
             setSeller(await userService.getUserByUrl(url));
         }catch (e) {
-            attendError("Connection error. Couldn't fetch seller",e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

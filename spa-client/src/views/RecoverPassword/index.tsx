@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import i18n from "../../i18n";
 import {useForm} from "react-hook-form";
 import useUserService from "../../hooks/useUserService";
-import {attendError} from "../../common/utils/utils";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 

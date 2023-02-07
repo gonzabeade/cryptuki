@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import useKycService from "../../hooks/useKycService";
 import {KycInformationModel} from "../../types/KycInformationModel";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import KycInformation from "../../components/KycAdminInformation/KycInformation";
-import {attendError} from "../../common/utils/utils";
 import i18n from "../../i18n";
+import {AxiosError} from "axios";
+import {toast} from "react-toastify";
 
 const SolveKycAdmin = () => {
     const kycService = useKycService();
@@ -14,6 +15,7 @@ const SolveKycAdmin = () => {
     const [activeIdPhoto, setActiveIdPhoto ] = useState<string>("idPhoto");
     const [idPhotoBase64,setIdPhotoBase64] = useState<string>();
     const [validationPhotoBase64,setValidationPhotoBase64] = useState<string>();
+    const navigate = useNavigate();
 
 
     useEffect(()=>{
@@ -34,7 +36,14 @@ const SolveKycAdmin = () => {
             setValidationPhotoBase64(
                 await kycService?.getPicturesByUrl(kyc.validationPhoto)) ;
         }catch (e){
-            attendError("Connection error. Failed to fetch id's photo",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -43,7 +52,14 @@ const SolveKycAdmin = () => {
         try{
             setIdPhotoBase64(await kycService?.getPicturesByUrl(kyc.idPhoto)) ;
         }catch (e){
-            attendError("Connection error. Failed to fetch validation's photo. ",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 
@@ -52,7 +68,14 @@ const SolveKycAdmin = () => {
             const apiCall = await kycService?.getKycInformation(username);
             setKyc(apiCall);
         }catch (e){
-            attendError("Connection error. Failed to fetch kyc information",e)
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

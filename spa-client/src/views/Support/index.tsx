@@ -4,7 +4,7 @@ import useComplainService from "../../hooks/useComplainService";
 import i18n from "../../i18n";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import {attendError} from "../../common/utils/utils";
+import {AxiosError} from "axios";
 
 export interface CreateComplainForm {
     email: string,
@@ -30,7 +30,14 @@ const Support= ({tradeId}:ContactFormProps) => {
             toast("Your complaint was saved. As short as possible, we will have an answer.")
             setBackButton(true);
         }catch (e){
-            attendError("The complaint could not be saved",e );
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+                navigate('/error/'+errorMsg);
+
+            }
+            else toast.error("Connection error");
         }
     }
 

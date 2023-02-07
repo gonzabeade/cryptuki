@@ -75,10 +75,6 @@ const BuyOffer = () => {
     }
     async function onSubmit(data:BuyOfferFormValues){
         try{
-            if(!user){
-                navigate('/login');
-                return;
-            }
             const resp = await tradeService.createTrade(data.amount, offer?.offerId);
             let tradeId = resp.match("\/([0-9]+)(?=[^\/]*$)");
             if(tradeId){

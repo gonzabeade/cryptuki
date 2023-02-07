@@ -515,13 +515,10 @@
   "failedToCreateOffer": "Error de conexión. No se pudo crear la oferta",
   "failedToChangeTradeStatus": "Error de conexión. No se pudo cambiar el estado de la orden de compra ",
   "failedToGetRatingFromTrade": "Error de conexión. No se pudo recuperar el puntaje asociado con la orden de compra",
-  "failedToRateCounterpart": "Error de conexión. No se pudo puntuar a la contraparte "
-
-
-
-
-
-
+  "failedToRateCounterpart": "Error de conexión. No se pudo puntuar a la contraparte ",
+  "offerPaused": "Oferta pausada",
+  "offerResumed": "Oferta resumida",
+  "offerDeleted": "Oferta eliminada"
 
 
 }

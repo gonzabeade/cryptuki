@@ -1,5 +1,5 @@
 export const paths = {
-    BASE_URL: 'http://localhost:8080/webapp/api',
+    BASE_URL: 'http://pawserver.it.itba.edu.ar/paw-2022a-01/api',
     HOME:'/',
     OFFERS: '/offers/',
     TRADE: '/trades/',

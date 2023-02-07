@@ -513,5 +513,8 @@
   "failedToCreateOffer": "Check your connection. Creation of offer failed. ",
   "failedToChangeTradeStatus": "Connection error. Couldn't change trade status",
   "failedToGetRatingFromTrade": "Connection failed. Failed to get rating info from Trade ",
-  "failedToRateCounterpart": "Connection Error, failed to rate your counterpart "
+  "failedToRateCounterpart": "Connection Error, failed to rate your counterpart ",
+  "offerPaused": "Offer paused",
+  "offerResumed": "Offer resumed",
+  "offerDeleted": "Offer deleted"
 }

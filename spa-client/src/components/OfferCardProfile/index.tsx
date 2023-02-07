@@ -19,7 +19,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
     async function pauseOffer(){
         try{
             await offerService.pauseOffer(offer);
-            toast.success("Offer paused");
+            toast.success(i18n.t('offerPaused'));
             renewOffers(OFFER_STATUS.PausedBySeller);
         }catch (e) {
             const error: AxiosError =  e as AxiosError;
@@ -35,7 +35,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
     async function deleteOffer(){
         try{
             await offerService.deleteOffer(offer);
-            toast.success("Offer deleted");
+            toast.success(i18n.t('offerDeleted'));
             renewOffers(OFFER_STATUS.Deleted);
         }catch (e:any) {
             const error: AxiosError =  e as AxiosError;
@@ -50,7 +50,7 @@ const OfferCardProfile: React.FC<OfferCardProfileProps> = ({ offer , renewOffers
     async function resumeOffer(){
         try{
             await offerService.resumeOffer(offer);
-            toast.success("Offer resumed");
+            toast.success(i18n.t('offerResumed'));
             renewOffers(OFFER_STATUS.Pending);
         }catch (e) {
             const error: AxiosError =  e as AxiosError;

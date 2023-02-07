@@ -516,5 +516,6 @@
   "failedToRateCounterpart": "Connection Error, failed to rate your counterpart ",
   "offerPaused": "Offer paused",
   "offerResumed": "Offer resumed",
-  "offerDeleted": "Offer deleted"
+  "offerDeleted": "Offer deleted",
+  "kycSuccesffulSent": "Kyc information successfully sent."
 }

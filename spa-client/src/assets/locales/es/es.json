@@ -518,7 +518,6 @@
   "failedToRateCounterpart": "Error de conexión. No se pudo puntuar a la contraparte ",
   "offerPaused": "Oferta pausada",
   "offerResumed": "Oferta resumida",
-  "offerDeleted": "Oferta eliminada"
-
-
+  "offerDeleted": "Oferta eliminada",
+  "kycSuccesffulSent": "La solicitud fue correctamente enviada."
 }

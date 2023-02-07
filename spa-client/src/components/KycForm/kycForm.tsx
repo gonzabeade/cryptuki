@@ -37,7 +37,7 @@ const KycForm = () => {
                 data.idPictures,
                 data.facePictures
             );
-            toast.success("Kyc information successfully sent.");
+            toast.success(i18n.t('kycSuccessfulSent'));
             navigate(-1);
         }
         catch (e) {

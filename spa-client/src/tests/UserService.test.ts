@@ -140,18 +140,16 @@ test("register new user", () => {
 
 test("verify user", () => {
     const userService = new UserService(() => axios)
+    const params = new URLSearchParams();
+    params.append("code",String(code))
 
     userService.verifyUser(code, user.username)
 
     expect(axios.post).toHaveBeenCalledWith(
         paths.BASE_URL +
         paths.USERS +
-        user.username, {
-            code: code
-        }, {
-            "headers": {
-                "Content-Type": user_validation_mime
-            }
+        user.username, {}, {
+            "params": params
         }
     )
     expect(axios.post).toHaveBeenCalledTimes(1)

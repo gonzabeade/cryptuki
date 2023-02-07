@@ -501,5 +501,17 @@
   "amountLessThanMax": "Amount must be less than maximum",
   "nameRequired":"You must enter a name",
   "dismissing": "You are about to dismiss this complaint ",
-  "banning": "You are about to ban "
+  "banning": "You are about to ban ",
+  "noOfferId": "There is no an offer with such id",
+  "kycSuccessfulAttended": "Kyc request was successfully attended",
+  "failedToFetchPendingKyc": "Connection error. Failed to fetch pending kyc requests",
+  "failedToSendMessage": "Connection error. Failed to send message ",
+  "failedToFetchUserData": "Connection error. Failed to fetch user data ",
+  "loggedToMakeTradeProposal": "You need to be logged in to make a trade proposal",
+  "failedToFetchOffer": "Connection error. Failed to fetch offer",
+  "failedToFetchBuyer": "Connection error. Couldn't fetch buyer ",
+  "failedToCreateOffer": "Check your connection. Creation of offer failed. ",
+  "failedToChangeTradeStatus": "Connection error. Couldn't change trade status",
+  "failedToGetRatingFromTrade": "Connection failed. Failed to get rating info from Trade ",
+  "failedToRateCounterpart": "Connection Error, failed to rate your counterpart "
 }

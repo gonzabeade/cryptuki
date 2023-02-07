@@ -76,9 +76,9 @@ const KycForm = () => {
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">{i18n.t('names')}</label>
                                 <input className="p-3 rounded-lg shadow" placeholder="e.g. Pedro Martin"
                                        {...register("names",{
-                                           required: "You must enter a name",
-                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
-                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                           required: i18n.t('nameRequired')!,
+                                           minLength: {value: 1, message: i18n.t('namesValidationLengthMin')},
+                                           maxLength: {value: 140, message: i18n.t('namesValidationLengthMax')}
                                        })}
                                 />
                                 {errors && errors.names && <p className="text-red-600 mx-auto mt-2">{errors.names.message}</p> }
@@ -87,9 +87,9 @@ const KycForm = () => {
                                 <label className="text-start text-xl font-bold font-sans text-polar my-2">{i18n.t('surnames')}</label>
                                 <input className="p-3 rounded-lg shadow" placeholder="e.g. Juarez"
                                        {...register("surnames", {
-                                           required: "You must enter a surname",
-                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
-                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                           required: i18n.t('requiredField')!,
+                                           minLength: {value: 1, message: i18n.t('surnamesValidationLengthMin')},
+                                           maxLength: {value: 140, message: i18n.t('surnamesValidationLengthMax')}
                                        })}
                                 />
                                 {errors && errors.surnames && <p className="text-red-600 mx-auto mt-2">{errors.surnames.message}</p> }
@@ -110,9 +110,9 @@ const KycForm = () => {
                                 </label>
                                 <input type="text" placeholder="e.g. 45089768" className="rounded-lg p-3"
                                        {...register("documentCode", {
-                                           required: "You must enter a passport/id number",
-                                           minLength: {value: 1, message: "Passport/id number must contain at least 1 character"},
-                                           maxLength: {value: 140, message: "Passport/id number must contain no more than 140 characters"}
+                                           required: i18n.t('requiredField')!,
+                                           minLength: {value: 1, message: i18n.t('docCodeValidationLengthMin')},
+                                           maxLength: {value: 140, message: i18n.t('docCodeValidationLengthMax')}
                                        })}
                                 />
                                 {errors && errors.documentCode && <p className="text-red-600 mx-auto mt-2">{errors.documentCode.message}</p> }
@@ -134,8 +134,8 @@ const KycForm = () => {
                             <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
                                    {...register("idPictures", {
                                        validate:{
-                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null|| 'File should not be empty',
-                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || 'File should be smaller than 10 MB'
+                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null|| i18n.t('fileRequired')!,
+                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || i18n.t('multipartValidationCheck')!
                                        }}
                                    )}
                             />
@@ -153,8 +153,8 @@ const KycForm = () => {
                                    <input type="file" className="rounded-lg p-3" accept="image/png, image/gif, image/jpeg"
                                    {...register("facePictures", {
                                        validate:{
-                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null|| 'File should not be empty',
-                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || 'File should be smaller than 10 MB'
+                                           validateExistance: fileList => fileList.length == 1 && fileList[0] != null||  i18n.t('fileRequired')!,
+                                           validateSize: fileList => fileList[0].size > 0 && fileList[0].size < 10000000 || i18n.t('multipartValidationCheck')!
                                        }}
                                    )}
                                   />

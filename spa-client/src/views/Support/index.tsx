@@ -27,7 +27,7 @@ const Support= ({tradeId}:ContactFormProps) => {
     async function onSubmit(data:CreateComplainForm){
         try {
             await complainService.createComplain(data);
-            toast("Your complaint was saved. As short as possible, we will have an answer.")
+            toast.success(i18n.t('complaintSent'))
             setBackButton(true);
         }catch (e){
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
@@ -57,7 +57,7 @@ const Support= ({tradeId}:ContactFormProps) => {
                     <input type="hidden" value={params.id} {...register("tradeId")}/>
                     <div className="flex flex-col p-5 ">
                         <div className="flex-row justify-center">
-                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder={i18n.t('message')!} {...register("message", {required:"Message is required."})}/>
+                            <textarea className="min-w-full h-32 rounded-lg mx-auto p-5"  placeholder={i18n.t('message')!} {...register("message", {required:i18n.t('requiredField')!})}/>
                             {errors && errors.message && <span className="text-red-500">{errors.message.message}</span>}
                         </div>
                     </div>

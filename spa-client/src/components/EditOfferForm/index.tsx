@@ -42,7 +42,7 @@ const EditOfferForm = () => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch cryptocurrencies ");
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('cryptocurrencies'));
         }
 
     }
@@ -90,7 +90,7 @@ const EditOfferForm = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
     async function fetchSeller(url:string){
@@ -104,7 +104,7 @@ const EditOfferForm = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

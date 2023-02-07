@@ -73,10 +73,10 @@ const Login = () => {
                     autoComplete="off"
                     {...register("username", {required: true, minLength: {
                             value: 3,
-                            message:"Username must be at least 3 characters long"
+                            message:i18n.t('usernameLengthValidationMin')
                         }, maxLength: {
                             value: 23,
-                            message:"Username must be at most 23 characters long"
+                            message:i18n.t('usernameLengthValidationMax')
                         }})}
                     className="p-2 m-2 rounded-lg"
                 />
@@ -85,10 +85,13 @@ const Login = () => {
                     placeholder={i18n.t('password')!}
                     type="password"
                     id="password"
-                    {...register("password",{required: true, minLength: {value: 6, message: "Password must contain at least 6 characters."
+                    {...register("password",{required: true,
+                        minLength: {
+                        value: 6,
+                            message: i18n.t('passMinLength')
                         }, maxLength:{
                             value:24,
-                            message:"Password must contain max 24 characters"
+                            message:i18n.t('passMaxLength')
                         }})}
                     className="p-2 m-2 rounded-lg"
                 />

@@ -29,22 +29,6 @@ const BuyerDashboard = () => {
         }
     );
 
-    // useEffect(()=>{
-    //     getLastTransactions();
-    // },[])
-
-    // async function getLastTransactions(){
-    //     try{
-    //         const resp = await tradeService.getLastTransactions(userService.getLoggedInUser()!);
-    //         if(resp){
-    //             setLastTransactions(resp)
-    //         }
-    //
-    //     }catch (e) {
-    //         attendError("Connection error. Failed to fetch lasts transactions",e);
-    //     }
-    // }
-
     async function fetchTradesBuyerProfile(){
         try {
             if(user){

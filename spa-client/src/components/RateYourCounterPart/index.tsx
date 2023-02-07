@@ -37,7 +37,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
                }
            }
        }catch (e) {
-            toast.error("Connection failed. Failed to get rating info from Trade " + e)
+            toast.error(i18n.t('failedToGetRatingFromTrade') + e)
        }
     }
 
@@ -69,7 +69,7 @@ const RateYourCounterPart:React.FC<RateYourCounterPartProps>= ({ isBuyer, userna
             setRating(rating*2);
             setAlreadyRated(true);
         }catch (e) {
-            toast.error("Connection Error, failed to rate your counterpart " + e)
+            toast.error(i18n.t('failedToRateCounterpart') + e)
         }
     }
 

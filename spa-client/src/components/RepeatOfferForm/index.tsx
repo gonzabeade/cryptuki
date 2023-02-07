@@ -40,7 +40,7 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e) {
-            toast.error("Connection error. Failed to fetch cryptocurrencies ");
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('cryptocurrencies'));
         }
     }
 
@@ -75,7 +75,7 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -95,7 +95,7 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -131,7 +131,7 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
             toast.success("Offer created");
             navigate('/seller/offer/'+offer.offerId);
         }catch (e) {
-            toast.error("Check your connection. Creation of offer failed. " + e)
+            toast.error(i18n.t('failedToCreateOffer') + e)
         }
     }
 

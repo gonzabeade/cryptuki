@@ -74,7 +74,7 @@ const SolveComplaint = () => {
                 setOffer(resp);
                 return resp;
         }catch (e){
-            toast.error("Connection error. Failed to fetch offer"+e);
+            toast.error(i18n.t('failedToFetchOffer') + e);
         }
     }
 
@@ -91,7 +91,7 @@ const SolveComplaint = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
 
     }
@@ -101,8 +101,7 @@ const SolveComplaint = () => {
             setTrade(resp);
             return resp;
         }catch (e){
-            toast.error("Connection error. Failed to fetch Trade "+ e);
-        }
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trades'));        }
 
     }
 
@@ -118,7 +117,7 @@ const SolveComplaint = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

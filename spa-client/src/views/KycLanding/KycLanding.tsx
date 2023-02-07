@@ -49,7 +49,7 @@ const KycLanding = () => {
             setPaginatorProps(apiCall.paginatorProps!);
             setLoading(false);
         }catch (e){
-            toast.error("Connection error. Failed to fetch pending kyc requests")
+            toast.error(i18n.t('failedToFetchPendingKyc'))
         }
     }
 

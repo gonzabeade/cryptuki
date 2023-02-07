@@ -49,11 +49,11 @@ const SellerOfferDashboard = () => {
                 const offerResp = await offerService.getOfferInformation(Number(params.id));
                 setOffer(offerResp);
             } else {
-                toast.error("No offer ID!");
+                toast.error(i18n.t('noOfferId'));
             }
 
         } catch (e) {
-            toast.error("Connection error. Failed to fetch trades"+ e);
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
     async function getPaginatedTrades(uri:string){
@@ -62,8 +62,7 @@ const SellerOfferDashboard = () => {
             setTrades(resp.items);
             setPaginatorProps(resp.paginatorProps!);
         }catch (e) {
-            toast.error("Connection  error. Failed to fetch trades "+ e);
-        }
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trades'));        }
     }
 
 
@@ -145,7 +144,7 @@ const SellerOfferDashboard = () => {
                                         <OfferInformationForSeller trade={trade} chat={true} key={trade.tradeId} callback={fetchTradesAssociatedWithOfferWithStatus}/>
                                 );
                             })}
-                            {!trades || trades.length === 0 && <div className="flex flex-col mx-auto">
+                            {(!trades || trades.length === 0) && <div className="flex flex-col mx-auto">
                                 <h1 className="font-sans text-center text-xl font-bold text-polar">{i18n.t('noResults')}</h1>
                             </div>}
                         </div>

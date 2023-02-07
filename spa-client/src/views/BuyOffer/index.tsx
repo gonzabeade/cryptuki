@@ -82,7 +82,7 @@ const BuyOffer = () => {
             }
 
         }catch (e){
-            toast.error("You need to be logged in to make a trade proposal"+ e);
+            toast.error(i18n.t('loggedToMakeTradeProposal')+ e);
         }
     }
 
@@ -97,7 +97,7 @@ const BuyOffer = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

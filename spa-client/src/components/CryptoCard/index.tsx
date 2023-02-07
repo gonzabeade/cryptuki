@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import './styles.css';
-import icons from "../../assets";
 import OfferModel from "../../types/OfferModel";
 import {Link, useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars";
@@ -18,7 +17,7 @@ const CryptoCard = ({offer}: {offer: OfferModel}) => {
             const resp = await userService.getUser(username);
             setSeller(resp);
         }catch (e) {
-            toast.error("Connection error. Failed to fetch user data " + e);
+            toast.error(i18n.t('failedToFetchUserData') + e);
         }
     }
 

@@ -83,7 +83,7 @@ const Trade =  () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trades'));
+            else toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trade'));
         }
 
     }

@@ -28,7 +28,7 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
             await kycService.solveKyc(
                 {status:"APR",comments:i18n.t('welcome')}
                 ,username);
-            toast.success("Kyc request was successfully attended")
+            toast.success(i18n.t('kycSuccessfulAttended'))
             navigate("/admin/kyc")
         }catch (e){
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
@@ -38,7 +38,7 @@ const KycInformation = ({kyc,username}:KycCardProp) => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

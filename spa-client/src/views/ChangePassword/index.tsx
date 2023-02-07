@@ -96,7 +96,7 @@ const ChangePassword = () => {
                             type="password"
                             id="password"
                             className="rounded-lg p-3 w-full"
-                            {...register("password",{required: true, pattern: {value: PWD_REGEX, message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}})}
+                            {...register("password",{required: true, pattern: {value: PWD_REGEX, message: i18n.t('passwordValidation')}})}
                         />
                         {errors && errors.password && <span className="text-red-500">{errors.password.message}</span>}
                     </div>
@@ -114,7 +114,7 @@ const ChangePassword = () => {
                                 {required: true,
                                     validate:checkEquals,
                                     pattern: {value: PWD_REGEX,
-                                        message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"}
+                                        message:  i18n.t('passwordValidation')}
                                     })}
                         />
                         {errors && errors.repeatPassword && <span className="text-red-500">{errors.repeatPassword.message}</span>}

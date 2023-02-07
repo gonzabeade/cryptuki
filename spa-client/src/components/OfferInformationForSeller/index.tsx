@@ -11,7 +11,7 @@ import useUserService from "../../hooks/useUserService";
 import useTradeService from "../../hooks/useTradeService";
 import {TRADE_STATUS} from "../../common/constants";
 import i18n from "../../i18n";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 type OfferInformationForSellerProps = {
     trade:TransactionModel,
@@ -26,6 +26,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
     const userService = useUserService();
     const tradeService = useTradeService();
     const [unSeenMessages, setUnseenMessages]= useState<number>(0);
+    const navigate = useNavigate();
 
     async function fetchBuyer(){
         try{
@@ -34,7 +35,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 setBuyer(resp);
             }
         }catch (e) {
-            toast.error("Connection error. Couldn't fetch buyer " + e);
+            toast.error(i18n.t('failedToFetchBuyer') + e);
         }
     }
 
@@ -49,7 +50,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 const resp = await offerService.getOfferInformation(Number(offerId));
                 setOffer(resp);
             }catch (e) {
-                toast.error("Connection error. Couldn't fetch offer "+e);
+                toast.error(i18n.t('failedToFetchOffer')+e);
             }
         }
     }
@@ -78,7 +79,7 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
                 callback(status);
             }
         }catch (e) {
-            toast.error("Connection error. Couldn't change trade status" + e);
+            toast.error(i18n.t('failedToChangeTradeStatus') + e);
         }
     }
 
@@ -179,7 +180,11 @@ const OfferInformationForSeller: React.FC<OfferInformationForSellerProps>= ({tra
 
                     <form className="flex justify-center mx-auto my-3">
                         <button type="submit"
-                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>changeStatus(TRADE_STATUS.Sold, trade?.tradeId)}>
+                                className="font-bold w-fit bg-gray-500 text-white p-3 rounded-lg font-sans mx-auto" onClick={()=>{
+                                    changeStatus(TRADE_STATUS.Sold, trade?.tradeId);
+                                    navigate('/trade/'+trade?.tradeId+'/receipt');
+                                }
+                        }>
                             {i18n.t('markAsSold')}
                         </button>
                     </form>

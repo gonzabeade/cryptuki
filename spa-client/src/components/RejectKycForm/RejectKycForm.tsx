@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import useKycService from "../../hooks/useKycService";
 import {useForm} from "react-hook-form";
-import register from "../../views/Register";
 import {SolveKycForm} from "../KycAdminInformation/KycInformation";
 import {useNavigate} from "react-router-dom";
 
@@ -48,7 +47,7 @@ return (
 
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col">
-                    <textarea {...register("comments",{required:"You must provide a comment"})  }
+                    <textarea {...register("comments",{required:i18n.t('commentRequired')!})  }
                               className="border-2 border-gray-400 mt-10 h-[14rem] p-2" />
                 {errors && errors.comments && <span className="text-red-500">{errors.comments.message}</span>}
                 <input type="hidden" value="REJ" {...register("status")}/>

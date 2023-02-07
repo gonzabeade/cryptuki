@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import {KycInformationModel} from "../../types/KycInformationModel";
-import {useForm} from "react-hook-form";
 import useKycService from "../../hooks/useKycService";
 import Popup from "reactjs-popup";
-import {QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
-import AdviceOnP2P from "../AdviceOnP2P";
 import RejectKycForm from "../RejectKycForm/RejectKycForm";
 import {useNavigate} from "react-router-dom";
 import i18n from "../../i18n";

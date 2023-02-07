@@ -1,6 +1,7 @@
 import React from 'react';
 import useUserService from "../../hooks/useUserService";
 import {Link} from "react-router-dom";
+import icons from "../../assets";
 
 
 type ErrorProps = {
@@ -14,7 +15,7 @@ const Error = ({message, illustration}:ErrorProps) => {
         <>
             <div className="flex w-full my-2">
                 <Link className="mx-auto mt-10" to="/">
-                    <img className='object-contain mx-auto w-52' src={illustration}
+                    <img className='object-contain mx-auto w-52' src={require('/src/assets/'+illustration+'.png')}
                          alt="logo"/>
                 </Link>
             </div>

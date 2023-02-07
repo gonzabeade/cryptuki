@@ -29,7 +29,7 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
     async function onSubmit(data:SolveComplaintFormModel) {
         try {
             await complainService.createComplainResolution(data);
-            toast.success("The complaint was solved.");
+            toast.success(i18n.t('successfulClaim'));
             navigate("/admin");
         }catch (e){
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
@@ -50,13 +50,13 @@ const SolveComplaintForm = ({other,resolution,complainId}:props) => {
                 <div className="flex flex-row bg-white shadow rounded-lg p-3 font-sans font-bold">
                     <InformationCircleIcon className="w-5 h-5 mr-4 my-auto "/>
                     <p>
-                        {resolution==="DISMISS" && ` Estás por desestimar la denuncia de ${other}. `}
-                        {resolution==="KICK" && ` Estás por banear a ${other}. ` }
+                        {resolution==="DISMISS" && ` ${i18n.t('dismissing')}. `}
+                        {resolution==="KICK" && ` ${i18n.t('banning')} ${other}. ` }
                         {i18n.t('irreversibleAction')} </p>
                 </div>
                 <input type="string" className="min-w-full h-32 rounded-lg mx-auto p-5 mt-5"
                        step=".01"
-                       {...register("comments", {required:"You must comment your resolution"})}
+                       {...register("comments", {required:i18n.t('requiredField')!})}
                 />
                 {errors && errors.comments && <p className="text-red-600 mx-auto mt-2">{errors.comments.message}</p> }
                 <input type="hidden"  value={resolution} {...register("resolution")} />

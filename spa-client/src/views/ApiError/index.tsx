@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import i18n from "../../i18n";
+import icons from "../../assets";
 type ErrorProps = {
     illustration:string
 }
@@ -18,7 +19,7 @@ const Index = ({illustration}:ErrorProps) => {
         <>
             <div className="flex w-full my-2">
                 <Link className="mx-auto mt-10" to="/">
-                    <img className='object-contain mx-auto w-52' src={illustration}
+                    <img className='object-contain mx-auto w-52' src={icons.logo}
                          alt="logo"/>
                 </Link>
             </div>

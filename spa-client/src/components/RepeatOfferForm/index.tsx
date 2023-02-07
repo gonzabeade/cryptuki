@@ -146,8 +146,8 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                                 className="text-lg font-sans text-polard  mb-3 mt-2 text-center">{i18n.t('cryptocurrency')}*</label>
                             <div className="flex flex-col justify-center mx-auto">
                                 <select className="rounded-lg p-3" id="cryptoSelected"
-                                        {...register("cryptoCode",{required:"You must choose a cryptocurrency to sell", validate:{
-                                                notDefault: value => value !== "DEFAULT" || "You must choose a cryptocurrency to sell"
+                                        {...register("cryptoCode",{required:i18n.t('ChooseCrypto')!, validate:{
+                                                notDefault: value => value !== "DEFAULT" || i18n.t('ChooseCrypto')!
                                             }, onChange:changeSuggestedPrice})} defaultValue="DEFAULT">
                                     <option disabled value="DEFAULT">{i18n.t('chooseAnOption')}</option>
                                     {
@@ -173,7 +173,7 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                             <div className="flex flex-col justify-center ">
                                 <input type="number" className="h-10 justify-center rounded-lg p-3 mx-auto "
                                        step=".01"
-                                       {...register("unitPrice", {required:"You must set a price per unit", min: {value:100, message:"Please input an amount greater than 100 ARS"}})}
+                                       {...register("unitPrice", {required:i18n.t('pricePerUnit')!, min: {value:100, message:i18n.t('greaterThan100')!}})}
                                 />
                             </div>
                             {errors && errors.unitPrice && <p className="text-red-600 mx-auto mt-2">{errors.unitPrice.message}</p> }
@@ -190,10 +190,10 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
                                                step=".00000001"
                                                {...register("minInCrypto", {
-                                                   required: "Minimum amount is required",
-                                                   min: {value: 0, message: "Please input an amount greater than 0"},
+                                                   required: i18n.t("minimumAmountRequired")!,
+                                                   min: {value: 0, message: i18n.t('greaterThan100')!},
                                                    validate: {
-                                                       smallerThanMax: value => value <= getValues().maxInCrypto || "Min must be smaller than max",
+                                                       smallerThanMax: value => value <= getValues().maxInCrypto || i18n.t('minSmallerThanMax')!,
                                                    }
                                                })}/>
                                     </div>
@@ -211,10 +211,10 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                                         <input type="number" className="h-10 justify-center rounded-lg p-3 mx-5 w-20"
                                                step=".00000001"
                                                {...register("maxInCrypto", {
-                                                   required: "Maximum amount is required",
-                                                   min: {value: 0, message: "Please input an amount greater than 0"},
+                                                   required: i18n.t("maximumAmountRequired")!,
+                                                   min: {value: 0, message: i18n.t("greaterThanZero")},
                                                    validate: {
-                                                       biggerThanMin: value => value >= getValues().minInCrypto || "Max must be bigger than min",
+                                                       biggerThanMin: value => value >= getValues().minInCrypto ||  i18n.t('maxBiggerThanMin')!,
                                                    }
                                                })}/>
                                     </div>
@@ -231,9 +231,9 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                         <div className="flex flex-col justify-center px-5">
                             <h2 className="text-lg font-sans text-polard text-center flex flex-row justify-center my-3">{i18n.t('hood')}*</h2>
                             <select className="font-sans text-polard mb-3 text-center rounded-lg p-2 " {...register("location",{
-                                required: "Location must not be empty",
+                                required: i18n.t('noEmptyLocation')!,
                                 validate:{
-                                    locationNotEmpty: value => value !== "DEFAULT" || "Must select location"
+                                    locationNotEmpty: value => value !== "DEFAULT" || i18n.t('noEmptyLocation')!
                                 }
                             })}  defaultValue="DEFAULT">
                                 <option disabled value="DEFAULT">{i18n.t('chooseAnOption')}</option>
@@ -249,12 +249,11 @@ const RepeatOfferForm = ({offerId}:repeatOfferProps) => {
                         </div>
                     </div>
                     <div className="flex flex-col px-10 w-1/3">
-                        <label className="text-xl font-sans text-polar font-bold mb-3 text-center ">3. Automatic
-                            Response</label>
+                        <label className="text-xl font-sans text-polar font-bold mb-3 text-center ">3. {i18n.t('firstChat')}</label>
                         <h2 className="text-justify">{i18n.t('automaticResponseDetail')} </h2>
                         <div className="flex flex-row justify-center w-80 mx-auto mt-2">
                             <textarea className="w-full h-36 rounded-lg mx-auto p-5"
-                                      {...register("comments", {maxLength: {value:240, message:"Max length is 240 characters"}})}/>
+                                      {...register("comments", {maxLength: {value:240, message:i18n.t('maxLength')!}})}/>
                         </div>
                         {errors && errors.comments && <p className="mt-2 text-red-600 mx-auto">{errors.comments.message}</p> }
                     </div>

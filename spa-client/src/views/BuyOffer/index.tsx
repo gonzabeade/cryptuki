@@ -157,13 +157,14 @@ const BuyOffer = () => {
                     <input type="number" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={i18n.t('quantity')!}
                            {...register("amount",
                                {
-                                   required:"You must input an amount",
+                                   required:i18n.t('amountRequired')!,
                                    min:{
                                        value: min,
-                                       message:"Amount must be greater to minimum"},
+                                       message:i18n.t('amountGreaterThanMin')
+                                   },
                                    max:{
                                        value: max,
-                                       message:"Amount must be less than maximum"
+                                       message:i18n.t('amountLessThanMax')
                                    }
                                })} onChange={(e)=>fillCrypto(e)} id={"ars_amount"}/>
                     {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}

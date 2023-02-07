@@ -169,7 +169,7 @@ const BuyOffer = () => {
                     {errors && errors.amount && <p className={"text-red-600 mx-auto"}> {errors.amount.message}</p>}
                     <p className="mx-auto font-bold text-polar">or</p>
                     <label className="mx-auto text-center mt-3">{i18n.t('cryptoQuantity')}</label>
-                    <input type="number" step="0.000000000000001" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={`Amount in CRYPTO`}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
+                    <input type="number" step="0.000000000000001" className="p-2 m-2 rounded-lg shadow mx-auto" placeholder={i18n.t('AmountInCrypto')!}  onChange={(e)=>fillARS(e)} id={"crypto_amount"}/>
                     <div className="flex flex-row justify-evenly mt-3 mb-3">
                         <div onClick={()=>navigate(-1)} className="p-3 w-48 bg-polarlr/[0.6] text-white font-roboto rounded-lg font-bold text-center cursor-pointer" > {i18n.t('back')}</div>
                         <button type="submit" className=" w-48 p-3 bg-frostdr text-white font-roboto rounded-lg font-bold">{i18n.t('makeTradeProposal')}</button>

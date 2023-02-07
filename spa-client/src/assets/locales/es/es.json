@@ -472,5 +472,6 @@
   "kycStatus": "Estado de KYC",
   "userOrCodeInvalid": "El código o el nombre de usuario son inválidos",
   "couldntDeleteOffer": "No puedes borrar tu oferta",
-  "couldntResumeOffer": "No puedes resumir tu oferta"
+  "couldntResumeOffer": "No puedes resumir tu oferta",
+  "AmountInCrypto": "Monto en criptomonedas"
 }

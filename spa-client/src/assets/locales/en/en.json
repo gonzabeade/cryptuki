@@ -470,6 +470,7 @@
   "offers": "Offers",
   "profilePicture": "Profile picture",
   "kycStatus": "KYC status",
-  "userOrCodeInvalid": "The code or the username given are invalid"
+  "userOrCodeInvalid": "The code or the username given are invalid",
+  "AmountInCrypto": "Amount in crypto"
 
 }

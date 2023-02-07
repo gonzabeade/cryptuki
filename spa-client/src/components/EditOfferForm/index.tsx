@@ -131,7 +131,7 @@ const EditOfferForm = () => {
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;
-                toast.error( i18n.t('couldntModifyOffer')+ ` ${data.message}`);
+                toast.error( i18n.t('couldntModifyOffer'));
             }else{
                 toast.error(i18n.t(`${error.code}`))
             }

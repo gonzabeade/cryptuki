@@ -5,9 +5,6 @@ import i18n from "../../i18n";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import {AxiosError} from "axios";
-import {useAuth} from "../../contexts/AuthContext";
-import useUserService from "../../hooks/useUserService";
-import {UserService} from "../../services/UserService";
 
 export interface CreateComplainForm {
     email: string,
@@ -26,7 +23,6 @@ const Support= ({tradeId}:ContactFormProps) => {
     const params = useParams();
     const [backButton, setBackButton] = useState<boolean>(false);
     const navigate = useNavigate();
-    const {user} = useAuth();
 
     async function onSubmit(data:CreateComplainForm){
         try {

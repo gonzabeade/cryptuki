@@ -27,7 +27,8 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
                 setDefaultPicture(true);
             else setPictureBase64(photo);
         }catch (e){
-            toast.error("Failed to fetch profile picture")
+            //todo api error
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -43,8 +44,8 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
             <div className="flex flex-col">
                 <div className="flex flex-col gap-1 items-center">
                     <div className="flex flex-col mt-5 font-bold text-polar text-xl">
-                        {!defaultPicture && <img src={pictureBase64} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
-                        {defaultPicture && <img src={icons.profile} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
+                        {!defaultPicture && <img alt={"profile picture"} src={pictureBase64} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
+                        {defaultPicture && <img alt={"profile picture"} src={icons.profile} className={"rounded-full border-frostdr border-2 shadow-lg"} width={"100px"} height={"100px"} /> }
                         {username}
                     </div>
                 </div>

@@ -30,7 +30,8 @@ const UploadForm = () => {
              const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
              setCryptoCurrencies(apiCall);
          }catch (e) {
-             toast.error("Connection error. Failed to fetch cryptocurrencies");
+             //todo error check api
+             toast.error(i18n.t('connectionError'));
          }
     }
 

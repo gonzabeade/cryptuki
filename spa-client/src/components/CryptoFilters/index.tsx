@@ -33,7 +33,8 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
             const apiCall:CryptocurrencyModel[] = await cryptocurrencyService.getCryptocurrencies();
             setCryptoCurrencies(apiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch cryptocurrencies ")
+            //revisar error de api  y de TC
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -43,7 +44,8 @@ const CryptoFilters = ({callback}:CryptoFiltersProps) => {
             const orderApiCall = apiCall.sort((a,b) => b.offerCount - a.offerCount)
             setNeighborhoods(orderApiCall);
         }catch (e){
-            toast.error("Connection error. Failed to fetch locations " + e)
+            //check api errors
+            toast.error(i18n.t('connectionError'));
         }
     }
 

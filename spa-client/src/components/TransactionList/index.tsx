@@ -16,6 +16,7 @@ const TRADE_STATUS = new Map([
     ['REJECTED', {icon: <XCircleIcon className="text-nred w-6 h-6"/>, title: "Title", subtitle: "You've rejected this trade proposal "}]
 
     ])
+// @Deprecated this is deprecated
 const TransactionList:React.FC<TransactionListProps> = ({transactions}) => {
     const [buyer, setBuyer] = useState<UserModel>();
     const [offer, setOffer] = useState<OfferModel>();

@@ -30,7 +30,8 @@ const ChatSnippet= ({ counterPart, tradeId}:ChatSnippetProps) => {
                 setMessages(resp);
             }
         }catch (e) {
-            toast.error("Error fetching messages. Check your connection " + e)
+            //check api error
+            toast.error(i18n.t('connectionError'))
         }
 
     }

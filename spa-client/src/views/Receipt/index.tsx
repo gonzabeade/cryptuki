@@ -65,6 +65,7 @@ const Receipt = () => {
                 setCounterPart(resp);
             }
         }catch (e){
+            //TODO: handle error message
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -72,7 +73,7 @@ const Receipt = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t("connectionError"));
         }
     }
 

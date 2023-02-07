@@ -31,7 +31,8 @@ const Verify = () => {
                 navigate("/");
             }
         }catch (e){
-            toast.error("Connection error. Please try again later "+ e);
+            //TODO aca devuelve mensaje de error?
+            toast.error(i18n.t('connectionError'));
         }
     }
 

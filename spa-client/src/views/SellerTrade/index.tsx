@@ -25,6 +25,7 @@ const SellerTrade = () => {
             const resp = await tradeService.getTradeInformation(Number(tradeId));
             setTrade(resp);
         }catch (e) {
+            //todo aca vuelve mensaje?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -32,7 +33,7 @@ const SellerTrade = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
     async function fetchCounterPart(){
@@ -40,9 +41,8 @@ const SellerTrade = () => {
             try{
                 const resp = await userService.getUser(userService.getUsernameFromURI(trade.buyer));
                 setCounterPart(resp);
-
             }catch (e) {
-                toast.error("Connection error. Couldn't fetch counterpart" + e);
+                toast.error(i18n.t('connectionError'));
             }
         }
     }

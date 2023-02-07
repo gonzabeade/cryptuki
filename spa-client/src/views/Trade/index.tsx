@@ -76,6 +76,7 @@ const Trade =  () => {
                 setTrade(resp);
             }
         }catch (e) {
+            //todo aca devuelve error irrecuperable?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -83,7 +84,7 @@ const Trade =  () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
 
     }
@@ -103,7 +104,8 @@ const Trade =  () => {
                 setSeller(resp);
             }
         }catch (e) {
-                toast.error("Connection error. Failed to fetch seller "+e)
+                //todo aca devuelve error irrecuperable?
+                toast.error(i18n.t('connectionError'));
         }
 
     }
@@ -115,7 +117,8 @@ const Trade =  () => {
                 setOffer(resp);
             }
         }catch (e) {
-            toast.error("Connection error. Could not fetch offer "+ e);
+            //todo aca devuelve error irrecuperable?
+            toast.error(i18n.t('connectionError'));
         }
     }
 

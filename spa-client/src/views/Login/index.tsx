@@ -36,7 +36,7 @@ const Login = () => {
         try{
             // dummy call to get the token
             const resp = await tradeService.getLastTransactions(data.username);
-            toast.success("Successfully logged in!");
+            toast.success(i18n.t('successfullyLoggedIn'));
             signin(await userService.getUser(data.username), ()=>{
                 if(location.state && location.state.url) {
                     navigate(location.state.url);
@@ -48,6 +48,7 @@ const Login = () => {
             });
             await sleep(500);
         }catch (e){
+            //todo chequear mensaje
             const error:AxiosError = e as AxiosError;
             if(error.response?.data){
                 const data = error.response.data as {message:string} ;

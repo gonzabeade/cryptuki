@@ -37,7 +37,8 @@ const SellerOfferDashboard = () => {
             setPaginatorProps(resp.paginatorProps!)
             setSelectedStatus(status);
         }catch (e){
-            toast.error("Connection error. Couldn't fetch trades "+ e);
+            //todo aca vuelve mensaje?
+            toast.error(i18n.t('connectionError'));
         }
     }
 

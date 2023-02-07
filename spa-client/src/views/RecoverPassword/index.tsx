@@ -22,8 +22,8 @@ const Index = () => {
             await useService.recoverPassword(data)
             setSent(true)
         }catch (e){
-            console.log(e)
-            // attendError("Could not sent recover code.",e);
+            //todo aca vuelve error?
+           toast.error(i18n.t('connectionError'));
        }
     }
 

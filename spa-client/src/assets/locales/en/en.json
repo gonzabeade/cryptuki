@@ -455,5 +455,12 @@
   "VILLA_URQUIZA":"Villa Urquiza",
   "VILLA_DEL_PARQUE":"Villa del Parque",
   "VELEZ_SARSFIELD":"Velez Sarsfield",
-  "UNKNOWN":"Desconocido"
+  "UNKNOWN":"Desconocido",
+  "connectionError":"Connection error. Please try again later ",
+  "successfullyRegistered": "Successfully registered",
+  "successfullyLoggedIn": "Successfully signed in",
+  "errorForm": "Data incorrect. Please check the field",
+  "failedToUpdatePassword": "Failed to update password",
+  "passwordUpdated":"Password successfully updated",
+  "unableToSignIn": "Unable to sign in"
 }

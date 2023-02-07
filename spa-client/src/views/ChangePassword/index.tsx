@@ -32,7 +32,7 @@ const ChangePassword = () => {
 
     async function onSubmit(data:changePasswordForm){
         if(!username){
-            toast.error("Failed to update the password.")
+            toast.error(i18n.t('failedToUpdatePassword'));
             return;
         }
         try{
@@ -40,13 +40,14 @@ const ChangePassword = () => {
                 withBasicAuthorizationWithCode(username, code)
             }
             await userService.changePassword(data,username)
-            toast.success("Password successfully updated.")
+            toast.success(i18n.t('passwordUpdated'))
             if(username && code) {
                 await login(username,data.password);
                 navigate("/");
             }else navigate(-1);
         }catch (e) {
-            toast.error("Failed to update the password.")
+            //todo check messages
+            toast.error(i18n.t('failedToUpdatePassword'))
         }
     }
 
@@ -66,7 +67,7 @@ const ChangePassword = () => {
             });
             await sleep(500);
         }catch (e){
-            toast.error("Unable to log in.")
+            toast.error(i18n.t('unableToSignIn'))
         }
     }
 

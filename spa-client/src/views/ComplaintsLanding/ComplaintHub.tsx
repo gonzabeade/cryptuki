@@ -38,7 +38,7 @@ const ComplaintHub = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -83,7 +83,7 @@ const ComplaintHub = () => {
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch paginated offers")
+            toast.error(i18n.t('connectionError'));
         }
     }
 };

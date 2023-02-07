@@ -30,6 +30,7 @@ const KycLanding = () => {
             setPaginatorProps(apiCall.paginatorProps!);
             setLoading(false);
         }catch (e){
+            //todo check this
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -37,7 +38,7 @@ const KycLanding = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
 
     }

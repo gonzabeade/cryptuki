@@ -26,14 +26,14 @@ const Register = () => {
     async function onSubmit(data:RegisterFormValues){
         try{
             await userService.register(data.username, data.password, data.repeatPassword, data.phoneNumber, data.email);
-            toast.success("Successfully registered!");
+            toast.success(i18n.t('successfullyRegistered'));
             navigate('/verify?username='+data.username);
         }catch (e) {
             const error: AxiosError =  e as AxiosError;
             if(error.response?.data){
                 const errors = error.response.data as { message:string, path:string }[];
                 errors.map((error) =>
-                    toast.error("Error in field  " + i18n.t(`${error.path}`) + ": " + `${error.message}`)
+                    toast.error(i18n.t('errorForm')+ i18n.t(`${error.path}`) + ": " + `${error.message}`)
                 );
             }else{
                 toast.error(i18n.t(`${error.code}`))

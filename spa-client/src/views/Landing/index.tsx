@@ -47,7 +47,8 @@ const Landing = () => {
             setIsLoading(false);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch offers" + e)
+            //todo check errors
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -63,7 +64,8 @@ const Landing = () => {
 
             setIsLoading(false);
         }catch (e){
-            toast.error("Connection error. Failed to fetch paginated offers "+e)
+            //todo check errors
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -71,7 +73,8 @@ const Landing = () => {
         try{
             setOrderCriteria(order_by);
         }catch (e) {
-            toast.error("Connection error. Failed to fetch ordered offers "+ e)
+            //todo check message
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -80,7 +83,8 @@ const Landing = () => {
         try{
             setFilters(data);
         }catch (e){
-            toast.error("Connection error. Failed to fetch offers"+ e)
+            //todo check
+            toast.error(i18n.t('connectionError'));
         }
     }
 

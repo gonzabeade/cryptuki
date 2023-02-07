@@ -55,6 +55,7 @@ const BuyerDashboard = () => {
                 setTrades(resp.items);
             }
         }catch (e){
+            //todo check api
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -62,7 +63,7 @@ const BuyerDashboard = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -74,7 +75,8 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
-            toast.error("Couldn't fetch trades with status " + status + " " +e);
+            //todo check api
+            toast.error(i18n.t('connectionError'));
         }
     }
     async function fetchPage(uri:string){
@@ -85,6 +87,7 @@ const BuyerDashboard = () => {
             }
             setTrades(resp.items);
         }catch (e) {
+            //todo check api
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -92,7 +95,7 @@ const BuyerDashboard = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

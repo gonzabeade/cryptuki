@@ -40,6 +40,7 @@ const BuyOffer = () => {
             setMin(resp.minInCrypto * resp.unitPrice);
             setMax(resp.maxInCrypto * resp.unitPrice);
         }catch (e) {
+            //todo check messages from API
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
@@ -47,7 +48,7 @@ const BuyOffer = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
 
     }

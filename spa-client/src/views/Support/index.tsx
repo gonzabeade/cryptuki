@@ -30,14 +30,14 @@ const Support= ({tradeId}:ContactFormProps) => {
             toast("Your complaint was saved. As short as possible, we will have an answer.")
             setBackButton(true);
         }catch (e){
+            //todo aca devuelve mensaje de error?
             if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
             {
                 const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
                 toast.error(errorMsg);
                 navigate('/error/'+errorMsg);
-
             }
-            else toast.error("Connection error");
+            else toast.error(i18n.t('connectionError'));
         }
     }
 

@@ -46,7 +46,8 @@ const SellerDashboard = () => {
             }
 
         }catch (e) {
-            toast.error("Connection failed. Couldn't fetch KYC status " + e)
+            //todo aca vuelve msj?
+            toast.error(i18n.t('connectionError'))
         }
     }
 
@@ -59,7 +60,8 @@ const SellerDashboard = () => {
                 setPaginatorProps(resp.paginatorProps);
             }
         }catch (e) {
-            toast.error("Connection error. Failed to fetch offers" + e);
+            //todo aca vuelve mensaje?
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -72,7 +74,7 @@ const SellerDashboard = () => {
             setPaginatorProps(apiCall.paginatorProps!);
 
         }catch (e){
-            toast.error("Connection error. Failed to fetch paginated offers" + e)
+            toast.error(i18n.t('connectionError'));
         }
     }
 
@@ -91,7 +93,8 @@ const SellerDashboard = () => {
            }
            setSelectedStatus(status);
         }catch (e) {
-            toast.error("Connection error fetching offers with status " + status + " " +e)
+            //todo aca vuelve mensaje?
+            toast.error(i18n.t('connectionError'));
         }
 
     }

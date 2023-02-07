@@ -25,12 +25,9 @@ const LoggedGate = ({children, admin}:LoggedGateProps) => {
                 })
                 return;
             }
-            if(admin && userService.getRole() !== "ROLE_ADMIN") {
-                navigate('/error');
-                return;
-            }
-            if(!admin && userService.getRole() !== "ROLE_USER") {
-                navigate('/error');
+
+            if((admin && userService.getRole() !== "ROLE_ADMIN") || (admin === undefined && userService.getRole() === "ROLE_ADMIN")) {
+                navigate('/forbidden');
                 return;
             }
             setLoading(false);

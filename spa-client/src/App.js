@@ -71,12 +71,13 @@ function App() {
                               <Route path="/admin/complaint/:id" element={<LoggedGate children={<SolveComplaint/>} admin={true}/>}/>
                               <Route path="/admin/kyc" element={<LoggedGate children={<KycLanding/>} admin={true}/>}/>
                               <Route path="/admin/kyc/:username" element={<LoggedGate children={<SolveKycAdmin/>} admin={true}/> }/>
-                              <Route path="/forbidden" element={<Error message={i18n.t('error.FORBIDDEN')} illustration={"/images/403.png"}/>}/>
+                              <Route path="/forbidden" element={<Error message={i18n.t('error.403')} illustration={"/images/403.png"}/>}/>
                               <Route path="/recoverPassword" element={<RecoverPassword/>}/>
                               <Route path="/changePassword" element={<ChangePassword/>}/>
+                              {/*todo esto es nefasto, cambiar si hay tiempo*/}
                               <Route path="/error/:message" element={<ApiError illustration={"image/404.png"}/>}/>
                               <Route path="/" element={<Landing/>}/>
-                              <Route path="*" element={<Error message={i18n.t('error.NOT_FOUND')} illustration={"/images/404.png"}/>}/>
+                              <Route path="*" element={<Error message={i18n.t('error.404')} illustration={"/images/404.png"}/>}/>
                           </Routes>
                       </Suspense>
                   </div>

@@ -63,7 +63,7 @@ const BuyerDashboard = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error(i18n.t('connectionError'));
+            else toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
 
@@ -76,7 +76,7 @@ const BuyerDashboard = () => {
             setTrades(resp.items);
         }catch (e) {
             //todo check api
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
     async function fetchPage(uri:string){
@@ -95,7 +95,7 @@ const BuyerDashboard = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error(i18n.t('connectionError'));
+            else toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
 

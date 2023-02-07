@@ -47,7 +47,7 @@ const SellerDashboard = () => {
 
         }catch (e) {
             //todo aca vuelve msj?
-            toast.error(i18n.t('connectionError'))
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('kycStatus'))
         }
     }
 
@@ -61,7 +61,7 @@ const SellerDashboard = () => {
             }
         }catch (e) {
             //todo aca vuelve mensaje?
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('offers') );
         }
     }
 
@@ -94,7 +94,7 @@ const SellerDashboard = () => {
            setSelectedStatus(status);
         }catch (e) {
             //todo aca vuelve mensaje?
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('offers'));
         }
 
     }

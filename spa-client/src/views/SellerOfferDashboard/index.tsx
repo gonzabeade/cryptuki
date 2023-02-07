@@ -38,7 +38,7 @@ const SellerOfferDashboard = () => {
             setSelectedStatus(status);
         }catch (e){
             //todo aca vuelve mensaje?
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trades'));
         }
     }
 

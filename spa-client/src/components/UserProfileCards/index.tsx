@@ -28,7 +28,7 @@ const UserProfileCards: React.FC<UserProfileCardsProps> = ({username, phoneNumbe
             else setPictureBase64(photo);
         }catch (e){
             //todo api error
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('profilePicture'));
         }
     }
 

@@ -48,7 +48,7 @@ const Landing = () => {
 
         }catch (e){
             //todo check errors
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('offers'));
         }
     }
 
@@ -65,27 +65,17 @@ const Landing = () => {
             setIsLoading(false);
         }catch (e){
             //todo check errors
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('offers'));
         }
     }
 
     async function orderOffers(order_by:string){
-        try{
             setOrderCriteria(order_by);
-        }catch (e) {
-            //todo check message
-            toast.error(i18n.t('connectionError'));
-        }
     }
 
 
     async function getOffersWithFilters(data:CryptoFormValues){
-        try{
             setFilters(data);
-        }catch (e){
-            //todo check
-            toast.error(i18n.t('connectionError'));
-        }
     }
 
     useEffect(() => {

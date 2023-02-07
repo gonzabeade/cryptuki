@@ -84,7 +84,7 @@ const Trade =  () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error(i18n.t('connectionError'));
+            else toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('trades'));
         }
 
     }
@@ -93,7 +93,7 @@ const Trade =  () => {
             const resp = await tradeService.changeTradeStatus(trade?.tradeId!,"DELETED" );
             setTrade(resp);
         }catch (e) {
-            toast.error("Connection error. Failed to take back proposal " + e);
+            toast.error(i18n.t('connectionError') + e);
         }
     }
 
@@ -105,7 +105,7 @@ const Trade =  () => {
             }
         }catch (e) {
                 //todo aca devuelve error irrecuperable?
-                toast.error(i18n.t('connectionError'));
+                toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('seller'));
         }
 
     }
@@ -118,7 +118,7 @@ const Trade =  () => {
             }
         }catch (e) {
             //todo aca devuelve error irrecuperable?
-            toast.error(i18n.t('connectionError'));
+            toast.error(i18n.t('connectionError') + i18n.t('failedToFetch') + i18n.t('offers'));
         }
     }
 

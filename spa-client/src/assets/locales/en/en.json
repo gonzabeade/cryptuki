@@ -462,5 +462,10 @@
   "errorForm": "Data incorrect. Please check the field",
   "failedToUpdatePassword": "Failed to update password",
   "passwordUpdated":"Password successfully updated",
-  "unableToSignIn": "Unable to sign in"
+  "unableToSignIn": "Unable to sign in",
+  "successfullyVerified": "Successfully verified",
+  "failedToFetch": "Failed to fetch",
+  "offers": "Offers",
+  "profilePicture": "Profile picture",
+  "kycStatus": "KYC status"
 }

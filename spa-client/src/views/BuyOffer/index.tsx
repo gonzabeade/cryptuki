@@ -48,7 +48,7 @@ const BuyOffer = () => {
                 navigate('/error/'+errorMsg);
 
             }
-            else toast.error(i18n.t('connectionError'));
+            else toast.error(i18n.t('connectionError')+ i18n.t('failedToFetch') + i18n.t('offers'));
         }
 
     }

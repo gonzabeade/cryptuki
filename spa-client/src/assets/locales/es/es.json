@@ -464,5 +464,10 @@
   "errorForm": "Los datos que enviaste tienen un error.",
   "failedToUpdatePassword": "No se pudo actualizar la contraseña",
   "passwordUpdated":"Contraseña actualizada",
-  "unableToSignIn": "No se pudo iniciar sesión"
+  "unableToSignIn": "No se pudo iniciar sesión",
+  "successfullyVerified": "Verificado con éxito",
+  "failedToFetch": "No se pudo obtener la información de los ",
+  "offers": "Anuncios",
+  "profilePicture": "Foto de perfil",
+  "kycStatus": "Estado de KYC"
 }

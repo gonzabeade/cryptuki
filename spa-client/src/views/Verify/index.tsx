@@ -5,6 +5,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import i18n from "../../i18n";
 import {useAuth} from "../../contexts/AuthContext";
+import {AxiosError} from "axios";
 
 type VerifyFormValues ={
     code:number
@@ -27,12 +28,17 @@ const Verify = () => {
         try{
             if(searchParams.get("code") && searchParams.get("username")){
                 await userService.verifyUser(Number(searchParams.get("code")), searchParams.get("username")!);
-                toast.success("Successfully verified!");
+                toast.success(i18n.t('successfullyVerified'));
                 navigate("/");
             }
         }catch (e){
-            //TODO aca devuelve mensaje de error?
-            toast.error(i18n.t('connectionError'));
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+            }else{
+                toast.error(i18n.t('connectionError') );
+            }
         }
     }
 
@@ -44,7 +50,13 @@ const Verify = () => {
             toast.success("Successfully verified!");
             navigate("/");
         }catch (e){
-            toast.error("Connection error. Please try again later "+ e);
+            if( e instanceof AxiosError && (e.response !== undefined || e.message !== undefined))
+            {
+                const errorMsg =  e.response !== undefined ? e.response.data.message : e.message;
+                toast.error(errorMsg);
+            }else{
+                toast.error(i18n.t('connectionError') );
+            }
         }
 
     }
